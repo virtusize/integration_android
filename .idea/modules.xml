@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/VirtusizeIntegrationAndroid.iml" filepath="$PROJECT_DIR$/VirtusizeIntegrationAndroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libsource/libsource.iml" filepath="$PROJECT_DIR$/libsource/libsource.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sampleAppKotlin/sampleAppKotlin.iml" filepath="$PROJECT_DIR$/sampleAppKotlin/sampleAppKotlin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sampleappjava/sampleappjava.iml" filepath="$PROJECT_DIR$/sampleappjava/sampleappjava.iml" />
+    </modules>
+  </component>
+</project>

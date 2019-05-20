@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/button_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <Button
+            android:id="@+id/fit_button"
+            android:text="@string/fit_button_text"
+            android:background="@color/black"
+            android:textColor="@color/white"
+            android:textAllCaps="true"
+            android:drawablePadding="@dimen/dp16"
+            android:drawableLeft="@drawable/ic_vs_icon_white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp16"
+            android:drawableStart="@drawable/ic_vs_icon_white" />
+</LinearLayout>

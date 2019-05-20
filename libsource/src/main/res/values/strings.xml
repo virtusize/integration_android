@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">LibSource</string>
+    <string name="fit_button_text">Check the fit</string>
+    <string name="landscape">landscape</string>
+    <string name="portrait">portrait</string>
+</resources>
