@@ -21,7 +21,7 @@ class FitIllustratorButton(context: Context, attrs: AttributeSet): LinearLayout(
     VirtusizeButtonSetupHandler {
 
     var virtusizeProduct: VirtusizeProduct? = null
-    private val dialogFragment = FitIllustratorDialog()
+    private val fitIllustratorDialogFragment = FitIllustratorView()
 
     init {
         View.inflate(context, R.layout.fit_illustrator_button, this)
@@ -43,26 +43,26 @@ class FitIllustratorButton(context: Context, attrs: AttributeSet): LinearLayout(
     }
 
     fun dismiss() {
-        if (dialogFragment.isVisible)
-            dialogFragment.dismiss()
+        if (fitIllustratorDialogFragment.isVisible)
+            fitIllustratorDialogFragment.dismiss()
     }
 
     override fun setupProduct(productData: ProductCheckResponse) {
         if (virtusizeProduct != null) {
-            virtusizeProduct!!.data = productData
-            if (productData.data?.validProduct != null && productData.data.validProduct) {
+            virtusizeProduct!!.productCheckData = productData
+            if (productData.data?.validProduct == true) {
                 fit_button.visibility = View.VISIBLE
                 fit_button.setOnClickListener {
                     val fragmentTransaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
                     val previousFragment = (context as AppCompatActivity).supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
-                    if (previousFragment != null) {
-                        fragmentTransaction.remove(previousFragment)
+                    previousFragment?.let {fragment ->
+                        fragmentTransaction.remove(fragment)
                     }
                     fragmentTransaction.addToBackStack(null)
                     val args = Bundle()
 		            args.putString(Constants.URL_KEY, VirtusizeApi.fitIllustrator(virtusizeProduct!!))
-                    dialogFragment.arguments = args
-                    dialogFragment.show(fragmentTransaction, Constants.FRAG_TAG)
+                    fitIllustratorDialogFragment.arguments = args
+                    fitIllustratorDialogFragment.show(fragmentTransaction, Constants.FRAG_TAG)
                 }
             }
         }

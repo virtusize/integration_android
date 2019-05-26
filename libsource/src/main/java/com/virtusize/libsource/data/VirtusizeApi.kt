@@ -1,6 +1,7 @@
 package com.virtusize.libsource.data
 
 import android.net.Uri
+import android.util.ArrayMap
 import com.android.volley.Request
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -11,21 +12,20 @@ import com.virtusize.libsource.model.VirtusizeProduct
 import com.virtusize.libsource.model.value
 import kotlin.random.Random
 
-
 object VirtusizeApi {
     private var environment = VirtusizeEnvironment.GLOBAL
     private lateinit var apiKey: String
-    private lateinit var bid: String
-    private lateinit var lang: String
+    private lateinit var browserID: String
+    private lateinit var language: String
     private lateinit var userId: String
 
     fun init(env: VirtusizeEnvironment,
-             key: String, _bid: String, _userId: String, _lang: String) {
+             key: String, browserID: String, userId: String, language: String) {
         environment = env
         apiKey = key
-        bid = _bid
-        userId = _userId
-        lang = _lang
+        this.browserID = browserID
+        this.userId = userId
+        this.language = language
     }
 
     private val gson = GsonBuilder().create()
@@ -48,12 +48,12 @@ object VirtusizeApi {
         val urlBuilder = Uri.parse(environment.value() + VirtusizeEndpoint.FitIllustrator.getUrl())
             .buildUpon()
             .appendQueryParameter("detached", "false")
-            .appendQueryParameter("bid", bid)
+            .appendQueryParameter("browserID", browserID)
             .appendQueryParameter("addToCartEnabled", "false")
-            .appendQueryParameter("storeId", product.data?.data?.storeId.toString())
+            .appendQueryParameter("storeId", product.productCheckData?.data?.storeId.toString())
             .appendQueryParameter("_", Random.nextInt(1519982555).toString())
-            .appendQueryParameter("spid", product.data?.data?.productDataId.toString())
-            .appendQueryParameter("lang", lang)
+            .appendQueryParameter("spid", product.productCheckData?.data?.productDataId.toString())
+            .appendQueryParameter("language", language)
             .appendQueryParameter("android", "true")
             .appendQueryParameter("sdk", "1")
             .appendQueryParameter("userId", userId)
@@ -61,7 +61,6 @@ object VirtusizeApi {
         if (userId.isNotEmpty()) {
             urlBuilder.appendQueryParameter("externalUserId", userId)
         }
-
         return urlBuilder.build().toString()
     }
 
@@ -70,8 +69,8 @@ object VirtusizeApi {
             .buildUpon()
             .build()
             .toString()
-        val params = HashMap<String, String>()
-        product.data?.data?.storeId?.let {
+        val params = mutableMapOf<String, String>()
+        product.productCheckData?.data?.storeId?.let {
             params["store_id"] = it.toString()
         }
         params["external_id"] = product.externalId
@@ -82,27 +81,27 @@ object VirtusizeApi {
 
     fun sendEventToAPI(
         virtusizeEvent: VirtusizeEvent,
-        data: ProductCheckResponse?,
-        orientation: String,
-        resolution: String,
+        productCheckResponse: ProductCheckResponse?,
+        deviceOrientation: String,
+        screenResolution: String,
         versionCode: Int
     ): ApiRequest {
         val url = Uri.parse(environment.value() + VirtusizeEndpoint.Events.getUrl())
             .buildUpon()
             .build()
             .toString()
-        val params = buildEventPayload(virtusizeEvent, data, orientation, resolution, versionCode)
+        val params = buildEventPayload(virtusizeEvent, productCheckResponse, deviceOrientation, screenResolution, versionCode)
         return ApiRequest(url, Request.Method.POST, params)
     }
 
     private fun buildEventPayload(
         virtusizeEvent: VirtusizeEvent,
-        data: ProductCheckResponse?,
+        productCheckResponse: ProductCheckResponse?,
         orientation: String,
         resolution: String,
         versionCode: Int
-    ): HashMap<String, String> {
-        val params = HashMap<String, String>()
+    ): MutableMap<String, String> {
+        val params = mutableMapOf<String, String>()
         params["name"] = virtusizeEvent.name
         params["apiKey"] = apiKey
         params["type"] = "user"
@@ -116,29 +115,29 @@ object VirtusizeApi {
 
         val type = object : TypeToken<Map<String, String>>() {}.type
 
-        if (data != null) {
-            data.data?.storeId?.let {
+        if (productCheckResponse != null) {
+            productCheckResponse.data?.storeId?.let {
                 params["storeId"] = it.toString()
             }
-            data.data?.storeName?.let {
+            productCheckResponse.data?.storeName?.let {
                 params["storeName"] = it
             }
-            data.data?.productTypeName?.let {
+            productCheckResponse.data?.productTypeName?.let {
                 params["storeProductType"] = it
             }
-            data.productId?.let {
+            productCheckResponse.productId?.let {
                 params["storeProductExternalId"] = it
             }
-            data.data?.userData?.wardrobeActive?.let {
+            productCheckResponse.data?.userData?.wardrobeActive?.let {
                 params["wardrobeActive"] = it.toString()
             }
-            data.data?.userData?.wardrobeHasM?.let {
+            productCheckResponse.data?.userData?.wardrobeHasM?.let {
                 params["wardrobeHasM"] = it.toString()
             }
-            data.data?.userData?.wardrobeHasP?.let {
+            productCheckResponse.data?.userData?.wardrobeHasP?.let {
                 params["wardrobeHasP"] = it.toString()
             }
-            data.data?.userData?.wardrobeHasR?.let {
+            productCheckResponse.data?.userData?.wardrobeHasR?.let {
                 params["wardrobeHasR"] = it.toString()
             }
         }
@@ -151,4 +150,4 @@ object VirtusizeApi {
     }
 }
 
-data class ApiRequest(val url: String, val method: Int, val params: HashMap<String, String> = hashMapOf())
+data class ApiRequest(val url: String, val method: Int, val params: MutableMap<String, String> = mutableMapOf())

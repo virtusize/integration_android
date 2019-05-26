@@ -2,11 +2,11 @@ package com.virtusize.libsource
 
 import com.virtusize.libsource.data.pojo.ProductCheckResponse
 
-interface CompletionHandler {
+interface CallbackHandler {
     fun handleEvent(data: Any)
 }
 
-interface VirtusizeButtonSetupHandler: CompletionHandler {
+interface VirtusizeButtonSetupHandler: CallbackHandler {
 
     override fun handleEvent(data: Any) {
         setupProduct(data as ProductCheckResponse)
@@ -15,7 +15,7 @@ interface VirtusizeButtonSetupHandler: CompletionHandler {
     fun setupProduct(productData: ProductCheckResponse)
 }
 
-interface ValidProductCompletionHandler: CompletionHandler {
+interface ValidProductFetchHandler: CallbackHandler {
 
     override fun handleEvent(data: Any) {
         onValidProductCheckCompleted(data as ProductCheckResponse)

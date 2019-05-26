@@ -7,34 +7,34 @@ import kotlin.random.Random
 
 class BrowserIdentifier(private val sharedPrefs: SharedPreferences) {
 
-    fun getBid(): String {
+    fun getBrowserId(): String {
         return if(sharedPrefs.contains(BID_KEY)) {
-                    sharedPrefs.getString(BID_KEY, null) ?: generateAndStoreBid()
-                }
-                else generateAndStoreBid()
+            sharedPrefs.getString(BID_KEY, null) ?: generateAndStoreBrowserId()
+        }
+        else generateAndStoreBrowserId()
     }
 
-    private fun generateAndStoreBid(): String {
-        val bid = generateBid()
+    private fun generateAndStoreBrowserId(): String {
+        val bid = generateBrowserId()
         val editor = sharedPrefs.edit()
         editor.putString(BID_KEY, bid)
         editor.apply()
         return bid
     }
 
-    private fun generateBid(): String {
+    private fun generateBrowserId(): String {
         // Format: cJhf5nGjDA0fgUXLAIz5Ls5.pfa1lp
-        val randomPart = StringBuilder("")
+        val browserIdentifier = StringBuilder("")
         val chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
         for (i in 0..21) {
             val randomNum = Random.nextInt(until = chars.length)
-            randomPart.append(chars[randomNum])
+            browserIdentifier.append(chars[randomNum])
         }
         val timeUntil1970InMs = Calendar.getInstance().timeInMillis
 
-        randomPart.append('.')
-        randomPart.append(timeUntil1970InMs.toString(36).toLowerCase())
+        browserIdentifier.append('.')
+        browserIdentifier.append(timeUntil1970InMs.toString(36).toLowerCase())
 
-        return randomPart.toString()
+        return browserIdentifier.toString()
     }
 }

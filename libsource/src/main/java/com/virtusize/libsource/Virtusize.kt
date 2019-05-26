@@ -29,7 +29,7 @@ class Virtusize
     private val context: Context)
 {
 
-    private var browserIdentifier: BrowserIdentifier = BrowserIdentifier(
+    private var browserIdentifier: BrowserIdentifier = BrowserIdentifier( sharedPrefs =
         context.getSharedPreferences(
             "VIRTUSIZE_SHARED_PREFS",
             MODE_PRIVATE
@@ -40,13 +40,13 @@ class Virtusize
     private lateinit var resolution: String
 
     init {
-        VirtusizeApi.init(env, apiKey, browserIdentifier.getBid(), userId?.toString()?:"", language)
+        VirtusizeApi.init(env = env, key = apiKey, browserID = browserIdentifier.getBrowserId(), userId = userId?.toString()?:"", language = language)
     }
 
     private val requestQueue = Volley.newRequestQueue(context)
     private val gson = GsonBuilder().create()
 
-    private fun perform(url: String, callback: CompletionHandler?, method: Int, dataType: Class<*>?, params: HashMap<String, String> = hashMapOf()) {
+    private fun perform(url: String, callback: CallbackHandler?, method: Int, dataType: Class<*>?, params: MutableMap<String, String> = mutableMapOf()) {
         if (method == Request.Method.GET) {
             val stringRequest = StringRequest(
                 method, url,
@@ -92,36 +92,46 @@ class Virtusize
                        virtusizeProduct: VirtusizeProduct) {
 
         if (fitIllustratorButton == null) {
-            throwError(VirtusizeError.NullFitButtonError)
+            throwError(error = VirtusizeError.NullFitButtonError)
             return
         }
-        fitIllustratorButton.setup(virtusizeProduct)
-        val apiRequest = VirtusizeApi.productCheck(virtusizeProduct)
+        fitIllustratorButton.setup(product = virtusizeProduct)
+        val apiRequest = VirtusizeApi.productCheck(product = virtusizeProduct)
 
-        val productValidCheckListener = object : ValidProductCompletionHandler {
+        val productValidCheckListener = object : ValidProductFetchHandler {
 
             override fun onValidProductCheckCompleted(productData: ProductCheckResponse) {
-                (fitIllustratorButton as VirtusizeButtonSetupHandler).setupProduct(productData)
-                sendEventToApi(VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()), withDataProduct = productData)
-                if (productData.data?.validProduct != null && productData.data.validProduct) {
-                    if (productData.data.fetchMetaData != null
-                        && productData.data.fetchMetaData == true) {
+                fitIllustratorButton.setupProduct(productData)
+                sendEventToApi(event = VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()), withDataProduct = productData)
+                if (productData.data?.validProduct == true) {
+                    if (productData.data.fetchMetaData == true) {
                         if (fitIllustratorButton.virtusizeProduct?.imageUrl != null)
                             sendProductImageToBackend(product = fitIllustratorButton.virtusizeProduct!!)
                         else
                             throwError(VirtusizeError.ImageUrlNotValid)
                     }
-                    sendEventToApi(VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName()), withDataProduct = productData)
+                    sendEventToApi(event = VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName()), withDataProduct = productData)
                 }
             }
         }
 
-        perform(apiRequest.url, productValidCheckListener, apiRequest.method, ProductCheckResponse::class.java)
+        perform(
+            url = apiRequest.url,
+            callback = productValidCheckListener,
+            method = apiRequest.method,
+            dataType = ProductCheckResponse::class.java
+        )
     }
 
     fun sendProductImageToBackend(product: VirtusizeProduct) {
-        val apiRequest = VirtusizeApi.sendProductImageToBackend(product)
-        perform(apiRequest.url, null, apiRequest.method, ProductMetaDataHintsResponse::class.java, apiRequest.params)
+        val apiRequest = VirtusizeApi.sendProductImageToBackend(product = product)
+        perform(
+            url = apiRequest.url,
+            callback = null,
+            method = apiRequest.method,
+            dataType = ProductMetaDataHintsResponse::class.java,
+            params = apiRequest.params
+        )
     }
 
     fun sendEventToApi(event: VirtusizeEvent, withDataProduct: ProductCheckResponse? = null) {
@@ -129,14 +139,21 @@ class Virtusize
         resolution = "${defaultDisplay.height}x${defaultDisplay.width}"
 
         val apiRequest = VirtusizeApi.sendEventToAPI(
-                        event,
-                        withDataProduct,
-                        if (context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) context.getString(R.string.landscape)
-                        else context.getString(R.string.portrait),
-                        resolution,
-            context.packageManager
-                .getPackageInfo(context.packageName, 0).versionCode)
-        perform(apiRequest.url, null, apiRequest.method, null, apiRequest.params)
+            virtusizeEvent = event,
+            productCheckResponse = withDataProduct,
+            deviceOrientation = if (context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) context.getString(R.string.landscape)
+            else context.getString(R.string.portrait),
+            screenResolution = resolution,
+            versionCode = context.packageManager
+                .getPackageInfo(context.packageName, 0).versionCode
+        )
+        perform(
+            url = apiRequest.url,
+            callback = null,
+            method = apiRequest.method,
+            dataType = null,
+            params = apiRequest.params
+        )
     }
 }
 
@@ -177,7 +194,7 @@ class VirtusizeBuilder {
         if (context == null) {
             throwError(VirtusizeError.NullContext)
         }
-        return Virtusize(userId, apiKey!!, env, context!!)
+        return Virtusize(userId = userId, apiKey = apiKey!!, env = env, context = context!!)
     }
 }
 

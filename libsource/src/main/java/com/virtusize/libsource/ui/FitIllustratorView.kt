@@ -12,7 +12,7 @@ import com.virtusize.libsource.Constants
 import com.virtusize.libsource.R
 import kotlinx.android.synthetic.main.web_activity.*
 
-class FitIllustratorDialog: DialogFragment() {
+class FitIllustratorView: DialogFragment() {
 
     private var url = "http://www.virtusize.com"
 
