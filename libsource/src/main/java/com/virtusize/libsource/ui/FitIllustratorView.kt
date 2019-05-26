@@ -37,7 +37,7 @@ class FitIllustratorView: DialogFragment() {
         web_view.webViewClient = object: WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-                web_view.loadUrl(
+                view?.loadUrl(
                     "javascript:(function() { " +
                             "var element = document.getElementsByClassName('global-close')[0];"
                             + "element.onclick = function() { ${Constants.JSBridgeName}.userClosedWidget(); };" +
