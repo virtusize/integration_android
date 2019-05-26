@@ -1,25 +1,23 @@
 package com.virtusize.libsource.data
 
 import android.net.Uri
-import android.util.Log
 import com.android.volley.Request
 import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
+import com.virtusize.libsource.data.pojo.ProductCheckResponse
 import com.virtusize.libsource.model.VirtusizeEnvironment
 import com.virtusize.libsource.model.VirtusizeEvent
 import com.virtusize.libsource.model.VirtusizeProduct
 import com.virtusize.libsource.model.value
-import com.google.gson.reflect.TypeToken
-import com.virtusize.libsource.Constants
-import com.virtusize.libsource.data.pojo.ProductCheckResponse
 import kotlin.random.Random
 
 
 object VirtusizeApi {
-    var environment = VirtusizeEnvironment.GLOBAL
-    lateinit var apiKey: String
-    lateinit var bid: String
-    lateinit var lang: String
-    lateinit var userId: String
+    private var environment = VirtusizeEnvironment.GLOBAL
+    private lateinit var apiKey: String
+    private lateinit var bid: String
+    private lateinit var lang: String
+    private lateinit var userId: String
 
     fun init(env: VirtusizeEnvironment,
              key: String, _bid: String, _userId: String, _lang: String) {
@@ -33,7 +31,7 @@ object VirtusizeApi {
     private val gson = GsonBuilder().create()
 
     fun productCheck(product: VirtusizeProduct): ApiRequest  {
-        val urlBuilder = Uri.parse(environment.value() + VirtusizeEndpoint.productCheck.getUrl())
+        val urlBuilder = Uri.parse(environment.value() + VirtusizeEndpoint.ProductCheck.getUrl())
             .buildUpon()
             .appendQueryParameter("apiKey", apiKey)
             .appendQueryParameter("externalId", product.externalId)
@@ -47,7 +45,7 @@ object VirtusizeApi {
     }
 
     fun fitIllustrator(product: VirtusizeProduct): String {
-        val urlBuilder = Uri.parse(environment.value() + VirtusizeEndpoint.fitIllustrator.getUrl())
+        val urlBuilder = Uri.parse(environment.value() + VirtusizeEndpoint.FitIllustrator.getUrl())
             .buildUpon()
             .appendQueryParameter("detached", "false")
             .appendQueryParameter("bid", bid)
@@ -64,13 +62,11 @@ object VirtusizeApi {
             urlBuilder.appendQueryParameter("externalUserId", userId)
         }
 
-            val url = urlBuilder.build()
-                                .toString()
-        return url
+        return urlBuilder.build().toString()
     }
 
     fun sendProductImageToBackend(product: VirtusizeProduct): ApiRequest {
-        val url = Uri.parse(environment.value() + VirtusizeEndpoint.productMetaDataHints.getUrl())
+        val url = Uri.parse(environment.value() + VirtusizeEndpoint.ProductMetaDataHints.getUrl())
             .buildUpon()
             .build()
             .toString()
@@ -91,7 +87,7 @@ object VirtusizeApi {
         resolution: String,
         versionCode: Int
     ): ApiRequest {
-        val url = Uri.parse(environment.value() + VirtusizeEndpoint.events.getUrl())
+        val url = Uri.parse(environment.value() + VirtusizeEndpoint.Events.getUrl())
             .buildUpon()
             .build()
             .toString()

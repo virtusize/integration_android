@@ -2,23 +2,16 @@ package com.virtusize.libsource
 
 import android.content.SharedPreferences
 import com.virtusize.libsource.Constants.BID_KEY
-import java.lang.StringBuilder
 import java.util.*
 import kotlin.random.Random
 
-class BrowserIdentifier(val sharedPrefs: SharedPreferences) {
+class BrowserIdentifier(private val sharedPrefs: SharedPreferences) {
 
     fun getBid(): String {
-        if(sharedPrefs.contains(BID_KEY)) {
-            val bid = sharedPrefs.getString(BID_KEY, null)
-            if (bid == null) {
-                return generateAndStoreBid()
-            }
-            else {
-                return bid
-            }
-        }
-        else return generateAndStoreBid()
+        return if(sharedPrefs.contains(BID_KEY)) {
+                    sharedPrefs.getString(BID_KEY, null) ?: generateAndStoreBid()
+                }
+                else generateAndStoreBid()
     }
 
     private fun generateAndStoreBid(): String {

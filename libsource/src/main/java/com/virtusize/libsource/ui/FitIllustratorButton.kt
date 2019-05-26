@@ -35,8 +35,8 @@ class FitIllustratorButton(context: Context, attrs: AttributeSet): LinearLayout(
     fun applyStyle(buttonStyle: VirtusizeButtonStyle) {
         when(buttonStyle) {
             VirtusizeButtonStyle.DEFAULT_STYLE -> {
-                fit_button.setBackgroundColor(resources.getColor(R.color.black))
-                fit_button.setTextColor(resources.getColor(R.color.white))
+                fit_button.setBackgroundColor(resources.getColor(R.color.virtusizeBlack))
+                fit_button.setTextColor(resources.getColor(R.color.vritusizeWhite))
                 fit_button.setText(R.string.fit_button_text)
             }
         }

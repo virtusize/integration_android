@@ -15,7 +15,6 @@ class App: Application() {
         Virtusize = VirtusizeBuilder().init(this)
             .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
             .setAppId(123)
-            .setDebuggable(true)
             .setEnv(VirtusizeEnvironment.STAGING)
             .build()
 

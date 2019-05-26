@@ -2,25 +2,23 @@ package com.virtusize.libsource.ui
 
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.*
-import android.widget.Toast
+import android.webkit.JavascriptInterface
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import com.virtusize.libsource.Constants
 import com.virtusize.libsource.R
-import com.virtusize.libsource.model.VirtusizeError
-import com.virtusize.libsource.throwError
 import kotlinx.android.synthetic.main.web_activity.*
 
 class FitIllustratorDialog: DialogFragment() {
 
-    var url = "http://www.virtusize.com"
+    private var url = "http://www.virtusize.com"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.FullScreenDialogStyle);
+        setStyle(STYLE_NORMAL, R.style.FullScreenDialogStyle)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -36,16 +34,15 @@ class FitIllustratorDialog: DialogFragment() {
                 web_view.loadUrl(
                     "javascript:(function() { " +
                             "var element = document.getElementsByClassName('global-close')[0];"
-                            + "element.onclick = function() { vs.userClosedWidget(); };" +
-                            "})()");
+                            + "element.onclick = function() { ${Constants.JSBridgeName}.userClosedWidget(); };" +
+                            "})()")
             }
         }
-        web_view.addJavascriptInterface(JavaScriptInterface(), "vs")
+        web_view.addJavascriptInterface(JavaScriptInterface(), Constants.JSBridgeName)
         arguments?.getString(Constants.URL_KEY)?.let {
             url = it
         }
         web_view.loadUrl(url)
-        splash_logo.visibility = View.GONE
     }
 
     private inner class JavaScriptInterface {

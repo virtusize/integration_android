@@ -25,7 +25,6 @@ class Virtusize
     (
     userId: Int?,
     apiKey: String,
-    private val isDebuggable: Boolean,
     env: VirtusizeEnvironment,
     private val context: Context)
 {
@@ -115,7 +114,6 @@ class Virtusize
                     sendEventToApi(VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName()), withDataProduct = productData)
                 }
             }
-
         }
 
         perform(apiRequest.url, productValidCheckListener, apiRequest.method, ProductCheckResponse::class.java)
@@ -148,13 +146,12 @@ fun throwError(error: VirtusizeError) {
 }
 
 class VirtusizeBuilder {
-    var userId: Int? = null
-    var apiKey: String? = null
-    var isDebuggable = false
-    var env = VirtusizeEnvironment.GLOBAL
-    var context: Context? = null
+    private var userId: Int? = null
+    private var apiKey: String? = null
+    private var env = VirtusizeEnvironment.GLOBAL
+    private var context: Context? = null
 
-    //    Builder
+    // Builder
     fun init(ctx: Context): VirtusizeBuilder {
         context = ctx
         return this
@@ -166,10 +163,6 @@ class VirtusizeBuilder {
     }
     fun setApiKey(key: String): VirtusizeBuilder {
         this.apiKey = key
-        return this
-    }
-    fun setDebuggable(flag: Boolean): VirtusizeBuilder {
-        this.isDebuggable = flag
         return this
     }
     fun setEnv(environment: VirtusizeEnvironment): VirtusizeBuilder {
@@ -184,13 +177,14 @@ class VirtusizeBuilder {
         if (context == null) {
             throwError(VirtusizeError.NullContext)
         }
-        return Virtusize(userId, apiKey!!, isDebuggable, env, context!!)
+        return Virtusize(userId, apiKey!!, env, context!!)
     }
 }
 
 object Constants {
-    val FRAG_TAG = "FIT_FRAG_TAG"
-    val URL_KEY = "URL_KEY"
-    val LOG_TAG = "VIRTUSIZE"
-    val BID_KEY = "BID_KEY_VIRTUSIZE"
+    const val FRAG_TAG = "FIT_FRAG_TAG"
+    const val URL_KEY = "URL_KEY"
+    const val LOG_TAG = "VIRTUSIZE"
+    const val BID_KEY = "BID_KEY_VIRTUSIZE"
+    const val JSBridgeName = "VirtusizeAndroid"
 }
