@@ -78,7 +78,7 @@ class FitIllustratorButton(context: Context, attrs: AttributeSet): LinearLayout(
     override fun setupProductCheckResponseData(productCheckResponse: ProductCheckResponse) {
         if (virtusizeProduct != null) {
             virtusizeProduct!!.productCheckData = productCheckResponse
-            if (productCheckResponse.data?.validProduct == true) {
+            if (productCheckResponse.data.validProduct) {
                 fit_button.visibility = View.VISIBLE
                 fit_button.setOnClickListener {
                     val fragmentTransaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()

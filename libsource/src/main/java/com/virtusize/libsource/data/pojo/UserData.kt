@@ -11,17 +11,17 @@ import com.google.gson.annotations.SerializedName
 data class UserData(
 
 	@field:SerializedName("should_see_ph_tooltip")
-	val shouldSeePhTooltip: Boolean? = null,
+	val shouldSeePhTooltip: Boolean,
 
 	@field:SerializedName("wardrobeHasP")
-	val wardrobeHasP: Boolean? = null,
+	val wardrobeHasP: Boolean,
 
 	@field:SerializedName("wardrobeHasR")
-	val wardrobeHasR: Boolean? = null,
+	val wardrobeHasR: Boolean,
 
 	@field:SerializedName("wardrobeHasM")
-	val wardrobeHasM: Boolean? = null,
+	val wardrobeHasM: Boolean,
 
 	@field:SerializedName("wardrobeActive")
-	val wardrobeActive: Boolean? = null
+	val wardrobeActive: Boolean
 )

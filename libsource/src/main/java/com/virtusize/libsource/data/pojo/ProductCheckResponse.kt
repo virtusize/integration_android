@@ -11,11 +11,11 @@ import com.google.gson.annotations.SerializedName
 data class ProductCheckResponse(
 
 	@field:SerializedName("data")
-	val data: Data? = null,
+	val data: Data,
 
 	@field:SerializedName("productId")
-	val productId: String? = null,
+	val productId: String,
 
 	@field:SerializedName("name")
-	val name: String? = null
+	val name: String
 )

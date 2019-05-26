@@ -11,14 +11,14 @@ import com.google.gson.annotations.SerializedName
 data class ProductMetaDataHintsResponse(
 
 	@field:SerializedName("apiKey")
-	val apiKey: String? = null,
+	val apiKey: String,
 
 	@field:SerializedName("imageUrl")
-	val imageUrl: String? = null,
+	val imageUrl: String,
 
 	@field:SerializedName("cloudinaryPublicId")
-	val cloudinaryPublicId: String? = null,
+	val cloudinaryPublicId: String,
 
 	@field:SerializedName("externalProductId")
-	val externalProductId: String? = null
+	val externalProductId: String
 )

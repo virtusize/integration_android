@@ -168,28 +168,28 @@ object VirtusizeApi {
         val type = object : TypeToken<Map<String, String>>() {}.type
 
         if (productCheckResponse != null) {
-            productCheckResponse.data?.storeId?.let {
+            productCheckResponse.data.storeId.let {
                 params["storeId"] = it.toString()
             }
-            productCheckResponse.data?.storeName?.let {
+            productCheckResponse.data.storeName.let {
                 params["storeName"] = it
             }
-            productCheckResponse.data?.productTypeName?.let {
+            productCheckResponse.data.productTypeName.let {
                 params["storeProductType"] = it
             }
-            productCheckResponse.productId?.let {
+            productCheckResponse.productId.let {
                 params["storeProductExternalId"] = it
             }
-            productCheckResponse.data?.userData?.wardrobeActive?.let {
+            productCheckResponse.data.userData.wardrobeActive.let {
                 params["wardrobeActive"] = it.toString()
             }
-            productCheckResponse.data?.userData?.wardrobeHasM?.let {
+            productCheckResponse.data.userData.wardrobeHasM.let {
                 params["wardrobeHasM"] = it.toString()
             }
-            productCheckResponse.data?.userData?.wardrobeHasP?.let {
+            productCheckResponse.data.userData.wardrobeHasP.let {
                 params["wardrobeHasP"] = it.toString()
             }
-            productCheckResponse.data?.userData?.wardrobeHasR?.let {
+            productCheckResponse.data.userData.wardrobeHasR.let {
                 params["wardrobeHasR"] = it.toString()
             }
         }

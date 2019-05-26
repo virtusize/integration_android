@@ -16,7 +16,6 @@ interface CallbackHandler {
 
 /**
  * This interface can be implemented by any class that wants to receive ProductCheckResponse, that is received from product data check endpoint
- * @param data of type ProductCheckResponse
  * @see ProductCheckResponse
  */
 interface VirtusizeButtonSetupHandler: CallbackHandler {
@@ -41,7 +40,6 @@ interface VirtusizeButtonSetupHandler: CallbackHandler {
 
 /**
  * This interface can be implemented by any class that wants to receive ProductCheckResponse when server returns valid product for product check response
- * @param data of type ProductCheckResponse
  * @see ProductCheckResponse
  */
 interface ValidProductCheckHandler: CallbackHandler {

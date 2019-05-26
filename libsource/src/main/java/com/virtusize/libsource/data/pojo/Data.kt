@@ -11,26 +11,26 @@ import com.google.gson.annotations.SerializedName
 data class Data(
 
 	@field:SerializedName("validProduct")
-	val validProduct: Boolean? = null,
+	val validProduct: Boolean,
 
 	@field:SerializedName("fetchMetaData")
-	val fetchMetaData: Boolean? = null,
+	val fetchMetaData: Boolean,
 
 	@field:SerializedName("userData")
-	val userData: UserData? = null,
+	val userData: UserData,
 
 	@field:SerializedName("productDataId")
-	val productDataId: Int? = null,
+	val productDataId: Int,
 
 	@field:SerializedName("productTypeName")
-	val productTypeName: String? = null,
+	val productTypeName: String,
 
 	@field:SerializedName("storeName")
-	val storeName: String? = null,
+	val storeName: String,
 
 	@field:SerializedName("storeId")
-	val storeId: Int? = null,
+	val storeId: Int,
 
 	@field:SerializedName("productTypeId")
-	val productTypeId: Int? = null
+	val productTypeId: Int
 )

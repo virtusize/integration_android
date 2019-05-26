@@ -152,8 +152,8 @@ class Virtusize
                 fitIllustratorButton.setupProductCheckResponseData(productCheckResponse)
                 // Send API Event UserSawProduct
                 sendEventToApi(event = VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()), withDataProduct = productCheckResponse)
-                if (productCheckResponse.data?.validProduct == true) {
-                    if (productCheckResponse.data.fetchMetaData == true) {
+                if (productCheckResponse.data.validProduct) {
+                    if (productCheckResponse.data.fetchMetaData) {
                         if (fitIllustratorButton.virtusizeProduct?.imageUrl != null) {
                             // If image URL is valid, send image URL to server
                             sendProductImageToBackend(product = fitIllustratorButton.virtusizeProduct!!)
