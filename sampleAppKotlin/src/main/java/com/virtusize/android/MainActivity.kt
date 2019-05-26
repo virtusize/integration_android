@@ -24,11 +24,9 @@ class MainActivity : AppCompatActivity() {
 
         // Fit Illustrator opens automatically when button is clicked
 
-        /*
-         * To close fit illustrator use:
-         *
-         * exampleFitButton.dismiss()
-         *
+        /**
+         * To close fit illustrator use
+         * @sample exampleFitButton.dismissFitIllustratorView()
          */
 
     }

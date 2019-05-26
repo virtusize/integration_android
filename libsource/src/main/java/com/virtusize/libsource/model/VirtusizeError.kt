@@ -2,6 +2,9 @@ package com.virtusize.libsource.model
 
 import java.lang.IllegalArgumentException
 
+/**
+ * This enum contains all available errors in virtusize library
+ */
 enum class VirtusizeError{
     NullFitButtonError,
     ApiKeyNullOrEmpty,
@@ -11,6 +14,10 @@ enum class VirtusizeError{
     FitIllustratorError
 }
 
+/**
+ * This method returns error message for the VirtusizeError that it is called on
+ * @return Error message
+ */
 fun VirtusizeError.message(): String {
     return when(this) {
         VirtusizeError.NullFitButtonError -> "Fit Illustrator Button is null."
@@ -22,6 +29,10 @@ fun VirtusizeError.message(): String {
     }
 }
 
+/**
+ * This method throws error for the VirtusizeError that it is called on
+ * @throws IllegalArgumentException
+ */
 fun VirtusizeError.throwError() {
     throw IllegalArgumentException(this.message())
 }

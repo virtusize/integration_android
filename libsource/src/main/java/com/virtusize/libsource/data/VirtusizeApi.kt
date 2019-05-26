@@ -1,7 +1,6 @@
 package com.virtusize.libsource.data
 
 import android.net.Uri
-import android.util.ArrayMap
 import com.android.volley.Request
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -12,13 +11,24 @@ import com.virtusize.libsource.model.VirtusizeProduct
 import com.virtusize.libsource.model.value
 import kotlin.random.Random
 
+/**
+ * This object represents the Virtusize API
+ */
 object VirtusizeApi {
-    private var environment = VirtusizeEnvironment.GLOBAL
-    private lateinit var apiKey: String
-    private lateinit var browserID: String
-    private lateinit var language: String
-    private lateinit var userId: String
+    private var environment = VirtusizeEnvironment.GLOBAL // Virtusize environment to be used in network requests
+    private lateinit var apiKey: String // API Key that is unique for every Virtusize client
+    private lateinit var browserID: String // BrowserID for this application
+    private lateinit var language: String // Language set in user's device
+    private lateinit var userId: String // UserId userId corresponding to the app user
 
+    /**
+     * This method is used to initialize VirtusizeApi
+     * @param env Virtusize environment to be used in network requests
+     * @param key API Key that is unique for every Virtusize client
+     * @param browserID BrowserID for this application
+     * @param userId userId corresponding to the app user
+     * @param language Language set in device
+     */
     fun init(env: VirtusizeEnvironment,
              key: String, browserID: String, userId: String, language: String) {
         environment = env
@@ -28,8 +38,16 @@ object VirtusizeApi {
         this.language = language
     }
 
+    // GSON for JSON to Java serialization and vice versa
     private val gson = GsonBuilder().create()
 
+    /**
+     * This method is used get api request for product check
+     * @param product VirtusizeProduct for which check needs to be performed
+     * @return ApiRequest
+     * @see VirtusizeProduct
+     * @see ApiRequest
+     */
     fun productCheck(product: VirtusizeProduct): ApiRequest  {
         val urlBuilder = Uri.parse(environment.value() + VirtusizeEndpoint.ProductCheck.getUrl())
             .buildUpon()
@@ -44,6 +62,11 @@ object VirtusizeApi {
         return ApiRequest(url, Request.Method.GET)
     }
 
+    /**
+     * This method is used to get Fit Illustrator URL for a VirtusizeProduct
+     * @param product VirtusizeProduct for which Fit Illustrator URL is needed
+     * @return Fit Illustrator URL as String
+     */
     fun fitIllustrator(product: VirtusizeProduct): String {
         val urlBuilder = Uri.parse(environment.value() + VirtusizeEndpoint.FitIllustrator.getUrl())
             .buildUpon()
@@ -64,6 +87,11 @@ object VirtusizeApi {
         return urlBuilder.build().toString()
     }
 
+    /**
+     * This method is used to get api request for sending image of VirtusizeProduct to server
+     * @param product VirtusizeProduct whose image needs to be sent to Virtusize server
+     * @return ApiRequest
+     */
     fun sendProductImageToBackend(product: VirtusizeProduct): ApiRequest {
         val url = Uri.parse(environment.value() + VirtusizeEndpoint.ProductMetaDataHints.getUrl())
             .buildUpon()
@@ -79,6 +107,18 @@ object VirtusizeApi {
         return ApiRequest(url, Request.Method.POST, params)
     }
 
+    /**
+     * This method is used to get api request for sending event to server
+     * @param virtusizeEvent Event to be sent to Virtusize server
+     * @param productCheckResponse ProductCheckResponse as additional payload to be sent to server with event
+     * @param deviceOrientation Device's screen orientation
+     * @param screenResolution Device's screen resolution
+     * @param versionCode Version Code
+     * @return ApiRequest
+     * @see VirtusizeEvent
+     * @see ProductCheckResponse
+     * @see ApiRequest
+     */
     fun sendEventToAPI(
         virtusizeEvent: VirtusizeEvent,
         productCheckResponse: ProductCheckResponse?,
@@ -94,6 +134,18 @@ object VirtusizeApi {
         return ApiRequest(url, Request.Method.POST, params)
     }
 
+    /**
+     * This method is used to build additional payload to be sent when sending event to server
+     * @param virtusizeEvent Event to be sent to Virtusize server
+     * @param productCheckResponse ProductCheckResponse as additional payload to be sent to server with event
+     * @param orientation Device's screen orientation
+     * @param resolution Device's screen resolution
+     * @param versionCode Version Code
+     * @return MutableMap of params for payload
+     * @see VirtusizeEvent
+     * @see ProductCheckResponse
+     * @see MutableMap
+     */
     private fun buildEventPayload(
         virtusizeEvent: VirtusizeEvent,
         productCheckResponse: ProductCheckResponse?,
@@ -150,4 +202,10 @@ object VirtusizeApi {
     }
 }
 
+/**
+ * This class represents Api request that can be used to perform network request
+ * @param url URL for network request
+ * @param method Request method type
+ * @param params MutableMap of parameters to be sent as request body
+ */
 data class ApiRequest(val url: String, val method: Int, val params: MutableMap<String, String> = mutableMapOf())

@@ -5,8 +5,16 @@ import com.virtusize.libsource.Constants.BID_KEY
 import java.util.*
 import kotlin.random.Random
 
+/**
+ * This class is used to get BrowserIdentifier specific to this application
+ * @param sharedPrefs Application specific Shared Preferences
+ */
 class BrowserIdentifier(private val sharedPrefs: SharedPreferences) {
 
+    /**
+     * This method is used to get Browser Identifier specific to this app
+     * @return Browser Identifier as String
+     */
     fun getBrowserId(): String {
         return if(sharedPrefs.contains(BID_KEY)) {
             sharedPrefs.getString(BID_KEY, null) ?: generateAndStoreBrowserId()
@@ -14,6 +22,10 @@ class BrowserIdentifier(private val sharedPrefs: SharedPreferences) {
         else generateAndStoreBrowserId()
     }
 
+    /**
+     * This method is used to generate and store browser identifier in application level shared preferences
+     * @return Browser Identifier as String
+     */
     private fun generateAndStoreBrowserId(): String {
         val bid = generateBrowserId()
         val editor = sharedPrefs.edit()
@@ -22,6 +34,10 @@ class BrowserIdentifier(private val sharedPrefs: SharedPreferences) {
         return bid
     }
 
+    /**
+     * This method is used to generate Browser Identifier of the format cJhf5nGjDA0fgUXLAIz5Ls5.pfa1lp
+     * @return Browser Identifier as String
+     */
     private fun generateBrowserId(): String {
         // Format: cJhf5nGjDA0fgUXLAIz5Ls5.pfa1lp
         val browserIdentifier = StringBuilder("")

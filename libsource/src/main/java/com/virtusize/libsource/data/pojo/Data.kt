@@ -3,6 +3,10 @@ package com.virtusize.libsource.data.pojo
 import javax.annotation.Generated
 import com.google.gson.annotations.SerializedName
 
+/**
+ * This class represents response for data field in ProductCheckResponse
+ * @see ProductCheckResponse
+ */
 @Generated("com.robohorse.robopojogenerator")
 data class Data(
 

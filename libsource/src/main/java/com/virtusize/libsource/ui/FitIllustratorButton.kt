@@ -17,10 +17,19 @@ import com.virtusize.libsource.model.VirtusizeProduct
 import com.virtusize.libsource.throwError
 import kotlinx.android.synthetic.main.fit_illustrator_button.view.*
 
+/**
+ * This class is the custom view FitIllustratorButton that is added in the client's layout file.
+ */
 class FitIllustratorButton(context: Context, attrs: AttributeSet): LinearLayout(context, attrs),
     VirtusizeButtonSetupHandler {
 
+    /**
+     * VirtusizeProduct associated with FitIllustratorButton instance
+     */
     var virtusizeProduct: VirtusizeProduct? = null
+    /**
+     * Fit Illustrator view that opens when button is clicked
+     */
     private val fitIllustratorDialogFragment = FitIllustratorView()
 
     init {
@@ -28,10 +37,20 @@ class FitIllustratorButton(context: Context, attrs: AttributeSet): LinearLayout(
         fit_button.visibility = View.INVISIBLE
     }
 
+    /**
+     * This method is used to set up button with the corresponding VirtusizeProduct
+     * @param product This is the VirtusizeProduct that is set for this button
+     * @see VirtusizeProduct
+     */
     fun setup(product: VirtusizeProduct) {
         virtusizeProduct = product
     }
 
+    /**
+     * This method is used to apply custom style to FitIllustratorButton
+     * @param buttonStyle The type of styles available, are in VirtusizeButtonStyle
+     * @see VirtusizeButtonStyle
+     */
     fun applyStyle(buttonStyle: VirtusizeButtonStyle) {
         when(buttonStyle) {
             VirtusizeButtonStyle.DEFAULT_STYLE -> {
@@ -42,15 +61,24 @@ class FitIllustratorButton(context: Context, attrs: AttributeSet): LinearLayout(
         }
     }
 
-    fun dismiss() {
+    /**
+     * This method is used to dismiss/close the Fit Illustrator Window
+     */
+    fun dismissFitIllustratorView() {
         if (fitIllustratorDialogFragment.isVisible)
             fitIllustratorDialogFragment.dismiss()
     }
 
-    override fun setupProduct(productData: ProductCheckResponse) {
+    /**
+     * This method is used to set up product check data received from server to virtusizeProduct
+     * @param productCheckResponse ProductCheckResponse received from Virtusize server
+     * @see ProductCheckResponse
+     * @throws VirtusizeError.InvalidProduct error
+     */
+    override fun setupProductCheckResponseData(productCheckResponse: ProductCheckResponse) {
         if (virtusizeProduct != null) {
-            virtusizeProduct!!.productCheckData = productData
-            if (productData.data?.validProduct == true) {
+            virtusizeProduct!!.productCheckData = productCheckResponse
+            if (productCheckResponse.data?.validProduct == true) {
                 fit_button.visibility = View.VISIBLE
                 fit_button.setOnClickListener {
                     val fragmentTransaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()

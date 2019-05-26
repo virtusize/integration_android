@@ -1,5 +1,8 @@
 package com.virtusize.libsource.data
 
+/**
+ * This enum represents all available Virtusize endpoints
+ */
 enum class VirtusizeEndpoint {
     ProductCheck,
     FitIllustrator,
@@ -7,6 +10,10 @@ enum class VirtusizeEndpoint {
     Events
 }
 
+/**
+ * This method returns url corresponding to the VirtusizeEndpoint that it is called upon
+ * @return Virtusize Endpoint URL
+ */
 fun VirtusizeEndpoint.getUrl(): String {
      return when(this) {
         VirtusizeEndpoint.ProductCheck -> {
