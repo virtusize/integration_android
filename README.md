@@ -22,7 +22,7 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 ## Setup
 1. Initialize Virtusize object in your Application class's `onCreate` method using your API key and environment. The environment is the region you are running the integration from, either `VirtusizeEnvironment.STAGING`,  `VirtusizeEnvironment.GLOBAL`, `VirtusizeEnvironment.JAPAN` or `VirtusizeEnvironment.KOREA`
     - Kotlin
-        ```
+        ```kotlin
         lateinit var Virtusize: Virtusize
         override fun onCreate() {
             super.onCreate()
@@ -34,7 +34,7 @@ You need a unique API key and an Admin account, only available to Virtusize cust
         ```
 
     - Java
-        ```
+        ```java
         Virtusize Virtusize;
 
         @Override
@@ -47,7 +47,7 @@ You need a unique API key and an Admin account, only available to Virtusize cust
                    .build();
         ```
 2. Add Virtusize button in your activity's XML layout file
-    ```
+    ```xml
     <com.virtusize.libsource.ui.FitIllustratorButton
         android:id="@+id/exampleFitButton"
         android:layout_width="wrap_content"
@@ -55,7 +55,7 @@ You need a unique API key and an Admin account, only available to Virtusize cust
     ```
 3. Inside your activity, setup the Fit Illustrator button using product details by passing a `imageUrl` of the product in order to populate the comparison view and passing in an `externalId` that will be used to reference that product in our API
     - Kotlin
-        ```
+        ```kotlin
         (application as App)
         .Virtusize
         .setupFitButton(
@@ -64,7 +64,7 @@ You need a unique API key and an Admin account, only available to Virtusize cust
         ```
 
     - Java
-        ```
+        ```java
         FitIllustratorButton fitIllustratorButton;
         @Override
         protected void onCreate(Bundle savedInstanceState) {
