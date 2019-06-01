@@ -9,7 +9,7 @@ import com.virtusize.libsource.data.pojo.ProductCheckResponse
  * @param imageUrl Image URL of product, in order to populate the comparison view
  * @param productCheckData Response from Virtusize Server for Product check request
  */
-data class VirtusizeProduct (
+data class VirtusizeProduct @JvmOverloads constructor(
     val externalId: String,
     var imageUrl: String? = null,
     var productCheckData: ProductCheckResponse? = null

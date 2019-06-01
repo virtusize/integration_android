@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
 
         // apply style to Virtusize button
         exampleFitButton.applyStyle(VirtusizeButtonStyle.DEFAULT_STYLE)
-
         // Fit Illustrator opens automatically when button is clicked
 
         /*

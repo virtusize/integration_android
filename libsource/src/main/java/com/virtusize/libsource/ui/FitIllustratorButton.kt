@@ -42,7 +42,7 @@ class FitIllustratorButton(context: Context, attrs: AttributeSet): LinearLayout(
      * @param product This is the VirtusizeProduct that is set for this button
      * @see VirtusizeProduct
      */
-    fun setup(product: VirtusizeProduct) {
+    internal fun setup(product: VirtusizeProduct) {
         virtusizeProduct = product
     }
 

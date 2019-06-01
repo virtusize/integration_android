@@ -19,8 +19,8 @@ enum class VirtusizeEnvironment {
 fun VirtusizeEnvironment.value(): String {
     return when(this) {
         STAGING -> "https://staging.virtusize.com"
-        GLOBAL -> "www.virtusize.com"
-        JAPAN -> "api.virtusize.jp"
-        KOREA -> "api.virtusize.kr"
+        GLOBAL -> "https://api.virtusize.com"
+        JAPAN -> "https://api.virtusize.jp"
+        KOREA -> "https://api.virtusize.kr"
     }
 }
