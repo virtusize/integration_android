@@ -17,8 +17,19 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 - Setup in AppCompatActivity
 
 ## Installation
-- TODO
-
+- Download Library AAR file from https://github.com/virtusize/integration_android/blob/master/virtusize.aar
+- In your Android Studio add the compiled AAR by 
+    1. Click File > New > New Module.
+    2. Click Import .JAR/.AAR Package then click Next.
+    3. Enter the location of the compiled AAR or JAR file then click Finish
+- In your app `build.gradle` file, add below dependencies:
+    ```groovy
+    implementation project(":virtusize")
+    implementation 'com.android.volley:volley:1.1.1'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'javax.annotation:jsr250-api:1.0'
+    ```
+    Find out more at: https://developer.android.com/studio/projects/android-library#AddDependency
 ## Setup
 1. Initialize Virtusize object in your Application class's `onCreate` method using your API key and environment. The environment is the region you are running the integration from, either `VirtusizeEnvironment.STAGING`,  `VirtusizeEnvironment.GLOBAL`, `VirtusizeEnvironment.JAPAN` or `VirtusizeEnvironment.KOREA`
     - Kotlin
