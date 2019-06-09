@@ -1,6 +1,7 @@
 package com.virtusize.libsource
 
 import com.virtusize.libsource.data.pojo.ProductCheckResponse
+import com.virtusize.libsource.model.VirtusizeError
 
 /**
  * This interface can be implemented by any class that wants to receive any form of Data
@@ -14,6 +15,17 @@ interface CallbackHandler {
     fun handleEvent(data: Any)
 }
 
+/**
+ * This interface can be implemented by class that wants to receive Virtusize error
+ * The object of the class can then be used to pass error to that object
+ */
+interface ErrorHandler {
+    /**
+     * This method is used to pass error to any object whose class implements ErrorHandler interface
+     * @param error VirtusizeError
+     */
+    fun onError(error: VirtusizeError)
+}
 /**
  * This interface can be implemented by any class that wants to receive ProductCheckResponse, that is received from product data check endpoint
  * @see ProductCheckResponse

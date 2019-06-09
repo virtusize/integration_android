@@ -10,6 +10,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.virtusize.libsource.Constants
 import com.virtusize.libsource.R
+import com.virtusize.libsource.model.VirtusizeMessageHandler
 import kotlinx.android.synthetic.main.web_activity.*
 
 /**
@@ -18,6 +19,9 @@ import kotlinx.android.synthetic.main.web_activity.*
 class FitIllustratorView: DialogFragment() {
 
     private var url = "http://www.virtusize.com"
+
+    private lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
+    private lateinit var fitIllustratorButton: FitIllustratorButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +58,14 @@ class FitIllustratorView: DialogFragment() {
     }
 
     /**
+     * This method sets up message handler
+     */
+    internal fun setupMessageHandler(messageHandler: VirtusizeMessageHandler, fitIllustratorButton: FitIllustratorButton) {
+        virtusizeMessageHandler = messageHandler
+        this.fitIllustratorButton = fitIllustratorButton
+    }
+
+    /**
      * Javascript interface to receive events from web view
      */
     private inner class JavaScriptInterface {
@@ -63,6 +75,7 @@ class FitIllustratorView: DialogFragment() {
          */
         @JavascriptInterface
         fun userClosedWidget() {
+            virtusizeMessageHandler.virtusizeControllerShouldClose(fitIllustratorButton)
             dismiss()
         }
     }

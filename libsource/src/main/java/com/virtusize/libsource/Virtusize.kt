@@ -32,6 +32,31 @@ class Virtusize
     private val context: Context) // Application Context
 {
 
+    // Registered message handlers
+    private val messageHandlers = mutableListOf<VirtusizeMessageHandler>()
+
+    // Virtusize message handler passes received errors and events to all registered message handlers
+    private val messageHandler = object : VirtusizeMessageHandler {
+        override fun virtusizeControllerShouldClose(fitIllustratorButton: FitIllustratorButton) {
+            messageHandlers.forEach{ messageHandler ->
+                messageHandler.virtusizeControllerShouldClose(fitIllustratorButton)
+            }
+        }
+
+        override fun onEvent(fitIllustratorButton: FitIllustratorButton?, event: VirtusizeEvents) {
+            messageHandlers.forEach{ messageHandler ->
+                messageHandler.onEvent(fitIllustratorButton, event)
+            }
+        }
+
+        override fun onError(fitIllustratorButton: FitIllustratorButton?, error: VirtusizeError) {
+            messageHandlers.forEach{ messageHandler ->
+                messageHandler.onError(fitIllustratorButton, error)
+            }
+        }
+
+    }
+
     /**
      * BrowserIdentifier contains the browser identifier for current application
      */
@@ -76,8 +101,9 @@ class Virtusize
      * @param method API Request type
      * @param dataType Class for converting JSON response to Java object of type dataType
      * @param params Map of parameters to be sent as request body
+     * @param errorHandler Error Handler optional
      */
-    private fun perform(url: String, callback: CallbackHandler?, method: Int, dataType: Class<*>?, params: MutableMap<String, String> = mutableMapOf()) {
+    private fun perform(url: String, callback: CallbackHandler?, method: Int, dataType: Class<*>?, params: MutableMap<String, String> = mutableMapOf(), errorHandler: ErrorHandler? = null) {
         if (method == Request.Method.GET) {
             val stringRequest = StringRequest(
                 method, url,
@@ -90,6 +116,7 @@ class Virtusize
                 Response.ErrorListener { error ->
                     if (error != null)
                         handleVolleyError(error)
+                    errorHandler?.onError(VirtusizeError.NetworkError)
                 })
 
             // Add the request to the RequestQueue.
@@ -106,8 +133,9 @@ class Virtusize
                     Log.d(Constants.LOG_TAG, response.toString())
                 },
                 Response.ErrorListener {error ->
-                if (error != null)
-                    handleVolleyError(error)
+                    if (error != null)
+                        handleVolleyError(error)
+                    errorHandler?.onError(VirtusizeError.NetworkError)
                 })
             requestQueue.add(jsonObjectRequest)
         }
@@ -134,11 +162,20 @@ class Virtusize
 
         // Throws VirtusizeError.NullFitButtonError error if button is null
         if (fitIllustratorButton == null) {
+            messageHandler.onError(null, VirtusizeError.NullFitButtonError)
             throwError(error = VirtusizeError.NullFitButtonError)
             return
         }
+
+        // to handle network errors
+        val errorHandler = object : ErrorHandler {
+            override fun onError(error: VirtusizeError) {
+                messageHandler.onError(fitIllustratorButton, error)
+            }
+        }
+
         // Set virtusizeProduct to fitIllustratorButton
-        fitIllustratorButton.setup(product = virtusizeProduct)
+        fitIllustratorButton.setup(product = virtusizeProduct, messageHandler = messageHandler)
         // API Request to perform Product check on Virtusize server
         val apiRequest = VirtusizeApi.productCheck(product = virtusizeProduct)
         // Callback Handler for Product Check request
@@ -151,18 +188,22 @@ class Virtusize
                 // Set up Product check response data to VirtusizeProduct in FitIllustratorButton
                 fitIllustratorButton.setupProductCheckResponseData(productCheckResponse)
                 // Send API Event UserSawProduct
-                sendEventToApi(event = VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()), withDataProduct = productCheckResponse)
+                sendEventToApi(event = VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()), withDataProduct = productCheckResponse, errorHandler = errorHandler)
+                messageHandler.onEvent(fitIllustratorButton, VirtusizeEvents.UserSawProduct)
                 if (productCheckResponse.data.validProduct) {
                     if (productCheckResponse.data.fetchMetaData) {
                         if (fitIllustratorButton.virtusizeProduct?.imageUrl != null) {
                             // If image URL is valid, send image URL to server
-                            sendProductImageToBackend(product = fitIllustratorButton.virtusizeProduct!!)
+                            sendProductImageToBackend(product = fitIllustratorButton.virtusizeProduct!!, errorHandler = errorHandler)
                         }
-                        else
+                        else {
+                            messageHandler.onError(fitIllustratorButton, VirtusizeError.ImageUrlNotValid)
                             throwError(VirtusizeError.ImageUrlNotValid)
+                        }
                     }
                     // Send API Event UserSawWidgetButton
-                    sendEventToApi(event = VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName()), withDataProduct = productCheckResponse)
+                    sendEventToApi(event = VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName()), withDataProduct = productCheckResponse, errorHandler = errorHandler)
+                    messageHandler.onEvent(fitIllustratorButton, VirtusizeEvents.UserSawWidgetButton)
                 }
             }
         }
@@ -172,23 +213,26 @@ class Virtusize
             url = apiRequest.url,
             callback = productValidCheckListener,
             method = apiRequest.method,
-            dataType = ProductCheckResponse::class.java
+            dataType = ProductCheckResponse::class.java,
+            errorHandler = errorHandler
         )
     }
 
     /**
      * This method is used to send VirtusizeProduct's image URL to server
      * @param product VirtusizeProduct
+     * @param errorHandler {@link ErrorHandler}
      * @see VirtusizeProduct
      */
-    private fun sendProductImageToBackend(product: VirtusizeProduct) {
+    private fun sendProductImageToBackend(product: VirtusizeProduct, errorHandler: ErrorHandler) {
         val apiRequest = VirtusizeApi.sendProductImageToBackend(product = product)
         perform(
             url = apiRequest.url,
             callback = null,
             method = apiRequest.method,
             dataType = ProductMetaDataHintsResponse::class.java,
-            params = apiRequest.params
+            params = apiRequest.params,
+            errorHandler = errorHandler
         )
     }
 
@@ -196,8 +240,9 @@ class Virtusize
      * This method is used to send Event to Virtusize server
      * @param event VirtusizeEvent
      * @param withDataProduct ProductCheckResponse corresponding to VirtusizeProduct
+     * @param errorHandler {@link ErrorHandler}
      */
-    private fun sendEventToApi(event: VirtusizeEvent, withDataProduct: ProductCheckResponse? = null) {
+    private fun sendEventToApi(event: VirtusizeEvent, withDataProduct: ProductCheckResponse? = null, errorHandler: ErrorHandler) {
         val defaultDisplay = (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
         resolution = "${defaultDisplay.height}x${defaultDisplay.width}"
 
@@ -215,8 +260,18 @@ class Virtusize
             callback = null,
             method = apiRequest.method,
             dataType = null,
-            params = apiRequest.params
+            params = apiRequest.params,
+            errorHandler = errorHandler
         )
+    }
+
+    /**
+     * This method is used to register message handlers. The registered message handlers will receive virtusize errors, events, fit illustrator close action.
+     * @param messageHandler Object that is an instance of {@link VirtusizeMessageHandler}
+     * @see VirtusizeMessageHandler
+     */
+    fun registerMessageHandler(messageHandler: VirtusizeMessageHandler) {
+        messageHandlers.add(messageHandler)
     }
 }
 

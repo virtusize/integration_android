@@ -11,7 +11,8 @@ enum class VirtusizeError{
     NullContext,
     ImageUrlNotValid,
     InvalidProduct,
-    FitIllustratorError
+    FitIllustratorError,
+    NetworkError
 }
 
 /**
@@ -26,6 +27,7 @@ fun VirtusizeError.message(): String {
         VirtusizeError.ImageUrlNotValid -> "Image URL is invalid"
         VirtusizeError.InvalidProduct -> "Product can not null"
         VirtusizeError.FitIllustratorError -> "Failed to load fit illustrator"
+        VirtusizeError.NetworkError -> "Network error"
     }
 }
 

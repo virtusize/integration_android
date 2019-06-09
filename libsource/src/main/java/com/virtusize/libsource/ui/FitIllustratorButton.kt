@@ -13,6 +13,7 @@ import com.virtusize.libsource.data.VirtusizeApi
 import com.virtusize.libsource.data.pojo.ProductCheckResponse
 import com.virtusize.libsource.model.VirtusizeButtonStyle
 import com.virtusize.libsource.model.VirtusizeError
+import com.virtusize.libsource.model.VirtusizeMessageHandler
 import com.virtusize.libsource.model.VirtusizeProduct
 import com.virtusize.libsource.throwError
 import kotlinx.android.synthetic.main.fit_illustrator_button.view.*
@@ -30,6 +31,7 @@ class FitIllustratorButton(context: Context, attrs: AttributeSet): LinearLayout(
     /**
      * Fit Illustrator view that opens when button is clicked
      */
+    private lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
     private val fitIllustratorDialogFragment = FitIllustratorView()
 
     init {
@@ -42,8 +44,10 @@ class FitIllustratorButton(context: Context, attrs: AttributeSet): LinearLayout(
      * @param product This is the VirtusizeProduct that is set for this button
      * @see VirtusizeProduct
      */
-    internal fun setup(product: VirtusizeProduct) {
+    internal fun setup(product: VirtusizeProduct, messageHandler: VirtusizeMessageHandler) {
         virtusizeProduct = product
+        virtusizeMessageHandler = messageHandler
+        fitIllustratorDialogFragment.setupMessageHandler(messageHandler, this)
     }
 
     /**
@@ -95,6 +99,7 @@ class FitIllustratorButton(context: Context, attrs: AttributeSet): LinearLayout(
             }
         }
         else {
+            virtusizeMessageHandler.onError(this, VirtusizeError.InvalidProduct)
             throwError(VirtusizeError.InvalidProduct)
         }
     }
