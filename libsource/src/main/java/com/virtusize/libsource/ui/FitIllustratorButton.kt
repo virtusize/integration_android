@@ -11,10 +11,7 @@ import com.virtusize.libsource.R
 import com.virtusize.libsource.VirtusizeButtonSetupHandler
 import com.virtusize.libsource.data.VirtusizeApi
 import com.virtusize.libsource.data.pojo.ProductCheckResponse
-import com.virtusize.libsource.model.VirtusizeButtonStyle
-import com.virtusize.libsource.model.VirtusizeError
-import com.virtusize.libsource.model.VirtusizeMessageHandler
-import com.virtusize.libsource.model.VirtusizeProduct
+import com.virtusize.libsource.model.*
 import com.virtusize.libsource.throwError
 import kotlinx.android.synthetic.main.fit_illustrator_button.view.*
 
@@ -85,6 +82,7 @@ class FitIllustratorButton(context: Context, attrs: AttributeSet): LinearLayout(
             if (productCheckResponse.data.validProduct) {
                 fit_button.visibility = View.VISIBLE
                 fit_button.setOnClickListener {
+                    virtusizeMessageHandler.onEvent(this, VirtusizeEvents.UserOpenedWidget)
                     val fragmentTransaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
                     val previousFragment = (context as AppCompatActivity).supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
                     previousFragment?.let {fragment ->
