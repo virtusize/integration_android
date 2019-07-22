@@ -10,7 +10,7 @@
         android:id="@+id/fit_button"
         android:text="@string/fit_button_text"
         android:background="@color/virtusizeBlack"
-        android:textColor="@color/vritusizeWhite"
+        android:textColor="@color/virtusizeWhite"
         android:textAllCaps="true"
         android:drawablePadding="@dimen/virtusizeDp16"
         android:drawableLeft="@drawable/ic_vs_icon_white"
