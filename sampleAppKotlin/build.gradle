@@ -27,6 +27,6 @@ dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "com.android.support:appcompat-v7:$build_version"
     implementation "com.android.support.constraint:constraint-layout:$constraint_layout_version"
-    implementation 'com.github.virtusize:integration_android:1.1'
-//    implementation project(":libsource")
+//    implementation 'com.github.virtusize:integration_android:1.1'
+    implementation project(":libsource")
 }

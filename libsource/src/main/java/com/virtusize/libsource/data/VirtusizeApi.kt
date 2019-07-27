@@ -97,7 +97,7 @@ object VirtusizeApi {
             .buildUpon()
             .build()
             .toString()
-        val params = mutableMapOf<String, String>()
+        val params = mutableMapOf<String, Any>()
         product.productCheckData?.data?.storeId?.let {
             params["store_id"] = it.toString()
         }
@@ -152,8 +152,8 @@ object VirtusizeApi {
         orientation: String,
         resolution: String,
         versionCode: Int
-    ): MutableMap<String, String> {
-        val params = mutableMapOf<String, String>()
+    ): MutableMap<String, Any> {
+        val params = mutableMapOf<String, Any>()
         params["name"] = virtusizeEvent.name
         params["apiKey"] = apiKey
         params["type"] = "user"
@@ -165,7 +165,7 @@ object VirtusizeApi {
         params["integrationVersion"] = "$versionCode"
         params["snippetVersion"] = "$versionCode"
 
-        val type = object : TypeToken<Map<String, String>>() {}.type
+        val type = object : TypeToken<Map<String, Any>>() {}.type
 
         if (productCheckResponse != null) {
             productCheckResponse.data.storeId.let {
@@ -181,16 +181,16 @@ object VirtusizeApi {
                 params["storeProductExternalId"] = it
             }
             productCheckResponse.data.userData.wardrobeActive.let {
-                params["wardrobeActive"] = it.toString()
+                params["wardrobeActive"] = it
             }
             productCheckResponse.data.userData.wardrobeHasM.let {
-                params["wardrobeHasM"] = it.toString()
+                params["wardrobeHasM"] = it
             }
             productCheckResponse.data.userData.wardrobeHasP.let {
-                params["wardrobeHasP"] = it.toString()
+                params["wardrobeHasP"] = it
             }
             productCheckResponse.data.userData.wardrobeHasR.let {
-                params["wardrobeHasR"] = it.toString()
+                params["wardrobeHasR"] = it
             }
         }
 
@@ -208,4 +208,4 @@ object VirtusizeApi {
  * @param method Request method type
  * @param params MutableMap of parameters to be sent as request body
  */
-data class ApiRequest(val url: String, val method: Int, val params: MutableMap<String, String> = mutableMapOf())
+data class ApiRequest(val url: String, val method: Int, val params: MutableMap<String, Any> = mutableMapOf())

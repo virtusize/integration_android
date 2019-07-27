@@ -103,7 +103,7 @@ class Virtusize
      * @param params Map of parameters to be sent as request body
      * @param errorHandler Error Handler optional
      */
-    private fun perform(url: String, callback: CallbackHandler?, method: Int, dataType: Class<*>?, params: MutableMap<String, String> = mutableMapOf(), errorHandler: ErrorHandler? = null) {
+    private fun perform(url: String, callback: CallbackHandler?, method: Int, dataType: Class<*>?, params: MutableMap<String, Any> = mutableMapOf(), errorHandler: ErrorHandler? = null) {
         if (method == Request.Method.GET) {
             val stringRequest = StringRequest(
                 method, url,
