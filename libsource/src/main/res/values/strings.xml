@@ -3,4 +3,5 @@
     <string name="fit_button_text">Check the fit</string>
     <string name="landscape">landscape</string>
     <string name="portrait">portrait</string>
+    <string name="fit_button_text_jp">サイズをチェックする</string>
 </resources>

@@ -4,18 +4,23 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
 
     <Button
         android:id="@+id/fit_button"
-        android:text="@string/fit_button_text"
-        android:background="@color/virtusizeBlack"
+        android:text="@string/fit_button_text_jp"
+        android:background="@drawable/background_blue"
         android:textColor="@color/virtusizeWhite"
         android:textAllCaps="true"
-        android:drawablePadding="@dimen/virtusizeDp16"
+        android:drawablePadding="0dp"
         android:drawableLeft="@drawable/ic_vs_icon_white"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="275dp"
+        android:layout_height="54dp"
         android:padding="@dimen/virtusizeDp16"
-        android:drawableStart="@drawable/ic_vs_icon_white" />
+        android:drawableStart="@drawable/ic_vs_icon_white"
+        android:paddingLeft="50dp"
+        android:paddingStart="50dp"
+        android:paddingRight="40dp"
+        android:paddingEnd="40dp"/>
 </LinearLayout>
