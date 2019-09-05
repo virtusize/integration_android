@@ -37,6 +37,8 @@ class FitIllustratorView: DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         // Enable javascript in web view
         web_view.settings.javaScriptEnabled = true
+        web_view.settings.domStorageEnabled = true
+        web_view.settings.databaseEnabled = true
         // Add web view client that adds script for click listener to close button in javascript widget
         web_view.webViewClient = object: WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
