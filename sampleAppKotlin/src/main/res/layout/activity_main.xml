@@ -11,7 +11,7 @@
     <!-- FitIllustratorButton is custom button layout that can be put in xml file and set up programmatically -->
     <com.virtusize.libsource.ui.FitIllustratorButton
         android:id="@+id/exampleFitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        style="@style/DefaultStyleBlueJapanese"
+        />
 
 </LinearLayout>

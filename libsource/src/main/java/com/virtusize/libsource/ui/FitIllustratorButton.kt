@@ -5,20 +5,21 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.AttributeSet
 import android.view.View
-import android.widget.LinearLayout
+import android.widget.Button
 import com.virtusize.libsource.Constants
-import com.virtusize.libsource.R
 import com.virtusize.libsource.VirtusizeButtonSetupHandler
 import com.virtusize.libsource.data.VirtusizeApi
 import com.virtusize.libsource.data.pojo.ProductCheckResponse
-import com.virtusize.libsource.model.*
+import com.virtusize.libsource.model.VirtusizeError
+import com.virtusize.libsource.model.VirtusizeEvents
+import com.virtusize.libsource.model.VirtusizeMessageHandler
+import com.virtusize.libsource.model.VirtusizeProduct
 import com.virtusize.libsource.throwError
-import kotlinx.android.synthetic.main.fit_illustrator_button.view.*
 
 /**
  * This class is the custom view FitIllustratorButton that is added in the client's layout file.
  */
-class FitIllustratorButton(context: Context, attrs: AttributeSet): LinearLayout(context, attrs),
+class FitIllustratorButton(context: Context, attrs: AttributeSet): Button(context, attrs),
     VirtusizeButtonSetupHandler {
 
     /**
@@ -32,8 +33,7 @@ class FitIllustratorButton(context: Context, attrs: AttributeSet): LinearLayout(
     private val fitIllustratorDialogFragment = FitIllustratorView()
 
     init {
-        View.inflate(context, R.layout.fit_illustrator_button, this)
-        fit_button.visibility = View.INVISIBLE
+        visibility = View.INVISIBLE
     }
 
     /**
@@ -45,21 +45,6 @@ class FitIllustratorButton(context: Context, attrs: AttributeSet): LinearLayout(
         virtusizeProduct = product
         virtusizeMessageHandler = messageHandler
         fitIllustratorDialogFragment.setupMessageHandler(messageHandler, this)
-    }
-
-    /**
-     * This method is used to apply custom style to FitIllustratorButton
-     * @param buttonStyle The type of styles available, are in VirtusizeButtonStyle
-     * @see VirtusizeButtonStyle
-     */
-    fun applyStyle(buttonStyle: VirtusizeButtonStyle) {
-        when(buttonStyle) {
-            VirtusizeButtonStyle.DEFAULT_STYLE -> {
-//                fit_button.setBackgroundColor(resources.getColor(R.color.virtusizeBlack))
-//                fit_button.setTextColor(resources.getColor(R.color.virtusizeWhite))
-//                fit_button.setText(R.string.fit_button_text)
-            }
-        }
     }
 
     /**
@@ -80,8 +65,8 @@ class FitIllustratorButton(context: Context, attrs: AttributeSet): LinearLayout(
         if (virtusizeProduct != null) {
             virtusizeProduct!!.productCheckData = productCheckResponse
             if (productCheckResponse.data.validProduct) {
-                fit_button.visibility = View.VISIBLE
-                fit_button.setOnClickListener {
+                visibility = View.VISIBLE
+                setOnClickListener {
                     virtusizeMessageHandler.onEvent(this, VirtusizeEvents.UserOpenedWidget)
                     val fragmentTransaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
                     val previousFragment = (context as AppCompatActivity).supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)

@@ -28,8 +28,6 @@ class MainActivity : AppCompatActivity() {
                 fitIllustratorButton = exampleFitButton,
                 virtusizeProduct = VirtusizeProduct(externalId = "694", imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"))
 
-        // apply style to Virtusize button
-        exampleFitButton.applyStyle(VirtusizeButtonStyle.DEFAULT_STYLE)
         // Fit Illustrator opens automatically when button is clicked
 
         /*

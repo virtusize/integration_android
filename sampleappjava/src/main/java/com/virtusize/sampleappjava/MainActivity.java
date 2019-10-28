@@ -38,7 +38,5 @@ public class MainActivity extends AppCompatActivity {
         });
 
         app.Virtusize.setupFitButton(fitIllustratorButton, new VirtusizeProduct("694", "https://www.publicdomainpictures.net/pictures/120000/velka/dress-1950-vintage-style.jpg"));
-
-        fitIllustratorButton.applyStyle(VirtusizeButtonStyle.DEFAULT_STYLE);
     }
 }
