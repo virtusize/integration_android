@@ -60,13 +60,23 @@ You need a unique API key and an Admin account, only available to Virtusize cust
                    .setEnv(VirtusizeEnvironment.STAGING)
                    .build();
         ```
-2. Add Virtusize button in your activity's XML layout file
+2. Add Virtusize button in your activity's XML layout file. Style of the button can be one of the two default available styles **DefaultStyleBlueJapanese**, **DefaultStyleBlackEnglish** or use any other button styles and/or define attributes like text, height, width, etc on the FitIllustratorButton
     ```xml
     <com.virtusize.libsource.ui.FitIllustratorButton
         android:id="@+id/exampleFitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        style="@style/DefaultStyleBlueJapanese" />
     ```
+    
+    or
+    ```xml
+    <com.virtusize.libsource.ui.FitIllustratorButton
+        android:id="@+id/exampleFitButton"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fit_button_text" />
+    ```
+    
 3. Inside your activity, setup the Fit Illustrator button using product details by passing a `imageUrl` of the product in order to populate the comparison view and passing in an `externalId` that will be used to reference that product in our API
     - Kotlin
         ```kotlin
