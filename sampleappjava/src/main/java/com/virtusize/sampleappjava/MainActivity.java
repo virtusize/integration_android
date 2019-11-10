@@ -10,6 +10,8 @@ import com.virtusize.libsource.ui.FitIllustratorButton;
 public class MainActivity extends AppCompatActivity {
 
     FitIllustratorButton fitIllustratorButton;
+    App app;
+    VirtusizeMessageHandler virtusizeMessageHandler;
 
     private static final String TAG = "MAIN_ACTIVITY_JAVA";
 
@@ -18,9 +20,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         fitIllustratorButton = findViewById(R.id.exampleFitButton);
-        App app = (App) getApplication();
+        app = (App) getApplication();
 
-        app.Virtusize.registerMessageHandler(new VirtusizeMessageHandler() {
+        virtusizeMessageHandler = new VirtusizeMessageHandler() {
             @Override
             public void virtusizeControllerShouldClose(@NonNull FitIllustratorButton fitIllustratorButton) {
                 Log.i(TAG, "Close fit illustrator");
@@ -35,8 +37,15 @@ public class MainActivity extends AppCompatActivity {
             public void onError(FitIllustratorButton fitIllustratorButton, @NonNull VirtusizeError error) {
                 Log.e(TAG, VirtusizeErrorKt.message(error));
             }
-        });
+        };
+        app.Virtusize.registerMessageHandler(virtusizeMessageHandler);
 
         app.Virtusize.setupFitButton(fitIllustratorButton, new VirtusizeProduct("694", "https://www.publicdomainpictures.net/pictures/120000/velka/dress-1950-vintage-style.jpg"));
+    }
+
+    @Override
+    protected void onPause() {
+        app.Virtusize.unregisterMessageHandler(virtusizeMessageHandler);
+        super.onPause();
     }
 }

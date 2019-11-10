@@ -37,6 +37,13 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onPause() {
+        // Always un register message handler in onPause() or depending on implementation onStop().
+        (application as App)
+            .Virtusize.unregisterMessageHandler(activityMessageHandler)
+        super.onPause()
+    }
+
     private val activityMessageHandler = object : VirtusizeMessageHandler {
         override fun virtusizeControllerShouldClose(fitIllustratorButton: FitIllustratorButton) {
             Log.i(TAG, "Close fit illustrator")

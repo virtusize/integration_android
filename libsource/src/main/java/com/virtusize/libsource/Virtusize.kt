@@ -273,6 +273,17 @@ class Virtusize
     fun registerMessageHandler(messageHandler: VirtusizeMessageHandler) {
         messageHandlers.add(messageHandler)
     }
+
+    /**
+     * This method is used to unregister a message handler. If a message handler is not unregistered
+     * when activity or fragment containing it dies then when activity or fragment opens again it
+     * will keep listening to the events along with newly registered message handlers.
+     * @param messageHandler Object that is an instance of {@link VirtusizeMessageHandler}
+     * @see VirtusizeMessageHandler
+     */
+    fun unregisterMessageHandler(messageHandler: VirtusizeMessageHandler) {
+        messageHandlers.remove(messageHandler)
+    }
 }
 
 /**
