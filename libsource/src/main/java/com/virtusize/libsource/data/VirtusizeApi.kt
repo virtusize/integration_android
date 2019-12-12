@@ -76,9 +76,9 @@ object VirtusizeApi {
             .appendQueryParameter("storeId", product.productCheckData?.data?.storeId.toString())
             .appendQueryParameter("_", Random.nextInt(1519982555).toString())
             .appendQueryParameter("spid", product.productCheckData?.data?.productDataId.toString())
-            .appendQueryParameter("language", language)
+            .appendQueryParameter("lang", language)
             .appendQueryParameter("android", "true")
-            .appendQueryParameter("sdk", "1")
+            .appendQueryParameter("sdk", "android")
             .appendQueryParameter("userId", userId)
 
         if (userId.isNotEmpty()) {
