@@ -70,7 +70,7 @@ class Virtusize
     /**
      * Device language
      */
-    private val language = Locale.getDefault().displayLanguage
+    private val language = Locale.getDefault().language
     /**
      * Device screen resolution
      */
