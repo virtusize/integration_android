@@ -99,6 +99,12 @@ You need a unique API key and an Admin account, only available to Virtusize cust
             app.Virtusize.setupFitButton(fitIllustratorButton, new VirtusizeProduct("694", "https://www.publicdomainpictures.net/pictures/120000/velka/dress-1950-vintage-style.jpg"));
         }
         ```
+        
+## Proguard rules
+Add following rules to your proguard rules file:
+```
+-keep class com.virtusize.libsource.**
+```
 
 ## Documentation
 https://github.com/virtusize/integration_android/wiki
