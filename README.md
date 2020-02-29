@@ -42,6 +42,7 @@ You need a unique API key and an Admin account, only available to Virtusize cust
             super.onCreate()
             Virtusize = VirtusizeBuilder().init(this)
                 .setApiKey(api_key)
+                .setAppId(123)
                 .setEnv(VirtusizeEnvironment.STAGING)
                 .build()
         }
@@ -57,6 +58,7 @@ You need a unique API key and an Admin account, only available to Virtusize cust
            Virtusize = new VirtusizeBuilder()
                    .init(this)
                    .setApiKey(api_key)
+                   .setAppId(123)
                    .setEnv(VirtusizeEnvironment.STAGING)
                    .build();
         ```
