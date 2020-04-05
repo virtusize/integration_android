@@ -144,11 +144,10 @@ class Virtusize
 
     /**
      * This method is used to handle errors received when performing network requests using Volley
-     * It Logs error and shows error toast to user
+     * It Logs error.
      */
     private fun handleVolleyError(err: VolleyError) {
         Log.e(Constants.LOG_TAG, err.toString() + err.localizedMessage)
-        Toast.makeText(context, "Oops! Something went wrong! $err", Toast.LENGTH_LONG).show()
     }
 
     /**
