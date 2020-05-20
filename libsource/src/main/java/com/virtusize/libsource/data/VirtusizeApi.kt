@@ -13,21 +13,26 @@ import kotlin.random.Random
 
 /**
  * This object represents the Virtusize API
+ * @param environment the Virtusize environment that is used in network requests
+ * @param apiKey the API key that is unique for every Virtusize client
+ * @param browserID the browser ID that is used to identify the user's browser
+ * @param language the language code that is set in the user's device
+ * @param userId the user ID that is unique from the client system
  */
 object VirtusizeApi {
-    private var environment = VirtusizeEnvironment.GLOBAL // Virtusize environment to be used in network requests
-    private lateinit var apiKey: String // API Key that is unique for every Virtusize client
-    private lateinit var browserID: String // BrowserID for this application
-    private lateinit var language: String // Language set in user's device
-    private lateinit var userId: String // UserId userId corresponding to the app user
+    private var environment = VirtusizeEnvironment.GLOBAL
+    private lateinit var apiKey: String
+    private lateinit var browserID: String
+    private lateinit var language: String
+    private lateinit var userId: String
 
     /**
-     * This method is used to initialize VirtusizeApi
-     * @param env Virtusize environment to be used in network requests
-     * @param key API Key that is unique for every Virtusize client
-     * @param browserID BrowserID for this application
-     * @param userId userId corresponding to the app user
-     * @param language Language set in device
+     * Initializes the VirtusizeApi
+     * @param env the Virtusize environment that is used in network requests
+     * @param key the API key that is unique for every Virtusize client
+     * @param browserID the browser ID that is used to identify the user's browser
+     * @param userId the user ID that is unique from the client system
+     * @param language the language code that is set in the user's device
      */
     fun init(env: VirtusizeEnvironment,
              key: String, browserID: String, userId: String, language: String) {
@@ -42,8 +47,10 @@ object VirtusizeApi {
     private val gson = GsonBuilder().create()
 
     /**
-     * This method is used get api request for product check
-     * @param product VirtusizeProduct for which check needs to be performed
+     * Gets the API request for product check
+     * It checks if the product is supported by Virtusize before loading anything on the frontend
+     *
+     * @param product the VirtusizeProduct for which check needs to be performed
      * @return ApiRequest
      * @see VirtusizeProduct
      * @see ApiRequest
@@ -63,9 +70,9 @@ object VirtusizeApi {
     }
 
     /**
-     * This method is used to get Fit Illustrator URL for a VirtusizeProduct
-     * @param product VirtusizeProduct for which Fit Illustrator URL is needed
-     * @return Fit Illustrator URL as String
+     * Gets the Fit Illustrator URL for a VirtusizeProduct
+     * @param product the VirtusizeProduct for which Fit Illustrator URL is needed
+     * @return the Fit Illustrator URL as String
      */
     fun fitIllustrator(product: VirtusizeProduct): String {
         val urlBuilder = Uri.parse(environment.value() + VirtusizeEndpoint.FitIllustrator.getUrl())
@@ -88,8 +95,8 @@ object VirtusizeApi {
     }
 
     /**
-     * This method is used to get api request for sending image of VirtusizeProduct to server
-     * @param product VirtusizeProduct whose image needs to be sent to Virtusize server
+     * Gets a API request for sending the image of VirtusizeProduct to the server
+     * @param product the VirtusizeProduct whose image needs to be sent to the Virtusize server
      * @return ApiRequest
      */
     fun sendProductImageToBackend(product: VirtusizeProduct): ApiRequest {
@@ -108,12 +115,12 @@ object VirtusizeApi {
     }
 
     /**
-     * This method is used to get api request for sending event to server
-     * @param virtusizeEvent Event to be sent to Virtusize server
-     * @param productCheckResponse ProductCheckResponse as additional payload to be sent to server with event
-     * @param deviceOrientation Device's screen orientation
-     * @param screenResolution Device's screen resolution
-     * @param versionCode Version Code
+     * Gets a API request for logging and sending a Virtusize event to the server
+     * @param virtusizeEvent the event to be sent to Virtusize server
+     * @param productCheckResponse ProductCheckResponse as the additional payload to be sent to the server along with the event
+     * @param deviceOrientation the screen orientation of the device
+     * @param screenResolution the screen resolution of the device
+     * @param versionCode the SDK version code
      * @return ApiRequest
      * @see VirtusizeEvent
      * @see ProductCheckResponse
@@ -135,13 +142,13 @@ object VirtusizeApi {
     }
 
     /**
-     * This method is used to build additional payload to be sent when sending event to server
-     * @param virtusizeEvent Event to be sent to Virtusize server
-     * @param productCheckResponse ProductCheckResponse as additional payload to be sent to server with event
-     * @param orientation Device's screen orientation
-     * @param resolution Device's screen resolution
-     * @param versionCode Version Code
-     * @return MutableMap of params for payload
+     * Builds the additional payload to be sent when sending an event to the server
+     * @param virtusizeEvent the event to be sent to the Virtusize server
+     * @param productCheckResponse ProductCheckResponse as the additional payload to be sent to the server along with the event
+     * @param orientation the screen orientation of the device
+     * @param resolution the screen resolution of the device
+     * @param versionCode the SDK version code
+     * @return the MutableMap that holds pairs of keys and values for the payload
      * @see VirtusizeEvent
      * @see ProductCheckResponse
      * @see MutableMap
@@ -203,9 +210,9 @@ object VirtusizeApi {
 }
 
 /**
- * This class represents Api request that can be used to perform network request
- * @param url URL for network request
- * @param method Request method type
- * @param params MutableMap of parameters to be sent as request body
+ * This class represents the API request that can be used to perform a network request
+ * @param url the URL for a network request
+ * @param method the HTTP request method type
+ * @param params the MutableMap of query parameters to be sent to the server
  */
 data class ApiRequest(val url: String, val method: Int, val params: MutableMap<String, Any> = mutableMapOf())

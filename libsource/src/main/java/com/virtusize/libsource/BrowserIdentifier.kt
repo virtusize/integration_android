@@ -6,14 +6,14 @@ import java.util.*
 import kotlin.random.Random
 
 /**
- * This class is used to get BrowserIdentifier specific to this application
+ * This class is used to get a browser identifier specific to this SDK
  * @param sharedPrefs Application specific Shared Preferences
  */
 class BrowserIdentifier(private val sharedPrefs: SharedPreferences) {
 
     /**
-     * This method is used to get Browser Identifier specific to this app
-     * @return Browser Identifier as String
+     * Gets the browser identifier specific to this SDK
+     * @return the browser identifier as String
      */
     fun getBrowserId(): String {
         return if(sharedPrefs.contains(BID_KEY)) {
@@ -23,8 +23,8 @@ class BrowserIdentifier(private val sharedPrefs: SharedPreferences) {
     }
 
     /**
-     * This method is used to generate and store browser identifier in application level shared preferences
-     * @return Browser Identifier as String
+     * Generates and stores a browser identifier in application level shared preferences
+     * @return the browser identifier as String
      */
     private fun generateAndStoreBrowserId(): String {
         val bid = generateBrowserId()
@@ -35,11 +35,15 @@ class BrowserIdentifier(private val sharedPrefs: SharedPreferences) {
     }
 
     /**
-     * This method is used to generate Browser Identifier of the format cJhf5nGjDA0fgUXLAIz5Ls5.pfa1lp
-     * @return Browser Identifier as String
+     * Generates a browser identifier
+     *
+     * A Browser Identifier contains 23 random characters and 6 generated characters based on the current time
+     * in milliseconds separated with a '.'
+     * For example, cJhf5nGjDA0fgUXLAIz5Ls5.pfa1lp is a generated browser identifier
+     * @sample cJhf5nGjDA0fgUXLAIz5Ls5.pfa1lp
+     * @return the browser identifier as String
      */
     private fun generateBrowserId(): String {
-        // Format: cJhf5nGjDA0fgUXLAIz5Ls5.pfa1lp
         val browserIdentifier = StringBuilder("")
         val chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
         for (i in 0..21) {

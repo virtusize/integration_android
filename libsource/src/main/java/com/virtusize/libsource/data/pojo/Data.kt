@@ -4,7 +4,7 @@ import javax.annotation.Generated
 import com.google.gson.annotations.SerializedName
 
 /**
- * This class represents response for data field in ProductCheckResponse
+ * This class represents the response for the data field of ProductCheckResponse
  * @see ProductCheckResponse
  */
 @Generated("com.robohorse.robopojogenerator")

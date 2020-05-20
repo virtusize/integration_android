@@ -11,8 +11,8 @@ enum class VirtusizeEndpoint {
 }
 
 /**
- * This method returns url corresponding to the VirtusizeEndpoint that it is called upon
- * @return Virtusize Endpoint URL
+ * This method returns a URL corresponding to the Virtusize endpoint that it is called upon
+ * @return the Virtusize Endpoint URL
  */
 fun VirtusizeEndpoint.getUrl(): String {
      return when(this) {

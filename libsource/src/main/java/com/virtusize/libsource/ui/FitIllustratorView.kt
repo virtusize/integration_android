@@ -35,11 +35,11 @@ class FitIllustratorView: DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Enable javascript in web view
+        // Enable JavaScript in the web view
         web_view.settings.javaScriptEnabled = true
         web_view.settings.domStorageEnabled = true
         web_view.settings.databaseEnabled = true
-        // Add web view client that adds script for click listener to close button in javascript widget
+        // Set up the web view client that adds a JavaScript script for the click listener to close the button
         web_view.webViewClient = object: WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
@@ -50,9 +50,9 @@ class FitIllustratorView: DialogFragment() {
                             "})()")
             }
         }
-        // Add Javascript interface to receive events from web view
+        // Add the Javascript interface to receive events from the web view
         web_view.addJavascriptInterface(JavaScriptInterface(), Constants.JSBridgeName)
-        // Get Fit Illustrator URL passed in fragment arguments
+        // Get the Fit Illustrator URL passed in fragment arguments
         arguments?.getString(Constants.URL_KEY)?.let {
             url = it
         }
@@ -60,7 +60,7 @@ class FitIllustratorView: DialogFragment() {
     }
 
     /**
-     * This method sets up message handler
+     * Sets up a Virtusize message handler
      */
     internal fun setupMessageHandler(messageHandler: VirtusizeMessageHandler, fitIllustratorButton: FitIllustratorButton) {
         virtusizeMessageHandler = messageHandler
@@ -68,12 +68,12 @@ class FitIllustratorView: DialogFragment() {
     }
 
     /**
-     * Javascript interface to receive events from web view
+     * The Javascript interface to receive events from the web view
      */
     private inner class JavaScriptInterface {
 
         /**
-         * This method is called when usr clicks on close button in fit illustrator view
+         * This method is called when a user clicks on the close button in the Fit Illustrator window
          */
         @JavascriptInterface
         fun userClosedWidget() {
