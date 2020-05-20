@@ -128,7 +128,7 @@ class Virtusize
             for ((key, value) in  params) {
                 jsonBody.put(key, value)
             }
-            val jsonObjectRequest = JsonObjectRequest(method, url, jsonBody,
+            val jsonObjectRequest = object: JsonObjectRequest(method, url, jsonBody,
                 Response.Listener { response ->
                     Log.d(Constants.LOG_TAG, response.toString())
                 },
@@ -136,7 +136,13 @@ class Virtusize
                     if (error != null)
                         handleVolleyError(error)
                     errorHandler?.onError(VirtusizeError.NetworkError)
-                })
+                }) {
+                override fun getHeaders(): MutableMap<String, String> {
+                    val headers = HashMap<String, String>()
+                    headers["x-vs-bid"] = browserIdentifier.getBrowserId()
+                    return headers
+                }
+            }
             requestQueue.add(jsonObjectRequest)
         }
 
