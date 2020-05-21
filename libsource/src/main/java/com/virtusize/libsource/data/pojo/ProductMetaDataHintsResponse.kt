@@ -4,7 +4,7 @@ import javax.annotation.Generated
 import com.google.gson.annotations.SerializedName
 
 /**
- * This class represents response for request ProductMetaDataHints
+ * This class represents the response for the request ProductMetaDataHints
  * @see VirtusizeEndpoint.ProductMetaDataHints
  */
 @Generated("com.robohorse.robopojogenerator")

@@ -13,8 +13,8 @@ enum class VirtusizeEnvironment {
 }
 
 /**
- * This method is used to get environment value corresponding to the VirtusizeEnvironment it is called on
- * @return Value of Virtusize Environment
+ * Gets the environment value corresponding to the Virtusize Environment it is called on
+ * @return A String value of the Virtusize Environment
  */
 fun VirtusizeEnvironment.value(): String {
     return when(this) {

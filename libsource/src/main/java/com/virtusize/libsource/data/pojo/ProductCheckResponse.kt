@@ -4,7 +4,7 @@ import javax.annotation.Generated
 import com.google.gson.annotations.SerializedName
 
 /**
- * This class represents response for request ProductCheck
+ * This class represents the response for the API request ProductCheck
  * @see VirtusizeEndpoint.ProductCheck
  */
 @Generated("com.robohorse.robopojogenerator")

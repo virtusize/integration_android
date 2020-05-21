@@ -3,7 +3,7 @@ package com.virtusize.libsource.model
 import org.json.JSONObject
 
 /**
- * This enum contains all available events in Virtusize
+ * This enum contains all available events in Virtusize API
  */
 enum class VirtusizeEvents {
     UserSawProduct,
@@ -12,8 +12,8 @@ enum class VirtusizeEvents {
 }
 
 /**
- * This method returns the name of event that it is called upon
- * @return Event name
+ * Returns the name of the event that it is called upon
+ * @return the name of the event
  */
 fun VirtusizeEvents.getEventName(): String {
     return when(this) {
@@ -24,8 +24,8 @@ fun VirtusizeEvents.getEventName(): String {
 }
 
 /**
- * This class represents VirtusizeEvent object
- * @param name is the name of the event
- * @param data is the additional data as JSONObject in the event
+ * Represents a VirtusizeEvent object
+ * @param name the name of the event
+ * @param data the additional data as JSONObject in the event
  */
 data class VirtusizeEvent(val name: String, val data: JSONObject? = null)

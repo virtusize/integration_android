@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.AttributeSet
 import android.view.View
-import android.widget.Button
 import com.virtusize.libsource.Constants
 import com.virtusize.libsource.VirtusizeButtonSetupHandler
 import com.virtusize.libsource.data.VirtusizeApi
@@ -17,19 +16,18 @@ import com.virtusize.libsource.model.VirtusizeProduct
 import com.virtusize.libsource.throwError
 
 /**
- * This class is the custom view FitIllustratorButton that is added in the client's layout file.
+ * This class is the custom Fit Illustrator Button that is added in the client's layout file
  */
-class FitIllustratorButton(context: Context, attrs: AttributeSet): Button(context, attrs),
+class FitIllustratorButton(context: Context, attrs: AttributeSet): android.support.v7.widget.AppCompatButton(context, attrs),
     VirtusizeButtonSetupHandler {
 
-    /**
-     * VirtusizeProduct associated with FitIllustratorButton instance
-     */
+    // VirtusizeProduct associated with the FitIllustratorButton instance
     var virtusizeProduct: VirtusizeProduct? = null
-    /**
-     * Fit Illustrator view that opens when button is clicked
-     */
+
+    // Receives Virtusize messages
     private lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
+
+    // The Fit Illustrator view that opens when the button is clicked
     private val fitIllustratorDialogFragment = FitIllustratorView()
 
     init {
@@ -37,8 +35,8 @@ class FitIllustratorButton(context: Context, attrs: AttributeSet): Button(contex
     }
 
     /**
-     * This method is used to set up button with the corresponding VirtusizeProduct
-     * @param product This is the VirtusizeProduct that is set for this button
+     * Sets up the button with the corresponding VirtusizeProduct
+     * @param product the VirtusizeProduct that is set for this button
      * @see VirtusizeProduct
      */
     internal fun setup(product: VirtusizeProduct, messageHandler: VirtusizeMessageHandler) {
@@ -48,7 +46,7 @@ class FitIllustratorButton(context: Context, attrs: AttributeSet): Button(contex
     }
 
     /**
-     * This method is used to dismiss/close the Fit Illustrator Window
+     * Dismisses/closes the Fit Illustrator Window
      */
     fun dismissFitIllustratorView() {
         if (fitIllustratorDialogFragment.isVisible)
@@ -56,8 +54,8 @@ class FitIllustratorButton(context: Context, attrs: AttributeSet): Button(contex
     }
 
     /**
-     * This method is used to set up product check data received from server to virtusizeProduct
-     * @param productCheckResponse ProductCheckResponse received from Virtusize server
+     * Sets up the product check data received from Virtusize API to VirtusizeProduct
+     * @param productCheckResponse ProductCheckResponse received from Virtusize API
      * @see ProductCheckResponse
      * @throws VirtusizeError.InvalidProduct error
      */

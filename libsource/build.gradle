@@ -10,7 +10,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
 
         versionCode 3
-        versionName "1.5.2"
+        versionName "1.5.3"
     }
 
     buildTypes {

@@ -3,7 +3,7 @@ package com.virtusize.libsource.model
 import java.lang.IllegalArgumentException
 
 /**
- * This enum contains all available errors in virtusize library
+ * This enum contains all available errors in Virtusize library
  */
 enum class VirtusizeError{
     NullFitButtonError,
@@ -16,8 +16,8 @@ enum class VirtusizeError{
 }
 
 /**
- * This method returns error message for the VirtusizeError that it is called on
- * @return Error message
+ * Returns an error message for the VirtusizeError that it is called on
+ * @return the error message for the VirtusizeError
  */
 fun VirtusizeError.message(): String {
     return when(this) {
@@ -32,7 +32,7 @@ fun VirtusizeError.message(): String {
 }
 
 /**
- * This method throws error for the VirtusizeError that it is called on
+ * Throws error for the VirtusizeError that it is called on
  * @throws IllegalArgumentException
  */
 fun VirtusizeError.throwError() {
