@@ -10,7 +10,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.virtusize.libsource.Constants
 import com.virtusize.libsource.R
-import com.virtusize.libsource.model.VirtusizeMessageHandler
+import com.virtusize.libsource.data.local.VirtusizeMessageHandler
 import kotlinx.android.synthetic.main.web_activity.*
 
 /**

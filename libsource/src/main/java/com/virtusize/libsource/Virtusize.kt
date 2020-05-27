@@ -5,19 +5,12 @@ import android.content.Context.MODE_PRIVATE
 import android.content.res.Configuration
 import android.util.Log
 import android.view.WindowManager
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.VolleyError
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
-import com.google.gson.GsonBuilder
-import com.virtusize.libsource.data.VirtusizeApi
-import com.virtusize.libsource.data.pojo.ProductCheckResponse
-import com.virtusize.libsource.data.pojo.ProductMetaDataHintsResponse
-import com.virtusize.libsource.model.*
+import com.virtusize.libsource.data.local.*
+import com.virtusize.libsource.network.VirtusizeApi
+import com.virtusize.libsource.data.remote.ProductCheck
+import com.virtusize.libsource.data.remote.ProductMetaDataHints
+import com.virtusize.libsource.network.VirtusizeApiTask
 import com.virtusize.libsource.ui.FitIllustratorButton
-import org.json.JSONObject
 import java.util.*
 
 /**
@@ -34,7 +27,6 @@ class Virtusize(
     env: VirtusizeEnvironment,
     private val context: Context
 ) {
-
     // Registered message handlers
     private val messageHandlers = mutableListOf<VirtusizeMessageHandler>()
 
@@ -86,82 +78,6 @@ class Virtusize(
         )
     }
 
-    // Volley request queue
-    private val requestQueue = Volley.newRequestQueue(context)
-
-    // GSON for JSON to Java serialization
-    private val gson = GsonBuilder().create()
-
-    /**
-     * This method is used to perform API requests.
-     * Needs Internet permission
-     * Makes network calls
-     * @param url the request URL
-     * @param callback the callback which is used to send data back when the request is successful and completed
-     * @param method the API request method type
-     * @param dataType the Class for converting the JSON response to a Java object of type dataType
-     * @param params the MutableMap of query parameters to be sent to the server
-     * @param errorHandler optional error handler
-     */
-    private fun perform(
-        url: String,
-        callback: CallbackHandler?,
-        method: Int,
-        dataType: Class<*>?,
-        params: MutableMap<String, Any> = mutableMapOf(),
-        errorHandler: ErrorHandler? = null
-    ) {
-        if (method == Request.Method.GET) {
-            val stringRequest = StringRequest(
-                method, url,
-                Response.Listener<String> { response ->
-                    if (response != null && dataType != null) {
-                        val result = gson.fromJson(response, dataType)
-                        callback?.handleEvent(result)
-                    }
-                },
-                Response.ErrorListener { error ->
-                    if (error != null)
-                        handleVolleyError(error)
-                    errorHandler?.onError(VirtusizeError.NetworkError)
-                })
-
-            // Add the request to the RequestQueue.
-            requestQueue.add(stringRequest)
-        } else {
-            val jsonBody = JSONObject()
-
-            for ((key, value) in params) {
-                jsonBody.put(key, value)
-            }
-            val jsonObjectRequest = object: JsonObjectRequest(method, url, jsonBody,
-                Response.Listener { response ->
-                    Log.d(Constants.LOG_TAG, response.toString())
-                },
-                Response.ErrorListener { error ->
-                    if (error != null)
-                        handleVolleyError(error)
-                    errorHandler?.onError(VirtusizeError.NetworkError)
-                }) {
-                override fun getHeaders(): MutableMap<String, String> {
-                    val headers = HashMap<String, String>()
-                    headers["x-vs-bid"] = browserIdentifier.getBrowserId()
-                    return headers
-                }
-            }
-            requestQueue.add(jsonObjectRequest)
-        }
-
-    }
-
-    /**
-     * Handles errors received when performing network requests using Volley
-     * It Logs error.
-     */
-    private fun handleVolleyError(err: VolleyError) {
-        Log.e(Constants.LOG_TAG, err.toString() + err.localizedMessage)
-    }
-
     /**
      * Sets up the Fit Illustrator button by setting VirtusizeProduct to this button
      * @param fitIllustratorButton FitIllustratorButton that is being set up
@@ -195,56 +111,59 @@ class Virtusize(
         val productValidCheckListener = object : ValidProductCheckHandler {
 
             /**
-             * This method returns ProductCheckResponse from Virtusize when Product check Request is performed on server on Virtusize server
+             * This method returns ProductCheckResponse from Virtusize
+             * when Product check Request is performed on server on Virtusize server
              */
-            override fun onValidProductCheckCompleted(productCheckResponse: ProductCheckResponse) {
+            override fun onValidProductCheckCompleted(productCheck: ProductCheck) {
                 // Set up Product check response data to VirtusizeProduct in FitIllustratorButton
-                fitIllustratorButton.setupProductCheckResponseData(productCheckResponse)
+                fitIllustratorButton.setupProductCheckResponseData(productCheck)
                 // Send API Event UserSawProduct
                 sendEventToApi(
                     event = VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()),
-                    withDataProduct = productCheckResponse,
+                    withDataProduct = productCheck,
                     errorHandler = errorHandler
                 )
                 messageHandler.onEvent(fitIllustratorButton, VirtusizeEvents.UserSawProduct)
-                if (productCheckResponse.data.validProduct) {
-                    if (productCheckResponse.data.fetchMetaData) {
-                        if (fitIllustratorButton.virtusizeProduct?.imageUrl != null) {
-                            // If image URL is valid, send image URL to server
-                            sendProductImageToBackend(
-                                product = fitIllustratorButton.virtusizeProduct!!,
-                                errorHandler = errorHandler
-                            )
-                        } else {
-                            messageHandler.onError(
-                                fitIllustratorButton,
-                                VirtusizeError.ImageUrlNotValid
-                            )
-                            throwError(VirtusizeError.ImageUrlNotValid)
+                productCheck.data?.apply {
+                    if (validProduct) {
+                        if (fetchMetaData) {
+                            if (fitIllustratorButton.virtusizeProduct?.imageUrl != null) {
+                                // If image URL is valid, send image URL to server
+                                sendProductImageToBackend(
+                                    product = fitIllustratorButton.virtusizeProduct!!,
+                                    errorHandler = errorHandler
+                                )
+                            } else {
+                                messageHandler.onError(
+                                    fitIllustratorButton,
+                                    VirtusizeError.ImageUrlNotValid
+                                )
+                                throwError(VirtusizeError.ImageUrlNotValid)
+                            }
                         }
+                        // Send API Event UserSawWidgetButton
+                        sendEventToApi(
+                            event = VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName()),
+                            withDataProduct = productCheck,
+                            errorHandler = errorHandler
+                        )
+                        messageHandler.onEvent(
+                            fitIllustratorButton,
+                            VirtusizeEvents.UserSawWidgetButton
+                        )
                     }
-                    // Send API Event UserSawWidgetButton
-                    sendEventToApi(
-                        event = VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName()),
-                        withDataProduct = productCheckResponse,
-                        errorHandler = errorHandler
-                    )
-                    messageHandler.onEvent(
-                        fitIllustratorButton,
-                        VirtusizeEvents.UserSawWidgetButton
-                    )
                 }
+
             }
         }
 
-        // Perform the network request for Product Check
-        perform(
-            url = apiRequest.url,
-            callback = productValidCheckListener,
-            method = apiRequest.method,
-            dataType = ProductCheckResponse::class.java,
-            errorHandler = errorHandler
-        )
+        // Execute the API task to make a network request for Product Check
+        VirtusizeApiTask()
+            .setBrowserID(browserIdentifier.getBrowserId())
+            .setCallback(productValidCheckListener)
+            .setDataType(ProductCheck::class.java)
+            .setErrorHandler(errorHandler)
+            .execute(apiRequest)
     }
 
     /**
@@ -256,14 +175,12 @@ class Virtusize(
      */
     private fun sendProductImageToBackend(product: VirtusizeProduct, errorHandler: ErrorHandler) {
         val apiRequest = VirtusizeApi.sendProductImageToBackend(product = product)
-        perform(
-            url = apiRequest.url,
-            callback = null,
-            method = apiRequest.method,
-            dataType = ProductMetaDataHintsResponse::class.java,
-            params = apiRequest.params,
-            errorHandler = errorHandler
-        )
+        VirtusizeApiTask()
+            .setBrowserID(browserIdentifier.getBrowserId())
+            .setCallback(null)
+            .setDataType(ProductMetaDataHints::class.java)
+            .setErrorHandler(errorHandler)
+            .execute(apiRequest)
     }
 
     /**
@@ -275,7 +192,7 @@ class Virtusize(
      */
     private fun sendEventToApi(
         event: VirtusizeEvent,
-        withDataProduct: ProductCheckResponse? = null,
+        withDataProduct: ProductCheck? = null,
         errorHandler: ErrorHandler
     ) {
         val defaultDisplay =
@@ -284,7 +201,7 @@ class Virtusize(
 
         val apiRequest = VirtusizeApi.sendEventToAPI(
             virtusizeEvent = event,
-            productCheckResponse = withDataProduct,
+            productCheck = withDataProduct,
             deviceOrientation = if (context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) context.getString(
                 R.string.landscape
             )
@@ -293,14 +210,12 @@ class Virtusize(
             versionCode = context.packageManager
                 .getPackageInfo(context.packageName, 0).versionCode
         )
-        perform(
-            url = apiRequest.url,
-            callback = null,
-            method = apiRequest.method,
-            dataType = null,
-            params = apiRequest.params,
-            errorHandler = errorHandler
-        )
+        VirtusizeApiTask()
+            .setBrowserID(browserIdentifier.getBrowserId())
+            .setCallback(null)
+            .setDataType(null)
+            .setErrorHandler(errorHandler)
+            .execute(apiRequest)
     }
 
     /**
@@ -316,7 +231,8 @@ class Virtusize(
     /**
      * Unregisters a message handler.
      * If a message handler is not unregistered when the associated activity or fragment dies,
-     * then when the activity or fragment opens again, it will keep listening to the events along with newly registered message handlers.
+     * then when the activity or fragment opens again,
+     * it will keep listening to the events along with newly registered message handlers.
      * @param messageHandler an instance of {@link VirtusizeMessageHandler}
      * @see VirtusizeMessageHandler
      */
@@ -326,7 +242,8 @@ class Virtusize(
 }
 
 /**
- * Throws a VirtusizeError. It logs the error information and exits the normal app flow by throwing an error
+ * Throws a VirtusizeError.
+ * It logs the error information and exits the normal app flow by throwing an error
  * @param error VirtusizeError
  * @throws IllegalArgumentException
  * @see VirtusizeError

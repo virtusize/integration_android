@@ -1,4 +1,4 @@
-package com.virtusize.libsource.model
+package com.virtusize.libsource.data.local
 
 /**
  * This enum contains all the styles that can be applied to the Fit Illustrator Button

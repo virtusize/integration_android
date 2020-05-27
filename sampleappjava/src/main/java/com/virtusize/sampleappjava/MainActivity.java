@@ -1,10 +1,16 @@
 package com.virtusize.sampleappjava;
 
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import com.virtusize.libsource.model.*;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import com.virtusize.libsource.model.VirtusizeError;
+import com.virtusize.libsource.model.VirtusizeErrorKt;
+import com.virtusize.libsource.model.VirtusizeEventKt;
+import com.virtusize.libsource.model.VirtusizeEvents;
+import com.virtusize.libsource.model.VirtusizeMessageHandler;
+import com.virtusize.libsource.model.VirtusizeProduct;
 import com.virtusize.libsource.ui.FitIllustratorButton;
 
 public class MainActivity extends AppCompatActivity {

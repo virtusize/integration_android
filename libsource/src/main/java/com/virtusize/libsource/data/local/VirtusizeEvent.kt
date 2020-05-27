@@ -1,4 +1,4 @@
-package com.virtusize.libsource.model
+package com.virtusize.libsource.data.local
 
 import org.json.JSONObject
 
