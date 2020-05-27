@@ -7,12 +7,12 @@ import android.util.AttributeSet
 import android.view.View
 import com.virtusize.libsource.Constants
 import com.virtusize.libsource.VirtusizeButtonSetupHandler
-import com.virtusize.libsource.data.VirtusizeApi
-import com.virtusize.libsource.data.pojo.ProductCheckResponse
-import com.virtusize.libsource.model.VirtusizeError
-import com.virtusize.libsource.model.VirtusizeEvents
-import com.virtusize.libsource.model.VirtusizeMessageHandler
-import com.virtusize.libsource.model.VirtusizeProduct
+import com.virtusize.libsource.network.VirtusizeApi
+import com.virtusize.libsource.data.remote.ProductCheck
+import com.virtusize.libsource.data.local.VirtusizeError
+import com.virtusize.libsource.data.local.VirtusizeEvents
+import com.virtusize.libsource.data.local.VirtusizeMessageHandler
+import com.virtusize.libsource.data.local.VirtusizeProduct
 import com.virtusize.libsource.throwError
 
 /**
@@ -55,29 +55,32 @@ class FitIllustratorButton(context: Context, attrs: AttributeSet): android.suppo
 
     /**
      * Sets up the product check data received from Virtusize API to VirtusizeProduct
-     * @param productCheckResponse ProductCheckResponse received from Virtusize API
-     * @see ProductCheckResponse
+     * @param productCheck ProductCheckResponse received from Virtusize API
+     * @see ProductCheck
      * @throws VirtusizeError.InvalidProduct error
      */
-    override fun setupProductCheckResponseData(productCheckResponse: ProductCheckResponse) {
+    override fun setupProductCheckResponseData(productCheck: ProductCheck) {
         if (virtusizeProduct != null) {
-            virtusizeProduct!!.productCheckData = productCheckResponse
-            if (productCheckResponse.data.validProduct) {
-                visibility = View.VISIBLE
-                setOnClickListener {
-                    virtusizeMessageHandler.onEvent(this, VirtusizeEvents.UserOpenedWidget)
-                    val fragmentTransaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
-                    val previousFragment = (context as AppCompatActivity).supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
-                    previousFragment?.let {fragment ->
-                        fragmentTransaction.remove(fragment)
+            virtusizeProduct!!.productCheckData = productCheck
+            productCheck.data?.let { productCheckResponseData ->
+                if (productCheckResponseData.validProduct) {
+                    visibility = View.VISIBLE
+                    setOnClickListener {
+                        virtusizeMessageHandler.onEvent(this, VirtusizeEvents.UserOpenedWidget)
+                        val fragmentTransaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
+                        val previousFragment = (context as AppCompatActivity).supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
+                        previousFragment?.let {fragment ->
+                            fragmentTransaction.remove(fragment)
+                        }
+                        fragmentTransaction.addToBackStack(null)
+                        val args = Bundle()
+                        args.putString(Constants.URL_KEY, VirtusizeApi.fitIllustrator(virtusizeProduct!!))
+                        fitIllustratorDialogFragment.arguments = args
+                        fitIllustratorDialogFragment.show(fragmentTransaction, Constants.FRAG_TAG)
                     }
-                    fragmentTransaction.addToBackStack(null)
-                    val args = Bundle()
-		            args.putString(Constants.URL_KEY, VirtusizeApi.fitIllustrator(virtusizeProduct!!))
-                    fitIllustratorDialogFragment.arguments = args
-                    fitIllustratorDialogFragment.show(fragmentTransaction, Constants.FRAG_TAG)
                 }
             }
+
         }
         else {
             virtusizeMessageHandler.onError(this, VirtusizeError.InvalidProduct)

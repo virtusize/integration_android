@@ -1,9 +1,9 @@
-package com.virtusize.libsource.data
+package com.virtusize.libsource.network
 
 /**
  * This enum represents all available Virtusize endpoints
  */
-enum class VirtusizeEndpoint {
+internal enum class VirtusizeEndpoint {
     ProductCheck,
     FitIllustrator,
     ProductMetaDataHints,
@@ -14,7 +14,7 @@ enum class VirtusizeEndpoint {
  * This method returns a URL corresponding to the Virtusize endpoint that it is called upon
  * @return the Virtusize Endpoint URL
  */
-fun VirtusizeEndpoint.getUrl(): String {
+internal fun VirtusizeEndpoint.getUrl(): String {
      return when(this) {
         VirtusizeEndpoint.ProductCheck -> {
             "/integration/v3/product-data-check"

@@ -1,4 +1,4 @@
-package com.virtusize.libsource.model
+package com.virtusize.libsource.data.local
 
 import java.lang.IllegalArgumentException
 
@@ -22,7 +22,7 @@ enum class VirtusizeError{
 fun VirtusizeError.message(): String {
     return when(this) {
         VirtusizeError.NullFitButtonError -> "Fit Illustrator Button is null."
-        VirtusizeError.ApiKeyNullOrEmpty-> "Api Key can not be null or empty."
+        VirtusizeError.ApiKeyNullOrEmpty -> "Api Key can not be null or empty."
         VirtusizeError.NullContext -> "Context can not be null"
         VirtusizeError.ImageUrlNotValid -> "Image URL is invalid"
         VirtusizeError.InvalidProduct -> "Product can not null"

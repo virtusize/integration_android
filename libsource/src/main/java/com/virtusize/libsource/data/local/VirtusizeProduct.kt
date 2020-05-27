@@ -1,6 +1,6 @@
-package com.virtusize.libsource.model
+package com.virtusize.libsource.data.local
 
-import com.virtusize.libsource.data.pojo.ProductCheckResponse
+import com.virtusize.libsource.data.remote.ProductCheck
 
 /**
  * This class represents a VirtusizeProduct object.
@@ -12,5 +12,5 @@ import com.virtusize.libsource.data.pojo.ProductCheckResponse
 data class VirtusizeProduct @JvmOverloads constructor(
     val externalId: String,
     var imageUrl: String? = null,
-    var productCheckData: ProductCheckResponse? = null
+    var productCheckData: ProductCheck? = null
 )

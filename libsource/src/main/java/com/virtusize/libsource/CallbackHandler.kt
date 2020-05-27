@@ -1,7 +1,7 @@
 package com.virtusize.libsource
 
-import com.virtusize.libsource.data.pojo.ProductCheckResponse
-import com.virtusize.libsource.model.VirtusizeError
+import com.virtusize.libsource.data.local.VirtusizeError
+import com.virtusize.libsource.data.remote.ProductCheck
 
 /**
  * This interface can be implemented by any class that wants to receive any form of Data
@@ -28,31 +28,31 @@ interface ErrorHandler {
 }
 /**
  * This interface can be implemented by any class that wants to receive ProductCheckResponse, that is received from the product data check endpoint
- * @see ProductCheckResponse
+ * @see ProductCheck
  */
 interface VirtusizeButtonSetupHandler: CallbackHandler {
 
     /**
      * Invokes this method to pass ProductCheckResponse to object
      * @param data the data whose type is ProductCheckResponse
-     * @see ProductCheckResponse
+     * @see ProductCheck
      */
     override fun handleEvent(data: Any) {
-        if (data is ProductCheckResponse)
+        if (data is ProductCheck)
             setupProductCheckResponseData(data)
     }
 
     /**
      * This methods sets up productCheckResponse received from Virtusize server to object
-     * @param productCheckResponse is ProductCheckResponse
-     * @see ProductCheckResponse
+     * @param productCheck is ProductCheckResponse
+     * @see ProductCheck
      */
-    fun setupProductCheckResponseData(productCheckResponse: ProductCheckResponse)
+    fun setupProductCheckResponseData(productCheck: ProductCheck)
 }
 
 /**
  * This interface can be implemented by any class that wants to receive ProductCheckResponse when server returns valid product for product check response
- * @see ProductCheckResponse
+ * @see ProductCheck
  */
 interface ValidProductCheckHandler: CallbackHandler {
 
@@ -61,14 +61,14 @@ interface ValidProductCheckHandler: CallbackHandler {
      * @param data of type ProductCheckResponse
      */
     override fun handleEvent(data: Any) {
-        if (data is ProductCheckResponse)
+        if (data is ProductCheck)
             onValidProductCheckCompleted(data)
     }
 
     /**
      * Passes productCheckResponse to object
-     * @param productCheckResponse is ProductCheckResponse
-     * @see ProductCheckResponse
+     * @param productCheck is ProductCheckResponse
+     * @see ProductCheck
      */
-    fun onValidProductCheckCompleted(productCheckResponse: ProductCheckResponse)
+    fun onValidProductCheckCompleted(productCheck: ProductCheck)
 }
