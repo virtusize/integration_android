@@ -73,9 +73,6 @@ internal object VirtusizeApi {
             .appendQueryParameter("apiKey", apiKey)
             .appendQueryParameter("externalId", product.externalId)
             .appendQueryParameter("version", "1")
-        if (userId.isNotEmpty()) {
-            urlBuilder.appendQueryParameter("externalUserId", userId)
-        }
         val url = urlBuilder.build().toString()
         return ApiRequest(url, HttpMethod.GET)
     }
