@@ -101,8 +101,10 @@ class Virtusize(
         }
 
         // to handle network errors
-        val errorHandler: ((VirtusizeError) -> Unit) = { error ->
-            messageHandler.onError(fitIllustratorButton, error)
+        val errorHandler: ErrorResponseHandler = object: ErrorResponseHandler {
+            override fun onError(error: VirtusizeError) {
+                messageHandler.onError(fitIllustratorButton, error)
+            }
         }
 
         // Set virtusizeProduct to fitIllustratorButton
@@ -164,11 +166,7 @@ class Virtusize(
             .setBrowserID(browserIdentifier.getBrowserId())
             .setResponseCallback(productValidCheckListener)
             .setJsonParser(ProductCheckJsonParser())
-            .setErrorHandler(object : ErrorResponseHandler{
-                override fun onError(error: VirtusizeError) {
-                    errorHandler.invoke(error)
-                }
-            })
+            .setErrorHandler(errorHandler)
             .execute(apiRequest)
     }
 
@@ -180,16 +178,12 @@ class Virtusize(
      */
     private fun sendProductImageToBackend(
         product: VirtusizeProduct,
-        errorHandler: ((VirtusizeError) -> Unit)) {
+        errorHandler: ErrorResponseHandler) {
         val apiRequest = VirtusizeApi.sendProductImageToBackend(product = product)
         VirtusizeApiTask()
             .setBrowserID(browserIdentifier.getBrowserId())
             .setJsonParser(ProductMetaDataHintsJsonParser())
-            .setErrorHandler(object : ErrorResponseHandler{
-                override fun onError(error: VirtusizeError) {
-                    errorHandler.invoke(error)
-                }
-            })
+            .setErrorHandler(errorHandler)
             .execute(apiRequest)
     }
 
@@ -202,7 +196,7 @@ class Virtusize(
     private fun sendEventToApi(
         event: VirtusizeEvent,
         withDataProduct: ProductCheck? = null,
-        errorHandler: ((VirtusizeError) -> Unit)
+        errorHandler: ErrorResponseHandler
     ) {
         val defaultDisplay =
             (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
@@ -221,11 +215,7 @@ class Virtusize(
         )
         VirtusizeApiTask()
             .setBrowserID(browserIdentifier.getBrowserId())
-            .setErrorHandler(object : ErrorResponseHandler {
-                override fun onError(error: VirtusizeError) {
-                    errorHandler.invoke(error)
-                }
-            })
+            .setErrorHandler(errorHandler)
             .execute(apiRequest)
     }
 
