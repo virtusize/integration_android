@@ -11,7 +11,7 @@ android {
 
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -31,8 +31,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "com.android.support:appcompat-v7:$build_version"
-    implementation "com.android.support.constraint:constraint-layout:$constraint_layout_version"
-    implementation 'com.github.virtusize:integration_android:1.5.3'
-//    implementation project(":libsource")
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
+
+//    implementation 'com.github.virtusize:integration_android:1.5.3'
+    implementation project(":libsource")
 }

@@ -7,6 +7,7 @@ import com.virtusize.libsource.data.local.VirtusizeEvent
 import com.virtusize.libsource.data.local.VirtusizeProduct
 import com.virtusize.libsource.data.local.value
 import com.virtusize.libsource.data.remote.JsonUtils
+import com.virtusize.libsource.data.local.VirtusizeOrder
 import kotlin.random.Random
 
 
@@ -222,5 +223,32 @@ internal object VirtusizeApi {
             }
         }
         return params
+    }
+
+    /**
+     * Gets a API request for sending the order to the server
+     * @param order [VirtusizeOrder]
+     * @see ApiRequest
+     */
+    fun sendOrder(order: VirtusizeOrder): ApiRequest {
+        val url = Uri.parse(environment.value() + VirtusizeEndpoint.Orders.getUrl())
+            .buildUpon()
+            .build()
+            .toString()
+        return ApiRequest(url, HttpMethod.POST, order.paramsToMap(apiKey, userId).toMutableMap())
+    }
+
+    /**
+     * Gets a API request for retrieve the specific store info from the API key that is unique to the client
+     * @param order [VirtusizeOrder]
+     * @see ApiRequest
+     */
+    fun retrieveStoreInfo() : ApiRequest {
+        val url = Uri.parse(environment.value() + VirtusizeEndpoint.StoreViewApiKey.getUrl() + apiKey)
+            .buildUpon()
+            .appendQueryParameter("format", "json")
+            .build()
+            .toString()
+        return ApiRequest(url, HttpMethod.GET)
     }
 }

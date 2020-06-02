@@ -7,7 +7,9 @@ internal enum class VirtusizeEndpoint {
     ProductCheck,
     FitIllustrator,
     ProductMetaDataHints,
-    Events
+    Events,
+    Orders,
+    StoreViewApiKey
 }
 
 /**
@@ -27,6 +29,12 @@ internal fun VirtusizeEndpoint.getUrl(): String {
          }
          VirtusizeEndpoint.Events -> {
              "/a/api/v3/events"
+         }
+         VirtusizeEndpoint.Orders -> {
+             "/a/api/v3/orders"
+         }
+         VirtusizeEndpoint.StoreViewApiKey -> {
+             "/a/api/v3/stores/api-key/"
          }
     }
 }

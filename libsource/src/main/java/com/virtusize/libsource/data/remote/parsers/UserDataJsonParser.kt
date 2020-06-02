@@ -9,8 +9,8 @@ import org.json.JSONObject
 /**
  * This class parses a JSONObject to the [UserData] object
  */
-internal class UserDataJsonParser {
-    fun parse(json: JSONObject): UserData? {
+internal class UserDataJsonParser: VirtusizeJsonParser {
+    override fun parse(json: JSONObject): UserData? {
         try {
             val shouldSeePhTooltip = json.getBoolean(FIELD_SHOULD_SEE_PH_TOOLTIP)
             val wardrobeHasP = json.optBoolean(FIELD_WARDROBE_HAS_P)

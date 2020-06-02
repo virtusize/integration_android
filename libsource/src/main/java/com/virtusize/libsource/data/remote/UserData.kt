@@ -1,7 +1,7 @@
 package com.virtusize.libsource.data.remote
 
 /**
- * This class represents the response for the user data field in the data field of ProductCheckResponse
+ * This class represents the response for the user data field in the data field of ProductCheck
  * @see Data
  */
 data class UserData(

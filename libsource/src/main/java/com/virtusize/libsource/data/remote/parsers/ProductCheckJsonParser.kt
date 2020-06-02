@@ -9,8 +9,8 @@ import org.json.JSONObject
 /**
  * This class parses a JSONObject to the [ProductCheck] object
  */
-internal class ProductCheckJsonParser {
-    fun parse(json: JSONObject): ProductCheck? {
+class ProductCheckJsonParser: VirtusizeJsonParser {
+    override fun parse(json: JSONObject): ProductCheck? {
         try {
             val data = DataJsonParser().parse(json.getJSONObject(FIELD_DATA))
             val productId = json.getString(FIELD_PRODUCT_ID)
