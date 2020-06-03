@@ -280,7 +280,6 @@ class Virtusize(
      * @param onSuccess the optional success callback to pass the [Store] from the response when [VirtusizeApiTask] is successful
      * @param onError the optional error callback to get the [VirtusizeError] in the API task
      */
-    @JvmOverloads
     fun sendOrder(
         order: VirtusizeOrder,
         onSuccess: SuccessResponseHandler? = null,
