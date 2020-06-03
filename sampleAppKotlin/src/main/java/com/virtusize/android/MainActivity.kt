@@ -42,6 +42,10 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Demonstrates how to send an order to the Virtusize server
+     *
+     * Notes:
+     * 1. The parameters sizeAlias, variantId, color, gender, and url for [VirtusizeOrderItem] are optional
+     * 2. If quantity is not provided, it will be set to 1 on its own
      */
     private fun sendOrderSample() {
         val order = VirtusizeOrder("888400111032")
@@ -49,15 +53,15 @@ class MainActivity : AppCompatActivity() {
             VirtusizeOrderItem(
                 "P001",
                 "L",
-                "Large", // sizeAlias is optional
-                "P001_SIZEL_RED", // variantId is optional
+                "Large",
+                "P001_SIZEL_RED",
                 "http://images.example.com/products/P001/red/image1xl.jpg",
-                "Red", // color is optional
-                "W", // gender is optional
+                "Red",
+                "W",
                 5100.00,
                 "JPY",
                 1,
-                "http://example.com/products/P001" // url is optional
+                "http://example.com/products/P001"
             )
         )
 

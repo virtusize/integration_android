@@ -8,7 +8,7 @@ package com.virtusize.libsource.data.local
  * @param variantId the variant ID that is set on the product SKU, color, or size if there are several options
  * @param imageUrl the image URL of the item
  * @param color the color of the item, e.g. "Red", etc.
- * @param gender an identifier for the gender, e.g. "W", "Womens", etc.
+ * @param gender an identifier for the gender, e.g. "W", "Women", etc.
  * @param unitPrice the product price that is a double number with a maximum of 12 digits and 2 decimals (12, 2)
  * @param currency the currency code, e.g. "JPY", etc.
  * @param quantity the number of the item purchased. If it's not passed, It will be set to 1
