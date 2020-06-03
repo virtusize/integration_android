@@ -1,13 +1,10 @@
 package com.virtusize.libsource.network
 
 import android.net.Uri
-import com.virtusize.libsource.data.remote.ProductCheck
-import com.virtusize.libsource.data.local.VirtusizeEnvironment
-import com.virtusize.libsource.data.local.VirtusizeEvent
-import com.virtusize.libsource.data.local.VirtusizeProduct
-import com.virtusize.libsource.data.local.value
+import com.virtusize.libsource.data.local.*
+import com.virtusize.libsource.data.local.aoyama.AoyamaParams
 import com.virtusize.libsource.data.remote.JsonUtils
-import com.virtusize.libsource.data.local.VirtusizeOrder
+import com.virtusize.libsource.data.remote.ProductCheck
 import kotlin.random.Random
 
 
@@ -99,6 +96,16 @@ internal object VirtusizeApi {
 
         if (userId.isNotEmpty()) {
             urlBuilder.appendQueryParameter("externalUserId", userId)
+        }
+        return urlBuilder.build().toString()
+    }
+
+    // TODO: Gets the URL for Aoyama
+    fun aoyamaIntegration(params: AoyamaParams): String {
+        val urlBuilder = Uri.parse("")
+            .buildUpon()
+        for ((key, value) in params.paramsToMap()) {
+            urlBuilder.appendQueryParameter(key, value.toString())
         }
         return urlBuilder.build().toString()
     }
