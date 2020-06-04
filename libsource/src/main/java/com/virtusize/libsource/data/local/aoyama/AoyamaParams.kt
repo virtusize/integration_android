@@ -17,7 +17,7 @@ data class AoyamaParams(
     fun paramsToMap(): Map<String, Any> {
 
         val languageMap = mutableMapOf<String, String>()
-        allowedLanguages.forEach { languageMap[it.code] = it.label }
+        allowedLanguages.forEach { languageMap[it.value] = it.label }
 
         return emptyMap<String, Any>()
             .plus(
@@ -27,7 +27,7 @@ data class AoyamaParams(
                 mapOf(PARAM_ENVIRONMENT to env.value)
             )
             .plus(
-                mapOf(PARAM_LANGUAGE to language.code)
+                mapOf(PARAM_LANGUAGE to language.value)
             )
             .plus(
                 mapOf(PARAM_ALLOW_LANGUAGES to languageMap)
@@ -56,7 +56,7 @@ data class AoyamaParams(
     }
 
     fun getI18NUrl(): String {
-        return "https://i18n.virtusize." + region.value + if(env == AoyamaEnvironment.STAGE) "/stg" else "" + "/bundle-payloads/aoyama/" + language.code
+        return "https://i18n.virtusize." + region.value + if(env == AoyamaEnvironment.STAGE) "/stg" else "" + "/bundle-payloads/aoyama/" + language.value
     }
 
     private companion object {
