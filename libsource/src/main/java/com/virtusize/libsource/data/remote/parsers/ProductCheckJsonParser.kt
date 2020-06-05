@@ -9,17 +9,14 @@ import org.json.JSONObject
 /**
  * This class parses a JSONObject to the [ProductCheck] object
  */
-internal class ProductCheckJsonParser {
-    fun parse(json: JSONObject): ProductCheck? {
-        try {
-            val data = DataJsonParser().parse(json.getJSONObject(FIELD_DATA))
-            val productId = json.getString(FIELD_PRODUCT_ID)
-            val name = json.getString(FIELD_NAME)
-            return ProductCheck(data, productId, name)
-        } catch(e: JSONException) {
-            Log.e(Constants.LOG_TAG, e.localizedMessage)
+internal class ProductCheckJsonParser: VirtusizeJsonParser {
+    override fun parse(json: JSONObject): ProductCheck? {
+        val data = json.optJSONObject(FIELD_DATA)?.let {
+            DataJsonParser().parse(it)
         }
-        return null
+        val productId = json.optString(FIELD_PRODUCT_ID)
+        val name = json.optString(FIELD_NAME)
+        return ProductCheck(data, productId, name)
     }
 
     private companion object {

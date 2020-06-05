@@ -2,9 +2,10 @@ package com.virtusize.libsource.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.util.AttributeSet
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import com.virtusize.libsource.Constants
 import com.virtusize.libsource.VirtusizeButtonSetupHandler
 import com.virtusize.libsource.network.VirtusizeApi
@@ -18,7 +19,7 @@ import com.virtusize.libsource.throwError
 /**
  * This class is the custom Fit Illustrator Button that is added in the client's layout file
  */
-class FitIllustratorButton(context: Context, attrs: AttributeSet): android.support.v7.widget.AppCompatButton(context, attrs),
+class FitIllustratorButton(context: Context, attrs: AttributeSet): AppCompatButton(context, attrs),
     VirtusizeButtonSetupHandler {
 
     // VirtusizeProduct associated with the FitIllustratorButton instance

@@ -8,7 +8,11 @@ import android.view.WindowManager
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.network.VirtusizeApi
 import com.virtusize.libsource.data.remote.ProductCheck
-import com.virtusize.libsource.data.remote.ProductMetaDataHints
+import com.virtusize.libsource.data.remote.Store
+import com.virtusize.libsource.data.local.VirtusizeOrder
+import com.virtusize.libsource.data.remote.parsers.ProductCheckJsonParser
+import com.virtusize.libsource.data.remote.parsers.ProductMetaDataHintsJsonParser
+import com.virtusize.libsource.data.remote.parsers.StoreJsonParser
 import com.virtusize.libsource.network.VirtusizeApiTask
 import com.virtusize.libsource.ui.FitIllustratorButton
 import java.util.*
@@ -22,7 +26,7 @@ import java.util.*
  * @param context Android Application Context
  */
 class Virtusize(
-    userId: Int?,
+    private val userId: String?,
     apiKey: String,
     env: VirtusizeEnvironment,
     private val context: Context
@@ -73,7 +77,7 @@ class Virtusize(
             env = env,
             key = apiKey,
             browserID = browserIdentifier.getBrowserId(),
-            userId = userId?.toString() ?: "",
+            userId = userId ?: "",
             language = language
         )
     }
@@ -97,7 +101,7 @@ class Virtusize(
         }
 
         // to handle network errors
-        val errorHandler = object : ErrorHandler {
+        val errorHandler: ErrorResponseHandler = object: ErrorResponseHandler {
             override fun onError(error: VirtusizeError) {
                 messageHandler.onError(fitIllustratorButton, error)
             }
@@ -160,8 +164,8 @@ class Virtusize(
         // Execute the API task to make a network request for Product Check
         VirtusizeApiTask()
             .setBrowserID(browserIdentifier.getBrowserId())
-            .setCallback(productValidCheckListener)
-            .setDataType(ProductCheck::class.java)
+            .setResponseCallback(productValidCheckListener)
+            .setJsonParser(ProductCheckJsonParser())
             .setErrorHandler(errorHandler)
             .execute(apiRequest)
     }
@@ -171,29 +175,28 @@ class Virtusize(
      * @param product VirtusizeProduct
      * @param errorHandler
      * @see VirtusizeProduct
-     * @see ErrorHandler
      */
-    private fun sendProductImageToBackend(product: VirtusizeProduct, errorHandler: ErrorHandler) {
+    private fun sendProductImageToBackend(
+        product: VirtusizeProduct,
+        errorHandler: ErrorResponseHandler) {
         val apiRequest = VirtusizeApi.sendProductImageToBackend(product = product)
         VirtusizeApiTask()
             .setBrowserID(browserIdentifier.getBrowserId())
-            .setCallback(null)
-            .setDataType(ProductMetaDataHints::class.java)
+            .setJsonParser(ProductMetaDataHintsJsonParser())
             .setErrorHandler(errorHandler)
             .execute(apiRequest)
     }
 
     /**
-     * Send an event to the Virtusize server
+     * Sends an event to the Virtusize server
      * @param event VirtusizeEvent
      * @param withDataProduct ProductCheckResponse corresponding to VirtusizeProduct
-     * @param errorHandler
-     * @see ErrorHandler
+     * @param errorHandler the error callback to get the [VirtusizeError] in the API task
      */
     private fun sendEventToApi(
         event: VirtusizeEvent,
         withDataProduct: ProductCheck? = null,
-        errorHandler: ErrorHandler
+        errorHandler: ErrorResponseHandler
     ) {
         val defaultDisplay =
             (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
@@ -212,10 +215,96 @@ class Virtusize(
         )
         VirtusizeApiTask()
             .setBrowserID(browserIdentifier.getBrowserId())
-            .setCallback(null)
-            .setDataType(null)
             .setErrorHandler(errorHandler)
             .execute(apiRequest)
+    }
+
+    /**
+     * Retrieves the specific store info
+     * @param onSuccess the success callback to get the [Store] in the API task
+     * @param errorHandler the error callback to get the [VirtusizeError] in the API task
+     */
+    private fun retrieveStoreInfo(
+        onSuccess: SuccessResponseHandler? = null,
+        onError: ErrorResponseHandler? = null) {
+        val apiRequest = VirtusizeApi.retrieveStoreInfo()
+        VirtusizeApiTask()
+            .setJsonParser(StoreJsonParser())
+            .setSuccessHandler(onSuccess)
+            .setErrorHandler(onError)
+            .execute(apiRequest)
+    }
+
+    /**
+     * Sends an order to the Virtusize server for Kotlin apps
+     * @param order
+     * @param onSuccess the optional success callback to notify [VirtusizeApiTask] is successful
+     * @param onError the optional error callback to get the [VirtusizeError] in the API task
+     */
+    fun sendOrder(order: VirtusizeOrder,
+                  onSuccess: (() -> Unit)? = null,
+                  onError: ((VirtusizeError) -> Unit)? = null) {
+        retrieveStoreInfo(object : SuccessResponseHandler{
+            override fun onSuccess(data: Any?) {
+                /**
+                 * Throws the error if the user id is not set up or empty during the initialization of the [Virtusize] class
+                 */
+                if(userId.isNullOrEmpty()) {
+                    throwError(VirtusizeError.UserIdNullOrEmpty)
+                }
+                // Sets the region from the store info
+                if(data is Store) {
+                    data.region?.let { order.setRegion(it) }
+                }
+                val apiRequest = VirtusizeApi.sendOrder(order)
+                VirtusizeApiTask()
+                    .setBrowserID(browserIdentifier.getBrowserId())
+                    .setSuccessHandler(object : SuccessResponseHandler {
+                        override fun onSuccess(data: Any?) {
+                            onSuccess?.invoke()
+                        }
+                    })
+                    .setErrorHandler(object : ErrorResponseHandler {
+                        override fun onError(error: VirtusizeError) {
+                            onError?.invoke(error)
+                        }
+                    })
+                    .execute(apiRequest)
+            }
+        })
+    }
+
+    /**
+     * Sends an order to the Virtusize server for Java apps
+     * @param order
+     * @param onSuccess the optional success callback to pass the [Store] from the response when [VirtusizeApiTask] is successful
+     * @param onError the optional error callback to get the [VirtusizeError] in the API task
+     */
+    fun sendOrder(
+        order: VirtusizeOrder,
+        onSuccess: SuccessResponseHandler? = null,
+        onError: ErrorResponseHandler? = null) {
+        retrieveStoreInfo(object : SuccessResponseHandler{
+            override fun onSuccess(data: Any?) {
+                /**
+                 * Throws the error if the user id is not set up or empty during the initialization of the [Virtusize] class
+                 */
+                if(userId.isNullOrEmpty()) {
+                    throwError(VirtusizeError.UserIdNullOrEmpty)
+                }
+                // Sets the region from the store info
+                if(data is Store) {
+                    data.region?.let { order.setRegion(it) }
+                }
+                val apiRequest = VirtusizeApi.sendOrder(order)
+                VirtusizeApiTask()
+                    .setBrowserID(browserIdentifier.getBrowserId())
+                    .setSuccessHandler(onSuccess)
+                    .setErrorHandler(onError)
+                    .execute(apiRequest)
+            }
+
+        })
     }
 
     /**
@@ -261,7 +350,7 @@ fun throwError(error: VirtusizeError) {
  * @param context Android Application Context
  */
 class VirtusizeBuilder {
-    private var userId: Int? = null
+    private var userId: String? = null
     private var apiKey: String? = null
     private var env = VirtusizeEnvironment.GLOBAL
     private var context: Context? = null
@@ -282,7 +371,7 @@ class VirtusizeBuilder {
      * @param id the id that is an unique user ID from the client system
      * @return VirtusizeBuilder
      */
-    fun setAppId(id: Int): VirtusizeBuilder {
+    fun setUserId(id: String): VirtusizeBuilder {
         this.userId = id
         return this
     }

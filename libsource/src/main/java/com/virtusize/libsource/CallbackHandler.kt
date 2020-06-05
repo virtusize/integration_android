@@ -1,7 +1,32 @@
 package com.virtusize.libsource
 
+import androidx.annotation.NonNull
+import androidx.annotation.Nullable
 import com.virtusize.libsource.data.local.VirtusizeError
 import com.virtusize.libsource.data.remote.ProductCheck
+
+
+/**
+ * This interface can be implemented for passing the result of the successful response of an API request
+ */
+interface SuccessResponseHandler {
+    /**
+     * Passes optional data to any object
+     * @param data Any invoked data that wants to be passed
+     */
+    fun onSuccess(@Nullable data: Any? = null)
+}
+
+/**
+ * This interface can be implemented for passing the result of the error response of an API request
+ */
+interface ErrorResponseHandler {
+    /**
+     * Passes optional error of type [VirtusizeError]
+     * @param error Any error that wants to be passed
+     */
+    fun onError(@NonNull error: VirtusizeError)
+}
 
 /**
  * This interface can be implemented by any class that wants to receive any form of Data
@@ -15,17 +40,6 @@ interface CallbackHandler {
     fun handleEvent(data: Any)
 }
 
-/**
- * This interface can be implemented by class that wants to receive VirtusizeError
- * The object of the class can then be used to pass an error to that object
- */
-interface ErrorHandler {
-    /**
-     * Passes an error to any object whose class implements the ErrorHandler interface
-     * @param error VirtusizeError
-     */
-    fun onError(error: VirtusizeError)
-}
 /**
  * This interface can be implemented by any class that wants to receive ProductCheckResponse, that is received from the product data check endpoint
  * @see ProductCheck
