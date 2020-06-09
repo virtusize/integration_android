@@ -1,13 +1,16 @@
 package com.virtusize.libsource.network
 
-import android.os.AsyncTask
 import android.util.Log
-import com.virtusize.libsource.CallbackHandler
 import com.virtusize.libsource.ErrorResponseHandler
 import com.virtusize.libsource.SuccessResponseHandler
 import com.virtusize.libsource.Constants
 import com.virtusize.libsource.data.local.VirtusizeError
 import com.virtusize.libsource.data.remote.parsers.VirtusizeJsonParser
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.*
 import java.net.HttpURLConnection
@@ -18,7 +21,9 @@ import java.util.concurrent.TimeUnit
 /**
  * The asynchronous task to make an API request in the background thread
  */
-internal class VirtusizeApiTask : AsyncTask<ApiRequest, Void, Any?>() {
+internal class VirtusizeApiTask {
+
+    private val workScope: CoroutineScope = CoroutineScope(IO)
 
     companion object {
         // The read timeout to use for all the requests, which is 80 seconds
@@ -32,8 +37,6 @@ internal class VirtusizeApiTask : AsyncTask<ApiRequest, Void, Any?>() {
 
     // The Browser ID for the request header
     private var browserID: String? = null
-    // The callback for receiving the parsed response
-    private var callback: CallbackHandler? = null
     // The Json parser interface for converting the JSON response to a given type of Java object
     private var jsonParser: VirtusizeJsonParser? = null
     // The callback for a successful API response
@@ -46,14 +49,6 @@ internal class VirtusizeApiTask : AsyncTask<ApiRequest, Void, Any?>() {
      */
     fun setBrowserID(browserID: String?): VirtusizeApiTask {
         this.browserID = browserID
-        return this
-    }
-
-    /**
-     * Sets up the callback to receive the parsed response
-     */
-    fun setResponseCallback(callback: CallbackHandler?): VirtusizeApiTask {
-        this.callback = callback
         return this
     }
 
@@ -81,60 +76,59 @@ internal class VirtusizeApiTask : AsyncTask<ApiRequest, Void, Any?>() {
         return this
     }
 
-    override fun doInBackground(vararg apiRequests: ApiRequest): Any? {
-        var result: Any? = null
-        var urlConnection: HttpURLConnection? = null
-        var inputStream: InputStream? = null
-        try {
-            urlConnection = (URL(apiRequests[0].url).openConnection() as HttpURLConnection).apply {
-                readTimeout = READ_TIMEOUT
-                connectTimeout = CONNECT_TIMEOUT
-                requestMethod = apiRequests[0].method.name
+    fun execute(apiRequest: ApiRequest) {
+        workScope.launch {
+            var result: Any? = null
+            var urlConnection: HttpURLConnection? = null
+            var inputStream: InputStream? = null
+            try {
+                urlConnection = (URL(apiRequest.url).openConnection() as HttpURLConnection).apply {
+                    readTimeout = READ_TIMEOUT
+                    connectTimeout = CONNECT_TIMEOUT
+                    requestMethod = apiRequest.method.name
 
-                // Send the POST request
-                if(apiRequests[0].method == HttpMethod.POST) {
-                    doOutput = true
-                    browserID?.let {
-                        setRequestProperty (HEADER_BROWSER_ID, browserID)
-                    }
-                    setRequestProperty(HEADER_CONTENT_TYPE, "application/json")
+                    // Send the POST request
+                    if(apiRequest.method == HttpMethod.POST) {
+                        doOutput = true
+                        browserID?.let {
+                            setRequestProperty(HEADER_BROWSER_ID, browserID)
+                        }
+                        setRequestProperty(HEADER_CONTENT_TYPE, "application/json")
 
-                    // Write the byte array of the request body to the output stream
-                    if (apiRequests[0].params.isNotEmpty()) {
-                        val outStream = DataOutputStream(outputStream)
-                        outStream.write(JSONObject(apiRequests[0].params as Map<String, *>).toString().toByteArray())
-                        outStream.close()
-                    }
-                }
-            }
-
-            // If the request was successful, then read the input stream and parse the response.
-            if (urlConnection.isSuccessful()) {
-                inputStream = urlConnection.inputStream
-                readFromStream(inputStream)?.let { response ->
-                    Log.d(Constants.LOG_TAG, response)
-                    jsonParser?.let {
-                        val jsonObject = JSONObject(response)
-                        result = it.parse(jsonObject)
+                        // Write the byte array of the request body to the output stream
+                        if (apiRequest.params.isNotEmpty()) {
+                            val outStream = DataOutputStream(outputStream)
+                            outStream.write(JSONObject(apiRequest.params as Map<String, *>).toString().toByteArray())
+                            outStream.close()
+                        }
                     }
                 }
-                successHandler?.onSuccess(result)
-            } else {
-                logHTTPConnectionError("Status code ${urlConnection.responseCode}, message: ${urlConnection.responseMessage}", null)
-                errorHandler?.onError(VirtusizeError.NetworkError)
-            }
-        } catch (e: IOException) {
-            logHTTPConnectionError(null, e)
-        } finally {
-            urlConnection?.disconnect()
-            inputStream?.close()
-            return result
-        }
-    }
 
-    override fun onPostExecute(result: Any?) {
-        result?.let {
-            callback?.handleEvent(it)
+                // If the request was successful, then read the input stream and parse the response.
+                if (urlConnection.isSuccessful()) {
+                    inputStream = urlConnection.inputStream
+                    readFromStream(inputStream)?.let { response ->
+                        Log.d(Constants.LOG_TAG, response)
+                        jsonParser?.let {
+                            val jsonObject = JSONObject(response)
+                            result = it.parse(jsonObject)
+                        }
+                    }
+                    withContext(Main) {
+                        successHandler?.onSuccess(result)
+                    }
+                } else {
+                    logHTTPConnectionError("Status code ${urlConnection.responseCode}, message: ${urlConnection.responseMessage}", null)
+                    withContext(Main) {
+                        errorHandler?.onError(VirtusizeError.NetworkError)
+                    }
+                }
+            } catch (e: IOException) {
+                logHTTPConnectionError(null, e)
+            } finally {
+                urlConnection?.disconnect()
+                inputStream?.close()
+            }
         }
     }
 
