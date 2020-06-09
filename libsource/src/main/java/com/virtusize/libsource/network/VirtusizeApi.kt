@@ -83,14 +83,14 @@ internal object VirtusizeApi {
      * @param product the VirtusizeProduct for which Fit Illustrator URL is needed
      * @return the Fit Illustrator URL as String
      */
-    fun fitIllustrator(product: VirtusizeProduct): String {
+    fun fitIllustrator(product: VirtusizeProduct, randomNumberString: String? = null): String {
         val urlBuilder = Uri.parse(environment.value() + VirtusizeEndpoint.FitIllustrator.getUrl())
             .buildUpon()
             .appendQueryParameter("detached", "false")
-            .appendQueryParameter("browserID", browserID)
+            .appendQueryParameter("bid", browserID)
             .appendQueryParameter("addToCartEnabled", "false")
             .appendQueryParameter("storeId", product.productCheckData?.data?.storeId.toString())
-            .appendQueryParameter("_", Random.nextInt(1519982555).toString())
+            .appendQueryParameter("_", randomNumberString ?: Random.nextInt(1519982555).toString())
             .appendQueryParameter("spid", product.productCheckData?.data?.productDataId.toString())
             .appendQueryParameter("lang", language)
             .appendQueryParameter("android", "true")
