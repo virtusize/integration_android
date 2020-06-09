@@ -164,7 +164,7 @@ class Virtusize(
         // Execute the API task to make a network request for Product Check
         VirtusizeApiTask()
             .setBrowserID(browserIdentifier.getBrowserId())
-            .setResponseCallback(productValidCheckListener)
+            .setSuccessHandler(productValidCheckListener)
             .setJsonParser(ProductCheckJsonParser())
             .setErrorHandler(errorHandler)
             .execute(apiRequest)
