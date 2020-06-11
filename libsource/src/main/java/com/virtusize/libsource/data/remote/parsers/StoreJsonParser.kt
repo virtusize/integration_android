@@ -1,9 +1,6 @@
 package com.virtusize.libsource.data.remote.parsers
 
-import android.util.Log
-import com.virtusize.libsource.Constants
 import com.virtusize.libsource.data.remote.Store
-import org.json.JSONException
 import org.json.JSONObject
 
 /**

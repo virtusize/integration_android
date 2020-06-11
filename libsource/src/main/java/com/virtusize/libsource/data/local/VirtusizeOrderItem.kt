@@ -56,7 +56,7 @@ data class VirtusizeOrderItem @JvmOverloads constructor(
                 gender?.let { mapOf(PARAM_GENDER to it) }.orEmpty()
             )
             .plus(
-                mapOf(PARAM_UNIT_PRICE to unitPrice)
+                mapOf(PARAM_UNIT_PRICE to "%.2f".format(unitPrice).toDouble())
             )
             .plus(
                 mapOf(PARAM_CURRENCY to currency)

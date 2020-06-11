@@ -12,7 +12,7 @@ data class Store(
     val apiKey: String,
     val created: String,
     val updated: String,
-    val disabled: String?,
+    val disabled: String,
     val typeMapperEnabled: Boolean,
-    val region: String?
+    val region: String
 )
