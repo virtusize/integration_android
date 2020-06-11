@@ -87,7 +87,7 @@ internal object VirtusizeApi {
         val urlBuilder = Uri.parse(environment.value() + VirtusizeEndpoint.FitIllustrator.getUrl())
             .buildUpon()
             .appendQueryParameter("detached", "false")
-            .appendQueryParameter("browserID", browserID)
+            .appendQueryParameter("bid", browserID)
             .appendQueryParameter("addToCartEnabled", "false")
             .appendQueryParameter("storeId", product.productCheckData?.data?.storeId.toString())
             .appendQueryParameter("_", Random.nextInt(1519982555).toString())
