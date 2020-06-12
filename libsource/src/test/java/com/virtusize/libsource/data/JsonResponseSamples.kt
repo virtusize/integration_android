@@ -16,10 +16,10 @@ internal object JsonResponseSamples {
         """
             {
                "should_see_ph_tooltip": false,
-                "wardrobe_active": false,
-                "wardrobe_has_m": true,
-                "wardrobe_has_p": true,
-                "wardrobe_has_r": true
+                "wardrobeActive": false,
+                "wardrobeHasM": true,
+                "wardrobeHasP": true,
+                "wardrobeHasR": true
             }
         """.trimIndent()
     )

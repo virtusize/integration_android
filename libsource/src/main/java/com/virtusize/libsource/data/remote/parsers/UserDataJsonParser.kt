@@ -18,9 +18,9 @@ internal class UserDataJsonParser: VirtusizeJsonParser {
 
     companion object {
         private const val FIELD_SHOULD_SEE_PH_TOOLTIP = "should_see_ph_tooltip"
-        private const val FIELD_WARDROBE_HAS_P = "wardrobe_has_p"
-        private const val FIELD_WARDROBE_HAS_R = "wardrobe_has_r"
-        private const val FIELD_WARDROBE_HAS_M = "wardrobe_has_m"
-        private const val FIELD_WARDROBE_ACTIVE = "wardrobe_active"
+        private const val FIELD_WARDROBE_HAS_P = "wardrobeHasP"
+        private const val FIELD_WARDROBE_HAS_R = "wardrobeHasR"
+        private const val FIELD_WARDROBE_HAS_M = "wardrobeHasM"
+        private const val FIELD_WARDROBE_ACTIVE = "wardrobeActive"
     }
 }
