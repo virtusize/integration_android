@@ -6,11 +6,9 @@ import com.virtusize.libsource.SuccessResponseHandler
 import com.virtusize.libsource.Constants
 import com.virtusize.libsource.data.local.VirtusizeError
 import com.virtusize.libsource.data.remote.parsers.VirtusizeJsonParser
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.*
 import java.net.HttpURLConnection
@@ -23,7 +21,6 @@ import java.util.concurrent.TimeUnit
  */
 internal class VirtusizeApiTask {
 
-    private val workScope: CoroutineScope = CoroutineScope(IO)
 
     companion object {
         // The read timeout to use for all the requests, which is 80 seconds
@@ -35,6 +32,10 @@ internal class VirtusizeApiTask {
         private const val HEADER_CONTENT_TYPE = "Content-Type"
     }
 
+    // The dispatcher that determines what thread the corresponding coroutine uses for its execution
+    private var coroutineDispatcher: CoroutineDispatcher = IO
+    // The HTTP URL connection that is used to make a single request
+    private var urlConnection: HttpURLConnection? = null
     // The Browser ID for the request header
     private var browserID: String? = null
     // The Json parser interface for converting the JSON response to a given type of Java object
@@ -76,32 +77,50 @@ internal class VirtusizeApiTask {
         return this
     }
 
+    /**
+     * Sets up the HTTP URL connection
+     */
+    fun setHttpURLConnection(urlConnection: HttpURLConnection?): VirtusizeApiTask {
+        this.urlConnection = urlConnection
+        return this
+    }
+
+    /**
+     * Sets up the Coroutine dispatcher
+     */
+    fun setCoroutineDispatcher(dispatcher: CoroutineDispatcher): VirtusizeApiTask {
+        this.coroutineDispatcher = dispatcher
+        return this
+    }
+
     fun execute(apiRequest: ApiRequest) {
-        workScope.launch {
+        CoroutineScope(coroutineDispatcher).launch {
             var result: Any? = null
-            var urlConnection: HttpURLConnection? = null
+            var urlConnection: HttpURLConnection? = urlConnection
             var inputStream: InputStream? = null
             try {
-                urlConnection = (URL(apiRequest.url).openConnection() as HttpURLConnection).apply {
-                    readTimeout = READ_TIMEOUT
-                    connectTimeout = CONNECT_TIMEOUT
-                    requestMethod = apiRequest.method.name
+                if (urlConnection == null) {
+                    urlConnection = (URL(apiRequest.url).openConnection() as HttpURLConnection).apply {
+                            readTimeout = READ_TIMEOUT
+                            connectTimeout = CONNECT_TIMEOUT
+                            requestMethod = apiRequest.method.name
 
-                    // Send the POST request
-                    if(apiRequest.method == HttpMethod.POST) {
-                        doOutput = true
-                        browserID?.let {
-                            setRequestProperty(HEADER_BROWSER_ID, browserID)
-                        }
-                        setRequestProperty(HEADER_CONTENT_TYPE, "application/json")
+                            // Send the POST request
+                            if (apiRequest.method == HttpMethod.POST) {
+                                doOutput = true
+                                browserID?.let {
+                                    setRequestProperty(HEADER_BROWSER_ID, browserID)
+                                }
+                                setRequestProperty(HEADER_CONTENT_TYPE, "application/json")
 
-                        // Write the byte array of the request body to the output stream
-                        if (apiRequest.params.isNotEmpty()) {
-                            val outStream = DataOutputStream(outputStream)
-                            outStream.write(JSONObject(apiRequest.params as Map<String, *>).toString().toByteArray())
-                            outStream.close()
+                                // Write the byte array of the request body to the output stream
+                                if (apiRequest.params.isNotEmpty()) {
+                                    val outStream = DataOutputStream(outputStream)
+                                    outStream.write(JSONObject(apiRequest.params as Map<String, *>).toString().toByteArray())
+                                    outStream.close()
+                                }
+                            }
                         }
-                    }
                 }
 
                 // If the request was successful, then read the input stream and parse the response.
@@ -120,7 +139,7 @@ internal class VirtusizeApiTask {
                 } else {
                     logHTTPConnectionError("Status code ${urlConnection.responseCode}, message: ${urlConnection.responseMessage}", null)
                     withContext(Main) {
-                        errorHandler?.onError(VirtusizeError.NetworkError)
+                        errorHandler?.onError(urlConnection.responseCode, urlConnection.responseMessage, VirtusizeError.NetworkError)
                     }
                 }
             } catch (e: IOException) {

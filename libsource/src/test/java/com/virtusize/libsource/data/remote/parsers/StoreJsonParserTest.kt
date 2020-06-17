@@ -2,7 +2,7 @@ package com.virtusize.libsource.data.remote.parsers
 
 import com.google.common.truth.Truth.assertThat
 import com.virtusize.libsource.data.remote.Store
-import com.virtusize.libsource.data.JsonResponseSamples
+import com.virtusize.libsource.TestFixtures
 import org.junit.Test
 
 
@@ -10,7 +10,7 @@ class StoreJsonParserTest {
 
     @Test
     fun parse_hasFullInfo_shouldReturnExpectedObject() {
-        val actualStore = StoreJsonParser().parse(JsonResponseSamples.STORE_WITH_FULL_INFO)
+        val actualStore = StoreJsonParser().parse(TestFixtures.STORE_WITH_FULL_INFO)
 
         val expectedStore = Store(
             2,
@@ -31,7 +31,7 @@ class StoreJsonParserTest {
 
     @Test
     fun parse_hasNullValues_shouldReturnExpectedObject() {
-        val actualStore = StoreJsonParser().parse(JsonResponseSamples.STORE_WITH_NULL_VALUES)
+        val actualStore = StoreJsonParser().parse(TestFixtures.STORE_WITH_NULL_VALUES)
 
         val expectedStore = Store(
             2,

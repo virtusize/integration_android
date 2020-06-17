@@ -13,8 +13,12 @@ import com.virtusize.libsource.data.local.VirtusizeOrder
 import com.virtusize.libsource.data.remote.parsers.ProductCheckJsonParser
 import com.virtusize.libsource.data.remote.parsers.ProductMetaDataHintsJsonParser
 import com.virtusize.libsource.data.remote.parsers.StoreJsonParser
+import com.virtusize.libsource.network.ApiRequest
 import com.virtusize.libsource.network.VirtusizeApiTask
 import com.virtusize.libsource.ui.FitIllustratorButton
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers.IO
+import java.net.HttpURLConnection
 import java.util.*
 
 /**
@@ -71,6 +75,12 @@ class Virtusize(
     // Device screen resolution
     private lateinit var resolution: String
 
+    // The HTTP URL connection that is used to make a single request
+    private var httpURLConnection: HttpURLConnection? = null
+
+    // The dispatcher that determines what thread the corresponding coroutine uses for its execution
+    private var coroutineDispatcher: CoroutineDispatcher = IO
+
     init {
         // Virtusize API for building API requests
         VirtusizeApi.init(
@@ -102,7 +112,7 @@ class Virtusize(
 
         // to handle network errors
         val errorHandler: ErrorResponseHandler = object: ErrorResponseHandler {
-            override fun onError(error: VirtusizeError) {
+            override fun onError(errorCode: Int?, errorMessage: String?, error: VirtusizeError) {
                 messageHandler.onError(fitIllustratorButton, error)
             }
         }
@@ -161,12 +171,26 @@ class Virtusize(
             }
         }
 
-        // Execute the API task to make a network request for Product Check
+        productDataCheck(productValidCheckListener, errorHandler, apiRequest)
+    }
+
+    /**
+     * Executes the API task to make a network request for Product Check
+     * @param productValidCheckListener FitIllustratorButton that is being set up
+     * @param errorHandler VirtusizeProduct that is being set to this button
+     * @param apiRequest [ApiRequest]
+    */
+    internal fun productDataCheck(productValidCheckListener: ValidProductCheckHandler,
+                                  errorHandler: ErrorResponseHandler,
+                                  apiRequest: ApiRequest
+    ) {
         VirtusizeApiTask()
             .setBrowserID(browserIdentifier.getBrowserId())
             .setSuccessHandler(productValidCheckListener)
             .setJsonParser(ProductCheckJsonParser())
             .setErrorHandler(errorHandler)
+            .setHttpURLConnection(httpURLConnection)
+            .setCoroutineDispatcher(coroutineDispatcher)
             .execute(apiRequest)
     }
 
@@ -176,14 +200,18 @@ class Virtusize(
      * @param errorHandler
      * @see VirtusizeProduct
      */
-    private fun sendProductImageToBackend(
+    internal fun sendProductImageToBackend(
         product: VirtusizeProduct,
+        successHandler: SuccessResponseHandler? = null,
         errorHandler: ErrorResponseHandler) {
         val apiRequest = VirtusizeApi.sendProductImageToBackend(product = product)
         VirtusizeApiTask()
             .setBrowserID(browserIdentifier.getBrowserId())
             .setJsonParser(ProductMetaDataHintsJsonParser())
+            .setSuccessHandler(successHandler)
             .setErrorHandler(errorHandler)
+            .setHttpURLConnection(httpURLConnection)
+            .setCoroutineDispatcher(coroutineDispatcher)
             .execute(apiRequest)
     }
 
@@ -193,11 +221,11 @@ class Virtusize(
      * @param withDataProduct ProductCheckResponse corresponding to VirtusizeProduct
      * @param errorHandler the error callback to get the [VirtusizeError] in the API task
      */
-    private fun sendEventToApi(
+    internal fun sendEventToApi(
         event: VirtusizeEvent,
         withDataProduct: ProductCheck? = null,
-        errorHandler: ErrorResponseHandler
-    ) {
+        successHandler: SuccessResponseHandler? = null,
+        errorHandler: ErrorResponseHandler) {
         val defaultDisplay =
             (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
         resolution = "${defaultDisplay.height}x${defaultDisplay.width}"
@@ -215,7 +243,10 @@ class Virtusize(
         )
         VirtusizeApiTask()
             .setBrowserID(browserIdentifier.getBrowserId())
+            .setSuccessHandler(successHandler)
             .setErrorHandler(errorHandler)
+            .setHttpURLConnection(httpURLConnection)
+            .setCoroutineDispatcher(coroutineDispatcher)
             .execute(apiRequest)
     }
 
@@ -224,7 +255,7 @@ class Virtusize(
      * @param onSuccess the success callback to get the [Store] in the API task
      * @param errorHandler the error callback to get the [VirtusizeError] in the API task
      */
-    private fun retrieveStoreInfo(
+    internal fun retrieveStoreInfo(
         onSuccess: SuccessResponseHandler? = null,
         onError: ErrorResponseHandler? = null) {
         val apiRequest = VirtusizeApi.retrieveStoreInfo()
@@ -232,6 +263,8 @@ class Virtusize(
             .setJsonParser(StoreJsonParser())
             .setSuccessHandler(onSuccess)
             .setErrorHandler(onError)
+            .setHttpURLConnection(httpURLConnection)
+            .setCoroutineDispatcher(coroutineDispatcher)
             .execute(apiRequest)
     }
 
@@ -253,8 +286,8 @@ class Virtusize(
                     throwError(VirtusizeError.UserIdNullOrEmpty)
                 }
                 // Sets the region from the store info
-                if(data is Store) {
-                    data.region?.let { order.setRegion(it) }
+                if(data is Store && data.region.isNotBlank()) {
+                    order.setRegion(data.region)
                 }
                 val apiRequest = VirtusizeApi.sendOrder(order)
                 VirtusizeApiTask()
@@ -265,10 +298,16 @@ class Virtusize(
                         }
                     })
                     .setErrorHandler(object : ErrorResponseHandler {
-                        override fun onError(error: VirtusizeError) {
+                        override fun onError(
+                            errorCode: Int?,
+                            errorMessage: String?,
+                            error: VirtusizeError
+                        ) {
                             onError?.invoke(error)
                         }
                     })
+                    .setHttpURLConnection(httpURLConnection)
+                    .setCoroutineDispatcher(coroutineDispatcher)
                     .execute(apiRequest)
             }
         })
@@ -293,17 +332,18 @@ class Virtusize(
                     throwError(VirtusizeError.UserIdNullOrEmpty)
                 }
                 // Sets the region from the store info
-                if(data is Store) {
-                    data.region?.let { order.setRegion(it) }
+                if(data is Store && data.region.isNotBlank()) {
+                    order.setRegion(data.region)
                 }
                 val apiRequest = VirtusizeApi.sendOrder(order)
                 VirtusizeApiTask()
                     .setBrowserID(browserIdentifier.getBrowserId())
                     .setSuccessHandler(onSuccess)
                     .setErrorHandler(onError)
+                    .setHttpURLConnection(httpURLConnection)
+                    .setCoroutineDispatcher(coroutineDispatcher)
                     .execute(apiRequest)
             }
-
         })
     }
 
@@ -327,6 +367,22 @@ class Virtusize(
      */
     fun unregisterMessageHandler(messageHandler: VirtusizeMessageHandler) {
         messageHandlers.remove(messageHandler)
+    }
+
+    /**
+     * Sets the HTTP URL connection
+     * @param urlConnection an instance of [HttpURLConnection]
+     */
+    internal fun setHTTPURLConnection(urlConnection: HttpURLConnection?) {
+        this.httpURLConnection = urlConnection
+    }
+
+    /**
+     * Sets the Coroutine dispatcher
+     * @param dispatcher an instance of [CoroutineDispatcher]
+     */
+    internal fun setCoroutineDispatcher(dispatcher: CoroutineDispatcher) {
+        this.coroutineDispatcher = dispatcher
     }
 }
 

@@ -19,6 +19,8 @@ import com.virtusize.libsource.data.local.VirtusizeOrderItem;
 import com.virtusize.libsource.data.local.VirtusizeProduct;
 import com.virtusize.libsource.ui.FitIllustratorButton;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -95,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 // this optional error callback is called when an error occurs when the app is sending the order
                 new ErrorResponseHandler() {
                     @Override
-                    public void onError(@NonNull VirtusizeError error) {
+                    public void onError(@Nullable Integer errorCode, @Nullable String errorMessage, @NotNull VirtusizeError error) {
                         Log.e(TAG, VirtusizeErrorKt.message(error));
                     }
         });

@@ -1,7 +1,7 @@
 package com.virtusize.libsource.data.remote.parsers
 
 import com.google.common.truth.Truth.assertThat
-import com.virtusize.libsource.data.JsonResponseSamples
+import com.virtusize.libsource.TestFixtures
 import com.virtusize.libsource.data.remote.Data
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.data.remote.UserData
@@ -11,7 +11,7 @@ class ProductCheckJsonParserTest {
 
     @Test
     fun parse_shouldReturnExpectedObject() {
-        val actualProductCheck = ProductCheckJsonParser().parse(JsonResponseSamples.PRODUCT_DATA_CHECK)
+        val actualProductCheck = ProductCheckJsonParser().parse(TestFixtures.PRODUCT_DATA_CHECK)
 
         val expectedData = Data(
             true,

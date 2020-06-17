@@ -5,10 +5,9 @@ import android.os.Build
 import android.view.WindowManager
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
-import com.virtusize.libsource.data.JsonResponseSamples
+import com.virtusize.libsource.TestFixtures
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.JsonUtils
-import com.virtusize.libsource.data.remote.parsers.ProductCheckJsonParser
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,20 +29,20 @@ class VirtusizeApiTest {
     fun initVirtusizeApi(){
         VirtusizeApi.init(
             env = VirtusizeEnvironment.STAGING,
-            key = API_KEY,
-            browserID = BROWSER_ID,
-            userId = USER_ID,
-            language = LANGUAGE
+            key = TestFixtures.API_KEY,
+            browserID = TestFixtures.BROWSER_ID,
+            userId = TestFixtures.USER_ID,
+            language = TestFixtures.LANGUAGE
         )
     }
 
     @Test
     fun productCheck_shouldReturnExpectedApiRequest() {
-        val actualApiRequest = VirtusizeApi.productCheck(VIRTUSIZE_PRODUCT)
+        val actualApiRequest = VirtusizeApi.productCheck(TestFixtures.VIRTUSIZE_PRODUCT)
 
         val expectedUrl = "https://staging.virtusize.com/integration/v3/product-data-check" +
-                "?apiKey=$API_KEY" +
-                "&externalId=$EXTERNAL_ID" +
+                "?apiKey=${TestFixtures.API_KEY}" +
+                "&externalId=${TestFixtures.EXTERNAL_ID}" +
                 "&version=1"
 
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
@@ -54,37 +53,37 @@ class VirtusizeApiTest {
     @Test
     fun fitIllustrator_shouldReturnExpectedUrl() {
         val randomNumberString = Random.nextInt(1519982555).toString()
-        val actualUrl = VirtusizeApi.fitIllustrator(VIRTUSIZE_PRODUCT, randomNumberString)
+        val actualUrl = VirtusizeApi.fitIllustrator(TestFixtures.VIRTUSIZE_PRODUCT, randomNumberString)
 
         val expectedUrl = "https://staging.virtusize.com/a/fit-illustrator/v1/index.html" +
                 "?detached=false" +
-                "&bid=$BROWSER_ID" +
+                "&bid=${TestFixtures.BROWSER_ID}" +
                 "&addToCartEnabled=false" +
                 "&storeId=2" +
                 "&_=$randomNumberString" +
-                "&spid=${PRODUCT_CHECK?.data?.productDataId}" +
-                "&lang=$LANGUAGE" +
+                "&spid=${TestFixtures.PRODUCT_CHECK?.data?.productDataId}" +
+                "&lang=${TestFixtures.LANGUAGE}" +
                 "&android=true" +
                 "&sdk=android" +
-                "&userId=$USER_ID" +
-                "&externalUserId=$USER_ID"
+                "&userId=${TestFixtures.USER_ID}" +
+                "&externalUserId=${TestFixtures.USER_ID}"
 
         assertThat(actualUrl).isEqualTo(expectedUrl)
     }
 
     @Test
     fun sendProductImageToBackend_shouldReturnExpectedApiRequest() {
-        val actualApiRequest = VirtusizeApi.sendProductImageToBackend(VIRTUSIZE_PRODUCT)
+        val actualApiRequest = VirtusizeApi.sendProductImageToBackend(TestFixtures.VIRTUSIZE_PRODUCT)
 
         val expectedUrl = "https://staging.virtusize.com/rest-api/v1/product-meta-data-hints"
 
         val expectedParams = mutableMapOf<String, Any>()
-        VIRTUSIZE_PRODUCT.productCheckData?.data?.storeId?.let {
+        TestFixtures.VIRTUSIZE_PRODUCT.productCheckData?.data?.storeId?.let {
             expectedParams["store_id"] = it.toString()
         }
-        expectedParams["external_id"] = VIRTUSIZE_PRODUCT.externalId
-        expectedParams["image_url"] = VIRTUSIZE_PRODUCT.imageUrl!!
-        expectedParams["api_key"] = API_KEY
+        expectedParams["external_id"] = TestFixtures.VIRTUSIZE_PRODUCT.externalId
+        expectedParams["image_url"] = TestFixtures.VIRTUSIZE_PRODUCT.imageUrl!!
+        expectedParams["api_key"] = TestFixtures.API_KEY
 
         assertThat(actualApiRequest.url).isEqualTo(expectedUrl)
         assertThat(actualApiRequest.method).isEquivalentAccordingToCompareTo(HttpMethod.POST)
@@ -97,26 +96,26 @@ class VirtusizeApiTest {
         val event = VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName())
         val actualApiRequest = VirtusizeApi.sendEventToAPI(
             event,
-            PRODUCT_CHECK,
-            ORIENTATION,
+            TestFixtures.PRODUCT_CHECK,
+            TestFixtures.ORIENTATION,
             resolution,
             versionCode
         )
 
         val expectedParams = mutableMapOf<String, Any>(
             "name" to eventName,
-            "apiKey" to API_KEY,
+            "apiKey" to TestFixtures.API_KEY,
             "type" to "user",
             "source" to "integration-android",
             "userCohort" to "direct",
             "widgetType" to "mobile",
-            "browserOrientation" to ORIENTATION,
+            "browserOrientation" to TestFixtures.ORIENTATION,
             "browserResolution" to resolution,
             "integrationVersion" to versionCode.toString(),
             "snippetVersion" to versionCode.toString()
         )
 
-        PRODUCT_CHECK?.let { productCheck ->
+        TestFixtures.PRODUCT_CHECK?.let { productCheck ->
             expectedParams["storeProductExternalId"] = productCheck.productId
 
             productCheck.data?.let { data ->
@@ -164,9 +163,9 @@ class VirtusizeApiTest {
         val actualApiRequest = VirtusizeApi.sendOrder(order)
 
         val expectedParams = mutableMapOf(
-            "apiKey" to API_KEY,
+            "apiKey" to TestFixtures.API_KEY,
             "externalOrderId" to "888400111032",
-            "externalUserId" to USER_ID,
+            "externalUserId" to TestFixtures.USER_ID,
             "items" to mutableListOf<MutableMap<String, Any>>(mutableMapOf(
                 "productId" to "P001",
                 "size" to "L",
@@ -197,18 +196,5 @@ class VirtusizeApiTest {
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
 
         assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
-    }
-
-    private companion object {
-        const val API_KEY = "test_apiKey"
-        const val BROWSER_ID = "browserID"
-        const val USER_ID = "123"
-        const val EXTERNAL_ID = "7110384"
-        const val LANGUAGE = "en"
-        const val ORIENTATION = "orientation"
-
-        val PRODUCT_CHECK = ProductCheckJsonParser().parse(JsonResponseSamples.PRODUCT_DATA_CHECK)
-
-        val VIRTUSIZE_PRODUCT = VirtusizeProduct(EXTERNAL_ID, "http://image.com/xxx.jpg", PRODUCT_CHECK)
     }
 }

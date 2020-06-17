@@ -23,9 +23,11 @@ interface SuccessResponseHandler {
 interface ErrorResponseHandler {
     /**
      * Passes optional error of type [VirtusizeError]
+     * @param errorCode Any error code that wanted to passed
+     * @param errorMessage Any error message that wants to be passed
      * @param error Any error that wants to be passed
      */
-    fun onError(@NonNull error: VirtusizeError)
+    fun onError(@Nullable errorCode: Int?, @Nullable errorMessage: String?, @NonNull error: VirtusizeError)
 }
 
 /**
