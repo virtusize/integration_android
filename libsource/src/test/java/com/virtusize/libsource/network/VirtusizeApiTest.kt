@@ -1,6 +1,7 @@
 package com.virtusize.libsource.network
 
 import android.content.Context
+import android.net.UrlQuerySanitizer
 import android.os.Build
 import android.view.WindowManager
 import androidx.test.core.app.ApplicationProvider
@@ -52,23 +53,21 @@ class VirtusizeApiTest {
 
     @Test
     fun fitIllustrator_shouldReturnExpectedUrl() {
-        val randomNumberString = Random.nextInt(1519982555).toString()
-        val actualUrl = VirtusizeApi.fitIllustrator(TestFixtures.VIRTUSIZE_PRODUCT, randomNumberString)
+        val actualUrl = VirtusizeApi.fitIllustrator(TestFixtures.VIRTUSIZE_PRODUCT)
 
-        val expectedUrl = "https://staging.virtusize.com/a/fit-illustrator/v1/index.html" +
-                "?detached=false" +
-                "&bid=${TestFixtures.BROWSER_ID}" +
-                "&addToCartEnabled=false" +
-                "&storeId=2" +
-                "&_=$randomNumberString" +
-                "&spid=${TestFixtures.PRODUCT_CHECK?.data?.productDataId}" +
-                "&lang=${TestFixtures.LANGUAGE}" +
-                "&android=true" +
-                "&sdk=android" +
-                "&userId=${TestFixtures.USER_ID}" +
-                "&externalUserId=${TestFixtures.USER_ID}"
+        val actualUrlQuerySanitizer = UrlQuerySanitizer(actualUrl)
 
-        assertThat(actualUrl).isEqualTo(expectedUrl)
+        assertThat(actualUrlQuerySanitizer.getValue("detached")).isEqualTo("false")
+        assertThat(actualUrlQuerySanitizer.getValue("bid")).isEqualTo(TestFixtures.BROWSER_ID)
+        assertThat(actualUrlQuerySanitizer.getValue("addToCartEnabled")).isEqualTo("false")
+        assertThat(actualUrlQuerySanitizer.getValue("storeId")).isEqualTo("2")
+        assertThat(actualUrlQuerySanitizer.getValue("_").toInt() in 0..1519982555).isTrue()
+        assertThat(actualUrlQuerySanitizer.getValue("spid")).isEqualTo(TestFixtures.PRODUCT_CHECK?.data?.productDataId.toString())
+        assertThat(actualUrlQuerySanitizer.getValue("lang")).isEqualTo(TestFixtures.LANGUAGE)
+        assertThat(actualUrlQuerySanitizer.getValue("android")).isEqualTo("true")
+        assertThat(actualUrlQuerySanitizer.getValue("sdk")).isEqualTo("android")
+        assertThat(actualUrlQuerySanitizer.getValue("userId")).isEqualTo(TestFixtures.USER_ID)
+        assertThat(actualUrlQuerySanitizer.getValue("externalUserId")).isEqualTo(TestFixtures.USER_ID)
     }
 
     @Test
