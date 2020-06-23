@@ -1,5 +1,6 @@
 package com.virtusize.libsource.data.remote.parsers
 
+import com.virtusize.libsource.data.remote.JsonUtils
 import com.virtusize.libsource.data.remote.Store
 import org.json.JSONObject
 
@@ -9,16 +10,16 @@ import org.json.JSONObject
 internal class StoreJsonParser: VirtusizeJsonParser {
     override fun parse(json: JSONObject): Store? {
         val id = json.optInt(FIELD_ID)
-        val surveyLink = json.optString(FIELD_SURVEY_LINK)
-        val name = json.optString(FIELD_NAME)
-        val shortName = json.optString(FIELD_SHORT_NAME)
+        val surveyLink = JsonUtils.optString(json, FIELD_SURVEY_LINK)
+        val name = JsonUtils.optString(json, FIELD_NAME)
+        val shortName = JsonUtils.optString(json, FIELD_SHORT_NAME)
         val lengthUnitId = json.optInt(FIELD_LENGTH_UNIT_ID)
-        val apiKey = json.optString(FIELD_API_KEY)
-        val created = json.optString(FIELD_CREATED)
-        val updated = json.optString(FIELD_UPDATED)
-        val disabled = json.optString(FIELD_DISABLED)
+        val apiKey = JsonUtils.optString(json, FIELD_API_KEY)
+        val created = JsonUtils.optString(json, FIELD_CREATED)
+        val updated = JsonUtils.optString(json, FIELD_UPDATED)
+        val disabled = JsonUtils.optString(json, FIELD_DISABLED)
         val typeMapperEnabled = json.optBoolean(FIELD_TYPE_MAPPER_ENABLED)
-        val region = json.optString(FIELD_REGION)
+        val region = JsonUtils.optString(json, FIELD_REGION)
         return Store(id, surveyLink, name, shortName, lengthUnitId, apiKey, created, updated, disabled, typeMapperEnabled, region)
     }
 

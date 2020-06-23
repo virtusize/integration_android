@@ -1,5 +1,6 @@
 package com.virtusize.libsource.data.remote.parsers
 
+import com.virtusize.libsource.data.remote.JsonUtils
 import com.virtusize.libsource.data.remote.ProductCheck
 import org.json.JSONObject
 
@@ -11,8 +12,8 @@ internal class ProductCheckJsonParser: VirtusizeJsonParser {
         val data = json.optJSONObject(FIELD_DATA)?.let {
             DataJsonParser().parse(it)
         }
-        val productId = json.optString(FIELD_PRODUCT_ID)
-        val name = json.optString(FIELD_NAME)
+        val productId = JsonUtils.optString(json, FIELD_PRODUCT_ID)
+        val name = JsonUtils.optString(json, FIELD_NAME)
         return ProductCheck(data, productId, name)
     }
 
