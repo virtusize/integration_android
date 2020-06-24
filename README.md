@@ -30,7 +30,7 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 - In your app `build.gradle` file, add below dependencies:
     ```groovy
     dependencies {
-        implementation 'com.github.virtusize:integration_android:1.6'
+        implementation 'com.github.virtusize:integration_android:1.6.1'
     }
     ```
 ## Setup
@@ -245,10 +245,11 @@ app.Virtusize.sendOrder(order,
         // This error callback is optional and gets called when an error occurs when the app is sending the order
         new ErrorResponseHandler() {
             @Override
-            public void onError(@NonNull VirtusizeError error) {
+            public void onError(@Nullable Integer errorCode, @Nullable String errorMessage, @NotNull VirtusizeError error) {
                 Log.e(TAG, VirtusizeErrorKt.message(error));
             }
-});
+        }
+);
 ~~~~
 
 ## Proguard rules
