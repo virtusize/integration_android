@@ -9,8 +9,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
 
-        versionCode 5
-        versionName "1.6.1"
+        versionCode 6
+        versionName "1.6.2"
     }
 
     buildTypes {
@@ -45,7 +45,7 @@ dependencies {
     testImplementation 'org.json:json:20190722'
     testImplementation 'org.robolectric:robolectric:4.3.1'
     testImplementation 'androidx.test:core:1.2.0'
-    testImplementation "org.mockito:mockito-core:2.19.0"
+    testImplementation "org.mockito:mockito-core:3.0.0"
     testImplementation 'org.mockito:mockito-inline:2.13.0'
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_version"
 }
