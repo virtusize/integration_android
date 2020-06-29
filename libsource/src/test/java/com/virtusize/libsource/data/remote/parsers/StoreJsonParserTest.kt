@@ -23,7 +23,7 @@ class StoreJsonParserTest {
             "2020-04-20T02:33:58Z",
             "2018-05-29 04:32:45",
             false,
-            "JP"
+            "KR"
         )
 
         assertThat(actualStore).isEqualTo(expectedStore)
@@ -44,7 +44,7 @@ class StoreJsonParserTest {
             "2020-04-20T02:33:58Z",
             "",
             false,
-            ""
+            "JP"
         )
 
         assertThat(actualStore).isEqualTo(expectedStore)

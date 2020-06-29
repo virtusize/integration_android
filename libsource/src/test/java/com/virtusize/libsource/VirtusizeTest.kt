@@ -223,7 +223,7 @@ class VirtusizeTest {
         assertThat(actualStore?.updated).isEqualTo("2020-04-20T02:33:58Z")
         assertThat(actualStore?.disabled).isEqualTo("2018-05-29 04:32:45")
         assertThat(actualStore?.typeMapperEnabled).isEqualTo(false)
-        assertThat(actualStore?.region).isEqualTo("JP")
+        assertThat(actualStore?.region).isEqualTo("KR")
     }
 
     @Test
@@ -255,7 +255,7 @@ class VirtusizeTest {
         assertThat(actualStore?.updated).isEqualTo("2020-04-20T02:33:58Z")
         assertThat(actualStore?.disabled).isEqualTo("")
         assertThat(actualStore?.typeMapperEnabled).isEqualTo(false)
-        assertThat(actualStore?.region).isEqualTo("")
+        assertThat(actualStore?.region).isEqualTo("JP")
     }
 
     @Test

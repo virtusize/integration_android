@@ -150,7 +150,7 @@ internal object TestFixtures {
                 "updated": "2020-04-20T02:33:58Z",
                 "disabled": "2018-05-29 04:32:45",
                 "typemapperEnabled": false,
-                "region": "JP"
+                "region": "KR"
             }
       """.trimIndent()
     )
