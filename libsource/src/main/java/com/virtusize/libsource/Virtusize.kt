@@ -184,8 +184,7 @@ class Virtusize(
                                   errorHandler: ErrorResponseHandler,
                                   apiRequest: ApiRequest
     ) {
-        VirtusizeApiTask()
-            .setBrowserID(browserIdentifier.getBrowserId())
+        VirtusizeApiTask(context)
             .setSuccessHandler(productValidCheckListener)
             .setJsonParser(ProductCheckJsonParser())
             .setErrorHandler(errorHandler)
@@ -205,7 +204,7 @@ class Virtusize(
         successHandler: SuccessResponseHandler? = null,
         errorHandler: ErrorResponseHandler) {
         val apiRequest = VirtusizeApi.sendProductImageToBackend(product = product)
-        VirtusizeApiTask()
+        VirtusizeApiTask(context)
             .setBrowserID(browserIdentifier.getBrowserId())
             .setJsonParser(ProductMetaDataHintsJsonParser())
             .setSuccessHandler(successHandler)
@@ -241,7 +240,7 @@ class Virtusize(
             versionCode = context.packageManager
                 .getPackageInfo(context.packageName, 0).versionCode
         )
-        VirtusizeApiTask()
+        VirtusizeApiTask(context)
             .setBrowserID(browserIdentifier.getBrowserId())
             .setSuccessHandler(successHandler)
             .setErrorHandler(errorHandler)
@@ -259,7 +258,7 @@ class Virtusize(
         onSuccess: SuccessResponseHandler? = null,
         onError: ErrorResponseHandler? = null) {
         val apiRequest = VirtusizeApi.retrieveStoreInfo()
-        VirtusizeApiTask()
+        VirtusizeApiTask(context)
             .setJsonParser(StoreJsonParser())
             .setSuccessHandler(onSuccess)
             .setErrorHandler(onError)
@@ -288,7 +287,7 @@ class Virtusize(
                 // Sets the region from the store info
                 order.setRegion((data as Store).region)
                 val apiRequest = VirtusizeApi.sendOrder(order)
-                VirtusizeApiTask()
+                VirtusizeApiTask(context)
                     .setBrowserID(browserIdentifier.getBrowserId())
                     .setSuccessHandler(object : SuccessResponseHandler {
                         override fun onSuccess(data: Any?) {
@@ -332,7 +331,7 @@ class Virtusize(
                 // Sets the region from the store info
                 order.setRegion((data as Store).region)
                 val apiRequest = VirtusizeApi.sendOrder(order)
-                VirtusizeApiTask()
+                VirtusizeApiTask(context)
                     .setBrowserID(browserIdentifier.getBrowserId())
                     .setSuccessHandler(onSuccess)
                     .setErrorHandler(onError)

@@ -1,16 +1,20 @@
 package com.virtusize.libsource.network
 
+import android.content.Context
 import android.util.Log
-import com.virtusize.libsource.ErrorResponseHandler
-import com.virtusize.libsource.SuccessResponseHandler
-import com.virtusize.libsource.Constants
+import com.virtusize.libsource.*
 import com.virtusize.libsource.data.local.VirtusizeError
 import com.virtusize.libsource.data.remote.parsers.VirtusizeJsonParser
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
-import java.io.*
+import java.io.DataOutputStream
+import java.io.IOException
+import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
@@ -18,9 +22,9 @@ import java.util.concurrent.TimeUnit
 
 /**
  * The asynchronous task to make an API request in the background thread
+ * @param context Android Application Context
  */
-internal class VirtusizeApiTask {
-
+internal class VirtusizeApiTask(private val context: Context) {
 
     companion object {
         // The read timeout to use for all the requests, which is 80 seconds
@@ -29,6 +33,7 @@ internal class VirtusizeApiTask {
         private val CONNECT_TIMEOUT = TimeUnit.SECONDS.toMillis(60).toInt()
         // The request header keys
         private const val HEADER_BROWSER_ID = "x-vs-bid"
+        private const val HEADER_DEVICE_ID = "x-vs-device-id"
         private const val HEADER_CONTENT_TYPE = "Content-Type"
     }
 
@@ -108,10 +113,11 @@ internal class VirtusizeApiTask {
                             // Send the POST request
                             if (apiRequest.method == HttpMethod.POST) {
                                 doOutput = true
-                                browserID?.let {
-                                    setRequestProperty(HEADER_BROWSER_ID, browserID)
-                                }
                                 setRequestProperty(HEADER_CONTENT_TYPE, "application/json")
+                                browserID?.let { setRequestProperty(HEADER_BROWSER_ID, it) }
+                                DeviceIdentifier(context).getDeviceId {
+                                    setRequestProperty(HEADER_DEVICE_ID, it)
+                                }
 
                                 // Write the byte array of the request body to the output stream
                                 if (apiRequest.params.isNotEmpty()) {
