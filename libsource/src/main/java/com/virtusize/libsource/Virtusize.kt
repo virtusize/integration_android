@@ -205,7 +205,7 @@ class Virtusize(
         errorHandler: ErrorResponseHandler) {
         val apiRequest = VirtusizeApi.sendProductImageToBackend(product = product)
         VirtusizeApiTask(context)
-            .setBrowserID(browserIdentifier.getBrowserId())
+            .setBrowserID(browserIdentifier)
             .setJsonParser(ProductMetaDataHintsJsonParser())
             .setSuccessHandler(successHandler)
             .setErrorHandler(errorHandler)
@@ -241,7 +241,7 @@ class Virtusize(
                 .getPackageInfo(context.packageName, 0).versionCode
         )
         VirtusizeApiTask(context)
-            .setBrowserID(browserIdentifier.getBrowserId())
+            .setBrowserID(browserIdentifier)
             .setSuccessHandler(successHandler)
             .setErrorHandler(errorHandler)
             .setHttpURLConnection(httpURLConnection)
@@ -288,7 +288,7 @@ class Virtusize(
                 order.setRegion((data as Store).region)
                 val apiRequest = VirtusizeApi.sendOrder(order)
                 VirtusizeApiTask(context)
-                    .setBrowserID(browserIdentifier.getBrowserId())
+                    .setBrowserID(browserIdentifier)
                     .setSuccessHandler(object : SuccessResponseHandler {
                         override fun onSuccess(data: Any?) {
                             onSuccess?.invoke()
@@ -332,7 +332,7 @@ class Virtusize(
                 order.setRegion((data as Store).region)
                 val apiRequest = VirtusizeApi.sendOrder(order)
                 VirtusizeApiTask(context)
-                    .setBrowserID(browserIdentifier.getBrowserId())
+                    .setBrowserID(browserIdentifier)
                     .setSuccessHandler(onSuccess)
                     .setErrorHandler(onError)
                     .setHttpURLConnection(httpURLConnection)

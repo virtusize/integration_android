@@ -42,7 +42,7 @@ internal class VirtusizeApiTask(private val context: Context) {
     // The HTTP URL connection that is used to make a single request
     private var urlConnection: HttpURLConnection? = null
     // The Browser ID for the request header
-    private var browserID: String? = null
+    private var browserIdentifier: BrowserIdentifier? = null
     // The Json parser interface for converting the JSON response to a given type of Java object
     private var jsonParser: VirtusizeJsonParser? = null
     // The callback for a successful API response
@@ -53,8 +53,8 @@ internal class VirtusizeApiTask(private val context: Context) {
     /**
      * Sets up the browser ID
      */
-    fun setBrowserID(browserID: String?): VirtusizeApiTask {
-        this.browserID = browserID
+    fun setBrowserID(browserIdentifier: BrowserIdentifier?): VirtusizeApiTask {
+        this.browserIdentifier = browserIdentifier
         return this
     }
 
@@ -114,7 +114,7 @@ internal class VirtusizeApiTask(private val context: Context) {
                             if (apiRequest.method == HttpMethod.POST) {
                                 doOutput = true
                                 setRequestProperty(HEADER_CONTENT_TYPE, "application/json")
-                                browserID?.let { setRequestProperty(HEADER_BROWSER_ID, it) }
+                                browserIdentifier?.getBrowserId()?.let { setRequestProperty(HEADER_BROWSER_ID, it) }
                                 DeviceIdentifier(context).getDeviceId {
                                     setRequestProperty(HEADER_DEVICE_ID, it)
                                 }
