@@ -139,6 +139,7 @@ internal class VirtusizeApiTask(private val context: Context) {
                             result = it.parse(jsonObject)
                         }
                     }
+                    checkAndUpdateBid(urlConnection)
                     withContext(Main) {
                         successHandler?.onSuccess(result)
                     }
@@ -164,6 +165,39 @@ internal class VirtusizeApiTask(private val context: Context) {
     private fun readFromStream(inputStream: InputStream): String? {
         val scanner: Scanner = Scanner(inputStream).useDelimiter("\\A")
         return if (scanner.hasNext()) scanner.next() else null
+    }
+
+    /**
+     * Converts cookie header string to HashMap
+     * @param header cookies header string
+     */
+    private fun headerStringToMap(header: String): Map<String, String> {
+        val headerMap = mutableMapOf<String, String>()
+        val headerList = header.split(";")
+        for(cookieHeader in headerList) {
+            if(cookieHeader.contains("=")) {
+                val (key, value) = cookieHeader.split("=")
+                headerMap[key] = value
+            }
+        }
+        Log.d(Constants.LOG_TAG, headerMap.toString())
+        return headerMap
+    }
+
+    /**
+     * Checks if the bid in the response header is different from the bid saved locally.
+     * If it is, update and store the new bid
+     * @param urlConnection the HTTP URL connection
+     */
+    private fun checkAndUpdateBid(urlConnection: HttpURLConnection) {
+        if(!urlConnection.url.toString().contains(VirtusizeEndpoint.StoreViewApiKey.getUrl())) {
+            headerStringToMap(urlConnection.getHeaderField("set-cookie"))["virtusize.bid"]?.let { newBid ->
+                Log.d(Constants.LOG_TAG, newBid)
+                if(browserIdentifier?.getBrowserId() != newBid) {
+                    browserIdentifier?.storeBrowserId(newBid)
+                }
+            }
+        }
     }
 
     /**
