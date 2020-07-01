@@ -19,6 +19,8 @@ import com.virtusize.libsource.data.local.VirtusizeOrderItem;
 import com.virtusize.libsource.data.local.VirtusizeProduct;
 import com.virtusize.libsource.ui.FitIllustratorButton;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -61,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Demonstrates how to send an order to the Virtusize server
+     *
+     * Notes:
+     * 1. The parameters sizeAlias, variantId, color, gender, and url for [VirtusizeOrderItem] are optional
+     * 2. If quantity is not provided, it will be set to 1 on its own
      */
     private void sendOrderSample() {
         VirtusizeOrder order = new VirtusizeOrder("888400111032");
@@ -68,15 +74,15 @@ public class MainActivity extends AppCompatActivity {
         items.add(new VirtusizeOrderItem(
                 "P001",
                 "L",
-                "Large", // sizeAlias is optional
-                "P001_SIZEL_RED", // variantId is optional
+                "Large",
+                "P001_SIZEL_RED",
                 "http://images.example.com/products/P001/red/image1xl.jpg",
-                "Red", // color is optional
-                "W", // gender is optional
+                "Red",
+                "W",
                 5100.00,
                 "JPY",
                 1,
-                "http://example.com/products/P001" // url is optional
+                "http://example.com/products/P001"
         ));
         order.setItems(items);
 
@@ -91,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 // this optional error callback is called when an error occurs when the app is sending the order
                 new ErrorResponseHandler() {
                     @Override
-                    public void onError(@NonNull VirtusizeError error) {
+                    public void onError(@Nullable Integer errorCode, @Nullable String errorMessage, @NotNull VirtusizeError error) {
                         Log.e(TAG, VirtusizeErrorKt.message(error));
                     }
         });

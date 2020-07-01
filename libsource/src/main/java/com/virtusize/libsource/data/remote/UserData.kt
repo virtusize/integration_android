@@ -6,8 +6,8 @@ package com.virtusize.libsource.data.remote
  */
 data class UserData(
 	val shouldSeePhTooltip: Boolean,
-	val wardrobeHasP: Boolean?,
-	val wardrobeHasR: Boolean?,
-	val wardrobeHasM: Boolean?,
-	val wardrobeActive: Boolean?
+	val wardrobeHasP: Boolean,
+	val wardrobeHasR: Boolean,
+	val wardrobeHasM: Boolean,
+	val wardrobeActive: Boolean
 )

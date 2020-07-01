@@ -1,9 +1,7 @@
 package com.virtusize.libsource.data.remote.parsers
 
-import android.util.Log
-import com.virtusize.libsource.Constants
 import com.virtusize.libsource.data.remote.Data
-import org.json.JSONException
+import com.virtusize.libsource.data.remote.JsonUtils
 import org.json.JSONObject
 
 /**
@@ -11,20 +9,17 @@ import org.json.JSONObject
  */
 internal class DataJsonParser: VirtusizeJsonParser {
     override fun parse(json: JSONObject): Data? {
-        try {
-            val validProduct = json.getBoolean(FIELD_VALID_PRODUCT)
-            val fetchMetaData = json.getBoolean(FIELD_FETCH_META_DATA)
-            val userData = UserDataJsonParser().parse(json.getJSONObject(FIELD_USER_DATA))
-            val productDataId = json.getInt(FIELD_PRODUCT_DATA_ID)
-            val productTypeName = json.getString(FIELD_PRODUCT_TYPE_NAME)
-            val storeName = json.getString(FIELD_STORE_NAME)
-            val storeId = json.getInt(FIELD_STORE_ID)
-            val productTypeId = json.getInt(FIELD_PRODUCT_TYPE_ID)
-            return Data(validProduct, fetchMetaData, userData, productDataId, productTypeName, storeName, storeId, productTypeId)
-        } catch(e: JSONException) {
-            Log.e(Constants.LOG_TAG, e.localizedMessage)
+        val validProduct = json.optBoolean(FIELD_VALID_PRODUCT)
+        val fetchMetaData = json.optBoolean(FIELD_FETCH_META_DATA)
+        val userData = json.optJSONObject(FIELD_USER_DATA)?.let {
+            UserDataJsonParser().parse(it)
         }
-        return null
+        val productDataId = json.optInt(FIELD_PRODUCT_DATA_ID)
+        val productTypeName = JsonUtils.optString(json, FIELD_PRODUCT_TYPE_NAME)
+        val storeName = JsonUtils.optString(json, FIELD_STORE_NAME)
+        val storeId = json.optInt(FIELD_STORE_ID)
+        val productTypeId = json.optInt(FIELD_PRODUCT_TYPE_ID)
+        return Data(validProduct, fetchMetaData, userData, productDataId, productTypeName, storeName, storeId, productTypeId)
     }
 
     companion object {

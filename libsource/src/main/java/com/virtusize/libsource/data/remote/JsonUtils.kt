@@ -2,12 +2,24 @@ package com.virtusize.libsource.data.remote
 
 import org.json.JSONArray
 import org.json.JSONObject
-import org.json.JSONObject.NULL
 
 /**
  * JSON parsing utility functions
  */
 internal object JsonUtils {
+
+    /**
+     * Returns the String value mapped by name. If it isn't present, return `null`
+     *
+     * @param jsonObject the input JSON object
+     * @param name the optional field name
+     * @return the value stored in the field. If it isn't present, it returns `null`
+     */
+    internal fun optString(jsonObject: JSONObject, name: String?): String {
+        val stringValue = jsonObject.optString(name)
+        return if(stringValue == "null") "" else stringValue
+    }
+
     /**
      * Converts a JSONObject to a Map.
      *
@@ -36,7 +48,7 @@ internal object JsonUtils {
      * @param array a JSONArray to be converted
      * @return a List representing the input
      */
-    private fun jsonArrayToList(array: JSONArray): List<Any> {
+    internal fun jsonArrayToList(array: JSONArray): List<Any> {
         val list: MutableList<Any> = ArrayList()
         for (i in 0 until array.length()) {
             var value = array[i]
@@ -49,5 +61,4 @@ internal object JsonUtils {
         }
         return list
     }
-
 }

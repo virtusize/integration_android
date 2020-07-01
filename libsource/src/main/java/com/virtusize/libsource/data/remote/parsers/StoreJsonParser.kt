@@ -1,9 +1,7 @@
 package com.virtusize.libsource.data.remote.parsers
 
-import android.util.Log
-import com.virtusize.libsource.Constants
+import com.virtusize.libsource.data.remote.JsonUtils
 import com.virtusize.libsource.data.remote.Store
-import org.json.JSONException
 import org.json.JSONObject
 
 /**
@@ -11,23 +9,19 @@ import org.json.JSONObject
  */
 internal class StoreJsonParser: VirtusizeJsonParser {
     override fun parse(json: JSONObject): Store? {
-        try {
-            val id = json.getInt(FIELD_ID)
-            val surveyLink = json.getString(FIELD_SURVEY_LINK)
-            val name = json.getString(FIELD_NAME)
-            val shortName = json.getString(FIELD_SHORT_NAME)
-            val lengthUnitId = json.getInt(FIELD_LENGTH_UNIT_ID)
-            val apiKey = json.getString(FIELD_API_KEY)
-            val created = json.getString(FIELD_CREATED)
-            val updated = json.getString(FIELD_UPDATED)
-            val disabled = json.optBoolean(FIELD_DISABLED)
-            val typeMapperEnabled = json.getBoolean(FIELD_TYPE_MAPPER_ENABLED)
-            val region = json.optString(FIELD_REGION)
-            return Store(id, surveyLink, name, shortName, lengthUnitId, apiKey, created, updated, disabled, typeMapperEnabled, region)
-        } catch(e: JSONException) {
-            Log.e(Constants.LOG_TAG, e.localizedMessage)
-        }
-        return null
+        val id = json.optInt(FIELD_ID)
+        val surveyLink = JsonUtils.optString(json, FIELD_SURVEY_LINK)
+        val name = JsonUtils.optString(json, FIELD_NAME)
+        val shortName = JsonUtils.optString(json, FIELD_SHORT_NAME)
+        val lengthUnitId = json.optInt(FIELD_LENGTH_UNIT_ID)
+        val apiKey = JsonUtils.optString(json, FIELD_API_KEY)
+        val created = JsonUtils.optString(json, FIELD_CREATED)
+        val updated = JsonUtils.optString(json, FIELD_UPDATED)
+        val disabled = JsonUtils.optString(json, FIELD_DISABLED)
+        val typeMapperEnabled = json.optBoolean(FIELD_TYPE_MAPPER_ENABLED)
+        val parsedRegion = JsonUtils.optString(json, FIELD_REGION)
+        val region = if(parsedRegion.isEmpty()) "JP" else parsedRegion
+        return Store(id, surveyLink, name, shortName, lengthUnitId, apiKey, created, updated, disabled, typeMapperEnabled, region)
     }
 
     private companion object {

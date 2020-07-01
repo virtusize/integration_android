@@ -56,7 +56,7 @@ data class VirtusizeOrderItem @JvmOverloads constructor(
                 gender?.let { mapOf(PARAM_GENDER to it) }.orEmpty()
             )
             .plus(
-                mapOf(PARAM_UNIT_PRICE to unitPrice)
+                mapOf(PARAM_UNIT_PRICE to "%.2f".format(unitPrice).toDouble())
             )
             .plus(
                 mapOf(PARAM_CURRENCY to currency)
@@ -70,9 +70,9 @@ data class VirtusizeOrderItem @JvmOverloads constructor(
     }
 
     private companion object {
-        private const val PARAM_PRODUCT_ID = "amount"
-        private const val PARAM_SIZE = "currency"
-        private const val PARAM_SIZE_ALIAS = "description"
+        private const val PARAM_PRODUCT_ID = "productId"
+        private const val PARAM_SIZE = "size"
+        private const val PARAM_SIZE_ALIAS = "sizeAlias"
         private const val PARAM_VARIANT_ID = "variantId"
         private const val PARAM_IMAGE_URL = "imageUrl"
         private const val PARAM_COLOR = "color"

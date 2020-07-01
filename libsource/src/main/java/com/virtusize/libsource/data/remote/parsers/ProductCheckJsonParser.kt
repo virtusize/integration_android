@@ -1,9 +1,7 @@
 package com.virtusize.libsource.data.remote.parsers
 
-import android.util.Log
-import com.virtusize.libsource.Constants
+import com.virtusize.libsource.data.remote.JsonUtils
 import com.virtusize.libsource.data.remote.ProductCheck
-import org.json.JSONException
 import org.json.JSONObject
 
 /**
@@ -11,15 +9,12 @@ import org.json.JSONObject
  */
 internal class ProductCheckJsonParser: VirtusizeJsonParser {
     override fun parse(json: JSONObject): ProductCheck? {
-        try {
-            val data = DataJsonParser().parse(json.getJSONObject(FIELD_DATA))
-            val productId = json.getString(FIELD_PRODUCT_ID)
-            val name = json.getString(FIELD_NAME)
-            return ProductCheck(data, productId, name)
-        } catch(e: JSONException) {
-            Log.e(Constants.LOG_TAG, e.localizedMessage)
+        val data = json.optJSONObject(FIELD_DATA)?.let {
+            DataJsonParser().parse(it)
         }
-        return null
+        val productId = JsonUtils.optString(json, FIELD_PRODUCT_ID)
+        val name = JsonUtils.optString(json, FIELD_NAME)
+        return ProductCheck(data, productId, name)
     }
 
     private companion object {
