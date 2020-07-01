@@ -5,12 +5,9 @@ import android.util.Log
 import com.virtusize.libsource.*
 import com.virtusize.libsource.data.local.VirtusizeError
 import com.virtusize.libsource.data.remote.parsers.VirtusizeJsonParser
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.DataOutputStream
 import java.io.IOException
@@ -110,23 +107,24 @@ internal class VirtusizeApiTask(private val context: Context) {
                             connectTimeout = CONNECT_TIMEOUT
                             requestMethod = apiRequest.method.name
 
-                            // Send the POST request
-                            if (apiRequest.method == HttpMethod.POST) {
-                                doOutput = true
-                                setRequestProperty(HEADER_CONTENT_TYPE, "application/json")
-                                browserIdentifier?.getBrowserId()?.let { setRequestProperty(HEADER_BROWSER_ID, it) }
-                                DeviceIdentifier(context).getDeviceId {
-                                    setRequestProperty(HEADER_DEVICE_ID, it)
-                                }
+                        setRequestProperty(HEADER_CONTENT_TYPE, "application/json")
+                        browserIdentifier?.getBrowserId()?.let { setRequestProperty(HEADER_BROWSER_ID, it) }
+                        DeviceIdentifier(context).getDeviceId {
+                            setRequestProperty(HEADER_DEVICE_ID, it)
+                        }
 
-                                // Write the byte array of the request body to the output stream
-                                if (apiRequest.params.isNotEmpty()) {
-                                    val outStream = DataOutputStream(outputStream)
-                                    outStream.write(JSONObject(apiRequest.params as Map<String, *>).toString().toByteArray())
-                                    outStream.close()
-                                }
+                        // Send the POST request
+                        if (apiRequest.method == HttpMethod.POST) {
+                            doOutput = true
+
+                            // Write the byte array of the request body to the output stream
+                            if (apiRequest.params.isNotEmpty()) {
+                                val outStream = DataOutputStream(outputStream)
+                                outStream.write(JSONObject(apiRequest.params as Map<String, *>).toString().toByteArray())
+                                outStream.close()
                             }
                         }
+                    }
                 }
 
                 // If the request was successful, then read the input stream and parse the response.
@@ -189,11 +187,9 @@ internal class VirtusizeApiTask(private val context: Context) {
      * @param urlConnection the HTTP URL connection
      */
     private fun checkAndUpdateBid(urlConnection: HttpURLConnection) {
-        if(!urlConnection.url.toString().contains(VirtusizeEndpoint.StoreViewApiKey.getUrl())) {
-            headerStringToMap(urlConnection.getHeaderField("set-cookie"))["virtusize.bid"]?.let { newBid ->
-                if(browserIdentifier?.getBrowserId() != newBid) {
-                    browserIdentifier?.storeBrowserId(newBid)
-                }
+        headerStringToMap(urlConnection.getHeaderField("set-cookie"))["virtusize.bid"]?.let { newBid ->
+            if (browserIdentifier?.getBrowserId() != newBid) {
+                browserIdentifier?.storeBrowserId(newBid)
             }
         }
     }

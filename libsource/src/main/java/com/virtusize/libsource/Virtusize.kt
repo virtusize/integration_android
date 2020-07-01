@@ -259,6 +259,7 @@ class Virtusize(
         onError: ErrorResponseHandler? = null) {
         val apiRequest = VirtusizeApi.retrieveStoreInfo()
         VirtusizeApiTask(context)
+            .setBrowserID(browserIdentifier)
             .setJsonParser(StoreJsonParser())
             .setSuccessHandler(onSuccess)
             .setErrorHandler(onError)
