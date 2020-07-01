@@ -180,7 +180,6 @@ internal class VirtusizeApiTask(private val context: Context) {
                 headerMap[key] = value
             }
         }
-        Log.d(Constants.LOG_TAG, headerMap.toString())
         return headerMap
     }
 
@@ -192,7 +191,6 @@ internal class VirtusizeApiTask(private val context: Context) {
     private fun checkAndUpdateBid(urlConnection: HttpURLConnection) {
         if(!urlConnection.url.toString().contains(VirtusizeEndpoint.StoreViewApiKey.getUrl())) {
             headerStringToMap(urlConnection.getHeaderField("set-cookie"))["virtusize.bid"]?.let { newBid ->
-                Log.d(Constants.LOG_TAG, newBid)
                 if(browserIdentifier?.getBrowserId() != newBid) {
                     browserIdentifier?.storeBrowserId(newBid)
                 }
