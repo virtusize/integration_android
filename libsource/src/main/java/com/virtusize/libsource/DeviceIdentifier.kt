@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
 import android.util.Log
+import androidx.ads.identifier.AdvertisingIdClient.isAdvertisingIdProviderAvailable
+import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import java.util.concurrent.Executors
 
 /**
@@ -27,19 +29,18 @@ class DeviceIdentifier(private val context: Context) {
                 getAdvertisingIdByAndroidX(callback)
                 return
             } catch (e: NoClassDefFoundError) {
-                Log.d(Constants.LOG_TAG, "Not found package: androidx.ads.identifier")
+                Log.d(Constants.LOG_TAG, "Package androidx.ads.identifier is not found")
             }
             try {
                 getAdvertisingIdByGps(callback)
                 return
             } catch (e: NoClassDefFoundError) {
-                Log.d(Constants.LOG_TAG, "Not found package: com.google.android.gms.ads.identifier")
+                Log.d(Constants.LOG_TAG, "Package com.google.android.gms.ads.identifier is not found")
             }
         } catch (e: Exception) {
-            Log.w(Constants.LOG_TAG, "Failed to get AdvertisingId: '${e.message}'")
+            Log.w(Constants.LOG_TAG, "Failed to get Advertising ID: '${e.message}'")
         }
         val androidID = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
-        Log.d(Constants.LOG_TAG, "Got Android ID (SSAID): $androidID")
         callback(androidID)
     }
 
@@ -48,15 +49,14 @@ class DeviceIdentifier(private val context: Context) {
      * @param callback passes back the Advertising ID
      */
     private fun getAdvertisingIdByAndroidX(callback: (String) -> Unit) {
-        if (androidx.ads.identifier.AdvertisingIdClient.isAdvertisingIdProviderAvailable(context)) {
+        if (isAdvertisingIdProviderAvailable(context)) {
             val future = androidx.ads.identifier.AdvertisingIdClient.getAdvertisingIdInfo(context)
             future.addListener(Runnable {
                 val info = future.get()
-                Log.d(Constants.LOG_TAG, "Got advertising id: ${info.id}")
                 callback(info.id)
             }, Executors.newSingleThreadExecutor())
         } else {
-            Log.w(Constants.LOG_TAG, "Advertising id is opt outed.")
+            Log.w(Constants.LOG_TAG, "Advertising ID provider is not available.")
         }
     }
 
@@ -66,15 +66,14 @@ class DeviceIdentifier(private val context: Context) {
      */
     private fun getAdvertisingIdByGps(callback: (String) -> Unit) {
         try {
-            val info = com.google.android.gms.ads.identifier.AdvertisingIdClient.getAdvertisingIdInfo(context)
+            val info = AdvertisingIdClient.getAdvertisingIdInfo(context)
             if (!info.isLimitAdTrackingEnabled) {
-                Log.d(Constants.LOG_TAG, "Got advertising id: ${info.id}")
                 callback(info.id)
             } else {
-                Log.w(Constants.LOG_TAG, "Advertising id is opt outed.")
+                Log.w(Constants.LOG_TAG, "Limit Ad Tracking is enabled.")
             }
         } catch (e: Exception) {
-            Log.w(Constants.LOG_TAG, "Failed to get AdvertisingId: '${e.message}'")
+            Log.w(Constants.LOG_TAG, "Failed to get Advertising ID: '${e.message}'")
         }
     }
 }
