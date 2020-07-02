@@ -264,7 +264,7 @@ class VirtusizeTest {
 
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
             mockURL,
-            MockedResponse(204, "".byteInputStream())
+            MockedResponse(204, TestFixtures.STORE_WITH_FULL_INFO.toString().byteInputStream())
         ))
         virtusize.sendOrder(TestFixtures.VIRTUSIZE_ORDER,
             object: SuccessResponseHandler {

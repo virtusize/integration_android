@@ -1,16 +1,17 @@
 package com.virtusize.libsource.network
 
+import android.content.Context
 import android.util.Log
-import com.virtusize.libsource.ErrorResponseHandler
-import com.virtusize.libsource.SuccessResponseHandler
-import com.virtusize.libsource.Constants
+import com.virtusize.libsource.*
 import com.virtusize.libsource.data.local.VirtusizeError
 import com.virtusize.libsource.data.remote.parsers.VirtusizeJsonParser
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import org.json.JSONObject
-import java.io.*
+import java.io.DataOutputStream
+import java.io.IOException
+import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
@@ -18,9 +19,9 @@ import java.util.concurrent.TimeUnit
 
 /**
  * The asynchronous task to make an API request in the background thread
+ * @param context Android Application Context
  */
-internal class VirtusizeApiTask {
-
+internal class VirtusizeApiTask(private val context: Context) {
 
     companion object {
         // The read timeout to use for all the requests, which is 80 seconds
@@ -29,6 +30,7 @@ internal class VirtusizeApiTask {
         private val CONNECT_TIMEOUT = TimeUnit.SECONDS.toMillis(60).toInt()
         // The request header keys
         private const val HEADER_BROWSER_ID = "x-vs-bid"
+        private const val HEADER_DEVICE_ID = "x-vs-device-id"
         private const val HEADER_CONTENT_TYPE = "Content-Type"
     }
 
@@ -37,7 +39,7 @@ internal class VirtusizeApiTask {
     // The HTTP URL connection that is used to make a single request
     private var urlConnection: HttpURLConnection? = null
     // The Browser ID for the request header
-    private var browserID: String? = null
+    private var browserIdentifier: BrowserIdentifier? = null
     // The Json parser interface for converting the JSON response to a given type of Java object
     private var jsonParser: VirtusizeJsonParser? = null
     // The callback for a successful API response
@@ -48,8 +50,8 @@ internal class VirtusizeApiTask {
     /**
      * Sets up the browser ID
      */
-    fun setBrowserID(browserID: String?): VirtusizeApiTask {
-        this.browserID = browserID
+    fun setBrowserID(browserIdentifier: BrowserIdentifier?): VirtusizeApiTask {
+        this.browserIdentifier = browserIdentifier
         return this
     }
 
@@ -105,22 +107,24 @@ internal class VirtusizeApiTask {
                             connectTimeout = CONNECT_TIMEOUT
                             requestMethod = apiRequest.method.name
 
-                            // Send the POST request
-                            if (apiRequest.method == HttpMethod.POST) {
-                                doOutput = true
-                                browserID?.let {
-                                    setRequestProperty(HEADER_BROWSER_ID, browserID)
-                                }
-                                setRequestProperty(HEADER_CONTENT_TYPE, "application/json")
+                        setRequestProperty(HEADER_CONTENT_TYPE, "application/json")
+                        browserIdentifier?.getBrowserId()?.let { setRequestProperty(HEADER_BROWSER_ID, it) }
+                        DeviceIdentifier(context).getDeviceId {
+                            setRequestProperty(HEADER_DEVICE_ID, it)
+                        }
 
-                                // Write the byte array of the request body to the output stream
-                                if (apiRequest.params.isNotEmpty()) {
-                                    val outStream = DataOutputStream(outputStream)
-                                    outStream.write(JSONObject(apiRequest.params as Map<String, *>).toString().toByteArray())
-                                    outStream.close()
-                                }
+                        // Send the POST request
+                        if (apiRequest.method == HttpMethod.POST) {
+                            doOutput = true
+
+                            // Write the byte array of the request body to the output stream
+                            if (apiRequest.params.isNotEmpty()) {
+                                val outStream = DataOutputStream(outputStream)
+                                outStream.write(JSONObject(apiRequest.params as Map<String, *>).toString().toByteArray())
+                                outStream.close()
                             }
                         }
+                    }
                 }
 
                 // If the request was successful, then read the input stream and parse the response.
@@ -133,6 +137,7 @@ internal class VirtusizeApiTask {
                             result = it.parse(jsonObject)
                         }
                     }
+                    checkAndUpdateBid(urlConnection)
                     withContext(Main) {
                         successHandler?.onSuccess(result)
                     }
@@ -158,6 +163,35 @@ internal class VirtusizeApiTask {
     private fun readFromStream(inputStream: InputStream): String? {
         val scanner: Scanner = Scanner(inputStream).useDelimiter("\\A")
         return if (scanner.hasNext()) scanner.next() else null
+    }
+
+    /**
+     * Converts cookie header string to HashMap
+     * @param header cookies header string
+     */
+    private fun headerStringToMap(header: String): Map<String, String> {
+        val headerMap = mutableMapOf<String, String>()
+        val headerList = header.split(";")
+        for(cookieHeader in headerList) {
+            if(cookieHeader.contains("=")) {
+                val (key, value) = cookieHeader.split("=")
+                headerMap[key] = value
+            }
+        }
+        return headerMap
+    }
+
+    /**
+     * Checks if the bid in the response header is different from the bid saved locally.
+     * If it is, update and store the new bid
+     * @param urlConnection the HTTP URL connection
+     */
+    private fun checkAndUpdateBid(urlConnection: HttpURLConnection) {
+        headerStringToMap(urlConnection.getHeaderField("set-cookie"))["virtusize.bid"]?.let { newBid ->
+            if (browserIdentifier?.getBrowserId() != newBid) {
+                browserIdentifier?.storeBrowserId(newBid)
+            }
+        }
     }
 
     /**
