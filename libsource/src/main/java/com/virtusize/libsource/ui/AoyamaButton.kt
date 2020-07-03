@@ -1,38 +1,48 @@
 package com.virtusize.libsource.ui
 
 import android.content.Context
-import android.os.Bundle
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatButton
 import com.virtusize.libsource.Constants
+import com.virtusize.libsource.R
 import com.virtusize.libsource.VirtusizeButtonSetupHandler
-import com.virtusize.libsource.network.VirtusizeApi
-import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.data.local.VirtusizeError
 import com.virtusize.libsource.data.local.VirtusizeEvents
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler
 import com.virtusize.libsource.data.local.VirtusizeProduct
+import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.throwError
 
-/**
- * This class is the custom Fit Illustrator Button that is added in the client's layout file
- */
-class FitIllustratorButton(context: Context, attrs: AttributeSet): AppCompatButton(context, attrs),
+class AoyamaButton(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs),
     VirtusizeButtonSetupHandler {
 
-    // VirtusizeProduct associated with the FitIllustratorButton instance
+    // VirtusizeProduct associated with the AoyamaButton instance
     var virtusizeProduct: VirtusizeProduct? = null
 
     // Receives Virtusize messages
     private lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
 
-    // The Fit Illustrator view that opens when the button is clicked
-    private val fitIllustratorDialogFragment = FitIllustratorView()
+    // The Aoyama view that opens when the button is clicked
+    private val aoyamaDialogFragment = AoyamaView()
+
 
     init {
         visibility = View.INVISIBLE
+
+        LayoutInflater.from(context).inflate(R.layout.button_aoyama, this, true)
+
+        setOnClickListener {
+            val fragmentTransaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
+            val previousFragment = context.supportFragmentManager.findFragmentByTag(Constants.AOYAMA_FRAG_TAG)
+            previousFragment?.let {fragment ->
+                fragmentTransaction.remove(fragment)
+            }
+            fragmentTransaction.addToBackStack(null)
+            aoyamaDialogFragment.show(fragmentTransaction, Constants.AOYAMA_FRAG_TAG)
+        }
     }
 
     /**
@@ -43,15 +53,15 @@ class FitIllustratorButton(context: Context, attrs: AttributeSet): AppCompatButt
     internal fun setup(product: VirtusizeProduct, messageHandler: VirtusizeMessageHandler) {
         virtusizeProduct = product
         virtusizeMessageHandler = messageHandler
-        fitIllustratorDialogFragment.setupMessageHandler(messageHandler, this)
+        aoyamaDialogFragment.setupMessageHandler(messageHandler, this)
     }
 
     /**
-     * Dismisses/closes the Fit Illustrator Window
+     * Dismisses/closes the Aoyama Window
      */
-    fun dismissFitIllustratorView() {
-        if (fitIllustratorDialogFragment.isVisible)
-            fitIllustratorDialogFragment.dismiss()
+    fun dismissAoyamaView() {
+        if (aoyamaDialogFragment.isVisible)
+            aoyamaDialogFragment.dismiss()
     }
 
     /**
@@ -69,15 +79,12 @@ class FitIllustratorButton(context: Context, attrs: AttributeSet): AppCompatButt
                     setOnClickListener {
                         virtusizeMessageHandler.onEvent(this, VirtusizeEvents.UserOpenedWidget)
                         val fragmentTransaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
-                        val previousFragment = (context as AppCompatActivity).supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
+                        val previousFragment = (context as AppCompatActivity).supportFragmentManager.findFragmentByTag(Constants.AOYAMA_FRAG_TAG)
                         previousFragment?.let {fragment ->
                             fragmentTransaction.remove(fragment)
                         }
                         fragmentTransaction.addToBackStack(null)
-                        val args = Bundle()
-                        args.putString(Constants.URL_KEY, VirtusizeApi.fitIllustrator(virtusizeProduct!!))
-                        fitIllustratorDialogFragment.arguments = args
-                        fitIllustratorDialogFragment.show(fragmentTransaction, Constants.FRAG_TAG)
+                        aoyamaDialogFragment.show(fragmentTransaction, Constants.AOYAMA_FRAG_TAG)
                     }
                 }
             }

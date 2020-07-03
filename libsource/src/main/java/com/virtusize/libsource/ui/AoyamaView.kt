@@ -1,9 +1,10 @@
 package com.virtusize.libsource.ui
 
+import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -13,15 +14,12 @@ import com.virtusize.libsource.R
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler
 import kotlinx.android.synthetic.main.web_activity.*
 
-/**
- * This class represents the Fit Illustrator Window
- */
-class FitIllustratorView: DialogFragment() {
+class AoyamaView: DialogFragment() {
 
-    private var url = "http://www.virtusize.com"
+    private val url = "https://static.api.virtusize.jp/a/aoyama/testing/sdk-integration/sdk-webview.html"
 
     private lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
-    private lateinit var fitIllustratorButton: FitIllustratorButton
+    private lateinit var aoyamaButton: AoyamaButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +31,7 @@ class FitIllustratorView: DialogFragment() {
         return inflater.inflate(R.layout.web_activity, container, false)
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Enable JavaScript in the web view
@@ -43,42 +42,36 @@ class FitIllustratorView: DialogFragment() {
         web_view.webViewClient = object: WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-                view?.loadUrl(
-                    "javascript:(function() { " +
-                            "var element = document.getElementsByClassName('global-close')[0];"
-                            + "element.onclick = function() { ${Constants.JSBridgeName}.userClosedWidget(); };" +
-                            "})()")
+                val vsParamsFromSDKScript = "javascript:vsParamsFromSDK({" +
+                        "apiKey: '52140a6c9e0870294e4c5df4ebc39b47c8237bfa', " +
+                        "externalProductId: '18575990709', " +
+                        "env: 'staging', " +
+                        "language: 'en'})"
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    view?.evaluateJavascript(vsParamsFromSDKScript, null)
+                } else {
+                    view?.loadUrl(vsParamsFromSDKScript)
+                }
             }
         }
-        // Add the Javascript interface to receive events from the web view
-        web_view.addJavascriptInterface(JavaScriptInterface(), Constants.JSBridgeName)
-        // Get the Fit Illustrator URL passed in fragment arguments
-        arguments?.getString(Constants.URL_KEY)?.let {
-            url = it
-        }
+        // Add the Javascript interface to interface the web app with the web view
+        web_view.addJavascriptInterface(WebAppInterface(), Constants.JSBridgeName)
         web_view.loadUrl(url)
     }
 
     /**
      * Sets up a Virtusize message handler
      */
-    internal fun setupMessageHandler(messageHandler: VirtusizeMessageHandler, fitIllustratorButton: FitIllustratorButton) {
+    internal fun setupMessageHandler(messageHandler: VirtusizeMessageHandler, aoyamaButton: AoyamaButton) {
         virtusizeMessageHandler = messageHandler
-        this.fitIllustratorButton = fitIllustratorButton
+        this.aoyamaButton = aoyamaButton
     }
 
-    /**
-     * The Javascript interface to receive events from the web view
-     */
-    private inner class JavaScriptInterface {
+    private inner class WebAppInterface {
 
-        /**
-         * This method is called when a user clicks on the close button in the Fit Illustrator window
-         */
         @JavascriptInterface
-        fun userClosedWidget() {
-            virtusizeMessageHandler.virtusizeControllerShouldClose(fitIllustratorButton)
-            dismiss()
+        fun eventHandler(evenBody: String) {
+            Log.d(Constants.LOG_TAG, evenBody)
         }
     }
 }

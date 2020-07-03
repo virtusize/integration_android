@@ -8,10 +8,10 @@
     tools:context=".MainActivity"
     android:gravity="center">
 
-    <!-- FitIllustratorButton is custom button layout that can be put in xml file and set up programmatically -->
-    <com.virtusize.libsource.ui.FitIllustratorButton
-        android:id="@+id/exampleFitButton"
-        style="@style/DefaultStyleBlueJapanese"
-        />
+    <!-- AoyamaButton is custom button layout that can be put in xml file and set up programmatically -->
+    <com.virtusize.libsource.ui.AoyamaButton
+        android:id="@+id/exampleAoyamaButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

@@ -17,7 +17,7 @@ import com.virtusize.libsource.data.local.VirtusizeMessageHandler;
 import com.virtusize.libsource.data.local.VirtusizeOrder;
 import com.virtusize.libsource.data.local.VirtusizeOrderItem;
 import com.virtusize.libsource.data.local.VirtusizeProduct;
-import com.virtusize.libsource.ui.FitIllustratorButton;
+import com.virtusize.libsource.ui.AoyamaButton;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    FitIllustratorButton fitIllustratorButton;
+    AoyamaButton aoyamaButton;
     App app;
     VirtusizeMessageHandler virtusizeMessageHandler;
 
@@ -35,28 +35,28 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        fitIllustratorButton = findViewById(R.id.exampleFitButton);
+        aoyamaButton = findViewById(R.id.exampleAoyamaButton);
         app = (App) getApplication();
 
         virtusizeMessageHandler = new VirtusizeMessageHandler() {
             @Override
-            public void virtusizeControllerShouldClose(@NonNull FitIllustratorButton fitIllustratorButton) {
-                Log.i(TAG, "Close fit illustrator");
+            public void virtusizeControllerShouldClose(@NotNull AoyamaButton aoyamaButton) {
+                Log.i(TAG, "Close Aoyama");
             }
 
             @Override
-            public void onEvent(FitIllustratorButton fitIllustratorButton, @NonNull VirtusizeEvents event) {
+            public void onEvent(AoyamaButton aoyamaButton, @NonNull VirtusizeEvents event) {
                 Log.i(TAG, VirtusizeEventKt.getEventName(event));
             }
 
             @Override
-            public void onError(FitIllustratorButton fitIllustratorButton, @NonNull VirtusizeError error) {
+            public void onError(AoyamaButton aoyamaButton, @NonNull VirtusizeError error) {
                 Log.e(TAG, VirtusizeErrorKt.message(error));
             }
         };
         app.Virtusize.registerMessageHandler(virtusizeMessageHandler);
 
-        app.Virtusize.setupFitButton(fitIllustratorButton, new VirtusizeProduct("694", "https://www.publicdomainpictures.net/pictures/120000/velka/dress-1950-vintage-style.jpg"));
+        app.Virtusize.setupAoyamaButton(aoyamaButton, new VirtusizeProduct("694", "https://www.publicdomainpictures.net/pictures/120000/velka/dress-1950-vintage-style.jpg"));
 
         sendOrderSample();
     }

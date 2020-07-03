@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.VirtusizeOrder
-import com.virtusize.libsource.ui.FitIllustratorButton
+import com.virtusize.libsource.ui.AoyamaButton
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -22,19 +22,19 @@ class MainActivity : AppCompatActivity() {
         (application as App)
             .Virtusize.registerMessageHandler(activityMessageHandler)
 
-        // setup Virtusize fit illustrator button
+        // setup Aoyama button
         (application as App)
             .Virtusize
-            .setupFitButton(
-                fitIllustratorButton = exampleFitButton,
+            .setupAoyamaButton(
+                aoyamaButton = exampleAoyamaButton,
                 virtusizeProduct = VirtusizeProduct(externalId = "694", imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg")
             )
 
-        // Fit Illustrator opens automatically when button is clicked
+        // Aoyama opens automatically when button is clicked
 
         /*
-         * To close fit illustrator use
-         * exampleFitButton.dismissFitIllustratorView()
+         * To close the Aoyama page
+         * exampleAoyamaButton.dismissFitIllustratorView()
          */
 
         sendOrderSample()
@@ -86,16 +86,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val activityMessageHandler = object : VirtusizeMessageHandler {
-        override fun virtusizeControllerShouldClose(fitIllustratorButton: FitIllustratorButton) {
-            Log.i(TAG, "Close fit illustrator")
-            fitIllustratorButton.dismissFitIllustratorView()
+        override fun virtusizeControllerShouldClose(aoyamaButton: AoyamaButton) {
+            Log.i(TAG, "Close Aoyama")
+            aoyamaButton.dismissAoyamaView()
         }
 
-        override fun onEvent(fitIllustratorButton: FitIllustratorButton?, event: VirtusizeEvents) {
+        override fun onEvent(aoyamaButton: AoyamaButton?, event: VirtusizeEvents) {
             Log.i(TAG, event.getEventName())
         }
 
-        override fun onError(fitIllustratorButton: FitIllustratorButton?, error: VirtusizeError) {
+        override fun onError(aoyamaButton: AoyamaButton?, error: VirtusizeError) {
             Log.e(TAG, error.message())
         }
     }

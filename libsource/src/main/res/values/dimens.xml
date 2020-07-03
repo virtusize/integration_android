@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="virtusizeDp16">16dp</dimen>
+
+    <dimen name="aoyama_button_textSize">12sp</dimen>
+
+    <dimen name="aoyama_button_corner_radius">40dp</dimen>
+    <dimen name="aoyama_button_vertical_padding">10dp</dimen>
+    <dimen name="aoyama_button_horizontal_padding">12dp</dimen>
+    <dimen name="aoyama_button_logo_default_width">18dp</dimen>
+    <dimen name="aoyama_button_text_marginStart">5dp</dimen>
 </resources>

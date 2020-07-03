@@ -15,7 +15,7 @@ import com.virtusize.libsource.data.remote.parsers.ProductMetaDataHintsJsonParse
 import com.virtusize.libsource.data.remote.parsers.StoreJsonParser
 import com.virtusize.libsource.network.ApiRequest
 import com.virtusize.libsource.network.VirtusizeApiTask
-import com.virtusize.libsource.ui.FitIllustratorButton
+import com.virtusize.libsource.ui.AoyamaButton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers.IO
 import java.net.HttpURLConnection
@@ -40,21 +40,21 @@ class Virtusize(
 
     // The Virtusize message handler passes received errors and events to registered message handlers
     private val messageHandler = object : VirtusizeMessageHandler {
-        override fun virtusizeControllerShouldClose(fitIllustratorButton: FitIllustratorButton) {
+        override fun virtusizeControllerShouldClose(aoyamaButton: AoyamaButton) {
             messageHandlers.forEach { messageHandler ->
-                messageHandler.virtusizeControllerShouldClose(fitIllustratorButton)
+                messageHandler.virtusizeControllerShouldClose(aoyamaButton)
             }
         }
 
-        override fun onEvent(fitIllustratorButton: FitIllustratorButton?, event: VirtusizeEvents) {
+        override fun onEvent(aoyamaButton: AoyamaButton?, event: VirtusizeEvents) {
             messageHandlers.forEach { messageHandler ->
-                messageHandler.onEvent(fitIllustratorButton, event)
+                messageHandler.onEvent(aoyamaButton, event)
             }
         }
 
-        override fun onError(fitIllustratorButton: FitIllustratorButton?, error: VirtusizeError) {
+        override fun onError(aoyamaButton: AoyamaButton?, error: VirtusizeError) {
             messageHandlers.forEach { messageHandler ->
-                messageHandler.onError(fitIllustratorButton, error)
+                messageHandler.onError(aoyamaButton, error)
             }
         }
 
@@ -93,32 +93,29 @@ class Virtusize(
     }
 
     /**
-     * Sets up the Fit Illustrator button by setting VirtusizeProduct to this button
-     * @param fitIllustratorButton FitIllustratorButton that is being set up
+     * Sets up the Aoyama button by setting VirtusizeProduct to this button
+     * @param aoyamaButton AoyamaButton that is being set up
      * @param virtusizeProduct VirtusizeProduct that is being set to this button
-     * @throws IllegalArgumentException throws an error if FitIllustratorButton is null or the image URL of VirtusizeProduct is invalid
+     * @throws IllegalArgumentException throws an error if AoyamaButton is null or the image URL of VirtusizeProduct is invalid
      */
-    fun setupFitButton(
-        fitIllustratorButton: FitIllustratorButton?,
-        virtusizeProduct: VirtusizeProduct
-    ) {
+    fun setupAoyamaButton(aoyamaButton: AoyamaButton?, virtusizeProduct: VirtusizeProduct) {
 
-        // Throws VirtusizeError.NullFitButtonError error if button is null
-        if (fitIllustratorButton == null) {
-            messageHandler.onError(null, VirtusizeError.NullFitButtonError)
-            throwError(error = VirtusizeError.NullFitButtonError)
+        // Throws VirtusizeError.NullAoyamaButtonError error if button is null
+        if (aoyamaButton == null) {
+            messageHandler.onError(null, VirtusizeError.NullAoyamaButtonError)
+            throwError(error = VirtusizeError.NullAoyamaButtonError)
             return
         }
 
         // to handle network errors
         val errorHandler: ErrorResponseHandler = object: ErrorResponseHandler {
             override fun onError(errorCode: Int?, errorMessage: String?, error: VirtusizeError) {
-                messageHandler.onError(fitIllustratorButton, error)
+                messageHandler.onError(aoyamaButton, error)
             }
         }
 
-        // Set virtusizeProduct to fitIllustratorButton
-        fitIllustratorButton.setup(product = virtusizeProduct, messageHandler = messageHandler)
+        // Set virtusizeProduct to AoyamaButton
+        aoyamaButton.setup(product = virtusizeProduct, messageHandler = messageHandler)
         // API Request to perform Product check on Virtusize server
         val apiRequest = VirtusizeApi.productCheck(product = virtusizeProduct)
         // Callback Handler for Product Check request
@@ -129,27 +126,27 @@ class Virtusize(
              * when Product check Request is performed on server on Virtusize server
              */
             override fun onValidProductCheckCompleted(productCheck: ProductCheck) {
-                // Set up Product check response data to VirtusizeProduct in FitIllustratorButton
-                fitIllustratorButton.setupProductCheckResponseData(productCheck)
+                // Set up Product check response data to VirtusizeProduct in AoyamaButton
+                aoyamaButton.setupProductCheckResponseData(productCheck)
                 // Send API Event UserSawProduct
                 sendEventToApi(
                     event = VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()),
                     withDataProduct = productCheck,
                     errorHandler = errorHandler
                 )
-                messageHandler.onEvent(fitIllustratorButton, VirtusizeEvents.UserSawProduct)
+                messageHandler.onEvent(aoyamaButton, VirtusizeEvents.UserSawProduct)
                 productCheck.data?.apply {
                     if (validProduct) {
                         if (fetchMetaData) {
-                            if (fitIllustratorButton.virtusizeProduct?.imageUrl != null) {
+                            if (aoyamaButton.virtusizeProduct?.imageUrl != null) {
                                 // If image URL is valid, send image URL to server
                                 sendProductImageToBackend(
-                                    product = fitIllustratorButton.virtusizeProduct!!,
+                                    product = aoyamaButton.virtusizeProduct!!,
                                     errorHandler = errorHandler
                                 )
                             } else {
                                 messageHandler.onError(
-                                    fitIllustratorButton,
+                                    aoyamaButton,
                                     VirtusizeError.ImageUrlNotValid
                                 )
                                 throwError(VirtusizeError.ImageUrlNotValid)
@@ -162,7 +159,7 @@ class Virtusize(
                             errorHandler = errorHandler
                         )
                         messageHandler.onEvent(
-                            fitIllustratorButton,
+                            aoyamaButton,
                             VirtusizeEvents.UserSawWidgetButton
                         )
                     }
@@ -176,7 +173,7 @@ class Virtusize(
 
     /**
      * Executes the API task to make a network request for Product Check
-     * @param productValidCheckListener FitIllustratorButton that is being set up
+     * @param productValidCheckListener AoyamaButton that is being set up
      * @param errorHandler VirtusizeProduct that is being set to this button
      * @param apiRequest [ApiRequest]
     */
@@ -470,7 +467,7 @@ class VirtusizeBuilder {
  * Constants used in the Virtusize SDK
  */
 object Constants {
-    const val FRAG_TAG = "FIT_FRAG_TAG"
+    const val AOYAMA_FRAG_TAG = "AOYAMA_FRAG_TAG"
     const val URL_KEY = "URL_KEY"
     const val LOG_TAG = "VIRTUSIZE"
     const val SHARED_PREFS_NAME = "VIRTUSIZE_SHARED_PREFS"

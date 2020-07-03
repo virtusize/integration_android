@@ -6,7 +6,7 @@ import java.lang.IllegalArgumentException
  * This enum contains all available errors in Virtusize library
  */
 enum class VirtusizeError{
-    NullFitButtonError,
+    NullAoyamaButtonError,
     ApiKeyNullOrEmpty,
     UserIdNullOrEmpty,
     NullContext,
@@ -22,7 +22,7 @@ enum class VirtusizeError{
  */
 fun VirtusizeError.message(): String {
     return when(this) {
-        VirtusizeError.NullFitButtonError -> "Fit Illustrator Button is null."
+        VirtusizeError.NullAoyamaButtonError -> "Aoyama Button is null."
         VirtusizeError.ApiKeyNullOrEmpty -> "Api Key can not be null or empty."
         VirtusizeError.UserIdNullOrEmpty -> "The unique user ID from the client system is not set up or empty"
         VirtusizeError.NullContext -> "Context can not be null"

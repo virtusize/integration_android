@@ -18,35 +18,4 @@
         <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 
-    <!-- Fit button default style Blue Japanese-->
-    <style name="DefaultStyleBlueJapanese" parent="Base.TextAppearance.AppCompat.Button">
-        <item name="android:text">@string/fit_button_text_jp</item>
-        <item name="android:layout_width">275dp</item>
-        <item name="android:layout_height">54dp</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textColor">@color/virtusizeWhite</item>
-        <item name="android:background">@drawable/background_blue</item>
-        <item name="android:drawableLeft">@drawable/ic_vs_icon_white</item>
-        <item name="android:drawableStart">@drawable/ic_vs_icon_white</item>
-        <item name="android:drawablePadding">0dp</item>
-        <item name="android:padding">@dimen/virtusizeDp16</item>
-        <item name="android:paddingLeft">50dp</item>
-        <item name="android:paddingStart">50dp</item>
-        <item name="android:paddingRight">40dp</item>
-        <item name="android:paddingEnd">40dp</item>
-    </style>
-
-    <!-- Fit button default style Black English-->
-    <style name="DefaultStyleBlackEnglish" parent="Base.TextAppearance.AppCompat.Button">
-        <item name="android:text">@string/fit_button_text</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textColor">@color/virtusizeWhite</item>
-        <item name="android:background">#000</item>
-        <item name="android:drawableLeft">@drawable/ic_vs_icon_white</item>
-        <item name="android:drawableStart">@drawable/ic_vs_icon_white</item>
-        <item name="android:drawablePadding">0dp</item>
-        <item name="android:padding">@dimen/virtusizeDp16</item>
-    </style>
 </resources>
