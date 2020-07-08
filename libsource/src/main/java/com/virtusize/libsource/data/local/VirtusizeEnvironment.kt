@@ -27,6 +27,13 @@ fun VirtusizeEnvironment.apiBaseUrl(): String {
     }
 }
 
+fun VirtusizeEnvironment.productDataCheckBaseUrl(): String {
+    return when(this) {
+        STAGING -> "https://services.virtusize.com/stg"
+        else -> "https://services.virtusize.com/"
+    }
+}
+
 // TODO
 fun VirtusizeEnvironment.aoyamaBaseUrl(): String {
     return when(this) {

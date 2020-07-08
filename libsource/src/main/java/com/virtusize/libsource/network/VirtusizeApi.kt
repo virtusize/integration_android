@@ -60,7 +60,7 @@ internal object VirtusizeApi {
      * @see ApiRequest
      */
     fun productCheck(product: VirtusizeProduct): ApiRequest {
-        val urlBuilder = Uri.parse(environment.apiBaseUrl() + VirtusizeEndpoint.ProductCheck.getPath())
+        val urlBuilder = Uri.parse(environment.productDataCheckBaseUrl() + VirtusizeEndpoint.ProductCheck.getPath())
             .buildUpon()
             .appendQueryParameter("apiKey", apiKey)
             .appendQueryParameter("externalId", product.externalId)

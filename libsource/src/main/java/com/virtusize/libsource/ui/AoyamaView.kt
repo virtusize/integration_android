@@ -126,6 +126,12 @@ class AoyamaView: DialogFragment() {
         webView.loadUrl(aoyamaBaseUrl)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        webView.stopLoading()
+        webView.destroy()
+    }
+
     // TODO
     private fun showConfirmDialog() {
         dismiss()
