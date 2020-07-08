@@ -2,10 +2,8 @@ package com.virtusize.libsource.network
 
 import android.net.Uri
 import com.virtusize.libsource.data.local.*
-import com.virtusize.libsource.data.local.aoyama.AoyamaParams
 import com.virtusize.libsource.data.remote.JsonUtils
 import com.virtusize.libsource.data.remote.ProductCheck
-import kotlin.random.Random
 
 
 /**
@@ -35,8 +33,6 @@ internal data class ApiRequest(val url: String, val method: HttpMethod, val para
 internal object VirtusizeApi {
     private var environment = VirtusizeEnvironment.GLOBAL
     private lateinit var apiKey: String
-    private lateinit var browserID: String
-    private lateinit var language: String
     private lateinit var userId: String
 
     /**
@@ -48,12 +44,10 @@ internal object VirtusizeApi {
      * @param language the language code that is set in the user's device
      */
     fun init(env: VirtusizeEnvironment,
-             key: String, browserID: String, userId: String, language: String) {
+             key: String, userId: String) {
         environment = env
         apiKey = key
-        this.browserID = browserID
         this.userId = userId
-        this.language = language
     }
 
     /**
@@ -66,7 +60,7 @@ internal object VirtusizeApi {
      * @see ApiRequest
      */
     fun productCheck(product: VirtusizeProduct): ApiRequest {
-        val urlBuilder = Uri.parse(environment.value() + VirtusizeEndpoint.ProductCheck.getUrl())
+        val urlBuilder = Uri.parse(environment.apiBaseUrl() + VirtusizeEndpoint.ProductCheck.getPath())
             .buildUpon()
             .appendQueryParameter("apiKey", apiKey)
             .appendQueryParameter("externalId", product.externalId)
@@ -76,37 +70,12 @@ internal object VirtusizeApi {
     }
 
     /**
-     * Gets the Fit Illustrator URL for a VirtusizeProduct
-     * @param product the VirtusizeProduct for which Fit Illustrator URL is needed
-     * @return the Fit Illustrator URL as String
+     * Gets the Aoyama URL for a VirtusizeProduct
+     * @return the Aoyama URL as String
      */
-    fun fitIllustrator(product: VirtusizeProduct): String {
-        val urlBuilder = Uri.parse(environment.value() + VirtusizeEndpoint.FitIllustrator.getUrl())
+    fun aoyama(): String {
+        val urlBuilder = Uri.parse(environment.aoyamaBaseUrl() + VirtusizeEndpoint.Aoyama.getPath())
             .buildUpon()
-            .appendQueryParameter("detached", "false")
-            .appendQueryParameter("bid", browserID)
-            .appendQueryParameter("addToCartEnabled", "false")
-            .appendQueryParameter("storeId", product.productCheckData?.data?.storeId.toString())
-            .appendQueryParameter("_", Random.nextInt(1519982555).toString())
-            .appendQueryParameter("spid", product.productCheckData?.data?.productDataId.toString())
-            .appendQueryParameter("lang", language)
-            .appendQueryParameter("android", "true")
-            .appendQueryParameter("sdk", "android")
-            .appendQueryParameter("userId", userId)
-
-        if (userId.isNotEmpty()) {
-            urlBuilder.appendQueryParameter("externalUserId", userId)
-        }
-        return urlBuilder.build().toString()
-    }
-
-    // TODO: Gets the URL for Aoyama
-    fun aoyamaIntegration(params: AoyamaParams): String {
-        val urlBuilder = Uri.parse("")
-            .buildUpon()
-        for ((key, value) in params.paramsToMap()) {
-            urlBuilder.appendQueryParameter(key, value.toString())
-        }
         return urlBuilder.build().toString()
     }
 
@@ -116,7 +85,7 @@ internal object VirtusizeApi {
      * @return ApiRequest
      */
     fun sendProductImageToBackend(product: VirtusizeProduct): ApiRequest {
-        val url = Uri.parse(environment.value() + VirtusizeEndpoint.ProductMetaDataHints.getUrl())
+        val url = Uri.parse(environment.apiBaseUrl() + VirtusizeEndpoint.ProductMetaDataHints.getPath())
             .buildUpon()
             .build()
             .toString()
@@ -149,7 +118,7 @@ internal object VirtusizeApi {
         screenResolution: String,
         versionCode: Int
     ): ApiRequest {
-        val url = Uri.parse(environment.value() + VirtusizeEndpoint.Events.getUrl())
+        val url = Uri.parse(environment.apiBaseUrl() + VirtusizeEndpoint.Events.getPath())
             .buildUpon()
             .build()
             .toString()
@@ -238,7 +207,7 @@ internal object VirtusizeApi {
      * @see ApiRequest
      */
     fun sendOrder(order: VirtusizeOrder): ApiRequest {
-        val url = Uri.parse(environment.value() + VirtusizeEndpoint.Orders.getUrl())
+        val url = Uri.parse(environment.apiBaseUrl() + VirtusizeEndpoint.Orders.getPath())
             .buildUpon()
             .build()
             .toString()
@@ -251,7 +220,7 @@ internal object VirtusizeApi {
      * @see ApiRequest
      */
     fun retrieveStoreInfo() : ApiRequest {
-        val url = Uri.parse(environment.value() + VirtusizeEndpoint.StoreViewApiKey.getUrl() + apiKey)
+        val url = Uri.parse(environment.apiBaseUrl() + VirtusizeEndpoint.StoreViewApiKey.getPath() + apiKey)
             .buildUpon()
             .appendQueryParameter("format", "json")
             .build()

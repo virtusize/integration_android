@@ -10,6 +10,7 @@ import com.virtusize.libsource.network.VirtusizeApi
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.data.remote.Store
 import com.virtusize.libsource.data.local.VirtusizeOrder
+import com.virtusize.libsource.data.local.aoyama.AoyamaParams
 import com.virtusize.libsource.data.remote.parsers.ProductCheckJsonParser
 import com.virtusize.libsource.data.remote.parsers.ProductMetaDataHintsJsonParser
 import com.virtusize.libsource.data.remote.parsers.StoreJsonParser
@@ -19,7 +20,6 @@ import com.virtusize.libsource.ui.AoyamaButton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers.IO
 import java.net.HttpURLConnection
-import java.util.*
 
 /**
  * This is the main class that can be used by Virtusize Clients to perform all available operations related to fit check
@@ -31,8 +31,8 @@ import java.util.*
  */
 class Virtusize(
     private val userId: String?,
-    apiKey: String,
-    env: VirtusizeEnvironment,
+    private val apiKey: String,
+    private val env: VirtusizeEnvironment,
     private val context: Context
 ) {
     // Registered message handlers
@@ -69,9 +69,6 @@ class Virtusize(
         )
     )
 
-    // The language code that defaults to the device's default language
-    private val language = Locale.getDefault().language
-
     // Device screen resolution
     private lateinit var resolution: String
 
@@ -86,9 +83,7 @@ class Virtusize(
         VirtusizeApi.init(
             env = env,
             key = apiKey,
-            browserID = browserIdentifier.getBrowserId(),
-            userId = userId ?: "",
-            language = language
+            userId = userId ?: ""
         )
     }
 
@@ -98,12 +93,18 @@ class Virtusize(
      * @param virtusizeProduct VirtusizeProduct that is being set to this button
      * @throws IllegalArgumentException throws an error if AoyamaButton is null or the image URL of VirtusizeProduct is invalid
      */
-    fun setupAoyamaButton(aoyamaButton: AoyamaButton?, virtusizeProduct: VirtusizeProduct) {
+    fun setupAoyamaButton(aoyamaButton: AoyamaButton?, aoyamaParams: AoyamaParams) {
 
         // Throws VirtusizeError.NullAoyamaButtonError error if button is null
         if (aoyamaButton == null) {
             messageHandler.onError(null, VirtusizeError.NullAoyamaButtonError)
             throwError(error = VirtusizeError.NullAoyamaButtonError)
+            return
+        }
+
+        if (aoyamaParams.virtusizeProduct == null) {
+            messageHandler.onError(null, VirtusizeError.InvalidProduct)
+            throwError(error = VirtusizeError.InvalidProduct)
             return
         }
 
@@ -114,10 +115,14 @@ class Virtusize(
             }
         }
 
+        aoyamaParams.apiKey = apiKey
+        aoyamaParams.region = env.aoyamaRegion()
+        aoyamaParams.env = env.aoyamaEnv()
+        aoyamaParams.externalUserId = userId
         // Set virtusizeProduct to AoyamaButton
-        aoyamaButton.setup(product = virtusizeProduct, messageHandler = messageHandler)
+        aoyamaButton.setup(params = aoyamaParams, messageHandler = messageHandler)
         // API Request to perform Product check on Virtusize server
-        val apiRequest = VirtusizeApi.productCheck(product = virtusizeProduct)
+        val apiRequest = VirtusizeApi.productCheck(product = aoyamaParams.virtusizeProduct)
         // Callback Handler for Product Check request
         val productValidCheckListener = object : ValidProductCheckHandler {
 
@@ -138,10 +143,10 @@ class Virtusize(
                 productCheck.data?.apply {
                     if (validProduct) {
                         if (fetchMetaData) {
-                            if (aoyamaButton.virtusizeProduct?.imageUrl != null) {
+                            if (aoyamaButton.aoyamaParams?.virtusizeProduct?.imageUrl != null) {
                                 // If image URL is valid, send image URL to server
                                 sendProductImageToBackend(
-                                    product = aoyamaButton.virtusizeProduct!!,
+                                    product = aoyamaParams.virtusizeProduct,
                                     errorHandler = errorHandler
                                 )
                             } else {
@@ -469,6 +474,7 @@ class VirtusizeBuilder {
 object Constants {
     const val AOYAMA_FRAG_TAG = "AOYAMA_FRAG_TAG"
     const val URL_KEY = "URL_KEY"
+    const val AOYAMA_PARAMS_SCRIPT_KEY = "AOYAMA_PARAMS_SCRIPT_KEY"
     const val LOG_TAG = "VIRTUSIZE"
     const val SHARED_PREFS_NAME = "VIRTUSIZE_SHARED_PREFS"
     const val BID_KEY = "BID_KEY_VIRTUSIZE"

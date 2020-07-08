@@ -14,7 +14,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import kotlin.random.Random
 
 
 @RunWith(RobolectricTestRunner::class)
@@ -31,9 +30,7 @@ class VirtusizeApiTest {
         VirtusizeApi.init(
             env = VirtusizeEnvironment.STAGING,
             key = TestFixtures.API_KEY,
-            browserID = TestFixtures.BROWSER_ID,
-            userId = TestFixtures.USER_ID,
-            language = TestFixtures.LANGUAGE
+            userId = TestFixtures.USER_ID
         )
     }
 
@@ -52,22 +49,12 @@ class VirtusizeApiTest {
     }
 
     @Test
-    fun fitIllustrator_shouldReturnExpectedUrl() {
-        val actualUrl = VirtusizeApi.fitIllustrator(TestFixtures.VIRTUSIZE_PRODUCT)
+    fun aoyama_shouldReturnExpectedUrl() {
+        val actualUrl = VirtusizeApi.aoyama()
 
-        val actualUrlQuerySanitizer = UrlQuerySanitizer(actualUrl)
+        val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/testing/sdk-integration/sdk-webview.html"
 
-        assertThat(actualUrlQuerySanitizer.getValue("detached")).isEqualTo("false")
-        assertThat(actualUrlQuerySanitizer.getValue("bid")).isEqualTo(TestFixtures.BROWSER_ID)
-        assertThat(actualUrlQuerySanitizer.getValue("addToCartEnabled")).isEqualTo("false")
-        assertThat(actualUrlQuerySanitizer.getValue("storeId")).isEqualTo("2")
-        assertThat(actualUrlQuerySanitizer.getValue("_").toInt() in 0..1519982555).isTrue()
-        assertThat(actualUrlQuerySanitizer.getValue("spid")).isEqualTo(TestFixtures.PRODUCT_CHECK?.data?.productDataId.toString())
-        assertThat(actualUrlQuerySanitizer.getValue("lang")).isEqualTo(TestFixtures.LANGUAGE)
-        assertThat(actualUrlQuerySanitizer.getValue("android")).isEqualTo("true")
-        assertThat(actualUrlQuerySanitizer.getValue("sdk")).isEqualTo("android")
-        assertThat(actualUrlQuerySanitizer.getValue("userId")).isEqualTo(TestFixtures.USER_ID)
-        assertThat(actualUrlQuerySanitizer.getValue("externalUserId")).isEqualTo(TestFixtures.USER_ID)
+        assertThat(actualUrl).isEqualTo(expectedUrl)
     }
 
     @Test

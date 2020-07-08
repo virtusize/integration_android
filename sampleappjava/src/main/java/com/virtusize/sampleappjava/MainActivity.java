@@ -17,11 +17,15 @@ import com.virtusize.libsource.data.local.VirtusizeMessageHandler;
 import com.virtusize.libsource.data.local.VirtusizeOrder;
 import com.virtusize.libsource.data.local.VirtusizeOrderItem;
 import com.virtusize.libsource.data.local.VirtusizeProduct;
+import com.virtusize.libsource.data.local.aoyama.AoyamaInfoCategory;
+import com.virtusize.libsource.data.local.aoyama.AoyamaLanguage;
+import com.virtusize.libsource.data.local.aoyama.AoyamaParams;
 import com.virtusize.libsource.ui.AoyamaButton;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,7 +60,13 @@ public class MainActivity extends AppCompatActivity {
         };
         app.Virtusize.registerMessageHandler(virtusizeMessageHandler);
 
-        app.Virtusize.setupAoyamaButton(aoyamaButton, new VirtusizeProduct("694", "https://www.publicdomainpictures.net/pictures/120000/velka/dress-1950-vintage-style.jpg"));
+        app.Virtusize.setupAoyamaButton(aoyamaButton, new AoyamaParams.Builder()
+                .language(AoyamaLanguage.EN)
+                .virtusizeProduct(new VirtusizeProduct("694", "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"))
+                .showSGI(false)
+                .allowedLanguages(Arrays.asList(AoyamaLanguage.EN, AoyamaLanguage.JP))
+                .detailsPanelCards(Arrays.asList(AoyamaInfoCategory.BRAND_SIZING, AoyamaInfoCategory.GENERAL_FIT))
+                .build());
 
         sendOrderSample();
     }

@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.VirtusizeOrder
+import com.virtusize.libsource.data.local.aoyama.*
 import com.virtusize.libsource.ui.AoyamaButton
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -27,7 +28,13 @@ class MainActivity : AppCompatActivity() {
             .Virtusize
             .setupAoyamaButton(
                 aoyamaButton = exampleAoyamaButton,
-                virtusizeProduct = VirtusizeProduct(externalId = "694", imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg")
+                aoyamaParams = AoyamaParams.Builder()
+                    .language(AoyamaLanguage.EN)
+                    .virtusizeProduct(VirtusizeProduct(externalId = "694", imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"))
+                    .showSGI(false)
+                    .allowedLanguages(mutableListOf(AoyamaLanguage.EN, AoyamaLanguage.JP))
+                    .detailsPanelCards(mutableListOf(AoyamaInfoCategory.BRAND_SIZING, AoyamaInfoCategory.GENERAL_FIT))
+                    .build()
             )
 
         // Aoyama opens automatically when button is clicked
