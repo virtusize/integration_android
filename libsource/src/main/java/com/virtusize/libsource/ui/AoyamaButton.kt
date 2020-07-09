@@ -12,7 +12,7 @@ import com.virtusize.libsource.data.local.VirtusizeError
 import com.virtusize.libsource.data.local.VirtusizeEvents
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler
 import com.virtusize.libsource.data.local.VirtusizeProduct
-import com.virtusize.libsource.data.local.aoyama.AoyamaParams
+import com.virtusize.libsource.data.local.AoyamaParams
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.network.VirtusizeApi
 

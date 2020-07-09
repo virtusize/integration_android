@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.VirtusizeOrder
-import com.virtusize.libsource.data.local.aoyama.*
 import com.virtusize.libsource.ui.AoyamaButton
 import kotlinx.android.synthetic.main.activity_main.*
 

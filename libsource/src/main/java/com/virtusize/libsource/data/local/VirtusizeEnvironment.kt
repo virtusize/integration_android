@@ -1,8 +1,6 @@
 package com.virtusize.libsource.data.local
 
 import com.virtusize.libsource.data.local.VirtusizeEnvironment.*
-import com.virtusize.libsource.data.local.aoyama.AoyamaEnvironment
-import com.virtusize.libsource.data.local.aoyama.AoyamaRegion
 
 /**
  * This enum contains all available Virtusize environments

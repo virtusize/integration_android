@@ -1,6 +1,4 @@
-package com.virtusize.libsource.data.local.aoyama
-
-import com.virtusize.libsource.data.local.VirtusizeProduct
+package com.virtusize.libsource.data.local
 
 // TODO
 class AoyamaParams private constructor(
@@ -32,7 +30,17 @@ class AoyamaParams private constructor(
         fun virtusizeProduct(virtusizeProduct: VirtusizeProduct) = apply { this.virtusizeProduct = virtusizeProduct }
         fun showSGI(showSGI: Boolean) = apply { this.showSGI = showSGI }
         fun detailsPanelCards(detailsPanelCards: MutableList<AoyamaInfoCategory>) = apply { this.detailsPanelCards = detailsPanelCards }
-        fun build() = AoyamaParams(apiKey, region, env, language, allowedLanguages, virtusizeProduct, externalUserId, showSGI, detailsPanelCards)
+        fun build() = AoyamaParams(
+            apiKey,
+            region,
+            env,
+            language,
+            allowedLanguages,
+            virtusizeProduct,
+            externalUserId,
+            showSGI,
+            detailsPanelCards
+        )
     }
 
     internal fun getVsParamsString(): String {

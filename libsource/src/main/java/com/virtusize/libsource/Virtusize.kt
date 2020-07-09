@@ -10,7 +10,7 @@ import com.virtusize.libsource.network.VirtusizeApi
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.data.remote.Store
 import com.virtusize.libsource.data.local.VirtusizeOrder
-import com.virtusize.libsource.data.local.aoyama.AoyamaParams
+import com.virtusize.libsource.data.local.AoyamaParams
 import com.virtusize.libsource.data.remote.parsers.ProductCheckJsonParser
 import com.virtusize.libsource.data.remote.parsers.ProductMetaDataHintsJsonParser
 import com.virtusize.libsource.data.remote.parsers.StoreJsonParser
@@ -288,7 +288,7 @@ class Virtusize(
                     throwError(VirtusizeError.UserIdNullOrEmpty)
                 }
                 // Sets the region from the store info
-                order.setRegion((data as Store).region)
+                order.setRegion((data as? Store)?.region)
                 val apiRequest = VirtusizeApi.sendOrder(order)
                 VirtusizeApiTask()
                     .setBrowserID(browserIdentifier.getBrowserId())
@@ -332,7 +332,7 @@ class Virtusize(
                     throwError(VirtusizeError.UserIdNullOrEmpty)
                 }
                 // Sets the region from the store info
-                order.setRegion((data as Store).region)
+                order.setRegion((data as? Store)?.region)
                 val apiRequest = VirtusizeApi.sendOrder(order)
                 VirtusizeApiTask()
                     .setBrowserID(browserIdentifier.getBrowserId())

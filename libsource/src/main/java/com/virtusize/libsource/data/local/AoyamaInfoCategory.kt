@@ -1,4 +1,4 @@
-package com.virtusize.libsource.data.local.aoyama
+package com.virtusize.libsource.data.local
 
 // TODO
 enum class AoyamaInfoCategory(val value: String) {

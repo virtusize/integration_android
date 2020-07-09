@@ -17,9 +17,9 @@ import com.virtusize.libsource.data.local.VirtusizeMessageHandler;
 import com.virtusize.libsource.data.local.VirtusizeOrder;
 import com.virtusize.libsource.data.local.VirtusizeOrderItem;
 import com.virtusize.libsource.data.local.VirtusizeProduct;
-import com.virtusize.libsource.data.local.aoyama.AoyamaInfoCategory;
-import com.virtusize.libsource.data.local.aoyama.AoyamaLanguage;
-import com.virtusize.libsource.data.local.aoyama.AoyamaParams;
+import com.virtusize.libsource.data.local.AoyamaInfoCategory;
+import com.virtusize.libsource.data.local.AoyamaLanguage;
+import com.virtusize.libsource.data.local.AoyamaParams;
 import com.virtusize.libsource.ui.AoyamaButton;
 
 import org.jetbrains.annotations.NotNull;
