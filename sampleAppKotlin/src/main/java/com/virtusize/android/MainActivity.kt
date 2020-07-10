@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
             .Virtusize.registerMessageHandler(activityMessageHandler)
 
         // setup Aoyama button
+        // Aoyama opens automatically when button is clicked
         (application as App)
             .Virtusize
             .setupAoyamaButton(
@@ -36,11 +37,9 @@ class MainActivity : AppCompatActivity() {
                     .build()
             )
 
-        // Aoyama opens automatically when button is clicked
-
         /*
          * To close the Aoyama page
-         * exampleAoyamaButton.dismissFitIllustratorView()
+         * exampleAoyamaButton.dismissAoyamaView()
          */
 
         sendOrderSample()

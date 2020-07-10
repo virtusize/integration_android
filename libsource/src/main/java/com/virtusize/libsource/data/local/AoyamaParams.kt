@@ -4,8 +4,7 @@ package com.virtusize.libsource.data.local
 class AoyamaParams private constructor(
     internal var apiKey: String?,
     internal var region: AoyamaRegion,
-    internal var env: AoyamaEnvironment,
-    private val language: AoyamaLanguage,
+    private val language: AoyamaLanguage?,
     private val allowedLanguages: MutableList<AoyamaLanguage>,
     internal val virtusizeProduct: VirtusizeProduct?,
     internal var externalUserId: String?,
@@ -16,8 +15,7 @@ class AoyamaParams private constructor(
     data class Builder(
         internal val apiKey: String? = null,
         internal val region: AoyamaRegion = AoyamaRegion.JP,
-        internal val env: AoyamaEnvironment = AoyamaEnvironment.PRODUCTION,
-        internal var language: AoyamaLanguage = AoyamaLanguage.JP,
+        internal var language: AoyamaLanguage? = null,
         internal var allowedLanguages: MutableList<AoyamaLanguage> = AoyamaLanguage.values().asList().toMutableList(),
         internal var virtusizeProduct: VirtusizeProduct? = null,
         internal val externalUserId: String? = null,
@@ -30,30 +28,35 @@ class AoyamaParams private constructor(
         fun virtusizeProduct(virtusizeProduct: VirtusizeProduct) = apply { this.virtusizeProduct = virtusizeProduct }
         fun showSGI(showSGI: Boolean) = apply { this.showSGI = showSGI }
         fun detailsPanelCards(detailsPanelCards: MutableList<AoyamaInfoCategory>) = apply { this.detailsPanelCards = detailsPanelCards }
-        fun build() = AoyamaParams(
-            apiKey,
-            region,
-            env,
-            language,
-            allowedLanguages,
-            virtusizeProduct,
-            externalUserId,
-            showSGI,
-            detailsPanelCards
-        )
+        fun build(): AoyamaParams {
+            // If a client does not set up the display language,
+            // the language will be set to a default value based on the region
+            if(language == null) {
+                language = region.defaultLanguage()
+            }
+            return AoyamaParams(
+                apiKey,
+                region,
+                language,
+                allowedLanguages,
+                virtusizeProduct,
+                externalUserId,
+                showSGI,
+                detailsPanelCards
+            )
+        }
     }
 
     internal fun getVsParamsString(): String {
         return "{$PARAM_API_KEY: '$apiKey', " +
                 "$PARAM_STORE_PRODUCT_ID: '${virtusizeProduct?.productCheckData?.productId}', " +
                 (if (externalUserId != null) "$PARAM_EXTERNAL_USER_ID: '$externalUserId', " else "") +
-                "$PARAM_LANGUAGE: '${language.value}', " +
+                "$PARAM_LANGUAGE: '${language?.value}', " +
                 "$PARAM_SHOW_SGI: $showSGI, " +
                 "$PARAM_ALLOW_LANGUAGES: ${allowedLanguages.map { "{label: \"${it.label}\", value: \"${it.value}\"}" }}, " +
-//                    "defaultBrandsSGI: '${showSGI}', " +
                     "$PARAM_DETAILS_PANEL_CARDS: ${detailsPanelCards.map { "\"${it.value}\"" }}, " +
                 "$PARAM_REGION: '${region.value}', " +
-                "$PARAM_ENVIRONMENT: '${env.value}'}"
+                "$PARAM_ENVIRONMENT: 'production'}"
     }
 
     private companion object {

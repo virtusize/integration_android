@@ -1,7 +1,5 @@
 package com.virtusize.libsource.network
 
-import com.virtusize.libsource.BuildConfig
-
 /**
  * This enum represents all available Virtusize endpoints
  */
@@ -19,17 +17,13 @@ internal enum class VirtusizeEndpoint {
  * @return the Virtusize Endpoint URL
  */
 internal fun VirtusizeEndpoint.getPath(): String {
-     return when(this) {
-        VirtusizeEndpoint.ProductCheck -> {
-            "/product/check"
-        }
-        VirtusizeEndpoint.Aoyama -> {
-            if (BuildConfig.DEBUG) {
-                "/a/aoyama/testing/sdk-integration/sdk-webview.html"
-            } else {
-                "/a/aoyama/latest/sdk-integration/sdk-webview.html"
-            }
-        }
+     return when (this) {
+         VirtusizeEndpoint.ProductCheck -> {
+             "/product/check"
+         }
+         VirtusizeEndpoint.Aoyama -> {
+             "/a/aoyama/latest/sdk-integration/sdk-webview.html"
+         }
          VirtusizeEndpoint.ProductMetaDataHints -> {
              "/rest-api/v1/product-meta-data-hints"
          }

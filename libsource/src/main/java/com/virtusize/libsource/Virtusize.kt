@@ -117,7 +117,6 @@ class Virtusize(
 
         aoyamaParams.apiKey = apiKey
         aoyamaParams.region = env.aoyamaRegion()
-        aoyamaParams.env = env.aoyamaEnv()
         aoyamaParams.externalUserId = userId
         // Set virtusizeProduct to AoyamaButton
         aoyamaButton.setup(params = aoyamaParams, messageHandler = messageHandler)
