@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.VirtusizeOrder
-import com.virtusize.libsource.ui.AoyamaButton
+import com.virtusize.libsource.ui.VirtusizeButton
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -22,26 +22,22 @@ class MainActivity : AppCompatActivity() {
         (application as App)
             .Virtusize.registerMessageHandler(activityMessageHandler)
 
-        // setup Aoyama button
-        // Aoyama opens automatically when button is clicked
+        // setup Virtusize button
         (application as App)
             .Virtusize
-            .setupAoyamaButton(
-                aoyamaButton = exampleAoyamaButton,
-                aoyamaParams = AoyamaParams.Builder()
-                    .language(AoyamaLanguage.EN)
-                    .virtusizeProduct(VirtusizeProduct(externalId = "694", imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"))
-                    .showSGI(false)
-                    .allowedLanguages(mutableListOf(AoyamaLanguage.EN, AoyamaLanguage.JP))
-                    .detailsPanelCards(mutableListOf(AoyamaInfoCategory.BRAND_SIZING, AoyamaInfoCategory.GENERAL_FIT))
-                    .build()
+            .setupVirtusizeButton(
+                virtusizeButton = exampleVirtusizeButton,
+                virtusizeProduct = VirtusizeProduct(externalId = "694", imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg")
             )
+
+        // Virtusize opens automatically when button is clicked
 
         /*
          * To close the Aoyama page
          * exampleAoyamaButton.dismissAoyamaView()
          */
 
+        // The sample function to send an order to the Virtusize server
         sendOrderSample()
     }
 
@@ -91,16 +87,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val activityMessageHandler = object : VirtusizeMessageHandler {
-        override fun virtusizeControllerShouldClose(aoyamaButton: AoyamaButton) {
-            Log.i(TAG, "Close Aoyama")
-            aoyamaButton.dismissAoyamaView()
+        override fun virtusizeControllerShouldClose(virtusizeButton: VirtusizeButton) {
+            Log.i(TAG, "Close Virtusize View")
+            virtusizeButton.dismissVirtusizeView()
         }
 
-        override fun onEvent(aoyamaButton: AoyamaButton?, event: VirtusizeEvents) {
-            Log.i(TAG, event.getEventName())
+        override fun onEvent(virtusizeButton: VirtusizeButton?, event: VirtusizeEvent) {
+            Log.i(TAG, event.name)
         }
 
-        override fun onError(aoyamaButton: AoyamaButton?, error: VirtusizeError) {
+        override fun onError(virtusizeButton: VirtusizeButton?, error: VirtusizeError) {
             Log.e(TAG, error.message())
         }
     }

@@ -2,6 +2,6 @@
     <string name="app_name">Virtusize</string>
     <string name="landscape" translatable="false">landscape</string>
     <string name="portrait" translatable="false">portrait</string>
-    <string name="aoyama_button_text">Check size</string>
+    <string name="virtusize_button_text">Check size</string>
 
 </resources>

@@ -1,7 +1,6 @@
 package com.virtusize.libsource.network
 
 import android.content.Context
-import android.net.UrlQuerySanitizer
 import android.os.Build
 import android.view.WindowManager
 import androidx.test.core.app.ApplicationProvider
@@ -49,8 +48,8 @@ class VirtusizeApiTest {
     }
 
     @Test
-    fun aoyama_shouldReturnExpectedUrl() {
-        val actualUrl = VirtusizeApi.aoyama()
+    fun virtusize_shouldReturnExpectedUrl() {
+        val actualUrl = VirtusizeApi.virtusizeURL()
 
         val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/testing/sdk-integration/sdk-webview.html"
 

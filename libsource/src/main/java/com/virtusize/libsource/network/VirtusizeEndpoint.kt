@@ -5,7 +5,7 @@ package com.virtusize.libsource.network
  */
 internal enum class VirtusizeEndpoint {
     ProductCheck,
-    Aoyama,
+    Virtusize,
     ProductMetaDataHints,
     Events,
     Orders,
@@ -21,7 +21,7 @@ internal fun VirtusizeEndpoint.getPath(): String {
          VirtusizeEndpoint.ProductCheck -> {
              "/product/check"
          }
-         VirtusizeEndpoint.Aoyama -> {
+         VirtusizeEndpoint.Virtusize -> {
              "/a/aoyama/latest/sdk-integration/sdk-webview.html"
          }
          VirtusizeEndpoint.ProductMetaDataHints -> {

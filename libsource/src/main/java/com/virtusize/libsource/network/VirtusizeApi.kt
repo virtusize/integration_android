@@ -70,11 +70,11 @@ internal object VirtusizeApi {
     }
 
     /**
-     * Gets the Aoyama URL for a VirtusizeProduct
-     * @return the Aoyama URL as String
+     * Gets the Virtusize URL for a VirtusizeProduct
+     * @return the Virtusize URL as String
      */
-    fun aoyama(): String {
-        val urlBuilder = Uri.parse(environment.aoyamaBaseUrl() + VirtusizeEndpoint.Aoyama.getPath())
+    fun virtusizeURL(): String {
+        val urlBuilder = Uri.parse(environment.virtusizeBaseUrl() + VirtusizeEndpoint.Virtusize.getPath())
             .buildUpon()
         return urlBuilder.build().toString()
     }

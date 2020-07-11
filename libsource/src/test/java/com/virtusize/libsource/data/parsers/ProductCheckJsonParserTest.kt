@@ -1,16 +1,18 @@
-package com.virtusize.libsource.data.remote.parsers
+package com.virtusize.libsource.data.parsers
 
 import com.google.common.truth.Truth.assertThat
 import com.virtusize.libsource.TestFixtures
 import com.virtusize.libsource.data.remote.Data
+import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.data.remote.UserData
 import org.junit.Test
 
-class DataJsonParserTest {
+class ProductCheckJsonParserTest {
 
     @Test
     fun parse_shouldReturnExpectedObject() {
-        val actualData = DataJsonParser().parse(TestFixtures.PRODUCT_DATA_CHECK_DATA)
+        val actualProductCheck = ProductCheckJsonParser().parse(TestFixtures.PRODUCT_DATA_CHECK)
+
         val expectedData = Data(
             true,
             false,
@@ -21,7 +23,12 @@ class DataJsonParserTest {
             2,
             5
         )
+        val expectedProductCheck = ProductCheck(
+            expectedData,
+            "694",
+            "backend-checked-product"
+        )
 
-        assertThat(actualData).isEqualTo(expectedData)
+        assertThat(actualProductCheck).isEqualTo(expectedProductCheck)
     }
 }

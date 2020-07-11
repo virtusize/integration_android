@@ -4,30 +4,27 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.os.Message
-import android.util.Log
 import android.view.*
 import android.webkit.*
 import androidx.fragment.app.DialogFragment
 import com.virtusize.libsource.Constants
 import com.virtusize.libsource.R
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler
+import com.virtusize.libsource.data.parsers.VirtusizeEventJsonParser
 import kotlinx.android.synthetic.main.web_activity.*
+import org.json.JSONObject
 
-class AoyamaView: DialogFragment() {
+class VirtusizeView: DialogFragment() {
 
-    private var aoyamaBaseUrl = "https://static.api.virtusize.jp/a/aoyama/testing/sdk-integration/sdk-webview.html"
-    private var vsParamsFromSDKScript = "javascript:vsParamsFromSDK({" +
-            "apiKey: '52140a6c9e0870294e4c5df4ebc39b47c8237bfa', " +
-            "externalProductId: '18575990709', " +
-            "env: 'staging', " +
-            "language: 'jp'})"
+    private var virtusizeBaseUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-integration/sdk-webview.html"
+    private var vsParamsFromSDKScript = ""
 
     private lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
-    private lateinit var aoyamaButton: AoyamaButton
+    private lateinit var virtusizeButton: VirtusizeButton
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        dialog?.window?.attributes?.windowAnimations = R.style.AoyamaDialogFragmentAnimation
+        dialog?.window?.attributes?.windowAnimations = R.style.VirtusizeDialogFragmentAnimation
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,7 +99,7 @@ class AoyamaView: DialogFragment() {
             }
         }
 
-        webView.setOnKeyListener{ v, keyCode, event ->
+        webView.setOnKeyListener{ _, keyCode, event ->
             if(keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP){
                 if(webView.canGoBack()) {
                     webView.goBack()
@@ -115,15 +112,17 @@ class AoyamaView: DialogFragment() {
             true
         }
 
-        // Get the Aoyama URL passed in fragment arguments
+        // Get the Virtusize URL passed in fragment arguments
         arguments?.getString(Constants.URL_KEY)?.let {
-            aoyamaBaseUrl = it
+            virtusizeBaseUrl = it
         }
-        // Get the Aoyama params script passed in fragment arguments
-        (arguments?.getString(Constants.AOYAMA_PARAMS_SCRIPT_KEY))?.let {
+        // Get the Virtusize params script passed in fragment arguments
+        arguments?.getString(Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY)?.let {
             vsParamsFromSDKScript = it
+        } ?: run {
+            dismiss()
         }
-        webView.loadUrl(aoyamaBaseUrl)
+        webView.loadUrl(virtusizeBaseUrl)
     }
 
     override fun onDestroyView() {
@@ -140,18 +139,18 @@ class AoyamaView: DialogFragment() {
     /**
      * Sets up a Virtusize message handler
      */
-    internal fun setupMessageHandler(messageHandler: VirtusizeMessageHandler, aoyamaButton: AoyamaButton) {
+    internal fun setupMessageHandler(messageHandler: VirtusizeMessageHandler, virtusizeButton: VirtusizeButton) {
         virtusizeMessageHandler = messageHandler
-        this.aoyamaButton = aoyamaButton
+        this.virtusizeButton = virtusizeButton
     }
 
     private inner class WebAppInterface {
 
         @JavascriptInterface
         fun eventHandler(evenBody: String) {
-            // TODO: convert evenBody to the object VirtusizeEvent
-            Log.d(Constants.LOG_TAG, "event: $evenBody")
-            if (evenBody.contains("user-closed-widget")) {
+            val event = VirtusizeEventJsonParser().parse(JSONObject(evenBody))
+            event?.let { virtusizeMessageHandler.onEvent(virtusizeButton, it) }
+            if (event?.name =="user-closed-widget") {
                 dismiss()
             }
         }

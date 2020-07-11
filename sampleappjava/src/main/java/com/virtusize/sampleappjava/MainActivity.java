@@ -11,25 +11,19 @@ import com.virtusize.libsource.ErrorResponseHandler;
 import com.virtusize.libsource.SuccessResponseHandler;
 import com.virtusize.libsource.data.local.VirtusizeError;
 import com.virtusize.libsource.data.local.VirtusizeErrorKt;
-import com.virtusize.libsource.data.local.VirtusizeEventKt;
-import com.virtusize.libsource.data.local.VirtusizeEvents;
+import com.virtusize.libsource.data.local.VirtusizeEvent;
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler;
 import com.virtusize.libsource.data.local.VirtusizeOrder;
 import com.virtusize.libsource.data.local.VirtusizeOrderItem;
-import com.virtusize.libsource.data.local.VirtusizeProduct;
-import com.virtusize.libsource.data.local.AoyamaInfoCategory;
-import com.virtusize.libsource.data.local.AoyamaLanguage;
-import com.virtusize.libsource.data.local.AoyamaParams;
-import com.virtusize.libsource.ui.AoyamaButton;
+import com.virtusize.libsource.ui.VirtusizeButton;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
-    AoyamaButton aoyamaButton;
+    VirtusizeButton virtusizeButton;
     App app;
     VirtusizeMessageHandler virtusizeMessageHandler;
 
@@ -39,34 +33,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        aoyamaButton = findViewById(R.id.exampleAoyamaButton);
+        virtusizeButton = findViewById(R.id.exampleAoyamaButton);
         app = (App) getApplication();
 
         virtusizeMessageHandler = new VirtusizeMessageHandler() {
             @Override
-            public void virtusizeControllerShouldClose(@NotNull AoyamaButton aoyamaButton) {
-                Log.i(TAG, "Close Aoyama");
+            public void virtusizeControllerShouldClose(@NotNull VirtusizeButton virtusizeButton) {
+                Log.i(TAG, "Close Virtusize View");
             }
 
             @Override
-            public void onEvent(AoyamaButton aoyamaButton, @NonNull VirtusizeEvents event) {
-                Log.i(TAG, VirtusizeEventKt.getEventName(event));
+            public void onEvent(@org.jetbrains.annotations.Nullable VirtusizeButton virtusizeButton, @NotNull VirtusizeEvent event) {
+                Log.i(TAG, event.getName());
             }
 
             @Override
-            public void onError(AoyamaButton aoyamaButton, @NonNull VirtusizeError error) {
+            public void onError(VirtusizeButton virtusizeButton, @NonNull VirtusizeError error) {
                 Log.e(TAG, VirtusizeErrorKt.message(error));
             }
         };
         app.Virtusize.registerMessageHandler(virtusizeMessageHandler);
-
-        app.Virtusize.setupAoyamaButton(aoyamaButton, new AoyamaParams.Builder()
-                .language(AoyamaLanguage.EN)
-                .virtusizeProduct(new VirtusizeProduct("694", "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"))
-                .showSGI(false)
-                .allowedLanguages(Arrays.asList(AoyamaLanguage.EN, AoyamaLanguage.JP))
-                .detailsPanelCards(Arrays.asList(AoyamaInfoCategory.BRAND_SIZING, AoyamaInfoCategory.GENERAL_FIT))
-                .build());
 
         sendOrderSample();
     }

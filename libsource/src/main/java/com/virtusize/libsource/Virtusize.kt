@@ -10,13 +10,13 @@ import com.virtusize.libsource.network.VirtusizeApi
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.data.remote.Store
 import com.virtusize.libsource.data.local.VirtusizeOrder
-import com.virtusize.libsource.data.local.AoyamaParams
-import com.virtusize.libsource.data.remote.parsers.ProductCheckJsonParser
-import com.virtusize.libsource.data.remote.parsers.ProductMetaDataHintsJsonParser
-import com.virtusize.libsource.data.remote.parsers.StoreJsonParser
+import com.virtusize.libsource.data.local.VirtusizeParams
+import com.virtusize.libsource.data.parsers.ProductCheckJsonParser
+import com.virtusize.libsource.data.parsers.ProductMetaDataHintsJsonParser
+import com.virtusize.libsource.data.parsers.StoreJsonParser
 import com.virtusize.libsource.network.ApiRequest
 import com.virtusize.libsource.network.VirtusizeApiTask
-import com.virtusize.libsource.ui.AoyamaButton
+import com.virtusize.libsource.ui.VirtusizeButton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers.IO
 import java.net.HttpURLConnection
@@ -30,31 +30,29 @@ import java.net.HttpURLConnection
  * @param context Android Application Context
  */
 class Virtusize(
-    private val userId: String?,
-    private val apiKey: String,
-    private val env: VirtusizeEnvironment,
-    private val context: Context
+    private val context: Context,
+    private val params: VirtusizeParams
 ) {
     // Registered message handlers
     private val messageHandlers = mutableListOf<VirtusizeMessageHandler>()
 
     // The Virtusize message handler passes received errors and events to registered message handlers
     private val messageHandler = object : VirtusizeMessageHandler {
-        override fun virtusizeControllerShouldClose(aoyamaButton: AoyamaButton) {
+        override fun virtusizeControllerShouldClose(virtusizeButton: VirtusizeButton) {
             messageHandlers.forEach { messageHandler ->
-                messageHandler.virtusizeControllerShouldClose(aoyamaButton)
+                messageHandler.virtusizeControllerShouldClose(virtusizeButton)
             }
         }
 
-        override fun onEvent(aoyamaButton: AoyamaButton?, event: VirtusizeEvents) {
+        override fun onEvent(virtusizeButton: VirtusizeButton?, event: VirtusizeEvent) {
             messageHandlers.forEach { messageHandler ->
-                messageHandler.onEvent(aoyamaButton, event)
+                messageHandler.onEvent(virtusizeButton, event)
             }
         }
 
-        override fun onError(aoyamaButton: AoyamaButton?, error: VirtusizeError) {
+        override fun onError(virtusizeButton: VirtusizeButton?, error: VirtusizeError) {
             messageHandlers.forEach { messageHandler ->
-                messageHandler.onError(aoyamaButton, error)
+                messageHandler.onError(virtusizeButton, error)
             }
         }
 
@@ -81,28 +79,28 @@ class Virtusize(
     init {
         // Virtusize API for building API requests
         VirtusizeApi.init(
-            env = env,
-            key = apiKey,
-            userId = userId ?: ""
+            env = params.environment,
+            key = params.apiKey!!,
+            userId = params.externalUserId ?: ""
         )
     }
 
     /**
-     * Sets up the Aoyama button by setting VirtusizeProduct to this button
-     * @param aoyamaButton AoyamaButton that is being set up
+     * Sets up the Virtusize button by setting VirtusizeProduct to this button
+     * @param virtusizeButton VirtusizeButton that is being set up
      * @param virtusizeProduct VirtusizeProduct that is being set to this button
-     * @throws IllegalArgumentException throws an error if AoyamaButton is null or the image URL of VirtusizeProduct is invalid
+     * @throws IllegalArgumentException throws an error if VirtusizeButton is null or the image URL of VirtusizeProduct is invalid
      */
-    fun setupAoyamaButton(aoyamaButton: AoyamaButton?, aoyamaParams: AoyamaParams) {
+    fun setupVirtusizeButton(virtusizeButton: VirtusizeButton?, virtusizeProduct: VirtusizeProduct?) {
 
-        // Throws VirtusizeError.NullAoyamaButtonError error if button is null
-        if (aoyamaButton == null) {
-            messageHandler.onError(null, VirtusizeError.NullAoyamaButtonError)
-            throwError(error = VirtusizeError.NullAoyamaButtonError)
+        // Throws VirtusizeError.NullVirtusizeButtonError error if button is null
+        if (virtusizeButton == null) {
+            messageHandler.onError(null, VirtusizeError.NullVirtusizeButtonError)
+            throwError(error = VirtusizeError.NullVirtusizeButtonError)
             return
         }
 
-        if (aoyamaParams.virtusizeProduct == null) {
+        if (virtusizeProduct == null) {
             messageHandler.onError(null, VirtusizeError.InvalidProduct)
             throwError(error = VirtusizeError.InvalidProduct)
             return
@@ -111,17 +109,15 @@ class Virtusize(
         // to handle network errors
         val errorHandler: ErrorResponseHandler = object: ErrorResponseHandler {
             override fun onError(errorCode: Int?, errorMessage: String?, error: VirtusizeError) {
-                messageHandler.onError(aoyamaButton, error)
+                messageHandler.onError(virtusizeButton, error)
             }
         }
 
-        aoyamaParams.apiKey = apiKey
-        aoyamaParams.region = env.aoyamaRegion()
-        aoyamaParams.externalUserId = userId
-        // Set virtusizeProduct to AoyamaButton
-        aoyamaButton.setup(params = aoyamaParams, messageHandler = messageHandler)
+        params.virtusizeProduct = virtusizeProduct
+        // Set virtusizeProduct to VirtusizeButton
+        virtusizeButton.setup(params = params, messageHandler = messageHandler)
         // API Request to perform Product check on Virtusize server
-        val apiRequest = VirtusizeApi.productCheck(product = aoyamaParams.virtusizeProduct)
+        val apiRequest = VirtusizeApi.productCheck(product = virtusizeProduct)
         // Callback Handler for Product Check request
         val productValidCheckListener = object : ValidProductCheckHandler {
 
@@ -130,27 +126,27 @@ class Virtusize(
              * when Product check Request is performed on server on Virtusize server
              */
             override fun onValidProductCheckCompleted(productCheck: ProductCheck) {
-                // Set up Product check response data to VirtusizeProduct in AoyamaButton
-                aoyamaButton.setupProductCheckResponseData(productCheck)
+                // Set up Product check response data to VirtusizeProduct in VirtusizeButton
+                virtusizeButton.setupProductCheckResponseData(productCheck)
                 // Send API Event UserSawProduct
                 sendEventToApi(
                     event = VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()),
                     withDataProduct = productCheck,
                     errorHandler = errorHandler
                 )
-                messageHandler.onEvent(aoyamaButton, VirtusizeEvents.UserSawProduct)
+                messageHandler.onEvent(virtusizeButton, VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()))
                 productCheck.data?.apply {
                     if (validProduct) {
                         if (fetchMetaData) {
-                            if (aoyamaButton.aoyamaParams?.virtusizeProduct?.imageUrl != null) {
+                            if (virtusizeButton.virtusizeParams?.virtusizeProduct?.imageUrl != null) {
                                 // If image URL is valid, send image URL to server
                                 sendProductImageToBackend(
-                                    product = aoyamaParams.virtusizeProduct,
+                                    product = virtusizeProduct,
                                     errorHandler = errorHandler
                                 )
                             } else {
                                 messageHandler.onError(
-                                    aoyamaButton,
+                                    virtusizeButton,
                                     VirtusizeError.ImageUrlNotValid
                                 )
                                 throwError(VirtusizeError.ImageUrlNotValid)
@@ -163,8 +159,8 @@ class Virtusize(
                             errorHandler = errorHandler
                         )
                         messageHandler.onEvent(
-                            aoyamaButton,
-                            VirtusizeEvents.UserSawWidgetButton
+                            virtusizeButton,
+                            VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName())
                         )
                     }
                 }
@@ -177,7 +173,7 @@ class Virtusize(
 
     /**
      * Executes the API task to make a network request for Product Check
-     * @param productValidCheckListener AoyamaButton that is being set up
+     * @param productValidCheckListener VirtusizeButton that is being set up
      * @param errorHandler VirtusizeProduct that is being set to this button
      * @param apiRequest [ApiRequest]
     */
@@ -283,7 +279,7 @@ class Virtusize(
                 /**
                  * Throws the error if the user id is not set up or empty during the initialization of the [Virtusize] class
                  */
-                if(userId.isNullOrEmpty()) {
+                if(params.externalUserId.isNullOrEmpty()) {
                     throwError(VirtusizeError.UserIdNullOrEmpty)
                 }
                 // Sets the region from the store info
@@ -327,7 +323,7 @@ class Virtusize(
                 /**
                  * Throws the error if the user id is not set up or empty during the initialization of the [Virtusize] class
                  */
-                if(userId.isNullOrEmpty()) {
+                if(params.externalUserId.isNullOrEmpty()) {
                     throwError(VirtusizeError.UserIdNullOrEmpty)
                 }
                 // Sets the region from the store info
@@ -407,6 +403,11 @@ class VirtusizeBuilder {
     private var apiKey: String? = null
     private var env = VirtusizeEnvironment.GLOBAL
     private var context: Context? = null
+    private var region: VirtusizeRegion = VirtusizeRegion.JP
+    private var language: VirtusizeLanguage? = region.defaultLanguage()
+    private var allowedLanguages: MutableList<VirtusizeLanguage> = VirtusizeLanguage.values().asList().toMutableList()
+    private var showSGI: Boolean = false
+    private var detailsPanelCards: MutableList<VirtusizeInfoCategory> = VirtusizeInfoCategory.values().asList().toMutableList()
 
     /**
      * This method is used to add the application context to the Virtusize builder
@@ -448,6 +449,31 @@ class VirtusizeBuilder {
      */
     fun setEnv(environment: VirtusizeEnvironment): VirtusizeBuilder {
         this.env = environment
+        this.region = environment.virtusizeRegion()
+        return this
+    }
+
+    // TODO: Comment
+    fun setLanguage(language: VirtusizeLanguage) : VirtusizeBuilder {
+        this.language = language
+        return this
+    }
+
+    // TODO: Comment
+    fun setAllowedLanguages(allowedLanguages: MutableList<VirtusizeLanguage>) : VirtusizeBuilder {
+        this.allowedLanguages = allowedLanguages
+        return this
+    }
+
+    // TODO: Comment
+    fun setShowSGI(showSGI: Boolean) : VirtusizeBuilder {
+        this.showSGI = showSGI
+        return this
+    }
+
+    // TODO: Comment
+    fun setDetailsPanelCards(detailsPanelCards: MutableList<VirtusizeInfoCategory>) : VirtusizeBuilder {
+        this.detailsPanelCards = detailsPanelCards
         return this
     }
 
@@ -463,7 +489,18 @@ class VirtusizeBuilder {
         if (context == null) {
             throwError(VirtusizeError.NullContext)
         }
-        return Virtusize(userId = userId, apiKey = apiKey!!, env = env, context = context!!)
+        val params = VirtusizeParams(
+            apiKey = apiKey,
+            environment = env,
+            region = region,
+            language = language,
+            allowedLanguages = allowedLanguages,
+            virtusizeProduct = null,
+            externalUserId = userId,
+            showSGI = showSGI,
+            detailsPanelCards = detailsPanelCards
+        )
+        return Virtusize(context = context!!, params = params)
     }
 }
 
@@ -471,9 +508,9 @@ class VirtusizeBuilder {
  * Constants used in the Virtusize SDK
  */
 object Constants {
-    const val AOYAMA_FRAG_TAG = "AOYAMA_FRAG_TAG"
+    const val FRAG_TAG = "FRAG_TAG"
     const val URL_KEY = "URL_KEY"
-    const val AOYAMA_PARAMS_SCRIPT_KEY = "AOYAMA_PARAMS_SCRIPT_KEY"
+    const val VIRTUSIZE_PARAMS_SCRIPT_KEY = "VIRTUSIZE_PARAMS_SCRIPT_KEY"
     const val LOG_TAG = "VIRTUSIZE"
     const val SHARED_PREFS_NAME = "VIRTUSIZE_SHARED_PREFS"
     const val BID_KEY = "BID_KEY_VIRTUSIZE"

@@ -5,7 +5,7 @@ import com.virtusize.libsource.ErrorResponseHandler
 import com.virtusize.libsource.SuccessResponseHandler
 import com.virtusize.libsource.Constants
 import com.virtusize.libsource.data.local.VirtusizeError
-import com.virtusize.libsource.data.remote.parsers.VirtusizeJsonParser
+import com.virtusize.libsource.data.parsers.VirtusizeJsonParser
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main

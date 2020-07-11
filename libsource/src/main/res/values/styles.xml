@@ -16,9 +16,15 @@
         <item name="android:windowBackground">@color/virtusizeWhite</item>
     </style>
 
-    <style name="AoyamaDialogFragmentAnimation">
+    <style name="VirtusizeDialogFragmentAnimation">
         <item name="android:windowEnterAnimation">@anim/slide_in_right</item>
         <item name="android:windowExitAnimation">@anim/slide_out_right</item>
+    </style>
+
+    <!-- Virtusize Button Default TextAppearance -->
+    <style name="VirtusizeButtonTextAppearance">
+        <item name="android:textColor">@color/virtusizeWhite</item>
+        <item name="android:textSize">@dimen/virtusize_button_textSize</item>
     </style>
 
 </resources>

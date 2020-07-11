@@ -33,7 +33,7 @@ fun VirtusizeEnvironment.productDataCheckBaseUrl(): String {
 }
 
 // TODO
-fun VirtusizeEnvironment.aoyamaBaseUrl(): String {
+fun VirtusizeEnvironment.virtusizeBaseUrl(): String {
     return when(this) {
         STAGING, JAPAN -> "https://static.api.virtusize.jp"
         GLOBAL -> "https://static.api.virtusize.com"
@@ -42,10 +42,10 @@ fun VirtusizeEnvironment.aoyamaBaseUrl(): String {
 }
 
 // TODO
-fun VirtusizeEnvironment.aoyamaRegion(): AoyamaRegion {
+fun VirtusizeEnvironment.virtusizeRegion(): VirtusizeRegion {
     return when(this) {
-        STAGING, JAPAN -> AoyamaRegion.JP
-        GLOBAL -> AoyamaRegion.COM
-        KOREA -> AoyamaRegion.KR
+        STAGING, JAPAN -> VirtusizeRegion.JP
+        GLOBAL -> VirtusizeRegion.COM
+        KOREA -> VirtusizeRegion.KR
     }
 }
