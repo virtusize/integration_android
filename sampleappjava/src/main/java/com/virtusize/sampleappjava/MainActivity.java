@@ -15,6 +15,7 @@ import com.virtusize.libsource.data.local.VirtusizeEvent;
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler;
 import com.virtusize.libsource.data.local.VirtusizeOrder;
 import com.virtusize.libsource.data.local.VirtusizeOrderItem;
+import com.virtusize.libsource.data.local.VirtusizeProduct;
 import com.virtusize.libsource.ui.VirtusizeButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        virtusizeButton = findViewById(R.id.exampleAoyamaButton);
+        virtusizeButton = findViewById(R.id.exampleVirtusizeButton);
         app = (App) getApplication();
 
         virtusizeMessageHandler = new VirtusizeMessageHandler() {
@@ -53,6 +54,19 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         app.Virtusize.registerMessageHandler(virtusizeMessageHandler);
+
+        app.Virtusize.setupVirtusizeButton(
+                virtusizeButton,
+                new VirtusizeProduct(
+                        "694",
+                        "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"
+                )
+        );
+
+        /*
+         * To set up the button style programmatically
+         * virtusizeButton.setButtonStyle(VirtusizeButtonStyle.DEFAULT_STYLE);
+         */
 
         sendOrderSample();
     }

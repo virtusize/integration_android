@@ -20,7 +20,7 @@ import com.virtusize.libsource.throwError
 class VirtusizeButton(context: Context, attrs: AttributeSet) : AppCompatButton(context, attrs),
     VirtusizeButtonSetupHandler {
 
-    // TODO
+    // The parameter object to be passed to the Virtusize web app
     internal var virtusizeParams: VirtusizeParams? = null
 
     // Receives Virtusize messages
@@ -29,16 +29,37 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : AppCompatButton(c
     // The Virtusize view that opens when the button is clicked
     private val virtusizeDialogFragment = VirtusizeView()
 
+    // The VirtusizeButtonStyle that clients can choose to use
+    var buttonStyle: VirtusizeButtonStyle = VirtusizeButtonStyle.NONE
+        set(value) {
+            field = value
+            updateButtonStyle(field)
+        }
+
     init {
         visibility = View.INVISIBLE
         val attrsArray = context.obtainStyledAttributes(attrs, R.styleable.VirtusizeButton, 0, 0)
-        val buttonStyle = attrsArray.getInt(R.styleable.VirtusizeButton_virtusizeButtonStyle, -1)
+        val buttonStyle = attrsArray.getInt(R.styleable.VirtusizeButton_virtusizeButtonStyle, VirtusizeButtonStyle.NONE.value)
         if(buttonStyle == VirtusizeButtonStyle.DEFAULT_STYLE.value) {
-            setVirtusizeDefaultStyle()
+            this.buttonStyle = VirtusizeButtonStyle.DEFAULT_STYLE
         }
         attrsArray.recycle()
     }
 
+    /**
+     * Updates the Virtusize Button Style corresponding to [VirtusizeButtonStyle]
+     * @param [VirtusizeButtonStyle]
+     */
+    private fun updateButtonStyle(virtusizeButtonStyle: VirtusizeButtonStyle?) {
+        if(virtusizeButtonStyle == VirtusizeButtonStyle.DEFAULT_STYLE) {
+            setVirtusizeDefaultStyle()
+        }
+        invalidate()
+    }
+
+    /**
+     * Sets up the default Virtusize button style
+     */
     private fun setVirtusizeDefaultStyle() {
         setBackgroundResource(R.drawable.button_background_black)
 
@@ -103,7 +124,7 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : AppCompatButton(c
                         val args = Bundle()
                         args.putString(Constants.URL_KEY, VirtusizeApi.virtusizeURL())
                         virtusizeParams?.let {
-                            args.putString(Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY, "javascript:vsParamsFromSDK(${it.getVsParamsString()})")
+                            args.putString(Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY, "javascript:vsParamsFromSDK(${it.vsParamsString()})")
                         }
                         virtusizeDialogFragment.arguments = args
                         virtusizeDialogFragment.show(fragmentTransaction, Constants.FRAG_TAG)

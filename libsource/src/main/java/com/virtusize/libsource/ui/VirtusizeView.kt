@@ -16,7 +16,7 @@ import org.json.JSONObject
 
 class VirtusizeView: DialogFragment() {
 
-    private var virtusizeBaseUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-integration/sdk-webview.html"
+    private var virtusizeWebAppUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-integration/sdk-webview.html"
     private var vsParamsFromSDKScript = ""
 
     private lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
@@ -51,7 +51,7 @@ class VirtusizeView: DialogFragment() {
         // Set up the web view client that adds JavaScript scripts for the interaction between the SDK and the web
         webView.webViewClient = object: WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
-                if(url != null && url.contains("sdk-webview")) {
+                if(url != null && url.contains(virtusizeWebAppUrl)) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                         view?.evaluateJavascript(vsParamsFromSDKScript, null)
                        } else {
@@ -62,6 +62,7 @@ class VirtusizeView: DialogFragment() {
 
             override fun onLoadResource(view: WebView?, url: String?) {
                 super.onLoadResource(view, url)
+                // To prevent multiple views in the WebView when a user selects a different display language
                 if(url != null && url.contains("i18n")) {
                     webView.removeAllViews()
                 }
@@ -78,6 +79,7 @@ class VirtusizeView: DialogFragment() {
                     newWebView.settings.userAgentString = System.getProperty("http.agent")
                     newWebView.webViewClient = object : WebViewClient() {
                         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+                            // To prevent multiple views in the WebView when a user accesses to "Report a problem" or "Give a feedback"
                             if(url.contains("survey")) {
                                 webView.loadUrl(url)
                                 webView.removeAllViews()
@@ -101,12 +103,16 @@ class VirtusizeView: DialogFragment() {
 
         webView.setOnKeyListener{ _, keyCode, event ->
             if(keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP){
-                if(webView.canGoBack()) {
-                    webView.goBack()
-                } else if(webView.childCount > 0) {
-                    webView.removeAllViews()
-                } else {
-                    showConfirmDialog()
+                when {
+                    webView.canGoBack() -> {
+                        webView.goBack()
+                    }
+                    webView.childCount > 0 -> {
+                        webView.removeAllViews()
+                    }
+                    else -> {
+                        showConfirmDialog()
+                    }
                 }
             }
             true
@@ -114,15 +120,18 @@ class VirtusizeView: DialogFragment() {
 
         // Get the Virtusize URL passed in fragment arguments
         arguments?.getString(Constants.URL_KEY)?.let {
-            virtusizeBaseUrl = it
+            virtusizeWebAppUrl = it
         }
-        // Get the Virtusize params script passed in fragment arguments
+
+        // Get the Virtusize params script passed in fragment arguments.
+        // If the script is not passed, we dismiss this dialog fragment.
         arguments?.getString(Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY)?.let {
             vsParamsFromSDKScript = it
         } ?: run {
             dismiss()
         }
-        webView.loadUrl(virtusizeBaseUrl)
+
+        webView.loadUrl(virtusizeWebAppUrl)
     }
 
     override fun onDestroyView() {
@@ -131,7 +140,7 @@ class VirtusizeView: DialogFragment() {
         webView.destroy()
     }
 
-    // TODO
+    // TODO: TO show a dialogue when the user clicks the back button
     private fun showConfirmDialog() {
         dismiss()
     }
@@ -144,11 +153,16 @@ class VirtusizeView: DialogFragment() {
         this.virtusizeButton = virtusizeButton
     }
 
+    // The JavaScript interface to interact the web app with the web view
     private inner class WebAppInterface {
 
+        /**
+         * Receives any event information from the Virtusize web app
+         * @param eventInfo The String value of the event info
+         */
         @JavascriptInterface
-        fun eventHandler(evenBody: String) {
-            val event = VirtusizeEventJsonParser().parse(JSONObject(evenBody))
+        fun eventHandler(eventInfo: String) {
+            val event = VirtusizeEventJsonParser().parse(JSONObject(eventInfo))
             event?.let { virtusizeMessageHandler.onEvent(virtusizeButton, it) }
             if (event?.name =="user-closed-widget") {
                 dismiss()

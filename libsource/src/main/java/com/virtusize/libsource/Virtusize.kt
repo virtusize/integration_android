@@ -24,10 +24,8 @@ import java.net.HttpURLConnection
 /**
  * This is the main class that can be used by Virtusize Clients to perform all available operations related to fit check
  *
- * @param userId the user id that is an unique user ID from the client system
- * @param apiKey the API key that is unique to every Virtusize Client
- * @param env the Virtusize environment
  * @param context Android Application Context
+ * @param params [VirtusizeParams] that contains userId, apiKey, env and other parameters to be passed to the Virtusize web app
  */
 class Virtusize(
     private val context: Context,
@@ -397,6 +395,11 @@ fun throwError(error: VirtusizeError) {
  * @param apiKey the API key that is unique to every Virtusize Client
  * @param env the Virtusize environment
  * @param context Android Application Context
+ * @param region the [VirtusizeRegion] that is used to set the region of the config url domains within the Virtusize web app
+ * @param language the [VirtusizeLanguage] that sets the initial language the Virtusize web app will load in
+ * @param allowedLanguages the languages that the user can switch to using the Language Selector
+ * @param showSGI the Boolean value to determine whether the Virtusize web app will fetch SGI and use SGI flow for users to add user generated items to their wardrobe
+ * @param detailsPanelCards the info categories that will display in the Product Details tab
  */
 class VirtusizeBuilder {
     private var userId: String? = null
@@ -453,25 +456,45 @@ class VirtusizeBuilder {
         return this
     }
 
-    // TODO: Comment
+    /**
+     * Sets up the initial display language for the Virtusize web app
+     * By default, the language value is based on the region value
+     * @param language [VirtusizeLanguage]
+     * @return VirtusizeBuilder
+     */
     fun setLanguage(language: VirtusizeLanguage) : VirtusizeBuilder {
         this.language = language
         return this
     }
 
-    // TODO: Comment
+    /**
+     * Sets up the languages for users to select for the Virtusize web app
+     * By default, the Virtusize web app allows all the possible languages
+     * @param allowedLanguages the list of [VirtusizeLanguage]
+     * @return VirtusizeBuilder
+     */
     fun setAllowedLanguages(allowedLanguages: MutableList<VirtusizeLanguage>) : VirtusizeBuilder {
         this.allowedLanguages = allowedLanguages
         return this
     }
 
-    // TODO: Comment
+    /**
+     * Sets up whether the Virtusize web app will fetch SGI and use SGI flow for users to add user generated items to their wardrobe
+     * By default, showSGI is false
+     * @param showSGI the Boolean value
+     * @return VirtusizeBuilder
+     */
     fun setShowSGI(showSGI: Boolean) : VirtusizeBuilder {
         this.showSGI = showSGI
         return this
     }
 
-    // TODO: Comment
+    /**
+     * Sets up the info categories that will be displayed in the Product Details tab of the Virtusize web app
+     * By default, the Virtusize web app display all the possible info categories
+     * @param detailsPanelCards the list of [VirtusizeInfoCategory]
+     * @return VirtusizeBuilder
+     */
     fun setDetailsPanelCards(detailsPanelCards: MutableList<VirtusizeInfoCategory>) : VirtusizeBuilder {
         this.detailsPanelCards = detailsPanelCards
         return this

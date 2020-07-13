@@ -23,14 +23,18 @@ class MainActivity : AppCompatActivity() {
             .Virtusize.registerMessageHandler(activityMessageHandler)
 
         // setup Virtusize button
+        // Virtusize opens automatically when button is clicked
         (application as App)
             .Virtusize
             .setupVirtusizeButton(
                 virtusizeButton = exampleVirtusizeButton,
                 virtusizeProduct = VirtusizeProduct(externalId = "694", imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg")
             )
+        /*
+         * To set up the button style programmatically
+         * exampleVirtusizeButton.buttonStyle = VirtusizeButtonStyle.DEFAULT_STYLE
+         */
 
-        // Virtusize opens automatically when button is clicked
 
         /*
          * To close the Aoyama page

@@ -8,7 +8,7 @@
         tools:context=".MainActivity">
 
     <com.virtusize.libsource.ui.VirtusizeButton
-        android:id="@+id/exampleAoyamaButton"
+        android:id="@+id/exampleVirtusizeButton"
         app:virtusizeButtonStyle="default_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
