@@ -18,6 +18,7 @@ class VirtusizeView: DialogFragment() {
 
     private var virtusizeWebAppUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-integration/sdk-webview.html"
     private var vsParamsFromSDKScript = ""
+    private var vsEventFromSDKScript = "javascript:vsEventFromSDK({ name: 'sdk-back-button-tapped'})"
 
     private lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
     private lateinit var virtusizeButton: VirtusizeButton
@@ -52,11 +53,7 @@ class VirtusizeView: DialogFragment() {
         webView.webViewClient = object: WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 if(url != null && url.contains(virtusizeWebAppUrl)) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        view?.evaluateJavascript(vsParamsFromSDKScript, null)
-                       } else {
-                        view?.loadUrl(vsParamsFromSDKScript)
-                    }
+                    executeJavascript(view, vsParamsFromSDKScript)
                 }
             }
 
@@ -101,18 +98,12 @@ class VirtusizeView: DialogFragment() {
             }
         }
 
-        webView.setOnKeyListener{ _, keyCode, event ->
-            if(keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP){
+        webView.setOnKeyListener{ v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP) {
                 when {
-                    webView.canGoBack() -> {
-                        webView.goBack()
-                    }
-                    webView.childCount > 0 -> {
-                        webView.removeAllViews()
-                    }
-                    else -> {
-                        showConfirmDialog()
-                    }
+                    webView.canGoBack() -> webView.goBack()
+                    webView.childCount > 0 -> webView.removeAllViews()
+                    else -> executeJavascript(webView, vsEventFromSDKScript)
                 }
             }
             true
@@ -134,15 +125,23 @@ class VirtusizeView: DialogFragment() {
         webView.loadUrl(virtusizeWebAppUrl)
     }
 
+    /**
+     * Executes a Javascript function in the Virtusize web app from the SDK
+     * @param webView the web view to load the script
+     * @param script the string value of the script in JavaScript
+     */
+    private fun executeJavascript(webView: WebView?, script: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            webView?.evaluateJavascript(script, null)
+        } else {
+            webView?.loadUrl(script)
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         webView.stopLoading()
         webView.destroy()
-    }
-
-    // TODO: TO show a dialogue when the user clicks the back button
-    private fun showConfirmDialog() {
-        dismiss()
     }
 
     /**
@@ -153,7 +152,9 @@ class VirtusizeView: DialogFragment() {
         this.virtusizeButton = virtusizeButton
     }
 
-    // The JavaScript interface to interact the web app with the web view
+    /**
+     * The JavaScript interface to interact the web app with the web view
+     */
     private inner class WebAppInterface {
 
         /**
