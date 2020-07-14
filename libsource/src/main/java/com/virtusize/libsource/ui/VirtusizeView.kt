@@ -69,12 +69,12 @@ class VirtusizeView: DialogFragment() {
         webView.webChromeClient = object : WebChromeClient() {
             override fun onCreateWindow(view: WebView, dialog: Boolean, userGesture: Boolean, resultMsg: Message): Boolean {
                 if (resultMsg.obj != null && resultMsg.obj is WebView.WebViewTransport) {
-                    val newWebView = WebView(view.context)
-                    newWebView.settings.javaScriptEnabled = true
-                    newWebView.settings.javaScriptCanOpenWindowsAutomatically = true
-                    newWebView.settings.setSupportMultipleWindows(true)
-                    newWebView.settings.userAgentString = System.getProperty("http.agent")
-                    newWebView.webViewClient = object : WebViewClient() {
+                    val popupWebView = WebView(view.context)
+                    popupWebView.settings.javaScriptEnabled = true
+                    popupWebView.settings.javaScriptCanOpenWindowsAutomatically = true
+                    popupWebView.settings.setSupportMultipleWindows(true)
+                    popupWebView.settings.userAgentString = System.getProperty("http.agent")
+                    popupWebView.webViewClient = object : WebViewClient() {
                         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                             // To prevent multiple views in the WebView when a user accesses to "Report a problem" or "Give a feedback"
                             if(url.contains("survey")) {
@@ -84,14 +84,14 @@ class VirtusizeView: DialogFragment() {
                             return false
                         }
                     }
-                    newWebView.webChromeClient = object : WebChromeClient(){
+                    popupWebView.webChromeClient = object : WebChromeClient(){
                         override fun onCloseWindow(window: WebView) {
                             webView.removeAllViews()
                         }
                     }
                     val transport = resultMsg.obj as WebView.WebViewTransport
-                    webView.addView(newWebView)
-                    transport.webView = newWebView
+                    webView.addView(popupWebView)
+                    transport.webView = popupWebView
                     resultMsg.sendToTarget()
                 }
                 return true

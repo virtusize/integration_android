@@ -16,8 +16,9 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Virtusize = new VirtusizeBuilder()
-                .init(this)
+
+        // Initialize Virtusize instance for your application
+        Virtusize = new VirtusizeBuilder().init(this)
                 .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
                 .setUserId("123")
                 .setEnv(VirtusizeEnvironment.STAGING)
