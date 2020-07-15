@@ -1,12 +1,14 @@
 package com.virtusize.libsource.ui
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.os.Message
 import android.view.*
 import android.webkit.*
 import androidx.fragment.app.DialogFragment
+import com.virtusize.libsource.BrowserIdentifier
 import com.virtusize.libsource.Constants
 import com.virtusize.libsource.R
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler
@@ -23,9 +25,18 @@ class VirtusizeView: DialogFragment() {
     private lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
     private lateinit var virtusizeButton: VirtusizeButton
 
+    private lateinit var browserIdentifier: BrowserIdentifier
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         dialog?.window?.attributes?.windowAnimations = R.style.VirtusizeDialogFragmentAnimation
+        browserIdentifier = BrowserIdentifier(
+            sharedPrefs =
+            requireContext().getSharedPreferences(
+                Constants.SHARED_PREFS_NAME,
+                Context.MODE_PRIVATE
+            )
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +65,11 @@ class VirtusizeView: DialogFragment() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 if(url != null && url.contains(virtusizeWebAppUrl)) {
                     executeJavascript(view, vsParamsFromSDKScript)
+                    getBrowserIDFromCookies()?.let { bid ->
+                        if(bid != browserIdentifier.getBrowserId()) {
+                            browserIdentifier.storeBrowserId(bid)
+                        }
+                    }
                 }
             }
 
@@ -150,6 +166,24 @@ class VirtusizeView: DialogFragment() {
     internal fun setupMessageHandler(messageHandler: VirtusizeMessageHandler, virtusizeButton: VirtusizeButton) {
         virtusizeMessageHandler = messageHandler
         this.virtusizeButton = virtusizeButton
+    }
+
+    /**
+     * Returns virtusize.bid from the web view cookies
+     */
+    private fun getBrowserIDFromCookies(): String? {
+        var bidValue: String? = null
+        val cookieManager = CookieManager.getInstance()
+        val cookies = cookieManager.getCookie(virtusizeWebAppUrl)
+        if (cookies != null) {
+            val cookiesArray = cookies.split(";".toRegex()).toTypedArray()
+            for (cookie in cookiesArray) {
+                if (cookie.contains("virtusize.bid")) {
+                    bidValue = cookie.split("=".toRegex()).toTypedArray()[1]
+                }
+            }
+        }
+        return bidValue
     }
 
     /**

@@ -14,6 +14,7 @@ package com.virtusize.libsource.data.local
  */
 data class VirtusizeParams(
     internal var apiKey: String?,
+    internal var bid: String?,
     internal var environment: VirtusizeEnvironment,
     private var region: VirtusizeRegion,
     private val language: VirtusizeLanguage?,
@@ -29,6 +30,7 @@ data class VirtusizeParams(
      */
     internal fun vsParamsString(): String {
         return "{$PARAM_API_KEY: '$apiKey', " +
+                (if (bid != null) "$PARAM_BID: '$bid', " else "") +
                 "$PARAM_STORE_PRODUCT_ID: '${virtusizeProduct?.productCheckData?.productId}', " +
                 (if (externalUserId != null) "$PARAM_EXTERNAL_USER_ID: '$externalUserId', " else "") +
                 "$PARAM_LANGUAGE: '${language?.value}', " +
@@ -41,6 +43,7 @@ data class VirtusizeParams(
 
     private companion object {
         private const val PARAM_API_KEY = "apiKey"
+        private const val PARAM_BID = "bid"
         private const val PARAM_REGION = "region"
         private const val PARAM_ENVIRONMENT = "env"
         private const val PARAM_LANGUAGE = "language"

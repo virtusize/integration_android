@@ -111,6 +111,7 @@ class Virtusize(
             }
         }
 
+        params.bid = browserIdentifier.getBrowserId()
         params.virtusizeProduct = virtusizeProduct
         // Set virtusizeProduct to VirtusizeButton
         virtusizeButton.setup(params = params, messageHandler = messageHandler)
@@ -410,6 +411,7 @@ internal fun throwError(errorType: VirtusizeErrorType) {
 class VirtusizeBuilder {
     private var userId: String? = null
     private var apiKey: String? = null
+    private var browserID: String? = null
     private var env = VirtusizeEnvironment.GLOBAL
     private var context: Context? = null
     private var region: VirtusizeRegion = VirtusizeRegion.JP
@@ -520,6 +522,7 @@ class VirtusizeBuilder {
         }
         val params = VirtusizeParams(
             apiKey = apiKey,
+            bid = browserID,
             environment = env,
             region = region,
             language = language,
