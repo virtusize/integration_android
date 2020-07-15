@@ -93,20 +93,20 @@ class Virtusize(
 
         // Throws VirtusizeError.NullVirtusizeButtonError error if button is null
         if (virtusizeButton == null) {
-            messageHandler.onError(null, VirtusizeError.NullVirtusizeButtonError)
-            throwError(error = VirtusizeError.NullVirtusizeButtonError)
+            messageHandler.onError(null, VirtusizeErrorType.NullVirtusizeButtonError.virtusizeError())
+            throwError(errorType = VirtusizeErrorType.NullVirtusizeButtonError)
             return
         }
 
         if (virtusizeProduct == null) {
-            messageHandler.onError(null, VirtusizeError.InvalidProduct)
-            throwError(error = VirtusizeError.InvalidProduct)
+            messageHandler.onError(null, VirtusizeErrorType.NullProduct.virtusizeError())
+            throwError(errorType = VirtusizeErrorType.NullProduct)
             return
         }
 
         // to handle network errors
         val errorHandler: ErrorResponseHandler = object: ErrorResponseHandler {
-            override fun onError(errorCode: Int?, errorMessage: String?, error: VirtusizeError) {
+            override fun onError(error: VirtusizeError) {
                 messageHandler.onError(virtusizeButton, error)
             }
         }
@@ -145,9 +145,9 @@ class Virtusize(
                             } else {
                                 messageHandler.onError(
                                     virtusizeButton,
-                                    VirtusizeError.ImageUrlNotValid
+                                    VirtusizeErrorType.ImageUrlNotValid.virtusizeError()
                                 )
-                                throwError(VirtusizeError.ImageUrlNotValid)
+                                throwError(VirtusizeErrorType.ImageUrlNotValid)
                             }
                         }
                         // Send API Event UserSawWidgetButton
@@ -214,7 +214,7 @@ class Virtusize(
      * Sends an event to the Virtusize server
      * @param event VirtusizeEvent
      * @param withDataProduct ProductCheckResponse corresponding to VirtusizeProduct
-     * @param errorHandler the error callback to get the [VirtusizeError] in the API task
+     * @param errorHandler the error callback to get the [VirtusizeErrorType] in the API task
      */
     internal fun sendEventToApi(
         event: VirtusizeEvent,
@@ -248,7 +248,7 @@ class Virtusize(
     /**
      * Retrieves the specific store info
      * @param onSuccess the success callback to get the [Store] in the API task
-     * @param errorHandler the error callback to get the [VirtusizeError] in the API task
+     * @param errorHandler the error callback to get the [VirtusizeErrorType] in the API task
      */
     internal fun retrieveStoreInfo(
         onSuccess: SuccessResponseHandler? = null,
@@ -267,7 +267,7 @@ class Virtusize(
      * Sends an order to the Virtusize server for Kotlin apps
      * @param order
      * @param onSuccess the optional success callback to notify [VirtusizeApiTask] is successful
-     * @param onError the optional error callback to get the [VirtusizeError] in the API task
+     * @param onError the optional error callback to get the [VirtusizeErrorType] in the API task
      */
     fun sendOrder(order: VirtusizeOrder,
                   onSuccess: (() -> Unit)? = null,
@@ -278,7 +278,7 @@ class Virtusize(
                  * Throws the error if the user id is not set up or empty during the initialization of the [Virtusize] class
                  */
                 if(params.externalUserId.isNullOrEmpty()) {
-                    throwError(VirtusizeError.UserIdNullOrEmpty)
+                    throwError(VirtusizeErrorType.UserIdNullOrEmpty)
                 }
                 // Sets the region from the store info
                 order.setRegion((data as? Store)?.region)
@@ -291,11 +291,7 @@ class Virtusize(
                         }
                     })
                     .setErrorHandler(object : ErrorResponseHandler {
-                        override fun onError(
-                            errorCode: Int?,
-                            errorMessage: String?,
-                            error: VirtusizeError
-                        ) {
+                        override fun onError(error: VirtusizeError) {
                             onError?.invoke(error)
                         }
                     })
@@ -303,6 +299,11 @@ class Virtusize(
                     .setCoroutineDispatcher(coroutineDispatcher)
                     .execute(apiRequest)
             }
+        }, object : ErrorResponseHandler{
+            override fun onError(error: VirtusizeError) {
+                onError?.invoke(error)
+            }
+
         })
     }
 
@@ -310,7 +311,7 @@ class Virtusize(
      * Sends an order to the Virtusize server for Java apps
      * @param order
      * @param onSuccess the optional success callback to pass the [Store] from the response when [VirtusizeApiTask] is successful
-     * @param onError the optional error callback to get the [VirtusizeError] in the API task
+     * @param onError the optional error callback to get the [VirtusizeErrorType] in the API task
      */
     fun sendOrder(
         order: VirtusizeOrder,
@@ -322,7 +323,7 @@ class Virtusize(
                  * Throws the error if the user id is not set up or empty during the initialization of the [Virtusize] class
                  */
                 if(params.externalUserId.isNullOrEmpty()) {
-                    throwError(VirtusizeError.UserIdNullOrEmpty)
+                    throwError(VirtusizeErrorType.UserIdNullOrEmpty)
                 }
                 // Sets the region from the store info
                 order.setRegion((data as? Store)?.region)
@@ -335,6 +336,11 @@ class Virtusize(
                     .setCoroutineDispatcher(coroutineDispatcher)
                     .execute(apiRequest)
             }
+        }, object : ErrorResponseHandler{
+            override fun onError(error: VirtusizeError) {
+                onError(error)
+            }
+
         })
     }
 
@@ -380,13 +386,13 @@ class Virtusize(
 /**
  * Throws a VirtusizeError.
  * It logs the error information and exits the normal app flow by throwing an error
- * @param error VirtusizeError
+ * @param errorType VirtusizeError
  * @throws IllegalArgumentException
- * @see VirtusizeError
+ * @see VirtusizeErrorType
  */
-fun throwError(error: VirtusizeError) {
-    Log.e(Constants.LOG_TAG, error.message())
-    error.throwError()
+internal fun throwError(errorType: VirtusizeErrorType) {
+    Log.e(Constants.LOG_TAG, errorType.message())
+    errorType.throwError()
 }
 
 /**
@@ -507,10 +513,10 @@ class VirtusizeBuilder {
      */
     fun build(): Virtusize {
         if (apiKey.isNullOrEmpty()) {
-            throwError(VirtusizeError.ApiKeyNullOrEmpty)
+            throwError(VirtusizeErrorType.ApiKeyNullOrInvalid)
         }
         if (context == null) {
-            throwError(VirtusizeError.NullContext)
+            throwError(VirtusizeErrorType.NullContext)
         }
         val params = VirtusizeParams(
             apiKey = apiKey,

@@ -105,7 +105,7 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : AppCompatButton(c
      * Sets up the product check data received from Virtusize API to VirtusizeProduct
      * @param productCheck ProductCheckResponse received from Virtusize API
      * @see ProductCheck
-     * @throws VirtusizeError.InvalidProduct error
+     * @throws VirtusizeErrorType.NullProduct error
      */
     override fun setupProductCheckResponseData(productCheck: ProductCheck) {
         if (virtusizeParams?.virtusizeProduct != null) {
@@ -132,8 +132,8 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : AppCompatButton(c
                 }
             }
         } else {
-            virtusizeMessageHandler.onError(this, VirtusizeError.InvalidProduct)
-            throwError(VirtusizeError.InvalidProduct)
+            virtusizeMessageHandler.onError(this, VirtusizeErrorType.NullProduct.virtusizeError())
+            throwError(VirtusizeErrorType.NullProduct)
         }
     }
 }

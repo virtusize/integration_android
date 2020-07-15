@@ -28,7 +28,9 @@ class MainActivity : AppCompatActivity() {
             .Virtusize
             .setupVirtusizeButton(
                 virtusizeButton = exampleVirtusizeButton,
-                virtusizeProduct = VirtusizeProduct(externalId = "694", imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg")
+                virtusizeProduct = VirtusizeProduct(externalId = "694",
+                    imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"
+                )
             )
         /*
          * To set up the button style programmatically
@@ -63,7 +65,7 @@ class MainActivity : AppCompatActivity() {
                 "http://images.example.com/products/P001/red/image1xl.jpg",
                 "Red",
                 "W",
-                5100.00,
+                51000.00,
                 "JPY",
                 1,
                 "http://example.com/products/P001"
@@ -79,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                 },
                 // this optional error callback is called when an error occurs when the app is sending the order
                 onError = { error ->
-                    Log.e(TAG, error.message())
+                    Log.e(TAG, error.message)
                 })
     }
 
@@ -100,8 +102,8 @@ class MainActivity : AppCompatActivity() {
             Log.i(TAG, event.name)
         }
 
-        override fun onError(virtusizeButton: VirtusizeButton?, error: VirtusizeError) {
-            Log.e(TAG, error.message())
+        override fun onError(virtusizeButton: VirtusizeButton?, errorType: VirtusizeError) {
+            Log.e(TAG, errorType.message)
         }
     }
 }

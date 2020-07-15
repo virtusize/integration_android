@@ -1,16 +1,26 @@
 package com.virtusize.libsource.network
 
 import android.util.Log
+import com.virtusize.libsource.Constants
 import com.virtusize.libsource.ErrorResponseHandler
 import com.virtusize.libsource.SuccessResponseHandler
-import com.virtusize.libsource.Constants
 import com.virtusize.libsource.data.local.VirtusizeError
+import com.virtusize.libsource.data.local.VirtusizeErrorType
+import com.virtusize.libsource.data.local.message
+import com.virtusize.libsource.data.local.virtusizeError
 import com.virtusize.libsource.data.parsers.VirtusizeJsonParser
-import kotlinx.coroutines.*
+import com.virtusize.libsource.data.remote.ProductCheck
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONException
 import org.json.JSONObject
-import java.io.*
+import java.io.DataOutputStream
+import java.io.IOException
+import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
@@ -95,9 +105,9 @@ internal class VirtusizeApiTask {
 
     fun execute(apiRequest: ApiRequest) {
         CoroutineScope(coroutineDispatcher).launch {
-            var result: Any? = null
             var urlConnection: HttpURLConnection? = urlConnection
             var inputStream: InputStream? = null
+            var errorStream: InputStream? = null
             try {
                 if (urlConnection == null) {
                     urlConnection = (URL(apiRequest.url).openConnection() as HttpURLConnection).apply {
@@ -123,51 +133,97 @@ internal class VirtusizeApiTask {
                         }
                 }
 
-                // If the request was successful, then read the input stream and parse the response.
-                if (urlConnection.isSuccessful()) {
-                    inputStream = urlConnection.inputStream
-                    readFromStream(inputStream)?.let { response ->
-                        Log.d(Constants.LOG_TAG, response)
-                        jsonParser?.let {
-                            val jsonObject = JSONObject(response)
-                            result = it.parse(jsonObject)
+                when {
+                    // If the request was successful, then read the input stream and parse the response.
+                    urlConnection.isSuccessful() -> {
+                        inputStream = urlConnection.inputStream
+                        val result = parseURLConnectionStream(inputStream)
+                        withContext(Main) {
+                            successHandler?.onSuccess(result)
                         }
                     }
-                    withContext(Main) {
-                        successHandler?.onSuccess(result)
+                    // If the request was failed but it has a error response, then read the error stream and parse the response.
+                    urlConnection.errorStream != null -> {
+                        errorStream = urlConnection.errorStream
+                        val response = parseURLConnectionStream(errorStream)
+                        val error = when (urlConnection.responseCode) {
+                            HttpURLConnection.HTTP_FORBIDDEN -> {
+                                // If the API key is empty or invalid
+                                VirtusizeErrorType.ApiKeyNullOrInvalid.virtusizeError()
+                            }
+                            HttpURLConnection.HTTP_NOT_FOUND -> {
+                                // If the product cannot be found in the Virtusize Server
+                                if (response is ProductCheck) {
+                                    Log.d(
+                                        Constants.LOG_TAG,
+                                        VirtusizeErrorType.InvalidProduct.message(response.productId)
+                                    )
+                                    withContext(Main) {
+                                        successHandler?.onSuccess(response)
+                                        return@withContext
+                                    }
+                                }
+                                VirtusizeError(
+                                    VirtusizeErrorType.NetworkError,
+                                    urlConnection.responseCode,
+                                    response?.toString() ?: urlConnection.responseMessage
+                                )
+                            }
+                            else -> {
+                                VirtusizeError(
+                                    VirtusizeErrorType.NetworkError, urlConnection.responseCode,
+                                    response?.toString() ?: urlConnection.responseMessage
+                                )
+                            }
+                        }
+                        withContext(Main) {
+                            errorHandler?.onError(error)
+                        }
                     }
-                } else {
-                    logHTTPConnectionError("Status code ${urlConnection.responseCode}, message: ${urlConnection.responseMessage}", null)
-                    withContext(Main) {
-                        errorHandler?.onError(urlConnection.responseCode, urlConnection.responseMessage, VirtusizeError.NetworkError)
+                    else -> {
+                        withContext(Main) {
+                            errorHandler?.onError(VirtusizeError(VirtusizeErrorType.NetworkError, urlConnection.responseCode, urlConnection.responseMessage))
+                        }
                     }
                 }
             } catch (e: IOException) {
-                logHTTPConnectionError(null, e)
+                Log.e(Constants.LOG_TAG, "Virtusize API task failed. Error: $e")
             } finally {
                 urlConnection?.disconnect()
                 inputStream?.close()
+                errorStream?.close()
             }
         }
+    }
+
+    /**
+     * Parses the contents of an InputStream
+     * @param inputStream The input stream of bytes
+     */
+    private fun parseURLConnectionStream(stream: InputStream): Any? {
+        var result: Any? = null
+        readInputStreamAsString(stream)?.let { streamString ->
+            jsonParser?.let {
+                try {
+                    val jsonObject = JSONObject(streamString)
+                    result = it.parse(jsonObject)
+                } catch (e: JSONException) {
+                    Log.d(Constants.LOG_TAG, "JSONException: $e")
+                }
+            }
+            if(result == null) {
+                result = streamString
+            }
+        }
+        return result
     }
 
     /**
      * Returns the contents of an InputStream as a String.
      * @param inputStream The input stream of bytes
      */
-    private fun readFromStream(inputStream: InputStream): String? {
+    private fun readInputStreamAsString(inputStream: InputStream): String? {
         val scanner: Scanner = Scanner(inputStream).useDelimiter("\\A")
         return if (scanner.hasNext()) scanner.next() else null
     }
-
-    /**
-     * Handles errors received when performing network requests
-     * It Logs error.
-     * @param message the error message
-     * @param exception the error Exception that got thrown
-     */
-    private fun logHTTPConnectionError(message: String?, exception: Exception?) {
-        Log.e(Constants.LOG_TAG, "Virtusize API request failed. " + (message ?: "") + if (exception != null) "Exception: $exception" else "")
-    }
-
 }

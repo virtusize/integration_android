@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.virtusize.libsource.ErrorResponseHandler;
 import com.virtusize.libsource.SuccessResponseHandler;
 import com.virtusize.libsource.data.local.VirtusizeError;
-import com.virtusize.libsource.data.local.VirtusizeErrorKt;
 import com.virtusize.libsource.data.local.VirtusizeEvent;
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler;
 import com.virtusize.libsource.data.local.VirtusizeOrder;
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(VirtusizeButton virtusizeButton, @NonNull VirtusizeError error) {
-                Log.e(TAG, VirtusizeErrorKt.message(error));
+                Log.e(TAG, error.getMessage());
             }
         };
         app.Virtusize.registerMessageHandler(virtusizeMessageHandler);
@@ -107,8 +106,8 @@ public class MainActivity extends AppCompatActivity {
                 // this optional error callback is called when an error occurs when the app is sending the order
                 new ErrorResponseHandler() {
                     @Override
-                    public void onError(@Nullable Integer errorCode, @Nullable String errorMessage, @NotNull VirtusizeError error) {
-                        Log.e(TAG, VirtusizeErrorKt.message(error));
+                    public void onError(@NotNull VirtusizeError error) {
+                        Log.e(TAG, error.getMessage());
                     }
         });
     }
