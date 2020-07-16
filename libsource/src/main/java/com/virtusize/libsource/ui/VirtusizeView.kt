@@ -2,6 +2,8 @@ package com.virtusize.libsource.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Message
@@ -92,10 +94,13 @@ class VirtusizeView: DialogFragment() {
                     popupWebView.settings.userAgentString = System.getProperty("http.agent")
                     popupWebView.webViewClient = object : WebViewClient() {
                         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                            // To prevent multiple views in the WebView when a user accesses to "Report a problem" or "Give a feedback"
-                            if(url.contains("survey")) {
-                                webView.loadUrl(url)
-                                webView.removeAllViews()
+                            if (isExternalLink(url)) {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                try {
+                                    startActivity(intent)
+                                } finally {
+                                    return true
+                                }
                             }
                             return false
                         }
@@ -118,7 +123,10 @@ class VirtusizeView: DialogFragment() {
             if (keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP) {
                 when {
                     webView.canGoBack() -> webView.goBack()
-                    webView.childCount > 0 -> webView.removeAllViews()
+                    webView.childCount > 0 -> {
+                        webView.removeAllViews()
+                        webView.reload()
+                    }
                     else -> executeJavascript(webView, vsEventFromSDKScript)
                 }
             }
@@ -141,19 +149,6 @@ class VirtusizeView: DialogFragment() {
         webView.loadUrl(virtusizeWebAppUrl)
     }
 
-    /**
-     * Executes a Javascript function in the Virtusize web app from the SDK
-     * @param webView the web view to load the script
-     * @param script the string value of the script in JavaScript
-     */
-    private fun executeJavascript(webView: WebView?, script: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            webView?.evaluateJavascript(script, null)
-        } else {
-            webView?.loadUrl(script)
-        }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         webView.stopLoading()
@@ -166,6 +161,19 @@ class VirtusizeView: DialogFragment() {
     internal fun setupMessageHandler(messageHandler: VirtusizeMessageHandler, virtusizeButton: VirtusizeButton) {
         virtusizeMessageHandler = messageHandler
         this.virtusizeButton = virtusizeButton
+    }
+
+    /**
+     * Executes a Javascript function in the Virtusize web app from the SDK
+     * @param webView the web view to load the script
+     * @param script the string value of the script in JavaScript
+     */
+    private fun executeJavascript(webView: WebView?, script: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            webView?.evaluateJavascript(script, null)
+        } else {
+            webView?.loadUrl(script)
+        }
     }
 
     /**
@@ -186,6 +194,12 @@ class VirtusizeView: DialogFragment() {
         return bidValue
     }
 
+    /**
+     * Checks if the URL is an external link to be opened with a browser app
+     */
+    private fun isExternalLink(url: String): Boolean {
+        return url.contains("privacy") || url.contains("survey")
+    }
     /**
      * The JavaScript interface to interact the web app with the web view
      */
