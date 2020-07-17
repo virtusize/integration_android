@@ -39,8 +39,8 @@ class MainActivity : AppCompatActivity() {
 
 
         /*
-         * To close the Aoyama page
-         * exampleAoyamaButton.dismissAoyamaView()
+         * To close the Virtusize page
+         * exampleVirtusizeButton.dismissVirtusizeView()
          */
 
         // The sample function to send an order to the Virtusize server
