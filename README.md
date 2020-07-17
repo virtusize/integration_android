@@ -14,94 +14,143 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 > This is the integration script for native Android apps only. For web integration, refer to the developer documentation on https://developers.virtusize.com. For iOS integration, refer to https://github.com/virtusize/integration_ios
 
 ## Requirements
+
 - minSdkVersion >= 15
 - compileSdkVersion >= 30
 - Setup in AppCompatActivity
 
 ## Installation
+
 - In your root `build.gradle` file, add below dependency:
-    ```groovy
-    allprojects {
-        repositories {
-            maven { url 'https://jitpack.io' }
-        }
-    }
-    ```
+
+  ```groovy
+  allprojects {
+      repositories {
+          maven { url 'https://jitpack.io' }
+      }
+  }
+  ```
+
 - In your app `build.gradle` file, add below dependencies:
-    ```groovy
-    dependencies {
-        implementation 'com.github.virtusize:integration_android:1.6.2'
-    }
-    ```
+
+  ```groovy
+  dependencies {
+      implementation 'com.github.virtusize:integration_android:2.0'
+  }
+  ```
+
 ## Setup
-1. Initialize Virtusize object in your Application class's `onCreate` method using your API key and environment. The environment is the region you are running the integration from, either `VirtusizeEnvironment.STAGING`,  `VirtusizeEnvironment.GLOBAL`, `VirtusizeEnvironment.JAPAN` or `VirtusizeEnvironment.KOREA`
-    - Kotlin
-        ```kotlin
-        lateinit var Virtusize: Virtusize
-        override fun onCreate() {
-            super.onCreate()
-            Virtusize = VirtusizeBuilder().init(this)
-                .setApiKey(api_key)
-                .setUserId("123")
-                .setEnv(VirtusizeEnvironment.STAGING)
-                .build()
-        }
-        ```
 
-    - Java
-        ```java
-        Virtusize Virtusize;
+1. Initialize Virtusize object in your Application class's `onCreate` method using the `VirtusizeBuilder` to set up the configuration. Possible configuration methods are shown as the following table: 
 
-        @Override
-        public void onCreate() {
-           super.onCreate();
-           Virtusize = new VirtusizeBuilder()
-                   .init(this)
-                   .setApiKey(api_key)
-                   .setUserId("123")
-                   .setEnv(VirtusizeEnvironment.STAGING)
-                   .build();
-        ```
-2. Add Virtusize button in your activity's XML layout file. Style of the button can be one of the two default available styles **DefaultStyleBlueJapanese**, **DefaultStyleBlackEnglish** or use any other button styles and/or define attributes like text, height, width, etc on the FitIllustratorButton
-    ```xml
-    <com.virtusize.libsource.ui.FitIllustratorButton
-        android:id="@+id/exampleFitButton"
-        style="@style/DefaultStyleBlueJapanese" />
-    ```
-    
-    or
-    ```xml
-    <com.virtusize.libsource.ui.FitIllustratorButton
-        android:id="@+id/exampleFitButton"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/fit_button_text" />
-    ```
-    
+   **VirtusizeBuilder**
+
+   | Method               | Argument Type                     | Example                                                      | Description                                                  | Requirement                                                  |
+   | -------------------- | --------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+   | setApiKey            | String                            | setApiKey("api_key")                                         | A unique API key is provided to each Virtusize client.       | Yes                                                          |
+   | setUserId            | String                            | setUserId("123")                                             | It's passed from the client if the user is logged into the client's app. | Yes, if the Order API is used.                               |
+   | setEnv               | VirtusizeEnvironment              | setEnv(VirtusizeEnvironment.STAGING)                         | The environment is the region you are running the integration from, either `VirtusizeEnvironment.STAGING`,  `VirtusizeEnvironment.GLOBAL`, `VirtusizeEnvironment.JAPAN` or `VirtusizeEnvironment.KOREA`. | No, by default, the Virtusize environment will be set to `VirtusizeEnvironment.GLOBAL`. |
+   | setLanguage          | VirtusizeLanguage                 | setLanguage(VirtusizeLanguage.EN)                            | It sets the initial language that the integration will load in. The possible values are `VirtusizeLanguage.EN`, `VirtusizeLanguage.JP` and `VirtusizeLanguage.KR` | No, by default, the initial language will be set based on the Virtusize environment. |
+   | setShowSGI           | Boolean                           | setShowSGI(true)                                             | It determines whether the integration will fetch SGI and use SGI flow for users to add user generated items to their wardrobe. | No, by default, ShowSGI is set to false                      |
+   | setAllowedLanguages  | A list of `VirtusizeLanguage`     | In Kotlin, setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))<br />In Java, setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP)) | The languages that the user can switch to using the Language Selector | No, by default, the integration allows all the possible languages to be displayed, including English, Japanese and Korean. |
+   | setDetailsPanelCards | A list of `VirtusizeInfoCategory` | In Kotlin, setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))<br />In Java, setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT)) | The info categories that will be display in the Product Details tab. Possible categories are: `VirtusizeInfoCategory.MODEL_INFO`, `VirtusizeInfoCategory.GENERAL_FIT`, `VirtusizeInfoCategory.BRAND_SIZING` and `VirtusizeInfoCategory.MATERIAL` | No, by default, the integration displays all the possible info categories in the Product Details tab. |
+
+   - Kotlin
+
+     ```kotlin
+     lateinit var Virtusize: Virtusize
+     override fun onCreate() {
+         super.onCreate()
+        Virtusize = VirtusizeBuilder().init(this)
+                 // Only the API key is required
+                 .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
+                 // For using the Order API, a user ID is required
+                 .setUserId("123")
+                 // By default, the Virtusize environment will be set to GLOBAL
+                 .setEnv(VirtusizeEnvironment.STAGING)
+                 // By default, the initial language will be set based on the Virtusize environment
+                 .setLanguage(VirtusizeLanguage.EN)
+                 // By default, ShowSGI is false
+                 .setShowSGI(true)
+                 // By default, Virtusize allows all the possible languages
+                 .setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
+                 // By default, Virtusize displays all the possible info categories in the Product Details tab
+                 .setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
+                 .build()
+     }
+     ```
+   - Java
+
+       ```java
+       Virtusize Virtusize;
+
+       @Override
+       public void onCreate() {
+          super.onCreate();
+               // Initialize Virtusize instance for your application
+               Virtusize = new VirtusizeBuilder().init(this)
+                       // Only the API key is required
+                       .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
+                       // For using the Order API, a user ID is required
+                       .setUserId("123")
+                       // By default, the Virtusize environment will be set to GLOBAL
+                       .setEnv(VirtusizeEnvironment.STAGING)
+                       // By default, the initial language will be set based on the Virtusize environment
+                       .setLanguage(VirtusizeLanguage.EN)
+                       // By default, ShowSGI is false
+                       .setShowSGI(true)
+                       // By default, Virtusize allows all the possible languages
+                       .setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
+                       // By default, Virtusize displays all the possible info categories in the Product Details tab
+                       .setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
+                       .build();
+       ```
+
+2. Add Virtusize button in your activity's XML layout file. You can use the default button style we provide by setting up `app:virtusizeButtonStyle="default_style"` or you use any other button styles and/or define attributes like text, height, width, etc on the VirtusizeButton
+
+   ```xml
+   <com.virtusize.libsource.ui.VirtusizeButton
+       android:id="@+id/exampleVirtusizeButton"
+       app:virtusizeButtonStyle="default_style" />
+   ```
+
+   or
+
+   ```xml
+   <com.virtusize.libsource.ui.VirtusizeButton
+       android:id="@+id/exampleVirtusizeButton"
+       style="@style/Widget.AppCompat.Button.Colored"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="@string/fit_button_text" />
+   ```
+
 3. Inside your activity, setup the Fit Illustrator button using product details by passing a `imageUrl` of the product in order to populate the comparison view and passing in an `externalId` that will be used to reference that product in our API
-    - Kotlin
-        ```kotlin
-        (application as App)
-        .Virtusize
-        .setupFitButton(
-            fitIllustratorButton = exampleFitButton,
-            virtusizeProduct = VirtusizeProduct(externalId = "694", imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"))
-        ```
 
-    - Java
-        ```java
-        FitIllustratorButton fitIllustratorButton;
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
-            fitIllustratorButton = findViewById(R.id.exampleFitButton);
-            App app = (App) getApplication();
-            app.Virtusize.setupFitButton(fitIllustratorButton, new VirtusizeProduct("694", "https://www.publicdomainpictures.net/pictures/120000/velka/dress-1950-vintage-style.jpg"));
-        }
-        ```
-        
+   - Kotlin
+
+     ```kotlin
+     (application as App)
+     .Virtusize
+     .setupVirtusizeButton(
+         virtusizeButton = exampleVirtusizeButton,
+         virtusizeProduct = VirtusizeProduct(externalId = "694", imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"))
+     ```
+
+   - Java
+
+     ```java
+     VirtusizeButton virtusizeButton;
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_main);
+         virtusizeButton = findViewById(R.id.exampleVirtusizeButton);
+         App app = (App) getApplication();
+         app.Virtusize.setupVirtusizeButton(virtusizeButton, new VirtusizeProduct("694", "https://www.publicdomainpictures.net/pictures/120000/velka/dress-1950-vintage-style.jpg"));
+     }
+     ```
+
 ## The Order API
 
 The order API enables Virtusize to show your customers the items they have recently purchased as part of their `Purchase History`, and use those items to compare with new items they want to buy.
@@ -214,9 +263,11 @@ items.add(new VirtusizeOrderItem(
 #### 3. Send an Order
 
 Call the `Virtusize.sendOrder` method in your activity or fragment when the user places an order.
+
 * Kotlin
 
 The `onSuccess` and `onError` callbacks are optional.
+
 ~~~~kotlin
 (application as App)
     .Virtusize
@@ -227,12 +278,14 @@ The `onSuccess` and `onError` callbacks are optional.
         },
         // This error callback is optional and gets called when an error occurs when the app is sending the order
         onError = { error ->
-            Log.e(TAG, error.message())
+            Log.e(TAG, error.message)
         })
 ~~~~
+
 * Java
 
 The `SuccessResponseHandler` and `ErrorResponseHandler` callbacks are optional.
+
 ~~~~java
 app.Virtusize.sendOrder(order,
         // This success callback is optional and gets called when the app successfully sends the order
@@ -245,23 +298,27 @@ app.Virtusize.sendOrder(order,
         // This error callback is optional and gets called when an error occurs when the app is sending the order
         new ErrorResponseHandler() {
             @Override
-            public void onError(@Nullable Integer errorCode, @Nullable String errorMessage, @NotNull VirtusizeError error) {
-                Log.e(TAG, VirtusizeErrorKt.message(error));
+            public void onError(@NotNull VirtusizeError error) {
+                Log.e(TAG, error.getMessage());
             }
         }
 );
 ~~~~
 
 ## Proguard rules
+
 Add following rules to your proguard rules file:
+
 ```
 -keep class com.virtusize.libsource.**
 ```
 
 ## Documentation
+
 https://github.com/virtusize/integration_android/wiki
 
 ## Examples
+
 1. Kotlin example https://github.com/virtusize/integration_android/tree/master/sampleAppKotlin
 2. Java example https://github.com/virtusize/integration_android/tree/master/sampleappjava
 

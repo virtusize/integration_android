@@ -29,10 +29,9 @@ public class App extends Application {
                 .setLanguage(VirtusizeLanguage.EN)
                 // By default, ShowSGI is false
                 .setShowSGI(true)
-                // By default, Virtusize allows all the possible languages including English, Japanese and Korean
+                // By default, Virtusize allows all the possible languages
                 .setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
-                // By default, Virtusize displays all the possible info categories in the Product Details tab,
-                // including "modelInfo", "generalFit", "brandSizing" and "material".
+                // By default, Virtusize displays all the possible info categories in the Product Details tab
                 .setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
                 .build();
     }
