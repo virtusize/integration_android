@@ -43,7 +43,7 @@ If you would like to continue to use the old Version 1.x.x, please refer to the 
 
 ## Setup
 
-1. Initialize Virtusize object in your Application class's `onCreate` method using the `VirtusizeBuilder` to set up the configuration. Possible configuration methods are shown as the following table: 
+1. Initialize Virtusize object in your Application class's `onCreate` method using the **VirtusizeBuilder** to set up the configuration. Possible configuration methods are shown as the following table: 
 
    **VirtusizeBuilder**
 
@@ -108,15 +108,31 @@ If you would like to continue to use the old Version 1.x.x, please refer to the 
                        .build();
        ```
 
-2. Add Virtusize button in your activity's XML layout file. You can use the default button style we provide by setting up `app:virtusizeButtonStyle="default_style"` or you use any other button styles and/or define attributes like text, height, width, etc on the VirtusizeButton
+2. Add Virtusize button in your activity's XML layout file. You can use the default button style we provide by setting up `app:virtusizeButtonStyle="default_style"` in XML or programmatically.
 
-   ```xml
-   <com.virtusize.libsource.ui.VirtusizeButton
-       android:id="@+id/exampleVirtusizeButton"
-       app:virtusizeButtonStyle="default_style" />
-   ```
+   - XML
 
-   or
+     ```xml
+     <com.virtusize.libsource.ui.VirtusizeButton
+         android:id="@+id/exampleVirtusizeButton"
+         app:virtusizeButtonStyle="default_style"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content" />
+     ```
+
+   - Kotlin
+
+     ```kotlin
+     exampleVirtusizeButton.buttonStyle = VirtusizeButtonStyle.DEFAULT_STYLE
+     ```
+
+   - Java
+
+     ```java
+     virtusizeButton.setButtonStyle(VirtusizeButtonStyle.DEFAULT_STYLE);
+     ```
+
+   You can also use any other button styles and/or define attributes like text, height, width, etc on the VirtusizeButton.
 
    ```xml
    <com.virtusize.libsource.ui.VirtusizeButton
@@ -124,10 +140,10 @@ If you would like to continue to use the old Version 1.x.x, please refer to the 
        style="@style/Widget.AppCompat.Button.Colored"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:text="@string/fit_button_text" />
+       android:text="@string/virtusize_button_text" />
    ```
 
-3. Inside your activity, setup the Fit Illustrator button using product details by passing a `imageUrl` of the product in order to populate the comparison view and passing in an `externalId` that will be used to reference that product in our API
+3. Inside your activity, setup the Virtusize button using product details by passing a `imageUrl` of the product in order to populate the comparison view and passing in an `externalId` that will be used to reference that product in our API
 
    - Kotlin
 
