@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Virtusize</string>
-    <string name="fit_button_text">Check the fit</string>
-    <string name="landscape">landscape</string>
-    <string name="portrait">portrait</string>
-    <string name="fit_button_text_jp">サイズをチェックする</string>
+    <string name="landscape" translatable="false">landscape</string>
+    <string name="portrait" translatable="false">portrait</string>
+    <string name="virtusize_button_text">Check size</string>
+
 </resources>

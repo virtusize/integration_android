@@ -1,4 +1,4 @@
-package com.virtusize.libsource.data.remote.parsers
+package com.virtusize.libsource.data.parsers
 
 import com.virtusize.libsource.data.remote.UserData
 import org.json.JSONObject

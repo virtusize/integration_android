@@ -1,7 +1,6 @@
-package com.virtusize.libsource.data.remote.parsers
+package com.virtusize.libsource.data.parsers
 
 import com.virtusize.libsource.data.remote.Data
-import com.virtusize.libsource.data.remote.JsonUtils
 import org.json.JSONObject
 
 /**

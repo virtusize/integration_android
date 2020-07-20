@@ -3,7 +3,7 @@ package com.virtusize.libsource
 import com.virtusize.libsource.data.local.VirtusizeOrder
 import com.virtusize.libsource.data.local.VirtusizeOrderItem
 import com.virtusize.libsource.data.local.VirtusizeProduct
-import com.virtusize.libsource.data.remote.parsers.ProductCheckJsonParser
+import com.virtusize.libsource.data.parsers.ProductCheckJsonParser
 import org.json.JSONObject
 
 internal object TestFixtures {

@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.VirtusizeOrder
-import com.virtusize.libsource.ui.FitIllustratorButton
+import com.virtusize.libsource.ui.VirtusizeButton
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -22,21 +22,28 @@ class MainActivity : AppCompatActivity() {
         (application as App)
             .Virtusize.registerMessageHandler(activityMessageHandler)
 
-        // setup Virtusize fit illustrator button
+        // setup Virtusize button
+        // Virtusize opens automatically when button is clicked
         (application as App)
             .Virtusize
-            .setupFitButton(
-                fitIllustratorButton = exampleFitButton,
-                virtusizeProduct = VirtusizeProduct(externalId = "694", imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg")
+            .setupVirtusizeButton(
+                virtusizeButton = exampleVirtusizeButton,
+                virtusizeProduct = VirtusizeProduct(externalId = "694",
+                    imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"
+                )
             )
-
-        // Fit Illustrator opens automatically when button is clicked
-
         /*
-         * To close fit illustrator use
-         * exampleFitButton.dismissFitIllustratorView()
+         * To set up the button style programmatically
+         * exampleVirtusizeButton.buttonStyle = VirtusizeButtonStyle.DEFAULT_STYLE
          */
 
+
+        /*
+         * To close the Virtusize page
+         * exampleVirtusizeButton.dismissVirtusizeView()
+         */
+
+        // The sample function to send an order to the Virtusize server
         sendOrderSample()
     }
 
@@ -58,7 +65,7 @@ class MainActivity : AppCompatActivity() {
                 "http://images.example.com/products/P001/red/image1xl.jpg",
                 "Red",
                 "W",
-                5100.00,
+                51000.00,
                 "JPY",
                 1,
                 "http://example.com/products/P001"
@@ -74,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                 },
                 // this optional error callback is called when an error occurs when the app is sending the order
                 onError = { error ->
-                    Log.e(TAG, error.message())
+                    Log.e(TAG, error.message)
                 })
     }
 
@@ -86,17 +93,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val activityMessageHandler = object : VirtusizeMessageHandler {
-        override fun virtusizeControllerShouldClose(fitIllustratorButton: FitIllustratorButton) {
-            Log.i(TAG, "Close fit illustrator")
-            fitIllustratorButton.dismissFitIllustratorView()
+        override fun virtusizeControllerShouldClose(virtusizeButton: VirtusizeButton) {
+            Log.i(TAG, "Close Virtusize View")
+            virtusizeButton.dismissVirtusizeView()
         }
 
-        override fun onEvent(fitIllustratorButton: FitIllustratorButton?, event: VirtusizeEvents) {
-            Log.i(TAG, event.getEventName())
+        override fun onEvent(virtusizeButton: VirtusizeButton?, event: VirtusizeEvent) {
+            Log.i(TAG, event.name)
         }
 
-        override fun onError(fitIllustratorButton: FitIllustratorButton?, error: VirtusizeError) {
-            Log.e(TAG, error.message())
+        override fun onError(virtusizeButton: VirtusizeButton?, errorType: VirtusizeError) {
+            Log.e(TAG, errorType.message)
         }
     }
 }

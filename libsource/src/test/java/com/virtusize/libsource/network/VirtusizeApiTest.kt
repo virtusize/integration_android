@@ -1,20 +1,18 @@
 package com.virtusize.libsource.network
 
 import android.content.Context
-import android.net.UrlQuerySanitizer
 import android.os.Build
 import android.view.WindowManager
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.virtusize.libsource.TestFixtures
 import com.virtusize.libsource.data.local.*
-import com.virtusize.libsource.data.remote.JsonUtils
+import com.virtusize.libsource.data.parsers.JsonUtils
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import kotlin.random.Random
 
 
 @RunWith(RobolectricTestRunner::class)
@@ -31,9 +29,7 @@ class VirtusizeApiTest {
         VirtusizeApi.init(
             env = VirtusizeEnvironment.STAGING,
             key = TestFixtures.API_KEY,
-            browserID = TestFixtures.BROWSER_ID,
-            userId = TestFixtures.USER_ID,
-            language = TestFixtures.LANGUAGE
+            userId = TestFixtures.USER_ID
         )
     }
 
@@ -41,7 +37,7 @@ class VirtusizeApiTest {
     fun productCheck_shouldReturnExpectedApiRequest() {
         val actualApiRequest = VirtusizeApi.productCheck(TestFixtures.VIRTUSIZE_PRODUCT)
 
-        val expectedUrl = "https://staging.virtusize.com/integration/v3/product-data-check" +
+        val expectedUrl = "https://services.virtusize.com/stg/product/check" +
                 "?apiKey=${TestFixtures.API_KEY}" +
                 "&externalId=${TestFixtures.EXTERNAL_ID}" +
                 "&version=1"
@@ -52,22 +48,12 @@ class VirtusizeApiTest {
     }
 
     @Test
-    fun fitIllustrator_shouldReturnExpectedUrl() {
-        val actualUrl = VirtusizeApi.fitIllustrator(TestFixtures.VIRTUSIZE_PRODUCT)
+    fun virtusize_shouldReturnExpectedUrl() {
+        val actualUrl = VirtusizeApi.virtusizeURL()
 
-        val actualUrlQuerySanitizer = UrlQuerySanitizer(actualUrl)
+        val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-webview.html"
 
-        assertThat(actualUrlQuerySanitizer.getValue("detached")).isEqualTo("false")
-        assertThat(actualUrlQuerySanitizer.getValue("bid")).isEqualTo(TestFixtures.BROWSER_ID)
-        assertThat(actualUrlQuerySanitizer.getValue("addToCartEnabled")).isEqualTo("false")
-        assertThat(actualUrlQuerySanitizer.getValue("storeId")).isEqualTo("2")
-        assertThat(actualUrlQuerySanitizer.getValue("_").toInt() in 0..1519982555).isTrue()
-        assertThat(actualUrlQuerySanitizer.getValue("spid")).isEqualTo(TestFixtures.PRODUCT_CHECK?.data?.productDataId.toString())
-        assertThat(actualUrlQuerySanitizer.getValue("lang")).isEqualTo(TestFixtures.LANGUAGE)
-        assertThat(actualUrlQuerySanitizer.getValue("android")).isEqualTo("true")
-        assertThat(actualUrlQuerySanitizer.getValue("sdk")).isEqualTo("android")
-        assertThat(actualUrlQuerySanitizer.getValue("userId")).isEqualTo(TestFixtures.USER_ID)
-        assertThat(actualUrlQuerySanitizer.getValue("externalUserId")).isEqualTo(TestFixtures.USER_ID)
+        assertThat(actualUrl).isEqualTo(expectedUrl)
     }
 
     @Test

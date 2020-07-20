@@ -3,6 +3,7 @@ package com.virtusize.libsource
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import com.virtusize.libsource.data.local.VirtusizeError
+import com.virtusize.libsource.data.local.VirtusizeErrorType
 import com.virtusize.libsource.data.remote.ProductCheck
 
 
@@ -22,12 +23,12 @@ interface SuccessResponseHandler {
  */
 interface ErrorResponseHandler {
     /**
-     * Passes optional error of type [VirtusizeError]
+     * Passes optional error of type [VirtusizeErrorType]
      * @param errorCode Any error code that wanted to passed
      * @param errorMessage Any error message that wants to be passed
-     * @param error Any error that wants to be passed
+     * @param errorType Any error that wants to be passed
      */
-    fun onError(@Nullable errorCode: Int?, @Nullable errorMessage: String?, @NonNull error: VirtusizeError)
+    fun onError(@NonNull error: VirtusizeError)
 }
 
 /**

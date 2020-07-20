@@ -10,14 +10,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.virtusize.libsource.ErrorResponseHandler;
 import com.virtusize.libsource.SuccessResponseHandler;
 import com.virtusize.libsource.data.local.VirtusizeError;
-import com.virtusize.libsource.data.local.VirtusizeErrorKt;
-import com.virtusize.libsource.data.local.VirtusizeEventKt;
-import com.virtusize.libsource.data.local.VirtusizeEvents;
+import com.virtusize.libsource.data.local.VirtusizeEvent;
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler;
 import com.virtusize.libsource.data.local.VirtusizeOrder;
 import com.virtusize.libsource.data.local.VirtusizeOrderItem;
 import com.virtusize.libsource.data.local.VirtusizeProduct;
-import com.virtusize.libsource.ui.FitIllustratorButton;
+import com.virtusize.libsource.ui.VirtusizeButton;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +23,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    FitIllustratorButton fitIllustratorButton;
+    VirtusizeButton virtusizeButton;
     App app;
     VirtusizeMessageHandler virtusizeMessageHandler;
 
@@ -35,28 +33,39 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        fitIllustratorButton = findViewById(R.id.exampleFitButton);
+        virtusizeButton = findViewById(R.id.exampleVirtusizeButton);
         app = (App) getApplication();
 
         virtusizeMessageHandler = new VirtusizeMessageHandler() {
             @Override
-            public void virtusizeControllerShouldClose(@NonNull FitIllustratorButton fitIllustratorButton) {
-                Log.i(TAG, "Close fit illustrator");
+            public void virtusizeControllerShouldClose(@NotNull VirtusizeButton virtusizeButton) {
+                Log.i(TAG, "Close Virtusize View");
             }
 
             @Override
-            public void onEvent(FitIllustratorButton fitIllustratorButton, @NonNull VirtusizeEvents event) {
-                Log.i(TAG, VirtusizeEventKt.getEventName(event));
+            public void onEvent(@org.jetbrains.annotations.Nullable VirtusizeButton virtusizeButton, @NotNull VirtusizeEvent event) {
+                Log.i(TAG, event.getName());
             }
 
             @Override
-            public void onError(FitIllustratorButton fitIllustratorButton, @NonNull VirtusizeError error) {
-                Log.e(TAG, VirtusizeErrorKt.message(error));
+            public void onError(VirtusizeButton virtusizeButton, @NonNull VirtusizeError error) {
+                Log.e(TAG, error.getMessage());
             }
         };
         app.Virtusize.registerMessageHandler(virtusizeMessageHandler);
 
-        app.Virtusize.setupFitButton(fitIllustratorButton, new VirtusizeProduct("694", "https://www.publicdomainpictures.net/pictures/120000/velka/dress-1950-vintage-style.jpg"));
+        app.Virtusize.setupVirtusizeButton(
+                virtusizeButton,
+                new VirtusizeProduct(
+                        "694",
+                        "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"
+                )
+        );
+
+        /*
+         * To set up the button style programmatically
+         * virtusizeButton.setButtonStyle(VirtusizeButtonStyle.DEFAULT_STYLE);
+         */
 
         sendOrderSample();
     }
@@ -97,8 +106,8 @@ public class MainActivity extends AppCompatActivity {
                 // this optional error callback is called when an error occurs when the app is sending the order
                 new ErrorResponseHandler() {
                     @Override
-                    public void onError(@Nullable Integer errorCode, @Nullable String errorMessage, @NotNull VirtusizeError error) {
-                        Log.e(TAG, VirtusizeErrorKt.message(error));
+                    public void onError(@NotNull VirtusizeError error) {
+                        Log.e(TAG, error.getMessage());
                     }
         });
     }

@@ -28,10 +28,17 @@ class BrowserIdentifier(private val sharedPrefs: SharedPreferences) {
      */
     private fun generateAndStoreBrowserId(): String {
         val bid = generateBrowserId()
+        storeBrowserId(bid)
+        return bid
+    }
+
+    /**
+     * Stores a browser identifier in application level shared preferences
+     */
+    fun storeBrowserId(bid: String) {
         val editor = sharedPrefs.edit()
         editor.putString(BID_KEY, bid)
         editor.apply()
-        return bid
     }
 
     /**
