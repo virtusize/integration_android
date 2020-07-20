@@ -21,9 +21,9 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 
 ## Installation
 
-If you would like to continue to use the old Version 1.x.x, please refer to the branch [v1](https://github.com/virtusize/integration_android/tree/v1).
+If you'd like to continue using the old Version 1.x.x, refer to the branch [v1](https://github.com/virtusize/integration_android/tree/v1).
 
-- In your root `build.gradle` file, add below dependency:
+- In your root `build.gradle` file, add the following dependency:
 
   ```groovy
   allprojects {
@@ -33,7 +33,7 @@ If you would like to continue to use the old Version 1.x.x, please refer to the 
   }
   ```
 
-- In your app `build.gradle` file, add below dependencies:
+- In your app `build.gradle` file, add the following dependencies:
 
   ```groovy
   dependencies {
@@ -43,19 +43,19 @@ If you would like to continue to use the old Version 1.x.x, please refer to the 
 
 ## Setup
 
-1. Initialize Virtusize object in your Application class's `onCreate` method using the **VirtusizeBuilder** to set up the configuration. Possible configuration methods are shown as the following table: 
+1. Initialize the Virtusize object in your Application class's `onCreate` method using the **VirtusizeBuilder** to set up the configuration. Possible configuration methods are shown in the following table: 
 
    **VirtusizeBuilder**
 
    | Method               | Argument Type                     | Example                                                      | Description                                                  | Requirement                                                  |
    | -------------------- | --------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
    | setApiKey            | String                            | setApiKey("api_key")                                         | A unique API key is provided to each Virtusize client.       | Yes                                                          |
-   | setUserId            | String                            | setUserId("123")                                             | It's passed from the client if the user is logged into the client's app. | Yes, if the Order API is used.                               |
-   | setEnv               | VirtusizeEnvironment              | setEnv(VirtusizeEnvironment.STAGING)                         | The environment is the region you are running the integration from, either `VirtusizeEnvironment.STAGING`,  `VirtusizeEnvironment.GLOBAL`, `VirtusizeEnvironment.JAPAN` or `VirtusizeEnvironment.KOREA`. | No, by default, the Virtusize environment will be set to `VirtusizeEnvironment.GLOBAL`. |
-   | setLanguage          | VirtusizeLanguage                 | setLanguage(VirtusizeLanguage.EN)                            | It sets the initial language that the integration will load in. The possible values are `VirtusizeLanguage.EN`, `VirtusizeLanguage.JP` and `VirtusizeLanguage.KR` | No, by default, the initial language will be set based on the Virtusize environment. |
-   | setShowSGI           | Boolean                           | setShowSGI(true)                                             | It determines whether the integration will fetch SGI and use SGI flow for users to add user generated items to their wardrobe. | No, by default, ShowSGI is set to false                      |
-   | setAllowedLanguages  | A list of `VirtusizeLanguage`     | In Kotlin, setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))<br />In Java, setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP)) | The languages that the user can switch to using the Language Selector | No, by default, the integration allows all the possible languages to be displayed, including English, Japanese and Korean. |
-   | setDetailsPanelCards | A list of `VirtusizeInfoCategory` | In Kotlin, setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))<br />In Java, setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT)) | The info categories that will be display in the Product Details tab. Possible categories are: `VirtusizeInfoCategory.MODEL_INFO`, `VirtusizeInfoCategory.GENERAL_FIT`, `VirtusizeInfoCategory.BRAND_SIZING` and `VirtusizeInfoCategory.MATERIAL` | No, by default, the integration displays all the possible info categories in the Product Details tab. |
+   | setUserId            | String                            | setUserId("123")                                             | Passed from the client if the user is logged into the client's app. | Yes, if the Order API is used.                               |
+   | setEnv               | VirtusizeEnvironment              | setEnv(VirtusizeEnvironment.STAGING)                         | The environment is the region you are running the integration from, either `VirtusizeEnvironment.STAGING`,  `VirtusizeEnvironment.GLOBAL`, `VirtusizeEnvironment.JAPAN` or `VirtusizeEnvironment.KOREA`. | No. By default, the Virtusize environment will be set to `VirtusizeEnvironment.GLOBAL`. |
+   | setLanguage          | VirtusizeLanguage                 | setLanguage(VirtusizeLanguage.EN)                            | Sets the initial language that the integration will load in. The possible values are `VirtusizeLanguage.EN`, `VirtusizeLanguage.JP` and `VirtusizeLanguage.KR` | No. By default, the initial language will be set based on the Virtusize environment. |
+   | setShowSGI           | Boolean                           | setShowSGI(true)                                             | Determines whether the integration will fetch SGI and use SGI flow for users to add user generated items to their wardrobe. | No. By default, ShowSGI is set to false                      |
+   | setAllowedLanguages  | A list of `VirtusizeLanguage`     | In Kotlin, setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))<br />In Java, setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP)) | The languages which the user can switch to using the Language Selector | No. By default, the integration allows all possible languages to be displayed, including English, Japanese and Korean. |
+   | setDetailsPanelCards | A list of `VirtusizeInfoCategory` | In Kotlin, setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))<br />In Java, setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT)) | The info categories which will be display in the Product Details tab. Possible categories are: `VirtusizeInfoCategory.MODEL_INFO`, `VirtusizeInfoCategory.GENERAL_FIT`, `VirtusizeInfoCategory.BRAND_SIZING` and `VirtusizeInfoCategory.MATERIAL` | No. By default, the integration displays all the possible info categories in the Product Details tab. |
 
    - Kotlin
 
@@ -108,7 +108,7 @@ If you would like to continue to use the old Version 1.x.x, please refer to the 
                        .build();
        ```
 
-2. Add Virtusize button in your activity's XML layout file. You can use the default button style we provide by setting up `app:virtusizeButtonStyle="default_style"` in XML or programmatically.
+2. Add a Virtusize button in your activity's XML layout file. You can use the default button style we provide by setting up `app:virtusizeButtonStyle="default_style"` in XML:
 
    - XML
 
@@ -119,6 +119,8 @@ If you would like to continue to use the old Version 1.x.x, please refer to the 
          android:layout_width="wrap_content"
          android:layout_height="wrap_content" />
      ```
+
+    or programmatically:
 
    - Kotlin
 
@@ -132,7 +134,7 @@ If you would like to continue to use the old Version 1.x.x, please refer to the 
      virtusizeButton.setButtonStyle(VirtusizeButtonStyle.DEFAULT_STYLE);
      ```
 
-   You can also use any other button styles and/or define attributes like text, height, width, etc on the VirtusizeButton.
+   You can also use any other button styles and/or define attributes like text, height, width, etc of the VirtusizeButton.
 
    ```xml
    <com.virtusize.libsource.ui.VirtusizeButton
@@ -143,7 +145,7 @@ If you would like to continue to use the old Version 1.x.x, please refer to the 
        android:text="@string/virtusize_button_text" />
    ```
 
-3. Inside your activity, setup the Virtusize button using product details by passing a `imageUrl` of the product in order to populate the comparison view and passing in an `externalId` that will be used to reference that product in our API
+3. Inside your activity, set up the Virtusize button using product details by passing an `imageUrl` for the product in order to populate the comparison view, and an `externalId` that will be used to reference that product in our API
 
    - Kotlin
 
@@ -223,7 +225,7 @@ __**Note:**__ * means the attribute is required
 
 | Attribute  | Data Type | Example                                  | Description                                                  |
 | ---------- | --------- | ---------------------------------------- | ------------------------------------------------------------ |
-| productId* | String    | "A001"                                   | The provide ID provided by the client. It must be unique for a product. |
+| productId* | String    | "A001"                                   | The product ID provided by the client. It must be unique for each product. |
 | size*      | String    | "S", "M", etc.                           | The name of the size                                         |
 | sizeAlias  | String    | "Small", "Large", etc.                   | The alias of the size is added if the size name is not identical from the product page |
 | variantId  | String    | "A001_SIZES_RED"                         | An ID that is set on the product SKU, color, or size if there are several options for the item |
@@ -232,7 +234,7 @@ __**Note:**__ * means the attribute is required
 | gender     | String    | "W", "Women", etc.                       | An identifier for the gender                                 |
 | unitPrice* | Double    | 5100.00                                  | The product price that is a double number with a maximum of 12 digits and 2 decimals (12, 2) |
 | currency*  | String    | "JPY", "KRW", "USD", etc.                | Currency code                                                |
-| quantity*  | Int       | 1                                        | The number of the item purchased. If it's not passed, It will be set to 1 |
+| quantity*  | Int       | 1                                        | The number of items purchased. If it's not passed, It will be set to 1 |
 | url        | String    | "http[]()://example.com/products/A001"   | The URL of the product page. Please make sure this is a URL that users can access |
 
 **Samples**
