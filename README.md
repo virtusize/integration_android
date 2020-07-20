@@ -21,6 +21,8 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 
 ## Installation
 
+If you would like to continue to use the old Version 1.x.x, please refer to the branch [v1](https://github.com/virtusize/integration_android/tree/v1).
+
 - In your root `build.gradle` file, add below dependency:
 
   ```groovy
