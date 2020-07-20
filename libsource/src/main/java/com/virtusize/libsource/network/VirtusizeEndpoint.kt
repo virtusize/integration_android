@@ -22,7 +22,7 @@ internal fun VirtusizeEndpoint.getPath(): String {
              "/product/check"
          }
          VirtusizeEndpoint.Virtusize -> {
-             "/a/aoyama/latest/sdk-integration/sdk-webview.html"
+             "/a/aoyama/testing/sdk-integration/sdk-webview.html"
          }
          VirtusizeEndpoint.ProductMetaDataHints -> {
              "/rest-api/v1/product-meta-data-hints"

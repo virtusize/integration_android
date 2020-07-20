@@ -1,4 +1,4 @@
-package com.virtusize.libsource.data.remote
+package com.virtusize.libsource.data.parsers
 
 import org.json.JSONArray
 import org.json.JSONObject
@@ -33,8 +33,12 @@ internal object JsonUtils {
             val key = keys.next()
             jsonObject.opt(key)?.let { value ->
                 map[key] = when (value) {
-                    is JSONObject -> jsonObjectToMap(value)
-                    is JSONArray -> jsonArrayToList(value)
+                    is JSONObject -> jsonObjectToMap(
+                        value
+                    )
+                    is JSONArray -> jsonArrayToList(
+                        value
+                    )
                     else -> value
                 }
             }
@@ -53,9 +57,15 @@ internal object JsonUtils {
         for (i in 0 until array.length()) {
             var value = array[i]
             if (value is JSONArray) {
-                value = jsonArrayToList(value)
+                value =
+                    jsonArrayToList(
+                        value
+                    )
             } else if (value is JSONObject) {
-                value = jsonObjectToMap(value)
+                value =
+                    jsonObjectToMap(
+                        value
+                    )
             }
             list.add(value)
         }

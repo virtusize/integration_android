@@ -1,6 +1,5 @@
 package com.virtusize.libsource.data.parsers
 
-import com.virtusize.libsource.data.remote.JsonUtils
 import com.virtusize.libsource.data.remote.Store
 import org.json.JSONObject
 
@@ -9,9 +8,6 @@ import org.json.JSONObject
  */
 internal class StoreJsonParser: VirtusizeJsonParser {
     override fun parse(json: JSONObject): Store? {
-        if(JsonUtils.optString(json, FIELD_ERROR_DETAIL).isNotEmpty()) {
-            return null
-        }
         val id = json.optInt(FIELD_ID)
         val surveyLink = JsonUtils.optString(json, FIELD_SURVEY_LINK)
         val name = JsonUtils.optString(json, FIELD_NAME)
@@ -39,6 +35,5 @@ internal class StoreJsonParser: VirtusizeJsonParser {
         private const val FIELD_DISABLED = "disabled"
         private const val FIELD_TYPE_MAPPER_ENABLED = "typemapperEnabled"
         private const val FIELD_REGION = "region"
-        private const val FIELD_ERROR_DETAIL = "detail"
     }
 }

@@ -2,7 +2,7 @@ package com.virtusize.libsource.network
 
 import android.net.Uri
 import com.virtusize.libsource.data.local.*
-import com.virtusize.libsource.data.remote.JsonUtils
+import com.virtusize.libsource.data.parsers.JsonUtils
 import com.virtusize.libsource.data.remote.ProductCheck
 
 

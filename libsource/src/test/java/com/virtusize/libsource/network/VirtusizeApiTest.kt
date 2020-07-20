@@ -7,7 +7,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.virtusize.libsource.TestFixtures
 import com.virtusize.libsource.data.local.*
-import com.virtusize.libsource.data.remote.JsonUtils
+import com.virtusize.libsource.data.parsers.JsonUtils
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
