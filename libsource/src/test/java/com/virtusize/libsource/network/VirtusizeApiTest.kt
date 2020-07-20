@@ -51,7 +51,7 @@ class VirtusizeApiTest {
     fun virtusize_shouldReturnExpectedUrl() {
         val actualUrl = VirtusizeApi.virtusizeURL()
 
-        val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-integration/sdk-webview.html"
+        val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-webview.html"
 
         assertThat(actualUrl).isEqualTo(expectedUrl)
     }
