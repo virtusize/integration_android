@@ -26,6 +26,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -36,4 +45,9 @@ dependencies {
 
     implementation 'com.github.virtusize:integration_android:2.0'
 //    implementation project(":libsource")
+
+    androidTestImplementation "androidx.test:core-ktx:$core_version"
+    androidTestImplementation "androidx.test.ext:junit-ktx:$extJUnit_version"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-web:$espresso_version"
 }
