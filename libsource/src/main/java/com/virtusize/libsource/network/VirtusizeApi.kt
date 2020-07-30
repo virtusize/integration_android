@@ -223,4 +223,13 @@ internal object VirtusizeApi {
             .toString()
         return ApiRequest(url, HttpMethod.GET)
     }
+
+    fun getStoreProductInfo(productId: String) : ApiRequest {
+        val url = Uri.parse(environment.apiUrl() + VirtusizeEndpoint.StoreProduct.getPath() + productId)
+            .buildUpon()
+            .appendQueryParameter("format", "json")
+            .build()
+            .toString()
+        return ApiRequest(url, HttpMethod.GET)
+    }
 }

@@ -182,4 +182,16 @@ class VirtusizeApiTest {
 
         assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
     }
+
+    @Test
+    fun getStoreProductInfo_shouldReturnExpectedApiRequest() {
+        val actualApiRequest = VirtusizeApi.getStoreProductInfo("16099122")
+
+        val expectedUrl = "https://staging.virtusize.com/a/api/v3/store-products/16099122" +
+                "?format=json"
+
+        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
+
+        assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
+    }
 }
