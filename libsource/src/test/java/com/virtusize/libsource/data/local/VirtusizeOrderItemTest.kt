@@ -22,7 +22,7 @@ class VirtusizeOrderItemTest {
         ).paramsToMap()
 
         val expectedMap = mapOf(
-            "productId" to "P001",
+            "externalProductId" to "P001",
             "size" to "L",
             "sizeAlias" to "Large",
             "variantId" to "P001_SIZEL_RED",
@@ -50,7 +50,7 @@ class VirtusizeOrderItemTest {
         ).paramsToMap()
 
         val expectedMap = mapOf(
-            "productId" to "P001",
+            "externalProductId" to "P001",
             "size" to "L",
             "imageUrl" to "http://images.example.com/products/P001/red/image1xl.jpg",
             "unitPrice" to 5000.00,
@@ -74,7 +74,7 @@ class VirtusizeOrderItemTest {
         ).paramsToMap()
 
         val expectedMap = mapOf(
-            "productId" to "P002",
+            "externalProductId" to "P002",
             "size" to "M",
             "imageUrl" to "http://images.example.com/products/P002/red/image1xl.jpg",
             "unitPrice" to 5000.01,
