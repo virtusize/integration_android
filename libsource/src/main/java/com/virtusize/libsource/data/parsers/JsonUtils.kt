@@ -4,6 +4,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * JSON parsing utility functions
@@ -29,13 +30,12 @@ internal object JsonUtils {
      * @return a Map representing the input
      */
     internal fun jsonObjectToMap(jsonObject: JSONObject): Map<String, Any> {
-        // Use Hashtable to keep the insertion order
-        val table: MutableMap<String, Any> = Hashtable()
+        val map: MutableMap<String, Any> = HashMap()
         val keys: Iterator<String> = jsonObject.keys()
         while (keys.hasNext()) {
             val key = keys.next()
             jsonObject.opt(key)?.let { value ->
-                table[key] = when (value) {
+                map[key] = when (value) {
                     is JSONObject -> jsonObjectToMap(
                         value
                     )
@@ -46,7 +46,7 @@ internal object JsonUtils {
                 }
             }
         }
-        return table
+        return map
     }
 
     /**

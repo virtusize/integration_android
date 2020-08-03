@@ -11,6 +11,9 @@ class StoreProductAdditionalInfoJsonParser : VirtusizeJsonParser {
         json.optJSONObject(FIELD_BRAND_SIZING)?.let {
             brandSizing = BrandSizingJsonParser().parse(it)
         }
+        if(fit.isBlank() && brandSizing == null) {
+            return null
+        }
         return StoreProductAdditionalInfo(fit, brandSizing)
     }
 

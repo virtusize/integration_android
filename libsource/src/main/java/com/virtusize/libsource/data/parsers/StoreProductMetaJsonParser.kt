@@ -11,6 +11,9 @@ internal class StoreProductMetaJsonParser: VirtusizeJsonParser {
         json.optJSONObject(FIELD_ADDITIONAL_INFO)?.let {
             additionalInfo = StoreProductAdditionalInfoJsonParser().parse(it)
         }
+        if (id == 0) {
+            return null
+        }
        return StoreProductMeta(id, additionalInfo)
     }
 

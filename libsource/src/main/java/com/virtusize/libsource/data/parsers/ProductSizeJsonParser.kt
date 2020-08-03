@@ -7,13 +7,14 @@ import org.json.JSONObject
 class ProductSizeJsonParser : VirtusizeJsonParser {
     override fun parse(json: JSONObject): ProductSize? {
         val name = json.optString(FIELD_NAME)
-        var measurements = emptyList<Measurement>()
+        var measurements = setOf<Measurement>()
         json.optJSONObject(FIELD_MEASUREMENTS)?.let { measurementsJsonObject ->
-            (JsonUtils.jsonObjectToMap(measurementsJsonObject) as? Map<String, Int>)?.let { measurementsMap ->
-                measurements = measurementsMap.map {
-                    Measurement(it.key, it.value)
-                }
-            }
+            measurements = JsonUtils.jsonObjectToMap(measurementsJsonObject).map {
+                Measurement(it.key, it.value as? Int ?: 0)
+            }.toSet()
+        }
+        if(name.isEmpty() && measurements.isEmpty()) {
+            return null
         }
         return ProductSize(name, measurements)
     }
