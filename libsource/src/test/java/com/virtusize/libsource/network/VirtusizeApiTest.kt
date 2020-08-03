@@ -152,7 +152,7 @@ class VirtusizeApiTest {
             "externalOrderId" to "888400111032",
             "externalUserId" to TestFixtures.USER_ID,
             "items" to mutableListOf<MutableMap<String, Any>>(mutableMapOf(
-                "productId" to "P001",
+                "externalProductId" to "P001",
                 "size" to "L",
                 "sizeAlias" to "Large",
                 "variantId" to "P001_SIZEL_RED",
