@@ -56,7 +56,7 @@ class ProductSizeJsonParserTest {
         val PRODUCT_SIZE_JSON_DATA = JSONObject(
             """
                 {
-                    "name": "",
+                    "name": " ",
                     "measurements": {
                         "width": 150,
                         "depth": 100,

@@ -14,7 +14,7 @@ class StoreProductAdditionalInfoJsonParserTest {
         val actualAdditionalInfo = StoreProductAdditionalInfoJsonParser().parse(ADDITIONAL_INFO_JSON_DATA)
 
         val expectedAdditionalInfo = StoreProductAdditionalInfo(
-            "regular",
+            "wide",
             BrandSizing(
                 "true",
                 true
