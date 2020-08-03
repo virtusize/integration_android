@@ -2,6 +2,8 @@ package com.virtusize.libsource.data.parsers
 
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * JSON parsing utility functions
@@ -27,12 +29,13 @@ internal object JsonUtils {
      * @return a Map representing the input
      */
     internal fun jsonObjectToMap(jsonObject: JSONObject): Map<String, Any> {
-        val map: MutableMap<String, Any> = HashMap()
+        // Use Hashtable to keep the insertion order
+        val table: MutableMap<String, Any> = Hashtable()
         val keys: Iterator<String> = jsonObject.keys()
         while (keys.hasNext()) {
             val key = keys.next()
             jsonObject.opt(key)?.let { value ->
-                map[key] = when (value) {
+                table[key] = when (value) {
                     is JSONObject -> jsonObjectToMap(
                         value
                     )
@@ -43,7 +46,7 @@ internal object JsonUtils {
                 }
             }
         }
-        return map
+        return table
     }
 
     /**
@@ -52,8 +55,11 @@ internal object JsonUtils {
      * @param array a JSONArray to be converted
      * @return a List representing the input
      */
-    internal fun jsonArrayToList(array: JSONArray): List<Any> {
+    internal fun jsonArrayToList(array: JSONArray?): List<Any> {
         val list: MutableList<Any> = ArrayList()
+        if(array == null) {
+            return list
+        }
         for (i in 0 until array.length()) {
             var value = array[i]
             if (value is JSONArray) {
