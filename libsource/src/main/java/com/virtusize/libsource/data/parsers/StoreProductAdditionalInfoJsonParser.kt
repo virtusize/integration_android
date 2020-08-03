@@ -14,7 +14,7 @@ class StoreProductAdditionalInfoJsonParser : VirtusizeJsonParser {
         return StoreProductAdditionalInfo(fit, brandSizing)
     }
 
-    private companion object {
+    companion object {
         private const val FIELD_FIT = "fit"
         private const val FIELD_BRAND_SIZING = "brandSizing"
     }

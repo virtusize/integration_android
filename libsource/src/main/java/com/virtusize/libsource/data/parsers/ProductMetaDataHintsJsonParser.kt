@@ -15,7 +15,7 @@ internal class ProductMetaDataHintsJsonParser: VirtusizeJsonParser {
         return ProductMetaDataHints(apiKey, imageUrl, cloudinaryPublicId, externalProductId)
     }
 
-    private companion object {
+    companion object {
         private const val FIELD_API_KEY = "apiKey"
         private const val FIELD_IMAGE_URL = "imageUrl"
         private const val FIELD_CLOUDINARY_PUBLIC_ID = "cloudinaryPublicId"

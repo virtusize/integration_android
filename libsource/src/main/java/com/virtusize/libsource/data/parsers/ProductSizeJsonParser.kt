@@ -18,7 +18,7 @@ class ProductSizeJsonParser : VirtusizeJsonParser {
         return ProductSize(name, measurements)
     }
 
-    private companion object {
+    companion object {
         private const val FIELD_NAME = "name"
         private const val FIELD_MEASUREMENTS = "measurements"
     }

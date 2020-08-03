@@ -23,11 +23,14 @@ internal class StoreProductJsonParser: VirtusizeJsonParser {
         json.optJSONObject(FIELD_STORE_PRODUCT_META)?.let {
             storeProductMeta = StoreProductMetaJsonParser().parse(it)
         }
+        if (id == 0 || externalId == "" || productType == 0 || storeId == 0) {
+            return null
+        }
         return StoreProduct(id, sizes, externalId, productType, name, storeId, storeProductMeta)
     }
 
 
-    private companion object {
+    companion object {
         private const val FIELD_ID = "id"
         private const val FIELD_SIZES = "sizes"
         private const val FIELD_EXTERNAL_ID = "externalId"

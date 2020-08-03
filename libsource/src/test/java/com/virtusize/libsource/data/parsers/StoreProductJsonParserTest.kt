@@ -50,7 +50,7 @@ class StoreProductJsonParserTest {
     }
 
     @Test
-    fun parse_HTTPErrorData_shouldReturnNull() {
+    fun parse_InvalidStoreProductData_shouldReturnNull() {
         val actualStoreProduct = StoreProductJsonParser().parse(JSONObject("{}"))
 
         Truth.assertThat(actualStoreProduct).isNull()

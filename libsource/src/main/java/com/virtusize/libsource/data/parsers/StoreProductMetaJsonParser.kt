@@ -14,7 +14,7 @@ internal class StoreProductMetaJsonParser: VirtusizeJsonParser {
        return StoreProductMeta(id, additionalInfo)
     }
 
-    private companion object {
+    companion object {
         private const val FIELD_ID = "id"
         private const val FIELD_ADDITIONAL_INFO = "additionalInfo"
     }
