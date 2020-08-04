@@ -13,7 +13,7 @@ internal class DataJsonParser: VirtusizeJsonParser {
         val userData = json.optJSONObject(FIELD_USER_DATA)?.let {
             UserDataJsonParser().parse(it)
         }
-        val productDataId = json.optInt(FIELD_PRODUCT_DATA_ID)
+        val productDataId = json.optLong(FIELD_PRODUCT_DATA_ID)
         val productTypeName = JsonUtils.optString(json, FIELD_PRODUCT_TYPE_NAME)
         val storeName = JsonUtils.optString(json, FIELD_STORE_NAME)
         val storeId = json.optInt(FIELD_STORE_ID)

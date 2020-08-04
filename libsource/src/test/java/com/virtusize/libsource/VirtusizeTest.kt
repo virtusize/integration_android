@@ -5,9 +5,7 @@ import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.virtusize.libsource.data.local.*
-import com.virtusize.libsource.data.remote.ProductCheck
-import com.virtusize.libsource.data.remote.ProductMetaDataHints
-import com.virtusize.libsource.data.remote.Store
+import com.virtusize.libsource.data.remote.*
 import com.virtusize.libsource.network.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -269,6 +267,36 @@ class VirtusizeTest {
         )
 
         assertThat(isSuccessful).isTrue()
+    }
+
+    @Test
+    fun getStoreProductInfo_whenSuccessful_onSuccessShouldReturnExpectedStoreProduct() = runBlocking {
+        var actualStoreProduct: StoreProduct? = null
+
+        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+            mockURL,
+            MockedResponse(200, TestFixtures.STORE_PRODUCT_INFO_JSON_DATA.toString().byteInputStream())
+        ))
+
+        virtusize.getStoreProductInfo(
+            TestFixtures.PRODUCT_ID,
+            onSuccess = {
+                actualStoreProduct = it
+            }
+        )
+
+        assertThat(actualStoreProduct?.id).isEqualTo(TestFixtures.PRODUCT_ID)
+        assertThat(actualStoreProduct?.sizes?.size).isEqualTo(2)
+        assertThat(actualStoreProduct?.externalId).isEqualTo(TestFixtures.EXTERNAL_ID)
+        assertThat(actualStoreProduct?.productType).isEqualTo(8)
+        assertThat(actualStoreProduct?.name).isEqualTo(TestFixtures.PRODUCT_NAME)
+        assertThat(actualStoreProduct?.storeId).isEqualTo(TestFixtures.STORE_ID)
+        assertThat(actualStoreProduct?.storeProductMeta?.id).isEqualTo(1)
+        val expectedAdditionalInfo = StoreProductAdditionalInfo(
+            "regular",
+            BrandSizing("large", false)
+        )
+        assertThat(actualStoreProduct?.storeProductMeta?.additionalInfo).isEqualTo(expectedAdditionalInfo)
     }
 
     companion object {

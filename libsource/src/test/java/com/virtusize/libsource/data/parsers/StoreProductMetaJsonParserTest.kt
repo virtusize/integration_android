@@ -80,7 +80,7 @@ class StoreProductMetaJsonParserTest {
                     },
                     "created":"2020-04-24T22:17:13Z",
                     "updated":"2020-05-30T21:20:39Z",
-                    "brand":"ジルスチュアート(JILLSTUART)",
+                    "brand":"Virtusize",
                     "active":true,
                     "url":"",
                     "gender":"female",

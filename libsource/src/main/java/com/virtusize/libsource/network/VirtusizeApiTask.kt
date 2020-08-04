@@ -164,17 +164,10 @@ internal class VirtusizeApiTask {
                                         return@withContext
                                     }
                                 }
-                                VirtusizeError(
-                                    VirtusizeErrorType.NetworkError,
-                                    urlConnection.responseCode,
-                                    response?.toString() ?: urlConnection.responseMessage
-                                )
+                                virtusizeNetworkError(urlConnection, response)
                             }
                             else -> {
-                                VirtusizeError(
-                                    VirtusizeErrorType.NetworkError, urlConnection.responseCode,
-                                    response?.toString() ?: urlConnection.responseMessage
-                                )
+                                virtusizeNetworkError(urlConnection, response)
                             }
                         }
                         withContext(Main) {
@@ -183,7 +176,7 @@ internal class VirtusizeApiTask {
                     }
                     else -> {
                         withContext(Main) {
-                            errorHandler?.onError(VirtusizeError(VirtusizeErrorType.NetworkError, urlConnection.responseCode, urlConnection.responseMessage))
+                            errorHandler?.onError(virtusizeNetworkError(urlConnection, urlConnection.responseMessage))
                         }
                     }
                 }
@@ -226,5 +219,14 @@ internal class VirtusizeApiTask {
     private fun readInputStreamAsString(inputStream: InputStream): String? {
         val scanner: Scanner = Scanner(inputStream).useDelimiter("\\A")
         return if (scanner.hasNext()) scanner.next() else null
+    }
+
+    /**
+     * Returns the VirtusizeError that is associated with an API error
+     * @param urlConnection The HTTP URL connection
+     * @param response The response from the API request
+     */
+    private fun virtusizeNetworkError(urlConnection: HttpURLConnection, response: Any?): VirtusizeError {
+        return VirtusizeError(VirtusizeErrorType.NetworkError, urlConnection.responseCode, "Virtusize API error: ${urlConnection.url.path} - ${response?.toString() ?: urlConnection.responseMessage}")
     }
 }

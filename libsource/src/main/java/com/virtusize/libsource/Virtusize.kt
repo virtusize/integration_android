@@ -14,6 +14,8 @@ import com.virtusize.libsource.data.local.VirtusizeParams
 import com.virtusize.libsource.data.parsers.ProductCheckJsonParser
 import com.virtusize.libsource.data.parsers.ProductMetaDataHintsJsonParser
 import com.virtusize.libsource.data.parsers.StoreJsonParser
+import com.virtusize.libsource.data.parsers.StoreProductJsonParser
+import com.virtusize.libsource.data.remote.StoreProduct
 import com.virtusize.libsource.network.ApiRequest
 import com.virtusize.libsource.network.VirtusizeApiTask
 import com.virtusize.libsource.ui.VirtusizeButton
@@ -343,6 +345,29 @@ class Virtusize(
             }
 
         })
+    }
+
+    fun getStoreProductInfo(
+        productId: Long,
+        onSuccess: ((StoreProduct?) -> Unit)? = null,
+        onError: ((VirtusizeError) -> Unit)? = null
+    ) {
+        val apiRequest = VirtusizeApi.getStoreProductInfo(productId.toString())
+        VirtusizeApiTask()
+            .setJsonParser(StoreProductJsonParser())
+            .setSuccessHandler(object : SuccessResponseHandler {
+                override fun onSuccess(data: Any?) {
+                    onSuccess?.invoke(data as? StoreProduct)
+                }
+            })
+            .setErrorHandler(object : ErrorResponseHandler {
+                override fun onError(error: VirtusizeError) {
+                    onError?.invoke(error)
+                }
+            })
+            .setHttpURLConnection(httpURLConnection)
+            .setCoroutineDispatcher(coroutineDispatcher)
+            .execute(apiRequest)
     }
 
     /**

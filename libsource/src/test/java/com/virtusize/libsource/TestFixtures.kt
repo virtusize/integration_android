@@ -10,7 +10,10 @@ internal object TestFixtures {
 
     const val API_KEY = "test_apiKey"
     const val USER_ID = "123"
-    const val EXTERNAL_ID = "7110384"
+    const val STORE_ID = 2
+    const val EXTERNAL_ID = "694"
+    const val PRODUCT_ID = 7110384L
+    const val PRODUCT_NAME = "Test Product Name"
     const val ORIENTATION = "orientation"
 
     val EMPTY_JSON_DATA = JSONObject("{}")
@@ -51,7 +54,7 @@ internal object TestFixtures {
                         }
                 }, 
                 "name": "backend-checked-product", 
-                "productId": "694"
+                "productId": "$EXTERNAL_ID"
             }
         """.trimIndent()
     )
@@ -99,7 +102,7 @@ internal object TestFixtures {
                 "apiKey": "test_apiKey",
                 "imageUrl": "http://www.test.com/goods/31/12/11/71/1234_COL_COL02_570.jpg",
                 "cloudinaryPublicId": "test_cloudinaryPublicId",
-                "externalProductId": "694"
+                "externalProductId": "$EXTERNAL_ID"
             }
         """.trimIndent()
     )
@@ -185,6 +188,135 @@ internal object TestFixtures {
         "JPY",
         1,
         "http://example.com/products/P001"
+    )))
+
+    val STORE_PRODUCT_INFO_JSON_DATA = JSONObject(
+        """
+            {
+                "id":$PRODUCT_ID,
+                "sizes":[
+                    {
+                        "name":"38",
+                        "measurements":{
+                            "height":760,
+                            "bust":660,
+                            "sleeve":845
+                        }
+                    },
+                    {
+                        "name":"36",
+                        "measurements":{
+                            "height":750,
+                            "bust":645,
+                            "sleeve":825
+                        }
+                    }
+                ],
+                "isSgi":false,
+                "created":"2020-01-29T09:48:55Z",
+                "updated":"2020-01-29T09:52:01Z",
+                "deleted":null,
+                "externalId":"$EXTERNAL_ID",
+                "productType":8,
+                "name":"$PRODUCT_NAME",
+                "cloudinaryPublicId":"Test Cloudinary Public Id",
+                "store":$STORE_ID,
+                "storeProductMeta":{
+                    "id":1,
+                    "modelInfo":{
+                        "hip":85,
+                        "size":"38",
+                        "waist":56,
+                        "bust":78,
+                        "height":165
+                    },
+                    "materials":{
+                        "main":{
+                            "polyamide":1.0
+                        },
+                        "fill":{
+                            "feather":0.1,
+                            "down":0.9
+                        },
+                        "sleeve lining":{}
+                    },
+                    "matAnalysis":{
+                        "lining":{
+                            "none":true,
+                            "some":false,
+                            "present":false
+                        },
+                        "elasticity":{
+                            "none":false,
+                            "some":true,
+                            "present":false
+                        },
+                        "transparency":{
+                            "none":false,
+                            "some":true,
+                            "present":false
+                        },"thickness":{
+                            "heavy":true,
+                            "light":false,
+                            "normal":false
+                        }
+                    },
+                    "additionalInfo":{
+                        "brand":"Virtusize",
+                        "gender":"female",
+                        "sizes":{
+                            "38":{
+                                "height":760,
+                                "bust":660,
+                                "sleeve":845
+                            },
+                            "36":{
+                                "height":750,
+                                "bust":645,
+                                "sleeve":825
+                            }
+                        },
+                        "modelInfo":{
+                            "hip":85,
+                            "size":"38",
+                            "waist":56,
+                            "bust":78,
+                            "height":165
+                        },
+                        "type":"regular",
+                        "style":"fashionable",
+                        "fit":"regular",
+                        "brandSizing":{
+                            "compare":"large",
+                            "itemBrand":false
+                        }
+                    },
+                    "price":{
+                        "eur":230
+                    },
+                    "salePrice":{
+                        "eur":60
+                    },
+                    "availableSizes":[
+                        "36",
+                        "38"
+                    ],
+                    "attributes":{
+                        "defaults":false,
+                        "jacket_style":"fashionable",
+                        "tops_fit":"regular"
+                    },
+                    "created":"2020-01-29T09:48:57Z",
+                    "updated":"2020-01-29T09:48:57Z",
+                    "brand":"Virtusize",
+                    "active":true,
+                    "url":"https://www.virtusize.co.jp/shop/goods.html?id=694",
+                    "gender":"female",
+                    "color":null,
+                    "style":null,
+                    "storeProduct":$PRODUCT_ID
+                }
+            }
+        """.trimIndent()
     )
-    ))
 }
