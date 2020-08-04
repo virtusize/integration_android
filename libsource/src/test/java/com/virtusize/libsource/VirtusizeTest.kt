@@ -157,7 +157,7 @@ class VirtusizeTest {
         })
 
         assertThat(actualError?.code).isEqualTo(500)
-        assertThat(actualError?.message).isEqualTo(INTERNAL_SERVER_ERROR_RESPONSE)
+        assertThat(actualError?.message).contains(INTERNAL_SERVER_ERROR_RESPONSE)
         assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.NetworkError)
     }
 

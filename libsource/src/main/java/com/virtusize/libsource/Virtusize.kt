@@ -348,7 +348,7 @@ class Virtusize(
     }
 
     fun getStoreProductInfo(
-        productId: Long,
+        productId: Int,
         onSuccess: ((StoreProduct?) -> Unit)? = null,
         onError: ((VirtusizeError) -> Unit)? = null
     ) {

@@ -8,7 +8,7 @@ data class Data(
 	val validProduct: Boolean,
 	val fetchMetaData: Boolean,
 	val userData: UserData?,
-	val productDataId: Long,
+	val productDataId: Int,
 	val productTypeName: String,
 	val storeName: String,
 	val storeId: Int,

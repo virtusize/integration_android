@@ -10,7 +10,7 @@ class BrandSizingJsonParserTest {
 
     @Test
     fun parse_validJsonData_shouldReturnExpectedObject() {
-        val actualBrandSizing = BrandSizingJsonParser().parse(ADDITIONAL_INFO_JSON_DATA)
+        val actualBrandSizing = BrandSizingJsonParser().parse(BRAND_SIZING_JSON_DATA)
 
         val expectedBrandSizing = BrandSizing(
             "small",
@@ -28,7 +28,7 @@ class BrandSizingJsonParserTest {
     }
 
     companion object {
-        private val ADDITIONAL_INFO_JSON_DATA = JSONObject(
+        private val BRAND_SIZING_JSON_DATA = JSONObject(
             """
                 {
                     "compare":"small",

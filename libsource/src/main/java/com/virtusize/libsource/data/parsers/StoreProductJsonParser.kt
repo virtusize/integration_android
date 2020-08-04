@@ -8,7 +8,7 @@ import org.json.JSONObject
 internal class StoreProductJsonParser: VirtusizeJsonParser {
 
     override fun parse(json: JSONObject): StoreProduct? {
-        val id = json.optLong(FIELD_ID)
+        val id = json.optInt(FIELD_ID)
         var sizes = emptyList<ProductSize>()
         json.optJSONArray(FIELD_SIZES)?.let { jsonArray ->
             sizes = (0 until jsonArray.length())
@@ -23,7 +23,7 @@ internal class StoreProductJsonParser: VirtusizeJsonParser {
         json.optJSONObject(FIELD_STORE_PRODUCT_META)?.let {
             storeProductMeta = StoreProductMetaJsonParser().parse(it)
         }
-        if (id == 0L || externalId == "" || productType == 0 || storeId == 0) {
+        if (id == 0 || externalId == "" || productType == 0 || storeId == 0) {
             return null
         }
         return StoreProduct(id, sizes, externalId, productType, name, storeId, storeProductMeta)
