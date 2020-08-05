@@ -11,7 +11,7 @@ import android.view.*
 import android.webkit.*
 import androidx.fragment.app.DialogFragment
 import com.virtusize.libsource.BrowserIdentifier
-import com.virtusize.libsource.Constants
+import com.virtusize.libsource.util.Constants
 import com.virtusize.libsource.R
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler
 import com.virtusize.libsource.data.parsers.VirtusizeEventJsonParser

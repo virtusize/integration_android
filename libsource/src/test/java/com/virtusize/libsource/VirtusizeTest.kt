@@ -299,6 +299,44 @@ class VirtusizeTest {
         assertThat(actualStoreProduct?.storeProductMeta?.additionalInfo).isEqualTo(expectedAdditionalInfo)
     }
 
+    @Test
+    fun getProductTypes_whenSuccessful_onSuccessShouldReturnExpectedProductTypeList() = runBlocking {
+        var actualProductTypeList: List<ProductType>? = null
+
+        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+            mockURL,
+            MockedResponse(200, TestFixtures.PRODUCT_TYPE_JSON_ARRAY.toString().byteInputStream())
+        ))
+
+        virtusize.getProductTypes(
+            onSuccess = {
+                actualProductTypeList = it
+            }
+        )
+
+        assertThat(actualProductTypeList?.size).isEqualTo(2)
+        assertThat(actualProductTypeList?.get(0)).isEqualTo(
+            ProductType(
+                1,
+                mutableSetOf(
+                    Weight("bust", 1f),
+                    Weight("waist", 1f),
+                    Weight("height", 0.25f)
+                )
+            )
+        )
+        assertThat(actualProductTypeList?.get(1)).isEqualTo(
+            ProductType(
+                18,
+                mutableSetOf(
+                    Weight("depth", 1f),
+                    Weight("width", 2f),
+                    Weight("height", 1f)
+                )
+            )
+        )
+    }
+
     companion object {
         private const val INTERNAL_SERVER_ERROR_RESPONSE = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n<title>500 Internal Server Error</title>\n" +
         "<h1>Internal Server Error</h1>\n" +

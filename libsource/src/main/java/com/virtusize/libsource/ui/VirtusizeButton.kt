@@ -8,13 +8,13 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
-import com.virtusize.libsource.Constants
+import com.virtusize.libsource.util.Constants
 import com.virtusize.libsource.R
 import com.virtusize.libsource.VirtusizeButtonSetupHandler
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.network.VirtusizeApi
-import com.virtusize.libsource.throwError
+import com.virtusize.libsource.data.local.throwError
 
 
 class VirtusizeButton(context: Context, attrs: AttributeSet) : AppCompatButton(context, attrs),

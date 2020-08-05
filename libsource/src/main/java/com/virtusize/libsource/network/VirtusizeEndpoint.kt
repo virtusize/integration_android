@@ -10,7 +10,8 @@ internal enum class VirtusizeEndpoint {
     Events,
     Orders,
     StoreViewApiKey,
-    StoreProduct
+    StoreProduct,
+    ProductType
 }
 
 /**
@@ -39,6 +40,9 @@ internal fun VirtusizeEndpoint.getPath(): String {
          }
          VirtusizeEndpoint.StoreProduct -> {
              "/a/api/v3/store-products/"
+         }
+         VirtusizeEndpoint.ProductType -> {
+             "/a/api/v3/product-types"
          }
     }
 }

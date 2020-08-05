@@ -232,4 +232,13 @@ internal object VirtusizeApi {
             .toString()
         return ApiRequest(url, HttpMethod.GET)
     }
+
+    fun getProductTypes() : ApiRequest {
+        val url = Uri.parse(environment.apiUrl() + VirtusizeEndpoint.ProductType.getPath())
+            .buildUpon()
+            .appendQueryParameter("format", "json")
+            .build()
+            .toString()
+        return ApiRequest(url, HttpMethod.GET)
+    }
 }
