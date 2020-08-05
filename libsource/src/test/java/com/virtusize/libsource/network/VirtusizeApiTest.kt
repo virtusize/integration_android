@@ -199,8 +199,7 @@ class VirtusizeApiTest {
     fun getProductTypes_shouldReturnExpectedApiRequest() {
         val actualApiRequest = VirtusizeApi.getProductTypes()
 
-        val expectedUrl = "https://staging.virtusize.com/a/api/v3/product-types" +
-                "?format=json"
+        val expectedUrl = "https://staging.virtusize.com/a/api/v3/product-types"
 
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
 
