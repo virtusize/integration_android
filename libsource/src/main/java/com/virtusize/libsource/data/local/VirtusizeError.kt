@@ -1,5 +1,8 @@
 package com.virtusize.libsource.data.local
 
+import android.util.Log
+import com.virtusize.libsource.util.Constants
+
 /**
  * The class that wraps Virtusize specific error information
  *
@@ -8,3 +11,15 @@ package com.virtusize.libsource.data.local
  * @param message Any error message that is wanted to be passed
  */
 data class VirtusizeError(val type: VirtusizeErrorType? = null, val code: Int? = null, val message: String)
+
+/**
+ * Throws a VirtusizeError.
+ * It logs the error information and exits the normal app flow by throwing an error
+ * @param errorType VirtusizeError
+ * @throws IllegalArgumentException
+ * @see VirtusizeErrorType
+ */
+internal fun throwError(errorType: VirtusizeErrorType) {
+    Log.e(Constants.LOG_TAG, errorType.message())
+    errorType.throwError()
+}

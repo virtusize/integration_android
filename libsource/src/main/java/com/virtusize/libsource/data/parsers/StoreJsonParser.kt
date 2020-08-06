@@ -23,7 +23,7 @@ internal class StoreJsonParser: VirtusizeJsonParser {
         return Store(id, surveyLink, name, shortName, lengthUnitId, apiKey, created, updated, disabled, typeMapperEnabled, region)
     }
 
-    private companion object {
+    companion object {
         private const val FIELD_ID = "id"
         private const val FIELD_SURVEY_LINK = "surveyLink"
         private const val FIELD_NAME = "name"

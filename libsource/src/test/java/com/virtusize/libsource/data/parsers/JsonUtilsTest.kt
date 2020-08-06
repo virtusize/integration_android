@@ -1,12 +1,9 @@
-package com.virtusize.libsource.data.remote
+package com.virtusize.libsource.data.parsers
 
-import com.google.common.truth.Truth.assertThat
-import com.virtusize.libsource.data.parsers.JsonUtils
+import com.google.common.truth.Truth
 import org.json.JSONArray
 import org.json.JSONObject
-import org.json.JSONObject.NULL
 import org.junit.Test
-
 
 class JsonUtilsTest {
 
@@ -14,26 +11,26 @@ class JsonUtilsTest {
     fun optString_whenValuePresent_findsAndReturnsValue() {
         val jsonObject = JSONObject()
             .put("key", "value")
-        assertThat(JsonUtils.optString(jsonObject, "key")).isEqualTo("value")
+        Truth.assertThat(JsonUtils.optString(jsonObject, "key")).isEqualTo("value")
     }
 
     @Test
     fun optString_whenValueContainsNull_returnsEmptyString() {
         val jsonObject = JSONObject()
             .put("key", "null")
-        assertThat(JsonUtils.optString(jsonObject, "key")).isEmpty()
+        Truth.assertThat(JsonUtils.optString(jsonObject, "key")).isEmpty()
     }
 
     @Test
     fun optString_whenNameNotPresent_returnsEmptyString() {
         val jsonObject = JSONObject()
             .put("key", "value")
-        assertThat(JsonUtils.optString(jsonObject, "notpresent")).isEmpty()
+        Truth.assertThat(JsonUtils.optString(jsonObject, "notpresent")).isEmpty()
     }
 
     @Test
     fun jsonObjectToMap_forEmptyJSONObject_returnsEmptyMap() {
-        assertThat(JsonUtils.jsonObjectToMap(JSONObject())).isEmpty()
+        Truth.assertThat(JsonUtils.jsonObjectToMap(JSONObject())).isEmpty()
     }
 
     @Test
@@ -42,12 +39,12 @@ class JsonUtilsTest {
             "key" to "value",
             "boolkey" to true,
             "numkey" to 123,
-            "nullkey" to NULL,
+            "nullkey" to JSONObject.NULL,
             "floatkey" to 1234.54
         )
 
         val mappedObject = JsonUtils.jsonObjectToMap(SIMPLE_JSON)
-        assertThat(expectedMap).isEqualTo(mappedObject)
+        Truth.assertThat(expectedMap).isEqualTo(mappedObject)
     }
 
     @Test
@@ -63,11 +60,11 @@ class JsonUtilsTest {
                 "key_two_one" to "world",
                 "key_two_two" to emptyMap<String, Any>()
             ),
-            "key_three" to NULL
+            "key_three" to JSONObject.NULL
         )
 
         val mappedObject = JsonUtils.jsonObjectToMap(NESTED_JSON)
-        assertThat(expectedMap).isEqualTo(mappedObject)
+        Truth.assertThat(expectedMap).isEqualTo(mappedObject)
     }
 
     @Test
@@ -89,19 +86,19 @@ class JsonUtilsTest {
         )
 
         val convertedMap = JsonUtils.jsonObjectToMap(NESTED_JSON_MIXED_ARRAY)
-        assertThat(expectedMap).isEqualTo(convertedMap)
+        Truth.assertThat(expectedMap).isEqualTo(convertedMap)
     }
 
     @Test
     fun jsonArrayToList_forEmptyJSONArray_returnsEmptyList() {
-        assertThat(JsonUtils.jsonArrayToList(JSONArray())).isEmpty()
+        Truth.assertThat(JsonUtils.jsonArrayToList(JSONArray())).isEmpty()
     }
 
     @Test
     fun jsonArrayToList_forSimpleJSONArray_returnsExpectedList() {
         val expectedList = listOf(1, 22.2, 3, "a", true, "cde")
         val convertedJsonArray = JsonUtils.jsonArrayToList(SIMPLE_JSON_ARRAY)
-        assertThat(expectedList).isEqualTo(convertedJsonArray)
+        Truth.assertThat(expectedList).isEqualTo(convertedJsonArray)
     }
 
     private companion object {

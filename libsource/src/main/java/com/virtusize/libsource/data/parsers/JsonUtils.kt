@@ -2,6 +2,9 @@ package com.virtusize.libsource.data.parsers
 
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * JSON parsing utility functions
@@ -52,8 +55,11 @@ internal object JsonUtils {
      * @param array a JSONArray to be converted
      * @return a List representing the input
      */
-    internal fun jsonArrayToList(array: JSONArray): List<Any> {
+    internal fun jsonArrayToList(array: JSONArray?): List<Any> {
         val list: MutableList<Any> = ArrayList()
+        if(array == null) {
+            return list
+        }
         for (i in 0 until array.length()) {
             var value = array[i]
             if (value is JSONArray) {
