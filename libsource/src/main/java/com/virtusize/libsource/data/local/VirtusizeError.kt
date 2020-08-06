@@ -20,6 +20,6 @@ data class VirtusizeError(val type: VirtusizeErrorType? = null, val code: Int? =
  * @see VirtusizeErrorType
  */
 internal fun throwError(errorType: VirtusizeErrorType) {
-    Log.e(Constants.LOG_TAG, errorType.message())
+    Log.e(Constants.VIRTUSIZE_LOG_TAG, errorType.message())
     errorType.throwError()
 }

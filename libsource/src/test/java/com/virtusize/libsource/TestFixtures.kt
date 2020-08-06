@@ -4,6 +4,7 @@ import com.virtusize.libsource.data.local.VirtusizeOrder
 import com.virtusize.libsource.data.local.VirtusizeOrderItem
 import com.virtusize.libsource.data.local.VirtusizeProduct
 import com.virtusize.libsource.data.parsers.ProductCheckJsonParser
+import com.virtusize.libsource.data.remote.*
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -190,6 +191,45 @@ internal object TestFixtures {
         1,
         "http://example.com/products/P001"
     )))
+
+    fun storeProduct(
+        productType: Int = 8,
+        brandSizing: BrandSizing? = BrandSizing("large", false),
+        fit: String? = "regular"
+    ) : StoreProduct {
+        return StoreProduct(
+            7110384,
+            mutableListOf(
+                ProductSize(
+                    "38",
+                    mutableSetOf(
+                        Measurement("height", 760),
+                        Measurement("bust", 660),
+                        Measurement("sleeve", 845)
+                    )
+                ),
+                ProductSize(
+                    "36",
+                    mutableSetOf(
+                        Measurement("height", 750),
+                        Measurement("bust", 645),
+                        Measurement("sleeve", 825)
+                    )
+                )
+            ),
+            "694",
+            productType,
+            "Test Product Name",
+            2,
+            StoreProductMeta(
+                1,
+                StoreProductAdditionalInfo(
+                    fit,
+                    brandSizing
+                )
+            )
+        )
+    }
 
     val STORE_PRODUCT_INFO_JSON_DATA = JSONObject(
         """

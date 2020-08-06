@@ -2,4 +2,15 @@
 <resources>
     <string name="app_name">バーチャサイズ</string>
     <string name="virtusize_button_text">サイズチェック</string>
+    <string name="inpage_default_text">この商品は平均的なサイズ感です。</string>
+    <string name="inpage_default_accessory_text">日用品と比較する</string>
+    <string name="inpage_sizing_itemBrand_large_text">このブランドの平均サイズより大きめです。</string>
+    <string name="inpage_sizing_itemBrand_true_text">このブランドの平均的なサイズ感です。</string>
+    <string name="inpage_sizing_itemBrand_small_text">このブランドの平均サイズより小さめです。</string>
+    <string name="inpage_sizing_mostBrands_large_text">この商品は大きめのつくりです。</string>
+    <string name="inpage_sizing_mostBrands_true_text">この商品は平均的なサイズ感です。</string>
+    <string name="inpage_sizing_mostBrands_small_text">この商品は小さめのつくりです。</string>
+    <string name="inpage_fit_loose_text">この商品はルーズフィットです。</string>
+    <string name="inpage_fit_regular_text">この商品はレギュラーフィットです。</string>
+    <string name="inpage_fit_tight_text">この商品はタイトフィットです。</string>
 </resources>

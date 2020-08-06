@@ -3,5 +3,15 @@
     <string name="landscape" translatable="false">landscape</string>
     <string name="portrait" translatable="false">portrait</string>
     <string name="virtusize_button_text">Check size</string>
-
+    <string name="inpage_default_text">This item’s brand is true to size.</string>
+    <string name="inpage_default_accessory_text">See how everyday items fit</string>
+    <string name="inpage_sizing_itemBrand_large_text">This item sizes larger than the brand\'s average.</string>
+    <string name="inpage_sizing_itemBrand_true_text">This item sizes true to fit to the brand.</string>
+    <string name="inpage_sizing_itemBrand_small_text">This item sizes smaller than the brand\'s average.</string>
+    <string name="inpage_sizing_mostBrands_large_text">This item\'s brand sizes larger than the average brand.</string>
+    <string name="inpage_sizing_mostBrands_true_text">This item\'s brand is true to size.</string>
+    <string name="inpage_sizing_mostBrands_small_text">This item\'s brand sizes smaller than the average brand.</string>
+    <string name="inpage_fit_loose_text">This item has a loose fit.</string>
+    <string name="inpage_fit_regular_text">This item has a regular fit.</string>
+    <string name="inpage_fit_tight_text">This item has a tight fit.</string>
 </resources>

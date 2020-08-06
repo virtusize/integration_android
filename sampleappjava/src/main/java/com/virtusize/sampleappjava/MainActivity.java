@@ -16,6 +16,7 @@ import com.virtusize.libsource.data.local.VirtusizeOrder;
 import com.virtusize.libsource.data.local.VirtusizeOrderItem;
 import com.virtusize.libsource.data.local.VirtusizeProduct;
 import com.virtusize.libsource.ui.VirtusizeButton;
+import com.virtusize.libsource.ui.VirtusizeView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -38,23 +39,23 @@ public class MainActivity extends AppCompatActivity {
 
         virtusizeMessageHandler = new VirtusizeMessageHandler() {
             @Override
-            public void virtusizeControllerShouldClose(@NotNull VirtusizeButton virtusizeButton) {
+            public void virtusizeControllerShouldClose(@NotNull VirtusizeView virtusizeView) {
                 Log.i(TAG, "Close Virtusize View");
             }
 
             @Override
-            public void onEvent(@org.jetbrains.annotations.Nullable VirtusizeButton virtusizeButton, @NotNull VirtusizeEvent event) {
+            public void onEvent(@org.jetbrains.annotations.Nullable VirtusizeView virtusizeView, @NotNull VirtusizeEvent event) {
                 Log.i(TAG, event.getName());
             }
 
             @Override
-            public void onError(VirtusizeButton virtusizeButton, @NonNull VirtusizeError error) {
+            public void onError(VirtusizeView virtusizeView, @NonNull VirtusizeError error) {
                 Log.e(TAG, error.getMessage());
             }
         };
         app.Virtusize.registerMessageHandler(virtusizeMessageHandler);
 
-        app.Virtusize.setupVirtusizeButton(
+        app.Virtusize.setupVirtusizeView(
                 virtusizeButton,
                 new VirtusizeProduct(
                         "694",

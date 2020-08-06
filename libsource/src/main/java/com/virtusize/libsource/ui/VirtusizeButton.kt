@@ -16,18 +16,18 @@ import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.network.VirtusizeApi
 import com.virtusize.libsource.data.local.throwError
 
-
-class VirtusizeButton(context: Context, attrs: AttributeSet) : AppCompatButton(context, attrs),
+class VirtusizeButton(context: Context, attrs: AttributeSet) :
+    VirtusizeButtonView(context, attrs),
     VirtusizeButtonSetupHandler {
 
     // The parameter object to be passed to the Virtusize web app
-    internal var virtusizeParams: VirtusizeParams? = null
+    override var virtusizeParams: VirtusizeParams? = null
 
     // Receives Virtusize messages
     private lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
 
     // The Virtusize view that opens when the button is clicked
-    private val virtusizeDialogFragment = VirtusizeView()
+    private val virtusizeDialogFragment = VirtusizeWebView()
 
     // The VirtusizeButtonStyle that clients can choose to use
     var buttonStyle: VirtusizeButtonStyle = VirtusizeButtonStyle.NONE
@@ -87,7 +87,7 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : AppCompatButton(c
      * @param product the VirtusizeProduct that is set for this button
      * @see VirtusizeProduct
      */
-    internal fun setup(params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
+    override fun setup(params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
         virtusizeParams = params
         virtusizeMessageHandler = messageHandler
         virtusizeDialogFragment.setupMessageHandler(messageHandler, this)
@@ -96,9 +96,10 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : AppCompatButton(c
     /**
      * Dismisses/closes the Virtusize Window
      */
-    fun dismissVirtusizeView() {
-        if (virtusizeDialogFragment.isVisible)
+    override fun dismissVirtusizeView() {
+        if (virtusizeDialogFragment.isVisible) {
             virtusizeDialogFragment.dismiss()
+        }
     }
 
     /**
@@ -114,7 +115,7 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : AppCompatButton(c
                 if (productCheckResponseData.validProduct) {
                     visibility = View.VISIBLE
                     setOnClickListener {
-                        virtusizeMessageHandler.onEvent(this@VirtusizeButton, VirtusizeEvent(VirtusizeEvents.UserOpenedWidget.getEventName()))
+                        virtusizeMessageHandler.onEvent(this, VirtusizeEvent(VirtusizeEvents.UserOpenedWidget.getEventName()))
                         val fragmentTransaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
                         val previousFragment = (context as AppCompatActivity).supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
                         previousFragment?.let {fragment ->
