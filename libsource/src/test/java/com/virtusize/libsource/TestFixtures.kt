@@ -4,6 +4,7 @@ import com.virtusize.libsource.data.local.VirtusizeOrder
 import com.virtusize.libsource.data.local.VirtusizeOrderItem
 import com.virtusize.libsource.data.local.VirtusizeProduct
 import com.virtusize.libsource.data.parsers.ProductCheckJsonParser
+import org.json.JSONArray
 import org.json.JSONObject
 
 internal object TestFixtures {
@@ -317,6 +318,167 @@ internal object TestFixtures {
                     "storeProduct":$PRODUCT_ID
                 }
             }
+        """.trimIndent()
+    )
+
+    private val PRODUCT_TYPE_ID_ONE_JSON_OBJECT_STRING =
+        """
+            {
+                "id": 1,
+                "name": "dress",
+                "optionalMeasurements": [
+                  "hip",
+                  "sleeveOpening",
+                  "hem",
+                  "waistHeight"
+                ],
+                "priority": [
+                  "bust",
+                  "waist",
+                  "height"
+                ],
+                "requiredMeasurements": [
+                  "height",
+                  "bust",
+                  "waist"
+                ],
+                "supportsLengthComparison": true,
+                "weights": {
+                  "bust": 1,
+                  "waist": 1,
+                  "height": 0.25
+                },
+                "anchorPoint": "shoulders",
+                "compatibleWith": [
+                  1,
+                  16
+                ],
+                "defaultMeasurements": {
+                  "hem": 470,
+                  "hip": 440,
+                  "bust": 430,
+                  "waist": 395,
+                  "height": 900,
+                  "waistHeight": 410,
+                  "sleeveOpening": 200
+                },
+                "displayMode": "portrait",
+                "isDraggable": false,
+                "isReserved": false,
+                "maxMeasurements": {
+                  "hem": 2000,
+                  "hip": 1500,
+                  "bust": 1200,
+                  "waist": 1200,
+                  "height": 2500,
+                  "waistHeight": 750,
+                  "sleeveOpening": 400
+                },
+                "minMeasurements": {
+                  "hem": 200,
+                  "hip": 150,
+                  "bust": 150,
+                  "waist": 100,
+                  "height": 500,
+                  "waistHeight": 150,
+                  "sleeveOpening": 50
+                },
+                "sgiGenders": [
+                  "female"
+                ],
+                "sgiStyles": [
+                  "regular"
+                ],
+                "sgiTypes": [
+                  "medium",
+                  "long",
+                  "short"
+                ]
+            }
+        """.trimIndent()
+
+    private val PRODUCT_TYPE_ID_EIGHTEEN_JSON_OBJECT_STRING =
+        """
+            {
+                "id":18,
+                "name":"bag",
+                "optionalMeasurements":[
+                    "topWidth",
+                    "handleDrop",
+                    "handleWidth"
+                ],
+                "priority":[
+                    "width",
+                    "height",
+                    "depth"
+                ],
+                "requiredMeasurements":[
+                    "height",
+                    "width",
+                    "depth"
+                ],
+                "supportsLengthComparison":true,
+                "weights":{
+                    "depth":1,
+                    "width":2,
+                    "height":1
+                },
+                "anchorPoint":"shoulders",
+                "compatibleWith":[
+                    18,
+                    19,
+                    25,
+                    26
+                ],
+                "defaultMeasurements":{
+                    "depth":70,
+                    "width":340,
+                    "height":190,
+                    "topWidth":300,
+                    "handleDrop":100,
+                    "handleWidth":140
+                },
+                "displayMode":"landscape",
+                "isDraggable":true,
+                "isReserved":false,
+                "maxMeasurements":{
+                    "depth":1000,
+                    "width":1000,
+                    "height":1000,
+                    "topWidth":1000,
+                    "handleDrop":1000,
+                    "handleWidth":1000
+                },
+                "minMeasurements":{
+                    "depth":10,
+                    "width":50,
+                    "height":50,
+                    "topWidth":50,
+                    "handleDrop":10,
+                    "handleWidth":10
+                },
+                "sgiGenders":[
+                    "male",
+                    "female",
+                    "unisex"
+                ],
+                "sgiStyles":[
+            
+                ],
+                "sgiTypes":[
+            
+                ]
+            }
+        """.trimIndent()
+
+    val PRODUCT_TYPE_JSON_OBJECT = JSONObject(PRODUCT_TYPE_ID_ONE_JSON_OBJECT_STRING)
+
+    val PRODUCT_TYPE_JSON_ARRAY = JSONArray(
+        """
+            [
+                $PRODUCT_TYPE_ID_ONE_JSON_OBJECT_STRING,
+                $PRODUCT_TYPE_ID_EIGHTEEN_JSON_OBJECT_STRING
+            ]
         """.trimIndent()
     )
 }

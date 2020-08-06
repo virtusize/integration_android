@@ -46,10 +46,10 @@ class MainActivity : AppCompatActivity() {
         // The sample function to send an order to the Virtusize server
         sendOrderSample()
 
-        // Demonstrates getting the info of a store product
+        // Demonstrates getting the product type data
         (application as App)
             .Virtusize
-            .getStoreProductInfo(7110384,
+            .getProductTypes(
                 onSuccess = {
                     Log.i(TAG, it.toString())
                 },

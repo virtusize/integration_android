@@ -1,7 +1,7 @@
 package com.virtusize.libsource
 
 import android.content.SharedPreferences
-import com.virtusize.libsource.Constants.BID_KEY
+import com.virtusize.libsource.util.Constants.BID_KEY
 import java.util.*
 import kotlin.random.Random
 
