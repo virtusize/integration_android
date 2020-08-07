@@ -32,10 +32,10 @@ internal object TestFixtures {
         """
             {
                "should_see_ph_tooltip": false,
-                "wardrobeActive": false,
-                "wardrobeHasM": true,
-                "wardrobeHasP": true,
-                "wardrobeHasR": true
+                "wardrobe_active": false,
+                "wardrobe_has_m": true,
+                "wardrobe_has_p": true,
+                "wardrobe_has_r": true
             }
         """.trimIndent()
     )
