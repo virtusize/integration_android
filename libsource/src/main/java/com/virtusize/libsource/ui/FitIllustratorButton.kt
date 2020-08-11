@@ -8,12 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import com.virtusize.libsource.Constants
 import com.virtusize.libsource.VirtusizeButtonSetupHandler
+import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.network.VirtusizeApi
 import com.virtusize.libsource.data.remote.ProductCheck
-import com.virtusize.libsource.data.local.VirtusizeError
-import com.virtusize.libsource.data.local.VirtusizeEvents
-import com.virtusize.libsource.data.local.VirtusizeMessageHandler
-import com.virtusize.libsource.data.local.VirtusizeProduct
 import com.virtusize.libsource.throwError
 
 /**
@@ -84,8 +81,8 @@ class FitIllustratorButton(context: Context, attrs: AttributeSet): AppCompatButt
 
         }
         else {
-            virtusizeMessageHandler.onError(this, VirtusizeError.InvalidProduct)
-            throwError(VirtusizeError.InvalidProduct)
+            virtusizeMessageHandler.onError(this, VirtusizeErrorType.InvalidProduct.virtusizeError())
+            throwError(VirtusizeErrorType.InvalidProduct)
         }
     }
 }

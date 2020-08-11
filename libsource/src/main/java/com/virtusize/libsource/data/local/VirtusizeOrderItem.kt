@@ -70,7 +70,7 @@ data class VirtusizeOrderItem @JvmOverloads constructor(
     }
 
     private companion object {
-        private const val PARAM_PRODUCT_ID = "externalProductId"
+        private const val PARAM_PRODUCT_ID = "productId"
         private const val PARAM_SIZE = "size"
         private const val PARAM_SIZE_ALIAS = "sizeAlias"
         private const val PARAM_VARIANT_ID = "variantId"

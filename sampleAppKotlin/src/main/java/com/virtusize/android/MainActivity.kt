@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
                 },
                 // this optional error callback is called when an error occurs when the app is sending the order
                 onError = { error ->
-                    Log.e(TAG, error.message())
+                    Log.e(TAG, error.message)
                 })
     }
 
@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onError(fitIllustratorButton: FitIllustratorButton?, error: VirtusizeError) {
-            Log.e(TAG, error.message())
+            Log.e(TAG, error.message)
         }
     }
 }
