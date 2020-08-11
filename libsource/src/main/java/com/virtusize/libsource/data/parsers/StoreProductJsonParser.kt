@@ -5,6 +5,9 @@ import com.virtusize.libsource.data.remote.StoreProduct
 import com.virtusize.libsource.data.remote.StoreProductMeta
 import org.json.JSONObject
 
+/**
+ * This class parses a JSONObject to the [StoreProduct] object
+ */
 internal class StoreProductJsonParser: VirtusizeJsonParser {
 
     override fun parse(json: JSONObject): StoreProduct? {

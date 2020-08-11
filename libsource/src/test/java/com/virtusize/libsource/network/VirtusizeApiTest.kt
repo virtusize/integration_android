@@ -173,7 +173,7 @@ class VirtusizeApiTest {
 
     @Test
     fun retrieveStoreInfo_shouldReturnExpectedApiRequest() {
-        val actualApiRequest = VirtusizeApi.retrieveStoreInfo()
+        val actualApiRequest = VirtusizeApi.getStoreInfo()
 
         val expectedUrl = "https://staging.virtusize.com/a/api/v3/stores/api-key/test_apiKey" +
                 "?format=json"

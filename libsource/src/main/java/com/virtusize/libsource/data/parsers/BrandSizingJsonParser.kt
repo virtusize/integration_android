@@ -3,10 +3,13 @@ package com.virtusize.libsource.data.parsers
 import com.virtusize.libsource.data.remote.BrandSizing
 import org.json.JSONObject
 
+/**
+ * This class parses a JSONObject to the [BrandSizing] object
+ */
 class BrandSizingJsonParser : VirtusizeJsonParser {
     override fun parse(json: JSONObject): BrandSizing? {
-        val compare = json.optString(FIELD_COMPARE) // "true", "large", or "small"
-        val itemBrand = json.optBoolean(FIELD_ITEM_BRAND) // true or false
+        val compare = json.optString(FIELD_COMPARE)
+        val itemBrand = json.optBoolean(FIELD_ITEM_BRAND)
         if(compare.isBlank()) {
             return null
         }

@@ -211,11 +211,11 @@ internal object VirtusizeApi {
     }
 
     /**
-     * Gets a API request for retrieve the specific store info from the API key that is unique to the client
+     * Gets a API request for retrieving the specific store info from the API key that is unique to the client
      * @param order [VirtusizeOrder]
      * @see ApiRequest
      */
-    fun retrieveStoreInfo() : ApiRequest {
+    fun getStoreInfo() : ApiRequest {
         val url = Uri.parse(environment.apiUrl() + VirtusizeEndpoint.StoreViewApiKey.getPath() + apiKey)
             .buildUpon()
             .appendQueryParameter("format", "json")
@@ -224,6 +224,11 @@ internal object VirtusizeApi {
         return ApiRequest(url, HttpMethod.GET)
     }
 
+    /**
+     * Gets a API request for retrieving the store product info
+     * @param productId the ID of a product
+     * @see ApiRequest
+     */
     fun getStoreProductInfo(productId: String) : ApiRequest {
         val url = Uri.parse(environment.apiUrl() + VirtusizeEndpoint.StoreProduct.getPath() + productId)
             .buildUpon()
@@ -233,6 +238,10 @@ internal object VirtusizeApi {
         return ApiRequest(url, HttpMethod.GET)
     }
 
+    /**
+     * Gets a API request for retrieving the info of all the product types
+     * @see ApiRequest
+     */
     fun getProductTypes() : ApiRequest {
         val url = Uri.parse(environment.apiUrl() + VirtusizeEndpoint.ProductType.getPath())
             .buildUpon()

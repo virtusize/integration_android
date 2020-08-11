@@ -4,6 +4,9 @@ import com.virtusize.libsource.data.remote.BrandSizing
 import com.virtusize.libsource.data.remote.StoreProductAdditionalInfo
 import org.json.JSONObject
 
+/**
+ * This class parses a JSONObject to the [StoreProductAdditionalInfo] object
+ */
 class StoreProductAdditionalInfoJsonParser : VirtusizeJsonParser {
     override fun parse(json: JSONObject): StoreProductAdditionalInfo? {
         val fit = json.optString(FIELD_FIT)

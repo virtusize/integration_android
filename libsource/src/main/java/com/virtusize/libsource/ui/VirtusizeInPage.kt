@@ -13,7 +13,7 @@ class VirtusizeInPage(context: Context, attrs: AttributeSet) : VirtusizeRelative
     // Receives Virtusize messages
     private lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
 
-    // The Virtusize view that opens when the button is clicked
+    // The Virtusize view that opens when the InPage view is clicked
     private val virtusizeDialogFragment = VirtusizeWebView()
 
     init {
@@ -27,7 +27,7 @@ class VirtusizeInPage(context: Context, attrs: AttributeSet) : VirtusizeRelative
     }
 
     override fun setupProductCheckResponseData(productCheck: ProductCheck) {
-
+        // TODO
     }
 
     override fun dismissVirtusizeView() {
