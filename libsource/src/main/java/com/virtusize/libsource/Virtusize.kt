@@ -330,7 +330,7 @@ class Virtusize(
                     throwError(VirtusizeError.UserIdNullOrEmpty)
                 }
                 // Sets the region from the store info
-                order.setRegion((data as Store).region)
+                order.setRegion((data as? Store)?.region)
                 val apiRequest = VirtusizeApi.sendOrder(order)
                 VirtusizeApiTask()
                     .setBrowserID(browserIdentifier.getBrowserId())
