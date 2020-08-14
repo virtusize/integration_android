@@ -35,7 +35,7 @@ data class VirtusizeOrderItem @JvmOverloads constructor(
     fun paramsToMap(): Map<String, Any> {
         return emptyMap<String, Any>()
             .plus(
-                mapOf(PARAM_PRODUCT_ID to productId)
+                mapOf(PARAM_EXTERNAL_PRODUCT_ID to productId)
             )
             .plus(
                 mapOf(PARAM_SIZE to size)
@@ -70,7 +70,7 @@ data class VirtusizeOrderItem @JvmOverloads constructor(
     }
 
     private companion object {
-        private const val PARAM_PRODUCT_ID = "productId"
+        private const val PARAM_EXTERNAL_PRODUCT_ID = "externalProductId"
         private const val PARAM_SIZE = "size"
         private const val PARAM_SIZE_ALIAS = "sizeAlias"
         private const val PARAM_VARIANT_ID = "variantId"
