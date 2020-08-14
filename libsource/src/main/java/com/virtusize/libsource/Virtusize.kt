@@ -105,14 +105,14 @@ class Virtusize(
 
         // Throws VirtusizeError.NullFitButtonError error if button is null
         if (fitIllustratorButton == null) {
-            messageHandler.onError(null, VirtusizeError.NullFitButtonError)
-            throwError(error = VirtusizeError.NullFitButtonError)
+            messageHandler.onError(null, VirtusizeErrorType.NullVirtusizeButtonError.virtusizeError())
+            throwError(VirtusizeErrorType.NullVirtusizeButtonError)
             return
         }
 
         // to handle network errors
         val errorHandler: ErrorResponseHandler = object: ErrorResponseHandler {
-            override fun onError(errorCode: Int?, errorMessage: String?, error: VirtusizeError) {
+            override fun onError(error: VirtusizeError) {
                 messageHandler.onError(fitIllustratorButton, error)
             }
         }
@@ -150,9 +150,9 @@ class Virtusize(
                             } else {
                                 messageHandler.onError(
                                     fitIllustratorButton,
-                                    VirtusizeError.ImageUrlNotValid
+                                    VirtusizeErrorType.ImageUrlNotValid.virtusizeError()
                                 )
-                                throwError(VirtusizeError.ImageUrlNotValid)
+                                throwError(VirtusizeErrorType.ImageUrlNotValid)
                             }
                         }
                         // Send API Event UserSawWidgetButton
@@ -283,7 +283,7 @@ class Virtusize(
                  * Throws the error if the user id is not set up or empty during the initialization of the [Virtusize] class
                  */
                 if(userId.isNullOrEmpty()) {
-                    throwError(VirtusizeError.UserIdNullOrEmpty)
+                    throwError(VirtusizeErrorType.UserIdNullOrEmpty)
                 }
                 // Sets the region from the store info
                 order.setRegion((data as Store).region)
@@ -296,11 +296,7 @@ class Virtusize(
                         }
                     })
                     .setErrorHandler(object : ErrorResponseHandler {
-                        override fun onError(
-                            errorCode: Int?,
-                            errorMessage: String?,
-                            error: VirtusizeError
-                        ) {
+                        override fun onError(error: VirtusizeError) {
                             onError?.invoke(error)
                         }
                     })
@@ -327,10 +323,10 @@ class Virtusize(
                  * Throws the error if the user id is not set up or empty during the initialization of the [Virtusize] class
                  */
                 if(userId.isNullOrEmpty()) {
-                    throwError(VirtusizeError.UserIdNullOrEmpty)
+                    throwError(VirtusizeErrorType.UserIdNullOrEmpty)
                 }
                 // Sets the region from the store info
-                order.setRegion((data as Store).region)
+                order.setRegion((data as? Store)?.region)
                 val apiRequest = VirtusizeApi.sendOrder(order)
                 VirtusizeApiTask()
                     .setBrowserID(browserIdentifier.getBrowserId())
@@ -385,13 +381,13 @@ class Virtusize(
 /**
  * Throws a VirtusizeError.
  * It logs the error information and exits the normal app flow by throwing an error
- * @param error VirtusizeError
+ * @param errorType [VirtusizeErrorType]
  * @throws IllegalArgumentException
  * @see VirtusizeError
  */
-fun throwError(error: VirtusizeError) {
-    Log.e(Constants.LOG_TAG, error.message())
-    error.throwError()
+internal fun throwError(errorType: VirtusizeErrorType) {
+    Log.e(Constants.LOG_TAG, errorType.message())
+    errorType.throwError()
 }
 
 /**
@@ -457,10 +453,10 @@ class VirtusizeBuilder {
      */
     fun build(): Virtusize {
         if (apiKey.isNullOrEmpty()) {
-            throwError(VirtusizeError.ApiKeyNullOrEmpty)
+            throwError(VirtusizeErrorType.ApiKeyNullOrInvalid)
         }
         if (context == null) {
-            throwError(VirtusizeError.NullContext)
+            throwError(VirtusizeErrorType.NullContext)
         }
         return Virtusize(userId = userId, apiKey = apiKey!!, env = env, context = context!!)
     }

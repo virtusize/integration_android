@@ -44,7 +44,7 @@ data class VirtusizeOrder @JvmOverloads constructor(
     /**
      * Sets the string value of the region
      */
-    fun setRegion(region: String) {
+    fun setRegion(region: String?) {
         this.region = region
     }
 

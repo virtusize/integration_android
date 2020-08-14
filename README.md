@@ -30,7 +30,7 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 - In your app `build.gradle` file, add below dependencies:
     ```groovy
     dependencies {
-        implementation 'com.github.virtusize:integration_android:1.6.2'
+        implementation 'com.github.virtusize:integration_android:1.6.3'
     }
     ```
 ## Setup
@@ -154,19 +154,19 @@ __**Note:**__ * means the attribute is required
 
 **VirtusizeOrderItem**
 
-| Attribute  | Data Type | Example                                  | Description                                                  |
-| ---------- | --------- | ---------------------------------------- | ------------------------------------------------------------ |
-| productId* | String    | "A001"                                   | The provide ID provided by the client. It must be unique for a product. |
-| size*      | String    | "S", "M", etc.                           | The name of the size                                         |
-| sizeAlias  | String    | "Small", "Large", etc.                   | The alias of the size is added if the size name is not identical from the product page |
-| variantId  | String    | "A001_SIZES_RED"                         | An ID that is set on the product SKU, color, or size if there are several options for the item |
-| imageUrl*  | String    | "http[]()://images.example.com/coat.jpg" | The image URL of the item                                    |
-| color      | String    | "RED", "R', etc.                         | The color of the item                                        |
-| gender     | String    | "W", "Women", etc.                       | An identifier for the gender                                 |
-| unitPrice* | Double    | 5100.00                                  | The product price that is a double number with a maximum of 12 digits and 2 decimals (12, 2) |
-| currency*  | String    | "JPY", "KRW", "USD", etc.                | Currency code                                                |
-| quantity*  | Int       | 1                                        | The number of the item purchased. If it's not passed, It will be set to 1 |
-| url        | String    | "http[]()://example.com/products/A001"   | The URL of the product page. Please make sure this is a URL that users can access |
+| Attribute          | Data Type | Example                                  | Description                                                  |
+| ------------------ | --------- | ---------------------------------------- | ------------------------------------------------------------ |
+| externalProductId* | String    | "A001"                                   | The external product ID provided by the client. It must be unique for a product. |
+| size*              | String    | "S", "M", etc.                           | The name of the size                                         |
+| sizeAlias          | String    | "Small", "Large", etc.                   | The alias of the size is added if the size name is not identical from the product page |
+| variantId          | String    | "A001_SIZES_RED"                         | An ID that is set on the product SKU, color, or size if there are several options for the item |
+| imageUrl*          | String    | "http[]()://images.example.com/coat.jpg" | The image URL of the item                                    |
+| color              | String    | "RED", "R', etc.                         | The color of the item                                        |
+| gender             | String    | "W", "Women", etc.                       | An identifier for the gender                                 |
+| unitPrice*         | Double    | 5100.00                                  | The product price that is a double number with a maximum of 12 digits and 2 decimals (12, 2) |
+| currency*          | String    | "JPY", "KRW", "USD", etc.                | Currency code                                                |
+| quantity*          | Int       | 1                                        | The number of the item purchased. If it's not passed, It will be set to 1 |
+| url                | String    | "http[]()://example.com/products/A001"   | The URL of the product page. Please make sure this is a URL that users can access |
 
 **Samples**
 
@@ -227,7 +227,7 @@ The `onSuccess` and `onError` callbacks are optional.
         },
         // This error callback is optional and gets called when an error occurs when the app is sending the order
         onError = { error ->
-            Log.e(TAG, error.message())
+            Log.e(TAG, error.message)
         })
 ~~~~
 * Java
@@ -245,8 +245,8 @@ app.Virtusize.sendOrder(order,
         // This error callback is optional and gets called when an error occurs when the app is sending the order
         new ErrorResponseHandler() {
             @Override
-            public void onError(@Nullable Integer errorCode, @Nullable String errorMessage, @NotNull VirtusizeError error) {
-                Log.e(TAG, VirtusizeErrorKt.message(error));
+            public void onError(@NotNull VirtusizeError error) {
+                Log.e(TAG, error.getMessage());
             }
         }
 );
