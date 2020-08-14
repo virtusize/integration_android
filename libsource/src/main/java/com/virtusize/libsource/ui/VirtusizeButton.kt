@@ -2,32 +2,22 @@ package com.virtusize.libsource.ui
 
 import android.content.Context
 import android.os.Build
-import android.os.Bundle
 import android.util.AttributeSet
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
-import com.virtusize.libsource.util.Constants
 import com.virtusize.libsource.R
-import com.virtusize.libsource.VirtusizeButtonSetupHandler
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.ProductCheck
-import com.virtusize.libsource.network.VirtusizeApi
 import com.virtusize.libsource.data.local.throwError
 
-class VirtusizeButton(context: Context, attrs: AttributeSet) :
-    VirtusizeButtonView(context, attrs),
-    VirtusizeButtonSetupHandler {
+class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, AppCompatButton(context, attrs) {
 
-    // The parameter object to be passed to the Virtusize web app
     override var virtusizeParams: VirtusizeParams? = null
 
-    // Receives Virtusize messages
-    private lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
+    override lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
 
-    // The Virtusize view that opens when the button is clicked
-    private val virtusizeDialogFragment = VirtusizeWebView()
+    override val virtusizeDialogFragment = VirtusizeWebView()
 
     // The VirtusizeButtonStyle that clients can choose to use
     var buttonStyle: VirtusizeButtonStyle = VirtusizeButtonStyle.NONE
@@ -44,6 +34,12 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) :
             this.buttonStyle = VirtusizeButtonStyle.DEFAULT_STYLE
         }
         attrsArray.recycle()
+    }
+
+    override fun setup(params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
+        super.setup(params, messageHandler)
+        virtusizeParams = params
+        virtusizeMessageHandler = messageHandler
     }
 
     /**
@@ -83,26 +79,6 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) :
     }
 
     /**
-     * Sets up the button with the corresponding VirtusizeProduct
-     * @param product the VirtusizeProduct that is set for this button
-     * @see VirtusizeProduct
-     */
-    override fun setup(params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
-        virtusizeParams = params
-        virtusizeMessageHandler = messageHandler
-        virtusizeDialogFragment.setupMessageHandler(messageHandler, this)
-    }
-
-    /**
-     * Dismisses/closes the Virtusize Window
-     */
-    override fun dismissVirtusizeView() {
-        if (virtusizeDialogFragment.isVisible) {
-            virtusizeDialogFragment.dismiss()
-        }
-    }
-
-    /**
      * Sets up the product check data received from Virtusize API to VirtusizeProduct
      * @param productCheck ProductCheckResponse received from Virtusize API
      * @see ProductCheck
@@ -115,20 +91,7 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) :
                 if (productCheckResponseData.validProduct) {
                     visibility = View.VISIBLE
                     setOnClickListener {
-                        virtusizeMessageHandler.onEvent(this, VirtusizeEvent(VirtusizeEvents.UserOpenedWidget.getEventName()))
-                        val fragmentTransaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
-                        val previousFragment = (context as AppCompatActivity).supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
-                        previousFragment?.let {fragment ->
-                            fragmentTransaction.remove(fragment)
-                        }
-                        fragmentTransaction.addToBackStack(null)
-                        val args = Bundle()
-                        args.putString(Constants.URL_KEY, VirtusizeApi.virtusizeURL())
-                        virtusizeParams?.let {
-                            args.putString(Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY, "javascript:vsParamsFromSDK(${it.vsParamsString()})")
-                        }
-                        virtusizeDialogFragment.arguments = args
-                        virtusizeDialogFragment.show(fragmentTransaction, Constants.FRAG_TAG)
+                        clickVirtusizeView(context)
                     }
                 }
             }

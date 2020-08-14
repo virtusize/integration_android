@@ -7,4 +7,6 @@ import android.widget.RelativeLayout
 /**
  * An abstract class representing the VirtusizeView that is a RelativeLayout
  */
-abstract class VirtusizeRelativeLayoutView(context: Context, attrs: AttributeSet): VirtusizeView, RelativeLayout(context, attrs)
+abstract class VirtusizeRelativeLayoutView(context: Context, attrs: AttributeSet): VirtusizeView, RelativeLayout(context, attrs) {
+    abstract fun setupRecommendationText(text: String)
+}
