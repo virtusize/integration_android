@@ -223,7 +223,6 @@ internal class VirtusizeApiTask {
                 result = streamString
             }
         }
-        Log.d("Kuei", result.toString())
         return result
     }
 
