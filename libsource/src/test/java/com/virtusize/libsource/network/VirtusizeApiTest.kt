@@ -107,14 +107,6 @@ class VirtusizeApiTest {
                 expectedParams["storeId"] = data.storeId.toString()
                 expectedParams["storeName"] = data.storeName
                 expectedParams["storeProductType"] = data.productTypeName
-
-                data.userData?.let { userData ->
-                    expectedParams["wardrobeActive"] = userData.wardrobeActive
-                    expectedParams["wardrobeHasM"] = userData.wardrobeHasM
-                    expectedParams["wardrobeHasP"] = userData.wardrobeHasP
-                    expectedParams["wardrobeHasR"] = userData.wardrobeHasR
-                }
-
             }
         }
 

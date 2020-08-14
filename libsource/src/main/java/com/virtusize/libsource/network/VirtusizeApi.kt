@@ -173,18 +173,6 @@ internal object VirtusizeApi {
             productCheck.productId.let {
                 params["storeProductExternalId"] = it
             }
-            productCheck.data?.userData?.wardrobeActive?.let {
-                params["wardrobeActive"] = it
-            }
-            productCheck.data?.userData?.wardrobeHasM?.let {
-                params["wardrobeHasM"] = it
-            }
-            productCheck.data?.userData?.wardrobeHasP?.let {
-                params["wardrobeHasP"] = it
-            }
-            productCheck.data?.userData?.wardrobeHasR?.let {
-                params["wardrobeHasR"] = it
-            }
         }
 
         if (!virtusizeEvent.data?.toString().isNullOrEmpty()) {

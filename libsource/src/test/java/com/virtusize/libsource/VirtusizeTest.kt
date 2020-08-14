@@ -75,7 +75,7 @@ class VirtusizeTest {
         assertThat(actualProductCheck?.data?.fetchMetaData).isFalse()
         assertThat(actualProductCheck?.data?.productDataId).isEqualTo(7110384)
         assertThat(actualProductCheck?.data?.productTypeId).isEqualTo(5)
-        assertThat(actualProductCheck?.data?.userData?.shouldSeePhTooltip).isFalse()
+        assertThat(actualProductCheck?.data?.shouldSeePhTooltip).isTrue()
         assertThat(actualProductCheck?.productId).isEqualTo("694")
     }
 
