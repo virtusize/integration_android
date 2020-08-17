@@ -14,6 +14,9 @@ object Constants {
     const val INPAGE_LOG_TAG = "VIRTUSIZE_INPAGE"
 }
 
+/**
+ * Constants used for i18n localization in the Virtusize SDK
+ */
 internal object I18nConstants {
     const val GENERAL_FIT_LOOSE_KEY = "loose"
     const val GENERAL_FIT_REGULAR_KEY = "regular"
