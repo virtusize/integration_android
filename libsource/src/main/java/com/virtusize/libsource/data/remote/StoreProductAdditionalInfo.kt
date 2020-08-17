@@ -1,5 +1,7 @@
 package com.virtusize.libsource.data.remote
 
+import com.virtusize.libsource.util.I18nConstants
+
 data class StoreProductAdditionalInfo(
     val fit: String?,
     val brandSizing: BrandSizing?
@@ -9,11 +11,11 @@ data class StoreProductAdditionalInfo(
             return null
         }
         if(mutableListOf("loose", "wide", "flared").contains(fit)) {
-            return "loose"
+            return I18nConstants.GENERAL_FIT_LOOSE_KEY
         }
         if(mutableListOf("tight", "slim").contains(fit)) {
-            return "tight"
+            return I18nConstants.GENERAL_FIT_TIGHT_KEY
         }
-        return "regular"
+        return I18nConstants.GENERAL_FIT_REGULAR_KEY
     }
 }

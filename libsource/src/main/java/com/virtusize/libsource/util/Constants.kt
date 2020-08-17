@@ -13,3 +13,16 @@ object Constants {
     const val VIRTUSIZE_LOG_TAG = "VIRTUSIZE"
     const val INPAGE_LOG_TAG = "VIRTUSIZE_INPAGE"
 }
+
+internal object I18nConstants {
+    const val GENERAL_FIT_LOOSE_KEY = "loose"
+    const val GENERAL_FIT_REGULAR_KEY = "regular"
+    const val GENERAL_FIT_TIGHT_KEY = "tight"
+
+    const val SIZING_LARGE_KEY = "large"
+    const val SIZING_TRUE_KEY = "true"
+    const val SIZING_SMALL_KEY = "small"
+
+    const val BRAND_ITEM_BRAND_KEY = "itemBrand"
+    const val BRAND_MOST_BRANDS_KEY = "mostBrands"
+}

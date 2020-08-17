@@ -270,7 +270,7 @@ class VirtusizeTest {
     }
 
     @Test
-    fun getStoreProductInfo_whenSuccessful_onSuccessShouldReturnExpectedStoreProduct() = runBlocking {
+    fun testGetStoreProductInfo_whenSuccessful_onSuccessShouldReturnExpectedStoreProduct() = runBlocking {
         var actualStoreProduct: StoreProduct? = null
 
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
@@ -300,7 +300,7 @@ class VirtusizeTest {
     }
 
     @Test
-    fun getProductTypes_whenSuccessful_onSuccessShouldReturnExpectedProductTypeList() = runBlocking {
+    fun testGetProductTypes_whenSuccessful_onSuccessShouldReturnExpectedProductTypeList() = runBlocking {
         var actualProductTypeList: List<ProductType>? = null
 
         virtusize.setHTTPURLConnection(MockHttpURLConnection(

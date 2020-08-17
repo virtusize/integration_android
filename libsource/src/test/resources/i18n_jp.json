@@ -1,0 +1,1159 @@
+{
+  "bundle": "aoyama",
+  "id": "aoyama.ja",
+  "language": "ja",
+  "keys": {
+    "apps": {
+      "aoyama": {
+        "bodygramTutorial": {
+          "self": {
+            "slide1": {
+              "title": "服装のチェック",
+              "text": "正しく採寸するため、ハイヒール、帽子、マスク、サングラス、ルーズな服、上着などは身に付けないでください。\nまた、靴を脱ぎ、袖をまくり、シャツなどをズボンに入れてください。"
+            },
+            "slide2": {
+              "title": "場所・背景のチェック",
+              "text": "暗所・逆光、また他の人物が入り込む場所を避け、あなたの服の色がはっきり見える背景を選んでください。"
+            },
+            "slide3": {
+              "title": "全身を枠に合わせて撮影",
+              "text": "音声ガイドを聞きながら、全身をおよそ白い点線に合わせて撮影してください。"
+            },
+            "slide4": {
+              "title": "さあ、試してみましょう",
+              "text": "準備ができたら「はじめる」をタップしてください。撮影した画像からあなただけのシルエットが自動で作成されます。"
+            },
+            "slide0": {
+              "title": "スマートフォンの設置",
+              "text": "スマートフォンをお腹の高さくらいに設置し、水平・垂直に固定します。"
+            }
+          },
+          "begin": "はじめる",
+          "else": {
+            "slide1": {
+              "title": "服装のチェック",
+              "text": "正しく採寸するため、ハイヒール、帽子、マスク、サングラス、ルーズな服、上着などは身に付けないでください。\nまた、靴を脱ぎ、袖をまくり、シャツなどをズボンに入れてください。"
+            },
+            "slide2": {
+              "title": "場所・背景のチェック",
+              "text": "暗所・逆光、また他の人物が入り込む場所を避け、あなたの服の色がはっきり見える背景を選んでください。"
+            },
+            "slide3": {
+              "title": "全身を枠に合わせて撮影",
+              "text": "撮影する人のアドバイスをもらいながら、全身をおよそ白い点線に合わせて撮影します。\n枠内におさまるまで何回か撮影してください。"
+            },
+            "slide4": {
+              "title": "さあ、試してみましょう",
+              "text": "準備ができたら「はじめる」をタップしてください。撮影した画像からあなただけのシルエットが自動で作成されます。"
+            },
+            "slide0": {
+              "title": "スマートフォンの固定",
+              "text": "スマートフォンを水平・垂直にし、あなたのお腹の高さくらいになるように固定してもらいます。"
+            }
+          }
+        },
+        "loader": "読み込み中。。。",
+        "noBodyTryItScreen": {
+          "title": "%{highlightStart}シルエット%{highlightEnd}を<br />つくろう",
+          "create": "はじめる",
+          "subtitle": "あなたの基本情報をもとにつくられるシルエットを使っていろいろな商品を試着できます。"
+        },
+        "about": {
+          "subTitle5-2": "ボディプロフィール情報との比較",
+          "subTitle5-1": "ワードローブ内アイテムとの比較",
+          "content5-1": "ワードローブ内のアイテムと比較をする際は、Fit Score™アルゴリズムに基づきあなたに最も近いサイズをおすすめします。もしワードローブ内にすでにお気に入りのフィット感のアイテムがある場合は、同じフィット感のアイテムを見つけるお手伝いをします。ワードローブ内のアイテムは自由に操作することができ、サイズレコメンドに役立つアイテムの追加・削除が可能です。",
+          "content5-2": "体の情報と比較する場合、パーソナライズされたフィットレコメンドエンジン*を使用して、あなたに最適なサイズをおすすめします。私たちは、あなたにファッションデザイナーが意図した通りにアイテムを着こなしていただきたいたいと考えています。そのために、パーソナライズツールはあなたの予測身体測定値と各ブランドから提供されたアイテム情報に基づき、あなたにぴったりのサイズを見つけます。\n（このパーソナルツールはあなたの予測身体測定値を考慮して、着用した時によく見えるであろうサイズに最も近いアイテムを見つけます。）\nバーチャサイズのサイズレコメンドの精度は詳細情報を得れば得るほど正確になりますので、恥ずかしからずに、出来るだけ全ての情報をご入力ください。",
+          "title1": "あなただけのパーソナライズ",
+          "title2": "購入履歴に基づくパーソナライズ",
+          "title3": "お気に入りのブランドに基づくパーソナライズ",
+          "title4": "好みのフィット感に基づくパーソナライズ",
+          "title5": "バーチャサイズプロフィール - サイズ情報の一括管理",
+          "content6": "サイズレコメンドをパーソナライズするために、詳細データが必要となります。バーチャサイズはデータセキュリティの重要性を理解し、個人情報の取扱いに細心の注意を払っており、データの安全を確保するために適切な処置をとっています。詳しくは%{linkStart}こちら%{linkEnd}よりプライバシーポリシーをご確認ください。",
+          "content4": "今までに着たことのないブランドを探している場合でも、いつものスタイルではなく新しいスタイルに挑戦してみようとしている場合でも、もしかしたらそのアイテムはいつもいつも着ているアイテムよりも大きめだったり、きつめだったりするかもしれません。バーチャサイズのパーソナルフィットエンジンは、ほんの数ステップであなたの体に最適なサイズを見つけます。お買いもの中にいつも考えているような様々な種類の質問を基に、あなたに最適なおすすめをします。",
+          "content3": "バーチャサイズには、お気に入りのブランドのサイズに基づきレコメンドをする、パーソナルブランドサイズエンジンがあります。すでに着用しているブランドとサイズ情報から新しくバーチャルアイテムを作成すると、バーチャサイズワードローブに情報が保存され、お買い物の途中でいつでもお気に入りのアイテムを確認、比較することができます。例えば、他のブランドのアイテムとお気に入りブランドのアイテムのサイズ感の違いに悩まされていたり、どのサイズを買うべきか確信しているけれど、もう少し自信が欲しい場合など、このお気に入りのブランドに基づくサイズレコメンドは最適です。",
+          "content2": "最も正確な「おすすめのサイズ」を知る方法は、購入履歴に基づくパーソナライズです。すでにサイズを知っていて、気に入っているアイテムの購入履歴に基づくサイズレコメンドは、次なるお気に入りのアイテムを見つけるための最も確実で正確な方法です。特に、数センチ単位のフィット感の違いを理解している方々にはこの方法でのサイズレコメンドを強くおすすめします。",
+          "content1": "バーチャサイズのパーソナライゼーションツールは、すべてあなたのために作成しています。他のユーザーに合わせたものでも、あなたに合う標準化されたブランドに基づくものでもありません。あなたの実際の購入履歴や、お気に入りブランドのアイテムでいっぱいのワードローブ、そして最新のボディプロフィールに基づき、バーチャサイズのパーソナライゼーションエンジンはあなただけにカスタマイズをします。"
+        },
+        "bodyProfileScreen": {
+          "select": "選択する",
+          "genderLabel": "シルエット",
+          "show": "数値を表示",
+          "weight": "体重",
+          "ageWhy": "（なぜこれが必要？）",
+          "optional": "（任意）",
+          "title": "%{highlightStart}シルエット%{highlightEnd}をつくろう",
+          "ageExplanation": "私たちの体型は年をとるにつれて変化します。 これを知ることで、より正確になります。",
+          "message": "%{min}〜%{max}の数値を入力してください。",
+          "headerSilhouette": "シルエット",
+          "heightLabel": "身長",
+          "bra": "ブラサイズ",
+          "hide": "数値を隠す",
+          "weightLabel": "体重",
+          "header": "%{silhouette}を作成",
+          "female": "女性",
+          "ageLabel": "年齢",
+          "male": "男性",
+          "age": "年齢",
+          "height": "身長",
+          "braLabel": "ブラサイズ（任意）"
+        },
+        "bodygramSelector": {
+          "title": "%{highlightStart}撮影%{highlightEnd}方法",
+          "self": "自分で撮影する",
+          "else": "誰かに撮影してもらう"
+        },
+        "detailsScreen": {
+          "sizing": {
+            "mostBrands": {
+              "large": "この商品は%{boldStart}大きめのつくりです。%{boldEnd}",
+              "true": "この商品は%{boldStart}平均的なサイズ感です。%{boldEnd}",
+              "small": "この商品は%{boldStart}小さめのつくりです。%{boldEnd}"
+            },
+            "itemBrand": {
+              "large": "このブランドの%{boldStart}平均サイズより大きめです。%{boldEnd}",
+              "true": "このブランドの%{boldStart}平均的なサイズ感です。%{boldEnd}",
+              "small": "このブランドの%{boldStart}平均サイズより小さめです。%{boldEnd}"
+            }
+          },
+          "heightText": "身長 %{value}",
+          "brandSizing": "サイズ感",
+          "weightText": "体重 %{value}",
+          "itemDetails": "この商品の%{highlightStart}詳細情報%{highlightEnd}",
+          "fit": {
+            "loose": "この商品は%{boldStart}ルーズフィットです。%{boldEnd}",
+            "tight": "この商品は%{boldStart}タイトフィットです。%{boldEnd}",
+            "regular": "この商品は%{boldStart}レギュラーフィットです。%{boldEnd}"
+          },
+          "modelInfo": "モデル情報",
+          "material": "素材",
+          "materials": {
+            "angora": "アンゴラ %{value}",
+            "feather": "フェザー %{value}",
+            "camisole": "キャミソール",
+            "wool": "毛 %{value}",
+            "lyocell": "リヨセル %{value}",
+            "fur": "毛皮 %{value}",
+            "other": "その他",
+            "cashmere": "カシミア %{value}",
+            "cupra": "キュプラ %{value}",
+            "synthetic_leather": "人造皮革 %{value}",
+            "cotton": "綿 %{value}",
+            "mohair": "モヘア %{value}",
+            "back": "後身ごろ",
+            "polyamide": "ポリアミド %{value}",
+            "main": "本体",
+            "down": "ダウン %{value}",
+            "chloroprene": "クロロプレン %{value}",
+            "ribbing": "リブ部分",
+            "hemp": "麻 %{value}",
+            "acetate": "アセテート %{value} ",
+            "viscose": "ビスコース %{value}",
+            "regenerated_fiber": "再生繊維 %{value}",
+            "polyester": "ポリエステル %{value}",
+            "acrylic": "アクリル %{value}",
+            "alpaca": "アルパカ %{value}",
+            "spandex": "スパンデックス %{value}",
+            "linen": "リネン %{value}",
+            "polyurethane": "ポリウレタン %{value}",
+            "triacetate": "トリアセテート %{value}",
+            "liner": "裏生地",
+            "modal": "モーダル %{value}",
+            "silk": "シルク %{value}",
+            "knit_portion": "ニット部分",
+            "lace": "レース部分",
+            "nylon": "ナイロン %{value}",
+            "skirt_portion": "スカート部分",
+            "fill": "中わた",
+            "leather": "革 %{value}",
+            "sleeve_lining": "袖裏",
+            "elastane": "エラスタン %{value}",
+            "cellulose": "セルロース %{value}",
+            "front": "前身ごろ",
+            "rayon": "レーヨン %{value}",
+            "pocket": "ポケット部分"
+          },
+          "sizeText": "着用 %{value}サイズ",
+          "defaultText": "この商品は%{boldStart}平均的なサイズ感です。%{boldEnd}",
+          "noInfo": "情報なし",
+          "generalFit": "フィット感"
+        },
+        "authorization": {
+          "notification": {
+            "noAccount": "入力いただいた情報ではアカウントが見つかりませんでした。他の方法でログインしていただくか、新しいアカウントを作成してください。",
+            "passwordRecoveryButton": "再送信",
+            "signUpSuccess": "アカウント作成完了",
+            "signInSuccess": "ログインしました",
+            "passwordRecovery": "パスワード再設定のためのリンクがあなたのメールアドレスに送信されました。",
+            "haveAccount": "このメールアドレスですでにアカウントが存在しています。ログインしていただくか新しいメールアドレスでアカウントを作成してください。"
+          },
+          "forgotPassword": {
+            "header": "バスワードを再設定",
+            "cta": "リンクを送る",
+            "navLink": "パスワードをお忘れの方はこちら",
+            "subHeader": "メールアドレスを入力してください。パスワード再設定のためのリンクが送られます。"
+          },
+          "buttons": {
+            "twitter": "Twitter",
+            "google": "Google",
+            "line": "LINE",
+            "email": "Email",
+            "facebook": "Facebook"
+          },
+          "inputs": {
+            "password": "パスワード",
+            "passwordStrength": "パスワードの強さ:",
+            "strong": "強",
+            "passwordInvalid": "入力いただいたパスワードは無効です。",
+            "displayName": "表示名",
+            "emailInvalid": "入力いただいたメールアドレスは無効です。",
+            "fair": "中",
+            "wrongEmailPassword": "メールアドレスかパスワードが間違っています。",
+            "passwordInstruction": "数字・英語小文字・英語大文字・記号（-!”#$%&'()= ~|{`+*_?><,./\\]:;[@^-）を含んだパスワードにしてください。",
+            "email": "メールアドレス",
+            "weak": "弱"
+          },
+          "signIn": {
+            "link": "バーチャサイズアカウントを持っていない場合はこちら",
+            "header": "ログイン",
+            "cta": "ログイン",
+            "subHeader": "ログイン方法を1つ選択"
+          },
+          "privacy": "アカウントを作成いただく場合、バーチャサイズの%{link}に同意したものとします。",
+          "signUp": {
+            "link": "すでにバーチャサイズアカウントをお持ちの方はこちら",
+            "header": "アカウントを作成",
+            "cta": "アカウント作成",
+            "subHeader": "バーチャサイズの全機能を無料でお使いいただけます。"
+          }
+        },
+        "customItem": {
+          "bottomNav": {
+            "next": "次へ",
+            "done": "完了",
+            "prev": "戻る"
+          },
+          "gender": {
+            "title": "どちらの%{highlightStart}タイプ%{highlightEnd}のアイテムですか？",
+            "female": "ウィメンズ",
+            "male": "メンズ"
+          },
+          "size": {
+            "measureInstructions": "お客様のアイテムを平らに広げ、直線の長さを測ってください。",
+            "placeholder": "例: M",
+            "title": "%{highlightStart}サイズ%{highlightEnd}は何ですか？",
+            "instruction": "アイテムのタグに記されています。",
+            "measurement": {
+              "collar": "襟周り",
+              "thigh": "もも周り",
+              "heightSkirt": "総丈",
+              "heightAccessory": "高さ",
+              "heightPanty": "股上",
+              "hip": "ヒップ",
+              "hem": "すそ幅",
+              "bicep": "そで幅",
+              "inseam": "股下",
+              "depth": "底マチ",
+              "lensWidth": "レンズ幅",
+              "sleeveDress": "そで丈",
+              "sleeve": "ゆき丈",
+              "width": "幅",
+              "temple": "こめかみ",
+              "bust": "身幅",
+              "waist": "ウエスト幅",
+              "bridge": "ブリッジ",
+              "shoulder": "肩幅",
+              "height": "身丈"
+            }
+          },
+          "itemCreation": {
+            "created": "アイテムが作成されました！",
+            "compare": "あなたのアイテムと比較しています‥"
+          },
+          "style": {
+            "title": "どちらの%{highlightStart}スタイル%{highlightEnd}のアイテムですか?",
+            "style": {
+              "cardigan": "カーディガン",
+              "formal": "フォーマル",
+              "blouse": "ブラウス",
+              "business": "ビジネス",
+              "button_down": "ボタンダウン",
+              "casual": "カジュアル",
+              "pullover": "プルオーバー",
+              "flared": "フレア",
+              "protective": "プロテクティブ",
+              "tight": "タイト",
+              "fashionable": "ファッショナブル",
+              "regular": "その他"
+            }
+          },
+          "type": {
+            "title": "どちらの%{highlightStart}タイプ%{highlightEnd}ですか？",
+            "type": {
+              "long_sleeved": "長袖",
+              "dress": "袖なし",
+              "pants": "パンツ",
+              "panties": "パンティー",
+              "glassesSquare": "スクエアグラス",
+              "slim": "スリム",
+              "bag": "バッグ",
+              "glassesOval": "オーバルグラス",
+              "medium": "ミディアム",
+              "long": "ロング",
+              "midi": "ミディ",
+              "top": "トップス",
+              "short_sleeved": "半袖",
+              "skirt": "スカート",
+              "glassesBoston": "ボストングラス",
+              "tShirt": "Tシャツ",
+              "sweater": "セーター",
+              "shorts": "ショートパンツ",
+              "dressALine": "袖なしAライン",
+              "glassesWellington": "ウェリントングラス",
+              "dressSleeve": "袖付き",
+              "shoe": "靴",
+              "regular": "レギュラー",
+              "wallet": "財布",
+              "wide": "ワイド",
+              "mini": "ミニ",
+              "jacket": "ジャケット",
+              "tunicSleeve": "袖付きAライン",
+              "dressStrapless": "ストラップレス",
+              "props": "小道具",
+              "coat": "コート",
+              "shirt": "シャツ",
+              "clutch": "クラッチ",
+              "maxi": "マキシ",
+              "short": "ショート"
+            },
+            "group": {
+              "outer": "アウター",
+              "dress": "ワンピース",
+              "other": "その他",
+              "top": "トップス",
+              "bottom": "ボトムス"
+            }
+          },
+          "brand": {
+            "title": "追加するアイテムに\n%{highlightStart}名前%{highlightEnd}をつけてください。",
+            "instruction": "ブランド名を入力してください。",
+            "placeholder": "例: 赤いシャツ、ブランド名など"
+          }
+        },
+        "bodygramPopup": {
+          "accountCreated": "バーチャサイズへようこそ！アカウントが作成されました",
+          "loginSuccess": "ログインしました",
+          "error": "シルエット詳細データの保存に失敗しました。マイページから再度入力できます。",
+          "success": "シルエットが保存されました。変更はマイページから行えます。"
+        },
+        "navbar": {
+          "cancel": "キャンセル",
+          "next": "次へ",
+          "compare": "比較",
+          "reset": "リセット",
+          "back": "戻る",
+          "details": "商品詳細",
+          "skip": "スキップ",
+          "myVirtusize": "マイページ",
+          "backToStore": "ストアに戻る",
+          "stepCount": "ステップ %{value}/2",
+          "done": "完了",
+          "tryit": "試着"
+        },
+        "tryItScreen": {
+          "fitScale": {
+            "standard": "ちょうどいい",
+            "loose": "少しゆったり",
+            "veryTight": "タイト",
+            "tight": "少しタイト",
+            "veryLoose": "ゆったり"
+          },
+          "btnBuy": "このサイズを買う",
+          "btnExamine": "もっと詳しく",
+          "title": {
+            "small": "こちらのサイズは少しきつめです",
+            "exact": "あなたにおすすめのサイズは",
+            "big": "こちらのサイズは少し大きめです",
+            "smaller": "こちらのサイズはきつめです",
+            "bigger": "こちらのサイズは大きめです"
+          }
+        },
+        "sgi": {
+          "bottomNav": {
+            "next": "次へ",
+            "done": "完了",
+            "prev": "戻る"
+          },
+          "welcomeEntry": {
+            "tryItOn": "自分の体と比較",
+            "compare": "手持ちの服と比較",
+            "measure": "身長と体重から探す",
+            "title": "どちらの方法で\n%{highlightStart}サイズを探しますか%{highlightEnd}？",
+            "sgi": "普段よく着る\nアイテムから探す"
+          },
+          "gender": {
+            "title": "どちらの%{highlightStart}性別%{highlightEnd}向けのアイテムですか？",
+            "female": "ウィメンズ",
+            "male": "メンズ"
+          },
+          "size": {
+            "title": "どの%{highlightStart}サイズ%{highlightEnd}を着ていますか？",
+            "measurement": {
+              "collar": "襟周り",
+              "thigh": "もも周り",
+              "heightSkirt": "総丈",
+              "hip": "ヒップ",
+              "hem": "すそ幅",
+              "bicep": "そで幅",
+              "inseam": "股下",
+              "depth": "底マチ",
+              "lensWidth": "レンズ幅",
+              "sleeveDress": "そで丈",
+              "sleeve": "ゆき丈",
+              "width": "幅",
+              "temple": "こめかみ",
+              "bust": "身幅",
+              "waist": "ウエスト幅",
+              "bridge": "ブリッジ",
+              "shoulder": "肩幅",
+              "height": "身丈"
+            },
+            "custom": "サイズを数値で入力"
+          },
+          "itemCreation": {
+            "created": "アイテムが作成されました！",
+            "compare": "あなたのアイテムと比較しています‥"
+          },
+          "style": {
+            "blouse": "ブラウス",
+            "business": "ビジネス",
+            "title": "どちらの%{highlightStart}スタイル%{highlightEnd}のアイテムですか?",
+            "tight": "タイト",
+            "fashionable": "ファッショナブル",
+            "cardigan": "カーディガン",
+            "formal": "フォーマル",
+            "button_down": "ボタンダウン",
+            "casual": "カジュアル",
+            "pullover": "プルオーバー",
+            "flared": "フレア",
+            "protective": "プロテクティブ",
+            "regular": "その他"
+          },
+          "type": {
+            "long_sleeved": "長袖",
+            "dress": "袖なし",
+            "pants": "パンツ",
+            "panties": "パンティー",
+            "glassesSquare": "スクエアグラス",
+            "slim": "スリム",
+            "bag": "バッグ",
+            "glassesOval": "オーバルグラス",
+            "medium": "ミディアム",
+            "title": "下記のうちどのような%{highlightStart}タイプ%{highlightEnd}ですか？",
+            "long": "ロング",
+            "midi": "ミディ",
+            "top": "トップス",
+            "short_sleeved": "半袖",
+            "skirt": "スカート",
+            "glassesBoston": "ボストングラス",
+            "tShirt": "Tシャツ",
+            "sweater": "セーター",
+            "shorts": "ショートパンツ",
+            "dressALine": "袖なしAライン",
+            "glassesWellington": "ウェリントングラス",
+            "dressSleeve": "袖付き",
+            "shoe": "靴",
+            "regular": "レギュラー",
+            "wallet": "財布",
+            "wide": "ワイド",
+            "mini": "ミニ",
+            "jacket": "ジャケット",
+            "tunicSleeve": "袖付きAライン",
+            "dressStrapless": "ストラップレス",
+            "props": "小道具",
+            "coat": "コート",
+            "shirt": "シャツ",
+            "clutch": "クラッチ",
+            "maxi": "マキシ",
+            "short": "ショート"
+          },
+          "brand": {
+            "title": "よく着る%{highlightStart}ブランド%{highlightEnd}を選択",
+            "selectAnother": "他のブランドを選ぶ",
+            "or": "or"
+          }
+        },
+        "faq": {
+          "content3-3": "Virtusize機能がついたアイテムを購入する際は、今後も比較参照としてそのアイテムの寸法を使用できるよう、クローゼットに登録して下さい。その情報はどのオンラインショップからでもアクセスできます。",
+          "content9": "いいえ、ご安心ください。お客様のVirtusizeアカウントは完全に個人用のものであり、VirtusizeがFacebookにお客様の情報を投稿することはありません。",
+          "title8": "購入したいアイテムの寸法は、確実にオンライン上で表示されている通りなのでしょうか？",
+          "title9": "Virtusizeを使用することで、Facebookのタイムラインやニュースフィードに何かが投稿されることはありますか？",
+          "title10": "全ての商品でVirtusizeを使用することができないのはなぜですか？",
+          "content10": "各ショップがそれぞれでどの商品でVirtusizeを提供するかを決定しているので、ショップによっては「パンツのみ」「一部ブランドのみ」など限定導入している場合があります。また、新しい商品の採寸にはしばらく時間がかかる場合があります。",
+          "heading": "Virtusize(バーチャサイズ)とは？",
+          "content11": "お手数ですが %{email} までご連絡をお願いします。弊社サポートチームがすぐにアカウントの削除を実施致します。",
+          "title1": "同じ「M」サイズでも、商品やブランドによってサイズが大きく違った経験はありませんか？",
+          "title2": "なぜアイテムが自動でクローゼットに追加されるのですか？",
+          "title3": "使用上のアドバイス",
+          "title4": "寸法に1cmでも差がある場合、そのアイテムはフィットしないのでしょうか？",
+          "title11": "Virtusizeのアカウントはどのように削除できますか？",
+          "title5": "異なる種類の生地や、伸縮する生地のアイテムはどのように比較されるのですか？",
+          "title6": "服がおかしな形に見えるのはなぜですか？",
+          "title7": "服がとても大きく／小さく見えるのはなぜですか？",
+          "content8": "大変申し訳ございませんが、Virtusizeは寸法を確実に保証することはできません。Virtusizeの機能は非常に正確ですが、衣類の生産過程で若干の誤差が出ることがあるからです。",
+          "content7": "異なる種類の生地で作られているアイテム同士を比較すると、予想外のサイズのズレが発生するケースがあります。お手数ですが、お客様がフィッティングを確認したいアイテムと、できるだけ似た生地のアイテムを比較参照に使うようにしてください。",
+          "content6": "どこかで間違ったサイズを入力していませんか？例えば、ゆき丈のサイズはえりの後ろから開始するなど、いくつか注意すべきポイントがあります。また、服は必ず平らに置いてサイズを測ってください。",
+          "content5": "Virtusizeは生地の種類を区別しません。お手数ですが比較する服の表示を見て、両者の生地が近いかどうかを確認してください。",
+          "content4": "多くの場合1cm程度の違いはそれほど気になりません。ただし、一部の寸法では注意が必要です。例えば、パンツ股下の1cmの差は、フィット感に影響を与えるかもしれません。購入希望のアイテムのサイズが合うかどうか微妙な場合は、それを他のお手持ちの大きめ／小さめのアイテムと比較してみてください。",
+          "content2": "Virtusize対応のオンラインショップでお買い物をされると、ご購入されたアイテムが自動でお客様のクローゼットに追加されます。 これは、別のストアからのアイテムとサイズを比較する際に役立ちます。整合性の理由から、Virtusizeにログインしていないと、これらのアイテムを編集、削除することはできません。Virtusizeアカウントを登録すると、ご購入されたアイテムがすべて保存される自分専用のクローゼットを持つことができます。クローゼットにはどのコンピューターからもアクセスでき、アイテムの追加、編集、削除を行うことができます。",
+          "content1-1": "Virtusize（バーチャサイズ）を使えば、体にフィットしているお手持ちのアイテムと、購入検討中のアイテムを寸法で比べることができます。そのため、店舗で試着ができないオンラインショッピングでも、ぴったりなサイズの服を選べるのです。",
+          "content1-2": "一度Virtusizeにお手持ちのアイテムの寸法を登録すれば、次回の買い物ではその参照アイテムと、買いたいアイテムを比較することで、最適なサイズを探せます。",
+          "content1-3": "サイズが合わないお手持ちのアイテムでもVirtusizeに登録すれば、大きめ／小さめサイズの例として、購入時の参考にすることができます。",
+          "content3-1": "バーチャル試着を成功させるためには、似たようなカット、生地、スタイルのアイテム同士を比較してください。",
+          "content3-2": "フィッティングの正確性を高めるため、１点以上のアイテムと比較することをおすすめします。"
+        },
+        "adjustYourSilhouette": {
+          "header": "シルエットを編集",
+          "text": "あなたのシルエットは、身長や体重、年齢をもとに作成されます。より正確な試着をしたい場合は、こちらで体の情報を編集してください"
+        },
+        "inpage": {
+          "tryItOn": "試着する",
+          "defaultAccessoryText": "日用品と比較する",
+          "hasProductAccessoryText": "あなたのアイテムと%{boldStart}大きさを比較%{boldEnd}",
+          "A5_HORIZONTAL": "A5 横",
+          "A4_HORIZONTAL": "A4用紙",
+          "errorTextLong": "現在バーチャサイズは使えませんが、\nそのままお買い物をお楽しみください。",
+          "sizeCheck": "サイズチェック",
+          "CREDIT_CARD": "クレジットカード",
+          "A5_PORTRAIT": "A5 縦",
+          "JPY_1000": "¥1,000円",
+          "closestSizeToItem": "あなたのアイテムに近いサイズ: %{value}",
+          "JPY_10000": "10,000円",
+          "A4_PORTRAIT": "A4用紙",
+          "errorTextShort": "現在バーチャサイズは使えません。",
+          "privacyLink": "プライバシーポリシー",
+          "JPY_5000": "5,000円"
+        },
+        "wardrobe": {
+          "filter": {
+            "all": "全てのアイテム",
+            "dress": "ドレス",
+            "other": "その他",
+            "top": "トップス",
+            "bottom": "ボトムス",
+            "outer": "アウター",
+            "label": "フィルター:"
+          },
+          "add": "アイテムを追加する",
+          "size": "サイズ",
+          "titleWithCategory": "ワードローブから%{itemCategory}を選択してください",
+          "edit": "編集",
+          "save": "保存",
+          "emptyTagline": "%{highlightStart}ワードローブに追加した%{highlightEnd}\nアイテムがここに表示されます",
+          "sort": {
+            "name": "アイテム名",
+            "label": "並べ替え:",
+            "created": "追加日",
+            "isFavorite": "スター付き"
+          },
+          "title": "ワードローブの中のアイテムを選んでください",
+          "propItems": {
+            "devicesDescription": "iPhoneなど",
+            "documentsTitle": "用紙",
+            "bankNotesTitle": "お札",
+            "bankNotesDescription": "千円札など",
+            "cardsDescription": "クレジットカード",
+            "devicesTitle": "デバイス",
+            "title": "または、以下の物が入るかみてみましょう！",
+            "bottlesTitle": "ペットボトル",
+            "bottlesDescription": "350ml, 500ml",
+            "documentsDescription": "A4, A5",
+            "cardsTitle": "カード"
+          },
+          "empty": "お手持ちのアイテムを追加すると欲しい商品とのサイズを比べられます。1分程で簡単に追加できます。"
+        },
+        "myVirtusize": {
+          "silhouette": "%{highlightStart}シルエット%{highlightEnd}",
+          "account": "%{highlightStart}アカウント%{highlightEnd}",
+          "wardrobe": "%{highlightStart}ワードローブ%{highlightEnd}"
+        },
+        "noItemComparisonScreen": {
+          "title": "%{highlightStart}ワードローブ%{highlightEnd}を<br />つくろう",
+          "add": "はじめる",
+          "subtitle": "お手持ちのアイテムをワードローブに追加して欲しい商品と重ねるようにしてサイズを比べられます。"
+        },
+        "areasOfConcernScreen": {
+          "shoulders": "肩幅",
+          "cancel": "キャンセル",
+          "shouldersNarrow": "狭め",
+          "hipsNarrow": "小さめ",
+          "chest": "バスト",
+          "waistWide": "太め",
+          "chestSmall": "小さめ",
+          "title": "%{highlightStart}各パーツをタップして%{highlightEnd}<br>シルエットを調整しましょう",
+          "subHeader": "任意",
+          "hipsWide": "大きめ",
+          "hips": "ヒップ",
+          "shouldersWide": "広め",
+          "waistSmall": "細め",
+          "waist": "ウエスト",
+          "chestLarge": "大きめ"
+        },
+        "mySilhouetteScreen": {
+          "finishSilhouette": "シルエットを作成する",
+          "show": "数値を表示",
+          "editHeader": "ボディ情報を更新",
+          "notProvided": "未入力",
+          "weightLabel": "体重",
+          "thighLabel": "もも周り",
+          "inseamLabel": "股下",
+          "details": "詳細",
+          "female": "女性",
+          "ageLabel": "年齢",
+          "noDataMessage": "%{highlightStart}あなたのシルエット%{highlightEnd}を見てみよう",
+          "edit": "編集",
+          "bicepsLabel": "二の腕",
+          "genderLabel": "シルエット",
+          "finishSilhouetteMessage": "あなたのシルエットを作成するといろいろな商品を試着できます。1分程で簡単に作成できます。",
+          "hipsLabel": "ヒップ",
+          "heightLabel": "身長",
+          "hide": "数値を隠す",
+          "seeMore": "もっと見る",
+          "seeLess": "閉じる",
+          "chestLabel": "バスト",
+          "shouldersLabel": "肩幅",
+          "header": "ボディ情報を調整",
+          "waistLabel": "ウエスト",
+          "male": "男性",
+          "areasOfConcern": "その他のボディ情報",
+          "braLabel": "ブラサイズ"
+        },
+        "bodygramLoader": {
+          "loading": "シルエットを作成中",
+          "finished": "シルエット作成完了"
+        },
+        "welcomeScreen": {
+          "userPitch": "さらに情報を入力すればより正確なおすすめサイズが出せます。無料で簡単、かつ正確にサイズ情報をお届けします。",
+          "getStarted": "始める",
+          "size": "おすすめのサイズは",
+          "privacyPolicy": "上記ボタンをクリックすることで<br/> %{link}に同意するものとします",
+          "noAccount": "アカウントを持っていない方はこちら",
+          "hello": null,
+          "pitch": "バーチャサイズを使うと、60秒ほどであなたに合うサイズが分かります。",
+          "privacyPolicyLink": "利用規約",
+          "haveAccount": "すでにバーチャサイズアカウントを持っている"
+        },
+        "bodyComparisons": {
+          "template": "%bodyPartから%value%position",
+          "tightness": {
+            "loose": "少しゆったり",
+            "veryTight": "タイト",
+            "tight": "少しタイト",
+            "veryLoose": "ゆったり"
+          },
+          "comparison": {
+            "above": "上",
+            "match": "ちょうど%bodyPartあたり",
+            "below": "下"
+          },
+          "equivalences": {
+            "heightShortSleeves": "ひじ",
+            "inseam": "足首",
+            "heightShorts": "膝",
+            "sleeve": "手首",
+            "heightCrotch": "股",
+            "heightTop": "ヒップ",
+            "heightBottom": "足首"
+          }
+        },
+        "bodyProfileAdditionalInfoSelect": {
+          "betterFit": "タップ操作やカメラで各身体のパーツデータを入力できます",
+          "or": "または",
+          "bodygramLogin": "このサービスの利用には、バーチャサイズのアカウントと\nBodygramへの登録・ログインが必要です",
+          "optional": "任意",
+          "title": "%{highlightStart}もっと正確なシルエット%{highlightEnd}\nをつくりますか？",
+          "manual": "タップで簡単入力",
+          "useCamera": "カメラで自動入力",
+          "mobileOnly": "日本語設定のモバイル端末専用"
+        },
+        "menu": {
+          "guestHasAccount": "すでにアカウントを持っています",
+          "back": "戻る",
+          "mySilhouette": "シルエット",
+          "supportLink": "サポート",
+          "userButton": "アイテム追加",
+          "guestSubGreeting": "バーチャサイズはあなたの入力情報や購入履歴をもとにサイズの提案をしています。データの損失を防ぐためには、アカウントを作成してください。",
+          "userSubGreeting": "お持ちのアイテムをワードローブに追加してストアのアイテムと比較できます。",
+          "myWardrobe": "ワードローブ",
+          "whatIsVirtusize": "バーチャサイズとは",
+          "privacyLink": "個人情報保護方針",
+          "userGreeting": "%{name}様\nバーチャサイズへようこそ!",
+          "myAccount": "アカウント",
+          "support": {
+            "report": "問題を報告",
+            "feedback": "フィードバック",
+            "privacy": "個人情報保護方針",
+            "faq": "よくある質問"
+          },
+          "guestButton": "アカウント作成を続ける"
+        },
+        "mySilhouetteBodygramButton": {
+          "disclaimerForAdditionalInfo": "日本語設定のモバイル端末専用\nこのサービスの利用には、バーチャサイズのアカウントとBodygramへの登録・ログインが必要です",
+          "editAdditionalInfo": "カメラを使って各パーツの値を自動入力しますか？",
+          "addBodygramButton": "タップで簡単入力",
+          "editAdditionalInfoSub": "手入力した値はより正確な値へ上書きされます。",
+          "addBodygramHeader": "こちらのストアではBodygramののサービスを提供していません。",
+          "addBodygramText": "現在、あなたの基本情報のみでシルエットがつくられています。画面をタップして、より正確なシルエットを作りませんか？",
+          "editSilhouetteSub": "日本語設定のモバイル端末専用",
+          "editSilhouette": "カメラで自動入力をやり直す",
+          "disclaimer": "このサービスの利用には、バーチャサイズのアカウントとBodygramへの登録・ログインが必要です"
+        },
+        "bodygramRegistration": {
+          "cancel": "キャンセル",
+          "text": "あなたの基本情報や購入アイテムを保存し、サイズ選びがもっと簡単に、もっと楽しく",
+          "or": "または",
+          "title": "アカウントを作成",
+          "alreadyHaveAccount": "すでにアカウントを持っている"
+        },
+        "closeConfirmationPopup": {
+          "explanationLink": "バーチャサイズのアカウントを作成しませんか？",
+          "cancel": "キャンセル",
+          "title": "バーチャサイズを閉じますか？",
+          "explanation": "お客様の登録データをより便利に活用するために、",
+          "close": "閉じる"
+        },
+        "bodygramCameraDenied": {
+          "title": "カメラにアクセスできません",
+          "instructions1": "ページを再度読み込み、基本情報のみのシルエットを表示する",
+          "instructions2": "手入力で詳しい情報を入力する",
+          "btn": "タップで簡単入力",
+          "subtitle": "カメラを使ったシルエット詳細情報の入力できません"
+        },
+        "propProducts": {
+          "JPY_1000": "¥1,000",
+          "JPY_10000": "¥10,000",
+          "A5_HORIZONTAL": "A5 横",
+          "A4_PORTRAIT": "A4 縦",
+          "A4_HORIZONTAL": "A4 横",
+          "JPY_5000": "¥5,000",
+          "CREDIT_CARD": "クレジットカード",
+          "A5_PORTRAIT": "A5 縦"
+        },
+        "comparisonScreen": {
+          "title": {
+            "small": "こちらのサイズは少し小さめです",
+            "exact": "比較中の商品と一番近いサイズは",
+            "big": "こちらのサイズは少し大きめです",
+            "smaller": "こちらのサイズは小さめです",
+            "bigger": "こちらのサイズは大きめです "
+          },
+          "compareNow": "比較中",
+          "btnBuy": "このサイズを購入"
+        },
+        "bodygramErrorMessages": {
+          "tokenExpiredTitle": "Bodygraからログアウト\nされました",
+          "notSupportedText": "現在、あなたの基本情報のみでシルエットがつくられています。変更は%{highlightStart}マイページ%{highlightEnd}から行えます。",
+          "tokenExpiredText": "現在、基本情報のみのシルエットが表示されています。ログインすると、より詳細なシルエットが読み込まれています。",
+          "notSupportedTitle": "こちらのストアでは\nBodygramのサービスを\n提供していません",
+          "loginButton": "Bodygramに登録・ログイン"
+        },
+        "bodygram": {
+          "side": "側面",
+          "selectOther": "シルエット作成に戻る",
+          "takeSelfie": "%{count}秒後に撮影",
+          "turnSideways": "身体の右側面を\nカメラに\n向けましょう",
+          "startCapture": "撮影をはじめる",
+          "tilt": "傾きの確認",
+          "takePhoto": "撮影\nする",
+          "align": "全身の位置を枠に合わせましょう",
+          "login": "シルエットを完成する",
+          "good": "Good!",
+          "great": "Great!",
+          "almostThere": "この画像データをもとに\nシルエットを完成します",
+          "featureProvided": "このサービスの利用には\nBodygramへの登録・ログインが必要です",
+          "retake": "撮り直す",
+          "deviceOrientation": "スマートフォンを\n水平・垂直に固定\nしましょう",
+          "audio": "音声",
+          "front": "前面",
+          "soundCheck": "音声ガイドを\nはじめます",
+          "audioTest": "音声テスト"
+        },
+        "legacyInpage": {
+          "date": "登録日:",
+          "closestSize": "一番近いサイズ:",
+          "match": "ぴったり",
+          "loginHeader": "データ損失を防ぐため\nアカウントを作成してください",
+          "selectItem": "アイテムを選択",
+          "changeItemShort": "アイテムを変更",
+          "login": "ログイン",
+          "versus": "比較",
+          "logout": "ログアウト",
+          "size": "サイズ:",
+          "header": "理想のサイズを探す",
+          "changeItemLong": "比較アイテムを変更",
+          "loggedInAs": "アカウント名",
+          "guest": "ゲスト",
+          "details": "詳しく見る",
+          "purchasedItem": "購入したアイテム",
+          "account": "ACCOUNT",
+          "register": "アカウント作成"
+        },
+        "myAccount": {
+          "registered": {
+            "deleteAccountSubText": "お客様の購入履歴とおすすめサイズ情報はバーチャサイズから消去されます。",
+            "cancel": "キャンセル",
+            "edit": "編集",
+            "displayName": "表示名",
+            "editDisplayName": "表示名を編集",
+            "change": "変更",
+            "save": "保存",
+            "newDisplayName": "新しい表示名",
+            "deleteAccount": "アカウントを消去",
+            "delete": "消去",
+            "logOut": "ログアウト",
+            "changePassword": "パスワードを変更"
+          },
+          "unregistered": {
+            "eraseDataTitle": "データを消去",
+            "eraseDataSubText": "あなたの購入履歴やサイズ情報がすべて消去されます。",
+            "title": "%{highlightStart}アカウントを作成して%{highlightEnd}<br />サイズ選びをもっと楽しく簡単に",
+            "eraseCta": "消去",
+            "signUp": "アカウントを作成",
+            "subText": "あなたの基本情報や購入アイテムを保存すると複数のデバイスでの利用が可能になります。",
+            "haveAccount": "すでにアカウントを持っている"
+          },
+          "eraseDataDialog": {
+            "cancel": "キャンセル",
+            "text": "全てのデータと閲覧履歴は消去され、保存したアイテムにアクセスできなくなります。",
+            "deleted": "データは消去されました",
+            "title": "本当にデータを消去しますか？",
+            "delete": "消去"
+          },
+          "removeAccountDialog": {
+            "cancel": "キャンセル",
+            "text": "全てのデータと閲覧履歴は消去され、保存したアイテムにアクセスできなくなります。",
+            "deleted": "アカウントは消去されました",
+            "title": "本当にアカウントを消去しますか？",
+            "delete": "消去"
+          },
+          "changePassword": {
+            "confirm": "新しいパスワードを確認",
+            "newPassword": "新しいパスワード",
+            "cta": "パスワードを変更",
+            "title": "パスワードを変更",
+            "oldPassword": "古いパスワード"
+          }
+        },
+        "smartTable": {
+          "measurementsView": {
+            "title": "サイズ%{highlightStart}詳細%{highlightEnd}",
+            "findSize": "自分のサイズを探す",
+            "selectSize": "サイズを選択して平置き寸法を確認"
+          }
+        },
+        "splash": {
+          "bodyProfile": {
+            "start": "始める",
+            "acceptTerms": "上記ボタンをクリックすることで<br />利用規約に同意するものとします",
+            "title": "Get your size<br />recommendation in only<br />2 simple steps",
+            "message": "It’s free, fast and accurate.",
+            "signIn": "すでにアカウントを持っている"
+          }
+        }
+      }
+    },
+    "productType": {
+      "dress": {
+        "name": "ワンピース",
+        "fullName": "ワンピース",
+        "pluralName": "ワンピース",
+        "measurements": {
+          "sleeveOpening": "そで口幅",
+          "hem": "すそ幅",
+          "bust": "身幅",
+          "waist": "ウエスト幅",
+          "waistHeight": "身丈",
+          "hip": "ヒップ幅",
+          "height": "総丈"
+        }
+      },
+      "wallet": {
+        "name": "財布",
+        "fullName": "財布",
+        "pluralName": "財布",
+        "measurements": {
+          "width": "底横幅",
+          "height": "高さ",
+          "depth": "底マチ"
+        }
+      },
+      "pants": {
+        "name": "ロングパンツ",
+        "fullName": "パンツ",
+        "pluralName": "ロングパンツ",
+        "measurements": {
+          "knee": "膝幅",
+          "inseam": "股下",
+          "thigh": "もも幅",
+          "legOpening": "すそ幅",
+          "waist": "ウエスト幅",
+          "backRise": "後股上",
+          "hip": "ヒップ幅",
+          "frontRise": "前股上"
+        }
+      },
+      "panties": {
+        "name": "ショーツ",
+        "fullName": "ショーツ",
+        "pluralName": "ショーツ",
+        "measurements": {
+          "waist": "ウエスト幅",
+          "hip": "ヒップ幅",
+          "height": "股上"
+        }
+      },
+      "glassesSquare": {
+        "name": "メガネ",
+        "fullName": "スクエアメガネ",
+        "pluralName": "スクエアメガネ",
+        "measurements": {
+          "temple": "テンプルの長さ",
+          "lensWidth": "レンズ幅",
+          "bridge": "ブリッジ",
+          "frameWidth": "幅",
+          "height": "レンズの高さ"
+        }
+      },
+      "bag": {
+        "name": "バッグ",
+        "fullName": "バッグ",
+        "pluralName": "バッグ",
+        "measurements": {
+          "width": "底横幅",
+          "handleDrop": "持ち手高さ",
+          "handleWidth": "持ち手幅",
+          "depth": "底マチ",
+          "height": "高さ",
+          "topWidth": "上横幅"
+        }
+      },
+      "glassesOval": {
+        "name": "メガネ",
+        "fullName": "オーバルメガネ",
+        "pluralName": "オーバルメガネ",
+        "measurements": {
+          "temple": "テンプルの長さ",
+          "lensWidth": "レンズ幅",
+          "bridge": "ブリッジ",
+          "frameWidth": "幅",
+          "height": "レンズの高さ"
+        }
+      },
+      "jacket": {
+        "name": "ジャケット",
+        "fullName": "ジャケット",
+        "pluralName": "ジャケット",
+        "measurements": {
+          "hem": "すそ幅",
+          "bicep": "そで幅",
+          "sleeve": "ゆき丈",
+          "bust": "身幅",
+          "waist": "ウエスト幅",
+          "shoulder": "肩幅",
+          "height": "身丈"
+        }
+      },
+      "tunicSleeve": {
+        "name": "チュニック",
+        "fullName": "袖付きチュニック",
+        "pluralName": "袖付きチュニック",
+        "measurements": {
+          "hem": "すそ幅",
+          "bicep": "そで幅",
+          "bust": "身幅",
+          "waist": "ウエスト幅",
+          "sleeve": "そで丈",
+          "height": "着丈"
+        }
+      },
+      "dressStrapless": {
+        "name": "ストラップレスドレス",
+        "fullName": "ストラップレスワンピース",
+        "pluralName": "ストラップレスドレス",
+        "measurements": {
+          "hem": "すそ幅",
+          "bust": "身幅",
+          "waist": "ウエスト幅",
+          "waistHeight": "胸元〜ウエスト",
+          "hip": "ヒップ幅",
+          "height": "総丈"
+        }
+      },
+      "coat": {
+        "name": "コート",
+        "fullName": "コート",
+        "pluralName": "コート",
+        "measurements": {
+          "hem": "すそ幅",
+          "bicep": "そで幅",
+          "sleeve": "ゆき丈",
+          "bust": "身幅",
+          "waist": "ウエスト幅",
+          "shoulder": "肩幅",
+          "height": "身丈"
+        }
+      },
+      "shirt": {
+        "name": "シャツ",
+        "fullName": "シャツ",
+        "pluralName": "シャツ",
+        "measurements": {
+          "hem": "すそ幅",
+          "bicep": "そで幅",
+          "collar": "襟回り",
+          "sleeve": "ゆき丈",
+          "bust": "身幅",
+          "waist": "ウエスト幅",
+          "shoulder": "肩幅",
+          "height": "身丈"
+        }
+      },
+      "top": {
+        "name": "ノースリーブ",
+        "fullName": "トップス",
+        "pluralName": "ノースリーブ",
+        "measurements": {
+          "hem": "すそ幅",
+          "bust": "身幅",
+          "waist": "ウエスト幅",
+          "shoulder": "肩幅",
+          "height": "身丈",
+          "armOpening": "アームホール幅"
+        }
+      },
+      "skirt": {
+        "name": "スカート",
+        "fullName": "スカート",
+        "pluralName": "スカート",
+        "measurements": {
+          "hem": "すそ幅",
+          "waist": "ウエスト幅",
+          "hip": "ヒップ幅",
+          "height": "スカート丈"
+        }
+      },
+      "clutch": {
+        "name": "バッグ",
+        "fullName": "クラッチバッグ",
+        "pluralName": "バッグ",
+        "measurements": {
+          "width": "底横幅",
+          "depth": "底マチ",
+          "height": "高さ",
+          "topWidth": "上横幅"
+        }
+      },
+      "glassesBoston": {
+        "name": "メガネ",
+        "fullName": "ボストンメガネ",
+        "pluralName": "ボストンメガネ",
+        "measurements": {
+          "temple": "テンプルの長さ",
+          "lensWidth": "レンズ幅",
+          "bridge": "ブリッジ",
+          "frameWidth": "幅",
+          "height": "レンズの高さ"
+        }
+      },
+      "tShirt": {
+        "name": "Tシャツ",
+        "fullName": "Tシャツ",
+        "pluralName": "Tシャツ",
+        "measurements": {
+          "hem": "すそ幅",
+          "bicep": "そで幅",
+          "sleeve": "ゆき丈",
+          "bust": "身幅",
+          "waist": "ウエスト幅",
+          "shoulder": "肩幅",
+          "height": "身丈"
+        }
+      },
+      "sweater": {
+        "name": "トップス",
+        "fullName": "セーター",
+        "pluralName": "トップス",
+        "measurements": {
+          "hem": "すそ幅",
+          "bicep": "そで幅",
+          "sleeve": "ゆき丈",
+          "bust": "身幅",
+          "waist": "ウエスト幅",
+          "shoulder": "肩幅",
+          "height": "身丈"
+        }
+      },
+      "glassesWellington": {
+        "name": "メガネ",
+        "fullName": "ウェリントンメガネ",
+        "pluralName": "ウェリントンメガネ",
+        "measurements": {
+          "temple": "テンプルの長さ",
+          "lensWidth": "レンズ幅",
+          "bridge": "ブリッジ",
+          "frameWidth": "幅",
+          "height": "レンズの高さ"
+        }
+      },
+      "shorts": {
+        "name": "ショートパンツ",
+        "fullName": "ショートパンツ",
+        "pluralName": "ショートパンツ",
+        "measurements": {
+          "inseam": "股下",
+          "thigh": "もも幅",
+          "legOpening": "すそ幅",
+          "waist": "ウエスト幅",
+          "backRise": "後股上",
+          "hip": "ヒップ幅",
+          "frontRise": "前股上"
+        }
+      },
+      "dressALine": {
+        "name": "Aラインワンピース",
+        "fullName": "チュニック",
+        "pluralName": "Aラインワンピース",
+        "measurements": {
+          "hem": "すそ幅",
+          "sleeveOpening": "そで口幅",
+          "bust": "身幅",
+          "waist": "ウエスト幅",
+          "height": "着丈"
+        }
+      },
+      "dressSleeve": {
+        "name": "袖付きワンピース",
+        "fullName": "袖付きワンピース",
+        "pluralName": "袖付きワンピース",
+        "measurements": {
+          "hem": "すそ幅",
+          "bicep": "そで幅",
+          "sleeve": "そで丈",
+          "bust": "身幅",
+          "waist": "ウエスト幅",
+          "waistHeight": "身丈",
+          "hip": "ヒップ幅",
+          "height": "総丈"
+        }
+      },
+      "shoe": {
+        "name": "靴",
+        "fullName": "シューズ",
+        "pluralName": "靴",
+        "measurements": {
+          "width": "幅",
+          "height": "長さ"
+        }
+      }
+    }
+  }
+}

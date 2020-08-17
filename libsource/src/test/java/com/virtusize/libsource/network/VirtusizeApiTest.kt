@@ -197,4 +197,15 @@ class VirtusizeApiTest {
 
         assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
     }
+
+    @Test
+    fun getI18n_shouldReturnExpectedApiRequest() {
+        val actualApiRequest = VirtusizeApi.getI18n(VirtusizeLanguage.KR)
+
+        val expectedUrl = "https://i18n.virtusize.jp/bundle-payloads/aoyama/ko"
+
+        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
+
+        assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
+    }
 }
