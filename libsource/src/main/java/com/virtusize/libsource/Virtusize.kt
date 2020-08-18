@@ -168,10 +168,10 @@ class Virtusize(
 
 //                if(virtusizeView is VirtusizeInPage) {
                     productCheck.data?.productDataId?.let { productId ->
-                        getI18nText(onSuccess = { i18nLocalization ->
-                            getStoreProductInfo(productId, onSuccess = {
+                        getStoreProductInfo(productId, onSuccess = {
+                            getI18nText({ i18nLocalization ->
                                 Log.d(Constants.INPAGE_LOG_TAG, it.getRecommendationText(i18nLocalization))
-                            }, onError = {
+                            }, {
                                 Log.e(Constants.INPAGE_LOG_TAG, it.message)
                             })
                         }, onError = {
@@ -409,7 +409,12 @@ class Virtusize(
             .execute(apiRequest)
     }
 
-    fun getI18nText(
+    /**
+     * Gets the i18n localization texts
+     * @param onSuccess the optional success callback to pass the [I18nLocalization] from the response when [VirtusizeApiTask] is successful
+     * @param onError the optional error callback to get the [VirtusizeErrorType] in the API task
+     */
+    internal fun getI18nText(
         onSuccess: ((I18nLocalization) -> Unit)? = null,
         onError: ((VirtusizeError) -> Unit)? = null
     ) {
@@ -418,12 +423,12 @@ class Virtusize(
             .setJsonParser(I18nLocalizationJsonParser(context))
             .setSuccessHandler(object : SuccessResponseHandler {
                 override fun onSuccess(data: Any?) {
-                    onSuccess(data as I18nLocalization)
+                    onSuccess?.invoke(data as I18nLocalization)
                 }
             })
             .setErrorHandler(object : ErrorResponseHandler {
                 override fun onError(error: VirtusizeError) {
-                    onError(error)
+                    onError?.invoke(error)
                 }
             })
             .setHttpURLConnection(httpURLConnection)
