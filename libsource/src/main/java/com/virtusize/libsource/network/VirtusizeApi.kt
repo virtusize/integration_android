@@ -237,4 +237,12 @@ internal object VirtusizeApi {
             .toString()
         return ApiRequest(url, HttpMethod.GET)
     }
+
+    fun getI18n(language: VirtusizeLanguage) : ApiRequest {
+        val url = Uri.parse(I18N_URL + VirtusizeEndpoint.I18N.getPath() + language.value)
+            .buildUpon()
+            .build()
+            .toString()
+        return ApiRequest(url, HttpMethod.GET)
+    }
 }

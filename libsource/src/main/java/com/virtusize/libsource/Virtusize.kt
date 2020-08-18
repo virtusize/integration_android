@@ -7,8 +7,6 @@ import android.util.Log
 import android.view.WindowManager
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.network.VirtusizeApi
-import com.virtusize.libsource.data.remote.ProductCheck
-import com.virtusize.libsource.data.remote.Store
 import com.virtusize.libsource.data.local.VirtusizeOrder
 import com.virtusize.libsource.data.local.VirtusizeParams
 import com.virtusize.libsource.data.parsers.*
@@ -16,8 +14,7 @@ import com.virtusize.libsource.data.parsers.ProductCheckJsonParser
 import com.virtusize.libsource.data.parsers.ProductMetaDataHintsJsonParser
 import com.virtusize.libsource.data.parsers.StoreJsonParser
 import com.virtusize.libsource.data.parsers.StoreProductJsonParser
-import com.virtusize.libsource.data.remote.ProductType
-import com.virtusize.libsource.data.remote.StoreProduct
+import com.virtusize.libsource.data.remote.*
 import com.virtusize.libsource.network.ApiRequest
 import com.virtusize.libsource.network.VirtusizeApiTask
 import com.virtusize.libsource.ui.VirtusizeView
@@ -25,6 +22,7 @@ import com.virtusize.libsource.util.Constants
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers.IO
 import java.net.HttpURLConnection
+import java.util.*
 
 /**
  * This is the main class that can be used by Virtusize Clients to perform all available operations related to fit check
@@ -171,7 +169,11 @@ class Virtusize(
 //                if(virtusizeView is VirtusizeInPage) {
                     productCheck.data?.productDataId?.let { productId ->
                         getStoreProductInfo(productId, onSuccess = {
-                            Log.d(Constants.INPAGE_LOG_TAG, it.getRecommendationText(context))
+                            getI18nText({ i18nLocalization ->
+                                Log.d(Constants.INPAGE_LOG_TAG, it.getRecommendationText(i18nLocalization))
+                            }, {
+                                Log.e(Constants.INPAGE_LOG_TAG, it.message)
+                            })
                         }, onError = {
                             Log.e(Constants.INPAGE_LOG_TAG, it.message)
                         })
@@ -354,7 +356,6 @@ class Virtusize(
             override fun onError(error: VirtusizeError) {
                 onError(error)
             }
-
         })
     }
 
@@ -364,7 +365,7 @@ class Virtusize(
      * @param onSuccess the optional success callback to pass the [StoreProduct]
      * @param onError the optional error callback to get the [VirtusizeError] in the API task
      */
-    fun getStoreProductInfo(
+    internal fun getStoreProductInfo(
         productId: Int,
         onSuccess: ((StoreProduct) -> Unit)? = null,
         onError: ((VirtusizeError) -> Unit)? = null
@@ -397,7 +398,7 @@ class Virtusize(
      * @param onSuccess the optional success callback to pass the list of [ProductType]
      * @param onError the optional error callback to get the [VirtusizeError] in the API task
      */
-    fun getProductTypes(
+    internal fun getProductTypes(
         onSuccess: ((List<ProductType>?) -> Unit)? = null,
         onError: ((VirtusizeError) -> Unit)? = null
     ) {
@@ -407,6 +408,33 @@ class Virtusize(
             .setSuccessHandler(object : SuccessResponseHandler {
                 override fun onSuccess(data: Any?) {
                     onSuccess?.invoke(data as? List<ProductType>)
+                }
+            })
+            .setErrorHandler(object : ErrorResponseHandler {
+                override fun onError(error: VirtusizeError) {
+                    onError?.invoke(error)
+                }
+            })
+            .setHttpURLConnection(httpURLConnection)
+            .setCoroutineDispatcher(coroutineDispatcher)
+            .execute(apiRequest)
+    }
+
+    /**
+     * Gets the i18n localization texts
+     * @param onSuccess the optional success callback to pass the [I18nLocalization] from the response when [VirtusizeApiTask] is successful
+     * @param onError the optional error callback to get the [VirtusizeErrorType] in the API task
+     */
+    internal fun getI18nText(
+        onSuccess: ((I18nLocalization) -> Unit)? = null,
+        onError: ((VirtusizeError) -> Unit)? = null
+    ) {
+        val apiRequest = VirtusizeApi.getI18n(params.language ?: (VirtusizeLanguage.values().find { it.value == Locale.getDefault().language } ?: VirtusizeLanguage.EN))
+        VirtusizeApiTask()
+            .setJsonParser(I18nLocalizationJsonParser(context))
+            .setSuccessHandler(object : SuccessResponseHandler {
+                override fun onSuccess(data: Any?) {
+                    onSuccess?.invoke(data as I18nLocalization)
                 }
             })
             .setErrorHandler(object : ErrorResponseHandler {

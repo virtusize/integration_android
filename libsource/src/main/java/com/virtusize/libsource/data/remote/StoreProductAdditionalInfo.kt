@@ -1,5 +1,7 @@
 package com.virtusize.libsource.data.remote
 
+import com.virtusize.libsource.util.I18nConstants
+
 /**
  * This class represents the additional info of a store product
  * @param fit the general fit key
@@ -18,11 +20,11 @@ data class StoreProductAdditionalInfo(
             return null
         }
         if(mutableListOf("loose", "wide", "flared").contains(fit)) {
-            return "loose"
+            return I18nConstants.GENERAL_FIT_LOOSE_KEY
         }
         if(mutableListOf("tight", "slim").contains(fit)) {
-            return "tight"
+            return I18nConstants.GENERAL_FIT_TIGHT_KEY
         }
-        return "regular"
+        return I18nConstants.GENERAL_FIT_REGULAR_KEY
     }
 }

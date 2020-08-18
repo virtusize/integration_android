@@ -1,9 +1,5 @@
 package com.virtusize.libsource.data.remote
 
-import android.content.Context
-import com.virtusize.libsource.R
-import com.virtusize.libsource.util.getStringResourceByName
-
 /**
  * This class represents the response for the request to getting the store product info
  * @param id the internal product ID in the Virtusize server
@@ -25,28 +21,25 @@ data class StoreProduct(
     val storeId: Int,
     val storeProductMeta: StoreProductMeta?
 ) {
-
     /**
      * Gets the InPage recommendation text based on the product info
-     * @param context Android Application Context
+     * @param i18nLocalization [I18nLocalization]
      * @return the InPage text
      */
-    fun getRecommendationText(context: Context): String {
+    fun getRecommendationText(i18nLocalization: I18nLocalization): String {
         var text: String? = null
         when {
             isAccessory() -> {
-                text = context.getString(R.string.inpage_default_accessory_text)
+                text = i18nLocalization.defaultAccessoryText
             }
             storeProductMeta?.additionalInfo?.brandSizing != null -> {
-                val brandSizing = storeProductMeta.additionalInfo.brandSizing
-                text = context.getStringResourceByName("inpage_sizing_${brandSizing.getBrandKey()}_${brandSizing.compare}_text")
+                text = i18nLocalization.getSizingText(storeProductMeta.additionalInfo.brandSizing)
             }
             storeProductMeta?.additionalInfo?.getGeneralFitKey() != null -> {
-                val generalFitKey = storeProductMeta.additionalInfo.getGeneralFitKey()
-                text = context.getStringResourceByName("inpage_fit_${generalFitKey}_text")
+                text = i18nLocalization.getFitText(storeProductMeta.additionalInfo.getGeneralFitKey())
             }
         }
-        return text ?: context.getString(R.string.inpage_default_text)
+        return text ?: i18nLocalization.defaultText
     }
 
     /**
