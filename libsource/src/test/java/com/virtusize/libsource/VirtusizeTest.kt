@@ -193,7 +193,7 @@ class VirtusizeTest {
             MockedResponse(200,
                 TestFixtures.STORE_WITH_FULL_INFO.toString().byteInputStream())
         ))
-        virtusize.retrieveStoreInfo(
+        virtusize.getStoreInfo(
             object: SuccessResponseHandler {
                 override fun onSuccess(data: Any?) {
                     actualStore = data as Store
@@ -225,7 +225,7 @@ class VirtusizeTest {
             MockedResponse(200,
                 TestFixtures.STORE_WITH_NULL_VALUES.toString().byteInputStream())
         ))
-        virtusize.retrieveStoreInfo(
+        virtusize.getStoreInfo(
             object: SuccessResponseHandler {
                 override fun onSuccess(data: Any?) {
                     actualStore = data as Store

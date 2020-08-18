@@ -4,6 +4,18 @@ import android.content.Context
 import com.virtusize.libsource.R
 import com.virtusize.libsource.util.getStringResourceByName
 
+/**
+ * This class represents the response for the request to getting the store product info
+ * @param id the internal product ID in the Virtusize server
+ * @param sizes the sizes that this product has
+ * @param externalId the external product ID from the client's store
+ * @param productType the ID of the product type of this product
+ * @param name the product name
+ * @param storeId the ID of the store that this product belongs to
+ * @param storeProductMeta the additional data of this product
+ * @see ProductSize
+ * @see StoreProductMeta
+ */
 data class StoreProduct(
     val id: Int,
     val sizes: List<ProductSize>,
@@ -13,6 +25,12 @@ data class StoreProduct(
     val storeId: Int,
     val storeProductMeta: StoreProductMeta?
 ) {
+
+    /**
+     * Gets the InPage recommendation text based on the product info
+     * @param context Android Application Context
+     * @return the InPage text
+     */
     fun getRecommendationText(context: Context): String {
         var text: String? = null
         when {

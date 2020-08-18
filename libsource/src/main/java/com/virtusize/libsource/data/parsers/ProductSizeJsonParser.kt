@@ -4,6 +4,9 @@ import com.virtusize.libsource.data.remote.Measurement
 import com.virtusize.libsource.data.remote.ProductSize
 import org.json.JSONObject
 
+/**
+ * This class parses a JSONObject to the [ProductSize] object
+ */
 class ProductSizeJsonParser : VirtusizeJsonParser {
     override fun parse(json: JSONObject): ProductSize? {
         val name = json.optString(FIELD_NAME)
