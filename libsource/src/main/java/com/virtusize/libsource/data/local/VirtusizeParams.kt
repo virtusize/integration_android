@@ -17,7 +17,7 @@ data class VirtusizeParams(
     internal var bid: String?,
     internal var environment: VirtusizeEnvironment,
     private var region: VirtusizeRegion,
-    private val language: VirtusizeLanguage?,
+    internal val language: VirtusizeLanguage?,
     private val allowedLanguages: MutableList<VirtusizeLanguage>,
     internal var virtusizeProduct: VirtusizeProduct?,
     internal var externalUserId: String?,

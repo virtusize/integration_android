@@ -107,14 +107,6 @@ class VirtusizeApiTest {
                 expectedParams["storeId"] = data.storeId.toString()
                 expectedParams["storeName"] = data.storeName
                 expectedParams["storeProductType"] = data.productTypeName
-
-                data.userData?.let { userData ->
-                    expectedParams["wardrobeActive"] = userData.wardrobeActive
-                    expectedParams["wardrobeHasM"] = userData.wardrobeHasM
-                    expectedParams["wardrobeHasP"] = userData.wardrobeHasP
-                    expectedParams["wardrobeHasR"] = userData.wardrobeHasR
-                }
-
             }
         }
 
@@ -200,6 +192,17 @@ class VirtusizeApiTest {
         val actualApiRequest = VirtusizeApi.getProductTypes()
 
         val expectedUrl = "https://staging.virtusize.com/a/api/v3/product-types"
+
+        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
+
+        assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
+    }
+
+    @Test
+    fun getI18n_shouldReturnExpectedApiRequest() {
+        val actualApiRequest = VirtusizeApi.getI18n(VirtusizeLanguage.KR)
+
+        val expectedUrl = "https://i18n.virtusize.jp/bundle-payloads/aoyama/ko"
 
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
 

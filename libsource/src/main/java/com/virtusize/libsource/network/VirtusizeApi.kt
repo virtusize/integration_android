@@ -173,18 +173,6 @@ internal object VirtusizeApi {
             productCheck.productId.let {
                 params["storeProductExternalId"] = it
             }
-            productCheck.data?.userData?.wardrobeActive?.let {
-                params["wardrobeActive"] = it
-            }
-            productCheck.data?.userData?.wardrobeHasM?.let {
-                params["wardrobeHasM"] = it
-            }
-            productCheck.data?.userData?.wardrobeHasP?.let {
-                params["wardrobeHasP"] = it
-            }
-            productCheck.data?.userData?.wardrobeHasR?.let {
-                params["wardrobeHasR"] = it
-            }
         }
 
         if (!virtusizeEvent.data?.toString().isNullOrEmpty()) {
@@ -244,6 +232,14 @@ internal object VirtusizeApi {
      */
     fun getProductTypes() : ApiRequest {
         val url = Uri.parse(environment.apiUrl() + VirtusizeEndpoint.ProductType.getPath())
+            .buildUpon()
+            .build()
+            .toString()
+        return ApiRequest(url, HttpMethod.GET)
+    }
+
+    fun getI18n(language: VirtusizeLanguage) : ApiRequest {
+        val url = Uri.parse(I18N_URL + VirtusizeEndpoint.I18N.getPath() + language.value)
             .buildUpon()
             .build()
             .toString()

@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.virtusize.libsource.R
 import com.virtusize.libsource.TestFixtures
+import org.junit.Before
 import org.junit.Test
 
 import org.junit.runner.RunWith
@@ -18,14 +19,33 @@ class StoreProductTest {
 
     private val context: Context = ApplicationProvider.getApplicationContext()
 
+    private lateinit var i18nLocalization: I18nLocalization
+
+    @Before
+    fun setup() {
+        i18nLocalization = I18nLocalization(
+            context.getString(R.string.inpage_default_text),
+            context.getString(R.string.inpage_default_accessory_text),
+            context.getString(R.string.inpage_sizing_itemBrand_large_text),
+            context.getString(R.string.inpage_sizing_itemBrand_true_text),
+            context.getString(R.string.inpage_sizing_itemBrand_small_text),
+            context.getString(R.string.inpage_sizing_mostBrands_large_text),
+            context.getString(R.string.inpage_sizing_mostBrands_true_text),
+            context.getString(R.string.inpage_sizing_mostBrands_small_text),
+            context.getString(R.string.inpage_fit_loose_text),
+            context.getString(R.string.inpage_fit_regular_text),
+            context.getString(R.string.inpage_fit_tight_text)
+        )
+    }
+
     @Test
     fun getRecommendationText_productIsAnAccessory_returnDefaultAccessoryText() {
 
         val defaultAccessoryText = context.getString(R.string.inpage_default_accessory_text)
-        assertThat(TestFixtures.storeProduct(18).getRecommendationText(context)).isEqualTo(defaultAccessoryText)
-        assertThat(TestFixtures.storeProduct(19).getRecommendationText(context)).isEqualTo(defaultAccessoryText)
-        assertThat(TestFixtures.storeProduct(25).getRecommendationText(context)).isEqualTo(defaultAccessoryText)
-        assertThat(TestFixtures.storeProduct(26).getRecommendationText(context)).isEqualTo(defaultAccessoryText)
+        assertThat(TestFixtures.storeProduct(18).getRecommendationText(i18nLocalization)).isEqualTo(defaultAccessoryText)
+        assertThat(TestFixtures.storeProduct(19).getRecommendationText(i18nLocalization)).isEqualTo(defaultAccessoryText)
+        assertThat(TestFixtures.storeProduct(25).getRecommendationText(i18nLocalization)).isEqualTo(defaultAccessoryText)
+        assertThat(TestFixtures.storeProduct(26).getRecommendationText(i18nLocalization)).isEqualTo(defaultAccessoryText)
     }
 
     @Test
@@ -34,28 +54,28 @@ class StoreProductTest {
             TestFixtures.storeProduct(
                 1,
                 brandSizing = BrandSizing("large", true)
-            ).getRecommendationText(context)
+            ).getRecommendationText(i18nLocalization)
         ).isEqualTo(context.getString(R.string.inpage_sizing_itemBrand_large_text))
 
         assertThat(
             TestFixtures.storeProduct(
                 15,
                 brandSizing = BrandSizing("true", true)
-            ).getRecommendationText(context)
+            ).getRecommendationText(i18nLocalization)
         ).isEqualTo(context.getString(R.string.inpage_sizing_itemBrand_true_text))
 
         assertThat(
             TestFixtures.storeProduct(
                 20,
                 brandSizing = BrandSizing("small", false)
-            ).getRecommendationText(context)
+            ).getRecommendationText(i18nLocalization)
         ).isEqualTo(context.getString(R.string.inpage_sizing_mostBrands_small_text))
 
         assertThat(
             TestFixtures.storeProduct(
                 24,
                 brandSizing = BrandSizing("true", false)
-            ).getRecommendationText(context)
+            ).getRecommendationText(i18nLocalization)
         ).isEqualTo(context.getString(R.string.inpage_sizing_mostBrands_true_text))
     }
 
@@ -66,7 +86,7 @@ class StoreProductTest {
                 2,
                 brandSizing = null,
                 fit = null
-            ).getRecommendationText(context)
+            ).getRecommendationText(i18nLocalization)
         ).isEqualTo(context.getString(R.string.inpage_default_text))
     }
 
@@ -77,7 +97,7 @@ class StoreProductTest {
                 4,
                 brandSizing = null,
                 fit = "regular"
-            ).getRecommendationText(context)
+            ).getRecommendationText(i18nLocalization)
         ).isEqualTo(context.getString(R.string.inpage_fit_regular_text))
 
         assertThat(
@@ -85,7 +105,7 @@ class StoreProductTest {
                 6,
                 brandSizing = null,
                 fit = "loose"
-            ).getRecommendationText(context)
+            ).getRecommendationText(i18nLocalization)
         ).isEqualTo(context.getString(R.string.inpage_fit_loose_text))
 
         assertThat(
@@ -93,7 +113,7 @@ class StoreProductTest {
                 8,
                 brandSizing = null,
                 fit = "flared"
-            ).getRecommendationText(context)
+            ).getRecommendationText(i18nLocalization)
         ).isEqualTo(context.getString(R.string.inpage_fit_loose_text))
 
         assertThat(
@@ -101,7 +121,7 @@ class StoreProductTest {
                 10,
                 brandSizing = null,
                 fit = "slim"
-            ).getRecommendationText(context)
+            ).getRecommendationText(i18nLocalization)
         ).isEqualTo(context.getString(R.string.inpage_fit_tight_text))
 
         assertThat(
@@ -109,7 +129,7 @@ class StoreProductTest {
                 12,
                 brandSizing = null,
                 fit = "random"
-            ).getRecommendationText(context)
+            ).getRecommendationText(i18nLocalization)
         ).isEqualTo(context.getString(R.string.inpage_fit_regular_text))
     }
 }

@@ -20,26 +20,6 @@ internal object TestFixtures {
 
     val EMPTY_JSON_DATA = JSONObject("{}")
 
-    val USER_DATA_ONLY_WITH_ONE_INFO = JSONObject(
-        """
-            {
-               "should_see_ph_tooltip": false
-            }
-        """.trimIndent()
-    )
-
-    val USER_DATA_WITH_FULL_INFO = JSONObject(
-        """
-            {
-               "should_see_ph_tooltip": false,
-                "wardrobe_active": false,
-                "wardrobe_has_m": true,
-                "wardrobe_has_p": true,
-                "wardrobe_has_r": true
-            }
-        """.trimIndent()
-    )
-
     val PRODUCT_DATA_CHECK = JSONObject(
         """
             {
@@ -52,7 +32,7 @@ internal object TestFixtures {
                     "productDataId": 7110384,
                     "productTypeId": 5,
                     "userData": {
-                            "should_see_ph_tooltip": false
+                            "should_see_ph_tooltip": true
                         }
                 }, 
                 "name": "backend-checked-product", 
