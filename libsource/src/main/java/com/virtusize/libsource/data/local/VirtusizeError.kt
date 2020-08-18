@@ -15,7 +15,7 @@ data class VirtusizeError(val type: VirtusizeErrorType? = null, val code: Int? =
 /**
  * Throws a VirtusizeError.
  * It logs the error information and exits the normal app flow by throwing an error
- * @param errorType VirtusizeError
+ * @param errorType VirtusizeErrorType
  * @throws IllegalArgumentException
  * @see VirtusizeErrorType
  */

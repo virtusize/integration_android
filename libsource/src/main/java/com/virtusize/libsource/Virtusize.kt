@@ -230,7 +230,7 @@ class Virtusize(
      * Sends an event to the Virtusize server
      * @param event VirtusizeEvent
      * @param withDataProduct ProductCheckResponse corresponding to VirtusizeProduct
-     * @param errorHandler the error callback to get the [VirtusizeErrorType] in the API task
+     * @param errorHandler the error callback to get the [VirtusizeError] in the API task
      */
     internal fun sendEventToApi(
         event: VirtusizeEvent,
@@ -264,12 +264,12 @@ class Virtusize(
     /**
      * Retrieves the specific store info
      * @param onSuccess the success callback to get the [Store] in the API task
-     * @param errorHandler the error callback to get the [VirtusizeErrorType] in the API task
+     * @param errorHandler the error callback to get the [VirtusizeError] in the API task
      */
-    internal fun retrieveStoreInfo(
+    internal fun getStoreInfo(
         onSuccess: SuccessResponseHandler? = null,
         onError: ErrorResponseHandler? = null) {
-        val apiRequest = VirtusizeApi.retrieveStoreInfo()
+        val apiRequest = VirtusizeApi.getStoreInfo()
         VirtusizeApiTask()
             .setJsonParser(StoreJsonParser())
             .setSuccessHandler(onSuccess)
@@ -283,12 +283,12 @@ class Virtusize(
      * Sends an order to the Virtusize server for Kotlin apps
      * @param order
      * @param onSuccess the optional success callback to notify [VirtusizeApiTask] is successful
-     * @param onError the optional error callback to get the [VirtusizeErrorType] in the API task
+     * @param onError the optional error callback to get the [VirtusizeError] in the API task
      */
     fun sendOrder(order: VirtusizeOrder,
                   onSuccess: (() -> Unit)? = null,
                   onError: ((VirtusizeError) -> Unit)? = null) {
-        retrieveStoreInfo(object : SuccessResponseHandler{
+        getStoreInfo(object : SuccessResponseHandler{
             override fun onSuccess(data: Any?) {
                 /**
                  * Throws the error if the user id is not set up or empty during the initialization of the [Virtusize] class
@@ -327,13 +327,13 @@ class Virtusize(
      * Sends an order to the Virtusize server for Java apps
      * @param order
      * @param onSuccess the optional success callback to pass the [Store] from the response when [VirtusizeApiTask] is successful
-     * @param onError the optional error callback to get the [VirtusizeErrorType] in the API task
+     * @param onError the optional error callback to get the [VirtusizeError] in the API task
      */
     fun sendOrder(
         order: VirtusizeOrder,
         onSuccess: SuccessResponseHandler? = null,
         onError: ErrorResponseHandler? = null) {
-        retrieveStoreInfo(object : SuccessResponseHandler{
+        getStoreInfo(object : SuccessResponseHandler{
             override fun onSuccess(data: Any?) {
                 /**
                  * Throws the error if the user id is not set up or empty during the initialization of the [Virtusize] class
@@ -359,6 +359,12 @@ class Virtusize(
         })
     }
 
+    /**
+     * Retrieves the store product info
+     * @param productId the ID of the store product
+     * @param onSuccess the optional success callback to pass the [StoreProduct]
+     * @param onError the optional error callback to get the [VirtusizeError] in the API task
+     */
     internal fun getStoreProductInfo(
         productId: Int,
         onSuccess: ((StoreProduct) -> Unit)? = null,
@@ -387,6 +393,11 @@ class Virtusize(
             .execute(apiRequest)
     }
 
+    /**
+     * Retrieves the list of the product types
+     * @param onSuccess the optional success callback to pass the list of [ProductType]
+     * @param onError the optional error callback to get the [VirtusizeError] in the API task
+     */
     internal fun getProductTypes(
         onSuccess: ((List<ProductType>?) -> Unit)? = null,
         onError: ((VirtusizeError) -> Unit)? = null
