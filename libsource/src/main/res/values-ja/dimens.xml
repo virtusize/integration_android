@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="virtusize_message_textSize">12sp</dimen>
+    <dimen name="virtusize_button_textSize">10sp</dimen>
+
+</resources>

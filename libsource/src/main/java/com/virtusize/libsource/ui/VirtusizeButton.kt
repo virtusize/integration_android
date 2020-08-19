@@ -10,30 +10,34 @@ import com.virtusize.libsource.R
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.data.local.throwError
+import com.virtusize.libsource.util.VirtusizeUtils
+import java.util.*
 
 class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, AppCompatButton(context, attrs) {
 
     override var virtusizeParams: VirtusizeParams? = null
+        private set
 
     override lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
+        private set
 
-    override val virtusizeDialogFragment = VirtusizeWebView()
+    override var virtusizeDialogFragment = VirtusizeWebView()
+        private set
 
-    // The VirtusizeButtonStyle that clients can choose to use
-    var buttonStyle: VirtusizeButtonStyle = VirtusizeButtonStyle.NONE
+    // The VirtusizeViewStyle that clients can choose to use for this Button
+    var virtusizeViewStyle: VirtusizeViewStyle = VirtusizeViewStyle.NONE
         set(value) {
             field = value
-            updateButtonStyle(field)
+            setupButtonStyle()
         }
 
     init {
         visibility = View.INVISIBLE
         val attrsArray = context.obtainStyledAttributes(attrs, R.styleable.VirtusizeButton, 0, 0)
-        val buttonStyle = attrsArray.getInt(R.styleable.VirtusizeButton_virtusizeButtonStyle, VirtusizeButtonStyle.NONE.value)
-        if(buttonStyle == VirtusizeButtonStyle.DEFAULT_STYLE.value) {
-            this.buttonStyle = VirtusizeButtonStyle.DEFAULT_STYLE
-        }
+        val buttonStyle = attrsArray.getInt(R.styleable.VirtusizeButton_virtusizeButtonStyle, VirtusizeViewStyle.NONE.value)
+        virtusizeViewStyle = VirtusizeViewStyle.values().firstOrNull { it.value == buttonStyle } ?: VirtusizeViewStyle.NONE
         attrsArray.recycle()
+        setupButtonStyle()
     }
 
     override fun setup(params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
@@ -43,23 +47,15 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, Ap
     }
 
     /**
-     * Updates the Virtusize Button Style corresponding to [VirtusizeButtonStyle]
-     * @param [VirtusizeButtonStyle]
+     * Sets up the Virtusize Button Style corresponding to [VirtusizeViewStyle]
      */
-    private fun updateButtonStyle(virtusizeButtonStyle: VirtusizeButtonStyle?) {
-        if(virtusizeButtonStyle == VirtusizeButtonStyle.DEFAULT_STYLE) {
-            setVirtusizeDefaultStyle()
+    private fun setupButtonStyle() {
+        if(virtusizeViewStyle == VirtusizeViewStyle.TEAL) {
+            setBackgroundResource(R.drawable.button_background_teal)
+        } else {
+            setBackgroundResource(R.drawable.button_background_black)
         }
-        invalidate()
-    }
 
-    /**
-     * Sets up the default Virtusize button style
-     */
-    private fun setVirtusizeDefaultStyle() {
-        setBackgroundResource(R.drawable.button_background_black)
-
-        setText(R.string.virtusize_button_text)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             setTextAppearance(R.style.VirtusizeButtonTextAppearance)
         } else {
@@ -90,6 +86,7 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, Ap
             productCheck.data?.let { productCheckResponseData ->
                 if (productCheckResponseData.validProduct) {
                     visibility = View.VISIBLE
+                    setupButtonTextConfiguredLocalization()
                     setOnClickListener {
                         clickVirtusizeView(context)
                     }
@@ -99,5 +96,21 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, Ap
             virtusizeMessageHandler.onError(this, VirtusizeErrorType.NullProduct.virtusizeError())
             throwError(VirtusizeErrorType.NullProduct)
         }
+    }
+
+    private fun setupButtonTextConfiguredLocalization() {
+        var configuredContext = VirtusizeUtils.configureLocale(context, Locale.getDefault())
+        when(virtusizeParams?.language) {
+            VirtusizeLanguage.EN -> {
+                configuredContext = VirtusizeUtils.configureLocale(context, Locale.ENGLISH)
+            }
+            VirtusizeLanguage.JP -> {
+                configuredContext = VirtusizeUtils.configureLocale(context, Locale.JAPAN)
+            }
+            VirtusizeLanguage.KR -> {
+                configuredContext = VirtusizeUtils.configureLocale(context, Locale.KOREA)
+            }
+        }
+        text = configuredContext?.getText(R.string.virtusize_button_text)
     }
 }

@@ -11,7 +11,7 @@
     <!-- VirtusizeButton is custom button layout that can be put in xml file and set up programmatically -->
     <com.virtusize.libsource.ui.VirtusizeButton
         android:id="@+id/exampleVirtusizeButton"
-        app:virtusizeButtonStyle="default_style"
+        app:virtusizeButtonStyle="virtusize_black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -19,6 +19,8 @@
         android:id="@+id/exampleVirtusizeInPageMini"
         android:layout_margin="@dimen/virtusizeDp16"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:virtusizeInPageMiniStyle="virtusize_black"
+        app:inPageMiniBackgroundColor="@color/colorAccent"/>
 
 </LinearLayout>

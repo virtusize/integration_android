@@ -45,14 +45,16 @@ class MainActivity : AppCompatActivity() {
             )
 
         /*
-         * To set up the button style programmatically
-         * exampleVirtusizeButton.buttonStyle = VirtusizeButtonStyle.DEFAULT_STYLE
+         * To set up the Button / InPageMini style programmatically
+         * exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.TEAL
+         * exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.TEAL
+         *
          */
-
 
         /*
          * To close the Virtusize page
          * exampleVirtusizeButton.dismissVirtusizeView()
+         * exampleVirtusizeInPageMini.dismissVirtusizeView()
          */
 
         // The sample function to send an order to the Virtusize server

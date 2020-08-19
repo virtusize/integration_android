@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="virtusizeDp8">8dp</dimen>
     <dimen name="virtusizeDp16">16dp</dimen>
 
+    <dimen name="virtusize_message_textSize">14sp</dimen>
     <dimen name="virtusize_button_textSize">12sp</dimen>
 
     <dimen name="virtusize_button_corner_radius">40dp</dimen>
@@ -10,4 +12,8 @@
     <dimen name="virtusize_button_logo_default_width">18dp</dimen>
     <dimen name="virtusize_button_logo_default_height">13dp</dimen>
     <dimen name="virtusize_button_text_marginStart">5dp</dimen>
+
+    <dimen name="virtusize_inpage_mini_height">30dp</dimen>
+    <dimen name="virtusize_inpage_mini_button_margin">5dp</dimen>
+    <dimen name="virtusize_inpage_mini_button_padding">6dp</dimen>
 </resources>
