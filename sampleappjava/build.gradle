@@ -34,7 +34,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
 
-    implementation 'com.github.virtusize:integration_android:1.6.3'
+    implementation 'com.github.virtusize:integration_android:1.7'
 //    implementation project(":libsource")
 
     testImplementation "junit:junit:$junit_version"
