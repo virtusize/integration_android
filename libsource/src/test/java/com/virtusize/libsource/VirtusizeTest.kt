@@ -4,9 +4,7 @@ import android.content.Context
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
-import com.virtusize.libsource.data.local.VirtusizeEnvironment
-import com.virtusize.libsource.data.local.VirtusizeError
-import com.virtusize.libsource.data.local.VirtusizeEvent
+import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.data.remote.ProductMetaDataHints
 import com.virtusize.libsource.data.remote.Store
@@ -21,6 +19,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import java.net.HttpURLConnection
 import java.net.URL
 
 @RunWith(RobolectricTestRunner::class)
@@ -71,7 +70,7 @@ class VirtusizeTest {
                 actualProductCheck = productCheck
             }
         }, object : ErrorResponseHandler {
-            override fun onError(errorCode: Int?, errorMessage: String?, error: VirtusizeError) {}
+            override fun onError(error: VirtusizeError) {}
         }, mockApiRequest)
 
         assertThat(actualProductCheck?.name).isEqualTo("backend-checked-product")
@@ -99,7 +98,7 @@ class VirtusizeTest {
                 actualProductCheck = productCheck
             }
         }, object : ErrorResponseHandler {
-            override fun onError(errorCode: Int?, errorMessage: String?, error: VirtusizeError) {}
+            override fun onError(error: VirtusizeError) {}
         }, mockApiRequest)
 
         assertThat(actualProductCheck?.name).isEqualTo("backend-checked-product")
@@ -111,21 +110,21 @@ class VirtusizeTest {
     fun testProductDataCheck_provideWrongAPIKey_hasNetworkError() = runBlocking {
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
             mockURL,
-            MockedResponse(403, null, "FORBIDDEN")
+            MockedResponse(HttpURLConnection.HTTP_FORBIDDEN, "{ \"Code\": \"ForbiddenError\", \"Message\": \"ForbiddenError: \" }".byteInputStream())
         ))
         virtusize.productDataCheck(object : ValidProductCheckHandler {
             override fun onValidProductCheckCompleted(productCheck: ProductCheck) {}
         }, object : ErrorResponseHandler {
-            override fun onError(errorCode: Int?, errorMessage: String?, error: VirtusizeError) {
-                actualErrorCode = errorCode ?: -1
-                actualMessage = errorMessage ?: ""
+            override fun onError(error: VirtusizeError) {
+                actualErrorCode = error.code
+                actualMessage = error.message
                 actualError = error
             }
         }, mockApiRequest)
 
-        assertThat(actualErrorCode).isEqualTo(403)
-        assertThat(actualMessage).isEqualTo("FORBIDDEN")
-        assertThat(actualError).isEqualTo(VirtusizeError.NetworkError)
+        assertThat(actualError?.code).isEqualTo(HttpURLConnection.HTTP_FORBIDDEN)
+        assertThat(actualError?.message).isEqualTo(VirtusizeErrorType.ApiKeyNullOrInvalid.message())
+        assertThat(actualError).isEqualTo(VirtusizeErrorType.ApiKeyNullOrInvalid)
     }
 
     @Test
@@ -141,7 +140,7 @@ class VirtusizeTest {
                 actualProductMetaDataHints = data as ProductMetaDataHints
             }
         }, object: ErrorResponseHandler{
-            override fun onError(errorCode: Int?, errorMessage: String?, error: VirtusizeError) {}
+            override fun onError(error: VirtusizeError) {}
         })
 
         assertThat(actualProductMetaDataHints?.apiKey).isEqualTo(TestFixtures.API_KEY)
@@ -152,23 +151,28 @@ class VirtusizeTest {
 
     @Test
     fun testSendProductImageToBackend_whenFailed_hasExpectedErrorInfo() = runBlocking {
+        val mockedInputString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n<title>500 Internal Server Error</title>\n" +
+                "<h1>Internal Server Error</h1>\n" +
+                "<p>The server encountered an internal error and was unable to complete your request.  " +
+                "Either the server is overloaded or there is an error in the application.</p>"
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
             mockURL,
-            MockedResponse(500, null, "Internal Server Error")
+            MockedResponse(
+                500,
+                mockedInputString.byteInputStream()
+            )
         ))
         virtusize.sendProductImageToBackend(TestFixtures.VIRTUSIZE_PRODUCT, object: SuccessResponseHandler {
             override fun onSuccess(data: Any?) {}
         }, object: ErrorResponseHandler{
-            override fun onError(errorCode: Int?, errorMessage: String?, error: VirtusizeError) {
-                actualErrorCode = errorCode
-                actualMessage = errorMessage
+            override fun onError(error: VirtusizeError) {
                 actualError = error
             }
         })
 
-        assertThat(actualErrorCode).isEqualTo(500)
-        assertThat(actualMessage).isEqualTo("Internal Server Error")
-        assertThat(actualError).isEqualTo(VirtusizeError.NetworkError)
+        assertThat(actualError?.code).isEqualTo(500)
+        assertThat(actualError?.message).isEqualTo(mockedInputString)
+        assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.NetworkError)
     }
 
     @Test
@@ -187,7 +191,7 @@ class VirtusizeTest {
                     isSuccessful = true
                 }
             }, object : ErrorResponseHandler {
-                    override fun onError(errorCode: Int?, errorMessage: String?, error: VirtusizeError) {}
+                    override fun onError(error: VirtusizeError) {}
             }
         )
 
@@ -209,7 +213,7 @@ class VirtusizeTest {
                     actualStore = data as Store
                 }
             }, object : ErrorResponseHandler {
-                override fun onError(errorCode: Int?, errorMessage: String?, error: VirtusizeError) {}
+                override fun onError(error: VirtusizeError) {}
             }
         )
 
@@ -241,7 +245,7 @@ class VirtusizeTest {
                     actualStore = data as Store
                 }
             }, object : ErrorResponseHandler {
-                override fun onError(errorCode: Int?, errorMessage: String?, error: VirtusizeError) {}
+                override fun onError(error: VirtusizeError) {}
             }
         )
 
@@ -272,7 +276,7 @@ class VirtusizeTest {
                     isSuccessful = true
                 }
             }, object : ErrorResponseHandler {
-                override fun onError(errorCode: Int?, errorMessage: String?, error: VirtusizeError) {}
+                override fun onError(error: VirtusizeError) {}
             }
         )
 

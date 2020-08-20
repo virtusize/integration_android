@@ -1,13 +1,9 @@
 package com.virtusize.libsource.network
 
 import android.net.Uri
+import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.ProductCheck
-import com.virtusize.libsource.data.local.VirtusizeEnvironment
-import com.virtusize.libsource.data.local.VirtusizeEvent
-import com.virtusize.libsource.data.local.VirtusizeProduct
-import com.virtusize.libsource.data.local.value
 import com.virtusize.libsource.data.remote.JsonUtils
-import com.virtusize.libsource.data.local.VirtusizeOrder
 import kotlin.random.Random
 
 
@@ -69,7 +65,7 @@ internal object VirtusizeApi {
      * @see ApiRequest
      */
     fun productCheck(product: VirtusizeProduct): ApiRequest {
-        val urlBuilder = Uri.parse(environment.value() + VirtusizeEndpoint.ProductCheck.getUrl())
+        val urlBuilder = Uri.parse(environment.value() + VirtusizeEndpoint.ProductCheck.getPath())
             .buildUpon()
             .appendQueryParameter("apiKey", apiKey)
             .appendQueryParameter("externalId", product.externalId)
@@ -84,7 +80,7 @@ internal object VirtusizeApi {
      * @return the Fit Illustrator URL as String
      */
     fun fitIllustrator(product: VirtusizeProduct): String {
-        val urlBuilder = Uri.parse(environment.value() + VirtusizeEndpoint.FitIllustrator.getUrl())
+        val urlBuilder = Uri.parse(environment.fitIllustratorUrl())
             .buildUpon()
             .appendQueryParameter("detached", "false")
             .appendQueryParameter("bid", browserID)
@@ -109,7 +105,7 @@ internal object VirtusizeApi {
      * @return ApiRequest
      */
     fun sendProductImageToBackend(product: VirtusizeProduct): ApiRequest {
-        val url = Uri.parse(environment.value() + VirtusizeEndpoint.ProductMetaDataHints.getUrl())
+        val url = Uri.parse(environment.value() + VirtusizeEndpoint.ProductMetaDataHints.getPath())
             .buildUpon()
             .build()
             .toString()
@@ -142,7 +138,7 @@ internal object VirtusizeApi {
         screenResolution: String,
         versionCode: Int
     ): ApiRequest {
-        val url = Uri.parse(environment.value() + VirtusizeEndpoint.Events.getUrl())
+        val url = Uri.parse(environment.value() + VirtusizeEndpoint.Events.getPath())
             .buildUpon()
             .build()
             .toString()
@@ -231,7 +227,7 @@ internal object VirtusizeApi {
      * @see ApiRequest
      */
     fun sendOrder(order: VirtusizeOrder): ApiRequest {
-        val url = Uri.parse(environment.value() + VirtusizeEndpoint.Orders.getUrl())
+        val url = Uri.parse(environment.value() + VirtusizeEndpoint.Orders.getPath())
             .buildUpon()
             .build()
             .toString()
@@ -244,7 +240,7 @@ internal object VirtusizeApi {
      * @see ApiRequest
      */
     fun retrieveStoreInfo() : ApiRequest {
-        val url = Uri.parse(environment.value() + VirtusizeEndpoint.StoreViewApiKey.getUrl() + apiKey)
+        val url = Uri.parse(environment.value() + VirtusizeEndpoint.StoreViewApiKey.getPath() + apiKey)
             .buildUpon()
             .appendQueryParameter("format", "json")
             .build()
