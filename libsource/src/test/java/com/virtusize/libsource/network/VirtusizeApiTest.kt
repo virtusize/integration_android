@@ -55,6 +55,10 @@ class VirtusizeApiTest {
     fun fitIllustrator_shouldReturnExpectedUrl() {
         val actualUrl = VirtusizeApi.fitIllustrator(TestFixtures.VIRTUSIZE_PRODUCT)
 
+        val expectedUrl = "https://static.api.virtusize.com/a/fit-illustrator/v2/staging/index.html"
+
+        assertThat(actualUrl).isEqualTo(expectedUrl)
+
         val actualUrlQuerySanitizer = UrlQuerySanitizer(actualUrl)
 
         assertThat(actualUrlQuerySanitizer.getValue("detached")).isEqualTo("false")
