@@ -1,0 +1,37 @@
+{
+  "bundle": "aoyama",
+  "id": "aoyama.en",
+  "language": "en",
+  "keys": {
+    "apps": {
+      "aoyama": {
+        "detailsScreen": {
+          "sizing": {
+            "mostBrands": {
+              "large": "This item's brand sizes %{boldStart}larger than the average brand.%{boldEnd}",
+              "true": "This item's brand is %{boldStart}true to size.%{boldEnd}",
+              "small": "This item's brand sizes %{boldStart}smaller than average brand.%{boldEnd}"
+            },
+            "itemBrand": {
+              "large": "This item sizes %{boldStart}larger than the brand's average.%{boldEnd}",
+              "true": "This item sizes %{boldStart}true to fit to the brand.%{boldEnd}",
+              "small": "This item sizes %{boldStart}smaller than the brand's average.%{boldEnd}"
+            }
+          },
+          "fit": {
+            "loose": "This item has a %{boldStart}loose fit.%{boldEnd}",
+            "tight": "This item has a %{boldStart}tight fit.%{boldEnd}",
+            "regular": "This item has a %{boldStart}regular fit.%{boldEnd}"
+          },
+          "defaultText": "This item’s brand is %{boldStart}true to size.%{boldEnd}"
+        },
+        "inpage": {
+          "tryItOn": "Try it on",
+          "defaultAccessoryText": "See how everyday items fit",
+          "hasProductAccessoryText": "See the size difference from %{boldStart}your own item%{boldEnd}",
+          "closestSizeToItem": "The closest size to your item is %{value}"
+        }
+      }
+    }
+  }
+}

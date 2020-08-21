@@ -154,13 +154,13 @@ internal class VirtusizeApiTask {
                                 // If the product cannot be found in the Virtusize Server
                                 if (response is ProductCheck) {
                                     Log.d(
-                                        Constants.LOG_TAG,
+                                        Constants.VIRTUSIZE_LOG_TAG,
                                         VirtusizeErrorType.InvalidProduct.message(response.productId)
                                     )
                                     withContext(Main) {
                                         successHandler?.onSuccess(response)
-                                        return@withContext
                                     }
+                                    return@launch
                                 }
                                 virtusizeNetworkError(urlConnection, response)
                             }
@@ -179,7 +179,7 @@ internal class VirtusizeApiTask {
                     }
                 }
             } catch (e: IOException) {
-                Log.e(Constants.LOG_TAG, "Virtusize API task failed. Error: $e")
+                Log.e(Constants.VIRTUSIZE_LOG_TAG, "Virtusize API task failed. Error: $e")
             } finally {
                 urlConnection?.disconnect()
                 inputStream?.close()
@@ -208,7 +208,7 @@ internal class VirtusizeApiTask {
                             jsonParser.parse(jsonObject)
                         }
                 } catch (e: JSONException) {
-                    Log.d(Constants.LOG_TAG, "JSONException: $e")
+                    Log.d(Constants.VIRTUSIZE_LOG_TAG, "JSONException: $e")
                 }
             }
             if (result == null) {

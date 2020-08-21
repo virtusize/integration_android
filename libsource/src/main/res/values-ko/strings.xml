@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">버츄사이즈</string>
+    <string name="virtusize_button_text">사이즈 확인</string>
+    <string name="inpage_default_text">This item’s brand is true to size.</string>
+    <string name="inpage_default_accessory_text">See how everyday items fit</string>
+    <string name="inpage_sizing_itemBrand_large_text">이 상품은 브랜드의 평균보다 큰 편입니다.</string>
+    <string name="inpage_sizing_itemBrand_true_text">이 상품은 브랜드의 평균과 비슷합니다.</string>
+    <string name="inpage_sizing_itemBrand_small_text">이 상품은 브랜드의 평균보다 작은 편입니다.</string>
+    <string name="inpage_sizing_mostBrands_large_text">이 브랜드의 사이즈는 평균보다 큽니다.</string>
+    <string name="inpage_sizing_mostBrands_true_text">이 브랜드의 사이즈는 정 사이즈입니다.</string>
+    <string name="inpage_sizing_mostBrands_small_text">이 브랜드의 사이즈는 평균보다 작습니다.</string>
+    <string name="inpage_fit_loose_text">This item has a loose fit.</string>
+    <string name="inpage_fit_regular_text">This item has a regular fit.</string>
+    <string name="inpage_fit_tight_text">This item has a tight fit.</string>
+</resources>

@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.VirtusizeOrder
-import com.virtusize.libsource.ui.VirtusizeButton
+import com.virtusize.libsource.ui.VirtusizeView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -22,41 +22,43 @@ class MainActivity : AppCompatActivity() {
         (application as App)
             .Virtusize.registerMessageHandler(activityMessageHandler)
 
+        // setup Virtusize product
+        (application as App)
+            .Virtusize
+            .setupVirtusizeProduct(virtusizeProduct = VirtusizeProduct(externalId = "694",
+                imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"
+            ))
+
         // setup Virtusize button
         // Virtusize opens automatically when button is clicked
         (application as App)
             .Virtusize
-            .setupVirtusizeButton(
-                virtusizeButton = exampleVirtusizeButton,
-                virtusizeProduct = VirtusizeProduct(externalId = "694",
-                    imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"
-                )
+            .setupVirtusizeView(
+                virtusizeView = exampleVirtusizeButton
             )
-        /*
-         * To set up the button style programmatically
-         * exampleVirtusizeButton.buttonStyle = VirtusizeButtonStyle.DEFAULT_STYLE
-         */
 
+        // setup Virtusize InPage Mini
+        (application as App)
+            .Virtusize
+            .setupVirtusizeView(
+                virtusizeView = exampleVirtusizeInPageMini
+            )
+
+        /*
+         * To set up the Button / InPageMini style programmatically
+         * exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.TEAL
+         * exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.TEAL
+         *
+         */
 
         /*
          * To close the Virtusize page
          * exampleVirtusizeButton.dismissVirtusizeView()
+         * exampleVirtusizeInPageMini.dismissVirtusizeView()
          */
 
         // The sample function to send an order to the Virtusize server
         sendOrderSample()
-
-        // Demonstrates getting the product type data
-        (application as App)
-            .Virtusize
-            .getProductTypes(
-                onSuccess = {
-                    Log.i(TAG, it.toString())
-                },
-                onError = { error ->
-                    Log.e(TAG, error.message)
-                })
-
     }
 
     /**
@@ -105,16 +107,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val activityMessageHandler = object : VirtusizeMessageHandler {
-        override fun virtusizeControllerShouldClose(virtusizeButton: VirtusizeButton) {
+        override fun virtusizeControllerShouldClose(virtusizeView: VirtusizeView) {
             Log.i(TAG, "Close Virtusize View")
-            virtusizeButton.dismissVirtusizeView()
+            virtusizeView.dismissVirtusizeView()
         }
 
-        override fun onEvent(virtusizeButton: VirtusizeButton?, event: VirtusizeEvent) {
+        override fun onEvent(virtusizeView: VirtusizeView?, event: VirtusizeEvent) {
             Log.i(TAG, event.name)
         }
 
-        override fun onError(virtusizeButton: VirtusizeButton?, errorType: VirtusizeError) {
+        override fun onError(virtusizeView: VirtusizeView?, errorType: VirtusizeError) {
             Log.e(TAG, errorType.message)
         }
     }

@@ -1,0 +1,36 @@
+{
+  "bundle": "aoyama",
+  "id": "aoyama.ko",
+  "language": "ko",
+  "keys": {
+    "apps": {
+      "aoyama": {
+        "detailsScreen": {
+          "sizing": {
+            "mostBrands": {
+              "large": "이 브랜드의 사이즈는 %{boldStart}평균보다 큽니다.%{boldEnd}",
+              "true": "이 브랜드의 사이즈는 %{boldStart}정 사이즈입니다.%{boldEnd}",
+              "small": "이 브랜드의 사이즈는 %{boldStart}평균보다 작습니다.%{boldEnd}"
+            },
+            "itemBrand": {
+              "large": "이 상품은 브랜드의 %{boldStart}평균보다 큰 편입니다.%{boldEnd}",
+              "true": "이 상품은 브랜드의 %{boldStart}평균과 비슷합니다.%{boldEnd}",
+              "small": "이 상품은 브랜드의 %{boldStart}평균보다 작은 편입니다.%{boldEnd}"
+            }
+          },
+          "fit": {
+            "loose": "This item has a %{boldStart}loose fit.%{boldEnd}",
+            "tight": "This item has a %{boldStart}tight fit.%{boldEnd}",
+            "regular": "This item has a %{boldStart}regular fit.%{boldEnd}"
+          },
+          "defaultText": "This item’s brand is %{boldStart}true to size.%{boldEnd}"
+        },
+        "inpage": {
+          "defaultAccessoryText": "See how everyday items fit",
+          "hasProductAccessoryText": "See the size difference from %{boldStart}your own item%{boldEnd}",
+          "closestSizeToItem": "당신의 상품과 유사한 사이즈 %{value}"
+        }
+      }
+    }
+  }
+}

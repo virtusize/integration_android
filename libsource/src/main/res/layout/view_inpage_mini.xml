@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/inpage_mini_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_gray_900"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/virtusizeDp8"
+    android:paddingTop="@dimen/virtusize_inpage_mini_padding_vertical"
+    android:paddingEnd="@dimen/virtusizeDp8"
+    android:paddingBottom="@dimen/virtusize_inpage_mini_padding_vertical">
+
+    <TextView
+        android:id="@+id/inpage_mini_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/inpage_mini_button"
+        android:layout_toLeftOf="@+id/inpage_mini_button"
+        android:textColor="@color/virtusizeWhite"
+        android:textSize="@dimen/virtusize_button_textSize"
+        tools:text="@string/inpage_default_text" />
+
+    <Button
+        android:id="@+id/inpage_mini_button"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/virtusize_inpage_mini_button_height"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/virtusize_inpage_mini_margin_between_message_button"
+        android:layout_marginLeft="@dimen/virtusize_inpage_mini_margin_between_message_button"
+        android:background="@drawable/button_background_white"
+        android:drawableEnd="@drawable/ic_arrow_right_black"
+        android:drawableRight="@drawable/ic_arrow_right_black"
+        android:paddingStart="@dimen/virtusize_inpage_mini_button_padding"
+        android:paddingLeft="@dimen/virtusize_inpage_mini_button_padding"
+        android:paddingEnd="@dimen/virtusize_inpage_mini_button_padding"
+        android:paddingRight="@dimen/virtusize_inpage_mini_button_padding"
+        android:text="@string/virtusize_button_text"
+        android:textColor="@color/color_gray_900"
+        android:textSize="@dimen/virtusize_button_textSize" />
+
+</RelativeLayout>

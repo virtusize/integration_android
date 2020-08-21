@@ -75,7 +75,7 @@ class VirtusizeTest {
         assertThat(actualProductCheck?.data?.fetchMetaData).isFalse()
         assertThat(actualProductCheck?.data?.productDataId).isEqualTo(7110384)
         assertThat(actualProductCheck?.data?.productTypeId).isEqualTo(5)
-        assertThat(actualProductCheck?.data?.userData?.shouldSeePhTooltip).isFalse()
+        assertThat(actualProductCheck?.data?.shouldSeePhTooltip).isTrue()
         assertThat(actualProductCheck?.productId).isEqualTo("694")
     }
 
@@ -193,7 +193,7 @@ class VirtusizeTest {
             MockedResponse(200,
                 TestFixtures.STORE_WITH_FULL_INFO.toString().byteInputStream())
         ))
-        virtusize.retrieveStoreInfo(
+        virtusize.getStoreInfo(
             object: SuccessResponseHandler {
                 override fun onSuccess(data: Any?) {
                     actualStore = data as Store
@@ -225,7 +225,7 @@ class VirtusizeTest {
             MockedResponse(200,
                 TestFixtures.STORE_WITH_NULL_VALUES.toString().byteInputStream())
         ))
-        virtusize.retrieveStoreInfo(
+        virtusize.getStoreInfo(
             object: SuccessResponseHandler {
                 override fun onSuccess(data: Any?) {
                     actualStore = data as Store
@@ -270,7 +270,7 @@ class VirtusizeTest {
     }
 
     @Test
-    fun getStoreProductInfo_whenSuccessful_onSuccessShouldReturnExpectedStoreProduct() = runBlocking {
+    fun testGetStoreProductInfo_whenSuccessful_onSuccessShouldReturnExpectedStoreProduct() = runBlocking {
         var actualStoreProduct: StoreProduct? = null
 
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
@@ -300,7 +300,7 @@ class VirtusizeTest {
     }
 
     @Test
-    fun getProductTypes_whenSuccessful_onSuccessShouldReturnExpectedProductTypeList() = runBlocking {
+    fun testGetProductTypes_whenSuccessful_onSuccessShouldReturnExpectedProductTypeList() = runBlocking {
         var actualProductTypeList: List<ProductType>? = null
 
         virtusize.setHTTPURLConnection(MockHttpURLConnection(

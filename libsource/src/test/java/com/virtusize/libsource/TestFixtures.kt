@@ -4,6 +4,7 @@ import com.virtusize.libsource.data.local.VirtusizeOrder
 import com.virtusize.libsource.data.local.VirtusizeOrderItem
 import com.virtusize.libsource.data.local.VirtusizeProduct
 import com.virtusize.libsource.data.parsers.ProductCheckJsonParser
+import com.virtusize.libsource.data.remote.*
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -19,26 +20,6 @@ internal object TestFixtures {
 
     val EMPTY_JSON_DATA = JSONObject("{}")
 
-    val USER_DATA_ONLY_WITH_ONE_INFO = JSONObject(
-        """
-            {
-               "should_see_ph_tooltip": false
-            }
-        """.trimIndent()
-    )
-
-    val USER_DATA_WITH_FULL_INFO = JSONObject(
-        """
-            {
-               "should_see_ph_tooltip": false,
-                "wardrobeActive": false,
-                "wardrobeHasM": true,
-                "wardrobeHasP": true,
-                "wardrobeHasR": true
-            }
-        """.trimIndent()
-    )
-
     val PRODUCT_DATA_CHECK = JSONObject(
         """
             {
@@ -51,7 +32,7 @@ internal object TestFixtures {
                     "productDataId": 7110384,
                     "productTypeId": 5,
                     "userData": {
-                            "should_see_ph_tooltip": false
+                            "should_see_ph_tooltip": true
                         }
                 }, 
                 "name": "backend-checked-product", 
@@ -190,6 +171,45 @@ internal object TestFixtures {
         1,
         "http://example.com/products/P001"
     )))
+
+    fun storeProduct(
+        productType: Int = 8,
+        brandSizing: BrandSizing? = BrandSizing("large", false),
+        fit: String? = "regular"
+    ) : StoreProduct {
+        return StoreProduct(
+            7110384,
+            mutableListOf(
+                ProductSize(
+                    "38",
+                    mutableSetOf(
+                        Measurement("height", 760),
+                        Measurement("bust", 660),
+                        Measurement("sleeve", 845)
+                    )
+                ),
+                ProductSize(
+                    "36",
+                    mutableSetOf(
+                        Measurement("height", 750),
+                        Measurement("bust", 645),
+                        Measurement("sleeve", 825)
+                    )
+                )
+            ),
+            "694",
+            productType,
+            "Test Product Name",
+            2,
+            StoreProductMeta(
+                1,
+                StoreProductAdditionalInfo(
+                    fit,
+                    brandSizing
+                )
+            )
+        )
+    }
 
     val STORE_PRODUCT_INFO_JSON_DATA = JSONObject(
         """

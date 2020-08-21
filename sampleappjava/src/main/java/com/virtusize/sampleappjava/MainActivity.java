@@ -14,8 +14,9 @@ import com.virtusize.libsource.data.local.VirtusizeEvent;
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler;
 import com.virtusize.libsource.data.local.VirtusizeOrder;
 import com.virtusize.libsource.data.local.VirtusizeOrderItem;
-import com.virtusize.libsource.data.local.VirtusizeProduct;
 import com.virtusize.libsource.ui.VirtusizeButton;
+import com.virtusize.libsource.ui.VirtusizeInPageMini;
+import com.virtusize.libsource.ui.VirtusizeView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     VirtusizeButton virtusizeButton;
+    VirtusizeInPageMini virtusizeInPageMini;
     App app;
     VirtusizeMessageHandler virtusizeMessageHandler;
 
@@ -38,29 +40,24 @@ public class MainActivity extends AppCompatActivity {
 
         virtusizeMessageHandler = new VirtusizeMessageHandler() {
             @Override
-            public void virtusizeControllerShouldClose(@NotNull VirtusizeButton virtusizeButton) {
+            public void virtusizeControllerShouldClose(@NotNull VirtusizeView virtusizeView) {
                 Log.i(TAG, "Close Virtusize View");
             }
 
             @Override
-            public void onEvent(@org.jetbrains.annotations.Nullable VirtusizeButton virtusizeButton, @NotNull VirtusizeEvent event) {
+            public void onEvent(@org.jetbrains.annotations.Nullable VirtusizeView virtusizeView, @NotNull VirtusizeEvent event) {
                 Log.i(TAG, event.getName());
             }
 
             @Override
-            public void onError(VirtusizeButton virtusizeButton, @NonNull VirtusizeError error) {
+            public void onError(VirtusizeView virtusizeView, @NonNull VirtusizeError error) {
                 Log.e(TAG, error.getMessage());
             }
         };
         app.Virtusize.registerMessageHandler(virtusizeMessageHandler);
 
-        app.Virtusize.setupVirtusizeButton(
-                virtusizeButton,
-                new VirtusizeProduct(
-                        "694",
-                        "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"
-                )
-        );
+        app.Virtusize.setupVirtusizeView(virtusizeButton);
+        app.Virtusize.setupVirtusizeView(virtusizeInPageMini);
 
         /*
          * To set up the button style programmatically

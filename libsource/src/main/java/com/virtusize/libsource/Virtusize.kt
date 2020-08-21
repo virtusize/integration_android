@@ -7,8 +7,6 @@ import android.util.Log
 import android.view.WindowManager
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.network.VirtusizeApi
-import com.virtusize.libsource.data.remote.ProductCheck
-import com.virtusize.libsource.data.remote.Store
 import com.virtusize.libsource.data.local.VirtusizeOrder
 import com.virtusize.libsource.data.local.VirtusizeParams
 import com.virtusize.libsource.data.parsers.*
@@ -16,15 +14,16 @@ import com.virtusize.libsource.data.parsers.ProductCheckJsonParser
 import com.virtusize.libsource.data.parsers.ProductMetaDataHintsJsonParser
 import com.virtusize.libsource.data.parsers.StoreJsonParser
 import com.virtusize.libsource.data.parsers.StoreProductJsonParser
-import com.virtusize.libsource.data.remote.ProductType
-import com.virtusize.libsource.data.remote.StoreProduct
+import com.virtusize.libsource.data.remote.*
 import com.virtusize.libsource.network.ApiRequest
 import com.virtusize.libsource.network.VirtusizeApiTask
-import com.virtusize.libsource.ui.VirtusizeButton
+import com.virtusize.libsource.ui.VirtusizeInPageMini
+import com.virtusize.libsource.ui.VirtusizeView
 import com.virtusize.libsource.util.Constants
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers.IO
 import java.net.HttpURLConnection
+import java.util.*
 
 /**
  * This is the main class that can be used by Virtusize Clients to perform all available operations related to fit check
@@ -41,21 +40,21 @@ class Virtusize(
 
     // The Virtusize message handler passes received errors and events to registered message handlers
     private val messageHandler = object : VirtusizeMessageHandler {
-        override fun virtusizeControllerShouldClose(virtusizeButton: VirtusizeButton) {
+        override fun virtusizeControllerShouldClose(virtusizeView: VirtusizeView) {
             messageHandlers.forEach { messageHandler ->
-                messageHandler.virtusizeControllerShouldClose(virtusizeButton)
+                messageHandler.virtusizeControllerShouldClose(virtusizeView)
             }
         }
 
-        override fun onEvent(virtusizeButton: VirtusizeButton?, event: VirtusizeEvent) {
+        override fun onEvent(virtusizeView: VirtusizeView?, event: VirtusizeEvent) {
             messageHandlers.forEach { messageHandler ->
-                messageHandler.onEvent(virtusizeButton, event)
+                messageHandler.onEvent(virtusizeView, event)
             }
         }
 
-        override fun onError(virtusizeButton: VirtusizeButton?, error: VirtusizeError) {
+        override fun onError(virtusizeView: VirtusizeView?, error: VirtusizeError) {
             messageHandlers.forEach { messageHandler ->
-                messageHandler.onError(virtusizeButton, error)
+                messageHandler.onError(virtusizeView, error)
             }
         }
 
@@ -79,6 +78,8 @@ class Virtusize(
     // The dispatcher that determines what thread the corresponding coroutine uses for its execution
     private var coroutineDispatcher: CoroutineDispatcher = IO
 
+    private var virtusizeProduct: VirtusizeProduct? = null
+
     init {
         // Virtusize API for building API requests
         VirtusizeApi.init(
@@ -89,68 +90,95 @@ class Virtusize(
     }
 
     /**
-     * Sets up the Virtusize button by setting VirtusizeProduct to this button
-     * @param virtusizeButton VirtusizeButton that is being set up
-     * @param virtusizeProduct VirtusizeProduct that is being set to this button
+     * Sets up the product for the product detail page
+     *
+     * @param virtusizeProduct VirtusizeProduct that is being set to the VirtusizeView
+     */
+    fun setupVirtusizeProduct(virtusizeProduct: VirtusizeProduct?) {
+        // Throws NullProduct error if the product is null
+        if (virtusizeProduct == null) {
+            handleNullProductError()
+            return
+        }
+        this.virtusizeProduct = virtusizeProduct
+    }
+
+    /**
+     * Sets up the Virtusize view by setting VirtusizeProduct
+     * @param virtusizeView VirtusizeView that is being set up
      * @throws IllegalArgumentException throws an error if VirtusizeButton is null or the image URL of VirtusizeProduct is invalid
      */
-    fun setupVirtusizeButton(virtusizeButton: VirtusizeButton?, virtusizeProduct: VirtusizeProduct?) {
-
-        // Throws VirtusizeError.NullVirtusizeButtonError error if button is null
-        if (virtusizeButton == null) {
-            messageHandler.onError(null, VirtusizeErrorType.NullVirtusizeButtonError.virtusizeError())
-            throwError(errorType = VirtusizeErrorType.NullVirtusizeButtonError)
+    fun setupVirtusizeView(virtusizeView: VirtusizeView?) {
+        // Throws NullProduct error if the product is not set yet
+        if (virtusizeProduct == null) {
+            handleNullProductError()
             return
         }
 
-        if (virtusizeProduct == null) {
-            messageHandler.onError(null, VirtusizeErrorType.NullProduct.virtusizeError())
-            throwError(errorType = VirtusizeErrorType.NullProduct)
+        // Throws VirtusizeError.NullVirtusizeButtonError error if button is null
+        if (virtusizeView == null) {
+            messageHandler.onError(null, VirtusizeErrorType.NullVirtusizeButtonError.virtusizeError())
+            throwError(errorType = VirtusizeErrorType.NullVirtusizeButtonError)
             return
         }
 
         // to handle network errors
         val errorHandler: ErrorResponseHandler = object: ErrorResponseHandler {
             override fun onError(error: VirtusizeError) {
-                messageHandler.onError(virtusizeButton, error)
+                messageHandler.onError(virtusizeView, error)
             }
         }
 
         params.bid = browserIdentifier.getBrowserId()
         params.virtusizeProduct = virtusizeProduct
         // Set virtusizeProduct to VirtusizeButton
-        virtusizeButton.setup(params = params, messageHandler = messageHandler)
+        virtusizeView.setup(params = params, messageHandler = messageHandler)
         // API Request to perform Product check on Virtusize server
-        val apiRequest = VirtusizeApi.productCheck(product = virtusizeProduct)
+        val apiRequest = VirtusizeApi.productCheck(product = virtusizeProduct!!)
         // Callback Handler for Product Check request
         val productValidCheckListener = object : ValidProductCheckHandler {
-
             /**
              * This method returns ProductCheckResponse from Virtusize
              * when Product check Request is performed on server on Virtusize server
              */
             override fun onValidProductCheckCompleted(productCheck: ProductCheck) {
-                // Set up Product check response data to VirtusizeProduct in VirtusizeButton
-                virtusizeButton.setupProductCheckResponseData(productCheck)
+                if (virtusizeView is VirtusizeInPageMini) {
+                    productCheck.data?.productDataId?.let { productId ->
+                        getI18nText({ i18nLocalization ->
+                            getStoreProductInfo(productId, onSuccess = {
+                                virtusizeView.setupRecommendationText(it.getRecommendationText(i18nLocalization))
+                                virtusizeView.setupProductCheckResponseData(productCheck)
+                            }, onError = {
+                                Log.e(Constants.INPAGE_LOG_TAG, it.message)
+                            })
+                        }, {
+                            Log.e(Constants.INPAGE_LOG_TAG, it.message)
+                        })
+
+                    }
+                } else {
+                    // Set up Product check response data to VirtusizeProduct in VirtusizeButton
+                    virtusizeView.setupProductCheckResponseData(productCheck)
+                }
                 // Send API Event UserSawProduct
                 sendEventToApi(
                     event = VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()),
                     withDataProduct = productCheck,
                     errorHandler = errorHandler
                 )
-                messageHandler.onEvent(virtusizeButton, VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()))
+                messageHandler.onEvent(virtusizeView, VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()))
                 productCheck.data?.apply {
                     if (validProduct) {
                         if (fetchMetaData) {
-                            if (virtusizeButton.virtusizeParams?.virtusizeProduct?.imageUrl != null) {
+                            if (virtusizeView.virtusizeParams?.virtusizeProduct?.imageUrl != null) {
                                 // If image URL is valid, send image URL to server
                                 sendProductImageToBackend(
-                                    product = virtusizeProduct,
+                                    product = virtusizeProduct!!,
                                     errorHandler = errorHandler
                                 )
                             } else {
                                 messageHandler.onError(
-                                    virtusizeButton,
+                                    virtusizeView,
                                     VirtusizeErrorType.ImageUrlNotValid.virtusizeError()
                                 )
                                 throwError(VirtusizeErrorType.ImageUrlNotValid)
@@ -163,12 +191,11 @@ class Virtusize(
                             errorHandler = errorHandler
                         )
                         messageHandler.onEvent(
-                            virtusizeButton,
+                            virtusizeView,
                             VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName())
                         )
                     }
                 }
-
             }
         }
 
@@ -220,7 +247,7 @@ class Virtusize(
      * Sends an event to the Virtusize server
      * @param event VirtusizeEvent
      * @param withDataProduct ProductCheckResponse corresponding to VirtusizeProduct
-     * @param errorHandler the error callback to get the [VirtusizeErrorType] in the API task
+     * @param errorHandler the error callback to get the [VirtusizeError] in the API task
      */
     internal fun sendEventToApi(
         event: VirtusizeEvent,
@@ -254,12 +281,12 @@ class Virtusize(
     /**
      * Retrieves the specific store info
      * @param onSuccess the success callback to get the [Store] in the API task
-     * @param errorHandler the error callback to get the [VirtusizeErrorType] in the API task
+     * @param errorHandler the error callback to get the [VirtusizeError] in the API task
      */
-    internal fun retrieveStoreInfo(
+    internal fun getStoreInfo(
         onSuccess: SuccessResponseHandler? = null,
         onError: ErrorResponseHandler? = null) {
-        val apiRequest = VirtusizeApi.retrieveStoreInfo()
+        val apiRequest = VirtusizeApi.getStoreInfo()
         VirtusizeApiTask()
             .setJsonParser(StoreJsonParser())
             .setSuccessHandler(onSuccess)
@@ -273,12 +300,12 @@ class Virtusize(
      * Sends an order to the Virtusize server for Kotlin apps
      * @param order
      * @param onSuccess the optional success callback to notify [VirtusizeApiTask] is successful
-     * @param onError the optional error callback to get the [VirtusizeErrorType] in the API task
+     * @param onError the optional error callback to get the [VirtusizeError] in the API task
      */
     fun sendOrder(order: VirtusizeOrder,
                   onSuccess: (() -> Unit)? = null,
                   onError: ((VirtusizeError) -> Unit)? = null) {
-        retrieveStoreInfo(object : SuccessResponseHandler{
+        getStoreInfo(object : SuccessResponseHandler{
             override fun onSuccess(data: Any?) {
                 /**
                  * Throws the error if the user id is not set up or empty during the initialization of the [Virtusize] class
@@ -317,13 +344,13 @@ class Virtusize(
      * Sends an order to the Virtusize server for Java apps
      * @param order
      * @param onSuccess the optional success callback to pass the [Store] from the response when [VirtusizeApiTask] is successful
-     * @param onError the optional error callback to get the [VirtusizeErrorType] in the API task
+     * @param onError the optional error callback to get the [VirtusizeError] in the API task
      */
     fun sendOrder(
         order: VirtusizeOrder,
         onSuccess: SuccessResponseHandler? = null,
         onError: ErrorResponseHandler? = null) {
-        retrieveStoreInfo(object : SuccessResponseHandler{
+        getStoreInfo(object : SuccessResponseHandler{
             override fun onSuccess(data: Any?) {
                 /**
                  * Throws the error if the user id is not set up or empty during the initialization of the [Virtusize] class
@@ -346,21 +373,31 @@ class Virtusize(
             override fun onError(error: VirtusizeError) {
                 onError(error)
             }
-
         })
     }
 
-    fun getStoreProductInfo(
+    /**
+     * Retrieves the store product info
+     * @param productId the ID of the store product
+     * @param onSuccess the optional success callback to pass the [StoreProduct]
+     * @param onError the optional error callback to get the [VirtusizeError] in the API task
+     */
+    internal fun getStoreProductInfo(
         productId: Int,
-        onSuccess: ((StoreProduct?) -> Unit)? = null,
+        onSuccess: ((StoreProduct) -> Unit)? = null,
         onError: ((VirtusizeError) -> Unit)? = null
     ) {
+        if(productId == 0) {
+            return
+        }
         val apiRequest = VirtusizeApi.getStoreProductInfo(productId.toString())
         VirtusizeApiTask()
             .setJsonParser(StoreProductJsonParser())
             .setSuccessHandler(object : SuccessResponseHandler {
                 override fun onSuccess(data: Any?) {
-                    onSuccess?.invoke(data as? StoreProduct)
+                    (data as? StoreProduct)?.let {
+                        onSuccess?.invoke(it)
+                    }
                 }
             })
             .setErrorHandler(object : ErrorResponseHandler {
@@ -373,7 +410,12 @@ class Virtusize(
             .execute(apiRequest)
     }
 
-    fun getProductTypes(
+    /**
+     * Retrieves the list of the product types
+     * @param onSuccess the optional success callback to pass the list of [ProductType]
+     * @param onError the optional error callback to get the [VirtusizeError] in the API task
+     */
+    internal fun getProductTypes(
         onSuccess: ((List<ProductType>?) -> Unit)? = null,
         onError: ((VirtusizeError) -> Unit)? = null
     ) {
@@ -383,6 +425,33 @@ class Virtusize(
             .setSuccessHandler(object : SuccessResponseHandler {
                 override fun onSuccess(data: Any?) {
                     onSuccess?.invoke(data as? List<ProductType>)
+                }
+            })
+            .setErrorHandler(object : ErrorResponseHandler {
+                override fun onError(error: VirtusizeError) {
+                    onError?.invoke(error)
+                }
+            })
+            .setHttpURLConnection(httpURLConnection)
+            .setCoroutineDispatcher(coroutineDispatcher)
+            .execute(apiRequest)
+    }
+
+    /**
+     * Gets the i18n localization texts
+     * @param onSuccess the optional success callback to pass the [I18nLocalization] from the response when [VirtusizeApiTask] is successful
+     * @param onError the optional error callback to get the [VirtusizeErrorType] in the API task
+     */
+    internal fun getI18nText(
+        onSuccess: ((I18nLocalization) -> Unit)? = null,
+        onError: ((VirtusizeError) -> Unit)? = null
+    ) {
+        val apiRequest = VirtusizeApi.getI18n(params.language ?: (VirtusizeLanguage.values().find { it.value == Locale.getDefault().language } ?: VirtusizeLanguage.EN))
+        VirtusizeApiTask()
+            .setJsonParser(I18nLocalizationJsonParser(context))
+            .setSuccessHandler(object : SuccessResponseHandler {
+                override fun onSuccess(data: Any?) {
+                    onSuccess?.invoke(data as I18nLocalization)
                 }
             })
             .setErrorHandler(object : ErrorResponseHandler {
@@ -431,5 +500,10 @@ class Virtusize(
      */
     internal fun setCoroutineDispatcher(dispatcher: CoroutineDispatcher) {
         this.coroutineDispatcher = dispatcher
+    }
+
+    private fun handleNullProductError() {
+        messageHandler.onError(null, VirtusizeErrorType.NullProduct.virtusizeError())
+        throwError(errorType = VirtusizeErrorType.NullProduct)
     }
 }

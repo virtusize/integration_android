@@ -12,39 +12,7 @@ class StoreProductJsonParserTest {
     fun parse_validJsonData_shouldReturnExpectedObject() {
         val actualStoreProduct = StoreProductJsonParser().parse(TestFixtures.STORE_PRODUCT_INFO_JSON_DATA)
 
-        val expectedStoreProduct = StoreProduct(
-            7110384,
-            mutableListOf(
-                ProductSize("38",
-                    mutableSetOf(
-                        Measurement("height", 760),
-                        Measurement("bust", 660),
-                        Measurement("sleeve", 845)
-                    )
-                ),
-                ProductSize("36",
-                    mutableSetOf(
-                        Measurement("height", 750),
-                        Measurement("bust", 645),
-                        Measurement("sleeve", 825)
-                    )
-                )
-            ),
-            "694",
-            8,
-            "Test Product Name",
-            2,
-            StoreProductMeta(
-                1,
-                StoreProductAdditionalInfo(
-                "regular",
-                    BrandSizing(
-                        "large",
-                        false
-                    )
-                )
-            )
-        )
+        val expectedStoreProduct = TestFixtures.storeProduct()
 
         assertThat(actualStoreProduct).isEqualTo(expectedStoreProduct)
     }
