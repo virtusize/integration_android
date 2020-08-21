@@ -17,6 +17,7 @@ import com.virtusize.libsource.data.parsers.StoreProductJsonParser
 import com.virtusize.libsource.data.remote.*
 import com.virtusize.libsource.network.ApiRequest
 import com.virtusize.libsource.network.VirtusizeApiTask
+import com.virtusize.libsource.ui.VirtusizeInPageMini
 import com.virtusize.libsource.ui.VirtusizeView
 import com.virtusize.libsource.util.Constants
 import kotlinx.coroutines.CoroutineDispatcher
@@ -77,6 +78,8 @@ class Virtusize(
     // The dispatcher that determines what thread the corresponding coroutine uses for its execution
     private var coroutineDispatcher: CoroutineDispatcher = IO
 
+    private var virtusizeProduct: VirtusizeProduct? = null
+
     init {
         // Virtusize API for building API requests
         VirtusizeApi.init(
@@ -87,22 +90,35 @@ class Virtusize(
     }
 
     /**
+     * Sets up the product for the product detail page
+     *
+     * @param virtusizeProduct VirtusizeProduct that is being set to the VirtusizeView
+     */
+    fun setupVirtusizeProduct(virtusizeProduct: VirtusizeProduct?) {
+        // Throws NullProduct error if the product is null
+        if (virtusizeProduct == null) {
+            handleNullProductError()
+            return
+        }
+        this.virtusizeProduct = virtusizeProduct
+    }
+
+    /**
      * Sets up the Virtusize view by setting VirtusizeProduct
      * @param virtusizeView VirtusizeView that is being set up
-     * @param virtusizeProduct VirtusizeProduct that is being set to this button
      * @throws IllegalArgumentException throws an error if VirtusizeButton is null or the image URL of VirtusizeProduct is invalid
      */
-    fun setupVirtusizeView(virtusizeView: VirtusizeView?, virtusizeProduct: VirtusizeProduct?) {
+    fun setupVirtusizeView(virtusizeView: VirtusizeView?) {
+        // Throws NullProduct error if the product is not set yet
+        if (virtusizeProduct == null) {
+            handleNullProductError()
+            return
+        }
+
         // Throws VirtusizeError.NullVirtusizeButtonError error if button is null
         if (virtusizeView == null) {
             messageHandler.onError(null, VirtusizeErrorType.NullVirtusizeButtonError.virtusizeError())
             throwError(errorType = VirtusizeErrorType.NullVirtusizeButtonError)
-            return
-        }
-
-        if (virtusizeProduct == null) {
-            messageHandler.onError(null, VirtusizeErrorType.NullProduct.virtusizeError())
-            throwError(errorType = VirtusizeErrorType.NullProduct)
             return
         }
 
@@ -118,17 +134,32 @@ class Virtusize(
         // Set virtusizeProduct to VirtusizeButton
         virtusizeView.setup(params = params, messageHandler = messageHandler)
         // API Request to perform Product check on Virtusize server
-        val apiRequest = VirtusizeApi.productCheck(product = virtusizeProduct)
+        val apiRequest = VirtusizeApi.productCheck(product = virtusizeProduct!!)
         // Callback Handler for Product Check request
         val productValidCheckListener = object : ValidProductCheckHandler {
-
             /**
              * This method returns ProductCheckResponse from Virtusize
              * when Product check Request is performed on server on Virtusize server
              */
             override fun onValidProductCheckCompleted(productCheck: ProductCheck) {
-                // Set up Product check response data to VirtusizeProduct in VirtusizeButton
-                virtusizeView.setupProductCheckResponseData(productCheck)
+                if (virtusizeView is VirtusizeInPageMini) {
+                    productCheck.data?.productDataId?.let { productId ->
+                        getI18nText({ i18nLocalization ->
+                            getStoreProductInfo(productId, onSuccess = {
+                                virtusizeView.setupRecommendationText(it.getRecommendationText(i18nLocalization))
+                                virtusizeView.setupProductCheckResponseData(productCheck)
+                            }, onError = {
+                                Log.e(Constants.INPAGE_LOG_TAG, it.message)
+                            })
+                        }, {
+                            Log.e(Constants.INPAGE_LOG_TAG, it.message)
+                        })
+
+                    }
+                } else {
+                    // Set up Product check response data to VirtusizeProduct in VirtusizeButton
+                    virtusizeView.setupProductCheckResponseData(productCheck)
+                }
                 // Send API Event UserSawProduct
                 sendEventToApi(
                     event = VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()),
@@ -142,7 +173,7 @@ class Virtusize(
                             if (virtusizeView.virtusizeParams?.virtusizeProduct?.imageUrl != null) {
                                 // If image URL is valid, send image URL to server
                                 sendProductImageToBackend(
-                                    product = virtusizeProduct,
+                                    product = virtusizeProduct!!,
                                     errorHandler = errorHandler
                                 )
                             } else {
@@ -165,20 +196,6 @@ class Virtusize(
                         )
                     }
                 }
-
-//                if(virtusizeView is VirtusizeInPage) {
-                    productCheck.data?.productDataId?.let { productId ->
-                        getStoreProductInfo(productId, onSuccess = {
-                            getI18nText({ i18nLocalization ->
-                                Log.d(Constants.INPAGE_LOG_TAG, it.getRecommendationText(i18nLocalization))
-                            }, {
-                                Log.e(Constants.INPAGE_LOG_TAG, it.message)
-                            })
-                        }, onError = {
-                            Log.e(Constants.INPAGE_LOG_TAG, it.message)
-                        })
-                    }
-//                }
             }
         }
 
@@ -483,5 +500,10 @@ class Virtusize(
      */
     internal fun setCoroutineDispatcher(dispatcher: CoroutineDispatcher) {
         this.coroutineDispatcher = dispatcher
+    }
+
+    private fun handleNullProductError() {
+        messageHandler.onError(null, VirtusizeErrorType.NullProduct.virtusizeError())
+        throwError(errorType = VirtusizeErrorType.NullProduct)
     }
 }

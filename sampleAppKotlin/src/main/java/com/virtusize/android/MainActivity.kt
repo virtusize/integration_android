@@ -22,25 +22,39 @@ class MainActivity : AppCompatActivity() {
         (application as App)
             .Virtusize.registerMessageHandler(activityMessageHandler)
 
+        // setup Virtusize product
+        (application as App)
+            .Virtusize
+            .setupVirtusizeProduct(virtusizeProduct = VirtusizeProduct(externalId = "694",
+                imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"
+            ))
+
         // setup Virtusize button
         // Virtusize opens automatically when button is clicked
         (application as App)
             .Virtusize
             .setupVirtusizeView(
-                virtusizeView = exampleVirtusizeButton,
-                virtusizeProduct = VirtusizeProduct(externalId = "694",
-                    imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"
-                )
+                virtusizeView = exampleVirtusizeButton
             )
-        /*
-         * To set up the button style programmatically
-         * exampleVirtusizeButton.buttonStyle = VirtusizeButtonStyle.DEFAULT_STYLE
-         */
 
+        // setup Virtusize InPage Mini
+        (application as App)
+            .Virtusize
+            .setupVirtusizeView(
+                virtusizeView = exampleVirtusizeInPageMini
+            )
+
+        /*
+         * To set up the Button / InPageMini style programmatically
+         * exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.TEAL
+         * exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.TEAL
+         *
+         */
 
         /*
          * To close the Virtusize page
          * exampleVirtusizeButton.dismissVirtusizeView()
+         * exampleVirtusizeInPageMini.dismissVirtusizeView()
          */
 
         // The sample function to send an order to the Virtusize server

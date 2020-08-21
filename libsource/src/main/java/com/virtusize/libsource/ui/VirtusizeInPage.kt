@@ -8,26 +8,32 @@ import com.virtusize.libsource.data.local.VirtusizeParams
 import com.virtusize.libsource.data.remote.ProductCheck
 
 class VirtusizeInPage(context: Context, attrs: AttributeSet) : VirtusizeRelativeLayoutView(context, attrs) {
+
     override var virtusizeParams: VirtusizeParams? = null
+        private set
 
-    // Receives Virtusize messages
-    private lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
+    override lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
+        private set
 
-    // The Virtusize view that opens when the InPage view is clicked
-    private val virtusizeDialogFragment = VirtusizeWebView()
+    override var virtusizeDialogFragment = VirtusizeWebView()
+        private set
 
     init {
         visibility = View.INVISIBLE
     }
 
     override fun setup(params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
+        super.setup(params, messageHandler)
         virtusizeParams = params
         virtusizeMessageHandler = messageHandler
-        virtusizeDialogFragment.setupMessageHandler(messageHandler, this)
     }
 
     override fun setupProductCheckResponseData(productCheck: ProductCheck) {
         // TODO
+    }
+
+    override fun setupRecommendationText(text: String) {
+        TODO("Not yet implemented")
     }
 
     override fun dismissVirtusizeView() {
