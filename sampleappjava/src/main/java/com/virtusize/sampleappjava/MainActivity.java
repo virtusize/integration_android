@@ -14,8 +14,10 @@ import com.virtusize.libsource.data.local.VirtusizeEvent;
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler;
 import com.virtusize.libsource.data.local.VirtusizeOrder;
 import com.virtusize.libsource.data.local.VirtusizeOrderItem;
+import com.virtusize.libsource.data.local.VirtusizeProduct;
 import com.virtusize.libsource.ui.VirtusizeButton;
 import com.virtusize.libsource.ui.VirtusizeInPageMini;
+import com.virtusize.libsource.ui.VirtusizeInPageStandard;
 import com.virtusize.libsource.ui.VirtusizeView;
 
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     VirtusizeButton virtusizeButton;
+    VirtusizeInPageStandard virtusizeInPageStandard;
     VirtusizeInPageMini virtusizeInPageMini;
     App app;
     VirtusizeMessageHandler virtusizeMessageHandler;
@@ -56,7 +59,15 @@ public class MainActivity extends AppCompatActivity {
         };
         app.Virtusize.registerMessageHandler(virtusizeMessageHandler);
 
+        app.Virtusize.setupVirtusizeProduct(
+                new VirtusizeProduct(
+                        "694",
+                        "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"
+                )
+        );
+
         app.Virtusize.setupVirtusizeView(virtusizeButton);
+        app.Virtusize.setupVirtusizeView(virtusizeInPageStandard);
         app.Virtusize.setupVirtusizeView(virtusizeInPageMini);
 
         /*
@@ -69,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Demonstrates how to send an order to the Virtusize server
-     *
+     * <p>
      * Notes:
      * 1. The parameters sizeAlias, variantId, color, gender, and url for [VirtusizeOrderItem] are optional
      * 2. If quantity is not provided, it will be set to 1 on its own
@@ -106,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onError(@NotNull VirtusizeError error) {
                         Log.e(TAG, error.getMessage());
                     }
-        });
+                });
     }
 
     @Override

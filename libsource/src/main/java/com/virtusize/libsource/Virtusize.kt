@@ -17,7 +17,7 @@ import com.virtusize.libsource.data.parsers.StoreProductJsonParser
 import com.virtusize.libsource.data.remote.*
 import com.virtusize.libsource.network.ApiRequest
 import com.virtusize.libsource.network.VirtusizeApiTask
-import com.virtusize.libsource.ui.VirtusizeInPageMini
+import com.virtusize.libsource.ui.VirtusizeInPageView
 import com.virtusize.libsource.ui.VirtusizeView
 import com.virtusize.libsource.util.Constants
 import kotlinx.coroutines.CoroutineDispatcher
@@ -142,7 +142,7 @@ class Virtusize(
              * when Product check Request is performed on server on Virtusize server
              */
             override fun onValidProductCheckCompleted(productCheck: ProductCheck) {
-                if (virtusizeView is VirtusizeInPageMini) {
+                if (virtusizeView is VirtusizeInPageView) {
                     productCheck.data?.productDataId?.let { productId ->
                         getI18nText({ i18nLocalization ->
                             getStoreProductInfo(productId, onSuccess = {

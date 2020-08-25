@@ -37,6 +37,13 @@ class MainActivity : AppCompatActivity() {
                 virtusizeView = exampleVirtusizeButton
             )
 
+        // setup Virtusize InPage Standard
+        (application as App)
+            .Virtusize
+            .setupVirtusizeView(
+                virtusizeView = exampleVirtusizeInPageStandard
+            )
+
         // setup Virtusize InPage Mini
         (application as App)
             .Virtusize

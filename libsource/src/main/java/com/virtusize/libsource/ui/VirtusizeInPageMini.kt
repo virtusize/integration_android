@@ -14,7 +14,7 @@ import com.virtusize.libsource.util.VirtusizeUtils
 import kotlinx.android.synthetic.main.view_inpage_mini.view.*
 import java.util.*
 
-class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeRelativeLayoutView(context, attrs) {
+class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPageView(context, attrs) {
 
     override var virtusizeParams: VirtusizeParams? = null
         private set
