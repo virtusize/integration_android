@@ -1,8 +1,10 @@
 <resources>
-    <string name="app_name">Virtusize</string>
+    <string name="virtusize_name">Virtusize</string>
     <string name="landscape" translatable="false">landscape</string>
     <string name="portrait" translatable="false">portrait</string>
     <string name="virtusize_button_text">Check size</string>
+    <string name="virtusize_privacy_policy">Privacy Policy</string>
+    <string name="virtusize_privacy_policy_link">http://www.virtusize.com/site/privacy-policy</string>
     <string name="inpage_default_text">This item’s brand is true to size.</string>
     <string name="inpage_default_accessory_text">See how everyday items fit</string>
     <string name="inpage_sizing_itemBrand_large_text">This item sizes larger than the brand\'s average.</string>

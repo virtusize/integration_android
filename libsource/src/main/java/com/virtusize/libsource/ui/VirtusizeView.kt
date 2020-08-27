@@ -1,12 +1,16 @@
 package com.virtusize.libsource.ui
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.network.VirtusizeApi
 import com.virtusize.libsource.util.Constants
+import com.virtusize.libsource.util.VirtusizeUtils
+import java.util.*
 
 /**
  * An interface for the Virtusize specific views such as VirtusizeButton and VirtusizeInPage
@@ -56,5 +60,14 @@ interface VirtusizeView {
         }
         virtusizeDialogFragment.arguments = args
         virtusizeDialogFragment.show(fragmentTransaction, Constants.FRAG_TAG)
+    }
+
+    fun getConfiguredContext(context: Context): ContextWrapper? {
+        return when(virtusizeParams?.language) {
+            VirtusizeLanguage.EN -> VirtusizeUtils.configureLocale(context, Locale.ENGLISH)
+            VirtusizeLanguage.JP -> VirtusizeUtils.configureLocale(context, Locale.JAPAN)
+            VirtusizeLanguage.KR -> VirtusizeUtils.configureLocale(context, Locale.KOREA)
+            else -> VirtusizeUtils.configureLocale(context, Locale.getDefault())
+        }
     }
 }

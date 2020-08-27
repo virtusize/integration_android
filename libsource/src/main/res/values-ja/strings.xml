@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">バーチャサイズ</string>
+    <string name="virtusize_name">バーチャサイズ</string>
     <string name="virtusize_button_text">サイズチェック</string>
+    <string name="virtusize_privacy_policy">個人情報保護方針</string>
+    <string name="virtusize_privacy_policy_link">http://www.virtusize.jp/privacy-policy</string>
     <string name="inpage_default_text">この商品は平均的なサイズ感です。</string>
     <string name="inpage_default_accessory_text">日用品と比較する</string>
     <string name="inpage_sizing_itemBrand_large_text">このブランドの平均サイズより大きめです。</string>

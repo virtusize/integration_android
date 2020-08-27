@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">버츄사이즈</string>
+    <string name="virtusize_name">버츄사이즈</string>
     <string name="virtusize_button_text">사이즈 확인</string>
+    <string name="virtusize_privacy_policy">개인 정보 보호 정책</string>
+    <string name="virtusize_privacy_policy_link">http://www.virtusize.kr/privacy-policy</string>
     <string name="inpage_default_text">This item’s brand is true to size.</string>
     <string name="inpage_default_accessory_text">See how everyday items fit</string>
     <string name="inpage_sizing_itemBrand_large_text">이 상품은 브랜드의 평균보다 큰 편입니다.</string>

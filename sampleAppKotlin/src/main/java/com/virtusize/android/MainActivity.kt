@@ -3,9 +3,11 @@ package com.virtusize.android
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.VirtusizeOrder
 import com.virtusize.libsource.ui.VirtusizeView
+import com.virtusize.libsource.util.dp
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
             .setupVirtusizeView(
                 virtusizeView = exampleVirtusizeButton
             )
+        exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.BLACK
 
         // setup Virtusize InPage Standard
         (application as App)
@@ -43,6 +46,8 @@ class MainActivity : AppCompatActivity() {
             .setupVirtusizeView(
                 virtusizeView = exampleVirtusizeInPageStandard
             )
+        exampleVirtusizeInPageStandard.horizontalMargin = 16.dp.toFloat()
+        exampleVirtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
 
         // setup Virtusize InPage Mini
         (application as App)
@@ -50,6 +55,8 @@ class MainActivity : AppCompatActivity() {
             .setupVirtusizeView(
                 virtusizeView = exampleVirtusizeInPageMini
             )
+        exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.BLACK
+        exampleVirtusizeInPageMini.setButtonBackgroundColor(ContextCompat.getColor(this, R.color.ocean_blue))
 
         /*
          * To set up the Button / InPageMini style programmatically
@@ -65,7 +72,7 @@ class MainActivity : AppCompatActivity() {
          */
 
         // The sample function to send an order to the Virtusize server
-        sendOrderSample()
+//        sendOrderSample()
     }
 
     /**

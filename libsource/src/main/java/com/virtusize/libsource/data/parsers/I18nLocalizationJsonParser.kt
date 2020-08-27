@@ -9,7 +9,11 @@ import org.json.JSONObject
 /**
  * This class parses a JSONObject to the [I18nLocalization] object
  */
-internal class I18nLocalizationJsonParser(val context: Context): VirtusizeJsonParser {
+internal class I18nLocalizationJsonParser(val context: Context, private val trimType: TrimType): VirtusizeJsonParser {
+
+    enum class TrimType {
+        CLEAN, HTML
+    }
 
     override fun parse(json: JSONObject): I18nLocalization? {
         val aoyamaJSONObject = json.optJSONObject(FIELD_KEYS)?.optJSONObject(FIELD_APPS)?.optJSONObject(FIELD_AOYAMA)
@@ -109,7 +113,10 @@ internal class I18nLocalizationJsonParser(val context: Context): VirtusizeJsonPa
      * Trims the text from i18n
      */
     private fun trimI18nText(text: String?): String {
-        return text?.replace("%{boldStart}", "")?.replace("%{boldEnd}", "") ?: ""
+        return when (trimType) {
+            TrimType.CLEAN -> text?.replace("%{boldStart}", "")?.replace("%{boldEnd}", "") ?: ""
+            TrimType.HTML -> text?.replace("%{boldStart}", "<br>")?.replace("%{boldEnd}", "") ?: ""
+        }
     }
 
     companion object {
@@ -130,6 +137,5 @@ internal class I18nLocalizationJsonParser(val context: Context): VirtusizeJsonPa
         private const val FIELD_LOOSE_FIT = I18nConstants.GENERAL_FIT_LOOSE_KEY
         private const val FIELD_REGULAR_FIT = I18nConstants.GENERAL_FIT_REGULAR_KEY
         private const val FIELD_TIGHT_FIT = I18nConstants.GENERAL_FIT_TIGHT_KEY
-
     }
 }

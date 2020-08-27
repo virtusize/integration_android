@@ -21,6 +21,7 @@ internal class StoreProductJsonParser: VirtusizeJsonParser {
         val externalId = json.optString(FIELD_EXTERNAL_ID)
         val productType = json.optInt(FIELD_PRODUCT_TYPE)
         val name = json.optString(FIELD_NAME)
+        var cloudinaryPublicId = json.optString(FIELD_CLOUDINARY_PUBLIC_ID)
         val storeId = json.optInt(FIELD_STORE_ID)
         var storeProductMeta: StoreProductMeta? = null
         json.optJSONObject(FIELD_STORE_PRODUCT_META)?.let {
@@ -29,7 +30,7 @@ internal class StoreProductJsonParser: VirtusizeJsonParser {
         if (id == 0 || externalId == "" || productType == 0 || storeId == 0) {
             return null
         }
-        return StoreProduct(id, sizes, externalId, productType, name, storeId, storeProductMeta)
+        return StoreProduct(id, sizes, externalId, productType, name, cloudinaryPublicId, storeId, storeProductMeta)
     }
 
 
@@ -39,6 +40,7 @@ internal class StoreProductJsonParser: VirtusizeJsonParser {
         private const val FIELD_EXTERNAL_ID = "externalId"
         private const val FIELD_PRODUCT_TYPE = "productType"
         private const val FIELD_NAME = "name"
+        private const val FIELD_CLOUDINARY_PUBLIC_ID = "cloudinaryPublicId"
         private const val FIELD_STORE_ID = "store"
         private const val FIELD_STORE_PRODUCT_META = "storeProductMeta"
     }

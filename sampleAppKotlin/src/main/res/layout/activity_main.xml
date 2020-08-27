@@ -17,7 +17,9 @@
 
     <com.virtusize.libsource.ui.VirtusizeInPageStandard
         android:id="@+id/exampleVirtusizeInPageStandard"
-        android:layout_margin="@dimen/virtusizeDp16"
+        android:layout_marginTop="@dimen/virtusizeDp16"
+        app:inPageStandardHorizontalMargin="@dimen/virtusizeDp16"
+        app:virtusizeInPageStandardStyle="virtusize_teal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -27,6 +29,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:virtusizeInPageMiniStyle="virtusize_black"
-        app:inPageMiniBackgroundColor="@color/colorAccent"/>
+        app:inPageMiniBackgroundColor="@color/ocean_blue"/>
 
 </LinearLayout>

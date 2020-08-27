@@ -27,4 +27,15 @@
         <item name="android:textSize">@dimen/virtusize_button_textSize</item>
     </style>
 
+    <style name="VirtusizeInPageButtonStyle" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:drawableEnd">@drawable/ic_arrow_right_black</item>
+        <item name="android:drawableRight">@drawable/ic_arrow_right_black</item>
+        <item name="android:paddingStart">@dimen/virtusize_inpage_mini_button_padding</item>
+        <item name="android:paddingLeft">@dimen/virtusize_inpage_mini_button_padding</item>
+        <item name="android:paddingEnd">@dimen/virtusize_inpage_mini_button_padding</item>
+        <item name="android:paddingRight">@dimen/virtusize_inpage_mini_button_padding</item>
+        <item name="android:text">@string/virtusize_button_text</item>
+        <item name="android:textColor">@color/color_gray_900</item>
+    </style>
+
 </resources>
