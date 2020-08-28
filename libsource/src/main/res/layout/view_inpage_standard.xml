@@ -107,6 +107,7 @@
                 android:layout_marginEnd="@dimen/virtusize_inpage_standard_button_horizontal_margin"
                 android:layout_marginRight="@dimen/virtusize_inpage_standard_button_horizontal_margin"
                 android:layout_marginBottom="@dimen/virtusize_inpage_standard_button_vertical_margin"
+                android:textAllCaps="false"
                 android:background="@drawable/button_background_black"
                 android:includeFontPadding="false"
                 android:textColor="@color/virtusizeWhite"

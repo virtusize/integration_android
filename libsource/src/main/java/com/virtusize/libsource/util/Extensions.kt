@@ -10,7 +10,7 @@ import androidx.core.content.res.ResourcesCompat
 /**
  * The Context extension function to get the string by the string resource name
  */
-fun Context.getStringResourceByName(stringName: String): String? {
+internal fun Context.getStringResourceByName(stringName: String): String? {
     val resId = resources.getIdentifier(stringName, "string", packageName)
     if(resId == 0) {
         return null
@@ -18,7 +18,7 @@ fun Context.getStringResourceByName(stringName: String): String? {
     return getString(resId)
 }
 
-fun Context.getDrawableResourceByName(drawableName: String): Drawable? {
+internal fun Context.getDrawableResourceByName(drawableName: String): Drawable? {
     val resId = resources.getIdentifier(drawableName, "drawable", packageName)
     if(resId == 0) {
         return null
@@ -26,7 +26,7 @@ fun Context.getDrawableResourceByName(drawableName: String): Drawable? {
     return ContextCompat.getDrawable(this, resId)
 }
 
-fun Context.getTypefaceByName(fontFileName: String): Typeface? {
+internal fun Context.getTypefaceByName(fontFileName: String): Typeface? {
     val resId = resources.getIdentifier(fontFileName, "font", packageName)
     if(resId == 0) {
         return null
@@ -34,7 +34,7 @@ fun Context.getTypefaceByName(fontFileName: String): Typeface? {
     return ResourcesCompat.getFont(this, resId)
 }
 
-val Int.dp: Int
+val Int.dpInPx: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
-val Int.px: Int
+val Int.pxInDp: Int
     get() = (this / Resources.getSystem().displayMetrics.density).toInt()

@@ -1,10 +1,11 @@
 package com.virtusize.libsource.ui
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -111,7 +112,18 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
                 inpage_mini_button
             ), virtusizeParams?.language, FontUtils.FontType.REGULAR
         )
-        inpage_mini_button.text = getConfiguredContext(context)?.getText(R.string.virtusize_button_text)
+        val configuredContext = getConfiguredContext(context)
+        inpage_mini_button.text = configuredContext?.getText(R.string.virtusize_button_text)
+        setConfiguredDimensions(configuredContext)
+    }
+
+    private fun setConfiguredDimensions(configuredContext: ContextWrapper?) {
+        configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_mini_message_textSize)?.let {
+            inpage_mini_text.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+        }
+        configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_button_textSize)?.let {
+            inpage_mini_button.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+        }
     }
 
     override fun setupRecommendationText(text: String) {

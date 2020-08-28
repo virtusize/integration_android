@@ -49,6 +49,7 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, Ap
      */
     private fun setupButtonStyle() {
         includeFontPadding = false
+        isAllCaps = false
 
         if(virtusizeViewStyle == VirtusizeViewStyle.TEAL) {
             setBackgroundResource(R.drawable.button_background_teal)
@@ -99,6 +100,8 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, Ap
     }
 
     private fun setupButtonTextConfiguredLocalization() {
-        text = getConfiguredContext(context)?.getText(R.string.virtusize_button_text)
+        val configuredContext = getConfiguredContext(context)
+        text = configuredContext?.getText(R.string.virtusize_button_text)
+        configuredContext?.resources?.getDimension(R.dimen.virtusize_button_textSize)
     }
 }

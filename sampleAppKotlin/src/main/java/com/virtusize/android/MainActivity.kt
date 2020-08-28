@@ -7,7 +7,7 @@ import androidx.core.content.ContextCompat
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.VirtusizeOrder
 import com.virtusize.libsource.ui.VirtusizeView
-import com.virtusize.libsource.util.dp
+import com.virtusize.libsource.util.dpInPx
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
             .setupVirtusizeView(
                 virtusizeView = exampleVirtusizeInPageStandard
             )
-        exampleVirtusizeInPageStandard.horizontalMargin = 16.dp.toFloat()
+        exampleVirtusizeInPageStandard.horizontalMargin = 16.dpInPx.toFloat()
         exampleVirtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
 
         // setup Virtusize InPage Mini

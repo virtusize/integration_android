@@ -35,6 +35,7 @@
         android:layout_marginLeft="@dimen/virtusize_inpage_mini_margin_between_message_button"
         android:background="@drawable/button_background_white"
         android:includeFontPadding="false"
+        android:textAllCaps="false"
         android:textSize="@dimen/virtusize_inpage_button_textSize" />
 
 </RelativeLayout>

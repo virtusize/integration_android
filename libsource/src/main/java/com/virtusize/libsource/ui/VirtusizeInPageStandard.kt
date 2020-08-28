@@ -1,11 +1,13 @@
 package com.virtusize.libsource.ui
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.AttributeSet
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
@@ -18,7 +20,7 @@ import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.util.Constants
 import com.virtusize.libsource.util.FontUtils
-import com.virtusize.libsource.util.dp
+import com.virtusize.libsource.util.dpInPx
 import com.virtusize.libsource.util.getDrawableResourceByName
 import kotlinx.android.synthetic.main.view_inpage_standard.view.*
 import kotlinx.coroutines.CoroutineScope
@@ -92,8 +94,8 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             virtusizeParams?.virtusizeProduct!!.productCheckData = productCheck
             productCheck.data?.let { productCheckResponseData ->
                 if (productCheckResponseData.validProduct) {
-                    setupMessageTextConfiguredLocalization()
                     visibility = View.VISIBLE
+                    setupConfiguredLocalization()
                     inpage_standard_layout.setOnClickListener {
                         clickVirtusizeView(context)
                     }
@@ -144,22 +146,22 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         }
 
         // Set horizontal margins
-        val inPageStandardFooterTopMargin = if(horizontalMargin.toInt() >= 2.dp) 10.dp - horizontalMargin.toInt()  else horizontalMargin.toInt() + 8.dp
-        if(horizontalMargin.toInt() == 0.dp) {
+        val inPageStandardFooterTopMargin = if(horizontalMargin.toInt() >= 2.dpInPx) 10.dpInPx - horizontalMargin.toInt()  else horizontalMargin.toInt() + 8.dpInPx
+        if(horizontalMargin == 0f) {
             inpage_standard_layout.cardElevation = horizontalMargin
-            setupInPageStandardLayoutMargins(0)
-            setupInPageStandardFooterMargins(2.dp, inPageStandardFooterTopMargin, 2.dp, 0.dp)
+            setupMargins(inpage_standard_layout, 0, 0 , 0, 0)
+            setupInPageStandardFooterMargins(2.dpInPx, inPageStandardFooterTopMargin, 2.dpInPx, 0)
         } else {
-            if(horizontalMargin.toInt() <= 14.dp) {
+            if(horizontalMargin.toInt() <= 14.dpInPx) {
                 inpage_standard_layout.cardElevation = horizontalMargin
             } else {
-                inpage_standard_layout.cardElevation = 14.dp.toFloat()
-                setupInPageStandardLayoutMargins(horizontalMargin.toInt())
+                inpage_standard_layout.cardElevation = 14.dpInPx.toFloat()
+                setupMargins(inpage_standard_layout, horizontalMargin.toInt(), horizontalMargin.toInt(), horizontalMargin.toInt(), horizontalMargin.toInt())
                 setupInPageStandardFooterMargins(
-                    horizontalMargin.toInt() + 2.dp,
+                    horizontalMargin.toInt() + 2.dpInPx,
                     inPageStandardFooterTopMargin,
-                    horizontalMargin.toInt() + 2.dp,
-                    0.dp
+                    horizontalMargin.toInt() + 2.dpInPx,
+                    0
                 )
             }
         }
@@ -175,7 +177,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         )
     }
 
-    private fun setupMessageTextConfiguredLocalization() {
+    private fun setupConfiguredLocalization() {
         FontUtils.setTypeFaces(
             context,
             mutableListOf(
@@ -196,6 +198,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         val configuredContext = getConfiguredContext(context)
         inpage_standard_button.text = configuredContext?.getText(R.string.virtusize_button_text)
         inpage_standard_privacy_policy_text.text = configuredContext?.getText(R.string.virtusize_privacy_policy)
+        setConfiguredDimensions(configuredContext)
 
         inpage_standard_privacy_policy_text.setOnClickListener {
             val intent = Intent(
@@ -210,10 +213,28 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         }
     }
 
-    private fun setupInPageStandardLayoutMargins(margin: Int) {
-        val cardViewLayoutParams: MarginLayoutParams = inpage_standard_layout.layoutParams as MarginLayoutParams
-        cardViewLayoutParams.setMargins(margin, margin, margin, margin)
-        inpage_standard_layout.requestLayout()
+    private fun setConfiguredDimensions(configuredContext: ContextWrapper?) {
+        configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_normal_textSize)?.let {
+            inpage_standard_top_text.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+        }
+        configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_bold_textSize)?.let {
+            inpage_standard_bottom_text.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+        }
+        configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_button_textSize)?.let {
+            inpage_standard_button.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+        }
+        configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_privacy_policy_textSize)?.let {
+            inpage_standard_privacy_policy_text.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+        }
+        configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_top_text_marginBottom)?.let {
+            setupMargins(inpage_standard_top_text, 0, 0, 0, it.toInt())
+        }
+    }
+
+    private fun setupMargins(view: View, left: Int, top: Int, right: Int, bottom: Int) {
+        val layoutParams: MarginLayoutParams = view.layoutParams as MarginLayoutParams
+        layoutParams.setMargins(left, top, right, bottom)
+        view.requestLayout()
     }
 
     private fun setupInPageStandardFooterMargins(left: Int, top: Int, right: Int, bottom: Int) {

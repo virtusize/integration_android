@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="virtusizeDp8">8dp</dimen>
+    <dimen name="virtusizeDp14">14dp</dimen>
     <dimen name="virtusizeDp16">16dp</dimen>
 
     <dimen name="virtusize_button_textSize">14sp</dimen>
@@ -27,7 +28,7 @@
     <dimen name="virtusize_inpage_standard_product_image_padding">4dp</dimen>
     <dimen name="virtusize_inpage_standard_texts_horizontal_margin">4dp</dimen>
     <dimen name="virtusize_inpage_standard_texts_vertical_margin">14dp</dimen>
-    <dimen name="virtusize_inpage_standard_top_text_marginBottom">6dp</dimen>
+    <dimen name="virtusize_inpage_standard_top_text_marginBottom">2dp</dimen>
     <dimen name="virtusize_inpage_standard_button_height">28dp</dimen>
     <dimen name="virtusize_inpage_standard_button_horizontal_margin">8dp</dimen>
     <dimen name="virtusize_inpage_standard_button_vertical_margin">20dp</dimen>
