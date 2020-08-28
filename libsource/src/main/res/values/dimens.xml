@@ -34,7 +34,7 @@
     <dimen name="virtusize_inpage_standard_button_vertical_margin">20dp</dimen>
     <dimen name="virtusize_inpage_standard_footer_height">15dp</dimen>
     <dimen name="virtusize_inpage_standard_footer_horizontal_margin">16dp</dimen>
-    <dimen name="virtusize_inpage_standard_footer_marginTop">-6dp</dimen>
+    <dimen name="virtusize_inpage_standard_footer_marginTop">-4dp</dimen>
 
     <dimen name="virtusize_inpage_mini_height">30dp</dimen>
     <dimen name="virtusize_inpage_mini_padding_vertical">5dp</dimen>

@@ -50,7 +50,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
     var virtusizeBackgroundColor = 0
         private set
 
-    var horizontalMargin = 0f
+    var horizontalMargin = -1f
         set(value) {
             field = value
             setStyle()
@@ -77,7 +77,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         )
         horizontalMargin = attrsArray.getDimension(
             R.styleable.VirtusizeInPageStandard_inPageStandardHorizontalMargin,
-            0f
+            -1f
         )
         attrsArray.recycle()
         setStyle()
@@ -116,6 +116,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             inpage_standard_top_text.text = splitTexts[0]
             inpage_standard_bottom_text.text = splitTexts[1]
         } else {
+            inpage_standard_top_text.visibility = View.GONE
             inpage_standard_bottom_text.text = splitTexts[0]
         }
     }
@@ -147,24 +148,16 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
 
         // Set horizontal margins
         val inPageStandardFooterTopMargin = if(horizontalMargin.toInt() >= 2.dpInPx) 10.dpInPx - horizontalMargin.toInt()  else horizontalMargin.toInt() + 8.dpInPx
-        if(horizontalMargin == 0f) {
-            inpage_standard_layout.cardElevation = horizontalMargin
-            setupMargins(inpage_standard_layout, 0, 0 , 0, 0)
-            setupInPageStandardFooterMargins(2.dpInPx, inPageStandardFooterTopMargin, 2.dpInPx, 0)
-        } else {
-            if(horizontalMargin.toInt() <= 14.dpInPx) {
-                inpage_standard_layout.cardElevation = horizontalMargin
-            } else {
-                inpage_standard_layout.cardElevation = 14.dpInPx.toFloat()
-                setupMargins(inpage_standard_layout, horizontalMargin.toInt(), horizontalMargin.toInt(), horizontalMargin.toInt(), horizontalMargin.toInt())
-                setupInPageStandardFooterMargins(
-                    horizontalMargin.toInt() + 2.dpInPx,
-                    inPageStandardFooterTopMargin,
-                    horizontalMargin.toInt() + 2.dpInPx,
-                    0
-                )
-            }
+        if(horizontalMargin < 0f) {
+            return
         }
+        setupMargins(inpage_standard_layout, horizontalMargin.toInt(), horizontalMargin.toInt(), horizontalMargin.toInt(), horizontalMargin.toInt())
+        setupInPageStandardFooterMargins(
+            horizontalMargin.toInt() + 2.dpInPx,
+            inPageStandardFooterTopMargin,
+            horizontalMargin.toInt() + 2.dpInPx,
+            0
+        )
     }
 
     private fun setSizeCheckButtonBackgroundTint(color: Int) {
