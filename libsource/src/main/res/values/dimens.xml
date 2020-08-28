@@ -38,6 +38,7 @@
 
     <dimen name="virtusize_inpage_mini_height">30dp</dimen>
     <dimen name="virtusize_inpage_mini_padding_vertical">5dp</dimen>
+    <dimen name="virtusize_inpage_mini_text_line_spacing">2.5dp</dimen>
     <dimen name="virtusize_inpage_mini_margin_between_message_button">4dp</dimen>
     <dimen name="virtusize_inpage_mini_button_height">20dp</dimen>
     <dimen name="virtusize_inpage_mini_button_padding">6dp</dimen>

@@ -221,6 +221,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         }
         configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_top_text_marginBottom)?.let {
             setupMargins(inpage_standard_top_text, 0, 0, 0, it.toInt())
+            inpage_standard_bottom_text.setLineSpacing(it, 1f)
         }
     }
 

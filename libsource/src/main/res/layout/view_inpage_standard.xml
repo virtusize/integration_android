@@ -89,6 +89,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
+                    android:lineSpacingExtra="@dimen/virtusize_inpage_standard_top_text_marginBottom"
                     android:textColor="@color/color_gray_900"
                     android:textSize="@dimen/virtusize_inpage_standard_bold_textSize"
                     tools:text="true to size" />
@@ -107,9 +108,9 @@
                 android:layout_marginEnd="@dimen/virtusize_inpage_standard_button_horizontal_margin"
                 android:layout_marginRight="@dimen/virtusize_inpage_standard_button_horizontal_margin"
                 android:layout_marginBottom="@dimen/virtusize_inpage_standard_button_vertical_margin"
-                android:textAllCaps="false"
                 android:background="@drawable/button_background_black"
                 android:includeFontPadding="false"
+                android:textAllCaps="false"
                 android:textColor="@color/virtusizeWhite"
                 android:textSize="@dimen/virtusize_inpage_button_textSize"
                 app:drawableTint="@color/virtusizeWhite" />

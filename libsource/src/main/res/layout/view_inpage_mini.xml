@@ -19,6 +19,7 @@
         android:layout_toStartOf="@+id/inpage_mini_button"
         android:layout_toLeftOf="@+id/inpage_mini_button"
         android:includeFontPadding="false"
+        android:lineSpacingExtra="@dimen/virtusize_inpage_mini_text_line_spacing"
         android:textColor="@color/virtusizeWhite"
         android:textSize="@dimen/virtusize_inpage_mini_message_textSize"
         tools:text="@string/inpage_default_text" />
