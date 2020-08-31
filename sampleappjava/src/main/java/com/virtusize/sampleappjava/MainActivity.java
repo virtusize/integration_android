@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         /*
          * To set up the button style programmatically
-         * virtusizeButton.setButtonStyle(VirtusizeButtonStyle.DEFAULT_STYLE);
+         * virtusizeButton.setVirtusizeViewStyle(VirtusizeViewStyle.BLACK);
          */
 
         sendOrderSample();

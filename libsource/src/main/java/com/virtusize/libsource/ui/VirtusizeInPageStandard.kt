@@ -47,7 +47,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             setStyle()
         }
 
-    var virtusizeBackgroundColor = 0
+    var virtusizeButtonBackgroundColor = 0
         private set
 
     var horizontalMargin = -1f
@@ -71,10 +71,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             VirtusizeViewStyle.NONE.value
         )
         virtusizeViewStyle = VirtusizeViewStyle.values().firstOrNull { it.value == buttonStyle } ?: VirtusizeViewStyle.NONE
-        virtusizeBackgroundColor = attrsArray.getColor(
-            R.styleable.VirtusizeInPageStandard_inPageStandardBackgroundColor,
-            0
-        )
+        virtusizeButtonBackgroundColor = attrsArray.getColor(R.styleable.VirtusizeInPageStandard_inPageStandardButtonBackgroundColor, 0)
         horizontalMargin = attrsArray.getDimension(
             R.styleable.VirtusizeInPageStandard_inPageStandardHorizontalMargin,
             -1f
@@ -132,14 +129,14 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
     }
 
     fun setButtonBackgroundColor(@ColorInt color: Int) {
-        virtusizeBackgroundColor = color
+        virtusizeButtonBackgroundColor = color
         setStyle()
     }
 
     private fun setStyle() {
         // Set Virtusize default style
-        if(virtusizeBackgroundColor!= 0) {
-            setSizeCheckButtonBackgroundTint(virtusizeBackgroundColor)
+        if(virtusizeButtonBackgroundColor!= 0) {
+            setSizeCheckButtonBackgroundTint(virtusizeButtonBackgroundColor)
         } else if(virtusizeViewStyle == VirtusizeViewStyle.TEAL) {
             setSizeCheckButtonBackgroundTint(ContextCompat.getColor(context, R.color.virtusizeTeal))
         } else {

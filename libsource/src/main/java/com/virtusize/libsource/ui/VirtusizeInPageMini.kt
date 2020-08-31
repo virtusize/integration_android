@@ -75,7 +75,7 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
         }
     }
 
-    fun setButtonBackgroundColor(@ColorInt color: Int) {
+    fun setInPageMiniBackgroundColor(@ColorInt color: Int) {
         virtusizeBackgroundColor = color
         setupStyle()
     }
@@ -98,7 +98,7 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
     private fun setButtonRightArrowColor(color: Int) {
         var drawable = ContextCompat.getDrawable(context, R.drawable.ic_arrow_right_black)
         drawable = DrawableCompat.wrap(drawable!!)
-        drawable.setBounds( 0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
+        drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
         DrawableCompat.setTint(drawable, color)
 
         inpage_mini_button.setCompoundDrawables(null, null, drawable, null)
