@@ -200,6 +200,7 @@ internal object TestFixtures {
             "694",
             productType,
             "Test Product Name",
+            "Test Cloudinary Public Id",
             2,
             StoreProductMeta(
                 1,

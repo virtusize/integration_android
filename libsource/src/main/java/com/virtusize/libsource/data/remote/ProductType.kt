@@ -8,5 +8,6 @@ package com.virtusize.libsource.data.remote
  */
 data class ProductType(
     val id: Int,
+    val name: String,
     val weights: Set<Weight>
 )

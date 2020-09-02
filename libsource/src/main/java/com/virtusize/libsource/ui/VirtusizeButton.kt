@@ -10,8 +10,6 @@ import com.virtusize.libsource.R
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.data.local.throwError
-import com.virtusize.libsource.util.VirtusizeUtils
-import java.util.*
 
 class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, AppCompatButton(context, attrs) {
 
@@ -50,6 +48,9 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, Ap
      * Sets up the Virtusize Button Style corresponding to [VirtusizeViewStyle]
      */
     private fun setupButtonStyle() {
+        includeFontPadding = false
+        isAllCaps = false
+
         if(virtusizeViewStyle == VirtusizeViewStyle.TEAL) {
             setBackgroundResource(R.drawable.button_background_teal)
         } else {
@@ -99,18 +100,8 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, Ap
     }
 
     private fun setupButtonTextConfiguredLocalization() {
-        var configuredContext = VirtusizeUtils.configureLocale(context, Locale.getDefault())
-        when(virtusizeParams?.language) {
-            VirtusizeLanguage.EN -> {
-                configuredContext = VirtusizeUtils.configureLocale(context, Locale.ENGLISH)
-            }
-            VirtusizeLanguage.JP -> {
-                configuredContext = VirtusizeUtils.configureLocale(context, Locale.JAPAN)
-            }
-            VirtusizeLanguage.KR -> {
-                configuredContext = VirtusizeUtils.configureLocale(context, Locale.KOREA)
-            }
-        }
+        val configuredContext = getConfiguredContext(context)
         text = configuredContext?.getText(R.string.virtusize_button_text)
+        configuredContext?.resources?.getDimension(R.dimen.virtusize_button_textSize)
     }
 }

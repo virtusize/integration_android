@@ -18,6 +18,7 @@ data class StoreProduct(
     val externalId: String,
     val productType: Int,
     val name: String,
+    val cloudinaryPublicId: String,
     val storeId: Int,
     val storeProductMeta: StoreProductMeta?
 ) {

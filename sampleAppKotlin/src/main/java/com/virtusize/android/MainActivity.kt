@@ -3,9 +3,11 @@ package com.virtusize.android
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.VirtusizeOrder
 import com.virtusize.libsource.ui.VirtusizeView
+import com.virtusize.libsource.util.dpInPx
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -22,38 +24,58 @@ class MainActivity : AppCompatActivity() {
         (application as App)
             .Virtusize.registerMessageHandler(activityMessageHandler)
 
-        // setup Virtusize product
+        // Set up Virtusize product
         (application as App)
             .Virtusize
             .setupVirtusizeProduct(virtusizeProduct = VirtusizeProduct(externalId = "694",
                 imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"
             ))
 
-        // setup Virtusize button
+        // Set up Virtusize button
         // Virtusize opens automatically when button is clicked
         (application as App)
             .Virtusize
             .setupVirtusizeView(
                 virtusizeView = exampleVirtusizeButton
             )
+        // Set up the Virtusize view style programmatically
+        exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.BLACK
 
-        // setup Virtusize InPage Mini
+        // Set up Virtusize InPage Standard
+        (application as App)
+            .Virtusize
+            .setupVirtusizeView(
+                virtusizeView = exampleVirtusizeInPageStandard
+            )
+        exampleVirtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
+        // If you like, you can set up the horizontal margins between the screen and the InPage Standard view
+        // Note. Use the helper extension function `dpInPx` if you like
+        exampleVirtusizeInPageStandard.horizontalMargin = 16.dpInPx.toFloat()
+        /*
+         * If you like, you can set up the background of the check size button in InPage Standard,
+         * as long as it passes WebAIM contrast test.
+         *
+         * exampleVirtusizeInPageStandard.setButtonBackgroundColor(ContextCompat.getColor(this, R.color.ocean_blue))
+         */
+
+        // Set up Virtusize InPage Mini
         (application as App)
             .Virtusize
             .setupVirtusizeView(
                 virtusizeView = exampleVirtusizeInPageMini
             )
-
+        exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.BLACK
         /*
-         * To set up the Button / InPageMini style programmatically
-         * exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.TEAL
-         * exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.TEAL
+         * If you like, you can set up the background of InPage Mini view as long as it passes WebAIM contrast test.
          *
+         * exampleVirtusizeInPageMini.setInPageMiniBackgroundColor(ContextCompat.getColor(this, R.color.ocean_blue))
          */
 
         /*
          * To close the Virtusize page
+         *
          * exampleVirtusizeButton.dismissVirtusizeView()
+         * exampleVirtusizeInPageStandard.dismissVirtusizeView()
          * exampleVirtusizeInPageMini.dismissVirtusizeView()
          */
 

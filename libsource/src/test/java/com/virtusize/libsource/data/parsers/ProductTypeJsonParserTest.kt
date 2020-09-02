@@ -14,6 +14,7 @@ class ProductTypeJsonParserTest {
 
         val expectedProductType = ProductType(
             1,
+            "dress",
             mutableSetOf(
                 Weight("bust", 1f),
                 Weight("waist", 1f),

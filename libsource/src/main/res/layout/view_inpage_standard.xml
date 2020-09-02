@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/inpage_standard_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/virtusize_inpage_standard_layout_card_elevation"
+        android:background="@color/virtusizeWhite"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="@dimen/virtusize_inpage_standard_layout_card_elevation">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/inpage_standard_product_border_card_view"
+                android:layout_width="@dimen/virtusize_inpage_standard_product_image_border_size"
+                android:layout_height="@dimen/virtusize_inpage_standard_product_image_border_size"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/virtusize_inpage_standard_product_image_border_card_horizontal_margin"
+                android:layout_marginLeft="@dimen/virtusize_inpage_standard_product_image_border_card_horizontal_margin"
+                android:layout_marginTop="@dimen/virtusize_inpage_standard_product_image_border_card_vertical_margin"
+                android:layout_marginBottom="@dimen/virtusize_inpage_standard_product_image_border_card_vertical_margin"
+                app:cardCornerRadius="@dimen/virtusize_inpage_standard_product_image_border_cardCornerRadius"
+                app:cardElevation="0dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ic_image_border_inpage_standard"
+                    android:scaleType="centerCrop" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/inpage_standard_product_card_view"
+                    android:layout_width="@dimen/virtusize_inpage_standard_product_image_size"
+                    android:layout_height="@dimen/virtusize_inpage_standard_product_image_size"
+                    android:layout_gravity="center"
+                    app:cardCornerRadius="@dimen/virtusize_inpage_standard_product_image_cardCornerRadius"
+                    app:cardElevation="0dp">
+
+                    <ImageView
+                        android:id="@+id/inpage_standard_product_image_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="@dimen/virtusize_inpage_standard_product_image_padding"
+                        android:scaleType="centerInside"
+                        tools:srcCompat="@drawable/ic_product_type_1" />
+
+                </androidx.cardview.widget.CardView>
+
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/virtusize_inpage_standard_texts_horizontal_margin"
+                android:layout_marginTop="@dimen/virtusize_inpage_standard_texts_vertical_margin"
+                android:layout_marginEnd="@dimen/virtusize_inpage_standard_texts_horizontal_margin"
+                android:layout_marginBottom="@dimen/virtusize_inpage_standard_texts_vertical_margin"
+                android:layout_toStartOf="@+id/inpage_standard_button"
+                android:layout_toLeftOf="@+id/inpage_standard_button"
+                android:layout_toEndOf="@+id/inpage_standard_product_border_card_view"
+                android:layout_toRightOf="@+id/inpage_standard_product_border_card_view"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/inpage_standard_top_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/virtusize_inpage_standard_top_text_marginBottom"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/color_gray_900"
+                    android:textSize="@dimen/virtusize_inpage_standard_normal_textSize"
+                    tools:text="This item is" />
+
+                <TextView
+                    android:id="@+id/inpage_standard_bottom_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:lineSpacingExtra="@dimen/virtusize_inpage_standard_top_text_marginBottom"
+                    android:textColor="@color/color_gray_900"
+                    android:textSize="@dimen/virtusize_inpage_standard_bold_textSize"
+                    tools:text="true to size" />
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/inpage_standard_button"
+                style="@style/VirtusizeInPageButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/virtusize_inpage_standard_button_height"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="@dimen/virtusize_inpage_standard_button_vertical_margin"
+                android:layout_marginEnd="@dimen/virtusize_inpage_standard_button_horizontal_margin"
+                android:layout_marginRight="@dimen/virtusize_inpage_standard_button_horizontal_margin"
+                android:layout_marginBottom="@dimen/virtusize_inpage_standard_button_vertical_margin"
+                android:background="@drawable/button_background_black"
+                android:includeFontPadding="false"
+                android:textAllCaps="false"
+                android:textColor="@color/virtusizeWhite"
+                android:textSize="@dimen/virtusize_inpage_button_textSize"
+                app:drawableTint="@color/virtusizeWhite" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <RelativeLayout
+        android:id="@+id/inpage_standard_footer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/virtusize_inpage_standard_footer_height"
+        android:layout_marginStart="@dimen/virtusize_inpage_standard_footer_horizontal_margin"
+        android:layout_marginTop="@dimen/virtusize_inpage_standard_footer_marginTop"
+        android:layout_marginEnd="@dimen/virtusize_inpage_standard_footer_horizontal_margin">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_vs_signature" />
+
+        <TextView
+            android:id="@+id/inpage_standard_privacy_policy_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:includeFontPadding="false"
+            android:text="@string/virtusize_privacy_policy"
+            android:textColor="@color/color_gray_900"
+            android:textSize="@dimen/virtusize_inpage_standard_privacy_policy_textSize" />
+
+    </RelativeLayout>
+
+</LinearLayout>

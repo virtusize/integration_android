@@ -6,21 +6,17 @@ import android.content.res.Configuration
 import android.util.Log
 import android.view.WindowManager
 import com.virtusize.libsource.data.local.*
-import com.virtusize.libsource.network.VirtusizeApi
-import com.virtusize.libsource.data.local.VirtusizeOrder
-import com.virtusize.libsource.data.local.VirtusizeParams
+import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser.TrimType
 import com.virtusize.libsource.data.parsers.*
-import com.virtusize.libsource.data.parsers.ProductCheckJsonParser
-import com.virtusize.libsource.data.parsers.ProductMetaDataHintsJsonParser
-import com.virtusize.libsource.data.parsers.StoreJsonParser
-import com.virtusize.libsource.data.parsers.StoreProductJsonParser
 import com.virtusize.libsource.data.remote.*
 import com.virtusize.libsource.network.ApiRequest
+import com.virtusize.libsource.network.VirtusizeApi
 import com.virtusize.libsource.network.VirtusizeApiTask
-import com.virtusize.libsource.ui.VirtusizeInPageMini
+import com.virtusize.libsource.ui.VirtusizeInPageStandard
+import com.virtusize.libsource.ui.VirtusizeInPageView
 import com.virtusize.libsource.ui.VirtusizeView
 import com.virtusize.libsource.util.Constants
-import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import java.net.HttpURLConnection
 import java.util.*
@@ -142,11 +138,19 @@ class Virtusize(
              * when Product check Request is performed on server on Virtusize server
              */
             override fun onValidProductCheckCompleted(productCheck: ProductCheck) {
-                if (virtusizeView is VirtusizeInPageMini) {
+                if (virtusizeView is VirtusizeInPageView) {
                     productCheck.data?.productDataId?.let { productId ->
-                        getI18nText({ i18nLocalization ->
-                            getStoreProductInfo(productId, onSuccess = {
-                                virtusizeView.setupRecommendationText(it.getRecommendationText(i18nLocalization))
+                        val trimType = if(virtusizeView is VirtusizeInPageStandard) TrimType.HTML else TrimType.CLEAN
+                        getI18nText(trimType, { i18nLocalization ->
+                            getStoreProductInfo(productId, onSuccess = { storeProduct ->
+                                if(virtusizeView is VirtusizeInPageStandard) {
+                                    virtusizeView.setupProductImage(
+                                        params.virtusizeProduct?.imageUrl,
+                                        storeProduct.cloudinaryPublicId,
+                                        storeProduct.productType
+                                    )
+                                }
+                                virtusizeView.setupRecommendationText(storeProduct.getRecommendationText(i18nLocalization))
                                 virtusizeView.setupProductCheckResponseData(productCheck)
                             }, onError = {
                                 Log.e(Constants.INPAGE_LOG_TAG, it.message)
@@ -154,7 +158,6 @@ class Virtusize(
                         }, {
                             Log.e(Constants.INPAGE_LOG_TAG, it.message)
                         })
-
                     }
                 } else {
                     // Set up Product check response data to VirtusizeProduct in VirtusizeButton
@@ -443,12 +446,13 @@ class Virtusize(
      * @param onError the optional error callback to get the [VirtusizeErrorType] in the API task
      */
     internal fun getI18nText(
+        trimType: I18nLocalizationJsonParser.TrimType,
         onSuccess: ((I18nLocalization) -> Unit)? = null,
         onError: ((VirtusizeError) -> Unit)? = null
     ) {
         val apiRequest = VirtusizeApi.getI18n(params.language ?: (VirtusizeLanguage.values().find { it.value == Locale.getDefault().language } ?: VirtusizeLanguage.EN))
         VirtusizeApiTask()
-            .setJsonParser(I18nLocalizationJsonParser(context))
+            .setJsonParser(I18nLocalizationJsonParser(context, trimType))
             .setSuccessHandler(object : SuccessResponseHandler {
                 override fun onSuccess(data: Any?) {
                     onSuccess?.invoke(data as I18nLocalization)
