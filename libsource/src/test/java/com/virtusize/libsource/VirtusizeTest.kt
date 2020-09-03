@@ -294,6 +294,7 @@ class VirtusizeTest {
         assertThat(actualStoreProduct?.storeProductMeta?.id).isEqualTo(1)
         val expectedAdditionalInfo = StoreProductAdditionalInfo(
             "regular",
+            "fashionable",
             BrandSizing("large", false)
         )
         assertThat(actualStoreProduct?.storeProductMeta?.additionalInfo).isEqualTo(expectedAdditionalInfo)

@@ -9,7 +9,8 @@ import org.json.JSONObject
  */
 class StoreProductAdditionalInfoJsonParser : VirtusizeJsonParser {
     override fun parse(json: JSONObject): StoreProductAdditionalInfo? {
-        val fit = json.optString(FIELD_FIT)
+        val fit = JsonUtils.optString(json, FIELD_FIT)
+        val style = JsonUtils.optString(json, FIELD_STYLE)
         var brandSizing: BrandSizing? = null
         json.optJSONObject(FIELD_BRAND_SIZING)?.let {
             brandSizing = BrandSizingJsonParser().parse(it)
@@ -17,11 +18,12 @@ class StoreProductAdditionalInfoJsonParser : VirtusizeJsonParser {
         if(fit.isBlank() && brandSizing == null) {
             return null
         }
-        return StoreProductAdditionalInfo(fit, brandSizing)
+        return StoreProductAdditionalInfo(fit, style, brandSizing)
     }
 
     companion object {
         private const val FIELD_FIT = "fit"
+        private const val FIELD_STYLE = "style"
         private const val FIELD_BRAND_SIZING = "brandSizing"
     }
 }

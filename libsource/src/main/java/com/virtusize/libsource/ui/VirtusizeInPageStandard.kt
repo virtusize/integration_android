@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.util.AttributeSet
 import android.util.Log
@@ -124,8 +125,8 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         }
     }
 
-    internal fun setupProductImage(imageUrl: String?, cloudinaryPublicId: String, productType: Int) {
-        setProductImageFromURL(imageUrl ?: getCloudinaryImageUrl(cloudinaryPublicId), productType)
+    internal fun setupProductImage(imageUrl: String?, cloudinaryPublicId: String, productType: Int, style: String?) {
+        setProductImageFromURL(imageUrl ?: getCloudinaryImageUrl(cloudinaryPublicId), productType, style)
     }
 
     fun setButtonBackgroundColor(@ColorInt color: Int) {
@@ -241,7 +242,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         return "https://res.cloudinary.com/virtusize/image/upload/t_product-large-retina-v1/$cloudinaryPublicId.jpg"
     }
 
-    private fun setProductImageFromURL(imageUrl: String?, productType: Int?) {
+    private fun setProductImageFromURL(imageUrl: String?, productType: Int?, style: String?) {
         if(imageUrl.isNullOrBlank()) {
             return
         }
@@ -264,12 +265,23 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
                         )
                     )
                     inpage_standard_product_image_view.setImageDrawable(
-                        context.getDrawableResourceByName(
-                            "ic_product_type_$productType"
-                        )
+                        getProductPlaceholderImage(productType, style)
                     )
                 }
             }
         }
+    }
+
+    private fun getProductPlaceholderImage(productType: Int?, style: String?): Drawable? {
+        var productPlaceholderImage = context.getDrawableResourceByName(
+            "ic_product_type_$productType"
+        )
+        val productTypeImageWithStyle = context.getDrawableResourceByName(
+            "ic_product_type_${productType}_$style"
+        )
+        if(productTypeImageWithStyle != null) {
+            productPlaceholderImage = productTypeImageWithStyle
+        }
+        return productPlaceholderImage
     }
 }

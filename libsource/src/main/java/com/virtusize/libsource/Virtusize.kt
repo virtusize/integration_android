@@ -147,7 +147,8 @@ class Virtusize(
                                     virtusizeView.setupProductImage(
                                         params.virtusizeProduct?.imageUrl,
                                         storeProduct.cloudinaryPublicId,
-                                        storeProduct.productType
+                                        storeProduct.productType,
+                                        storeProduct.storeProductMeta?.additionalInfo?.style
                                     )
                                 }
                                 virtusizeView.setupRecommendationText(storeProduct.getRecommendationText(i18nLocalization))
