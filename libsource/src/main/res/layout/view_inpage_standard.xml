@@ -60,6 +60,20 @@
 
             </androidx.cardview.widget.CardView>
 
+            <ImageView
+                android:layout_width="@dimen/virtusize_inpage_standard_product_image_border_size"
+                android:layout_height="@dimen/virtusize_inpage_standard_product_image_border_size"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/virtusize_inpage_standard_product_image_border_card_horizontal_margin"
+                android:layout_marginLeft="@dimen/virtusize_inpage_standard_product_image_border_card_horizontal_margin"
+                android:layout_marginTop="@dimen/virtusize_inpage_standard_product_image_border_card_vertical_margin"
+                android:layout_marginBottom="@dimen/virtusize_inpage_standard_product_image_border_card_vertical_margin"
+                android:id="@+id/vs_icon_image_view"
+                android:src="@drawable/ic_vs_icon_black"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -93,6 +107,16 @@
                     android:textColor="@color/color_gray_900"
                     android:textSize="@dimen/virtusize_inpage_standard_bold_textSize"
                     tools:text="true to size" />
+
+                <com.virtusize.libsource.ui.DotsLoadingTextView
+                    android:id="@+id/inpage_standard_loading_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/color_gray_900"
+                    android:textSize="@dimen/virtusize_inpage_standard_bold_textSize"
+                    tools:text="@string/inpage_standard_loading_text"/>
+
             </LinearLayout>
 
 
@@ -128,13 +152,14 @@
         android:layout_marginEnd="@dimen/virtusize_inpage_standard_footer_horizontal_margin">
 
         <ImageView
+            android:id="@+id/vs_signature_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_vs_signature" />
 
         <TextView
-            android:id="@+id/inpage_standard_privacy_policy_text"
+            android:id="@+id/privacy_policy_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

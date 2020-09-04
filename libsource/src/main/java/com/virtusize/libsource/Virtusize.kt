@@ -138,11 +138,14 @@ class Virtusize(
              * when Product check Request is performed on server on Virtusize server
              */
             override fun onValidProductCheckCompleted(productCheck: ProductCheck) {
+                // Set up Product check response data to VirtusizeProduct in VirtusizeButton
+                virtusizeView.setupProductCheckResponseData(productCheck)
                 if (virtusizeView is VirtusizeInPageView) {
                     productCheck.data?.productDataId?.let { productId ->
                         val trimType = if(virtusizeView is VirtusizeInPageStandard) TrimType.HTML else TrimType.CLEAN
                         getI18nText(trimType, { i18nLocalization ->
                             getStoreProductInfo(productId, onSuccess = { storeProduct ->
+                                virtusizeView.setupRecommendationText(storeProduct.getRecommendationText(i18nLocalization))
                                 if(virtusizeView is VirtusizeInPageStandard) {
                                     virtusizeView.setupProductImage(
                                         params.virtusizeProduct?.imageUrl,
@@ -151,8 +154,6 @@ class Virtusize(
                                         storeProduct.storeProductMeta?.additionalInfo?.style
                                     )
                                 }
-                                virtusizeView.setupRecommendationText(storeProduct.getRecommendationText(i18nLocalization))
-                                virtusizeView.setupProductCheckResponseData(productCheck)
                             }, onError = {
                                 Log.e(Constants.INPAGE_LOG_TAG, it.message)
                             })
@@ -160,9 +161,6 @@ class Virtusize(
                             Log.e(Constants.INPAGE_LOG_TAG, it.message)
                         })
                     }
-                } else {
-                    // Set up Product check response data to VirtusizeProduct in VirtusizeButton
-                    virtusizeView.setupProductCheckResponseData(productCheck)
                 }
                 // Send API Event UserSawProduct
                 sendEventToApi(

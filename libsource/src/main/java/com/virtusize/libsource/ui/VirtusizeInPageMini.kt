@@ -61,6 +61,7 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
                 if (productCheckResponseData.validProduct) {
                     visibility = View.VISIBLE
                     setupTextsConfiguredLocalization()
+                    setLoadingScreen(true)
                     setOnClickListener {
                         clickVirtusizeView(context)
                     }
@@ -73,6 +74,25 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
             virtusizeMessageHandler.onError(this, VirtusizeErrorType.NullProduct.virtusizeError())
             throwError(VirtusizeErrorType.NullProduct)
         }
+    }
+
+    private fun setLoadingScreen(loading: Boolean) {
+        if(loading) {
+            inpage_mini_layout.setBackgroundColor(ContextCompat.getColor(context, R.color.virtusizeWhite))
+        } else {
+            inpage_mini_layout.setBackgroundColor(virtusizeBackgroundColor)
+        }
+        FontUtils.setTypeFace(
+            context,
+            inpage_mini_loading_text,
+            virtusizeParams?.language,
+            if (loading) FontUtils.FontType.BOLD else FontUtils.FontType.REGULAR
+        )
+        inpage_mini_vs_icon_image_view.visibility = if(loading) View.VISIBLE else View.GONE
+        inpage_mini_text.visibility = if(loading) View.GONE else View.VISIBLE
+        inpage_mini_loading_text.visibility = if(loading) View.VISIBLE else View.GONE
+        inpage_mini_loading_text.startAnimation()
+        inpage_mini_button.visibility = if(loading) View.GONE else View.VISIBLE
     }
 
     fun setInPageMiniBackgroundColor(@ColorInt color: Int) {
@@ -114,11 +134,13 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
         )
         val configuredContext = getConfiguredContext(context)
         inpage_mini_button.text = configuredContext?.getText(R.string.virtusize_button_text)
+        inpage_mini_loading_text.text = configuredContext?.getText(R.string.inpage_mini_loading_text)
         setConfiguredDimensions(configuredContext)
     }
 
     private fun setConfiguredDimensions(configuredContext: ContextWrapper?) {
         configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_mini_message_textSize)?.let {
+            inpage_mini_loading_text.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
             inpage_mini_text.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
         }
         configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_button_textSize)?.let {
@@ -128,5 +150,6 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
 
     override fun setupRecommendationText(text: String) {
         inpage_mini_text.text = text
+        setLoadingScreen(false)
     }
 }

@@ -11,18 +11,34 @@
     android:paddingEnd="@dimen/virtusizeDp8"
     android:paddingBottom="@dimen/virtusize_inpage_mini_padding_vertical">
 
+    <ImageView
+        android:id="@+id/inpage_mini_vs_icon_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/virtusize_inpage_mini_vs_icon_height"
+        android:layout_marginEnd="@dimen/virtusize_inpage_mini_vs_icon_marginEnd"
+        android:layout_marginRight="@dimen/virtusize_inpage_mini_vs_icon_marginEnd"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_vs_icon_black" />
+
     <TextView
         android:id="@+id/inpage_mini_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        style="@style/InPageMiniTextStyle"
         android:layout_toStartOf="@+id/inpage_mini_button"
         android:layout_toLeftOf="@+id/inpage_mini_button"
-        android:includeFontPadding="false"
-        android:lineSpacingExtra="@dimen/virtusize_inpage_mini_text_line_spacing"
+        android:layout_toEndOf="@+id/inpage_mini_vs_icon_image_view"
+        android:layout_toRightOf="@+id/inpage_mini_vs_icon_image_view"
         android:textColor="@color/virtusizeWhite"
-        android:textSize="@dimen/virtusize_inpage_mini_message_textSize"
         tools:text="@string/inpage_default_text" />
+
+    <com.virtusize.libsource.ui.DotsLoadingTextView
+        android:id="@+id/inpage_mini_loading_text"
+        style="@style/InPageMiniTextStyle"
+        android:layout_toStartOf="@+id/inpage_mini_button"
+        android:layout_toLeftOf="@+id/inpage_mini_button"
+        android:layout_toEndOf="@+id/inpage_mini_vs_icon_image_view"
+        android:layout_toRightOf="@+id/inpage_mini_vs_icon_image_view"
+        android:textColor="@color/color_gray_900"
+        tools:text="@string/inpage_mini_loading_text" />
 
     <Button
         android:id="@+id/inpage_mini_button"

@@ -94,6 +94,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
                 if (productCheckResponseData.validProduct) {
                     visibility = View.VISIBLE
                     setupConfiguredLocalization()
+                    setLoadingScreen(true)
                     inpage_standard_layout.setOnClickListener {
                         clickVirtusizeView(context)
                     }
@@ -106,6 +107,17 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             virtusizeMessageHandler.onError(this, VirtusizeErrorType.NullProduct.virtusizeError())
             throwError(VirtusizeErrorType.NullProduct)
         }
+    }
+
+    private fun setLoadingScreen(loading: Boolean) {
+        inpage_standard_product_border_card_view.visibility = if(loading) View.INVISIBLE else View.VISIBLE
+        inpage_standard_top_text.visibility = if(loading) View.GONE else View.VISIBLE
+        inpage_standard_bottom_text.visibility = if(loading) View.GONE else View.VISIBLE
+        vs_signature_image_view.visibility = if(loading) View.INVISIBLE else View.VISIBLE
+        privacy_policy_text.visibility = if(loading) View.INVISIBLE else View.VISIBLE
+        vs_icon_image_view.visibility = if(loading) View.VISIBLE else View.GONE
+        inpage_standard_loading_text.visibility = if(loading) View.VISIBLE else View.GONE
+        inpage_standard_loading_text.startAnimation()
     }
 
     override fun setupRecommendationText(text: String) {
@@ -174,24 +186,28 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             mutableListOf(
                 inpage_standard_top_text,
                 inpage_standard_button,
-                inpage_standard_privacy_policy_text
+                privacy_policy_text
             ),
             virtusizeParams?.language,
             FontUtils.FontType.REGULAR
         )
-        FontUtils.setTypeFace(
+        FontUtils.setTypeFaces(
             context,
-            inpage_standard_bottom_text,
+            mutableListOf(
+                inpage_standard_loading_text,
+                inpage_standard_bottom_text
+            ),
             virtusizeParams?.language,
             FontUtils.FontType.BOLD
         )
 
         val configuredContext = getConfiguredContext(context)
         inpage_standard_button.text = configuredContext?.getText(R.string.virtusize_button_text)
-        inpage_standard_privacy_policy_text.text = configuredContext?.getText(R.string.virtusize_privacy_policy)
+        privacy_policy_text.text = configuredContext?.getText(R.string.virtusize_privacy_policy)
+        inpage_standard_loading_text.text = configuredContext?.getText(R.string.inpage_standard_loading_text)
         setConfiguredDimensions(configuredContext)
 
-        inpage_standard_privacy_policy_text.setOnClickListener {
+        privacy_policy_text.setOnClickListener {
             val intent = Intent(
                 Intent.ACTION_VIEW,
                 Uri.parse(configuredContext?.getString(R.string.virtusize_privacy_policy_link))
@@ -209,13 +225,14 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             inpage_standard_top_text.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
         }
         configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_bold_textSize)?.let {
+            inpage_standard_loading_text.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
             inpage_standard_bottom_text.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
         }
         configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_button_textSize)?.let {
             inpage_standard_button.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
         }
         configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_privacy_policy_textSize)?.let {
-            inpage_standard_privacy_policy_text.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+            privacy_policy_text.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
         }
         configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_top_text_marginBottom)?.let {
             setupMargins(inpage_standard_top_text, 0, 0, 0, it.toInt())
@@ -268,6 +285,9 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
                         getProductPlaceholderImage(productType, style)
                     )
                 }
+            }
+            withContext(Dispatchers.Main) {
+                setLoadingScreen(false)
             }
         }
     }

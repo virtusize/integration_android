@@ -16,4 +16,6 @@
     <string name="inpage_fit_loose_text">This item has a loose fit.</string>
     <string name="inpage_fit_regular_text">This item has a regular fit.</string>
     <string name="inpage_fit_tight_text">This item has a tight fit.</string>
+    <string name="inpage_standard_loading_text">Analyzing the size</string>
+    <string name="inpage_mini_loading_text">Loading</string>
 </resources>
