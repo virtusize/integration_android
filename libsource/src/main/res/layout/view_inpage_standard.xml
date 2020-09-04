@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/inpage_standard_layout"
+        android:id="@+id/inpage_standard_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/virtusize_inpage_standard_layout_card_elevation"
@@ -15,7 +15,35 @@
         app:cardCornerRadius="0dp"
         app:cardElevation="@dimen/virtusize_inpage_standard_layout_card_elevation">
 
+        <LinearLayout
+            android:paddingTop="@dimen/virtusize_inpage_standard_error_layout_vertical_padding"
+            android:paddingBottom="@dimen/virtusize_inpage_standard_error_layout_vertical_padding"
+            android:id="@+id/inpage_standard_error_screen_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_error_hanger" />
+
+            <TextView
+                android:id="@+id/inpage_standard_error_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/inpage_standard_error_text_horizontal_margin"
+                android:layout_marginEnd="@dimen/inpage_standard_error_text_horizontal_margin"
+                android:textColor="@color/color_gray_700"
+                android:gravity="center_horizontal"
+                android:text="@string/inpage_long_error_text" />
+
+        </LinearLayout>
+
         <RelativeLayout
+            android:id="@+id/inpage_standard_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -61,6 +89,7 @@
             </androidx.cardview.widget.CardView>
 
             <ImageView
+                android:id="@+id/vs_icon_image_view"
                 android:layout_width="@dimen/virtusize_inpage_standard_product_image_border_size"
                 android:layout_height="@dimen/virtusize_inpage_standard_product_image_border_size"
                 android:layout_alignParentStart="true"
@@ -71,8 +100,7 @@
                 android:layout_marginLeft="@dimen/virtusize_inpage_standard_product_image_border_card_horizontal_margin"
                 android:layout_marginTop="@dimen/virtusize_inpage_standard_product_image_border_card_vertical_margin"
                 android:layout_marginBottom="@dimen/virtusize_inpage_standard_product_image_border_card_vertical_margin"
-                android:id="@+id/vs_icon_image_view"
-                android:src="@drawable/ic_vs_icon_black"/>
+                android:src="@drawable/ic_vs_icon_black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -115,10 +143,9 @@
                     android:includeFontPadding="false"
                     android:textColor="@color/color_gray_900"
                     android:textSize="@dimen/virtusize_inpage_standard_bold_textSize"
-                    tools:text="@string/inpage_standard_loading_text"/>
+                    tools:text="@string/inpage_standard_loading_text" />
 
             </LinearLayout>
-
 
             <Button
                 android:id="@+id/inpage_standard_button"
@@ -136,7 +163,7 @@
                 android:includeFontPadding="false"
                 android:textAllCaps="false"
                 android:textColor="@color/virtusizeWhite"
-                android:textSize="@dimen/virtusize_inpage_button_textSize"
+                android:textSize="@dimen/virtusize_inpage_default_textSize"
                 app:drawableTint="@color/virtusizeWhite" />
 
         </RelativeLayout>

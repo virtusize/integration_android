@@ -9,4 +9,5 @@ import android.widget.RelativeLayout
  */
 abstract class VirtusizeInPageView(context: Context, attrs: AttributeSet): VirtusizeView, RelativeLayout(context, attrs) {
     abstract fun setupRecommendationText(text: String)
+    abstract fun showErrorScreen()
 }

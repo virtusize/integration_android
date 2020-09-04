@@ -6,7 +6,7 @@
 
     <dimen name="virtusize_button_textSize">14sp</dimen>
     <dimen name="virtusize_inpage_mini_message_textSize">14sp</dimen>
-    <dimen name="virtusize_inpage_button_textSize">12sp</dimen>
+    <dimen name="virtusize_inpage_default_textSize">12sp</dimen>
     <dimen name="virtusize_inpage_standard_normal_textSize">14sp</dimen>
     <dimen name="virtusize_inpage_standard_bold_textSize">18sp</dimen>
     <dimen name="virtusize_inpage_standard_privacy_policy_textSize">12sp</dimen>
@@ -37,11 +37,14 @@
     <dimen name="virtusize_inpage_standard_footer_marginTop">-4dp</dimen>
 
     <dimen name="virtusize_inpage_mini_height">30dp</dimen>
-    <dimen name="virtusize_inpage_mini_vs_icon_height">20dp</dimen>
-    <dimen name="virtusize_inpage_mini_vs_icon_marginEnd">5dp</dimen>
+    <dimen name="virtusize_inpage_mini_image_height">20dp</dimen>
+    <dimen name="virtusize_inpage_mini_image_marginEnd">6dp</dimen>
     <dimen name="virtusize_inpage_mini_padding_vertical">5dp</dimen>
     <dimen name="virtusize_inpage_mini_text_line_spacing">2.5dp</dimen>
     <dimen name="virtusize_inpage_mini_margin_between_message_button">4dp</dimen>
     <dimen name="virtusize_inpage_mini_button_height">20dp</dimen>
     <dimen name="virtusize_inpage_mini_button_padding">6dp</dimen>
+
+    <dimen name="virtusize_inpage_standard_error_layout_vertical_padding">8dp</dimen>
+    <dimen name="inpage_standard_error_text_horizontal_margin">8dp</dimen>
 </resources>
