@@ -9,7 +9,7 @@ import org.json.JSONObject
 /**
  * This class parses a JSONObject to the [I18nLocalization] object
  */
-internal class I18nLocalizationJsonParser(val context: Context, private val trimType: TrimType): VirtusizeJsonParser {
+internal class I18nLocalizationJsonParser(val context: Context): VirtusizeJsonParser {
 
     enum class TrimType {
         ONELINE, MULTIPLELINES
@@ -24,75 +24,53 @@ internal class I18nLocalizationJsonParser(val context: Context, private val trim
         val mostBrandsJSONObject = sizingJSONObject?.optJSONObject(FIELD_MOST_BRANDS)
         val fitJSONObject = detailsScreenJSONObject?.optJSONObject(FIELD_FIT)
 
-        val defaultText = trimI18nText(
-            detailsScreenJSONObject?.optString(
-                FIELD_DEFAULT_TEXT,
-                context.getString(R.string.inpage_default_text)
-            )
-        )
-        val defaultAccessoryText = trimI18nText(
-            inpageJSONObject?.optString(
-                FIELD_DEFAULT_ACCESSORY_TEXT,
-                context.getString(R.string.inpage_default_accessory_text)
-            )
-        )
+        val defaultText = detailsScreenJSONObject?.optString(
+            FIELD_DEFAULT_TEXT,
+            context.getString(R.string.inpage_default_text)
+        ) ?: ""
+        val defaultAccessoryText = inpageJSONObject?.optString(
+            FIELD_DEFAULT_ACCESSORY_TEXT,
+            context.getString(R.string.inpage_default_accessory_text)
+        ) ?: ""
 
-        val sizingItemBrandLargeText = trimI18nText(
-            itemBrandJSONObject?.optString(
-                FIELD_LARGE_SIZE,
-                context.getString(R.string.inpage_sizing_itemBrand_large_text)
-            )
-        )
-        val sizingItemBrandTrueText = trimI18nText(
-            itemBrandJSONObject?.optString(
-                FIELD_TRUE_SIZE,
-                context.getString(R.string.inpage_sizing_itemBrand_true_text)
-            )
-        )
-        val sizingItemBrandSmallText = trimI18nText(
-            itemBrandJSONObject?.optString(
-                FIELD_SMALL_SIZE,
-                context.getString(R.string.inpage_sizing_itemBrand_small_text)
-            )
-        )
+        val sizingItemBrandLargeText = itemBrandJSONObject?.optString(
+            FIELD_LARGE_SIZE,
+            context.getString(R.string.inpage_sizing_itemBrand_large_text)
+        ) ?: ""
+        val sizingItemBrandTrueText = itemBrandJSONObject?.optString(
+            FIELD_TRUE_SIZE,
+            context.getString(R.string.inpage_sizing_itemBrand_true_text)
+        ) ?: ""
+        val sizingItemBrandSmallText = itemBrandJSONObject?.optString(
+            FIELD_SMALL_SIZE,
+            context.getString(R.string.inpage_sizing_itemBrand_small_text)
+        ) ?: ""
 
-        val sizingMostBrandsLargeText = trimI18nText(
-            mostBrandsJSONObject?.optString(
-                FIELD_LARGE_SIZE,
-                context.getString(R.string.inpage_sizing_mostBrands_large_text)
-            )
-        )
-        val sizingMostBrandsTrueText = trimI18nText(
-            mostBrandsJSONObject?.optString(
-                FIELD_TRUE_SIZE,
-                context.getString(R.string.inpage_sizing_mostBrands_true_text)
-            )
-        )
-        val sizingMostBrandsSmallText = trimI18nText(
-            mostBrandsJSONObject?.optString(
-                FIELD_SMALL_SIZE,
-                context.getString(R.string.inpage_sizing_mostBrands_small_text)
-            )
-        )
+        val sizingMostBrandsLargeText = mostBrandsJSONObject?.optString(
+            FIELD_LARGE_SIZE,
+            context.getString(R.string.inpage_sizing_mostBrands_large_text)
+        ) ?: ""
+        val sizingMostBrandsTrueText = mostBrandsJSONObject?.optString(
+            FIELD_TRUE_SIZE,
+            context.getString(R.string.inpage_sizing_mostBrands_true_text)
+        ) ?: ""
+        val sizingMostBrandsSmallText = mostBrandsJSONObject?.optString(
+            FIELD_SMALL_SIZE,
+            context.getString(R.string.inpage_sizing_mostBrands_small_text)
+        ) ?: ""
 
-        val fitLooseText = trimI18nText(
-            fitJSONObject?.optString(
-                FIELD_LOOSE_FIT,
-                context.getString(R.string.inpage_fit_loose_text)
-            )
-        )
-        val fitRegularText = trimI18nText(
-            fitJSONObject?.optString(
-                FIELD_REGULAR_FIT,
-                context.getString(R.string.inpage_fit_regular_text)
-            )
-        )
-        val fitTightText = trimI18nText(
-            fitJSONObject?.optString(
-                FIELD_TIGHT_FIT,
-                context.getString(R.string.inpage_fit_tight_text)
-            )
-        )
+        val fitLooseText = fitJSONObject?.optString(
+            FIELD_LOOSE_FIT,
+            context.getString(R.string.inpage_fit_loose_text)
+        ) ?: ""
+        val fitRegularText = fitJSONObject?.optString(
+            FIELD_REGULAR_FIT,
+            context.getString(R.string.inpage_fit_regular_text)
+        ) ?: ""
+        val fitTightText = fitJSONObject?.optString(
+            FIELD_TIGHT_FIT,
+            context.getString(R.string.inpage_fit_tight_text)
+        ) ?: ""
 
         return I18nLocalization(
             defaultText,
@@ -107,16 +85,6 @@ internal class I18nLocalizationJsonParser(val context: Context, private val trim
             fitRegularText,
             fitTightText
         )
-    }
-
-    /**
-     * Trims the text from i18n
-     */
-    private fun trimI18nText(text: String?): String {
-        return when (trimType) {
-            TrimType.ONELINE -> text?.replace("%{boldStart}", "")?.replace("%{boldEnd}", "") ?: ""
-            TrimType.MULTIPLELINES -> text?.replace("%{boldStart}", "<br>")?.replace("%{boldEnd}", "") ?: ""
-        }
     }
 
     companion object {

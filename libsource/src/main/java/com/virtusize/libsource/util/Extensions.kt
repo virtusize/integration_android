@@ -6,6 +6,7 @@ import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser
 
 /**
  * The Context extension function to get the string by the string resource name
@@ -38,6 +39,16 @@ internal fun Context.getTypefaceByName(fontFileName: String): Typeface? {
         return null
     }
     return ResourcesCompat.getFont(this, resId)
+}
+
+/**
+ * The String extension function to trim the text from i18n localization
+ */
+internal fun String.trimI18nText(trimType: I18nLocalizationJsonParser.TrimType = I18nLocalizationJsonParser.TrimType.ONELINE): String {
+    return when (trimType) {
+        I18nLocalizationJsonParser.TrimType.ONELINE -> replace("%{boldStart}", "").replace("%{boldEnd}", "")
+        I18nLocalizationJsonParser.TrimType.MULTIPLELINES -> replace("%{boldStart}", "<br>").replace("%{boldEnd}", "")
+    }
 }
 
 /**

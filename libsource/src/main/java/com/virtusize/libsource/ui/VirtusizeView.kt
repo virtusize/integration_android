@@ -13,7 +13,7 @@ import com.virtusize.libsource.util.VirtusizeUtils
 import java.util.*
 
 /**
- * An interface for the Virtusize specific views such as VirtusizeButton and VirtusizeInPage
+ * An interface for the Virtusize specific views such as VirtusizeButton and VirtusizeInPageView
  */
 interface VirtusizeView {
     // The parameter object to be passed to the Virtusize web app

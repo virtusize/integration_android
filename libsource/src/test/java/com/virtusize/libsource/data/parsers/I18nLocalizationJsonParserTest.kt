@@ -26,7 +26,7 @@ class I18nLocalizationJsonParserTest {
 
     @Test
     fun parseI18N_englishLocalization_shouldReturnExpectedObject() {
-        val actualI18nLocalization = I18nLocalizationJsonParser(context, I18nLocalizationJsonParser.TrimType.ONELINE).parse(readFileFromAssets("/i18n_en.json"))
+        val actualI18nLocalization = I18nLocalizationJsonParser(context).parse(readFileFromAssets("/i18n_en.json"))
 
         val expectedI18nLocalization = I18nLocalization(
             context.getString(R.string.inpage_default_text),
@@ -47,7 +47,7 @@ class I18nLocalizationJsonParserTest {
 
     @Test
     fun parseI18N_emptyJsonData_shouldReturnExpectedObject() {
-        val actualI18nLocalization = I18nLocalizationJsonParser(context, I18nLocalizationJsonParser.TrimType.ONELINE).parse(TestFixtures.EMPTY_JSON_DATA)
+        val actualI18nLocalization = I18nLocalizationJsonParser(context).parse(TestFixtures.EMPTY_JSON_DATA)
 
         val expectedI18nLocalization = I18nLocalization(
             "",
@@ -72,7 +72,7 @@ class I18nLocalizationJsonParserTest {
         conf = Configuration(conf)
         conf.setLocale(Locale.JAPAN)
         val localizedContext = context.createConfigurationContext(conf)
-        val actualI18nLocalization = I18nLocalizationJsonParser(localizedContext, I18nLocalizationJsonParser.TrimType.ONELINE).parse(readFileFromAssets("/i18n_jp.json"))
+        val actualI18nLocalization = I18nLocalizationJsonParser(localizedContext).parse(readFileFromAssets("/i18n_jp.json"))
 
         val expectedI18nLocalization = I18nLocalization(
             localizedContext.getString(R.string.inpage_default_text),
@@ -97,7 +97,7 @@ class I18nLocalizationJsonParserTest {
         conf = Configuration(conf)
         conf.setLocale(Locale.KOREA)
         val localizedContext = context.createConfigurationContext(conf)
-        val actualI18nLocalization = I18nLocalizationJsonParser(localizedContext, I18nLocalizationJsonParser.TrimType.ONELINE).parse(readFileFromAssets("/i18n_ko.json"))
+        val actualI18nLocalization = I18nLocalizationJsonParser(localizedContext).parse(readFileFromAssets("/i18n_ko.json"))
 
         val expectedI18nLocalization = I18nLocalization(
             localizedContext.getString(R.string.inpage_default_text),
@@ -115,7 +115,6 @@ class I18nLocalizationJsonParserTest {
 
         assertThat(actualI18nLocalization).isEqualTo(expectedI18nLocalization)
     }
-
 
     private fun readFileFromAssets(fileName: String): JSONObject {
         return try {
