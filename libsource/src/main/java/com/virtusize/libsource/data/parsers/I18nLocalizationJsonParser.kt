@@ -12,7 +12,7 @@ import org.json.JSONObject
 internal class I18nLocalizationJsonParser(val context: Context, private val trimType: TrimType): VirtusizeJsonParser {
 
     enum class TrimType {
-        CLEAN, HTML
+        ONELINE, MULTIPLELINES
     }
 
     override fun parse(json: JSONObject): I18nLocalization? {
@@ -114,8 +114,8 @@ internal class I18nLocalizationJsonParser(val context: Context, private val trim
      */
     private fun trimI18nText(text: String?): String {
         return when (trimType) {
-            TrimType.CLEAN -> text?.replace("%{boldStart}", "")?.replace("%{boldEnd}", "") ?: ""
-            TrimType.HTML -> text?.replace("%{boldStart}", "<br>")?.replace("%{boldEnd}", "") ?: ""
+            TrimType.ONELINE -> text?.replace("%{boldStart}", "")?.replace("%{boldEnd}", "") ?: ""
+            TrimType.MULTIPLELINES -> text?.replace("%{boldStart}", "<br>")?.replace("%{boldEnd}", "") ?: ""
         }
     }
 

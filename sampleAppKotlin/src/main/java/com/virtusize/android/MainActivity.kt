@@ -24,11 +24,11 @@ class MainActivity : AppCompatActivity() {
         (application as App)
             .Virtusize.registerMessageHandler(activityMessageHandler)
 
-        // Set up Virtusize product
+        // Set up Virtusize product for all the Virtusize views
         (application as App)
             .Virtusize
             .setupVirtusizeProduct(virtusizeProduct = VirtusizeProduct(externalId = "694",
-                imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"
+                imageUrl = "http://www.image.com/goods/12345.jpg"
             ))
 
         // Set up Virtusize button
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 virtusizeView = exampleVirtusizeButton
             )
         // Set up the Virtusize view style programmatically
-        exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.BLACK
+        exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.TEAL
 
         // Set up Virtusize InPage Standard
         (application as App)
@@ -48,8 +48,8 @@ class MainActivity : AppCompatActivity() {
                 virtusizeView = exampleVirtusizeInPageStandard
             )
         exampleVirtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
-        // If you like, you can set up the horizontal margins between the screen and the InPage Standard view
-        // Note. Use the helper extension function `dpInPx` if you like
+        // If you like, you can set up the horizontal margins between the edges of the app screen and the InPage Standard view
+        // Note: Use the helper extension function `dpInPx` if you like
         exampleVirtusizeInPageStandard.horizontalMargin = 16.dpInPx.toFloat()
         /*
          * If you like, you can set up the background of the check size button in InPage Standard,
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
             .setupVirtusizeView(
                 virtusizeView = exampleVirtusizeInPageMini
             )
-        exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.BLACK
+        exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.TEAL
         /*
          * If you like, you can set up the background of InPage Mini view as long as it passes WebAIM contrast test.
          *
@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
      *
      * Notes:
      * 1. The parameters sizeAlias, variantId, color, gender, and url for [VirtusizeOrderItem] are optional
-     * 2. If quantity is not provided, it will be set to 1 on its own
+     * 2. If the item quantity is not provided, it will be set to 1 on its own
      */
     private fun sendOrderSample() {
         val order = VirtusizeOrder("888400111032")

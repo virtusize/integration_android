@@ -17,12 +17,17 @@
 
     <com.virtusize.libsource.ui.VirtusizeInPageStandard
         android:id="@+id/exampleVirtusizeInPageStandard"
-        android:layout_margin="@dimen/virtusizeDp16"
+        app:inPageStandardHorizontalMargin="@dimen/virtusizeDp16"
+        app:virtusizeInPageStandardStyle="virtusize_teal"
+        app:inPageStandardButtonBackgroundColor="@color/virtusizeTeal"
+        android:layout_marginTop="@dimen/virtusizeDp16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <com.virtusize.libsource.ui.VirtusizeInPageMini
         android:id="@+id/exampleVirtusizeInPageMini"
+        app:virtusizeInPageMiniStyle="virtusize_black"
+        app:inPageMiniBackgroundColor="@color/virtusizeBlack"
         android:layout_margin="@dimen/virtusizeDp16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>

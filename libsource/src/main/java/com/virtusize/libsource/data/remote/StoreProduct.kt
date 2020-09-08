@@ -7,6 +7,7 @@ package com.virtusize.libsource.data.remote
  * @param externalId the external product ID from the client's store
  * @param productType the ID of the product type of this product
  * @param name the product name
+ * @param cloudinaryPublicId the store product image public id from Cloudinary
  * @param storeId the ID of the store that this product belongs to
  * @param storeProductMeta the additional data of this product
  * @see ProductSize

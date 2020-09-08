@@ -138,11 +138,11 @@ class Virtusize(
              * when Product check Request is performed on server on Virtusize server
              */
             override fun onValidProductCheckCompleted(productCheck: ProductCheck) {
-                // Set up Product check response data to VirtusizeProduct in VirtusizeButton
+                // Sets up Product check response data to VirtusizeProduct in VirtusizeView
                 virtusizeView.setupProductCheckResponseData(productCheck)
                 if (virtusizeView is VirtusizeInPageView) {
                     productCheck.data?.productDataId?.let { productId ->
-                        val trimType = if(virtusizeView is VirtusizeInPageStandard) TrimType.HTML else TrimType.CLEAN
+                        val trimType = if(virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
                         getI18nText(trimType, { i18nLocalization ->
                             getStoreProductInfo(productId, onSuccess = { storeProduct ->
                                 virtusizeView.setupRecommendationText(storeProduct.getRecommendationText(i18nLocalization))
@@ -162,6 +162,8 @@ class Virtusize(
                             Log.e(Constants.INPAGE_LOG_TAG, it.message)
                             virtusizeView.showErrorScreen()
                         })
+                    } ?: run {
+                        virtusizeView.showErrorScreen()
                     }
                 }
                 // Send API Event UserSawProduct
@@ -507,6 +509,10 @@ class Virtusize(
         this.coroutineDispatcher = dispatcher
     }
 
+    /**
+     * Handles the null product error
+     * @throws VirtusizeErrorType.NullProduct error
+     */
     private fun handleNullProductError() {
         messageHandler.onError(null, VirtusizeErrorType.NullProduct.virtusizeError())
         throwError(errorType = VirtusizeErrorType.NullProduct)

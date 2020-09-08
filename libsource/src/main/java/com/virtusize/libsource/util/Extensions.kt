@@ -18,6 +18,9 @@ internal fun Context.getStringResourceByName(stringName: String): String? {
     return getString(resId)
 }
 
+/**
+ * The Context extension function to get a drawable resource by name in string
+ */
 internal fun Context.getDrawableResourceByName(drawableName: String): Drawable? {
     val resId = resources.getIdentifier(drawableName, "drawable", packageName)
     if(resId == 0) {
@@ -26,6 +29,9 @@ internal fun Context.getDrawableResourceByName(drawableName: String): Drawable? 
     return ContextCompat.getDrawable(this, resId)
 }
 
+/**
+ * The Context extension function to get a Typeface by the font file name
+ */
 internal fun Context.getTypefaceByName(fontFileName: String): Typeface? {
     val resId = resources.getIdentifier(fontFileName, "font", packageName)
     if(resId == 0) {
@@ -34,7 +40,8 @@ internal fun Context.getTypefaceByName(fontFileName: String): Typeface? {
     return ResourcesCompat.getFont(this, resId)
 }
 
+/**
+ * Integer extension function to convert dp to px
+ */
 val Int.dpInPx: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
-val Int.pxInDp: Int
-    get() = (this / Resources.getSystem().displayMetrics.density).toInt()

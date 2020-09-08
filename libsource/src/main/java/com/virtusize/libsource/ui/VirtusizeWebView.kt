@@ -11,10 +11,10 @@ import android.view.*
 import android.webkit.*
 import androidx.fragment.app.DialogFragment
 import com.virtusize.libsource.BrowserIdentifier
-import com.virtusize.libsource.util.Constants
 import com.virtusize.libsource.R
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler
 import com.virtusize.libsource.data.parsers.VirtusizeEventJsonParser
+import com.virtusize.libsource.util.Constants
 import kotlinx.android.synthetic.main.web_activity.*
 import org.json.JSONObject
 
@@ -47,7 +47,11 @@ class VirtusizeWebView: DialogFragment() {
         setStyle(STYLE_NORMAL, R.style.FullScreenDialogStyle)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.web_activity, container, false)
     }
 
@@ -85,7 +89,12 @@ class VirtusizeWebView: DialogFragment() {
         }
 
         webView.webChromeClient = object : WebChromeClient() {
-            override fun onCreateWindow(view: WebView, dialog: Boolean, userGesture: Boolean, resultMsg: Message): Boolean {
+            override fun onCreateWindow(
+                view: WebView,
+                dialog: Boolean,
+                userGesture: Boolean,
+                resultMsg: Message
+            ): Boolean {
                 if (resultMsg.obj != null && resultMsg.obj is WebView.WebViewTransport) {
                     val popupWebView = WebView(view.context)
                     popupWebView.settings.javaScriptEnabled = true
@@ -158,7 +167,10 @@ class VirtusizeWebView: DialogFragment() {
     /**
      * Sets up a Virtusize message handler
      */
-    internal fun setupMessageHandler(messageHandler: VirtusizeMessageHandler, virtusizeView: VirtusizeView) {
+    internal fun setupMessageHandler(
+        messageHandler: VirtusizeMessageHandler,
+        virtusizeView: VirtusizeView
+    ) {
         virtusizeMessageHandler = messageHandler
         this.virtusizeView = virtusizeView
     }
@@ -215,6 +227,22 @@ class VirtusizeWebView: DialogFragment() {
             event?.let { virtusizeMessageHandler.onEvent(virtusizeView, it) }
             if (event?.name =="user-closed-widget") {
                 dismiss()
+            }
+            if(event?.name == "user-clicked-start") {
+                userAcceptedPrivacyPolicy()
+            }
+        }
+    }
+
+    fun userAcceptedPrivacyPolicy() {
+        webView.post {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                webView.evaluateJavascript(
+                    "localStorage.setItem('acceptedPrivacyPolicy','true');",
+                    null
+                )
+            } else {
+                webView.loadUrl("javascript:localStorage.setItem('acceptedPrivacyPolicy','true');")
             }
         }
     }

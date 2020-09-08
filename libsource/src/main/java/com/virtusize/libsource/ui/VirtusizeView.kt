@@ -33,6 +33,11 @@ interface VirtusizeView {
         virtusizeDialogFragment.setupMessageHandler(messageHandler, this)
     }
 
+    /**
+     * Sets up the product check data received from Virtusize API to VirtusizeProduct
+     * @param productCheck ProductCheckResponse received from Virtusize API
+     * @see ProductCheck
+     */
     fun setupProductCheckResponseData(productCheck: ProductCheck)
 
     /**
@@ -44,8 +49,10 @@ interface VirtusizeView {
         }
     }
 
-    // TODO
-    fun clickVirtusizeView(context: Context) {
+    /**
+     * A clickable function to open the Virtusize WebView
+     */
+    fun openVirtusizeWebView(context: Context) {
         virtusizeMessageHandler.onEvent(this, VirtusizeEvent(VirtusizeEvents.UserOpenedWidget.getEventName()))
         val fragmentTransaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
         val previousFragment = context.supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
@@ -62,6 +69,9 @@ interface VirtusizeView {
         virtusizeDialogFragment.show(fragmentTransaction, Constants.FRAG_TAG)
     }
 
+    /**
+     * Gets configured context base on the language that clients set up with the Virtusize Builder in the application
+     */
     fun getConfiguredContext(context: Context): ContextWrapper? {
         return when(virtusizeParams?.language) {
             VirtusizeLanguage.EN -> VirtusizeUtils.configureLocale(context, Locale.ENGLISH)
