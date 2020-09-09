@@ -10,6 +10,7 @@ import com.virtusize.libsource.util.I18nConstants
  */
 data class StoreProductAdditionalInfo(
     val fit: String?,
+    val style: String?,
     val brandSizing: BrandSizing?
 ) {
     /**

@@ -206,6 +206,7 @@ internal object TestFixtures {
                 1,
                 StoreProductAdditionalInfo(
                     fit,
+                    "fashionable",
                     brandSizing
                 )
             )

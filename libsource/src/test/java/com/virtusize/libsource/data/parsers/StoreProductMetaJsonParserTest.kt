@@ -16,7 +16,7 @@ class StoreProductMetaJsonParserTest {
 
         val expectedStoreProductMeta = StoreProductMeta(
             123,
-            StoreProductAdditionalInfo("loose", BrandSizing("small", true))
+            StoreProductAdditionalInfo("loose", "fashionable", BrandSizing("small", true))
         )
 
         assertThat(actualStoreProductMeta).isEqualTo(expectedStoreProductMeta)
