@@ -95,7 +95,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
                     visibility = View.VISIBLE
                     setupConfiguredLocalization()
                     setLoadingScreen(true)
-                    inpage_standard_layout.setOnClickListener {
+                    inpage_standard_card_view.setOnClickListener {
                         clickVirtusizeView(context)
                     }
                     inpage_standard_button.setOnClickListener {
@@ -131,6 +131,14 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         }
     }
 
+    override fun showErrorScreen() {
+        inpage_standard_error_screen_layout.visibility = View.VISIBLE
+        inpage_standard_layout.visibility = View.GONE
+        inpage_standard_card_view.cardElevation = 0f
+        inpage_standard_card_view.setOnClickListener {}
+        inpage_standard_button.setOnClickListener {}
+    }
+
     override fun dismissVirtusizeView() {
         if (virtusizeDialogFragment.isVisible) {
             virtusizeDialogFragment.dismiss()
@@ -157,11 +165,11 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         }
 
         // Set horizontal margins
-        val inPageStandardFooterTopMargin = if(horizontalMargin.toInt() >= 2.dpInPx) 10.dpInPx - horizontalMargin.toInt()  else horizontalMargin.toInt() + 8.dpInPx
-        if(horizontalMargin < 0f) {
+        val inPageStandardFooterTopMargin = if(horizontalMargin.toInt() >= 2.dpInPx) 10.dpInPx - horizontalMargin.toInt() else horizontalMargin.toInt() + 8.dpInPx
+        if (horizontalMargin < 0f) {
             return
         }
-        setupMargins(inpage_standard_layout, horizontalMargin.toInt(), horizontalMargin.toInt(), horizontalMargin.toInt(), horizontalMargin.toInt())
+        setupMargins(inpage_standard_card_view, horizontalMargin.toInt(), horizontalMargin.toInt(), horizontalMargin.toInt(), horizontalMargin.toInt())
         setupInPageStandardFooterMargins(
             horizontalMargin.toInt() + 2.dpInPx,
             inPageStandardFooterTopMargin,
@@ -205,6 +213,8 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         inpage_standard_button.text = configuredContext?.getText(R.string.virtusize_button_text)
         privacy_policy_text.text = configuredContext?.getText(R.string.virtusize_privacy_policy)
         inpage_standard_loading_text.text = configuredContext?.getText(R.string.inpage_standard_loading_text)
+        inpage_standard_error_text.text = configuredContext?.getText(R.string.inpage_long_error_text)
+
         setConfiguredDimensions(configuredContext)
 
         privacy_policy_text.setOnClickListener {
@@ -228,8 +238,9 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             inpage_standard_loading_text.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
             inpage_standard_bottom_text.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
         }
-        configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_button_textSize)?.let {
+        configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_default_textSize)?.let {
             inpage_standard_button.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+            inpage_standard_error_text.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
         }
         configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_privacy_policy_textSize)?.let {
             privacy_policy_text.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)

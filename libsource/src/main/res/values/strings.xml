@@ -18,4 +18,6 @@
     <string name="inpage_fit_tight_text">This item has a tight fit.</string>
     <string name="inpage_standard_loading_text">Analyzing the size</string>
     <string name="inpage_mini_loading_text">Loading</string>
+    <string name="inpage_long_error_text">Virtusize is not available at the moment.\nPlease enjoy shopping without us.</string>
+    <string name="inpage_short_error_text">Virtusize is not available at the moment.</string>
 </resources>

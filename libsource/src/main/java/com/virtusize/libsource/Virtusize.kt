@@ -156,9 +156,11 @@ class Virtusize(
                                 }
                             }, onError = {
                                 Log.e(Constants.INPAGE_LOG_TAG, it.message)
+                                virtusizeView.showErrorScreen()
                             })
                         }, {
                             Log.e(Constants.INPAGE_LOG_TAG, it.message)
+                            virtusizeView.showErrorScreen()
                         })
                     }
                 }
