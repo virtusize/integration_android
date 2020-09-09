@@ -9,7 +9,10 @@ internal enum class VirtusizeEndpoint {
     ProductMetaDataHints,
     Events,
     Orders,
-    StoreViewApiKey
+    StoreViewApiKey,
+    StoreProduct,
+    ProductType,
+    I18N
 }
 
 /**
@@ -35,6 +38,15 @@ internal fun VirtusizeEndpoint.getPath(): String {
          }
          VirtusizeEndpoint.StoreViewApiKey -> {
              "/a/api/v3/stores/api-key/"
+         }
+         VirtusizeEndpoint.StoreProduct -> {
+             "/a/api/v3/store-products/"
+         }
+         VirtusizeEndpoint.ProductType -> {
+             "/a/api/v3/product-types"
+         }
+         VirtusizeEndpoint.I18N -> {
+              "/bundle-payloads/aoyama/"
          }
     }
 }

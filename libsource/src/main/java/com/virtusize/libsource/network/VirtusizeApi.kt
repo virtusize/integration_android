@@ -173,18 +173,6 @@ internal object VirtusizeApi {
             productCheck.productId.let {
                 params["storeProductExternalId"] = it
             }
-            productCheck.data?.userData?.wardrobeActive?.let {
-                params["wardrobeActive"] = it
-            }
-            productCheck.data?.userData?.wardrobeHasM?.let {
-                params["wardrobeHasM"] = it
-            }
-            productCheck.data?.userData?.wardrobeHasP?.let {
-                params["wardrobeHasP"] = it
-            }
-            productCheck.data?.userData?.wardrobeHasR?.let {
-                params["wardrobeHasR"] = it
-            }
         }
 
         if (!virtusizeEvent.data?.toString().isNullOrEmpty()) {
@@ -211,14 +199,52 @@ internal object VirtusizeApi {
     }
 
     /**
-     * Gets a API request for retrieve the specific store info from the API key that is unique to the client
+     * Gets a API request for retrieving the specific store info from the API key that is unique to the client
      * @param order [VirtusizeOrder]
      * @see ApiRequest
      */
-    fun retrieveStoreInfo() : ApiRequest {
+    fun getStoreInfo() : ApiRequest {
         val url = Uri.parse(environment.apiUrl() + VirtusizeEndpoint.StoreViewApiKey.getPath() + apiKey)
             .buildUpon()
             .appendQueryParameter("format", "json")
+            .build()
+            .toString()
+        return ApiRequest(url, HttpMethod.GET)
+    }
+
+    /**
+     * Gets a API request for retrieving the store product info
+     * @param productId the ID of a product
+     * @see ApiRequest
+     */
+    fun getStoreProductInfo(productId: String) : ApiRequest {
+        val url = Uri.parse(environment.apiUrl() + VirtusizeEndpoint.StoreProduct.getPath() + productId)
+            .buildUpon()
+            .appendQueryParameter("format", "json")
+            .build()
+            .toString()
+        return ApiRequest(url, HttpMethod.GET)
+    }
+
+    /**
+     * Gets a API request for retrieving the info of all the product types
+     * @see ApiRequest
+     */
+    fun getProductTypes() : ApiRequest {
+        val url = Uri.parse(environment.apiUrl() + VirtusizeEndpoint.ProductType.getPath())
+            .buildUpon()
+            .build()
+            .toString()
+        return ApiRequest(url, HttpMethod.GET)
+    }
+
+    /**
+     * Gets a API request for retrieving i18n localization texts
+     * @see ApiRequest
+     */
+    fun getI18n(language: VirtusizeLanguage) : ApiRequest {
+        val url = Uri.parse(I18N_URL + VirtusizeEndpoint.I18N.getPath() + language.value)
+            .buildUpon()
             .build()
             .toString()
         return ApiRequest(url, HttpMethod.GET)

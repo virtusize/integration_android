@@ -15,7 +15,12 @@ import com.virtusize.libsource.data.local.VirtusizeMessageHandler;
 import com.virtusize.libsource.data.local.VirtusizeOrder;
 import com.virtusize.libsource.data.local.VirtusizeOrderItem;
 import com.virtusize.libsource.data.local.VirtusizeProduct;
+import com.virtusize.libsource.data.local.VirtusizeViewStyle;
 import com.virtusize.libsource.ui.VirtusizeButton;
+import com.virtusize.libsource.ui.VirtusizeInPageMini;
+import com.virtusize.libsource.ui.VirtusizeInPageStandard;
+import com.virtusize.libsource.ui.VirtusizeView;
+import com.virtusize.libsource.util.ExtensionsKt;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,6 +29,8 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     VirtusizeButton virtusizeButton;
+    VirtusizeInPageStandard virtusizeInPageStandard;
+    VirtusizeInPageMini virtusizeInPageMini;
     App app;
     VirtusizeMessageHandler virtusizeMessageHandler;
 
@@ -34,45 +41,73 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         virtusizeButton = findViewById(R.id.exampleVirtusizeButton);
+        virtusizeInPageStandard = findViewById(R.id.exampleVirtusizeInPageStandard);
+        virtusizeInPageMini = findViewById(R.id.exampleVirtusizeInPageMini);
         app = (App) getApplication();
 
         virtusizeMessageHandler = new VirtusizeMessageHandler() {
             @Override
-            public void virtusizeControllerShouldClose(@NotNull VirtusizeButton virtusizeButton) {
+            public void virtusizeControllerShouldClose(@NotNull VirtusizeView virtusizeView) {
                 Log.i(TAG, "Close Virtusize View");
             }
 
             @Override
-            public void onEvent(@org.jetbrains.annotations.Nullable VirtusizeButton virtusizeButton, @NotNull VirtusizeEvent event) {
+            public void onEvent(@org.jetbrains.annotations.Nullable VirtusizeView virtusizeView, @NotNull VirtusizeEvent event) {
                 Log.i(TAG, event.getName());
             }
 
             @Override
-            public void onError(VirtusizeButton virtusizeButton, @NonNull VirtusizeError error) {
+            public void onError(VirtusizeView virtusizeView, @NonNull VirtusizeError error) {
                 Log.e(TAG, error.getMessage());
             }
         };
         app.Virtusize.registerMessageHandler(virtusizeMessageHandler);
 
-        app.Virtusize.setupVirtusizeButton(
-                virtusizeButton,
+        app.Virtusize.setupVirtusizeProduct(
                 new VirtusizeProduct(
                         "694",
-                        "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"
+                        "http://www.image.com/goods/12345.jpg"
                 )
         );
 
+        app.Virtusize.setupVirtusizeView(virtusizeButton);
         /*
          * To set up the button style programmatically
-         * virtusizeButton.setButtonStyle(VirtusizeButtonStyle.DEFAULT_STYLE);
+         * virtusizeButton.setVirtusizeViewStyle(VirtusizeViewStyle.BLACK);
          */
 
+        app.Virtusize.setupVirtusizeView(virtusizeInPageStandard);
+        // Set up the InPage Standard style programmatically
+        virtusizeInPageStandard.setVirtusizeViewStyle(VirtusizeViewStyle.TEAL);
+        /*
+         * If you like, you can set up the horizontal margins between the edges of the app screen and the InPage Standard view
+         * Note: Use the helper extension function `ExtensionsKt.getDpInPx` if you like
+         * virtusizeInPageStandard.setHorizontalMargin(ExtensionsKt.getDpInPx(16));
+         */
+
+        app.Virtusize.setupVirtusizeView(virtusizeInPageMini);
+        virtusizeInPageMini.setVirtusizeViewStyle(VirtusizeViewStyle.TEAL);
+        /*
+         * If you like, you can set up the background of InPage Mini view as long as it passes WebAIM contrast test.
+         *
+         * virtusizeInPageMini.setInPageMiniBackgroundColor(ContextCompat.getColor(this, R.color.ocean_blue));
+         */
+
+        /*
+         * To close the Virtusize page
+         *
+         * virtusizeButton.dismissVirtusizeView();
+         * virtusizeInPageStandard.dismissVirtusizeView();
+         * virtusizeInPageMini.dismissVirtusizeView();
+         */
+
+        // The sample function to send an order to the Virtusize server
         sendOrderSample();
     }
 
     /**
      * Demonstrates how to send an order to the Virtusize server
-     *
+     * <p>
      * Notes:
      * 1. The parameters sizeAlias, variantId, color, gender, and url for [VirtusizeOrderItem] are optional
      * 2. If quantity is not provided, it will be set to 1 on its own
@@ -109,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onError(@NotNull VirtusizeError error) {
                         Log.e(TAG, error.getMessage());
                     }
-        });
+                });
     }
 
     @Override

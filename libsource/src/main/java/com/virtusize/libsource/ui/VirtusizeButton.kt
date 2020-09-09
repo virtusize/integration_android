@@ -2,68 +2,74 @@ package com.virtusize.libsource.ui
 
 import android.content.Context
 import android.os.Build
-import android.os.Bundle
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
-import com.virtusize.libsource.Constants
 import com.virtusize.libsource.R
-import com.virtusize.libsource.VirtusizeButtonSetupHandler
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.ProductCheck
-import com.virtusize.libsource.network.VirtusizeApi
-import com.virtusize.libsource.throwError
+import com.virtusize.libsource.data.local.throwError
 
+class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, AppCompatButton(context, attrs) {
 
-class VirtusizeButton(context: Context, attrs: AttributeSet) : AppCompatButton(context, attrs),
-    VirtusizeButtonSetupHandler {
+    /**
+     * @see VirtusizeView.virtusizeParams
+     */
+    override var virtusizeParams: VirtusizeParams? = null
+        private set
 
-    // The parameter object to be passed to the Virtusize web app
-    internal var virtusizeParams: VirtusizeParams? = null
+    /**
+     * @see VirtusizeView.virtusizeMessageHandler
+     */
+    override lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
+        private set
 
-    // Receives Virtusize messages
-    private lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
+    /**
+     * @see VirtusizeView.virtusizeDialogFragment
+     */
+    override var virtusizeDialogFragment = VirtusizeWebView()
+        private set
 
-    // The Virtusize view that opens when the button is clicked
-    private val virtusizeDialogFragment = VirtusizeView()
-
-    // The VirtusizeButtonStyle that clients can choose to use
-    var buttonStyle: VirtusizeButtonStyle = VirtusizeButtonStyle.NONE
+    // The VirtusizeViewStyle that clients can choose to use for this Button
+    var virtusizeViewStyle: VirtusizeViewStyle = VirtusizeViewStyle.NONE
         set(value) {
             field = value
-            updateButtonStyle(field)
+            setupButtonStyle()
         }
 
     init {
         visibility = View.INVISIBLE
         val attrsArray = context.obtainStyledAttributes(attrs, R.styleable.VirtusizeButton, 0, 0)
-        val buttonStyle = attrsArray.getInt(R.styleable.VirtusizeButton_virtusizeButtonStyle, VirtusizeButtonStyle.NONE.value)
-        if(buttonStyle == VirtusizeButtonStyle.DEFAULT_STYLE.value) {
-            this.buttonStyle = VirtusizeButtonStyle.DEFAULT_STYLE
-        }
+        val buttonStyle = attrsArray.getInt(R.styleable.VirtusizeButton_virtusizeButtonStyle, VirtusizeViewStyle.NONE.value)
+        virtusizeViewStyle = VirtusizeViewStyle.values().firstOrNull { it.value == buttonStyle } ?: VirtusizeViewStyle.NONE
         attrsArray.recycle()
+        setupButtonStyle()
     }
 
     /**
-     * Updates the Virtusize Button Style corresponding to [VirtusizeButtonStyle]
-     * @param [VirtusizeButtonStyle]
+     * @see VirtusizeView.setup
      */
-    private fun updateButtonStyle(virtusizeButtonStyle: VirtusizeButtonStyle?) {
-        if(virtusizeButtonStyle == VirtusizeButtonStyle.DEFAULT_STYLE) {
-            setVirtusizeDefaultStyle()
+    override fun setup(params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
+        super.setup(params, messageHandler)
+        virtusizeParams = params
+        virtusizeMessageHandler = messageHandler
+    }
+
+    /**
+     * Sets up the Virtusize Button Style corresponding to [VirtusizeViewStyle]
+     */
+    private fun setupButtonStyle() {
+        includeFontPadding = false
+        isAllCaps = false
+
+        if(virtusizeViewStyle == VirtusizeViewStyle.TEAL) {
+            setBackgroundResource(R.drawable.button_background_teal)
+        } else {
+            setBackgroundResource(R.drawable.button_background_black)
         }
-        invalidate()
-    }
 
-    /**
-     * Sets up the default Virtusize button style
-     */
-    private fun setVirtusizeDefaultStyle() {
-        setBackgroundResource(R.drawable.button_background_black)
-
-        setText(R.string.virtusize_button_text)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             setTextAppearance(R.style.VirtusizeButtonTextAppearance)
         } else {
@@ -83,28 +89,7 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : AppCompatButton(c
     }
 
     /**
-     * Sets up the button with the corresponding VirtusizeProduct
-     * @param product the VirtusizeProduct that is set for this button
-     * @see VirtusizeProduct
-     */
-    internal fun setup(params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
-        virtusizeParams = params
-        virtusizeMessageHandler = messageHandler
-        virtusizeDialogFragment.setupMessageHandler(messageHandler, this)
-    }
-
-    /**
-     * Dismisses/closes the Virtusize Window
-     */
-    fun dismissVirtusizeView() {
-        if (virtusizeDialogFragment.isVisible)
-            virtusizeDialogFragment.dismiss()
-    }
-
-    /**
-     * Sets up the product check data received from Virtusize API to VirtusizeProduct
-     * @param productCheck ProductCheckResponse received from Virtusize API
-     * @see ProductCheck
+     * @see VirtusizeView.setupProductCheckResponseData
      * @throws VirtusizeErrorType.NullProduct error
      */
     override fun setupProductCheckResponseData(productCheck: ProductCheck) {
@@ -113,27 +98,26 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : AppCompatButton(c
             productCheck.data?.let { productCheckResponseData ->
                 if (productCheckResponseData.validProduct) {
                     visibility = View.VISIBLE
+                    setupButtonTextConfiguredLocalization()
                     setOnClickListener {
-                        virtusizeMessageHandler.onEvent(this@VirtusizeButton, VirtusizeEvent(VirtusizeEvents.UserOpenedWidget.getEventName()))
-                        val fragmentTransaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
-                        val previousFragment = (context as AppCompatActivity).supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
-                        previousFragment?.let {fragment ->
-                            fragmentTransaction.remove(fragment)
-                        }
-                        fragmentTransaction.addToBackStack(null)
-                        val args = Bundle()
-                        args.putString(Constants.URL_KEY, VirtusizeApi.virtusizeURL())
-                        virtusizeParams?.let {
-                            args.putString(Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY, "javascript:vsParamsFromSDK(${it.vsParamsString()})")
-                        }
-                        virtusizeDialogFragment.arguments = args
-                        virtusizeDialogFragment.show(fragmentTransaction, Constants.FRAG_TAG)
+                        openVirtusizeWebView(context)
                     }
                 }
             }
         } else {
             virtusizeMessageHandler.onError(this, VirtusizeErrorType.NullProduct.virtusizeError())
             throwError(VirtusizeErrorType.NullProduct)
+        }
+    }
+
+    /**
+     * Sets up the button text style based on the language that clients set using the [VirtusizeBuilder] in the application
+     */
+    private fun setupButtonTextConfiguredLocalization() {
+        val configuredContext = getConfiguredContext(context)
+        text = configuredContext?.getText(R.string.virtusize_button_text)
+        configuredContext?.resources?.getDimension(R.dimen.virtusize_button_textSize)?.let {
+            setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
         }
     }
 }

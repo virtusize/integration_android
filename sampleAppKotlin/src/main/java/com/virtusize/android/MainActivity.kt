@@ -3,9 +3,11 @@ package com.virtusize.android
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.VirtusizeOrder
-import com.virtusize.libsource.ui.VirtusizeButton
+import com.virtusize.libsource.ui.VirtusizeView
+import com.virtusize.libsource.util.dpInPx
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -22,25 +24,59 @@ class MainActivity : AppCompatActivity() {
         (application as App)
             .Virtusize.registerMessageHandler(activityMessageHandler)
 
-        // setup Virtusize button
+        // Set up Virtusize product for all the Virtusize views
+        (application as App)
+            .Virtusize
+            .setupVirtusizeProduct(virtusizeProduct = VirtusizeProduct(externalId = "694",
+                imageUrl = "http://www.image.com/goods/12345.jpg"
+            ))
+
+        // Set up Virtusize button
         // Virtusize opens automatically when button is clicked
         (application as App)
             .Virtusize
-            .setupVirtusizeButton(
-                virtusizeButton = exampleVirtusizeButton,
-                virtusizeProduct = VirtusizeProduct(externalId = "694",
-                    imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"
-                )
+            .setupVirtusizeView(
+                virtusizeView = exampleVirtusizeButton
             )
+        // Set up the Virtusize view style programmatically
+        exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.TEAL
+
+        // Set up Virtusize InPage Standard
+        (application as App)
+            .Virtusize
+            .setupVirtusizeView(
+                virtusizeView = exampleVirtusizeInPageStandard
+            )
+        exampleVirtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
+        // If you like, you can set up the horizontal margins between the edges of the app screen and the InPage Standard view
+        // Note: Use the helper extension function `dpInPx` if you like
+        exampleVirtusizeInPageStandard.horizontalMargin = 16.dpInPx.toFloat()
         /*
-         * To set up the button style programmatically
-         * exampleVirtusizeButton.buttonStyle = VirtusizeButtonStyle.DEFAULT_STYLE
+         * If you like, you can set up the background of the check size button in InPage Standard,
+         * as long as it passes WebAIM contrast test.
+         *
+         * exampleVirtusizeInPageStandard.setButtonBackgroundColor(ContextCompat.getColor(this, R.color.ocean_blue))
          */
 
+        // Set up Virtusize InPage Mini
+        (application as App)
+            .Virtusize
+            .setupVirtusizeView(
+                virtusizeView = exampleVirtusizeInPageMini
+            )
+        exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.TEAL
+        /*
+         * If you like, you can set up the background of InPage Mini view as long as it passes WebAIM contrast test.
+         *
+         * exampleVirtusizeInPageMini.setInPageMiniBackgroundColor(ContextCompat.getColor(this, R.color.ocean_blue))
+         */
 
         /*
          * To close the Virtusize page
+         *
          * exampleVirtusizeButton.dismissVirtusizeView()
+         * exampleVirtusizeInPageStandard.dismissVirtusizeView()
+         * exampleVirtusizeInPageMini.dismissVirtusizeView()
          */
 
         // The sample function to send an order to the Virtusize server
@@ -52,7 +88,7 @@ class MainActivity : AppCompatActivity() {
      *
      * Notes:
      * 1. The parameters sizeAlias, variantId, color, gender, and url for [VirtusizeOrderItem] are optional
-     * 2. If quantity is not provided, it will be set to 1 on its own
+     * 2. If the item quantity is not provided, it will be set to 1 on its own
      */
     private fun sendOrderSample() {
         val order = VirtusizeOrder("888400111032")
@@ -93,16 +129,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val activityMessageHandler = object : VirtusizeMessageHandler {
-        override fun virtusizeControllerShouldClose(virtusizeButton: VirtusizeButton) {
+        override fun virtusizeControllerShouldClose(virtusizeView: VirtusizeView) {
             Log.i(TAG, "Close Virtusize View")
-            virtusizeButton.dismissVirtusizeView()
+            virtusizeView.dismissVirtusizeView()
         }
 
-        override fun onEvent(virtusizeButton: VirtusizeButton?, event: VirtusizeEvent) {
+        override fun onEvent(virtusizeView: VirtusizeView?, event: VirtusizeEvent) {
             Log.i(TAG, event.name)
         }
 
-        override fun onError(virtusizeButton: VirtusizeButton?, errorType: VirtusizeError) {
+        override fun onError(virtusizeView: VirtusizeView?, errorType: VirtusizeError) {
             Log.e(TAG, errorType.message)
         }
     }

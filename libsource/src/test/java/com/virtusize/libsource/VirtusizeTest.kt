@@ -5,9 +5,7 @@ import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.virtusize.libsource.data.local.*
-import com.virtusize.libsource.data.remote.ProductCheck
-import com.virtusize.libsource.data.remote.ProductMetaDataHints
-import com.virtusize.libsource.data.remote.Store
+import com.virtusize.libsource.data.remote.*
 import com.virtusize.libsource.network.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -77,7 +75,7 @@ class VirtusizeTest {
         assertThat(actualProductCheck?.data?.fetchMetaData).isFalse()
         assertThat(actualProductCheck?.data?.productDataId).isEqualTo(7110384)
         assertThat(actualProductCheck?.data?.productTypeId).isEqualTo(5)
-        assertThat(actualProductCheck?.data?.userData?.shouldSeePhTooltip).isFalse()
+        assertThat(actualProductCheck?.data?.shouldSeePhTooltip).isTrue()
         assertThat(actualProductCheck?.productId).isEqualTo("694")
     }
 
@@ -147,14 +145,7 @@ class VirtusizeTest {
     fun testSendProductImageToBackend_whenFailed_hasExpectedErrorInfo() = runBlocking {
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
             mockURL,
-            MockedResponse(
-                500,
-                ("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n<title>500 Internal Server Error</title>\n" +
-                        "<h1>Internal Server Error</h1>\n" +
-                        "<p>The server encountered an internal error and was unable to complete your request.  " +
-                        "Either the server is overloaded or there is an error in the application.</p>").byteInputStream(),
-                "Internal Server Error"
-            )
+            MockedResponse(500, INTERNAL_SERVER_ERROR_RESPONSE.byteInputStream(), null)
         )
         )
         virtusize.sendProductImageToBackend(TestFixtures.VIRTUSIZE_PRODUCT, object: SuccessResponseHandler {
@@ -166,7 +157,7 @@ class VirtusizeTest {
         })
 
         assertThat(actualError?.code).isEqualTo(500)
-        assertThat(actualError?.message).isEqualTo("Internal Server Error")
+        assertThat(actualError?.message).contains(INTERNAL_SERVER_ERROR_RESPONSE)
         assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.NetworkError)
     }
 
@@ -202,7 +193,7 @@ class VirtusizeTest {
             MockedResponse(200,
                 TestFixtures.STORE_WITH_FULL_INFO.toString().byteInputStream())
         ))
-        virtusize.retrieveStoreInfo(
+        virtusize.getStoreInfo(
             object: SuccessResponseHandler {
                 override fun onSuccess(data: Any?) {
                     actualStore = data as Store
@@ -234,7 +225,7 @@ class VirtusizeTest {
             MockedResponse(200,
                 TestFixtures.STORE_WITH_NULL_VALUES.toString().byteInputStream())
         ))
-        virtusize.retrieveStoreInfo(
+        virtusize.getStoreInfo(
             object: SuccessResponseHandler {
                 override fun onSuccess(data: Any?) {
                     actualStore = data as Store
@@ -276,5 +267,83 @@ class VirtusizeTest {
         )
 
         assertThat(isSuccessful).isTrue()
+    }
+
+    @Test
+    fun testGetStoreProductInfo_whenSuccessful_onSuccessShouldReturnExpectedStoreProduct() = runBlocking {
+        var actualStoreProduct: StoreProduct? = null
+
+        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+            mockURL,
+            MockedResponse(200, TestFixtures.STORE_PRODUCT_INFO_JSON_DATA.toString().byteInputStream())
+        ))
+
+        virtusize.getStoreProductInfo(
+            TestFixtures.PRODUCT_ID,
+            onSuccess = {
+                actualStoreProduct = it
+            }
+        )
+
+        assertThat(actualStoreProduct?.id).isEqualTo(TestFixtures.PRODUCT_ID)
+        assertThat(actualStoreProduct?.sizes?.size).isEqualTo(2)
+        assertThat(actualStoreProduct?.externalId).isEqualTo(TestFixtures.EXTERNAL_ID)
+        assertThat(actualStoreProduct?.productType).isEqualTo(8)
+        assertThat(actualStoreProduct?.name).isEqualTo(TestFixtures.PRODUCT_NAME)
+        assertThat(actualStoreProduct?.storeId).isEqualTo(TestFixtures.STORE_ID)
+        assertThat(actualStoreProduct?.storeProductMeta?.id).isEqualTo(1)
+        val expectedAdditionalInfo = StoreProductAdditionalInfo(
+            "regular",
+            "fashionable",
+            BrandSizing("large", false)
+        )
+        assertThat(actualStoreProduct?.storeProductMeta?.additionalInfo).isEqualTo(expectedAdditionalInfo)
+    }
+
+    @Test
+    fun testGetProductTypes_whenSuccessful_onSuccessShouldReturnExpectedProductTypeList() = runBlocking {
+        var actualProductTypeList: List<ProductType>? = null
+
+        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+            mockURL,
+            MockedResponse(200, TestFixtures.PRODUCT_TYPE_JSON_ARRAY.toString().byteInputStream())
+        ))
+
+        virtusize.getProductTypes(
+            onSuccess = {
+                actualProductTypeList = it
+            }
+        )
+
+        assertThat(actualProductTypeList?.size).isEqualTo(2)
+        assertThat(actualProductTypeList?.get(0)).isEqualTo(
+            ProductType(
+                1,
+                "dress",
+                mutableSetOf(
+                    Weight("bust", 1f),
+                    Weight("waist", 1f),
+                    Weight("height", 0.25f)
+                )
+            )
+        )
+        assertThat(actualProductTypeList?.get(1)).isEqualTo(
+            ProductType(
+                18,
+                "bag",
+                mutableSetOf(
+                    Weight("depth", 1f),
+                    Weight("width", 2f),
+                    Weight("height", 1f)
+                )
+            )
+        )
+    }
+
+    companion object {
+        private const val INTERNAL_SERVER_ERROR_RESPONSE = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n<title>500 Internal Server Error</title>\n" +
+        "<h1>Internal Server Error</h1>\n" +
+        "<p>The server encountered an internal error and was unable to complete your request.  " +
+        "Either the server is overloaded or there is an error in the application.</p>"
     }
 }

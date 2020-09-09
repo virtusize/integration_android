@@ -16,7 +16,7 @@ internal class ProductCheckJsonParser: VirtusizeJsonParser {
         return ProductCheck(data, productId, name)
     }
 
-    private companion object {
+    companion object {
         private const val FIELD_DATA = "data"
         private const val FIELD_PRODUCT_ID = "productId"
         private const val FIELD_NAME = "name"

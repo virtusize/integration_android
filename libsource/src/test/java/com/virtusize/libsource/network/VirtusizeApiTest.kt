@@ -107,14 +107,6 @@ class VirtusizeApiTest {
                 expectedParams["storeId"] = data.storeId.toString()
                 expectedParams["storeName"] = data.storeName
                 expectedParams["storeProductType"] = data.productTypeName
-
-                data.userData?.let { userData ->
-                    expectedParams["wardrobeActive"] = userData.wardrobeActive
-                    expectedParams["wardrobeHasM"] = userData.wardrobeHasM
-                    expectedParams["wardrobeHasP"] = userData.wardrobeHasP
-                    expectedParams["wardrobeHasR"] = userData.wardrobeHasR
-                }
-
             }
         }
 
@@ -152,7 +144,7 @@ class VirtusizeApiTest {
             "externalOrderId" to "888400111032",
             "externalUserId" to TestFixtures.USER_ID,
             "items" to mutableListOf<MutableMap<String, Any>>(mutableMapOf(
-                "productId" to "P001",
+                "externalProductId" to "P001",
                 "size" to "L",
                 "sizeAlias" to "Large",
                 "variantId" to "P001_SIZEL_RED",
@@ -173,10 +165,44 @@ class VirtusizeApiTest {
 
     @Test
     fun retrieveStoreInfo_shouldReturnExpectedApiRequest() {
-        val actualApiRequest = VirtusizeApi.retrieveStoreInfo()
+        val actualApiRequest = VirtusizeApi.getStoreInfo()
 
         val expectedUrl = "https://staging.virtusize.com/a/api/v3/stores/api-key/test_apiKey" +
                 "?format=json"
+
+        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
+
+        assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
+    }
+
+    @Test
+    fun getStoreProductInfo_shouldReturnExpectedApiRequest() {
+        val actualApiRequest = VirtusizeApi.getStoreProductInfo("16099122")
+
+        val expectedUrl = "https://staging.virtusize.com/a/api/v3/store-products/16099122" +
+                "?format=json"
+
+        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
+
+        assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
+    }
+
+    @Test
+    fun getProductTypes_shouldReturnExpectedApiRequest() {
+        val actualApiRequest = VirtusizeApi.getProductTypes()
+
+        val expectedUrl = "https://staging.virtusize.com/a/api/v3/product-types"
+
+        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
+
+        assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
+    }
+
+    @Test
+    fun getI18n_shouldReturnExpectedApiRequest() {
+        val actualApiRequest = VirtusizeApi.getI18n(VirtusizeLanguage.KR)
+
+        val expectedUrl = "https://i18n.virtusize.jp/bundle-payloads/aoyama/ko"
 
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
 

@@ -2,7 +2,25 @@
 <resources>
     <declare-styleable name="VirtusizeButton">
         <attr name="virtusizeButtonStyle">
-            <enum name="default_style" value="0" />
+            <enum name="virtusize_black" value="0" />
+            <enum name="virtusize_teal" value="1" />
         </attr>
+    </declare-styleable>
+
+    <declare-styleable name="VirtusizeInPageMini">
+        <attr name="virtusizeInPageMiniStyle">
+            <enum name="virtusize_black" value="0" />
+            <enum name="virtusize_teal" value="1" />
+        </attr>
+        <attr name="inPageMiniBackgroundColor" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="VirtusizeInPageStandard">
+        <attr name="virtusizeInPageStandardStyle">
+            <enum name="virtusize_black" value="0" />
+            <enum name="virtusize_teal" value="1" />
+        </attr>
+        <attr name="inPageStandardButtonBackgroundColor" format="color"/>
+        <attr name="inPageStandardHorizontalMargin" format="dimension"/>
     </declare-styleable>
 </resources>

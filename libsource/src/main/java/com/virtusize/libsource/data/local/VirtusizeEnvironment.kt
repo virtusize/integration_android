@@ -61,3 +61,6 @@ fun VirtusizeEnvironment.virtusizeRegion(): VirtusizeRegion {
         KOREA -> VirtusizeRegion.KR
     }
 }
+
+// The URL for i18n
+const val I18N_URL = "https://i18n.virtusize.jp"
