@@ -38,4 +38,13 @@
         <item name="android:textColor">@color/color_gray_900</item>
     </style>
 
+    <style name="InPageMiniTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:lineSpacingExtra">@dimen/virtusize_inpage_mini_text_line_spacing</item>
+        <item name="android:textSize">@dimen/virtusize_inpage_mini_message_textSize</item>
+    </style>
+
 </resources>
