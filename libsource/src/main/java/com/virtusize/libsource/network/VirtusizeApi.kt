@@ -238,6 +238,10 @@ internal object VirtusizeApi {
         return ApiRequest(url, HttpMethod.GET)
     }
 
+    /**
+     * Gets a API request for retrieving i18n localization texts
+     * @see ApiRequest
+     */
     fun getI18n(language: VirtusizeLanguage) : ApiRequest {
         val url = Uri.parse(I18N_URL + VirtusizeEndpoint.I18N.getPath() + language.value)
             .buildUpon()

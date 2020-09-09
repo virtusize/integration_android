@@ -16,6 +16,7 @@ import com.virtusize.libsource.ui.VirtusizeInPageStandard
 import com.virtusize.libsource.ui.VirtusizeInPageView
 import com.virtusize.libsource.ui.VirtusizeView
 import com.virtusize.libsource.util.Constants
+import com.virtusize.libsource.util.trimI18nText
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import java.net.HttpURLConnection
@@ -138,14 +139,14 @@ class Virtusize(
              * when Product check Request is performed on server on Virtusize server
              */
             override fun onValidProductCheckCompleted(productCheck: ProductCheck) {
-                // Set up Product check response data to VirtusizeProduct in VirtusizeButton
+                // Sets up Product check response data to VirtusizeProduct in VirtusizeView
                 virtusizeView.setupProductCheckResponseData(productCheck)
                 if (virtusizeView is VirtusizeInPageView) {
                     productCheck.data?.productDataId?.let { productId ->
-                        val trimType = if(virtusizeView is VirtusizeInPageStandard) TrimType.HTML else TrimType.CLEAN
-                        getI18nText(trimType, { i18nLocalization ->
+                        val trimType = if(virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
+                        getI18nText({ i18nLocalization ->
                             getStoreProductInfo(productId, onSuccess = { storeProduct ->
-                                virtusizeView.setupRecommendationText(storeProduct.getRecommendationText(i18nLocalization))
+                                virtusizeView.setupRecommendationText(storeProduct.getRecommendationText(i18nLocalization).trimI18nText(trimType))
                                 if(virtusizeView is VirtusizeInPageStandard) {
                                     virtusizeView.setupProductImage(
                                         params.virtusizeProduct?.imageUrl,
@@ -162,6 +163,8 @@ class Virtusize(
                             Log.e(Constants.INPAGE_LOG_TAG, it.message)
                             virtusizeView.showErrorScreen()
                         })
+                    } ?: run {
+                        virtusizeView.showErrorScreen()
                     }
                 }
                 // Send API Event UserSawProduct
@@ -447,13 +450,12 @@ class Virtusize(
      * @param onError the optional error callback to get the [VirtusizeErrorType] in the API task
      */
     internal fun getI18nText(
-        trimType: I18nLocalizationJsonParser.TrimType,
         onSuccess: ((I18nLocalization) -> Unit)? = null,
         onError: ((VirtusizeError) -> Unit)? = null
     ) {
         val apiRequest = VirtusizeApi.getI18n(params.language ?: (VirtusizeLanguage.values().find { it.value == Locale.getDefault().language } ?: VirtusizeLanguage.EN))
         VirtusizeApiTask()
-            .setJsonParser(I18nLocalizationJsonParser(context, trimType))
+            .setJsonParser(I18nLocalizationJsonParser(context))
             .setSuccessHandler(object : SuccessResponseHandler {
                 override fun onSuccess(data: Any?) {
                     onSuccess?.invoke(data as I18nLocalization)
@@ -507,6 +509,10 @@ class Virtusize(
         this.coroutineDispatcher = dispatcher
     }
 
+    /**
+     * Handles the null product error
+     * @throws VirtusizeErrorType.NullProduct error
+     */
     private fun handleNullProductError() {
         messageHandler.onError(null, VirtusizeErrorType.NullProduct.virtusizeError())
         throwError(errorType = VirtusizeErrorType.NullProduct)

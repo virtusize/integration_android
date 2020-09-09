@@ -33,24 +33,36 @@ import java.net.URL
 
 class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : VirtusizeInPageView(context, attrs) {
 
+    /**
+     * @see VirtusizeView.virtusizeParams
+     */
     override var virtusizeParams: VirtusizeParams? = null
         private set
 
+    /**
+     * @see VirtusizeView.virtusizeMessageHandler
+     */
     override lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
         private set
 
+    /**
+     * @see VirtusizeView.virtusizeDialogFragment
+     */
     override var virtusizeDialogFragment = VirtusizeWebView()
         private set
 
+    // The VirtusizeViewStyle that clients can choose to use for this InPage Standard view
     var virtusizeViewStyle = VirtusizeViewStyle.NONE
         set(value) {
             field = value
             setStyle()
         }
 
+    // The background color that clients can set up for the button
     var virtusizeButtonBackgroundColor = 0
         private set
 
+    // The horizontal margin between the edges of InPage Standard view and the phone screen
     var horizontalMargin = -1f
         set(value) {
             field = value
@@ -81,12 +93,19 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         setStyle()
     }
 
+    /**
+     * @see VirtusizeView.setup
+     */
     override fun setup(params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
         super.setup(params, messageHandler)
         virtusizeParams = params
         virtusizeMessageHandler = messageHandler
     }
 
+    /**
+     * @see VirtusizeView.setupProductCheckResponseData
+     * @throws VirtusizeErrorType.NullProduct error
+     */
     override fun setupProductCheckResponseData(productCheck: ProductCheck) {
         if (virtusizeParams?.virtusizeProduct != null) {
             virtusizeParams?.virtusizeProduct!!.productCheckData = productCheck
@@ -96,10 +115,10 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
                     setupConfiguredLocalization()
                     setLoadingScreen(true)
                     inpage_standard_card_view.setOnClickListener {
-                        clickVirtusizeView(context)
+                        openVirtusizeWebView(context)
                     }
                     inpage_standard_button.setOnClickListener {
-                        clickVirtusizeView(context)
+                        openVirtusizeWebView(context)
                     }
                 }
             }
@@ -109,6 +128,10 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         }
     }
 
+    /**
+     * Sets up the styles for the loading screen and the screen after finishing loading
+     * @param loading pass true when it's loading, and pass false when finishing loading
+     */
     private fun setLoadingScreen(loading: Boolean) {
         inpage_standard_product_border_card_view.visibility = if(loading) View.INVISIBLE else View.VISIBLE
         inpage_standard_top_text.visibility = if(loading) View.GONE else View.VISIBLE
@@ -120,6 +143,9 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         inpage_standard_loading_text.startAnimation()
     }
 
+    /**
+     * @see VirtusizeInPageView.setupRecommendationText
+     */
     override fun setupRecommendationText(text: String) {
         val splitTexts = text.split("<br>")
         if(splitTexts.size == 2) {
@@ -131,6 +157,9 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         }
     }
 
+    /**
+     * @see VirtusizeInPageView.showErrorScreen
+     */
     override fun showErrorScreen() {
         inpage_standard_error_screen_layout.visibility = View.VISIBLE
         inpage_standard_layout.visibility = View.GONE
@@ -139,21 +168,29 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         inpage_standard_button.setOnClickListener {}
     }
 
-    override fun dismissVirtusizeView() {
-        if (virtusizeDialogFragment.isVisible) {
-            virtusizeDialogFragment.dismiss()
-        }
-    }
-
-    internal fun setupProductImage(imageUrl: String?, cloudinaryPublicId: String, productType: Int, style: String?) {
-        setProductImageFromURL(imageUrl ?: getCloudinaryImageUrl(cloudinaryPublicId), productType, style)
-    }
-
+    /**
+     * Sets up the background color of the button
+     * @param color a color int
+     */
     fun setButtonBackgroundColor(@ColorInt color: Int) {
         virtusizeButtonBackgroundColor = color
         setStyle()
     }
 
+    /**
+     * Sets up the store product image
+     * @param imageUrl the image URL that clients provide when setting up the product info
+     * @param cloudinaryPublicId the Cloudinary image public ID
+     * @param productType the product type, which is fetched from the store product info
+     * @param style the product style, which is fetched from the store product info
+     */
+    internal fun setupProductImage(imageUrl: String?, cloudinaryPublicId: String, productType: Int, style: String?) {
+        setProductImageFromURL(imageUrl ?: getCloudinaryImageUrl(cloudinaryPublicId), productType, style)
+    }
+
+    /**
+     * Sets the InPage Standard style corresponding to [VirtusizeViewStyle] and [horizontalMargin]
+     */
     private fun setStyle() {
         // Set Virtusize default style
         if(virtusizeButtonBackgroundColor!= 0) {
@@ -178,6 +215,9 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         )
     }
 
+    /**
+     * Sets the background color of the size check button
+     */
     private fun setSizeCheckButtonBackgroundTint(color: Int) {
         var drawable = ContextCompat.getDrawable(context, R.drawable.button_background_white)
         drawable = DrawableCompat.wrap(drawable!!)
@@ -188,6 +228,9 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         )
     }
 
+    /**
+     * Sets up the text fonts, localization, and UI dimensions based on the configured context
+     */
     private fun setupConfiguredLocalization() {
         FontUtils.setTypeFaces(
             context,
@@ -230,6 +273,9 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         }
     }
 
+    /**
+     * Sets up the text sizes and UI dimensions based on the configured context
+     */
     private fun setConfiguredDimensions(configuredContext: ContextWrapper?) {
         configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_normal_textSize)?.let {
             inpage_standard_top_text.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
@@ -251,12 +297,18 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         }
     }
 
+    /**
+     * Sets up the margins for a view
+     */
     private fun setupMargins(view: View, left: Int, top: Int, right: Int, bottom: Int) {
         val layoutParams: MarginLayoutParams = view.layoutParams as MarginLayoutParams
         layoutParams.setMargins(left, top, right, bottom)
         view.requestLayout()
     }
 
+    /**
+     * Sets up the InPage Standard footer margins
+     */
     private fun setupInPageStandardFooterMargins(left: Int, top: Int, right: Int, bottom: Int) {
         val layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
@@ -266,10 +318,19 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         inpage_standard_footer.layoutParams = layoutParams
     }
 
+    /**
+     * Sets up the InPage Standard footer margins
+     */
     private fun getCloudinaryImageUrl(cloudinaryPublicId: String): String {
         return "https://res.cloudinary.com/virtusize/image/upload/t_product-large-retina-v1/$cloudinaryPublicId.jpg"
     }
 
+    /**
+     * Sets up the store product image from URL
+     * @param imageUrl the image URL
+     * @param productType the product type, which is fetched from the store product info
+     * @param style the product style, which is fetched from the store product info
+     */
     private fun setProductImageFromURL(imageUrl: String?, productType: Int?, style: String?) {
         if(imageUrl.isNullOrBlank()) {
             return
@@ -303,6 +364,12 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         }
     }
 
+    /**
+     * Gets the product placeholder image by the product type and style
+     * @param productType the product type, which is fetched from the store product info
+     * @param style the product style, which is fetched from the store product info
+     * @return a Drawable of product placeholder image
+     */
     private fun getProductPlaceholderImage(productType: Int?, style: String?): Drawable? {
         var productPlaceholderImage = context.getDrawableResourceByName(
             "ic_product_type_$productType"

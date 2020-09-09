@@ -33,7 +33,6 @@ internal class StoreProductJsonParser: VirtusizeJsonParser {
         return StoreProduct(id, sizes, externalId, productType, name, cloudinaryPublicId, storeId, storeProductMeta)
     }
 
-
     companion object {
         private const val FIELD_ID = "id"
         private const val FIELD_SIZES = "sizes"

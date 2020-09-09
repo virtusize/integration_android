@@ -30,7 +30,6 @@ import java.util.concurrent.TimeUnit
  */
 internal class VirtusizeApiTask {
 
-
     companion object {
         // The read timeout to use for all the requests, which is 80 seconds
         private val READ_TIMEOUT = TimeUnit.SECONDS.toMillis(80).toInt()
@@ -141,7 +140,7 @@ internal class VirtusizeApiTask {
                             successHandler?.onSuccess(result)
                         }
                     }
-                    // If the request was failed but it has a error response, then read the error stream and parse the response.
+                    // If the request fails but it has a error response, then read the error stream and parse the response.
                     urlConnection.errorStream != null -> {
                         errorStream = urlConnection.errorStream
                         val response = parseInputStreamAsObject(stream = errorStream)

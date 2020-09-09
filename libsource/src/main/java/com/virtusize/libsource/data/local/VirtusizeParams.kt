@@ -3,6 +3,7 @@ package com.virtusize.libsource.data.local
 /**
  * The class that wraps the parameters we can pass to the Virtusize web app
  * @param apiKey the API key that is unique to every Virtusize Client
+ * @param bid the browser ID that is specific to the Virtusize WebView
  * @param environment the [VirtusizeEnvironment] that is used in the SDK
  * @param region the [VirtusizeRegion] that is used to set the region of the config url domains within the Virtusize web app
  * @param language the [VirtusizeLanguage] that sets the initial language the Virtusize web app will load in

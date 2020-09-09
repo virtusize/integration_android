@@ -6,10 +6,13 @@ import android.os.Looper
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 
+/**
+ * A custom TextView to display animated dots in a text
+ */
 internal class DotsLoadingTextView : AppCompatTextView {
 
     private var originalText: CharSequence? = null
-    private var runnable: Runnable? = null
+    private var dotsLoadingRunnable: Runnable? = null
     private var dotsLoadingHandler: Handler? = null
     private var maxDots: Int = 3
     private var tempDots: Int = 0
@@ -22,10 +25,13 @@ internal class DotsLoadingTextView : AppCompatTextView {
         defStyleAttr
     )
 
+    /**
+     * Starts the animation
+     */
     fun startAnimation() {
         originalText = text
         dotsLoadingHandler = Handler(Looper.getMainLooper())
-        runnable = object : Runnable {
+        dotsLoadingRunnable = object : Runnable {
             override fun run() {
                 dotsLoadingHandler?.postDelayed(this, 500)
                 if (tempDots == maxDots) {
@@ -37,17 +43,23 @@ internal class DotsLoadingTextView : AppCompatTextView {
                 invalidate()
             }
         }
-        runnable!!.run()
+        dotsLoadingRunnable!!.run()
     }
 
-    private fun stopAnimation() {
-        runnable?.let { dotsLoadingHandler?.removeCallbacks(it) }
+    /**
+     * Stops the animation
+     */
+    fun stopAnimation() {
+        dotsLoadingRunnable?.let { dotsLoadingHandler?.removeCallbacks(it) }
     }
 
+    /**
+     * Gets the number of dots
+     */
     private fun getDot(dotNumber: Int): String {
         val sb = StringBuilder()
         for (i in 1..dotNumber) {
-            sb.append(".")
+            sb.append("·")
         }
         return sb.toString()
     }

@@ -15,10 +15,12 @@ import com.virtusize.libsource.data.local.VirtusizeMessageHandler;
 import com.virtusize.libsource.data.local.VirtusizeOrder;
 import com.virtusize.libsource.data.local.VirtusizeOrderItem;
 import com.virtusize.libsource.data.local.VirtusizeProduct;
+import com.virtusize.libsource.data.local.VirtusizeViewStyle;
 import com.virtusize.libsource.ui.VirtusizeButton;
 import com.virtusize.libsource.ui.VirtusizeInPageMini;
 import com.virtusize.libsource.ui.VirtusizeInPageStandard;
 import com.virtusize.libsource.ui.VirtusizeView;
+import com.virtusize.libsource.util.ExtensionsKt;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         virtusizeButton = findViewById(R.id.exampleVirtusizeButton);
+        virtusizeInPageStandard = findViewById(R.id.exampleVirtusizeInPageStandard);
+        virtusizeInPageMini = findViewById(R.id.exampleVirtusizeInPageMini);
         app = (App) getApplication();
 
         virtusizeMessageHandler = new VirtusizeMessageHandler() {
@@ -62,19 +66,42 @@ public class MainActivity extends AppCompatActivity {
         app.Virtusize.setupVirtusizeProduct(
                 new VirtusizeProduct(
                         "694",
-                        "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"
+                        "http://www.image.com/goods/12345.jpg"
                 )
         );
 
         app.Virtusize.setupVirtusizeView(virtusizeButton);
-        app.Virtusize.setupVirtusizeView(virtusizeInPageStandard);
-        app.Virtusize.setupVirtusizeView(virtusizeInPageMini);
-
         /*
          * To set up the button style programmatically
          * virtusizeButton.setVirtusizeViewStyle(VirtusizeViewStyle.BLACK);
          */
 
+        app.Virtusize.setupVirtusizeView(virtusizeInPageStandard);
+        // Set up the InPage Standard style programmatically
+        virtusizeInPageStandard.setVirtusizeViewStyle(VirtusizeViewStyle.TEAL);
+        /*
+         * If you like, you can set up the horizontal margins between the edges of the app screen and the InPage Standard view
+         * Note: Use the helper extension function `ExtensionsKt.getDpInPx` if you like
+         * virtusizeInPageStandard.setHorizontalMargin(ExtensionsKt.getDpInPx(16));
+         */
+
+        app.Virtusize.setupVirtusizeView(virtusizeInPageMini);
+        virtusizeInPageMini.setVirtusizeViewStyle(VirtusizeViewStyle.TEAL);
+        /*
+         * If you like, you can set up the background of InPage Mini view as long as it passes WebAIM contrast test.
+         *
+         * virtusizeInPageMini.setInPageMiniBackgroundColor(ContextCompat.getColor(this, R.color.ocean_blue));
+         */
+
+        /*
+         * To close the Virtusize page
+         *
+         * virtusizeButton.dismissVirtusizeView();
+         * virtusizeInPageStandard.dismissVirtusizeView();
+         * virtusizeInPageMini.dismissVirtusizeView();
+         */
+
+        // The sample function to send an order to the Virtusize server
         sendOrderSample();
     }
 

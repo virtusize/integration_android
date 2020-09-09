@@ -6,6 +6,7 @@ import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser
 
 /**
  * The Context extension function to get the string by the string resource name
@@ -18,6 +19,9 @@ internal fun Context.getStringResourceByName(stringName: String): String? {
     return getString(resId)
 }
 
+/**
+ * The Context extension function to get a drawable resource by name in string
+ */
 internal fun Context.getDrawableResourceByName(drawableName: String): Drawable? {
     val resId = resources.getIdentifier(drawableName, "drawable", packageName)
     if(resId == 0) {
@@ -26,6 +30,9 @@ internal fun Context.getDrawableResourceByName(drawableName: String): Drawable? 
     return ContextCompat.getDrawable(this, resId)
 }
 
+/**
+ * The Context extension function to get a Typeface by the font file name
+ */
 internal fun Context.getTypefaceByName(fontFileName: String): Typeface? {
     val resId = resources.getIdentifier(fontFileName, "font", packageName)
     if(resId == 0) {
@@ -34,7 +41,18 @@ internal fun Context.getTypefaceByName(fontFileName: String): Typeface? {
     return ResourcesCompat.getFont(this, resId)
 }
 
+/**
+ * The String extension function to trim the text from i18n localization
+ */
+internal fun String.trimI18nText(trimType: I18nLocalizationJsonParser.TrimType = I18nLocalizationJsonParser.TrimType.ONELINE): String {
+    return when (trimType) {
+        I18nLocalizationJsonParser.TrimType.ONELINE -> replace("%{boldStart}", "").replace("%{boldEnd}", "")
+        I18nLocalizationJsonParser.TrimType.MULTIPLELINES -> replace("%{boldStart}", "<br>").replace("%{boldEnd}", "")
+    }
+}
+
+/**
+ * Integer extension function to convert dp to px
+ */
 val Int.dpInPx: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
-val Int.pxInDp: Int
-    get() = (this / Resources.getSystem().displayMetrics.density).toInt()

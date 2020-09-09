@@ -3,6 +3,7 @@ package com.virtusize.libsource.ui
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
@@ -13,12 +14,21 @@ import com.virtusize.libsource.data.local.throwError
 
 class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, AppCompatButton(context, attrs) {
 
+    /**
+     * @see VirtusizeView.virtusizeParams
+     */
     override var virtusizeParams: VirtusizeParams? = null
         private set
 
+    /**
+     * @see VirtusizeView.virtusizeMessageHandler
+     */
     override lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
         private set
 
+    /**
+     * @see VirtusizeView.virtusizeDialogFragment
+     */
     override var virtusizeDialogFragment = VirtusizeWebView()
         private set
 
@@ -38,6 +48,9 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, Ap
         setupButtonStyle()
     }
 
+    /**
+     * @see VirtusizeView.setup
+     */
     override fun setup(params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
         super.setup(params, messageHandler)
         virtusizeParams = params
@@ -76,9 +89,7 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, Ap
     }
 
     /**
-     * Sets up the product check data received from Virtusize API to VirtusizeProduct
-     * @param productCheck ProductCheckResponse received from Virtusize API
-     * @see ProductCheck
+     * @see VirtusizeView.setupProductCheckResponseData
      * @throws VirtusizeErrorType.NullProduct error
      */
     override fun setupProductCheckResponseData(productCheck: ProductCheck) {
@@ -89,7 +100,7 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, Ap
                     visibility = View.VISIBLE
                     setupButtonTextConfiguredLocalization()
                     setOnClickListener {
-                        clickVirtusizeView(context)
+                        openVirtusizeWebView(context)
                     }
                 }
             }
@@ -99,9 +110,14 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, Ap
         }
     }
 
+    /**
+     * Sets up the button text style based on the language that clients set using the [VirtusizeBuilder] in the application
+     */
     private fun setupButtonTextConfiguredLocalization() {
         val configuredContext = getConfiguredContext(context)
         text = configuredContext?.getText(R.string.virtusize_button_text)
-        configuredContext?.resources?.getDimension(R.dimen.virtusize_button_textSize)
+        configuredContext?.resources?.getDimension(R.dimen.virtusize_button_textSize)?.let {
+            setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+        }
     }
 }

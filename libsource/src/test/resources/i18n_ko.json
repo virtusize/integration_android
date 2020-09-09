@@ -19,15 +19,15 @@
             }
           },
           "fit": {
-            "loose": "This item has a %{boldStart}loose fit.%{boldEnd}",
-            "tight": "This item has a %{boldStart}tight fit.%{boldEnd}",
-            "regular": "This item has a %{boldStart}regular fit.%{boldEnd}"
+            "loose": "이 상품은 %{boldStart}느슨한 핏입니다.%{boldEnd}",
+            "regular": "이 상품은 %{boldStart}일반 핏입니다.%{boldEnd}",
+            "tight": "이 상품은 %{boldStart}꽉 조이는 핏입니다.%{boldEnd}"
           },
-          "defaultText": "This item’s brand is %{boldStart}true to size.%{boldEnd}"
+          "defaultText": "이 상품의 브랜드는 %{boldStart}정 사이즈입니다.%{boldEnd}"
         },
         "inpage": {
-          "defaultAccessoryText": "See how everyday items fit",
-          "hasProductAccessoryText": "See the size difference from %{boldStart}your own item%{boldEnd}",
+          "defaultAccessoryText": "상품이 어울리는지 확인해보세요.",
+          "hasProductAccessoryText": "%{boldStart}소장 상품%{boldEnd}과 구매 상품의 사이즈를 비교해보세요.",
           "closestSizeToItem": "당신의 상품과 유사한 사이즈 %{value}"
         }
       }
