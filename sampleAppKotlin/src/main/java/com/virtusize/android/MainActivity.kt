@@ -20,31 +20,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val app = application as App
+
         // Register message handler to listen to events from Virtusize
-        (application as App)
-            .Virtusize.registerMessageHandler(activityMessageHandler)
+        app.Virtusize.registerMessageHandler(activityMessageHandler)
 
         // Set up Virtusize product for all the Virtusize views
-        (application as App)
-            .Virtusize
-            .setupVirtusizeProduct(virtusizeProduct = VirtusizeProduct(externalId = "694",
-                imageUrl = "http://www.image.com/goods/12345.jpg"
-            ))
+        app.Virtusize.setupVirtusizeProduct(app.provideProduct())
 
         // Set up Virtusize button
         // Virtusize opens automatically when button is clicked
-        (application as App)
-            .Virtusize
-            .setupVirtusizeView(
-                virtusizeView = exampleVirtusizeButton
-            )
+        app.Virtusize.setupVirtusizeView(
+            virtusizeView = exampleVirtusizeButton
+        )
         // Set up the Virtusize view style programmatically
         exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.TEAL
 
         // Set up Virtusize InPage Standard
-        (application as App)
-            .Virtusize
-            .setupVirtusizeView(
+        app.Virtusize.setupVirtusizeView(
                 virtusizeView = exampleVirtusizeInPageStandard
             )
         exampleVirtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
@@ -59,11 +52,9 @@ class MainActivity : AppCompatActivity() {
          */
 
         // Set up Virtusize InPage Mini
-        (application as App)
-            .Virtusize
-            .setupVirtusizeView(
-                virtusizeView = exampleVirtusizeInPageMini
-            )
+        app.Virtusize.setupVirtusizeView(
+            virtusizeView = exampleVirtusizeInPageMini
+        )
         exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.TEAL
         /*
          * If you like, you can set up the background of InPage Mini view as long as it passes WebAIM contrast test.

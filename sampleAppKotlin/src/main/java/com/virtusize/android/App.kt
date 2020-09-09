@@ -5,8 +5,9 @@ import com.virtusize.libsource.Virtusize
 import com.virtusize.libsource.VirtusizeBuilder
 import com.virtusize.libsource.data.local.*
 
-class App: Application() {
+open class App: Application() {
     lateinit var Virtusize: Virtusize
+    open fun provideProduct(): VirtusizeProduct? = StoreProduct.virtusizeProduct
 
     override fun onCreate() {
         super.onCreate()
@@ -28,5 +29,10 @@ class App: Application() {
             // By default, Virtusize displays all the possible info categories in the Product Details tab
             .setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
             .build()
+
+        StoreProduct.virtusizeProduct = VirtusizeProduct(
+            externalId = "694",
+            imageUrl = "http://www.image.com/goods/12345.jpg"
+        )
     }
 }
