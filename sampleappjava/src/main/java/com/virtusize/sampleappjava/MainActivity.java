@@ -85,6 +85,12 @@ public class MainActivity extends AppCompatActivity {
          * virtusizeInPageStandard.setHorizontalMargin(ExtensionsKt.getDpInPx(16));
          */
 
+        /*
+         * If you like, you can set up the background color of InPage Standard view as long as it passes WebAIM contrast test.
+         *
+         * virtusizeInPageStandard.setButtonBackgroundColor(ContextCompat.getColor(this, R.color.ocean_blue));
+         */
+
         app.Virtusize.setupVirtusizeView(virtusizeInPageMini);
         virtusizeInPageMini.setVirtusizeViewStyle(VirtusizeViewStyle.TEAL);
         /*
