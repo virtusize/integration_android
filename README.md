@@ -37,143 +37,498 @@ If you'd like to continue using the old Version 1.x.x, refer to the branch [v1](
 
   ```groovy
   dependencies {
-      implementation 'com.github.virtusize:integration_android:2.0.1'
+      implementation 'com.github.virtusize:integration_android:2.1'
   }
   ```
 
 ## Setup
 
-1. Initialize the Virtusize object in your Application class's `onCreate` method using the **VirtusizeBuilder** to set up the configuration. Possible configuration methods are shown in the following table: 
+### 1. Initialize Virtusize
 
-   **VirtusizeBuilder**
+Initialize the Virtusize object in your Application class's `onCreate` method using the **VirtusizeBuilder** to set up the configuration. Possible configuration methods are shown in the following table: 
 
-   | Method               | Argument Type                     | Example                                                      | Description                                                  | Requirement                                                  |
-   | -------------------- | --------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-   | setApiKey            | String                            | setApiKey("api_key")                                         | A unique API key is provided to each Virtusize client.       | Yes                                                          |
-   | setUserId            | String                            | setUserId("123")                                             | Passed from the client if the user is logged into the client's app. | Yes, if the Order API is used.                               |
-   | setEnv               | VirtusizeEnvironment              | setEnv(VirtusizeEnvironment.STAGING)                         | The environment is the region you are running the integration from, either `VirtusizeEnvironment.STAGING`,  `VirtusizeEnvironment.GLOBAL`, `VirtusizeEnvironment.JAPAN` or `VirtusizeEnvironment.KOREA`. | No. By default, the Virtusize environment will be set to `VirtusizeEnvironment.GLOBAL`. |
-   | setLanguage          | VirtusizeLanguage                 | setLanguage(VirtusizeLanguage.EN)                            | Sets the initial language that the integration will load in. The possible values are `VirtusizeLanguage.EN`, `VirtusizeLanguage.JP` and `VirtusizeLanguage.KR` | No. By default, the initial language will be set based on the Virtusize environment. |
-   | setShowSGI           | Boolean                           | setShowSGI(true)                                             | Determines whether the integration will fetch SGI and use SGI flow for users to add user generated items to their wardrobe. | No. By default, ShowSGI is set to false                      |
-   | setAllowedLanguages  | A list of `VirtusizeLanguage`     | In Kotlin, setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))<br />In Java, setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP)) | The languages which the user can switch to using the Language Selector | No. By default, the integration allows all possible languages to be displayed, including English, Japanese and Korean. |
-   | setDetailsPanelCards | A list of `VirtusizeInfoCategory` | In Kotlin, setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))<br />In Java, setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT)) | The info categories which will be display in the Product Details tab. Possible categories are: `VirtusizeInfoCategory.MODEL_INFO`, `VirtusizeInfoCategory.GENERAL_FIT`, `VirtusizeInfoCategory.BRAND_SIZING` and `VirtusizeInfoCategory.MATERIAL` | No. By default, the integration displays all the possible info categories in the Product Details tab. |
+**VirtusizeBuilder**
 
-   - Kotlin
+| Method               | Argument Type                     | Example                                                      | Description                                                  | Requirement                                                  |
+| -------------------- | --------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| setApiKey            | String                            | setApiKey("api_key")                                         | A unique API key is provided to each Virtusize client.       | Yes                                                          |
+| setUserId            | String                            | setUserId("123")                                             | Passed from the client if the user is logged into the client's app. | Yes, if the Order API is used.                               |
+| setEnv               | VirtusizeEnvironment              | setEnv(VirtusizeEnvironment.STAGING)                         | The environment is the region you are running the integration from, either `VirtusizeEnvironment.STAGING`,  `VirtusizeEnvironment.GLOBAL`, `VirtusizeEnvironment.JAPAN` or `VirtusizeEnvironment.KOREA`. | No. By default, the Virtusize environment will be set to `VirtusizeEnvironment.GLOBAL`. |
+| setLanguage          | VirtusizeLanguage                 | setLanguage(VirtusizeLanguage.EN)                            | Sets the initial language that the integration will load in. The possible values are `VirtusizeLanguage.EN`, `VirtusizeLanguage.JP` and `VirtusizeLanguage.KR` | No. By default, the initial language will be set based on the Virtusize environment. |
+| setShowSGI           | Boolean                           | setShowSGI(true)                                             | Determines whether the integration will fetch SGI and use SGI flow for users to add user generated items to their wardrobe. | No. By default, ShowSGI is set to false                      |
+| setAllowedLanguages  | A list of `VirtusizeLanguage`     | In Kotlin, setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))<br />In Java, setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP)) | The languages which the user can switch to using the Language Selector | No. By default, the integration allows all possible languages to be displayed, including English, Japanese and Korean. |
+| setDetailsPanelCards | A list of `VirtusizeInfoCategory` | In Kotlin, setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))<br />In Java, setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT)) | The info categories which will be display in the Product Details tab. Possible categories are: `VirtusizeInfoCategory.MODEL_INFO`, `VirtusizeInfoCategory.GENERAL_FIT`, `VirtusizeInfoCategory.BRAND_SIZING` and `VirtusizeInfoCategory.MATERIAL` | No. By default, the integration displays all the possible info categories in the Product Details tab. |
 
-     ```kotlin
-     lateinit var Virtusize: Virtusize
-     override fun onCreate() {
-         super.onCreate()
-        Virtusize = VirtusizeBuilder().init(this)
-                 // Only the API key is required
-                 .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
-                 // For using the Order API, a user ID is required
-                 .setUserId("123")
-                 // By default, the Virtusize environment will be set to GLOBAL
-                 .setEnv(VirtusizeEnvironment.STAGING)
-                 // By default, the initial language will be set based on the Virtusize environment
-                 .setLanguage(VirtusizeLanguage.EN)
-                 // By default, ShowSGI is false
-                 .setShowSGI(true)
-                 // By default, Virtusize allows all the possible languages
-                 .setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
-                 // By default, Virtusize displays all the possible info categories in the Product Details tab
-                 .setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
-                 .build()
-     }
-     ```
-   - Java
+- Kotlin
 
-       ```java
-       Virtusize Virtusize;
+  ```kotlin
+  lateinit var Virtusize: Virtusize
+  
+  override fun onCreate() {
+     super.onCreate()
+     Virtusize = VirtusizeBuilder().init(this)
+              // Only the API key is required
+              .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
+              // For using the Order API, a user ID is required
+              .setUserId("123")
+              // By default, the Virtusize environment will be set to GLOBAL
+              .setEnv(VirtusizeEnvironment.STAGING)
+              // By default, the initial language will be set based on the Virtusize environment
+              .setLanguage(VirtusizeLanguage.EN)
+              // By default, ShowSGI is false
+              .setShowSGI(true)
+              // By default, Virtusize allows all the possible languages
+              .setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
+              // By default, Virtusize displays all the possible info categories in the Product Details tab
+              .setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
+              .build()
+  }
+  ```
 
-       @Override
-       public void onCreate() {
-          super.onCreate();
-               // Initialize Virtusize instance for your application
-               Virtusize = new VirtusizeBuilder().init(this)
-                       // Only the API key is required
-                       .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
-                       // For using the Order API, a user ID is required
-                       .setUserId("123")
-                       // By default, the Virtusize environment will be set to GLOBAL
-                       .setEnv(VirtusizeEnvironment.STAGING)
-                       // By default, the initial language will be set based on the Virtusize environment
-                       .setLanguage(VirtusizeLanguage.EN)
-                       // By default, ShowSGI is false
-                       .setShowSGI(true)
-                       // By default, Virtusize allows all the possible languages
-                       .setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
-                       // By default, Virtusize displays all the possible info categories in the Product Details tab
-                       .setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
-                       .build();
-       ```
+- Java
 
-2. Add a Virtusize button in your activity's XML layout file. You can use the default button style we provide by setting up `app:virtusizeButtonStyle="default_style"` in XML:
+  ```java
+  Virtusize Virtusize;
+  
+  @Override
+  public void onCreate() {
+     super.onCreate();
+     // Initialize Virtusize instance for your application
+     Virtusize = new VirtusizeBuilder().init(this)
+              // Only the API key is required
+              .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
+              // For using the Order API, a user ID is required
+              .setUserId("123")
+              // By default, the Virtusize environment will be set to GLOBAL
+              .setEnv(VirtusizeEnvironment.STAGING)
+              // By default, the initial language will be set based on the Virtusize environment
+              .setLanguage(VirtusizeLanguage.EN)
+              // By default, ShowSGI is false
+              .setShowSGI(true)
+              // By default, Virtusize allows all the possible languages
+              .setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
+              // By default, Virtusize displays all the possible info categories in the Product Details tab
+              .setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
+              .build();
+  }
+  ```
 
-   - XML
+### 2. Set Up Product Details
 
-     ```xml
-     <com.virtusize.libsource.ui.VirtusizeButton
-         android:id="@+id/exampleVirtusizeButton"
-         app:virtusizeButtonStyle="default_style"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content" />
-     ```
+1. Inside your activity, set up product details by passing an `imageUrl` for the product in order to populate the comparison view, and an `externalId` that will be used to reference that product in our API.
+
+   Kotlin
+
+   ```kotlin
+   (application as App)
+       .Virtusize
+       .setupVirtusizeProduct( 
+           VirtusizeProduct(
+               externalId = "694",
+               imageUrl = "http://www.image.com/goods/12345.jpg"
+           )
+       )
+   ```
+
+   Java
+
+   ```java
+   app.Virtusize.setupVirtusizeProduct(
+           new VirtusizeProduct(
+                   "694",
+                   "http://www.image.com/goods/12345.jpg"
+           )
+   );
+   ```
+
+### 3. Set Up Virtusize Message Handler
+
+Please do not forget to unregister message handler in activity or fragment's lifecycle method before it dies or is removed. See the next section for a how-to.
+
+- Kotlin
+
+  ```kotlin
+  private val activityMessageHandler = object : VirtusizeMessageHandler {
+      override fun virtusizeControllerShouldClose(virtusizeView: VirtusizeView) {
+          Log.i(TAG, "Close Virtusize View")
+          virtusizeView.dismissVirtusizeView()
+      }
+  
+      override fun onEvent(virtusizeView: VirtusizeView?, event: VirtusizeEvent) {
+          Log.i(TAG, event.name)
+      }
+  
+      override fun onError(virtusizeView: VirtusizeView?, errorType: VirtusizeError) {
+          Log.e(TAG, errorType.message)
+      }
+  }
+  
+  override fun onCreate(savedInstanceState: Bundle?) {
+      //...
+      // Register message handler to listen to events from Virtusize
+      (application as App).Virtusize.registerMessageHandler(activityMessageHandler)
+      //...
+  }
+  ```
+
+- Java
+
+  ```java
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+      //...
+      App app = (App) getApplication();
+      app.Virtusize.registerMessageHandler(new VirtusizeMessageHandler() {
+          @Override
+          public void virtusizeControllerShouldClose(@NotNull VirtusizeView virtusizeView) {
+              Log.i(TAG, "Close Virtusize View");
+          }
+  
+          @Override
+          public void onEvent(@org.jetbrains.annotations.Nullable VirtusizeView virtusizeView, @NotNull VirtusizeEvent event) {
+              Log.i(TAG, event.getName());
+          }
+  
+          @Override
+          public void onError(VirtusizeView virtusizeView, @NonNull VirtusizeError error) {
+              Log.e(TAG, error.getMessage());
+          }
+      });
+      //...
+  }
+  ```
+
+### 4. Unregister Virtusize Message Handler
+
+A message handler is tied to an activity or fragment's lifecycle, but the Virtusize library object is tied to the application's lifecycle. So if you forget to unregister message handler, then it will keep listening to events even after activity is dead or fragment has been removed. In the case of an activity; depending on where in the lifecycle you registered the message handler, you may need to unregister it in your onPause or onStop method before the super method is called. Follow the same guidelines in the case of fragment as well.
+
+- Kotlin
+
+  ```kotlin
+  private val activityMessageHandler: VirtusizeMessageHandler
+      override fun onPause() {
+          // Always un register message handler in onPause() or depending on implementation onStop().
+          (application as App).Virtusize.unregisterMessageHandler(activityMessageHandler)
+          super.onPause()
+  }
+  ```
+
+- Java
+
+  ```java
+  @Override
+  protected void onPause() {
+      app.Virtusize.unregisterMessageHandler(virtusizeMessageHandler);
+      super.onPause();
+  }
+  ```
+
+## Virtusize Views
+
+Virtusize SDK provides two main UI components for clients to use:
+
+### 1. Virtusize Button
+
+#### (1) Introduction
+
+VirtusizeButton is the simplest UI Button for our SDK. It opens our application in the web view to support customers find the right size.
+
+#### (2) Default Styles
+
+There are two default styles of the Virtusize Button in our Virtusize SDK.
+
+|                          Teal Theme                          |                         Black Theme                          |
+| :----------------------------------------------------------: | :----------------------------------------------------------: |
+| <img src="https://user-images.githubusercontent.com/7802052/92671785-22817a00-f352-11ea-8ce9-6b4f7fcb43c4.png" /> | <img src="https://user-images.githubusercontent.com/7802052/92671771-172e4e80-f352-11ea-8443-dcb8b05f5a07.png" /> |
+
+ If you like, you can also customize the button style.
+
+#### (3) Usage
+
+A. Add a VirtusizeButton in your activity's XML layout file. By using our default button styles, set up `app:virtusizeButtonStyle="virtusize_black"` or `app:virtusizeButtonStyle="virtusize_teal"` in XML:
+
+- XML
+
+  ```xml
+  <com.virtusize.libsource.ui.VirtusizeButton
+      android:id="@+id/exampleVirtusizeButton"
+      app:virtusizeButtonStyle="virtusize_black"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+  ```
+
+ or programmatically:
+
+- Kotlin
+
+  ```kotlin
+  exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.BLACK
+  ```
+
+- Java
+
+  ```java
+  virtusizeButton.setVirtusizeViewStyle(VirtusizeViewStyle.TEAL);
+  ```
+
+B. You can also use any other button styles and/or define attributes like text, height, width, etc of the VirtusizeButton.
+
+```xml
+<com.virtusize.libsource.ui.VirtusizeButton
+    android:id="@+id/exampleVirtusizeButton"
+    style="@style/Widget.AppCompat.Button.Colored"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/virtusize_button_text" />
+```
+
+C. Connect the Virtusize button to the Virtusize API by using `setupVirtusizeView` in your activity.
+
+- Kotlin
+
+  ```kotlin
+  (application as App)
+      .Virtusize
+      .setupVirtusizeView(exampleVirtusizeButton)
+  ```
+  
+- Java
+
+  ```java
+  app.Virtusize.setupVirtusizeView(virtusizeButton);
+  ```
+
+### 2. Virtusize InPage
+
+### (1) Introduction
+
+Virtusize InPage is a button that behaves as a start button for our product. The button also behaves as a fitting guide that supports people find the right size.
+
+##### InPage types
+
+There are two types of InPage in our Virtusize product.
+
+|                       InPage Standard                        |                         InPage Mini                          |
+| :----------------------------------------------------------: | :----------------------------------------------------------: |
+| ![InPageStandard](https://user-images.githubusercontent.com/7802052/92671977-9cb1fe80-f352-11ea-803b-5e3cb3469be4.png) | ![InPageMini](https://user-images.githubusercontent.com/7802052/92671979-9e7bc200-f352-11ea-8594-ed441649855c.png) |
+
+⚠️**Caution**⚠️
+
+1. InPage cannot be implemented together with the Virtusize button. Please pick either InPage or Virtusize button for your online shop.
+
+2. InPage Mini cannot be used alone while InPage Standard is not used.
+
+### (2) InPage Standard
+
+#### A. Design Guidelines
+
+- ##### Default Designs
+
+  There are two default design variations.
+
+  |                          Teal Theme                          |                         Black Theme                          |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | ![InPageStandardTeal](https://user-images.githubusercontent.com/7802052/92672035-b9e6cd00-f352-11ea-9e9e-5385a19e96da.png) | ![InPageStandardBlack](https://user-images.githubusercontent.com/7802052/92672031-b81d0980-f352-11ea-8b7a-564dd6c2a7f1.png) |
+
+- ##### Layout Variations
+
+  |               1 thumbnail + 2 lines of message               |               1 thumbnail + 1 line of message                |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | <img src="https://user-images.githubusercontent.com/7802052/92672132-ff0aff00-f352-11ea-8058-4ca7c149d6f2.png"> | <img src="https://user-images.githubusercontent.com/7802052/92672134-003c2c00-f353-11ea-842b-8ec54ba3585b.png"> |
+
+- ##### Recommended Placement
+  - Near the size table
+
+  - In the size info section
+
+    <img src="https://user-images.githubusercontent.com/7802052/92672185-15b15600-f353-11ea-921d-397f207cf616.png" style="zoom:50%;" />
+
+- ##### UI customization
+
+  - **You can:**
+    - change the background color of the CTA button as long as it passes **[WebAIM contrast test](https://webaim.org/resources/contrastchecker/)**.
+    - change the width of InPage so it fits your application width.
+
+  - **You cannot:**
+    - change interface components such as shapes and spacing.
+    - change the font.
+    - change the CTA button shape.
+    - change messages.
+    - change or hide the box shadow.
+    - hide the footer that contains VIRTUSIZE logo and Privacy Policy text link.
+
+#### B. Usage
+
+- Add a VirtusizeInPageStand in your activity's XML layout file. 
+
+  By using our default styles, set up `app:virtusizeInPageStandardStyle="virtusize_black"` or `app:virtusizeInPageStandardStyle="virtusize_teal"` 
+
+  If you'd like to change the background color of the CTA button, you can use `app:inPageStandardButtonBackgroundColor="#123456"`
+
+  If you'd like to set up the horizontal margins between the edges of the app screen and the InPageStandard, you can use `app:inPageStandardHorizontalMargin="16dp"`
+
+  - XML
+
+    ```xml
+    <com.virtusize.libsource.ui.VirtusizeInPageStandard
+        android:id="@+id/exampleVirtusizeInPageStandard"
+        app:virtusizeInPageStandardStyle="virtusize_black"
+        app:inPageStandardHorizontalMargin="16dp"                                               
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    ```
+
+    ```xml
+    <com.virtusize.libsource.ui.VirtusizeInPageStandard
+        android:id="@+id/exampleVirtusizeInPageStandard"
+        app:inPageStandardButtonBackgroundColor="#123456"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content" />
+    ```
 
     or programmatically:
 
-   - Kotlin
+  - Kotlin
 
-     ```kotlin
-     exampleVirtusizeButton.buttonStyle = VirtusizeButtonStyle.DEFAULT_STYLE
-     ```
+    ```kotlin
+    // Set up the Virtusize view style
+    exampleVirtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
+    // Set up the horizontal margins between the edges of the app screen and the InPageStandard
+    // Note: Use the helper extension function `dpInPx` if you like
+    exampleVirtusizeInPageStandard.horizontalMargin = 16.dpInPx.toFloat()
+    // Set up the background color of the check size button in InPage Standard
+    exampleVirtusizeInPageStandard.setButtonBackgroundColor(ContextCompat.getColor(this, R.color.your_custom_color))
+    ```
 
-   - Java
+  - Java
 
-     ```java
-     virtusizeButton.setButtonStyle(VirtusizeButtonStyle.DEFAULT_STYLE);
-     ```
+    ```java
+    virtusizeInPageStandard.setVirtusizeViewStyle(VirtusizeViewStyle.BLACK);
+    virtusizeInPageStandard.setHorizontalMargin(ExtensionsKt.getDpInPx(16));
+    virtusizeInPageStandard.setButtonBackgroundColor(ContextCompat.getColor(this, R.color.your_custom_color));
+    ```
 
-   You can also use any other button styles and/or define attributes like text, height, width, etc of the VirtusizeButton.
+- Connect the InPage Standard to the Virtusize API by using `setupVirtusizeView` in your activity.
 
-   ```xml
-   <com.virtusize.libsource.ui.VirtusizeButton
-       android:id="@+id/exampleVirtusizeButton"
-       style="@style/Widget.AppCompat.Button.Colored"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="@string/virtusize_button_text" />
-   ```
+  - Kotlin
 
-3. Inside your activity, set up the Virtusize button using product details by passing an `imageUrl` for the product in order to populate the comparison view, and an `externalId` that will be used to reference that product in our API
+    ```kotlin
+    (application as App)
+        .Virtusize
+        .setupVirtusizeView(exampleVirtusizeInPageStandard)
+    ```
 
-   - Kotlin
+  - Java
 
-     ```kotlin
-     (application as App)
-     .Virtusize
-     .setupVirtusizeButton(
-         virtusizeButton = exampleVirtusizeButton,
-         virtusizeProduct = VirtusizeProduct(externalId = "694", imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"))
-     ```
+    ```java
+    app.Virtusize.setupVirtusizeView(virtusizeInPageStandard);
+    ```
 
-   - Java
+### (3) InPage Mini
 
-     ```java
-     VirtusizeButton virtusizeButton;
-     @Override
-     protected void onCreate(Bundle savedInstanceState) {
-         super.onCreate(savedInstanceState);
-         setContentView(R.layout.activity_main);
-         virtusizeButton = findViewById(R.id.exampleVirtusizeButton);
-         App app = (App) getApplication();
-         app.Virtusize.setupVirtusizeButton(virtusizeButton, new VirtusizeProduct("694", "https://www.publicdomainpictures.net/pictures/120000/velka/dress-1950-vintage-style.jpg"));
-     }
-     ```
+This is a mini version of InPage you can place in your application. The discreet design is suitable when you want to support your customers when they are looking at the product images.
+
+#### A. Design Guidelines
+
+- ##### Default designs
+
+  There are two default design variations.
+
+  |                          Teal Theme                          |                         Black Theme                          |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | ![InPageMiniTeal](https://user-images.githubusercontent.com/7802052/92672234-2d88da00-f353-11ea-99d9-b9e9b6aa5620.png) | ![InPageMiniBlack](https://user-images.githubusercontent.com/7802052/92672232-2c57ad00-f353-11ea-80f6-55a9c72fb0b5.png) |
+
+- ##### Recommended Placements
+
+  |                 Underneath the product image                 |              Underneath or near the size table               |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | <img src="https://user-images.githubusercontent.com/7802052/92672261-3c6f8c80-f353-11ea-995c-ede56e0aacc3.png" /> | <img src="https://user-images.githubusercontent.com/7802052/92672266-40031380-f353-11ea-8f63-a67c9cf46c68.png" /> |
+
+- ##### Fonts
+  - Japanese
+    - Noto Sans CJK JP
+    - 12sp (Message)
+    - 10sp (Button)
+  - Korean
+    - Noto Sans CJK KR
+    - 12sp (Message)
+    - 10sp (Button)
+  - English
+    - Proxima Nova
+    - 14sp (Message)
+    - 12sp (Button)
+
+- ##### UI customization
+  - **You can:**
+    - change the background color of the bar as long as it passes **[WebAIM contrast test](https://webaim.org/resources/contrastchecker/)**.
+  - **You cannot:**
+    - change the font.
+    - change the CTA button shape.
+    - change messages.
+
+#### B. Usage
+
+- Add a VirtusizeInPageMini in your activity's XML layout file. 
+
+  By using our default styles, set up `app:virtusizeInPageMiniStyle="virtusize_black"` or `app:virtusizeInPageMiniStyle="virtusize_teal"` 
+
+  If you'd like to change the background color of the bar, you can use `app:inPageMiniBackgroundColor="#123456"`
+
+  - XML
+
+    ```xml
+    <com.virtusize.libsource.ui.VirtusizeInPageMini
+        android:id="@+id/exampleVirtusizeInPageMini"
+        app:virtusizeInPageMiniStyle="virtusize_teal"                                            
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    ```
+
+    ```xml
+    <com.virtusize.libsource.ui.VirtusizeInPageMini
+        android:id="@+id/exampleVirtusizeInPageMini"
+        app:inPageMiniBackgroundColor="#123456"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content" />
+    ```
+
+    or programmatically:
+
+  - Kotlin
+
+    ```kotlin
+    // Set up the Virtusize view style
+    exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.BLACK
+    // Set up the background color of the InPageMini view
+    exampleVirtusizeInPageMini.setInPageMiniBackgroundColor(ContextCompat.getColor(this, R.color.your_custom_color))
+    ```
+
+  - Java
+
+    ```java
+    virtusizeInPageMini.setVirtusizeViewStyle(VirtusizeViewStyle.TEAL);
+    virtusizeInPageMini.setInPageMiniBackgroundColor(ContextCompat.getColor(this, R.color.your_custom_color));
+    ```
+
+- Connect the InPage Mini to the Virtusize API by using `setupVirtusizeView` in your activity.
+
+  - Kotlin
+
+    ```kotlin
+    (application as App)
+        .Virtusize
+        .setupVirtusizeView(exampleVirtusizeInPageMini)
+    ```
+
+  - Java
+
+    ```java
+    app.Virtusize.setupVirtusizeView(virtusizeInPageMini);
+    ```
 
 ## The Order API
 
-The order API enables Virtusize to show your customers the items they have recently purchased as part of their `Purchase History`, and use those items to compare with new items they want to buy.
+The order API enables Virtusize to show your customers the items they have recently purchased as part of their `Purchase History`, and to use those items to compare with new items they want to buy.
 
 #### 1. Initialization
 
@@ -186,10 +541,10 @@ lateinit var Virtusize: Virtusize
 override fun onCreate() {
     super.onCreate()
     Virtusize = VirtusizeBuilder().init(this)
-            .setApiKey(api_key)
-            .setUserId(user_id)
-            .setEnv(VirtusizeEnvironment.STAGING)
-            .build()
+        .setApiKey(api_key)
+        .setUserId(user_id)
+        .setEnv(VirtusizeEnvironment.STAGING)
+        .build()
 }
 ```
 
@@ -199,13 +554,14 @@ override fun onCreate() {
 Virtusize Virtusize;
 @Override
 public void onCreate() {
-super.onCreate();
-Virtusize = new VirtusizeBuilder()
+    super.onCreate();
+    Virtusize = new VirtusizeBuilder()
         .init(this)
         .setApiKey(api_key)
         .setUserId(user_id)
         .setEnv(VirtusizeEnvironment.STAGING)
         .build();
+}
 ~~~~
 
 #### 2. Create a *VirtusizeOrder* object for order data
