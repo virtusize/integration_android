@@ -13,11 +13,15 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 
 > This is the integration script for native Android apps only. For web integration, refer to the developer documentation on https://developers.virtusize.com. For iOS integration, refer to https://github.com/virtusize/integration_ios
 
+
+
 ## Requirements
 
 - minSdkVersion >= 15
 - compileSdkVersion >= 30
 - Setup in AppCompatActivity
+
+
 
 ## Installation
 
@@ -40,6 +44,8 @@ If you'd like to continue using the old Version 1.x.x, refer to the branch [v1](
       implementation 'com.github.virtusize:integration_android:2.1'
   }
   ```
+
+
 
 ## Setup
 
@@ -115,7 +121,7 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
 
 ### 2. Set Up Product Details
 
-1. Inside your activity, set up product details by passing an `imageUrl` for the product in order to populate the comparison view, and an `externalId` that will be used to reference that product in our API.
+1. Inside your activity, set up the product details by passing an `imageUrl` for the product in order to populate the comparison view, and an `externalId` that will be used to reference that product in our API.
 
    Kotlin
 
@@ -141,7 +147,7 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
    );
    ```
 
-### 3. Set Up Virtusize Message Handler
+### 3. Register Virtusize Message Handler
 
 Please do not forget to unregister message handler in activity or fragment's lifecycle method before it dies or is removed. See the next section for a how-to.
 
@@ -223,6 +229,8 @@ A message handler is tied to an activity or fragment's lifecycle, but the Virtus
   }
   ```
 
+
+
 ## Virtusize Views
 
 Virtusize SDK provides two main UI components for clients to use:
@@ -231,7 +239,7 @@ Virtusize SDK provides two main UI components for clients to use:
 
 #### (1) Introduction
 
-VirtusizeButton is the simplest UI Button for our SDK. It opens our application in the web view to support customers find the right size.
+VirtusizeButton is the simplest UI Button for our SDK. It opens our application in the web view to support customers finding the right size.
 
 #### (2) Default Styles
 
@@ -245,7 +253,9 @@ There are two default styles of the Virtusize Button in our Virtusize SDK.
 
 #### (3) Usage
 
-A. Add a VirtusizeButton in your activity's XML layout file. By using our default button styles, set up `app:virtusizeButtonStyle="virtusize_black"` or `app:virtusizeButtonStyle="virtusize_teal"` in XML:
+**A. Add a VirtusizeButton in your activity's XML layout file.** 
+
+In order to use our default button styles, set `app:virtusizeButtonStyle="virtusize_black"` or `app:virtusizeButtonStyle="virtusize_teal"` in XML:
 
 - XML
 
@@ -271,7 +281,7 @@ A. Add a VirtusizeButton in your activity's XML layout file. By using our defaul
   virtusizeButton.setVirtusizeViewStyle(VirtusizeViewStyle.TEAL);
   ```
 
-B. You can also use any other button styles and/or define attributes like text, height, width, etc of the VirtusizeButton.
+**B. You can also use any other button styles and/or define the button's attributes like text, height, width, etc.**
 
 ```xml
 <com.virtusize.libsource.ui.VirtusizeButton
@@ -282,7 +292,7 @@ B. You can also use any other button styles and/or define attributes like text, 
     android:text="@string/virtusize_button_text" />
 ```
 
-C. Connect the Virtusize button to the Virtusize API by using `setupVirtusizeView` in your activity.
+**C. Connect the Virtusize button to the Virtusize API by using the** `setupVirtusizeView` **function in your activity.**
 
 - Kotlin
 
@@ -302,11 +312,11 @@ C. Connect the Virtusize button to the Virtusize API by using `setupVirtusizeVie
 
 ### (1) Introduction
 
-Virtusize InPage is a button that behaves as a start button for our product. The button also behaves as a fitting guide that supports people find the right size.
+Virtusize InPage is a button that behaves like a start button for our service. The button also behaves as a fitting guide that supports people to find the right size.
 
 ##### InPage types
 
-There are two types of InPage in our Virtusize product.
+There are two types of InPage in our Virtusize SDK.
 
 |                       InPage Standard                        |                         InPage Mini                          |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
@@ -316,7 +326,7 @@ There are two types of InPage in our Virtusize product.
 
 1. InPage cannot be implemented together with the Virtusize button. Please pick either InPage or Virtusize button for your online shop.
 
-2. InPage Mini cannot be used alone while InPage Standard is not used.
+2. InPage Mini must always be used in combination with InPage Standard.
 
 ### (2) InPage Standard
 
@@ -331,6 +341,8 @@ There are two types of InPage in our Virtusize product.
   | ![InPageStandardTeal](https://user-images.githubusercontent.com/7802052/92672035-b9e6cd00-f352-11ea-9e9e-5385a19e96da.png) | ![InPageStandardBlack](https://user-images.githubusercontent.com/7802052/92672031-b81d0980-f352-11ea-8b7a-564dd6c2a7f1.png) |
 
 - ##### Layout Variations
+
+  Here are some possible layouts 
 
   |               1 thumbnail + 2 lines of message               |               1 thumbnail + 1 line of message                |
   | :----------------------------------------------------------: | :----------------------------------------------------------: |
@@ -359,13 +371,13 @@ There are two types of InPage in our Virtusize product.
 
 #### B. Usage
 
-- Add a VirtusizeInPageStand in your activity's XML layout file. 
+- **Add a VirtusizeInPageStand in your activity's XML layout file.** 
 
-  By using our default styles, set up `app:virtusizeInPageStandardStyle="virtusize_black"` or `app:virtusizeInPageStandardStyle="virtusize_teal"` 
+  In order to use our default styles, set `app:virtusizeInPageStandardStyle="virtusize_black"` or `app:virtusizeInPageStandardStyle="virtusize_teal"` 
 
   If you'd like to change the background color of the CTA button, you can use `app:inPageStandardButtonBackgroundColor="#123456"`
 
-  If you'd like to set up the horizontal margins between the edges of the app screen and the InPageStandard, you can use `app:inPageStandardHorizontalMargin="16dp"`
+  If you'd like to set the horizontal margins between the edges of the app screen and the InPageStandard, you can use `app:inPageStandardHorizontalMargin="16dp"`
 
   - XML
 
@@ -391,12 +403,12 @@ There are two types of InPage in our Virtusize product.
   - Kotlin
 
     ```kotlin
-    // Set up the Virtusize view style
+    // Set the Virtusize view style
     exampleVirtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
-    // Set up the horizontal margins between the edges of the app screen and the InPageStandard
+    // Set the horizontal margins between the edges of the app screen and the InPageStandard
     // Note: Use the helper extension function `dpInPx` if you like
     exampleVirtusizeInPageStandard.horizontalMargin = 16.dpInPx.toFloat()
-    // Set up the background color of the check size button in InPage Standard
+    // Set the background color of the check size button in InPage Standard
     exampleVirtusizeInPageStandard.setButtonBackgroundColor(ContextCompat.getColor(this, R.color.your_custom_color))
     ```
 
@@ -408,7 +420,7 @@ There are two types of InPage in our Virtusize product.
     virtusizeInPageStandard.setButtonBackgroundColor(ContextCompat.getColor(this, R.color.your_custom_color));
     ```
 
-- Connect the InPage Standard to the Virtusize API by using `setupVirtusizeView` in your activity.
+- **Connect the InPage Standard to the Virtusize API by using the** `setupVirtusizeView` **function in your activity.**
 
   - Kotlin
 
@@ -426,7 +438,7 @@ There are two types of InPage in our Virtusize product.
 
 ### (3) InPage Mini
 
-This is a mini version of InPage you can place in your application. The discreet design is suitable when you want to support your customers when they are looking at the product images.
+This is a mini version of InPage you can place in your application. The discreet design is suitable for layouts where customers are browsing product images and size tables.
 
 #### A. Design Guidelines
 
@@ -444,7 +456,7 @@ This is a mini version of InPage you can place in your application. The discreet
   | :----------------------------------------------------------: | :----------------------------------------------------------: |
   | <img src="https://user-images.githubusercontent.com/7802052/92672261-3c6f8c80-f353-11ea-995c-ede56e0aacc3.png" /> | <img src="https://user-images.githubusercontent.com/7802052/92672266-40031380-f353-11ea-8f63-a67c9cf46c68.png" /> |
 
-- ##### Fonts
+- ##### Default Fonts
   - Japanese
     - Noto Sans CJK JP
     - 12sp (Message)
@@ -468,9 +480,9 @@ This is a mini version of InPage you can place in your application. The discreet
 
 #### B. Usage
 
-- Add a VirtusizeInPageMini in your activity's XML layout file. 
+- **Add a VirtusizeInPageMini in your activity's XML layout file.** 
 
-  By using our default styles, set up `app:virtusizeInPageMiniStyle="virtusize_black"` or `app:virtusizeInPageMiniStyle="virtusize_teal"` 
+  In order to use our default styles, set `app:virtusizeInPageMiniStyle="virtusize_black"` or `app:virtusizeInPageMiniStyle="virtusize_teal"` 
 
   If you'd like to change the background color of the bar, you can use `app:inPageMiniBackgroundColor="#123456"`
 
@@ -497,9 +509,9 @@ This is a mini version of InPage you can place in your application. The discreet
   - Kotlin
 
     ```kotlin
-    // Set up the Virtusize view style
+    // Set the Virtusize view style
     exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.BLACK
-    // Set up the background color of the InPageMini view
+    // Set the background color of the InPageMini view
     exampleVirtusizeInPageMini.setInPageMiniBackgroundColor(ContextCompat.getColor(this, R.color.your_custom_color))
     ```
 
@@ -510,7 +522,7 @@ This is a mini version of InPage you can place in your application. The discreet
     virtusizeInPageMini.setInPageMiniBackgroundColor(ContextCompat.getColor(this, R.color.your_custom_color));
     ```
 
-- Connect the InPage Mini to the Virtusize API by using `setupVirtusizeView` in your activity.
+- **Connect the InPage Mini to the Virtusize API by using the** `setupVirtusizeView` **function in your activity.**
 
   - Kotlin
 
@@ -525,6 +537,8 @@ This is a mini version of InPage you can place in your application. The discreet
     ```java
     app.Virtusize.setupVirtusizeView(virtusizeInPageMini);
     ```
+
+
 
 ## The Order API
 
@@ -688,10 +702,6 @@ Add following rules to your proguard rules file:
 ```
 -keep class com.virtusize.libsource.**
 ```
-
-## Documentation
-
-https://github.com/virtusize/integration_android/wiki
 
 ## Examples
 
