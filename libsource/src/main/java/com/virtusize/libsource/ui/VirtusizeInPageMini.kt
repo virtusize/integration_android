@@ -13,6 +13,7 @@ import com.virtusize.libsource.R
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.util.FontUtils
+import com.virtusize.libsource.util.VirtusizeUtils
 import kotlinx.android.synthetic.main.view_inpage_mini.view.*
 
 class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPageView(context, attrs) {
@@ -186,7 +187,7 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
                 inpage_mini_button
             ), virtusizeParams?.language, FontUtils.FontType.REGULAR
         )
-        configuredContext = getConfiguredContext(context)
+        configuredContext = VirtusizeUtils.getConfiguredContext(context, virtusizeParams?.language)
         inpage_mini_button.text = configuredContext?.getText(R.string.virtusize_button_text)
         inpage_mini_loading_text.text = configuredContext?.getText(R.string.inpage_mini_loading_text)
         setConfiguredDimensions()

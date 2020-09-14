@@ -17,19 +17,17 @@ class ExtensionsKtTest {
 
     @Test
     fun getStringResourceByName_existingResources_shouldBeNotNull() {
-        assertThat(context.getStringResourceByName("inpage_sizing_itemBrand_true_text")).isNotNull()
-        assertThat(context.getStringResourceByName("inpage_sizing_itemBrand_small_text")).isNotNull()
-        assertThat(context.getStringResourceByName("inpage_sizing_mostBrands_true_text")).isNotNull()
-        assertThat(context.getStringResourceByName("inpage_sizing_mostBrands_large_text")).isNotNull()
-        assertThat(context.getStringResourceByName("inpage_fit_regular_text")).isNotNull()
+        assertThat(context.getStringResourceByName("inpage_default_accessory_text")).isNotNull()
+        assertThat(context.getStringResourceByName("inpage_one_size_text")).isNotNull()
+        assertThat(context.getStringResourceByName("inpage_no_data_text")).isNotNull()
+        assertThat(context.getStringResourceByName("inpage_standard_loading_text")).isNotNull()
+        assertThat(context.getStringResourceByName("inpage_long_error_text")).isNotNull()
     }
 
     @Test
     fun getStringResourceByName_nonExistingResources_shouldBeNull() {
-        assertThat(context.getStringResourceByName("inpage_sizing_itembrand_true_text")).isNull()
-        assertThat(context.getStringResourceByName("inpage_sizing_itemBrand_regular_text")).isNull()
-        assertThat(context.getStringResourceByName("inpage_sizing_mostbrands_true_text")).isNull()
-        assertThat(context.getStringResourceByName("inpage_sizing_mostBrands_regular_text")).isNull()
-        assertThat(context.getStringResourceByName("inpage_fit_slim_text")).isNull()
+        assertThat(context.getStringResourceByName("random_text")).isNull()
+        assertThat(context.getStringResourceByName("inpage_size_text")).isNull()
+        assertThat(context.getStringResourceByName("inpage_loading_text")).isNull()
     }
 }

@@ -174,29 +174,28 @@ internal object TestFixtures {
 
     fun storeProduct(
         productType: Int = 8,
-        brandSizing: BrandSizing? = BrandSizing("large", false),
-        fit: String? = "regular"
+        sizes: List<ProductSize> = mutableListOf(
+            ProductSize(
+                "38",
+                mutableSetOf(
+                    Measurement("height", 760),
+                    Measurement("bust", 660),
+                    Measurement("sleeve", 845)
+                )
+            ),
+            ProductSize(
+                "36",
+                mutableSetOf(
+                    Measurement("height", 750),
+                    Measurement("bust", 645),
+                    Measurement("sleeve", 825)
+                )
+            )
+        )
     ) : StoreProduct {
         return StoreProduct(
             7110384,
-            mutableListOf(
-                ProductSize(
-                    "38",
-                    mutableSetOf(
-                        Measurement("height", 760),
-                        Measurement("bust", 660),
-                        Measurement("sleeve", 845)
-                    )
-                ),
-                ProductSize(
-                    "36",
-                    mutableSetOf(
-                        Measurement("height", 750),
-                        Measurement("bust", 645),
-                        Measurement("sleeve", 825)
-                    )
-                )
-            ),
+            sizes,
             "694",
             productType,
             "Test Product Name",
@@ -205,9 +204,25 @@ internal object TestFixtures {
             StoreProductMeta(
                 1,
                 StoreProductAdditionalInfo(
-                    fit,
+                    "regular",
                     "fashionable",
-                    brandSizing
+                    BrandSizing("large", false)
+                )
+            )
+        )
+    }
+
+    fun oneSizeProduct(productType: Int = 8): StoreProduct {
+        return storeProduct(
+            productType = productType,
+            sizes = mutableListOf(
+                ProductSize(
+                    "36",
+                    mutableSetOf(
+                        Measurement("height", 750),
+                        Measurement("bust", 645),
+                        Measurement("sleeve", 825)
+                    )
                 )
             )
         )

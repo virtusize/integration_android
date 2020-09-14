@@ -19,9 +19,9 @@ import androidx.core.view.ViewCompat
 import com.virtusize.libsource.R
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.ProductCheck
-import com.virtusize.libsource.util.Constants
+import com.virtusize.libsource.util.*
 import com.virtusize.libsource.util.FontUtils
-import com.virtusize.libsource.util.dpInPx
+import com.virtusize.libsource.util.VirtusizeUtils
 import com.virtusize.libsource.util.getDrawableResourceByName
 import kotlinx.android.synthetic.main.view_inpage_standard.view.*
 import kotlinx.coroutines.CoroutineScope
@@ -134,13 +134,23 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
      */
     private fun setLoadingScreen(loading: Boolean) {
         inpage_standard_product_border_card_view.visibility = if(loading) View.INVISIBLE else View.VISIBLE
-        inpage_standard_top_text.visibility = if(loading) View.GONE else View.VISIBLE
-        inpage_standard_bottom_text.visibility = if(loading) View.GONE else View.VISIBLE
         vs_signature_image_view.visibility = if(loading) View.INVISIBLE else View.VISIBLE
         privacy_policy_text.visibility = if(loading) View.INVISIBLE else View.VISIBLE
         vs_icon_image_view.visibility = if(loading) View.VISIBLE else View.GONE
         inpage_standard_loading_text.visibility = if(loading) View.VISIBLE else View.GONE
-        inpage_standard_loading_text.startAnimation()
+        if(loading) {
+            inpage_standard_loading_text.startAnimation()
+            inpage_standard_top_text.visibility = View.GONE
+            inpage_standard_bottom_text.visibility = View.GONE
+        } else {
+            inpage_standard_loading_text.stopAnimation()
+            if(!inpage_standard_top_text.text.isNullOrBlank()) {
+                inpage_standard_top_text.visibility = View.VISIBLE
+            }
+            if(!inpage_standard_bottom_text.text.isNullOrBlank()) {
+                inpage_standard_bottom_text.visibility = View.VISIBLE
+            }
+        }
     }
 
     /**
@@ -252,7 +262,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             FontUtils.FontType.BOLD
         )
 
-        val configuredContext = getConfiguredContext(context)
+        val configuredContext = VirtusizeUtils.getConfiguredContext(context, virtusizeParams?.language)
         inpage_standard_button.text = configuredContext?.getText(R.string.virtusize_button_text)
         privacy_policy_text.text = configuredContext?.getText(R.string.virtusize_privacy_policy)
         inpage_standard_loading_text.text = configuredContext?.getText(R.string.inpage_standard_loading_text)

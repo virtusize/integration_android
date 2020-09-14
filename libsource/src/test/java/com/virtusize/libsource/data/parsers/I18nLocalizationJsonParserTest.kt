@@ -7,6 +7,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.virtusize.libsource.R
 import com.virtusize.libsource.TestFixtures
+import com.virtusize.libsource.data.local.VirtusizeLanguage
 import com.virtusize.libsource.data.remote.I18nLocalization
 import org.json.JSONObject
 import org.junit.Test
@@ -26,20 +27,12 @@ class I18nLocalizationJsonParserTest {
 
     @Test
     fun parseI18N_englishLocalization_shouldReturnExpectedObject() {
-        val actualI18nLocalization = I18nLocalizationJsonParser(context).parse(readFileFromAssets("/i18n_en.json"))
+        val actualI18nLocalization = I18nLocalizationJsonParser(context, VirtusizeLanguage.EN).parse(readFileFromAssets("/i18n_en.json"))
 
         val expectedI18nLocalization = I18nLocalization(
-            context.getString(R.string.inpage_default_text),
             context.getString(R.string.inpage_default_accessory_text),
-            context.getString(R.string.inpage_sizing_itemBrand_large_text),
-            context.getString(R.string.inpage_sizing_itemBrand_true_text),
-            context.getString(R.string.inpage_sizing_itemBrand_small_text),
-            context.getString(R.string.inpage_sizing_mostBrands_large_text),
-            context.getString(R.string.inpage_sizing_mostBrands_true_text),
-            context.getString(R.string.inpage_sizing_mostBrands_small_text),
-            context.getString(R.string.inpage_fit_loose_text),
-            context.getString(R.string.inpage_fit_regular_text),
-            context.getString(R.string.inpage_fit_tight_text)
+            context.getString(R.string.inpage_one_size_text),
+            context.getString(R.string.inpage_no_data_text)
         )
 
         assertThat(actualI18nLocalization).isEqualTo(expectedI18nLocalization)
@@ -47,17 +40,9 @@ class I18nLocalizationJsonParserTest {
 
     @Test
     fun parseI18N_emptyJsonData_shouldReturnExpectedObject() {
-        val actualI18nLocalization = I18nLocalizationJsonParser(context).parse(TestFixtures.EMPTY_JSON_DATA)
+        val actualI18nLocalization = I18nLocalizationJsonParser(context, VirtusizeLanguage.EN).parse(TestFixtures.EMPTY_JSON_DATA)
 
         val expectedI18nLocalization = I18nLocalization(
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
             "",
             "",
             ""
@@ -68,24 +53,16 @@ class I18nLocalizationJsonParserTest {
 
     @Test
     fun parseI18NJP_japaneseLocalization_shouldReturnExpectedObject() {
+        val actualI18nLocalization = I18nLocalizationJsonParser(context, VirtusizeLanguage.JP).parse(readFileFromAssets("/i18n_jp.json"))
+
         var conf: Configuration = context.resources.configuration
         conf = Configuration(conf)
         conf.setLocale(Locale.JAPAN)
         val localizedContext = context.createConfigurationContext(conf)
-        val actualI18nLocalization = I18nLocalizationJsonParser(localizedContext).parse(readFileFromAssets("/i18n_jp.json"))
-
         val expectedI18nLocalization = I18nLocalization(
-            localizedContext.getString(R.string.inpage_default_text),
             localizedContext.getString(R.string.inpage_default_accessory_text),
-            localizedContext.getString(R.string.inpage_sizing_itemBrand_large_text),
-            localizedContext.getString(R.string.inpage_sizing_itemBrand_true_text),
-            localizedContext.getString(R.string.inpage_sizing_itemBrand_small_text),
-            localizedContext.getString(R.string.inpage_sizing_mostBrands_large_text),
-            localizedContext.getString(R.string.inpage_sizing_mostBrands_true_text),
-            localizedContext.getString(R.string.inpage_sizing_mostBrands_small_text),
-            localizedContext.getString(R.string.inpage_fit_loose_text),
-            localizedContext.getString(R.string.inpage_fit_regular_text),
-            localizedContext.getString(R.string.inpage_fit_tight_text)
+            localizedContext.getString(R.string.inpage_one_size_text),
+            localizedContext.getString(R.string.inpage_no_data_text)
         )
 
         assertThat(actualI18nLocalization).isEqualTo(expectedI18nLocalization)
@@ -93,24 +70,16 @@ class I18nLocalizationJsonParserTest {
 
     @Test
     fun parseI18NKO_koreanLocalization_shouldReturnExpectedObject() {
+        val actualI18nLocalization = I18nLocalizationJsonParser(context, VirtusizeLanguage.KR).parse(readFileFromAssets("/i18n_ko.json"))
+
         var conf: Configuration = context.resources.configuration
         conf = Configuration(conf)
         conf.setLocale(Locale.KOREA)
         val localizedContext = context.createConfigurationContext(conf)
-        val actualI18nLocalization = I18nLocalizationJsonParser(localizedContext).parse(readFileFromAssets("/i18n_ko.json"))
-
         val expectedI18nLocalization = I18nLocalization(
-            localizedContext.getString(R.string.inpage_default_text),
             localizedContext.getString(R.string.inpage_default_accessory_text),
-            localizedContext.getString(R.string.inpage_sizing_itemBrand_large_text),
-            localizedContext.getString(R.string.inpage_sizing_itemBrand_true_text),
-            localizedContext.getString(R.string.inpage_sizing_itemBrand_small_text),
-            localizedContext.getString(R.string.inpage_sizing_mostBrands_large_text),
-            localizedContext.getString(R.string.inpage_sizing_mostBrands_true_text),
-            localizedContext.getString(R.string.inpage_sizing_mostBrands_small_text),
-            localizedContext.getString(R.string.inpage_fit_loose_text),
-            localizedContext.getString(R.string.inpage_fit_regular_text),
-            localizedContext.getString(R.string.inpage_fit_tight_text)
+            localizedContext.getString(R.string.inpage_one_size_text),
+            localizedContext.getString(R.string.inpage_no_data_text)
         )
 
         assertThat(actualI18nLocalization).isEqualTo(expectedI18nLocalization)

@@ -29,19 +29,15 @@ data class StoreProduct(
      * @return the InPage text
      */
     fun getRecommendationText(i18nLocalization: I18nLocalization): String {
-        var text: String? = null
-        when {
+        return when {
             isAccessory() -> {
-                text = i18nLocalization.defaultAccessoryText
+                i18nLocalization.defaultAccessoryText
             }
-            storeProductMeta?.additionalInfo?.brandSizing != null -> {
-                text = i18nLocalization.getSizingText(storeProductMeta.additionalInfo.brandSizing)
+            sizes.size == 1 -> {
+                parseOneSizeText(i18nLocalization.defaultOneSizeText)
             }
-            storeProductMeta?.additionalInfo?.getGeneralFitKey() != null -> {
-                text = i18nLocalization.getFitText(storeProductMeta.additionalInfo.getGeneralFitKey())
-            }
+            else -> i18nLocalization.defaultNoDataText
         }
-        return text ?: i18nLocalization.defaultText
     }
 
     /**
@@ -51,5 +47,12 @@ data class StoreProduct(
      */
     private fun isAccessory(): Boolean {
         return productType == 18 || productType == 19 || productType == 25 || productType == 26
+    }
+
+    /**
+     * Parses the one size text from i18n and replaces the value placeholder with the product size name
+     */
+    private fun parseOneSizeText(text: String): String {
+        return text.replace("%{value}", sizes[0].name)
     }
 }

@@ -24,17 +24,9 @@ class StoreProductTest {
     @Before
     fun setup() {
         i18nLocalization = I18nLocalization(
-            context.getString(R.string.inpage_default_text),
             context.getString(R.string.inpage_default_accessory_text),
-            context.getString(R.string.inpage_sizing_itemBrand_large_text),
-            context.getString(R.string.inpage_sizing_itemBrand_true_text),
-            context.getString(R.string.inpage_sizing_itemBrand_small_text),
-            context.getString(R.string.inpage_sizing_mostBrands_large_text),
-            context.getString(R.string.inpage_sizing_mostBrands_true_text),
-            context.getString(R.string.inpage_sizing_mostBrands_small_text),
-            context.getString(R.string.inpage_fit_loose_text),
-            context.getString(R.string.inpage_fit_regular_text),
-            context.getString(R.string.inpage_fit_tight_text)
+            context.getString(R.string.inpage_one_size_text),
+            context.getString(R.string.inpage_no_data_text)
         )
     }
 
@@ -49,87 +41,18 @@ class StoreProductTest {
     }
 
     @Test
-    fun getRecommendationText_brandSizingIsNotNull_returnBrandSizingText() {
-        assertThat(
-            TestFixtures.storeProduct(
-                1,
-                brandSizing = BrandSizing("large", true)
-            ).getRecommendationText(i18nLocalization)
-        ).isEqualTo(context.getString(R.string.inpage_sizing_itemBrand_large_text))
-
-        assertThat(
-            TestFixtures.storeProduct(
-                15,
-                brandSizing = BrandSizing("true", true)
-            ).getRecommendationText(i18nLocalization)
-        ).isEqualTo(context.getString(R.string.inpage_sizing_itemBrand_true_text))
-
-        assertThat(
-            TestFixtures.storeProduct(
-                20,
-                brandSizing = BrandSizing("small", false)
-            ).getRecommendationText(i18nLocalization)
-        ).isEqualTo(context.getString(R.string.inpage_sizing_mostBrands_small_text))
-
-        assertThat(
-            TestFixtures.storeProduct(
-                24,
-                brandSizing = BrandSizing("true", false)
-            ).getRecommendationText(i18nLocalization)
-        ).isEqualTo(context.getString(R.string.inpage_sizing_mostBrands_true_text))
+    fun getRecommendationText_productHasOnlyOneSize_returnOneSizeText() {
+        val oneSizeText = context.getString(R.string.inpage_one_size_text).replace("%{value}", "36")
+        assertThat(TestFixtures.oneSizeProduct(1).getRecommendationText(i18nLocalization)).isEqualTo(oneSizeText)
+        assertThat(TestFixtures.oneSizeProduct(10).getRecommendationText(i18nLocalization)).isEqualTo(oneSizeText)
+        assertThat(TestFixtures.oneSizeProduct(24).getRecommendationText(i18nLocalization)).isEqualTo(oneSizeText)
     }
 
     @Test
-    fun getRecommendationText_brandSizingIsNullAndGeneralFitIsNull_returnDefaultText() {
-        assertThat(
-            TestFixtures.storeProduct(
-                2,
-                brandSizing = null,
-                fit = null
-            ).getRecommendationText(i18nLocalization)
-        ).isEqualTo(context.getString(R.string.inpage_default_text))
-    }
-
-    @Test
-    fun getRecommendationText_brandSizingIsNullAndGeneralFitIsNotNull_returnGeneralFitText() {
-        assertThat(
-            TestFixtures.storeProduct(
-                4,
-                brandSizing = null,
-                fit = "regular"
-            ).getRecommendationText(i18nLocalization)
-        ).isEqualTo(context.getString(R.string.inpage_fit_regular_text))
-
-        assertThat(
-            TestFixtures.storeProduct(
-                6,
-                brandSizing = null,
-                fit = "loose"
-            ).getRecommendationText(i18nLocalization)
-        ).isEqualTo(context.getString(R.string.inpage_fit_loose_text))
-
-        assertThat(
-            TestFixtures.storeProduct(
-                8,
-                brandSizing = null,
-                fit = "flared"
-            ).getRecommendationText(i18nLocalization)
-        ).isEqualTo(context.getString(R.string.inpage_fit_loose_text))
-
-        assertThat(
-            TestFixtures.storeProduct(
-                10,
-                brandSizing = null,
-                fit = "slim"
-            ).getRecommendationText(i18nLocalization)
-        ).isEqualTo(context.getString(R.string.inpage_fit_tight_text))
-
-        assertThat(
-            TestFixtures.storeProduct(
-                12,
-                brandSizing = null,
-                fit = "random"
-            ).getRecommendationText(i18nLocalization)
-        ).isEqualTo(context.getString(R.string.inpage_fit_regular_text))
+    fun getRecommendationText_productHasMultipleSizes_returnNoDataText() {
+        val noDataText = context.getString(R.string.inpage_no_data_text)
+        assertThat(TestFixtures.storeProduct(4).getRecommendationText(i18nLocalization)).isEqualTo(noDataText)
+        assertThat(TestFixtures.storeProduct(7).getRecommendationText(i18nLocalization)).isEqualTo(noDataText)
+        assertThat(TestFixtures.storeProduct(15).getRecommendationText(i18nLocalization)).isEqualTo(noDataText)
     }
 }
