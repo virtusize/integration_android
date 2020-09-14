@@ -6,7 +6,6 @@
     <string name="virtusize_privacy_policy">Privacy Policy</string>
     <string name="virtusize_privacy_policy_link">http://www.virtusize.com/site/privacy-policy</string>
     <string name="inpage_default_accessory_text">See how everyday items fit</string>
-    <string name="inpage_one_size_text">%{boldStart}There is only size %{value}%{boldEnd}</string>
     <string name="inpage_no_data_text">Find the right size before purchasing</string>
     <string name="inpage_standard_loading_text">Analyzing the size</string>
     <string name="inpage_mini_loading_text">Loading</string>

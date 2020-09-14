@@ -33,9 +33,6 @@ data class StoreProduct(
             isAccessory() -> {
                 i18nLocalization.defaultAccessoryText
             }
-            sizes.size == 1 -> {
-                parseOneSizeText(i18nLocalization.defaultOneSizeText)
-            }
             else -> i18nLocalization.defaultNoDataText
         }
     }
@@ -47,12 +44,5 @@ data class StoreProduct(
      */
     private fun isAccessory(): Boolean {
         return productType == 18 || productType == 19 || productType == 25 || productType == 26
-    }
-
-    /**
-     * Parses the one size text from i18n and replaces the value placeholder with the product size name
-     */
-    private fun parseOneSizeText(text: String): String {
-        return text.replace("%{value}", sizes[0].name)
     }
 }

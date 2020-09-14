@@ -5,6 +5,5 @@ package com.virtusize.libsource.data.remote
  */
 data class I18nLocalization(
     val defaultAccessoryText: String,
-    val defaultOneSizeText: String,
     val defaultNoDataText: String
 )

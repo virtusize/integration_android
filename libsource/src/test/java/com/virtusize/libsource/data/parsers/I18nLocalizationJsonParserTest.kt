@@ -31,7 +31,6 @@ class I18nLocalizationJsonParserTest {
 
         val expectedI18nLocalization = I18nLocalization(
             context.getString(R.string.inpage_default_accessory_text),
-            context.getString(R.string.inpage_one_size_text),
             context.getString(R.string.inpage_no_data_text)
         )
 
@@ -43,7 +42,6 @@ class I18nLocalizationJsonParserTest {
         val actualI18nLocalization = I18nLocalizationJsonParser(context, VirtusizeLanguage.EN).parse(TestFixtures.EMPTY_JSON_DATA)
 
         val expectedI18nLocalization = I18nLocalization(
-            "",
             "",
             ""
         )
@@ -61,7 +59,6 @@ class I18nLocalizationJsonParserTest {
         val localizedContext = context.createConfigurationContext(conf)
         val expectedI18nLocalization = I18nLocalization(
             localizedContext.getString(R.string.inpage_default_accessory_text),
-            localizedContext.getString(R.string.inpage_one_size_text),
             localizedContext.getString(R.string.inpage_no_data_text)
         )
 
@@ -78,7 +75,6 @@ class I18nLocalizationJsonParserTest {
         val localizedContext = context.createConfigurationContext(conf)
         val expectedI18nLocalization = I18nLocalization(
             localizedContext.getString(R.string.inpage_default_accessory_text),
-            localizedContext.getString(R.string.inpage_one_size_text),
             localizedContext.getString(R.string.inpage_no_data_text)
         )
 

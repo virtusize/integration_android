@@ -26,11 +26,6 @@ internal class I18nLocalizationJsonParser(val context: Context, private val virt
             configuredContext?.getString(R.string.inpage_default_accessory_text) ?: ""
         ) ?: ""
 
-        val defaultOneSizeText = inpageJSONObject?.optString(
-            FIELD_ONE_SIZE_TEXT,
-            configuredContext?.getString(R.string.inpage_one_size_text) ?: ""
-        ) ?: ""
-
         val defaultNoDataText = inpageJSONObject?.optString(
             FIELD_NO_DATA_TEXT,
             configuredContext?.getString(R.string.inpage_no_data_text) ?: ""
@@ -38,7 +33,6 @@ internal class I18nLocalizationJsonParser(val context: Context, private val virt
 
         return I18nLocalization(
             defaultAccessoryText,
-            defaultOneSizeText,
             defaultNoDataText
         )
     }
@@ -49,7 +43,6 @@ internal class I18nLocalizationJsonParser(val context: Context, private val virt
         private const val FIELD_AOYAMA = "aoyama"
         private const val FIELD_INPAGE = "inpage"
         private const val FIELD_DEFAULT_ACCESSORY_TEXT = "defaultAccessoryText"
-        private const val FIELD_ONE_SIZE_TEXT = "oneSizeText"
         private const val FIELD_NO_DATA_TEXT = "noDataText"
     }
 }

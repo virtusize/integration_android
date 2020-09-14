@@ -25,7 +25,6 @@ class StoreProductTest {
     fun setup() {
         i18nLocalization = I18nLocalization(
             context.getString(R.string.inpage_default_accessory_text),
-            context.getString(R.string.inpage_one_size_text),
             context.getString(R.string.inpage_no_data_text)
         )
     }
@@ -41,15 +40,7 @@ class StoreProductTest {
     }
 
     @Test
-    fun getRecommendationText_productHasOnlyOneSize_returnOneSizeText() {
-        val oneSizeText = context.getString(R.string.inpage_one_size_text).replace("%{value}", "36")
-        assertThat(TestFixtures.oneSizeProduct(1).getRecommendationText(i18nLocalization)).isEqualTo(oneSizeText)
-        assertThat(TestFixtures.oneSizeProduct(10).getRecommendationText(i18nLocalization)).isEqualTo(oneSizeText)
-        assertThat(TestFixtures.oneSizeProduct(24).getRecommendationText(i18nLocalization)).isEqualTo(oneSizeText)
-    }
-
-    @Test
-    fun getRecommendationText_productHasMultipleSizes_returnNoDataText() {
+    fun getRecommendationText_productIsNotAnAccessory_returnNoDataText() {
         val noDataText = context.getString(R.string.inpage_no_data_text)
         assertThat(TestFixtures.storeProduct(4).getRecommendationText(i18nLocalization)).isEqualTo(noDataText)
         assertThat(TestFixtures.storeProduct(7).getRecommendationText(i18nLocalization)).isEqualTo(noDataText)

@@ -18,7 +18,6 @@ class ExtensionsKtTest {
     @Test
     fun getStringResourceByName_existingResources_shouldBeNotNull() {
         assertThat(context.getStringResourceByName("inpage_default_accessory_text")).isNotNull()
-        assertThat(context.getStringResourceByName("inpage_one_size_text")).isNotNull()
         assertThat(context.getStringResourceByName("inpage_no_data_text")).isNotNull()
         assertThat(context.getStringResourceByName("inpage_standard_loading_text")).isNotNull()
         assertThat(context.getStringResourceByName("inpage_long_error_text")).isNotNull()
