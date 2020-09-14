@@ -61,6 +61,10 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, Ap
      * Sets up the Virtusize Button Style corresponding to [VirtusizeViewStyle]
      */
     private fun setupButtonStyle() {
+        if(virtusizeViewStyle == VirtusizeViewStyle.NONE) {
+            return
+        }
+
         includeFontPadding = false
         isAllCaps = false
 
@@ -115,9 +119,11 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, Ap
      */
     private fun setupButtonTextConfiguredLocalization() {
         val configuredContext = getConfiguredContext(context)
-        text = configuredContext?.getText(R.string.virtusize_button_text)
-        configuredContext?.resources?.getDimension(R.dimen.virtusize_button_textSize)?.let {
-            setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+        if(text.isNullOrEmpty()) {
+            text = configuredContext?.getText(R.string.virtusize_button_text)
+            configuredContext?.resources?.getDimension(R.dimen.virtusize_button_textSize)?.let {
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+            }
         }
     }
 }

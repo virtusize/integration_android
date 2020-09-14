@@ -21,29 +21,24 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // Register message handler to listen to events from Virtusize
-        (application as App)
-            .Virtusize.registerMessageHandler(activityMessageHandler)
+        (application as App).Virtusize.registerMessageHandler(activityMessageHandler)
 
         // Set up Virtusize product for all the Virtusize views
-        (application as App)
-            .Virtusize
-            .setupVirtusizeProduct(virtusizeProduct = VirtusizeProduct(externalId = "694",
-                imageUrl = "http://www.image.com/goods/12345.jpg"
-            ))
+        (application as App).Virtusize.setupVirtusizeProduct(
+                VirtusizeProduct(
+                    externalId = "694",
+                    imageUrl = "http://www.image.com/goods/12345.jpg"
+                )
+            )
 
         // Set up Virtusize button
         // Virtusize opens automatically when button is clicked
-        (application as App)
-            .Virtusize
-            .setupVirtusizeView(
-                virtusizeView = exampleVirtusizeButton
-            )
+        (application as App).Virtusize.setupVirtusizeView(exampleVirtusizeButton)
         // Set up the Virtusize view style programmatically
         exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.TEAL
 
         // Set up Virtusize InPage Standard
-        (application as App)
-            .Virtusize
+        (application as App).Virtusize
             .setupVirtusizeView(
                 virtusizeView = exampleVirtusizeInPageStandard
             )
@@ -52,18 +47,14 @@ class MainActivity : AppCompatActivity() {
         // Note: Use the helper extension function `dpInPx` if you like
         exampleVirtusizeInPageStandard.horizontalMargin = 16.dpInPx.toFloat()
         /*
-         * If you like, you can set up the background of the check size button in InPage Standard,
+         * If you like, you can set up the background color of the check size button in InPage Standard,
          * as long as it passes WebAIM contrast test.
          *
          * exampleVirtusizeInPageStandard.setButtonBackgroundColor(ContextCompat.getColor(this, R.color.ocean_blue))
          */
 
         // Set up Virtusize InPage Mini
-        (application as App)
-            .Virtusize
-            .setupVirtusizeView(
-                virtusizeView = exampleVirtusizeInPageMini
-            )
+        (application as App).Virtusize.setupVirtusizeView(virtusizeView = exampleVirtusizeInPageMini)
         exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.TEAL
         /*
          * If you like, you can set up the background of InPage Mini view as long as it passes WebAIM contrast test.

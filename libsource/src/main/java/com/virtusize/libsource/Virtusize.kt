@@ -101,7 +101,7 @@ class Virtusize(
     }
 
     /**
-     * Sets up the Virtusize view by setting VirtusizeProduct
+     * Sets up the Virtusize view by passing the VirtusizeView
      * @param virtusizeView VirtusizeView that is being set up
      * @throws IllegalArgumentException throws an error if VirtusizeButton is null or the image URL of VirtusizeProduct is invalid
      */
