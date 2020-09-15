@@ -68,16 +68,4 @@ interface VirtusizeView {
         virtusizeDialogFragment.arguments = args
         virtusizeDialogFragment.show(fragmentTransaction, Constants.FRAG_TAG)
     }
-
-    /**
-     * Gets configured context base on the language that clients set up with the Virtusize Builder in the application
-     */
-    fun getConfiguredContext(context: Context): ContextWrapper? {
-        return when(virtusizeParams?.language) {
-            VirtusizeLanguage.EN -> VirtusizeUtils.configureLocale(context, Locale.ENGLISH)
-            VirtusizeLanguage.JP -> VirtusizeUtils.configureLocale(context, Locale.JAPAN)
-            VirtusizeLanguage.KR -> VirtusizeUtils.configureLocale(context, Locale.KOREA)
-            else -> VirtusizeUtils.configureLocale(context, Locale.getDefault())
-        }
-    }
 }

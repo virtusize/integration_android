@@ -11,6 +11,7 @@ import com.virtusize.libsource.R
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.data.local.throwError
+import com.virtusize.libsource.util.VirtusizeUtils
 
 class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, AppCompatButton(context, attrs) {
 
@@ -118,7 +119,7 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, Ap
      * Sets up the button text style based on the language that clients set using the [VirtusizeBuilder] in the application
      */
     private fun setupButtonTextConfiguredLocalization() {
-        val configuredContext = getConfiguredContext(context)
+        val configuredContext = VirtusizeUtils.getConfiguredContext(context, virtusizeParams?.language)
         if(text.isNullOrEmpty()) {
             text = configuredContext?.getText(R.string.virtusize_button_text)
             configuredContext?.resources?.getDimension(R.dimen.virtusize_button_textSize)?.let {

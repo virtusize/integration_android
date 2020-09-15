@@ -5,30 +5,11 @@
   "keys": {
     "apps": {
       "aoyama": {
-        "detailsScreen": {
-          "sizing": {
-            "mostBrands": {
-              "large": "この商品は%{boldStart}大きめのつくりです。%{boldEnd}",
-              "true": "この商品は%{boldStart}平均的なサイズ感です。%{boldEnd}",
-              "small": "この商品は%{boldStart}小さめのつくりです。%{boldEnd}"
-            },
-            "itemBrand": {
-              "large": "このブランドの%{boldStart}平均サイズより大きめです。%{boldEnd}",
-              "true": "このブランドの%{boldStart}平均的なサイズ感です。%{boldEnd}",
-              "small": "このブランドの%{boldStart}平均サイズより小さめです。%{boldEnd}"
-            }
-          },
-          "fit": {
-            "loose": "この商品は%{boldStart}ルーズフィットです。%{boldEnd}",
-            "tight": "この商品は%{boldStart}タイトフィットです。%{boldEnd}",
-            "regular": "この商品は%{boldStart}レギュラーフィットです。%{boldEnd}"
-          },
-          "defaultText": "この商品は%{boldStart}平均的なサイズ感です。%{boldEnd}"
-        },
         "inpage": {
+          "closestSizeToItem": "あなたのアイテムに近いサイズ: %{value}",
           "defaultAccessoryText": "日用品と比較する",
           "hasProductAccessoryText": "あなたのアイテムと%{boldStart}大きさを比較%{boldEnd}",
-          "closestSizeToItem": "あなたのアイテムに近いサイズ: %{value}"
+          "noDataText": "購入前に簡単サイズチェック"
         }
       }
     }

@@ -5,30 +5,11 @@
   "keys": {
     "apps": {
       "aoyama": {
-        "detailsScreen": {
-          "sizing": {
-            "mostBrands": {
-              "large": "이 브랜드의 사이즈는 %{boldStart}평균보다 큽니다.%{boldEnd}",
-              "true": "이 브랜드의 사이즈는 %{boldStart}정 사이즈입니다.%{boldEnd}",
-              "small": "이 브랜드의 사이즈는 %{boldStart}평균보다 작습니다.%{boldEnd}"
-            },
-            "itemBrand": {
-              "large": "이 상품은 브랜드의 %{boldStart}평균보다 큰 편입니다.%{boldEnd}",
-              "true": "이 상품은 브랜드의 %{boldStart}평균과 비슷합니다.%{boldEnd}",
-              "small": "이 상품은 브랜드의 %{boldStart}평균보다 작은 편입니다.%{boldEnd}"
-            }
-          },
-          "fit": {
-            "loose": "이 상품은 %{boldStart}느슨한 핏입니다.%{boldEnd}",
-            "regular": "이 상품은 %{boldStart}일반 핏입니다.%{boldEnd}",
-            "tight": "이 상품은 %{boldStart}꽉 조이는 핏입니다.%{boldEnd}"
-          },
-          "defaultText": "이 상품의 브랜드는 %{boldStart}정 사이즈입니다.%{boldEnd}"
-        },
         "inpage": {
+          "closestSizeToItem": "당신의 상품과 유사한 사이즈 %{value}",
           "defaultAccessoryText": "상품이 어울리는지 확인해보세요.",
           "hasProductAccessoryText": "%{boldStart}소장 상품%{boldEnd}과 구매 상품의 사이즈를 비교해보세요.",
-          "closestSizeToItem": "당신의 상품과 유사한 사이즈 %{value}"
+          "noDataText": "구매 전에 당신에게 맞는 사이즈를 찾아보세요."
         }
       }
     }

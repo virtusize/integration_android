@@ -29,19 +29,12 @@ data class StoreProduct(
      * @return the InPage text
      */
     fun getRecommendationText(i18nLocalization: I18nLocalization): String {
-        var text: String? = null
-        when {
+        return when {
             isAccessory() -> {
-                text = i18nLocalization.defaultAccessoryText
+                i18nLocalization.defaultAccessoryText
             }
-            storeProductMeta?.additionalInfo?.brandSizing != null -> {
-                text = i18nLocalization.getSizingText(storeProductMeta.additionalInfo.brandSizing)
-            }
-            storeProductMeta?.additionalInfo?.getGeneralFitKey() != null -> {
-                text = i18nLocalization.getFitText(storeProductMeta.additionalInfo.getGeneralFitKey())
-            }
+            else -> i18nLocalization.defaultNoDataText
         }
-        return text ?: i18nLocalization.defaultText
     }
 
     /**

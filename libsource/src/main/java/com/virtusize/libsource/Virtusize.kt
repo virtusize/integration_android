@@ -455,7 +455,7 @@ class Virtusize(
     ) {
         val apiRequest = VirtusizeApi.getI18n(params.language ?: (VirtusizeLanguage.values().find { it.value == Locale.getDefault().language } ?: VirtusizeLanguage.EN))
         VirtusizeApiTask()
-            .setJsonParser(I18nLocalizationJsonParser(context))
+            .setJsonParser(I18nLocalizationJsonParser(context, params.language))
             .setSuccessHandler(object : SuccessResponseHandler {
                 override fun onSuccess(data: Any?) {
                     onSuccess?.invoke(data as I18nLocalization)
