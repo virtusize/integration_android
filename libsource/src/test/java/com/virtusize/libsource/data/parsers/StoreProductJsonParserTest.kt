@@ -2,8 +2,6 @@ package com.virtusize.libsource.data.parsers
 
 import com.google.common.truth.Truth.assertThat
 import com.virtusize.libsource.TestFixtures
-import com.virtusize.libsource.data.remote.*
-import org.json.JSONObject
 import org.junit.Test
 
 class StoreProductJsonParserTest {

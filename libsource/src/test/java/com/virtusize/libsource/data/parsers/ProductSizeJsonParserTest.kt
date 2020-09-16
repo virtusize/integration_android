@@ -34,11 +34,7 @@ class ProductSizeJsonParserTest {
             mutableSetOf(
                 Measurement("height", 560),
                 Measurement("bust", 450),
-                Measurement("sleeve", 730),
-                Measurement("shoulder", 0),
-                Measurement("waist", 0),
-                Measurement("hem", 0),
-                Measurement("bicep", 0)
+                Measurement("sleeve", 730)
             )
         )
 

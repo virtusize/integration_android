@@ -15,7 +15,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.P])
-class StoreProductTest {
+class ProductTest {
 
     private val context: Context = ApplicationProvider.getApplicationContext()
 
@@ -31,7 +31,6 @@ class StoreProductTest {
 
     @Test
     fun getRecommendationText_productIsAnAccessory_returnDefaultAccessoryText() {
-
         val defaultAccessoryText = context.getString(R.string.inpage_default_accessory_text)
         assertThat(TestFixtures.storeProduct(18).getRecommendationText(i18nLocalization)).isEqualTo(defaultAccessoryText)
         assertThat(TestFixtures.storeProduct(19).getRecommendationText(i18nLocalization)).isEqualTo(defaultAccessoryText)

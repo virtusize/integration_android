@@ -192,14 +192,15 @@ internal object TestFixtures {
                 )
             )
         )
-    ) : StoreProduct {
-        return StoreProduct(
+    ) : Product {
+        return Product(
             7110384,
             sizes,
             "694",
             productType,
             "Test Product Name",
             "Test Cloudinary Public Id",
+            null,
             2,
             StoreProductMeta(
                 1,
@@ -212,7 +213,7 @@ internal object TestFixtures {
         )
     }
 
-    fun oneSizeProduct(productType: Int = 8): StoreProduct {
+    fun oneSizeProduct(productType: Int = 8): Product {
         return storeProduct(
             productType = productType,
             sizes = mutableListOf(
@@ -518,4 +519,80 @@ internal object TestFixtures {
             ]
         """.trimIndent()
     )
+
+    val USER_PRODUCT_ONE_JSON_STRING =
+        """
+            {
+                "id": 123456,
+                "sizes": [
+                  {
+                    "name": "S",
+                    "measurements": {
+                      "height": 1000,
+                      "bust": 400,
+                      "waist": 340,
+                      "hip": null,
+                      "hem": null,
+                      "waistHeight": null
+                    }
+                  }
+                ],
+                "productType": 11,
+                "created": "2020-09-14T11:06:00Z",
+                "updated": "2020-09-14T11:06:00Z",
+                "name": "Test Womenswear Strapless Dress",
+                "cloudinaryPublicId": null,
+                "deleted": false,
+                "isFavorite": false,
+                "wardrobe": 123,
+                "orderItem": null,
+                "store": null
+            }
+      """.trimIndent()
+
+    val USER_PRODUCT_TWO_JSON_STRING =
+        """
+            {
+                "id": 654321,
+                "sizes": [
+                    {
+                        "name": null,
+                        "measurements": {
+                            "height": 820,
+                            "bust": 520,
+                            "sleeve": 930,
+                            "collar": null,
+                            "shoulder": null,
+                            "waist": null,
+                            "hem": null,
+                            "bicep": null
+                        }
+                    }
+                ],
+                "productType": 2,
+                "created": "2020-07-22T10:22:19Z",
+                "updated": "2020-07-22T10:22:19Z",
+                "name": "test2",
+                "cloudinaryPublicId": null,
+                "deleted": false,
+                "isFavorite": true,
+                "wardrobe": 123,
+                "orderItem": null,
+                "store": 2
+            }
+      """.trimIndent()
+
+    val USER_PRODUCT_ONE_JSON_OBJECT  = JSONObject(USER_PRODUCT_ONE_JSON_STRING)
+
+    val USER_PRODUCT_JSON_ARRAY = JSONArray(
+        """
+            [
+                $USER_PRODUCT_ONE_JSON_STRING,
+                $USER_PRODUCT_TWO_JSON_STRING
+            ]
+        """.trimIndent()
+    )
+
+    val WARDROBE_NOT_FOUND_ERROR_JSONObject = JSONObject("{\"detail\": \"No wardrobe found\"}")
+
 }
