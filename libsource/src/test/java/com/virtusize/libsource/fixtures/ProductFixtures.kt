@@ -410,6 +410,7 @@ internal object ProductFixtures {
             ]
         """.trimIndent()
     )
+    val EMPTY_PRODUCT_JSON_ARRAY = JSONArray("[]")
 
     val WARDROBE_NOT_FOUND_ERROR_JSONObject = JSONObject("{\"detail\": \"No wardrobe found\"}")
 }

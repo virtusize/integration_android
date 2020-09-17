@@ -377,6 +377,24 @@ class VirtusizeTest {
     }
 
     @Test
+    fun testGetUserProducts_emptyWardrobe_shouldReturnEmptyUserProductList(){
+        var actualUserProductList: List<Product>? = null
+
+        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+            mockURL,
+            MockedResponse(200, ProductFixtures.EMPTY_PRODUCT_JSON_ARRAY.toString().byteInputStream())
+        ))
+
+        virtusize.getUserProducts(
+            onSuccess = {
+                actualUserProductList = it
+            }
+        )
+
+        assertThat(actualUserProductList?.size).isEqualTo(0)
+    }
+
+    @Test
     fun testGetUserProducts_wardrobeNotExisted_shouldReturn404Error() {
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
             mockURL,
