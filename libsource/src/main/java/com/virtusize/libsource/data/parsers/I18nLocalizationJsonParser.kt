@@ -10,7 +10,10 @@ import org.json.JSONObject
 /**
  * This class parses a JSONObject to the [I18nLocalization] object
  */
-internal class I18nLocalizationJsonParser(val context: Context, private val virtusizeLanguage: VirtusizeLanguage?): VirtusizeJsonParser {
+internal class I18nLocalizationJsonParser(
+    val context: Context,
+    private val virtusizeLanguage: VirtusizeLanguage?
+): VirtusizeJsonParser<I18nLocalization> {
 
     enum class TrimType {
         ONELINE, MULTIPLELINES

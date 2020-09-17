@@ -50,7 +50,7 @@ internal class VirtusizeApiTask {
     // TODO: comment
     private var autoToken: String? = null
     // The Json parser interface for converting the JSON response to a given type of Java object
-    private var jsonParser: VirtusizeJsonParser? = null
+    private var jsonParser: VirtusizeJsonParser<Any>? = null
     // The callback for a successful API response
     private var successHandler: SuccessResponseHandler? = null
     // The error callback for a unsuccessful API response
@@ -67,7 +67,7 @@ internal class VirtusizeApiTask {
     /**
      * Sets up the JSON parser for converting the JSON response to a given type of Java object
      */
-    fun setJsonParser(jsonParser: VirtusizeJsonParser?): VirtusizeApiTask {
+    fun setJsonParser(jsonParser: VirtusizeJsonParser<Any>?): VirtusizeApiTask {
         this.jsonParser = jsonParser
         return this
     }
