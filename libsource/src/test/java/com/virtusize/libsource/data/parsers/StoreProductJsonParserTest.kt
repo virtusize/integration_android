@@ -1,16 +1,17 @@
 package com.virtusize.libsource.data.parsers
 
 import com.google.common.truth.Truth.assertThat
-import com.virtusize.libsource.TestFixtures
+import com.virtusize.libsource.fixtures.ProductFixtures
+import com.virtusize.libsource.fixtures.TestFixtures
 import org.junit.Test
 
 class StoreProductJsonParserTest {
 
     @Test
     fun parse_validJsonData_shouldReturnExpectedObject() {
-        val actualStoreProduct = StoreProductJsonParser().parse(TestFixtures.STORE_PRODUCT_INFO_JSON_DATA)
+        val actualStoreProduct = StoreProductJsonParser().parse(ProductFixtures.STORE_PRODUCT_INFO_JSON_DATA)
 
-        val expectedStoreProduct = TestFixtures.storeProduct()
+        val expectedStoreProduct = ProductFixtures.storeProduct()
 
         assertThat(actualStoreProduct).isEqualTo(expectedStoreProduct)
     }

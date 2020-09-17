@@ -1,17 +1,18 @@
 package com.virtusize.libsource.data.parsers
 
 import com.google.common.truth.Truth.assertThat
-import com.virtusize.libsource.TestFixtures
+import com.virtusize.libsource.fixtures.TestFixtures
 import com.virtusize.libsource.data.remote.Measurement
 import com.virtusize.libsource.data.remote.Product
 import com.virtusize.libsource.data.remote.ProductSize
+import com.virtusize.libsource.fixtures.ProductFixtures
 import org.junit.Test
 
 class UserProductsJsonParserTest {
 
     @Test
     fun parse_validUserProduct_returnExpectedUserProduct() {
-        val actualUserProduct = UserProductJsonParser().parse(TestFixtures.USER_PRODUCT_ONE_JSON_OBJECT)
+        val actualUserProduct = UserProductJsonParser().parse(ProductFixtures.USER_PRODUCT_ONE_JSON_OBJECT)
 
         val expectedUserProduct = Product(
             123456,

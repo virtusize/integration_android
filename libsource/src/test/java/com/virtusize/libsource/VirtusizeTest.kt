@@ -6,6 +6,8 @@ import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.*
+import com.virtusize.libsource.fixtures.ProductFixtures
+import com.virtusize.libsource.fixtures.TestFixtures
 import com.virtusize.libsource.network.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -256,7 +258,8 @@ class VirtusizeTest {
             mockURL,
             MockedResponse(204, "".byteInputStream())
         ))
-        virtusize.sendOrder(TestFixtures.VIRTUSIZE_ORDER,
+        virtusize.sendOrder(
+            TestFixtures.VIRTUSIZE_ORDER,
             object: SuccessResponseHandler {
                 override fun onSuccess(data: Any?) {
                     isSuccessful = true
@@ -275,7 +278,7 @@ class VirtusizeTest {
 
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
             mockURL,
-            MockedResponse(200, TestFixtures.STORE_PRODUCT_INFO_JSON_DATA.toString().byteInputStream())
+            MockedResponse(200, ProductFixtures.STORE_PRODUCT_INFO_JSON_DATA.toString().byteInputStream())
         ))
 
         virtusize.getStoreProductInfo(
@@ -306,7 +309,7 @@ class VirtusizeTest {
 
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
             mockURL,
-            MockedResponse(200, TestFixtures.PRODUCT_TYPE_JSON_ARRAY.toString().byteInputStream())
+            MockedResponse(200, ProductFixtures.PRODUCT_TYPE_JSON_ARRAY.toString().byteInputStream())
         ))
 
         virtusize.getProductTypes(
@@ -346,7 +349,7 @@ class VirtusizeTest {
 
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
             mockURL,
-            MockedResponse(200, TestFixtures.USER_PRODUCT_JSON_ARRAY.toString().byteInputStream())
+            MockedResponse(200, ProductFixtures.USER_PRODUCT_JSON_ARRAY.toString().byteInputStream())
         ))
 
         virtusize.getUserProducts(
@@ -377,7 +380,7 @@ class VirtusizeTest {
     fun testGetUserProducts_wardrobeNotExisted_shouldReturn404Error() {
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
             mockURL,
-            MockedResponse(404, TestFixtures.WARDROBE_NOT_FOUND_ERROR_JSONObject.toString().byteInputStream())
+            MockedResponse(404, ProductFixtures.WARDROBE_NOT_FOUND_ERROR_JSONObject.toString().byteInputStream())
         ))
         virtusize.getUserProducts(
             onError = {
