@@ -171,5 +171,56 @@ internal object TestFixtures {
         1,
         "http://example.com/products/P001"
     )))
+
+    val USER_BODY_JSONObject = JSONObject(
+        """
+                {
+                  "wardrobe": "1234567",
+                  "gender": "female",
+                  "age": 32,
+                  "height": 1630,
+                  "weight": "50.00",
+                  "braSize": {}, 
+                  "concernAreas": {},
+                  "bodyData": {
+                    "hip": 830,
+                    "bust": 755,
+                    "neck": 300,
+                    "rise": 215,
+                    "bicep": 220,
+                    "thigh": 480,
+                    "waist": 630,
+                    "inseam": 700,
+                    "sleeve": 720,
+                    "shoulder": 370,
+                    "hipWidth": 300,
+                    "bustWidth": 245,
+                    "hipHeight": 750,
+                    "headHeight": 215,
+                    "kneeHeight": 395,
+                    "waistWidth": 225,
+                    "waistHeight": 920,
+                    "armpitHeight": 1130,
+                    "sleeveLength": 520,
+                    "shoulderWidth": 340,
+                    "shoulderHeight": 1240
+                  }
+                }
+            """.trimIndent()
+    )
+
+    val NULL_USER_BODY_PROFILE = JSONObject(
+        """
+                {   
+                    "gender": "",
+                    "age": null,
+                    "height": null,
+                    "weight": null,
+                    "braSize": null,
+                    "concernAreas": null,
+                    "bodyData": null
+                }
+            """.trimIndent()
+    )
 }
 

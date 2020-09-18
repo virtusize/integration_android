@@ -142,12 +142,19 @@ class Virtusize(
                 // Sets up Product check response data to VirtusizeProduct in VirtusizeView
                 virtusizeView.setupProductCheckResponseData(productCheck)
                 if (virtusizeView is VirtusizeInPageView) {
-                    getUserProducts({
-                        Log.d("User Products", it.toString())
-                    }, {
-                        Log.e(Constants.INPAGE_LOG_TAG, it.message)
-                    })
                     productCheck.data?.productDataId?.let { productId ->
+                        // TODO: test API endpoints
+                        getUserProducts({
+                            Log.d("user-products", it.toString())
+                        }, {
+                            Log.e(Constants.INPAGE_LOG_TAG, it.message)
+                        })
+                        getUserBodyProfile({
+                            Log.d("user-body-measurements", it.toString())
+                        }, {
+                            Log.e(Constants.INPAGE_LOG_TAG, it.message)
+                        })
+
                         val trimType = if(virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
                         getI18nText({ i18nLocalization ->
                             getStoreProductInfo(productId, onSuccess = { storeProduct ->
@@ -452,7 +459,7 @@ class Virtusize(
     /**
      * Gets the i18n localization texts
      * @param onSuccess the optional success callback to pass the [I18nLocalization] from the response when [VirtusizeApiTask] is successful
-     * @param onError the optional error callback to get the [VirtusizeErrorType] in the API task
+     * @param onError the optional error callback to get the [VirtusizeError] in the API task
      */
     internal fun getI18nText(
         onSuccess: ((I18nLocalization) -> Unit)? = null,
@@ -481,7 +488,7 @@ class Virtusize(
     /**
      * Retrieves a list of user products
      * @param onSuccess the optional success callback to pass the list of [Product]
-     * @param onError the optional error callback to get the [VirtusizeErrorType] in the API task
+     * @param onError the optional error callback to get the [VirtusizeError] in the API task
      */
     internal fun getUserProducts(
         onSuccess: ((List<Product>?) -> Unit)? = null,
@@ -493,6 +500,35 @@ class Virtusize(
             .setSuccessHandler(object : SuccessResponseHandler {
                 override fun onSuccess(data: Any?) {
                     onSuccess?.invoke(data as? List<Product>)
+                }
+            })
+            .setErrorHandler(object : ErrorResponseHandler {
+                override fun onError(error: VirtusizeError) {
+                    onError?.invoke(error)
+                }
+            })
+            .setHttpURLConnection(httpURLConnection)
+            .setCoroutineDispatcher(coroutineDispatcher)
+            .execute(apiRequest)
+    }
+
+    /**
+     * Retrieves the current user body profile such as age, height, weight and body measurements
+     * @param onSuccess the optional success callback to pass [UserBodyProfile]
+     * @param onError the optional error callback to get the [VirtusizeError] in the API task
+     */
+    internal fun getUserBodyProfile(
+        onSuccess: ((UserBodyProfile) -> Unit)? = null,
+        onError: ((VirtusizeError) -> Unit)? = null
+    ) {
+        val apiRequest = VirtusizeApi.getUserBodyProfile()
+        VirtusizeApiTask()
+            .setJsonParser(UserBodyProfileJsonParser())
+            .setSuccessHandler(object : SuccessResponseHandler {
+                override fun onSuccess(data: Any?) {
+                    (data as? UserBodyProfile)?.let {
+                        onSuccess?.invoke(it)
+                    }
                 }
             })
             .setErrorHandler(object : ErrorResponseHandler {

@@ -47,7 +47,7 @@ internal class VirtusizeApiTask {
     private var urlConnection: HttpURLConnection? = null
     // The Browser ID for the request header
     private var browserID: String? = null
-    // TODO: comment
+    // TODO: integrate the sessions API to get the auth token
     private var autoToken: String? = null
     // The Json parser interface for converting the JSON response to a given type of Java object
     private var jsonParser: VirtusizeJsonParser<Any>? = null
@@ -116,16 +116,17 @@ internal class VirtusizeApiTask {
                             connectTimeout = CONNECT_TIMEOUT
                             requestMethod = apiRequest.method.name
 
-                            if (needsAuthorizationHeader(apiRequest.url)) {
+                            browserID?.let {
+                                setRequestProperty(HEADER_BROWSER_ID, browserID)
+                            }
+
+                            if (apiRequest.authorization) {
                                 setRequestProperty(HEADER_AUTHORIZATION, "Token $autoToken")
                             }
 
                             // Send the POST request
                             if (apiRequest.method == HttpMethod.POST) {
                                 doOutput = true
-                                browserID?.let {
-                                    setRequestProperty(HEADER_BROWSER_ID, browserID)
-                                }
                                 setRequestProperty(HEADER_CONTENT_TYPE, "application/json")
 
                                 // Write the byte array of the request body to the output stream
@@ -193,11 +194,6 @@ internal class VirtusizeApiTask {
                 errorStream?.close()
             }
         }
-    }
-
-    // TODO: comment
-    private fun needsAuthorizationHeader(apiRequestUrl: String? = null): Boolean {
-        return apiRequestUrl?.contains(VirtusizeEndpoint.UserProducts.getPath()) ?: false
     }
 
     /**
