@@ -49,6 +49,12 @@ internal object JsonUtils {
         return map
     }
 
+    /**
+     * Converts a JSONObject to a set of [Measurement]
+     *
+     * @param jsonObject a JSONObject to be converted
+     * @return a Set representing the input
+     */
     internal fun jsonObjectToMeasurements(jsonObject: JSONObject): Set<Measurement> {
         return jsonObjectToMap(jsonObject)
             .filter {

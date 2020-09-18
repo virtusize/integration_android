@@ -12,12 +12,7 @@ class ProductSizeJsonParser : VirtusizeJsonParser<ProductSize> {
         val name = JsonUtils.optString(json, FIELD_NAME)
         var measurements = setOf<Measurement>()
         json.optJSONObject(FIELD_MEASUREMENTS)?.let { measurementsJsonObject ->
-            measurements = JsonUtils.jsonObjectToMap(measurementsJsonObject)
-                .filter {
-                    it.value as? Int != null
-                }.map {
-                    Measurement(it.key, it.value as Int)
-                }.toSet()
+            measurements = JsonUtils.jsonObjectToMeasurements(measurementsJsonObject)
         }
         if(name.isEmpty() && measurements.isEmpty()) {
             return null
