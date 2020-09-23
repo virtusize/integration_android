@@ -218,7 +218,7 @@ internal object VirtusizeApi {
      * @see ApiRequest
      */
     fun getStoreProductInfo(productId: String) : ApiRequest {
-        val url = Uri.parse(environment.apiUrl() + VirtusizeEndpoint.StoreProduct.getPath() + productId)
+        val url = Uri.parse(environment.apiUrl() + VirtusizeEndpoint.StoreProducts.getPath() + productId)
             .buildUpon()
             .appendQueryParameter("format", "json")
             .build()
@@ -244,6 +244,18 @@ internal object VirtusizeApi {
      */
     fun getI18n(language: VirtusizeLanguage) : ApiRequest {
         val url = Uri.parse(I18N_URL + VirtusizeEndpoint.I18N.getPath() + language.value)
+            .buildUpon()
+            .build()
+            .toString()
+        return ApiRequest(url, HttpMethod.GET)
+    }
+
+    /**
+     * Gets a API request for retrieving a list of user products for the current signed-in or anonymous user
+     * @see ApiRequest
+     */
+    fun getUserProducts(): ApiRequest {
+        val url = Uri.parse(environment.apiUrl() + VirtusizeEndpoint.UserProducts.getPath())
             .buildUpon()
             .build()
             .toString()

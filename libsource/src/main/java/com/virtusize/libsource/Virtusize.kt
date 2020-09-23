@@ -142,6 +142,11 @@ class Virtusize(
                 // Sets up Product check response data to VirtusizeProduct in VirtusizeView
                 virtusizeView.setupProductCheckResponseData(productCheck)
                 if (virtusizeView is VirtusizeInPageView) {
+                    getUserProducts({
+                        Log.d("User Products", it.toString())
+                    }, {
+                        Log.e(Constants.INPAGE_LOG_TAG, it.message)
+                    })
                     productCheck.data?.productDataId?.let { productId ->
                         val trimType = if(virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
                         getI18nText({ i18nLocalization ->
@@ -386,12 +391,12 @@ class Virtusize(
     /**
      * Retrieves the store product info
      * @param productId the ID of the store product
-     * @param onSuccess the optional success callback to pass the [StoreProduct]
+     * @param onSuccess the optional success callback to pass the [Product]
      * @param onError the optional error callback to get the [VirtusizeError] in the API task
      */
     internal fun getStoreProductInfo(
         productId: Int,
-        onSuccess: ((StoreProduct) -> Unit)? = null,
+        onSuccess: ((Product) -> Unit)? = null,
         onError: ((VirtusizeError) -> Unit)? = null
     ) {
         if(productId == 0) {
@@ -402,7 +407,7 @@ class Virtusize(
             .setJsonParser(StoreProductJsonParser())
             .setSuccessHandler(object : SuccessResponseHandler {
                 override fun onSuccess(data: Any?) {
-                    (data as? StoreProduct)?.let {
+                    (data as? Product)?.let {
                         onSuccess?.invoke(it)
                     }
                 }
@@ -458,7 +463,36 @@ class Virtusize(
             .setJsonParser(I18nLocalizationJsonParser(context, params.language))
             .setSuccessHandler(object : SuccessResponseHandler {
                 override fun onSuccess(data: Any?) {
-                    onSuccess?.invoke(data as I18nLocalization)
+                    (data as? I18nLocalization)?.let {
+                        onSuccess?.invoke(it)
+                    }
+                }
+            })
+            .setErrorHandler(object : ErrorResponseHandler {
+                override fun onError(error: VirtusizeError) {
+                    onError?.invoke(error)
+                }
+            })
+            .setHttpURLConnection(httpURLConnection)
+            .setCoroutineDispatcher(coroutineDispatcher)
+            .execute(apiRequest)
+    }
+
+    /**
+     * Retrieves a list of user products
+     * @param onSuccess the optional success callback to pass the list of [Product]
+     * @param onError the optional error callback to get the [VirtusizeErrorType] in the API task
+     */
+    internal fun getUserProducts(
+        onSuccess: ((List<Product>?) -> Unit)? = null,
+        onError: ((VirtusizeError) -> Unit)? = null
+    ) {
+        val apiRequest = VirtusizeApi.getUserProducts()
+        VirtusizeApiTask()
+            .setJsonParser(UserProductJsonParser())
+            .setSuccessHandler(object : SuccessResponseHandler {
+                override fun onSuccess(data: Any?) {
+                    onSuccess?.invoke(data as? List<Product>)
                 }
             })
             .setErrorHandler(object : ErrorResponseHandler {

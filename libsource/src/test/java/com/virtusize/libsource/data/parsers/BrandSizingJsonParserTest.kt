@@ -1,7 +1,7 @@
 package com.virtusize.libsource.data.parsers
 
 import com.google.common.truth.Truth
-import com.virtusize.libsource.TestFixtures
+import com.virtusize.libsource.fixtures.TestFixtures
 import com.virtusize.libsource.data.remote.BrandSizing
 import org.json.JSONObject
 import org.junit.Test

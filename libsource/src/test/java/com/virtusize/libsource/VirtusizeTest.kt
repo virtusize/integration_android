@@ -6,6 +6,8 @@ import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.*
+import com.virtusize.libsource.fixtures.ProductFixtures
+import com.virtusize.libsource.fixtures.TestFixtures
 import com.virtusize.libsource.network.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -256,7 +258,8 @@ class VirtusizeTest {
             mockURL,
             MockedResponse(204, "".byteInputStream())
         ))
-        virtusize.sendOrder(TestFixtures.VIRTUSIZE_ORDER,
+        virtusize.sendOrder(
+            TestFixtures.VIRTUSIZE_ORDER,
             object: SuccessResponseHandler {
                 override fun onSuccess(data: Any?) {
                     isSuccessful = true
@@ -271,33 +274,33 @@ class VirtusizeTest {
 
     @Test
     fun testGetStoreProductInfo_whenSuccessful_onSuccessShouldReturnExpectedStoreProduct() = runBlocking {
-        var actualStoreProduct: StoreProduct? = null
+        var actualProduct: Product? = null
 
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
             mockURL,
-            MockedResponse(200, TestFixtures.STORE_PRODUCT_INFO_JSON_DATA.toString().byteInputStream())
+            MockedResponse(200, ProductFixtures.STORE_PRODUCT_INFO_JSON_DATA.toString().byteInputStream())
         ))
 
         virtusize.getStoreProductInfo(
             TestFixtures.PRODUCT_ID,
             onSuccess = {
-                actualStoreProduct = it
+                actualProduct = it
             }
         )
 
-        assertThat(actualStoreProduct?.id).isEqualTo(TestFixtures.PRODUCT_ID)
-        assertThat(actualStoreProduct?.sizes?.size).isEqualTo(2)
-        assertThat(actualStoreProduct?.externalId).isEqualTo(TestFixtures.EXTERNAL_ID)
-        assertThat(actualStoreProduct?.productType).isEqualTo(8)
-        assertThat(actualStoreProduct?.name).isEqualTo(TestFixtures.PRODUCT_NAME)
-        assertThat(actualStoreProduct?.storeId).isEqualTo(TestFixtures.STORE_ID)
-        assertThat(actualStoreProduct?.storeProductMeta?.id).isEqualTo(1)
+        assertThat(actualProduct?.id).isEqualTo(TestFixtures.PRODUCT_ID)
+        assertThat(actualProduct?.sizes?.size).isEqualTo(2)
+        assertThat(actualProduct?.externalId).isEqualTo(TestFixtures.EXTERNAL_ID)
+        assertThat(actualProduct?.productType).isEqualTo(8)
+        assertThat(actualProduct?.name).isEqualTo(TestFixtures.PRODUCT_NAME)
+        assertThat(actualProduct?.storeId).isEqualTo(TestFixtures.STORE_ID)
+        assertThat(actualProduct?.storeProductMeta?.id).isEqualTo(1)
         val expectedAdditionalInfo = StoreProductAdditionalInfo(
             "regular",
             "fashionable",
             BrandSizing("large", false)
         )
-        assertThat(actualStoreProduct?.storeProductMeta?.additionalInfo).isEqualTo(expectedAdditionalInfo)
+        assertThat(actualProduct?.storeProductMeta?.additionalInfo).isEqualTo(expectedAdditionalInfo)
     }
 
     @Test
@@ -306,7 +309,7 @@ class VirtusizeTest {
 
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
             mockURL,
-            MockedResponse(200, TestFixtures.PRODUCT_TYPE_JSON_ARRAY.toString().byteInputStream())
+            MockedResponse(200, ProductFixtures.PRODUCT_TYPE_JSON_ARRAY.toString().byteInputStream())
         ))
 
         virtusize.getProductTypes(
@@ -338,6 +341,73 @@ class VirtusizeTest {
                 )
             )
         )
+    }
+
+    @Test
+    fun testGetUserProducts_whenSuccessful_shouldReturnExpectedUserProduct(){
+        var actualUserProductList: List<Product>? = null
+
+        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+            mockURL,
+            MockedResponse(200, ProductFixtures.USER_PRODUCT_JSON_ARRAY.toString().byteInputStream())
+        ))
+
+        virtusize.getUserProducts(
+            onSuccess = {
+                actualUserProductList = it
+            }
+        )
+
+        assertThat(actualUserProductList?.size).isEqualTo(2)
+        assertThat(actualUserProductList?.get(0)?.id).isEqualTo(123456)
+        assertThat(actualUserProductList?.get(0)?.sizes?.size).isEqualTo(1)
+        assertThat(actualUserProductList?.get(0)?.sizes?.get(0)?.name).isEqualTo("S")
+        assertThat(actualUserProductList?.get(1)?.id).isEqualTo(654321)
+        assertThat(actualUserProductList?.get(1)?.sizes?.get(0)?.name).isEqualTo("")
+        assertThat(actualUserProductList?.get(1)?.sizes?.get(0)?.measurements).isEqualTo(
+            mutableSetOf(
+                Measurement("height", 820),
+                Measurement("bust", 520),
+                Measurement("sleeve", 930)
+            ))
+        assertThat(actualUserProductList?.get(1)?.productType).isEqualTo(2)
+        assertThat(actualUserProductList?.get(1)?.name).isEqualTo("test2")
+        assertThat(actualUserProductList?.get(1)?.cloudinaryPublicId).isEqualTo("")
+        assertThat(actualUserProductList?.get(1)?.isFavorite).isEqualTo(true)
+    }
+
+    @Test
+    fun testGetUserProducts_emptyWardrobe_shouldReturnEmptyUserProductList(){
+        var actualUserProductList: List<Product>? = null
+
+        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+            mockURL,
+            MockedResponse(200, ProductFixtures.EMPTY_PRODUCT_JSON_ARRAY.toString().byteInputStream())
+        ))
+
+        virtusize.getUserProducts(
+            onSuccess = {
+                actualUserProductList = it
+            }
+        )
+
+        assertThat(actualUserProductList?.size).isEqualTo(0)
+    }
+
+    @Test
+    fun testGetUserProducts_wardrobeNotExisted_shouldReturn404Error() {
+        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+            mockURL,
+            MockedResponse(404, ProductFixtures.WARDROBE_NOT_FOUND_ERROR_JSONObject.toString().byteInputStream())
+        ))
+        virtusize.getUserProducts(
+            onError = {
+                actualError = it
+            }
+        )
+        assertThat(actualError?.code).isEqualTo(HttpURLConnection.HTTP_NOT_FOUND)
+        assertThat(actualError?.message).contains("{\"detail\":\"No wardrobe found\"}")
+        assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.NetworkError)
     }
 
     companion object {

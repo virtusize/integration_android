@@ -37,6 +37,7 @@ internal class VirtusizeApiTask {
         private val CONNECT_TIMEOUT = TimeUnit.SECONDS.toMillis(60).toInt()
         // The request header keys
         private const val HEADER_BROWSER_ID = "x-vs-bid"
+        private const val HEADER_AUTHORIZATION = "Authorization"
         private const val HEADER_CONTENT_TYPE = "Content-Type"
     }
 
@@ -46,6 +47,8 @@ internal class VirtusizeApiTask {
     private var urlConnection: HttpURLConnection? = null
     // The Browser ID for the request header
     private var browserID: String? = null
+    // TODO: comment
+    private var autoToken: String? = null
     // The Json parser interface for converting the JSON response to a given type of Java object
     private var jsonParser: VirtusizeJsonParser? = null
     // The callback for a successful API response
@@ -113,6 +116,10 @@ internal class VirtusizeApiTask {
                             connectTimeout = CONNECT_TIMEOUT
                             requestMethod = apiRequest.method.name
 
+                            if (needsAuthorizationHeader(apiRequest.url)) {
+                                setRequestProperty(HEADER_AUTHORIZATION, "Token $autoToken")
+                            }
+
                             // Send the POST request
                             if (apiRequest.method == HttpMethod.POST) {
                                 doOutput = true
@@ -128,6 +135,7 @@ internal class VirtusizeApiTask {
                                     outStream.close()
                                 }
                             }
+
                         }
                 }
 
@@ -187,6 +195,11 @@ internal class VirtusizeApiTask {
         }
     }
 
+    // TODO: comment
+    private fun needsAuthorizationHeader(apiRequestUrl: String? = null): Boolean {
+        return apiRequestUrl?.contains(VirtusizeEndpoint.UserProducts.getPath()) ?: false
+    }
+
     /**
      * Parses the contents of an InputStream
      * @param inputStream The input stream of bytes
@@ -197,7 +210,7 @@ internal class VirtusizeApiTask {
             jsonParser?.let { jsonParser ->
                 try {
                     result =
-                        if (apiRequestUrl != null && apiRequestUrl.contains(VirtusizeEndpoint.ProductType.getPath())) {
+                        if (apiRequestUrl != null && responseIsJsonArray(apiRequestUrl)) {
                             val productTypeJsonArray = JSONArray(streamString)
                             (0 until productTypeJsonArray.length())
                                 .map { idx -> productTypeJsonArray.getJSONObject(idx) }
@@ -215,6 +228,12 @@ internal class VirtusizeApiTask {
             }
         }
         return result
+    }
+
+    // TODO: comment
+    private fun responseIsJsonArray(apiRequestUrl: String): Boolean {
+        return apiRequestUrl.contains(VirtusizeEndpoint.ProductType.getPath())
+                || apiRequestUrl.contains(VirtusizeEndpoint.UserProducts.getPath())
     }
 
     /**

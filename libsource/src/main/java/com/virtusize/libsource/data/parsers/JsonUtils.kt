@@ -12,11 +12,11 @@ import kotlin.collections.HashMap
 internal object JsonUtils {
 
     /**
-     * Returns the String value mapped by name. If it isn't present, return `null`
+     * Returns the String value mapped by name. If it isn't present, return an empty string
      *
      * @param jsonObject the input JSON object
      * @param name the optional field name
-     * @return the value stored in the field. If it isn't present, it returns `null`
+     * @return the value stored in the field. If it isn't present, it returns an empty string
      */
     internal fun optString(jsonObject: JSONObject, name: String?): String {
         val stringValue = jsonObject.optString(name)
