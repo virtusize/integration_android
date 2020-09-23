@@ -410,6 +410,87 @@ class VirtusizeTest {
         assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.NetworkError)
     }
 
+    @Test
+    fun testGetUserBodyProfile_getsValidUserBodyProfile_shouldHaveExpectedUserBodyProfile(){
+        var actualUserBodyProfile: UserBodyProfile? = null
+
+        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+            mockURL,
+            MockedResponse(200, TestFixtures.USER_BODY_JSONObject.toString().byteInputStream())
+        ))
+
+        virtusize.getUserBodyProfile(
+            onSuccess = {
+                actualUserBodyProfile = it
+            }
+        )
+
+        assertThat(actualUserBodyProfile?.age).isEqualTo(32)
+        assertThat(actualUserBodyProfile?.gender).isEqualTo("female")
+        assertThat(actualUserBodyProfile?.height).isEqualTo(1630)
+        assertThat(actualUserBodyProfile?.weight).isEqualTo("50.00")
+        assertThat(actualUserBodyProfile?.bodyData).isEqualTo(
+            mutableSetOf(
+                Measurement("hip", 830),
+                Measurement("hip", 830),
+                Measurement("bust", 755),
+                Measurement("neck", 300),
+                Measurement("rise", 215),
+                Measurement("bicep", 220),
+                Measurement("thigh", 480),
+                Measurement("waist", 630),
+                Measurement("inseam", 700),
+                Measurement("sleeve", 720),
+                Measurement("shoulder", 370),
+                Measurement("hipWidth", 300),
+                Measurement("bustWidth", 245),
+                Measurement("hipHeight", 750),
+                Measurement("headHeight", 215),
+                Measurement("kneeHeight", 395),
+                Measurement("waistWidth", 225),
+                Measurement("waistHeight", 920),
+                Measurement("armpitHeight", 1130),
+                Measurement("sleeveLength", 520),
+                Measurement("shoulderWidth", 340),
+                Measurement("shoulderHeight", 1240)
+            )
+        )
+    }
+
+    @Test
+    fun testGetUserBodyProfile_getsEmptyUserBodyProfile_shouldExpectNull(){
+        var actualUserBodyProfile: UserBodyProfile? = null
+
+        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+            mockURL,
+            MockedResponse(200, TestFixtures.NULL_USER_BODY_PROFILE.toString().byteInputStream())
+        ))
+
+        virtusize.getUserBodyProfile(
+            onSuccess = {
+                actualUserBodyProfile = it
+            }
+        )
+
+        assertThat(actualUserBodyProfile).isNull()
+    }
+
+    @Test
+    fun testGetUserBodyProfile_wardrobeNotExisted_shouldReturn404Error() {
+        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+            mockURL,
+            MockedResponse(404, ProductFixtures.WARDROBE_NOT_FOUND_ERROR_JSONObject.toString().byteInputStream())
+        ))
+        virtusize.getUserBodyProfile(
+            onError = {
+                actualError = it
+            }
+        )
+        assertThat(actualError?.code).isEqualTo(HttpURLConnection.HTTP_NOT_FOUND)
+        assertThat(actualError?.message).contains("{\"detail\":\"No wardrobe found\"}")
+        assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.NetworkError)
+    }
+
     companion object {
         private const val INTERNAL_SERVER_ERROR_RESPONSE = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n<title>500 Internal Server Error</title>\n" +
         "<h1>Internal Server Error</h1>\n" +
