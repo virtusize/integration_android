@@ -156,6 +156,17 @@ class Virtusize(
                 if (virtusizeView is VirtusizeInPageView) {
                     CoroutineScope(Main).launch {
                         productCheck.data?.productDataId?.let { productId ->
+                            // TODO: test API endpoints
+                            getUserProducts({
+                                Log.d("user-products", it.toString())
+                            }, {
+                                Log.e(Constants.INPAGE_LOG_TAG, it.message)
+                            })
+                            getUserBodyProfile({
+                                Log.d("user-body-measurements", it.toString())
+                            }, {
+                                Log.e(Constants.INPAGE_LOG_TAG, it.message)
+                            })
                             if(storeProduct == null) {
                                 val storeProductResponse = getStoreProductInfo(productId)
                                 if(storeProductResponse is VirtusizeApiResponse.Success) {

@@ -5,7 +5,7 @@ import android.os.Build
 import android.view.WindowManager
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
-import com.virtusize.libsource.TestFixtures
+import com.virtusize.libsource.fixtures.TestFixtures
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.parsers.JsonUtils
 import org.junit.Before
@@ -205,6 +205,28 @@ class VirtusizeApiTest {
         val expectedUrl = "https://i18n.virtusize.jp/bundle-payloads/aoyama/ko"
 
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
+
+        assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
+    }
+
+    @Test
+    fun getUserProducts_shouldReturnExpectedApiRequest() {
+        val actualApiRequest = VirtusizeApi.getUserProducts()
+
+        val expectedUrl = "https://staging.virtusize.com/a/api/v3/user-products"
+
+        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET, mutableMapOf(), true)
+
+        assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
+    }
+
+    @Test
+    fun getUserBodyProfile_shouldReturnExpectedApiRequest() {
+        val actualApiRequest = VirtusizeApi.getUserBodyProfile()
+
+        val expectedUrl = "https://staging.virtusize.com/a/api/v3/user-body-measurements"
+
+        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET, mutableMapOf(), true)
 
         assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
     }

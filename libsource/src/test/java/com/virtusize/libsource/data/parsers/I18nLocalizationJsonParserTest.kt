@@ -6,7 +6,7 @@ import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.virtusize.libsource.R
-import com.virtusize.libsource.TestFixtures
+import com.virtusize.libsource.fixtures.TestFixtures
 import com.virtusize.libsource.data.local.VirtusizeLanguage
 import com.virtusize.libsource.data.remote.I18nLocalization
 import org.json.JSONObject
@@ -39,7 +39,8 @@ class I18nLocalizationJsonParserTest {
 
     @Test
     fun parseI18N_emptyJsonData_shouldReturnExpectedObject() {
-        val actualI18nLocalization = I18nLocalizationJsonParser(context, VirtusizeLanguage.EN).parse(TestFixtures.EMPTY_JSON_DATA)
+        val actualI18nLocalization = I18nLocalizationJsonParser(context, VirtusizeLanguage.EN).parse(
+            TestFixtures.EMPTY_JSON_DATA)
 
         val expectedI18nLocalization = I18nLocalization(
             "",

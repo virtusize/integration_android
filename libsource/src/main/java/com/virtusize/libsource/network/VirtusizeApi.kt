@@ -19,8 +19,9 @@ internal enum class HttpMethod {
  * @param url the URL for a network request
  * @param method the HTTP request method type
  * @param params the MutableMap of query parameters to be sent to the server
+ * @param authorization if it's true, it means you need the auth token to make the API request
  */
-internal data class ApiRequest(val url: String, val method: HttpMethod, val params: MutableMap<String, Any> = mutableMapOf())
+internal data class ApiRequest(val url: String, val method: HttpMethod, val params: MutableMap<String, Any> = mutableMapOf(), val authorization: Boolean = false)
 
 /**
  * This object represents the Virtusize API
@@ -218,7 +219,7 @@ internal object VirtusizeApi {
      * @see ApiRequest
      */
     fun getStoreProductInfo(productId: String) : ApiRequest {
-        val url = Uri.parse(environment.apiUrl() + VirtusizeEndpoint.StoreProduct.getPath() + productId)
+        val url = Uri.parse(environment.apiUrl() + VirtusizeEndpoint.StoreProducts.getPath() + productId)
             .buildUpon()
             .appendQueryParameter("format", "json")
             .build()
@@ -248,5 +249,29 @@ internal object VirtusizeApi {
             .build()
             .toString()
         return ApiRequest(url, HttpMethod.GET)
+    }
+
+    /**
+     * Gets a API request for retrieving a list of user products for the current signed-in or anonymous user
+     * @see ApiRequest
+     */
+    fun getUserProducts(): ApiRequest {
+        val url = Uri.parse(environment.apiUrl() + VirtusizeEndpoint.UserProducts.getPath())
+            .buildUpon()
+            .build()
+            .toString()
+        return ApiRequest(url, HttpMethod.GET, authorization = true)
+    }
+
+    /**
+     * Gets a API request for retrieving the user body profile for the current signed-in or anonymous user
+     * @see ApiRequest
+     */
+    fun getUserBodyProfile(): ApiRequest {
+        val url = Uri.parse(environment.apiUrl() + VirtusizeEndpoint.UserBodyMeasurements.getPath())
+            .buildUpon()
+            .build()
+            .toString()
+        return ApiRequest(url, HttpMethod.GET, authorization = true)
     }
 }

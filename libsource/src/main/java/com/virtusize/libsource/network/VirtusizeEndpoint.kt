@@ -10,9 +10,11 @@ internal enum class VirtusizeEndpoint {
     Events,
     Orders,
     StoreViewApiKey,
-    StoreProduct,
+    StoreProducts,
+    UserProducts,
     ProductType,
-    I18N
+    I18N,
+    UserBodyMeasurements
 }
 
 /**
@@ -39,14 +41,20 @@ internal fun VirtusizeEndpoint.getPath(): String {
          VirtusizeEndpoint.StoreViewApiKey -> {
              "/a/api/v3/stores/api-key/"
          }
-         VirtusizeEndpoint.StoreProduct -> {
+         VirtusizeEndpoint.StoreProducts -> {
              "/a/api/v3/store-products/"
+         }
+         VirtusizeEndpoint.UserProducts -> {
+             "/a/api/v3/user-products"
          }
          VirtusizeEndpoint.ProductType -> {
              "/a/api/v3/product-types"
          }
          VirtusizeEndpoint.I18N -> {
               "/bundle-payloads/aoyama/"
+         }
+         VirtusizeEndpoint.UserBodyMeasurements -> {
+             "/a/api/v3/user-body-measurements"
          }
     }
 }
