@@ -87,7 +87,7 @@ class Virtusize(
     private var productCheckData: ProductCheck? = null
 
     // This variable holds the store product data from the Virtusize API
-    private var storeProduct: StoreProduct? = null
+    private var storeProduct: Product? = null
 
     init {
         // Virtusize API for building API requests
@@ -157,18 +157,13 @@ class Virtusize(
                     CoroutineScope(Main).launch {
                         productCheck.data?.productDataId?.let { productId ->
                             // TODO: test API endpoints
-                            getUserProducts({
-                                Log.d("user-products", it.toString())
-                            }, {
-                                Log.e(Constants.INPAGE_LOG_TAG, it.message)
-                            })
-                            getUserBodyProfile({
-                                Log.d("user-body-measurements", it.toString())
-                            }, {
-                                Log.e(Constants.INPAGE_LOG_TAG, it.message)
-                            })
+                            val userProductResponse = getUserProductsApiResponse()
+                            Log.d(Constants.INPAGE_LOG_TAG, userProductResponse.toString())
+                            val userBodyProfileResponse = getUserBodyProfileResponse()
+                            Log.d(Constants.INPAGE_LOG_TAG, userBodyProfileResponse.toString())
+
                             if(storeProduct == null) {
-                                val storeProductResponse = getStoreProductInfo(productId)
+                                val storeProductResponse = getStoreProductResponse(productId)
                                 if(storeProductResponse is VirtusizeApiResponse.Success) {
                                     storeProduct = storeProductResponse.data
                                 } else  {
@@ -179,7 +174,7 @@ class Virtusize(
                                     return@launch
                                 }
                             }
-                            val i18nResponse = getI18nText()
+                            val i18nResponse = getI18nResponse()
                             if (i18nResponse is VirtusizeApiResponse.Success && i18nResponse.data != null) {
                                 val trimType = if (virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
                                 virtusizeView.setupRecommendationText(storeProduct!!.getRecommendationText(i18nResponse.data).trimI18nText(trimType))
@@ -424,11 +419,11 @@ class Virtusize(
     }
 
     /**
-     * Retrieves the store product info
+     * Gets the API response for retrieving the store product info
      * @param productId the ID of the store product
-     * @return a [VirtusizeApiResponse] with the class [StoreProduct]
+     * @return the [VirtusizeApiResponse] with the data class [StoreProduct]
      */
-    internal suspend fun getStoreProductInfo(productId: Int): VirtusizeApiResponse<StoreProduct?> = withContext(IO) {
+    internal suspend fun getStoreProductResponse(productId: Int): VirtusizeApiResponse<Product?> = withContext(IO) {
         if(productId == 0) {
             return@withContext VirtusizeApiResponse.Error(VirtusizeErrorType.NullProduct.virtusizeError())
         }
@@ -436,7 +431,7 @@ class Virtusize(
         return@withContext VirtusizeApiTask()
             .setJsonParser(StoreProductJsonParser())
             .setHttpURLConnection(httpURLConnection)
-            .execute(apiRequest) as VirtusizeApiResponse<StoreProduct?>
+            .execute(apiRequest) as VirtusizeApiResponse<Product?>
     }
 
     /**
@@ -467,15 +462,39 @@ class Virtusize(
     }
 
     /**
-     * Gets the i18n localization texts
-     * @return the [VirtusizeApiResponse] with the class [I18nLocalization]
+     * Gets the API response for fetching the i18n localization texts
+     * @return the [VirtusizeApiResponse] with the data class [I18nLocalization]
      */
-    internal suspend fun getI18nText(): VirtusizeApiResponse<I18nLocalization?> = withContext(IO) {
+    internal suspend fun getI18nResponse(): VirtusizeApiResponse<I18nLocalization?> = withContext(IO) {
         val apiRequest = VirtusizeApi.getI18n(params.language ?: (VirtusizeLanguage.values().find { it.value == Locale.getDefault().language } ?: VirtusizeLanguage.EN))
         VirtusizeApiTask()
             .setJsonParser(I18nLocalizationJsonParser(context, params.language))
             .setHttpURLConnection(httpURLConnection)
             .execute(apiRequest) as VirtusizeApiResponse<I18nLocalization?>
+    }
+
+    /**
+     * Gets the API response for retrieving a list of user products
+     * @return the [VirtusizeApiResponse] with the list of [Product]
+     */
+    internal suspend fun getUserProductsApiResponse(): VirtusizeApiResponse<List<Product>?> = withContext(IO) {
+        val apiRequest = VirtusizeApi.getUserProducts()
+        return@withContext VirtusizeApiTask()
+            .setJsonParser(UserProductJsonParser())
+            .setHttpURLConnection(httpURLConnection)
+            .execute(apiRequest) as VirtusizeApiResponse<List<Product>?>
+    }
+
+    /**
+     * Gets the API response for retrieving the current user body profile such as age, height, weight and body measurements
+     * @return the [VirtusizeApiResponse] with the data class [UserBodyProfile]
+     */
+    internal suspend fun getUserBodyProfileResponse(): VirtusizeApiResponse<UserBodyProfile?>? = withContext(IO) {
+        val apiRequest = VirtusizeApi.getUserBodyProfile()
+        VirtusizeApiTask()
+            .setJsonParser(UserBodyProfileJsonParser())
+            .setHttpURLConnection(httpURLConnection)
+            .execute(apiRequest) as? VirtusizeApiResponse<UserBodyProfile?>
     }
 
     /**
