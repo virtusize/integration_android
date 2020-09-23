@@ -215,7 +215,18 @@ class VirtusizeApiTest {
 
         val expectedUrl = "https://staging.virtusize.com/a/api/v3/user-products"
 
-        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
+        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET, mutableMapOf(), true)
+
+        assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
+    }
+
+    @Test
+    fun getUserBodyProfile_shouldReturnExpectedApiRequest() {
+        val actualApiRequest = VirtusizeApi.getUserBodyProfile()
+
+        val expectedUrl = "https://staging.virtusize.com/a/api/v3/user-body-measurements"
+
+        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET, mutableMapOf(), true)
 
         assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
     }

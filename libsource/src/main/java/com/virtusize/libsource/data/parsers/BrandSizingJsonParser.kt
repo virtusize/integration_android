@@ -6,7 +6,7 @@ import org.json.JSONObject
 /**
  * This class parses a JSONObject to the [BrandSizing] object
  */
-class BrandSizingJsonParser : VirtusizeJsonParser {
+class BrandSizingJsonParser : VirtusizeJsonParser<BrandSizing> {
     override fun parse(json: JSONObject): BrandSizing? {
         val compare = json.optString(FIELD_COMPARE)
         val itemBrand = json.optBoolean(FIELD_ITEM_BRAND)

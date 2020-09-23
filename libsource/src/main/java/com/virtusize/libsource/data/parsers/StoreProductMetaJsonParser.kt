@@ -7,7 +7,7 @@ import org.json.JSONObject
 /**
  * This class parses a JSONObject to the [StoreProductMeta] object
  */
-internal class StoreProductMetaJsonParser: VirtusizeJsonParser {
+internal class StoreProductMetaJsonParser: VirtusizeJsonParser<StoreProductMeta> {
     override fun parse(json: JSONObject): StoreProductMeta? {
         val id = json.optInt(FIELD_ID)
         var additionalInfo: StoreProductAdditionalInfo? = null

@@ -7,7 +7,7 @@ import org.json.JSONObject
 /**
  * This class parses a JSONObject to the [StoreProductAdditionalInfo] object
  */
-class StoreProductAdditionalInfoJsonParser : VirtusizeJsonParser {
+class StoreProductAdditionalInfoJsonParser : VirtusizeJsonParser<StoreProductAdditionalInfo> {
     override fun parse(json: JSONObject): StoreProductAdditionalInfo? {
         val fit = JsonUtils.optString(json, FIELD_FIT)
         val style = JsonUtils.optString(json, FIELD_STYLE)

@@ -13,7 +13,8 @@ internal enum class VirtusizeEndpoint {
     StoreProducts,
     UserProducts,
     ProductType,
-    I18N
+    I18N,
+    UserBodyMeasurements
 }
 
 /**
@@ -51,6 +52,9 @@ internal fun VirtusizeEndpoint.getPath(): String {
          }
          VirtusizeEndpoint.I18N -> {
               "/bundle-payloads/aoyama/"
+         }
+         VirtusizeEndpoint.UserBodyMeasurements -> {
+             "/a/api/v3/user-body-measurements"
          }
     }
 }
