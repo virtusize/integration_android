@@ -271,19 +271,16 @@ class VirtusizeTest {
 
     @Test
     fun testGetStoreProductInfo_whenSuccessful_onSuccessShouldReturnExpectedStoreProduct() = runBlocking {
-        var actualStoreProduct: StoreProduct? = null
-
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
             mockURL,
             MockedResponse(200, TestFixtures.STORE_PRODUCT_INFO_JSON_DATA.toString().byteInputStream())
         ))
 
-        virtusize.getStoreProductInfo(
-            TestFixtures.PRODUCT_ID,
-            onSuccess = {
-                actualStoreProduct = it
-            }
-        )
+        val getStoreProductResponse = virtusize.getStoreProductInfo(TestFixtures.PRODUCT_ID)
+
+        assertThat(getStoreProductResponse is VirtusizeApiResponse.Success<StoreProduct?>)
+
+        val actualStoreProduct = (getStoreProductResponse as VirtusizeApiResponse.Success<StoreProduct?>).data
 
         assertThat(actualStoreProduct?.id).isEqualTo(TestFixtures.PRODUCT_ID)
         assertThat(actualStoreProduct?.sizes?.size).isEqualTo(2)
