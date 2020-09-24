@@ -19,8 +19,20 @@ internal object JsonUtils {
      * @return the value stored in the field. If it isn't present, it returns an empty string
      */
     internal fun optString(jsonObject: JSONObject, name: String?): String {
+        val stringValue = optNullableString(jsonObject, name)
+        return stringValue ?: ""
+    }
+
+    /**
+     * Returns the String value mapped by name. If it isn't present, return null
+     *
+     * @param jsonObject the input JSON object
+     * @param name the optional field name
+     * @return the value stored in the field. If it isn't present, it returns null
+     */
+    internal fun optNullableString(jsonObject: JSONObject, name: String?): String? {
         val stringValue = jsonObject.optString(name)
-        return if(stringValue == "null") "" else stringValue
+        return if(stringValue == "null") null else stringValue
     }
 
     /**
@@ -29,7 +41,7 @@ internal object JsonUtils {
      * @param jsonObject a JSONObject to be converted
      * @return a Map representing the input
      */
-    internal fun jsonObjectToMap(jsonObject: JSONObject): Map<String, Any> {
+    internal fun jsonObjectToMap(jsonObject: JSONObject): MutableMap<String, Any> {
         val map: MutableMap<String, Any> = HashMap()
         val keys: Iterator<String> = jsonObject.keys()
         while (keys.hasNext()) {

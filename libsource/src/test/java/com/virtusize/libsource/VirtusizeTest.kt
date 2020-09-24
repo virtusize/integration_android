@@ -289,7 +289,35 @@ class VirtusizeTest {
         assertThat(actualProduct?.name).isEqualTo(TestFixtures.PRODUCT_NAME)
         assertThat(actualProduct?.storeId).isEqualTo(TestFixtures.STORE_ID)
         assertThat(actualProduct?.storeProductMeta?.id).isEqualTo(1)
+        assertThat(actualProduct?.storeProductMeta?.id).isEqualTo(1)
         val expectedAdditionalInfo = StoreProductAdditionalInfo(
+            "Virtusize",
+            "female",
+            mutableSetOf(
+                ProductSize(
+                    "38",
+                    mutableSetOf(
+                        Measurement("height", 760),
+                        Measurement("bust", 660),
+                        Measurement("sleeve", 845)
+                    )
+                ),
+                ProductSize(
+                    "36",
+                    mutableSetOf(
+                        Measurement("height", 750),
+                        Measurement("bust", 645),
+                        Measurement("sleeve", 825)
+                    )
+                )
+            ),
+            mutableMapOf(
+                "hip" to 85,
+                "size" to "38",
+                "waist" to 56,
+                "bust" to 78,
+                "height" to 165
+            ),
             "regular",
             "fashionable",
             BrandSizing("large", false)

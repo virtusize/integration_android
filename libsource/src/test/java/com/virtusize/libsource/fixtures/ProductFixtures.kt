@@ -169,7 +169,7 @@ internal object ProductFixtures {
 
     fun storeProduct(
         productType: Int = 8,
-        sizes: List<ProductSize> = mutableListOf(
+        sizeList: List<ProductSize> = mutableListOf(
             ProductSize(
                 "38",
                 mutableSetOf(
@@ -186,11 +186,20 @@ internal object ProductFixtures {
                     Measurement("sleeve", 825)
                 )
             )
-        )
-    ) : Product {
+        ),
+        brand: String = "Virtusize",
+        modelInfo: Map<String, Any>? = mutableMapOf(
+            "hip" to 85,
+            "size" to "38",
+            "waist" to 56,
+            "bust" to 78,
+            "height" to 165
+        ),
+        gender: String? = "female"
+    ): Product {
         return Product(
             7110384,
-            sizes,
+            sizeList,
             "694",
             productType,
             "Test Product Name",
@@ -200,10 +209,16 @@ internal object ProductFixtures {
             StoreProductMeta(
                 1,
                 StoreProductAdditionalInfo(
+                    brand,
+                    gender,
+                    sizeList.toMutableSet(),
+                    modelInfo,
                     "regular",
                     "fashionable",
                     BrandSizing("large", false)
-                )
+                ),
+                brand,
+                gender
             )
         )
     }
