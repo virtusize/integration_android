@@ -151,6 +151,7 @@ class Virtusize(
              * when Product check Request is performed on server on Virtusize server
              */
             override fun onValidProductCheckCompleted(productCheck: ProductCheck) {
+                productCheckData = productCheck
                 // Sets up Product check response data to VirtusizeProduct in VirtusizeView
                 virtusizeView.setupProductCheckResponseData(productCheck)
                 if (virtusizeView is VirtusizeInPageView) {
@@ -206,7 +207,6 @@ class Virtusize(
                 messageHandler.onEvent(virtusizeView, VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()))
                 productCheck.data?.apply {
                     if (validProduct) {
-                        productCheckData = productCheck
                         if (fetchMetaData) {
                             if (virtusizeView.virtusizeParams?.virtusizeProduct?.imageUrl != null) {
                                 // If image URL is valid, send image URL to server
