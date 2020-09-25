@@ -82,6 +82,84 @@ internal object ProductFixtures {
             }
         """.trimIndent()
 
+    private val PRODUCT_TYPE_ID_EIGHT_JSON_OBJECT_STRING =
+        """
+            {
+                "id": 8,
+                "name": "jacket",
+                "optionalMeasurements": [
+                  "shoulder",
+                  "waist",
+                  "hem",
+                  "bicep"
+                ],
+                "priority": [
+                  "bust",
+                  "sleeve"
+                ],
+                "requiredMeasurements": [
+                  "height",
+                  "bust",
+                  "sleeve"
+                ],
+                "supportsLengthComparison": true,
+                "weights": {
+                  "bust": 2,
+                  "height": 1,
+                  "sleeve": 1
+                },
+                "anchorPoint": "shoulders",
+                "compatibleWith": [
+                  8,
+                  14
+                ],
+                "defaultMeasurements": {
+                  "hem": 560,
+                  "bust": 540,
+                  "bicep": 180,
+                  "waist": 480,
+                  "height": 810,
+                  "sleeve": 900,
+                  "shoulder": 470
+                },
+                "displayMode": "portrait",
+                "isDraggable": false,
+                "isReserved": false,
+                "maxMeasurements": {
+                  "hem": 1300,
+                  "bust": 1300,
+                  "bicep": 450,
+                  "waist": 1300,
+                  "height": 1800,
+                  "sleeve": 1300,
+                  "shoulder": 1100
+                },
+                "minMeasurements": {
+                  "hem": 300,
+                  "bust": 300,
+                  "bicep": 70,
+                  "waist": 200,
+                  "height": 350,
+                  "sleeve": 200,
+                  "shoulder": 250
+                },
+                "sgiGenders": [
+                  "unisex",
+                  "male",
+                  "female"
+                ],
+                "sgiStyles": [
+                  "regular",
+                  "formal",
+                  "fashionable",
+                  "protective"
+                ],
+                "sgiTypes": [
+                  "regular"
+                ]
+            }
+        """.trimIndent()
+
     private val PRODUCT_TYPE_ID_EIGHTEEN_JSON_OBJECT_STRING =
         """
             {
@@ -162,6 +240,7 @@ internal object ProductFixtures {
         """
             [
                 $PRODUCT_TYPE_ID_ONE_JSON_OBJECT_STRING,
+                $PRODUCT_TYPE_ID_EIGHT_JSON_OBJECT_STRING,
                 $PRODUCT_TYPE_ID_EIGHTEEN_JSON_OBJECT_STRING
             ]
         """.trimIndent()
