@@ -5,18 +5,15 @@ import android.content.res.Configuration
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
+import com.virtusize.libsource.TestUtils
 import com.virtusize.libsource.R
 import com.virtusize.libsource.fixtures.TestFixtures
 import com.virtusize.libsource.data.local.VirtusizeLanguage
 import com.virtusize.libsource.data.remote.I18nLocalization
-import org.json.JSONObject
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import java.io.File
-import java.io.IOException
-import java.io.InputStream
 import java.util.*
 
 @RunWith(RobolectricTestRunner::class)
@@ -27,7 +24,8 @@ class I18nLocalizationJsonParserTest {
 
     @Test
     fun parseI18N_englishLocalization_shouldReturnExpectedObject() {
-        val actualI18nLocalization = I18nLocalizationJsonParser(context, VirtusizeLanguage.EN).parse(readFileFromAssets("/i18n_en.json"))
+        val actualI18nLocalization = I18nLocalizationJsonParser(context, VirtusizeLanguage.EN).parse(
+            TestUtils.readFileFromAssets("/i18n_en.json"))
 
         val expectedI18nLocalization = I18nLocalization(
             context.getString(R.string.inpage_default_accessory_text),
@@ -52,7 +50,7 @@ class I18nLocalizationJsonParserTest {
 
     @Test
     fun parseI18NJP_japaneseLocalization_shouldReturnExpectedObject() {
-        val actualI18nLocalization = I18nLocalizationJsonParser(context, VirtusizeLanguage.JP).parse(readFileFromAssets("/i18n_jp.json"))
+        val actualI18nLocalization = I18nLocalizationJsonParser(context, VirtusizeLanguage.JP).parse(TestUtils.readFileFromAssets("/i18n_jp.json"))
 
         var conf: Configuration = context.resources.configuration
         conf = Configuration(conf)
@@ -68,7 +66,7 @@ class I18nLocalizationJsonParserTest {
 
     @Test
     fun parseI18NKO_koreanLocalization_shouldReturnExpectedObject() {
-        val actualI18nLocalization = I18nLocalizationJsonParser(context, VirtusizeLanguage.KR).parse(readFileFromAssets("/i18n_ko.json"))
+        val actualI18nLocalization = I18nLocalizationJsonParser(context, VirtusizeLanguage.KR).parse(TestUtils.readFileFromAssets("/i18n_ko.json"))
 
         var conf: Configuration = context.resources.configuration
         conf = Configuration(conf)
@@ -80,20 +78,5 @@ class I18nLocalizationJsonParserTest {
         )
 
         assertThat(actualI18nLocalization).isEqualTo(expectedI18nLocalization)
-    }
-
-    private fun readFileFromAssets(fileName: String): JSONObject {
-        return try {
-            val file = File(javaClass.getResource(fileName).path)
-            val `is`: InputStream = file.inputStream()
-            val size: Int = `is`.available()
-            val buffer = ByteArray(size)
-            `is`.read(buffer)
-            `is`.close()
-            JSONObject(String(buffer))
-        } catch (e: IOException) {
-            TestFixtures.EMPTY_JSON_DATA
-            throw RuntimeException(e)
-        }
     }
 }

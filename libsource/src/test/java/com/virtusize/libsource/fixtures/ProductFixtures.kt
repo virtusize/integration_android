@@ -1,5 +1,6 @@
 package com.virtusize.libsource.fixtures
 
+import com.virtusize.libsource.data.parsers.ProductTypeJsonParser
 import com.virtusize.libsource.data.remote.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -246,6 +247,16 @@ internal object ProductFixtures {
         """.trimIndent()
     )
 
+    fun productTypes() = run {
+        val productTypes: MutableList<ProductType> = mutableListOf()
+        for (i in 0 until PRODUCT_TYPE_JSON_ARRAY.length()) {
+            ProductTypeJsonParser().parse(PRODUCT_TYPE_JSON_ARRAY[i] as JSONObject)?.let {
+                productTypes.add(it)
+            }
+        }
+        productTypes
+    }
+
     fun storeProduct(
         productType: Int = 8,
         sizeList: List<ProductSize> = mutableListOf(
@@ -432,7 +443,7 @@ internal object ProductFixtures {
         """.trimIndent()
     )
 
-    val USER_PRODUCT_ONE_JSON_STRING =
+    private val USER_PRODUCT_ONE_JSON_STRING =
         """
             {
                 "id": 123456,
@@ -462,7 +473,7 @@ internal object ProductFixtures {
             }
       """.trimIndent()
 
-    val USER_PRODUCT_TWO_JSON_STRING =
+    private val USER_PRODUCT_TWO_JSON_STRING =
         """
             {
                 "id": 654321,

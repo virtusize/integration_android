@@ -15,11 +15,7 @@ class BodyProfileRecommendedSizeParamsTests {
 
     @Before
     fun setup() {
-        for (i in 0 until ProductFixtures.PRODUCT_TYPE_JSON_ARRAY.length()) {
-            ProductTypeJsonParser().parse(ProductFixtures.PRODUCT_TYPE_JSON_ARRAY[i] as JSONObject)?.let {
-                productTypes.add(it)
-            }
-        }
+        productTypes = ProductFixtures.productTypes()
     }
 
     @Test

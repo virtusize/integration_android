@@ -155,48 +155,52 @@ class Virtusize(
                 // Sets up Product check response data to VirtusizeProduct in VirtusizeView
                 virtusizeView.setupProductCheckResponseData(productCheck)
                 if (virtusizeView is VirtusizeInPageView) {
-                    CoroutineScope(Main).launch {
                         productCheck.data?.productDataId?.let { productId ->
-                            // TODO: test API endpoints
-                            val userProductResponse = getUserProductsApiResponse()
-                            Log.d(Constants.INPAGE_LOG_TAG, userProductResponse.toString())
-                            val userBodyProfileResponse = getUserBodyProfileResponse()
-                            Log.d(Constants.INPAGE_LOG_TAG, userBodyProfileResponse.toString())
+                            CoroutineScope(Main).launch {
+                                val userBodyProfileResponse = getUserBodyProfileResponse()
+                                Log.d(Constants.INPAGE_LOG_TAG, userBodyProfileResponse.toString())
+                                // TODO: test API endpoints
+                                val userProductResponse = getUserProductsResponse()
+                                Log.d(Constants.INPAGE_LOG_TAG, userProductResponse.toString())
 
-                            if(storeProduct == null) {
-                                val storeProductResponse = getStoreProductResponse(productId)
-                                if(storeProductResponse is VirtusizeApiResponse.Success) {
-                                    storeProduct = storeProductResponse.data
-                                } else  {
-                                    (storeProductResponse as? VirtusizeApiResponse.Error)?.let {
+                                if (storeProduct == null) {
+                                    val storeProductResponse = getStoreProductResponse(productId)
+                                    if (storeProductResponse is VirtusizeApiResponse.Success) {
+                                        storeProduct = storeProductResponse.data
+                                    } else {
+                                        (storeProductResponse as? VirtusizeApiResponse.Error)?.let {
+                                            Log.e(Constants.INPAGE_LOG_TAG, it.error.message)
+                                        }
+                                        virtusizeView.showErrorScreen()
+                                        return@launch
+                                    }
+                                }
+                                val i18nResponse = getI18nResponse()
+                                if (i18nResponse is VirtusizeApiResponse.Success && i18nResponse.data != null) {
+                                    val trimType = if (virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
+                                    virtusizeView.setupRecommendationText(
+                                        storeProduct!!.getRecommendationText(
+                                            i18nResponse.data
+                                        ).trimI18nText(trimType)
+                                    )
+                                    if (virtusizeView is VirtusizeInPageStandard) {
+                                        virtusizeView.setupProductImage(
+                                            params.virtusizeProduct?.imageUrl,
+                                            storeProduct!!.cloudinaryPublicId,
+                                            storeProduct!!.productType,
+                                            storeProduct!!.storeProductMeta?.additionalInfo?.style
+                                        )
+                                    }
+                                } else {
+                                    (i18nResponse as? VirtusizeApiResponse.Error)?.let {
                                         Log.e(Constants.INPAGE_LOG_TAG, it.error.message)
                                     }
                                     virtusizeView.showErrorScreen()
-                                    return@launch
                                 }
-                            }
-                            val i18nResponse = getI18nResponse()
-                            if (i18nResponse is VirtusizeApiResponse.Success && i18nResponse.data != null) {
-                                val trimType = if (virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
-                                virtusizeView.setupRecommendationText(storeProduct!!.getRecommendationText(i18nResponse.data).trimI18nText(trimType))
-                                if (virtusizeView is VirtusizeInPageStandard) {
-                                    virtusizeView.setupProductImage(
-                                        params.virtusizeProduct?.imageUrl,
-                                        storeProduct!!.cloudinaryPublicId,
-                                        storeProduct!!.productType,
-                                        storeProduct!!.storeProductMeta?.additionalInfo?.style
-                                    )
-                                }
-                            } else {
-                                (i18nResponse as? VirtusizeApiResponse.Error)?.let {
-                                    Log.e(Constants.INPAGE_LOG_TAG, it.error.message)
-                                }
-                                virtusizeView.showErrorScreen()
                             }
                         } ?: run {
                             virtusizeView.showErrorScreen()
                         }
-                    }
                 }
                 // Send API Event UserSawProduct
                 sendEventToApi(
@@ -477,7 +481,7 @@ class Virtusize(
      * Gets the API response for retrieving a list of user products
      * @return the [VirtusizeApiResponse] with the list of [Product]
      */
-    internal suspend fun getUserProductsApiResponse(): VirtusizeApiResponse<List<Product>?> = withContext(IO) {
+    internal suspend fun getUserProductsResponse(): VirtusizeApiResponse<List<Product>?> = withContext(IO) {
         val apiRequest = VirtusizeApi.getUserProducts()
         return@withContext VirtusizeApiTask()
             .setJsonParser(UserProductJsonParser())
