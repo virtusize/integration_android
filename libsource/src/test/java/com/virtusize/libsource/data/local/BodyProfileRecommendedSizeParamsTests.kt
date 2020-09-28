@@ -76,7 +76,7 @@ class BodyProfileRecommendedSizeParamsTests {
                     "sizes": {},
                     "gender": null,
                     "brand": "",
-                    "model_info": "{}"
+                    "model_info": {}
                 }
             """.trimIndent().replace("\\s+|[\\n]+".toRegex(), "")
         )

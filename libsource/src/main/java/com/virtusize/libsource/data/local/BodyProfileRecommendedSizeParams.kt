@@ -46,10 +46,10 @@ internal data class BodyProfileRecommendedSizeParams constructor(
                 mapOf(PARAM_FIT to (storeProduct.storeProductMeta?.additionalInfo?.fit ?: "regular"))
             )
             .plus(
-                mapOf(PARAM_SIZES to (sizeHashMap ?: "{}"))
+                mapOf(PARAM_SIZES to (sizeHashMap ?: mutableMapOf()))
             )
             .plus(
-                mapOf(PARAM_MODEL_INFO to (storeProduct.storeProductMeta?.additionalInfo?.modelInfo ?: "{}"))
+                mapOf(PARAM_MODEL_INFO to (storeProduct.storeProductMeta?.additionalInfo?.modelInfo ?: mutableMapOf()))
             )
             .plus(
                 mapOf(PARAM_GENDER to (gender ?: JSONObject.NULL))

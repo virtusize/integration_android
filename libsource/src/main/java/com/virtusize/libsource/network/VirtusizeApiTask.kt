@@ -135,7 +135,7 @@ internal class VirtusizeApiTask {
                         // Write the byte array of the request body to the output stream
                         if (apiRequest.params.isNotEmpty()) {
                             val outStream = DataOutputStream(outputStream)
-                            outStream.write(JSONObject(apiRequest.params as Map<String, Any>).toString().toByteArray())
+                            outStream.write(JSONObject(apiRequest.params).toString().toByteArray())
                             outStream.close()
                         }
                     }
