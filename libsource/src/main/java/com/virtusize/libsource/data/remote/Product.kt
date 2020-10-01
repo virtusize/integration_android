@@ -44,7 +44,7 @@ data class Product(
      *
      * Note: 18 is for bags, 19 is for clutches, 25 is for wallets and 26 is for props
      */
-    private fun isAccessory(): Boolean {
+    internal fun isAccessory(): Boolean {
         return productType == 18 || productType == 19 || productType == 25 || productType == 26
     }
 }

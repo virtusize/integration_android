@@ -155,48 +155,48 @@ class Virtusize(
                 // Sets up Product check response data to VirtusizeProduct in VirtusizeView
                 virtusizeView.setupProductCheckResponseData(productCheck)
                 if (virtusizeView is VirtusizeInPageView) {
-                    CoroutineScope(Main).launch {
                         productCheck.data?.productDataId?.let { productId ->
-                            // TODO: test API endpoints
-                            val userProductResponse = getUserProductsApiResponse()
-                            Log.d(Constants.INPAGE_LOG_TAG, userProductResponse.toString())
-                            val userBodyProfileResponse = getUserBodyProfileResponse()
-                            Log.d(Constants.INPAGE_LOG_TAG, userBodyProfileResponse.toString())
-
-                            if(storeProduct == null) {
-                                val storeProductResponse = getStoreProductResponse(productId)
-                                if(storeProductResponse is VirtusizeApiResponse.Success) {
-                                    storeProduct = storeProductResponse.data
-                                } else  {
-                                    (storeProductResponse as? VirtusizeApiResponse.Error)?.let {
+                            CoroutineScope(Main).launch {
+                                if (storeProduct == null) {
+                                    val storeProductResponse = getStoreProductResponse(productId)
+                                    if (storeProductResponse is VirtusizeApiResponse.Success) {
+                                        storeProduct = storeProductResponse.data
+                                    } else {
+                                        (storeProductResponse as? VirtusizeApiResponse.Error)?.let {
+                                            Log.e(Constants.INPAGE_LOG_TAG, it.error.message)
+                                        }
+                                        virtusizeView.showErrorScreen()
+                                        return@launch
+                                    }
+                                }
+                                val userBodyRecommendedSize = getUserBodyRecommendedSize()
+                                Log.d(Constants.INPAGE_LOG_TAG, userBodyRecommendedSize.toString())
+                                val i18nResponse = getI18nResponse()
+                                if (i18nResponse is VirtusizeApiResponse.Success && i18nResponse.data != null) {
+                                    val trimType = if (virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
+                                    virtusizeView.setupRecommendationText(
+                                        storeProduct!!.getRecommendationText(
+                                            i18nResponse.data
+                                        ).trimI18nText(trimType)
+                                    )
+                                    if (virtusizeView is VirtusizeInPageStandard) {
+                                        virtusizeView.setupProductImage(
+                                            params.virtusizeProduct?.imageUrl,
+                                            storeProduct!!.cloudinaryPublicId,
+                                            storeProduct!!.productType,
+                                            storeProduct!!.storeProductMeta?.additionalInfo?.style
+                                        )
+                                    }
+                                } else {
+                                    (i18nResponse as? VirtusizeApiResponse.Error)?.let {
                                         Log.e(Constants.INPAGE_LOG_TAG, it.error.message)
                                     }
                                     virtusizeView.showErrorScreen()
-                                    return@launch
                                 }
-                            }
-                            val i18nResponse = getI18nResponse()
-                            if (i18nResponse is VirtusizeApiResponse.Success && i18nResponse.data != null) {
-                                val trimType = if (virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
-                                virtusizeView.setupRecommendationText(storeProduct!!.getRecommendationText(i18nResponse.data).trimI18nText(trimType))
-                                if (virtusizeView is VirtusizeInPageStandard) {
-                                    virtusizeView.setupProductImage(
-                                        params.virtusizeProduct?.imageUrl,
-                                        storeProduct!!.cloudinaryPublicId,
-                                        storeProduct!!.productType,
-                                        storeProduct!!.storeProductMeta?.additionalInfo?.style
-                                    )
-                                }
-                            } else {
-                                (i18nResponse as? VirtusizeApiResponse.Error)?.let {
-                                    Log.e(Constants.INPAGE_LOG_TAG, it.error.message)
-                                }
-                                virtusizeView.showErrorScreen()
                             }
                         } ?: run {
                             virtusizeView.showErrorScreen()
                         }
-                    }
                 }
                 // Send API Event UserSawProduct
                 sendEventToApi(
@@ -242,6 +242,29 @@ class Virtusize(
         } else {
             productValidCheckListener.onValidProductCheckCompleted(productCheckData!!)
         }
+    }
+
+    /**
+     * Gets size recommendation for a store product that would best fit a user's body.
+     * @return recommended size name. If it's not available, return null
+     */
+    private suspend fun getUserBodyRecommendedSize(): String? {
+        if(storeProduct!!.isAccessory()) {
+            return null
+        }
+        val userBodyProfileResponse = getUserBodyProfileResponse()
+        val productTypesResponse = getProductTypesResponse()
+        if (productTypesResponse is VirtusizeApiResponse.Success && userBodyProfileResponse is VirtusizeApiResponse.Success) {
+            val bodyProfileRecommendedSizeResponse = getBodyProfileRecommendedSizeResponse(
+                productTypesResponse.data,
+                storeProduct!!,
+                userBodyProfileResponse.data
+            )
+            if (bodyProfileRecommendedSizeResponse is VirtusizeApiResponse.Success) {
+                return bodyProfileRecommendedSizeResponse.data?.sizeName
+            }
+        }
+        return null
     }
 
     /**
@@ -435,30 +458,14 @@ class Virtusize(
     }
 
     /**
-     * Retrieves the list of the product types
-     * @param onSuccess the optional success callback to pass the list of [ProductType]
-     * @param onError the optional error callback to get the [VirtusizeError] in the API task
+     * Gets the API response for retrieving the list of the product types
      */
-    internal fun getProductTypes(
-        onSuccess: ((List<ProductType>?) -> Unit)? = null,
-        onError: ((VirtusizeError) -> Unit)? = null
-    ) {
+    internal suspend fun getProductTypesResponse(): VirtusizeApiResponse<List<ProductType>?> = withContext(IO) {
         val apiRequest = VirtusizeApi.getProductTypes()
-        VirtusizeApiTask()
+        return@withContext VirtusizeApiTask()
             .setJsonParser(ProductTypeJsonParser())
-            .setSuccessHandler(object : SuccessResponseHandler {
-                override fun onSuccess(data: Any?) {
-                    onSuccess?.invoke(data as? List<ProductType>)
-                }
-            })
-            .setErrorHandler(object : ErrorResponseHandler {
-                override fun onError(error: VirtusizeError) {
-                    onError?.invoke(error)
-                }
-            })
             .setHttpURLConnection(httpURLConnection)
-            .setCoroutineDispatcher(coroutineDispatcher)
-            .executeAsync(apiRequest)
+            .execute(apiRequest) as VirtusizeApiResponse<List<ProductType>?>
     }
 
     /**
@@ -477,7 +484,7 @@ class Virtusize(
      * Gets the API response for retrieving a list of user products
      * @return the [VirtusizeApiResponse] with the list of [Product]
      */
-    internal suspend fun getUserProductsApiResponse(): VirtusizeApiResponse<List<Product>?> = withContext(IO) {
+    internal suspend fun getUserProductsResponse(): VirtusizeApiResponse<List<Product>?> = withContext(IO) {
         val apiRequest = VirtusizeApi.getUserProducts()
         return@withContext VirtusizeApiTask()
             .setJsonParser(UserProductJsonParser())
@@ -489,12 +496,23 @@ class Virtusize(
      * Gets the API response for retrieving the current user body profile such as age, height, weight and body measurements
      * @return the [VirtusizeApiResponse] with the data class [UserBodyProfile]
      */
-    internal suspend fun getUserBodyProfileResponse(): VirtusizeApiResponse<UserBodyProfile?>? = withContext(IO) {
+    internal suspend fun getUserBodyProfileResponse(): VirtusizeApiResponse<UserBodyProfile?> = withContext(IO) {
         val apiRequest = VirtusizeApi.getUserBodyProfile()
         VirtusizeApiTask()
             .setJsonParser(UserBodyProfileJsonParser())
             .setHttpURLConnection(httpURLConnection)
-            .execute(apiRequest) as? VirtusizeApiResponse<UserBodyProfile?>
+            .execute(apiRequest) as VirtusizeApiResponse<UserBodyProfile?>
+    }
+
+    internal suspend fun getBodyProfileRecommendedSizeResponse(productTypes: List<ProductType>?, storeProduct: Product, userBodyProfile: UserBodyProfile?): VirtusizeApiResponse<BodyProfileRecommendedSize?> = withContext(IO) {
+        if(productTypes == null || userBodyProfile == null) {
+            return@withContext VirtusizeApiResponse.Success(null)
+        }
+        val apiRequest = VirtusizeApi.getSize(productTypes, storeProduct, userBodyProfile)
+        VirtusizeApiTask()
+            .setJsonParser(BodyProfileRecommendedSizeJsonParser())
+            .setHttpURLConnection(httpURLConnection)
+            .execute(apiRequest) as VirtusizeApiResponse<BodyProfileRecommendedSize?>
     }
 
     /**

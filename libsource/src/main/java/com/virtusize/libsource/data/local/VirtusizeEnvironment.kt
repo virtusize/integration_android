@@ -13,10 +13,10 @@ enum class VirtusizeEnvironment {
 }
 
 /**
- * Gets the API URL corresponding to the Virtusize Environment
- * @return A String value of the API URL
+ * Gets the default API URL corresponding to the Virtusize Environment
+ * @return A String value of the default API URL
  */
-fun VirtusizeEnvironment.apiUrl(): String {
+fun VirtusizeEnvironment.defaultApiUrl(): String {
     return when(this) {
         STAGING -> "https://staging.virtusize.com"
         GLOBAL -> "https://api.virtusize.com"
@@ -26,10 +26,10 @@ fun VirtusizeEnvironment.apiUrl(): String {
 }
 
 /**
- * Gets the URL for the API endpoint Product Data Check corresponding to the Virtusize Environment
- * @return A String value of the URL for the API endpoint Product Data Check
+ * Gets the services API URL corresponding to the Virtusize Environment
+ * @return A String value of the services API URL
  */
-fun VirtusizeEnvironment.productDataCheckUrl(): String {
+fun VirtusizeEnvironment.servicesApiUrl(): String {
     return when(this) {
         STAGING -> "https://services.virtusize.com/stg"
         else -> "https://services.virtusize.com/"

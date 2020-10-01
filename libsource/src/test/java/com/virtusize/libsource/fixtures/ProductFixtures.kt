@@ -1,5 +1,6 @@
 package com.virtusize.libsource.fixtures
 
+import com.virtusize.libsource.data.parsers.ProductTypeJsonParser
 import com.virtusize.libsource.data.remote.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -78,6 +79,84 @@ internal object ProductFixtures {
                   "medium",
                   "long",
                   "short"
+                ]
+            }
+        """.trimIndent()
+
+    private val PRODUCT_TYPE_ID_EIGHT_JSON_OBJECT_STRING =
+        """
+            {
+                "id": 8,
+                "name": "jacket",
+                "optionalMeasurements": [
+                  "shoulder",
+                  "waist",
+                  "hem",
+                  "bicep"
+                ],
+                "priority": [
+                  "bust",
+                  "sleeve"
+                ],
+                "requiredMeasurements": [
+                  "height",
+                  "bust",
+                  "sleeve"
+                ],
+                "supportsLengthComparison": true,
+                "weights": {
+                  "bust": 2,
+                  "height": 1,
+                  "sleeve": 1
+                },
+                "anchorPoint": "shoulders",
+                "compatibleWith": [
+                  8,
+                  14
+                ],
+                "defaultMeasurements": {
+                  "hem": 560,
+                  "bust": 540,
+                  "bicep": 180,
+                  "waist": 480,
+                  "height": 810,
+                  "sleeve": 900,
+                  "shoulder": 470
+                },
+                "displayMode": "portrait",
+                "isDraggable": false,
+                "isReserved": false,
+                "maxMeasurements": {
+                  "hem": 1300,
+                  "bust": 1300,
+                  "bicep": 450,
+                  "waist": 1300,
+                  "height": 1800,
+                  "sleeve": 1300,
+                  "shoulder": 1100
+                },
+                "minMeasurements": {
+                  "hem": 300,
+                  "bust": 300,
+                  "bicep": 70,
+                  "waist": 200,
+                  "height": 350,
+                  "sleeve": 200,
+                  "shoulder": 250
+                },
+                "sgiGenders": [
+                  "unisex",
+                  "male",
+                  "female"
+                ],
+                "sgiStyles": [
+                  "regular",
+                  "formal",
+                  "fashionable",
+                  "protective"
+                ],
+                "sgiTypes": [
+                  "regular"
                 ]
             }
         """.trimIndent()
@@ -162,14 +241,25 @@ internal object ProductFixtures {
         """
             [
                 $PRODUCT_TYPE_ID_ONE_JSON_OBJECT_STRING,
+                $PRODUCT_TYPE_ID_EIGHT_JSON_OBJECT_STRING,
                 $PRODUCT_TYPE_ID_EIGHTEEN_JSON_OBJECT_STRING
             ]
         """.trimIndent()
     )
 
+    fun productTypes() = run {
+        val productTypes: MutableList<ProductType> = mutableListOf()
+        for (i in 0 until PRODUCT_TYPE_JSON_ARRAY.length()) {
+            ProductTypeJsonParser().parse(PRODUCT_TYPE_JSON_ARRAY[i] as JSONObject)?.let {
+                productTypes.add(it)
+            }
+        }
+        productTypes
+    }
+
     fun storeProduct(
         productType: Int = 8,
-        sizes: List<ProductSize> = mutableListOf(
+        sizeList: List<ProductSize> = mutableListOf(
             ProductSize(
                 "38",
                 mutableSetOf(
@@ -186,11 +276,20 @@ internal object ProductFixtures {
                     Measurement("sleeve", 825)
                 )
             )
-        )
-    ) : Product {
+        ),
+        brand: String = "Virtusize",
+        modelInfo: Map<String, Any>? = mutableMapOf(
+            "hip" to 85,
+            "size" to "38",
+            "waist" to 56,
+            "bust" to 78,
+            "height" to 165
+        ),
+        gender: String? = "female"
+    ): Product {
         return Product(
             7110384,
-            sizes,
+            sizeList,
             "694",
             productType,
             "Test Product Name",
@@ -200,10 +299,16 @@ internal object ProductFixtures {
             StoreProductMeta(
                 1,
                 StoreProductAdditionalInfo(
+                    brand,
+                    gender,
+                    sizeList.toMutableSet(),
+                    modelInfo,
                     "regular",
                     "fashionable",
                     BrandSizing("large", false)
-                )
+                ),
+                brand,
+                gender
             )
         )
     }
@@ -338,7 +443,7 @@ internal object ProductFixtures {
         """.trimIndent()
     )
 
-    val USER_PRODUCT_ONE_JSON_STRING =
+    private val USER_PRODUCT_ONE_JSON_STRING =
         """
             {
                 "id": 123456,
@@ -368,7 +473,7 @@ internal object ProductFixtures {
             }
       """.trimIndent()
 
-    val USER_PRODUCT_TWO_JSON_STRING =
+    private val USER_PRODUCT_TWO_JSON_STRING =
         """
             {
                 "id": 654321,

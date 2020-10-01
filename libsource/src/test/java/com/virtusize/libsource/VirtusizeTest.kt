@@ -289,7 +289,35 @@ class VirtusizeTest {
         assertThat(actualProduct?.name).isEqualTo(TestFixtures.PRODUCT_NAME)
         assertThat(actualProduct?.storeId).isEqualTo(TestFixtures.STORE_ID)
         assertThat(actualProduct?.storeProductMeta?.id).isEqualTo(1)
+        assertThat(actualProduct?.storeProductMeta?.id).isEqualTo(1)
         val expectedAdditionalInfo = StoreProductAdditionalInfo(
+            "Virtusize",
+            "female",
+            mutableSetOf(
+                ProductSize(
+                    "38",
+                    mutableSetOf(
+                        Measurement("height", 760),
+                        Measurement("bust", 660),
+                        Measurement("sleeve", 845)
+                    )
+                ),
+                ProductSize(
+                    "36",
+                    mutableSetOf(
+                        Measurement("height", 750),
+                        Measurement("bust", 645),
+                        Measurement("sleeve", 825)
+                    )
+                )
+            ),
+            mutableMapOf(
+                "hip" to 85,
+                "size" to "38",
+                "waist" to 56,
+                "bust" to 78,
+                "height" to 165
+            ),
             "regular",
             "fashionable",
             BrandSizing("large", false)
@@ -298,21 +326,18 @@ class VirtusizeTest {
     }
 
     @Test
-    fun testGetProductTypes_whenSuccessful_onSuccessShouldReturnExpectedProductTypeList() = runBlocking {
-        var actualProductTypeList: List<ProductType>? = null
-
+    fun testGetProductTypesResponse_whenSuccessful_onSuccessShouldReturnExpectedProductTypeList() = runBlocking {
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
             mockURL,
             MockedResponse(200, ProductFixtures.PRODUCT_TYPE_JSON_ARRAY.toString().byteInputStream())
         ))
 
-        virtusize.getProductTypes(
-            onSuccess = {
-                actualProductTypeList = it
-            }
-        )
 
-        assertThat(actualProductTypeList?.size).isEqualTo(2)
+        val productTypesResponse = virtusize.getProductTypesResponse()
+        assertThat(productTypesResponse is VirtusizeApiResponse.Success<List<ProductType>?>)
+        val actualProductTypeList = (productTypesResponse as VirtusizeApiResponse.Success<List<ProductType>?>).data
+
+        assertThat(actualProductTypeList?.size).isEqualTo(3)
         assertThat(actualProductTypeList?.get(0)).isEqualTo(
             ProductType(
                 1,
@@ -324,7 +349,7 @@ class VirtusizeTest {
                 )
             )
         )
-        assertThat(actualProductTypeList?.get(1)).isEqualTo(
+        assertThat(actualProductTypeList?.get(2)).isEqualTo(
             ProductType(
                 18,
                 "bag",
@@ -338,13 +363,13 @@ class VirtusizeTest {
     }
 
     @Test
-    fun testGetUserProducts_whenSuccessful_shouldReturnExpectedUserProduct() = runBlocking {
+    fun testGetUserProductsResponse_userHasItemsInTheWardrobe_shouldReturnExpectedUserProducts() = runBlocking {
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
             mockURL,
             MockedResponse(200, ProductFixtures.USER_PRODUCT_JSON_ARRAY.toString().byteInputStream())
         ))
 
-        val actualApiResponse = virtusize.getUserProductsApiResponse()
+        val actualApiResponse = virtusize.getUserProductsResponse()
         assertThat(actualApiResponse is VirtusizeApiResponse.Success<List<Product>?>)
         val actualUserProductList = (actualApiResponse as? VirtusizeApiResponse.Success<List<Product>?>)?.data
         assertThat(actualUserProductList?.size).isEqualTo(2)
@@ -366,26 +391,26 @@ class VirtusizeTest {
     }
 
     @Test
-    fun testGetUserProducts_emptyWardrobe_shouldReturnEmptyUserProductList() = runBlocking {
+    fun testGetUserProductsResponse_userHasEmptyWardrobe_shouldReturnEmptyUserProductList() = runBlocking {
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
             mockURL,
             MockedResponse(200, ProductFixtures.EMPTY_PRODUCT_JSON_ARRAY.toString().byteInputStream())
         ))
 
-        val actualApiResponse = virtusize.getUserProductsApiResponse()
+        val actualApiResponse = virtusize.getUserProductsResponse()
         assertThat(actualApiResponse is VirtusizeApiResponse.Success<List<Product>?>)
         val actualUserProductList = (actualApiResponse as? VirtusizeApiResponse.Success<List<Product>?>)?.data
         assertThat(actualUserProductList?.size).isEqualTo(0)
     }
 
     @Test
-    fun testGetUserProducts_wardrobeNotExisted_shouldReturn404Error() = runBlocking {
+    fun testGetUserProductsResponse_wardrobeDoesNotExist_shouldReturn404Error() = runBlocking {
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
             mockURL,
             MockedResponse(404, ProductFixtures.WARDROBE_NOT_FOUND_ERROR_JSONObject.toString().byteInputStream())
         ))
 
-        val actualApiResponse = virtusize.getUserProductsApiResponse()
+        val actualApiResponse = virtusize.getUserProductsResponse()
         assertThat(actualApiResponse is VirtusizeApiResponse.Error)
         val actualError = (actualApiResponse as? VirtusizeApiResponse.Error)?.error
 
@@ -395,7 +420,7 @@ class VirtusizeTest {
     }
 
     @Test
-    fun testGetUserBodyProfile_getsValidUserBodyProfile_shouldHaveExpectedUserBodyProfile() = runBlocking {
+    fun testGetUserBodyProfileResponse_userHasValidBodyProfile_shouldReturnExpectedBodyProfile() = runBlocking {
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
             mockURL,
             MockedResponse(200, TestFixtures.USER_BODY_JSONObject.toString().byteInputStream())
@@ -438,7 +463,7 @@ class VirtusizeTest {
     }
 
     @Test
-    fun testGetUserBodyProfile_getsEmptyUserBodyProfile_shouldExpectNull() = runBlocking {
+    fun testGetUserBodyProfileResponse_userHasEmptyBodyProfile_shouldExpectNull() = runBlocking {
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
             mockURL,
             MockedResponse(200, TestFixtures.NULL_USER_BODY_PROFILE.toString().byteInputStream())
@@ -452,7 +477,7 @@ class VirtusizeTest {
     }
 
     @Test
-    fun testGetUserBodyProfile_wardrobeNotExisted_shouldReturn404Error() = runBlocking {
+    fun testGetUserBodyProfileResponse_wardrobeDoesNotExist_shouldReturn404Error() = runBlocking {
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
             mockURL,
             MockedResponse(404, ProductFixtures.WARDROBE_NOT_FOUND_ERROR_JSONObject.toString().byteInputStream())
@@ -464,6 +489,59 @@ class VirtusizeTest {
 
         assertThat(actualError?.code).isEqualTo(HttpURLConnection.HTTP_NOT_FOUND)
         assertThat(actualError?.message).contains("{\"detail\":\"No wardrobe found\"}")
+        assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.NetworkError)
+    }
+
+    @Test
+    fun testI18nResponse_whenSuccessful_shouldReturnExpectedI18Localization() = runBlocking {
+        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+            mockURL,
+            MockedResponse(200, TestUtils.readFileFromAssets("/i18n_en.json").toString().byteInputStream())
+        ))
+
+        val actualApiResponse = virtusize.getI18nResponse()
+        assertThat(actualApiResponse is VirtusizeApiResponse.Success<I18nLocalization?>)
+        val actualI18nLocalization = (actualApiResponse as? VirtusizeApiResponse.Success<I18nLocalization?>)?.data
+
+        assertThat(actualI18nLocalization?.defaultNoDataText).isEqualTo("Find the right size before purchasing")
+        assertThat(actualI18nLocalization?.defaultAccessoryText).isEqualTo("See how everyday items fit")
+    }
+
+    @Test
+    fun testBodyRecommendedSize_whenSuccessful_shouldReturnExpectedBodyProfileRecommendedSize() = runBlocking {
+        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+            mockURL,
+            MockedResponse(200, "{\"sizeName\": \"29/33\"}".byteInputStream())
+        ))
+
+        val actualApiResponse = virtusize.getBodyProfileRecommendedSizeResponse(
+            ProductFixtures.productTypes(),
+            ProductFixtures.storeProduct(),
+            TestFixtures.userBodyProfile
+        )
+        assertThat(actualApiResponse is VirtusizeApiResponse.Success<BodyProfileRecommendedSize?>)
+        val actualBodyProfileRecommendedSize = (actualApiResponse as? VirtusizeApiResponse.Success<BodyProfileRecommendedSize?>)?.data
+
+        assertThat(actualBodyProfileRecommendedSize?.sizeName).isEqualTo("29/33")
+    }
+
+    @Test
+    fun testBodyRecommendedSize_whenStoreProductIsAnAccessory_shouldReturn400Error() = runBlocking {
+        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+            URL("https://services.virtusize.com/stg/ds-functions/size-rec/get-size"),
+            MockedResponse(400, "{\"Code\": \"BadRequestError\", \"Message\": \"BadRequestError: \"}".byteInputStream())
+        ))
+
+        val actualApiResponse = virtusize.getBodyProfileRecommendedSizeResponse(
+            ProductFixtures.productTypes(),
+            ProductFixtures.storeProduct(18),
+            TestFixtures.userBodyProfile
+        )
+        assertThat(actualApiResponse is VirtusizeApiResponse.Error)
+        val actualError = (actualApiResponse as? VirtusizeApiResponse.Error)?.error
+
+        assertThat(actualError?.code).isEqualTo(HttpURLConnection.HTTP_BAD_REQUEST)
+        assertThat(actualError?.message).contains("/stg/ds-functions/size-rec/get-size - {\"Code\": \"BadRequestError\", \"Message\": \"BadRequestError: \"}")
         assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.NetworkError)
     }
 
