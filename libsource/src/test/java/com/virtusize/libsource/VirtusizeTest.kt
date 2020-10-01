@@ -346,7 +346,8 @@ class VirtusizeTest {
                     Weight("bust", 1f),
                     Weight("waist", 1f),
                     Weight("height", 0.25f)
-                )
+                ),
+                mutableListOf(1, 16)
             )
         )
         assertThat(actualProductTypeList?.get(2)).isEqualTo(
@@ -357,7 +358,8 @@ class VirtusizeTest {
                     Weight("depth", 1f),
                     Weight("width", 2f),
                     Weight("height", 1f)
-                )
+                ),
+                mutableListOf(18, 19, 25, 26)
             )
         )
     }
