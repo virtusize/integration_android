@@ -6,9 +6,10 @@ import android.content.res.Configuration
 import android.util.Log
 import android.view.WindowManager
 import com.virtusize.libsource.data.local.*
-import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser.TrimType
 import com.virtusize.libsource.data.parsers.*
+import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser.TrimType
 import com.virtusize.libsource.data.remote.*
+import com.virtusize.libsource.network.*
 import com.virtusize.libsource.network.ApiRequest
 import com.virtusize.libsource.network.VirtusizeApi
 import com.virtusize.libsource.network.VirtusizeApiTask
@@ -17,8 +18,12 @@ import com.virtusize.libsource.ui.VirtusizeInPageView
 import com.virtusize.libsource.ui.VirtusizeView
 import com.virtusize.libsource.util.Constants
 import com.virtusize.libsource.util.trimI18nText
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.util.*
 
@@ -75,7 +80,14 @@ class Virtusize(
     // The dispatcher that determines what thread the corresponding coroutine uses for its execution
     private var coroutineDispatcher: CoroutineDispatcher = IO
 
+    // This variable holds the product information from the client and the product data check API
     private var virtusizeProduct: VirtusizeProduct? = null
+
+    // This variable holds the product data check data from the Virtusize API
+    private var productCheckData: ProductCheck? = null
+
+    // This variable holds the store product data from the Virtusize API
+    private var storeProduct: Product? = null
 
     init {
         // Virtusize API for building API requests
@@ -139,44 +151,51 @@ class Virtusize(
              * when Product check Request is performed on server on Virtusize server
              */
             override fun onValidProductCheckCompleted(productCheck: ProductCheck) {
+                productCheckData = productCheck
                 // Sets up Product check response data to VirtusizeProduct in VirtusizeView
                 virtusizeView.setupProductCheckResponseData(productCheck)
                 if (virtusizeView is VirtusizeInPageView) {
-                    productCheck.data?.productDataId?.let { productId ->
-                        // TODO: test API endpoints
-                        getUserProducts({
-                            Log.d("user-products", it.toString())
-                        }, {
-                            Log.e(Constants.INPAGE_LOG_TAG, it.message)
-                        })
-                        getUserBodyProfile({
-                            Log.d("user-body-measurements", it.toString())
-                        }, {
-                            Log.e(Constants.INPAGE_LOG_TAG, it.message)
-                        })
+                    CoroutineScope(Main).launch {
+                        productCheck.data?.productDataId?.let { productId ->
+                            // TODO: test API endpoints
+                            val userProductResponse = getUserProductsApiResponse()
+                            Log.d(Constants.INPAGE_LOG_TAG, userProductResponse.toString())
+                            val userBodyProfileResponse = getUserBodyProfileResponse()
+                            Log.d(Constants.INPAGE_LOG_TAG, userBodyProfileResponse.toString())
 
-                        val trimType = if(virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
-                        getI18nText({ i18nLocalization ->
-                            getStoreProductInfo(productId, onSuccess = { storeProduct ->
-                                virtusizeView.setupRecommendationText(storeProduct.getRecommendationText(i18nLocalization).trimI18nText(trimType))
-                                if(virtusizeView is VirtusizeInPageStandard) {
+                            if(storeProduct == null) {
+                                val storeProductResponse = getStoreProductResponse(productId)
+                                if(storeProductResponse is VirtusizeApiResponse.Success) {
+                                    storeProduct = storeProductResponse.data
+                                } else  {
+                                    (storeProductResponse as? VirtusizeApiResponse.Error)?.let {
+                                        Log.e(Constants.INPAGE_LOG_TAG, it.error.message)
+                                    }
+                                    virtusizeView.showErrorScreen()
+                                    return@launch
+                                }
+                            }
+                            val i18nResponse = getI18nResponse()
+                            if (i18nResponse is VirtusizeApiResponse.Success && i18nResponse.data != null) {
+                                val trimType = if (virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
+                                virtusizeView.setupRecommendationText(storeProduct!!.getRecommendationText(i18nResponse.data).trimI18nText(trimType))
+                                if (virtusizeView is VirtusizeInPageStandard) {
                                     virtusizeView.setupProductImage(
                                         params.virtusizeProduct?.imageUrl,
-                                        storeProduct.cloudinaryPublicId,
-                                        storeProduct.productType,
-                                        storeProduct.storeProductMeta?.additionalInfo?.style
+                                        storeProduct!!.cloudinaryPublicId,
+                                        storeProduct!!.productType,
+                                        storeProduct!!.storeProductMeta?.additionalInfo?.style
                                     )
                                 }
-                            }, onError = {
-                                Log.e(Constants.INPAGE_LOG_TAG, it.message)
+                            } else {
+                                (i18nResponse as? VirtusizeApiResponse.Error)?.let {
+                                    Log.e(Constants.INPAGE_LOG_TAG, it.error.message)
+                                }
                                 virtusizeView.showErrorScreen()
-                            })
-                        }, {
-                            Log.e(Constants.INPAGE_LOG_TAG, it.message)
+                            }
+                        } ?: run {
                             virtusizeView.showErrorScreen()
-                        })
-                    } ?: run {
-                        virtusizeView.showErrorScreen()
+                        }
                     }
                 }
                 // Send API Event UserSawProduct
@@ -218,7 +237,11 @@ class Virtusize(
             }
         }
 
-        productDataCheck(productValidCheckListener, errorHandler, apiRequest)
+        if(productCheckData == null) {
+            productDataCheck(productValidCheckListener, errorHandler, apiRequest)
+        } else {
+            productValidCheckListener.onValidProductCheckCompleted(productCheckData!!)
+        }
     }
 
     /**
@@ -238,7 +261,7 @@ class Virtusize(
             .setErrorHandler(errorHandler)
             .setHttpURLConnection(httpURLConnection)
             .setCoroutineDispatcher(coroutineDispatcher)
-            .execute(apiRequest)
+            .executeAsync(apiRequest)
     }
 
     /**
@@ -259,7 +282,7 @@ class Virtusize(
             .setErrorHandler(errorHandler)
             .setHttpURLConnection(httpURLConnection)
             .setCoroutineDispatcher(coroutineDispatcher)
-            .execute(apiRequest)
+            .executeAsync(apiRequest)
     }
 
     /**
@@ -294,7 +317,7 @@ class Virtusize(
             .setErrorHandler(errorHandler)
             .setHttpURLConnection(httpURLConnection)
             .setCoroutineDispatcher(coroutineDispatcher)
-            .execute(apiRequest)
+            .executeAsync(apiRequest)
     }
 
     /**
@@ -312,7 +335,7 @@ class Virtusize(
             .setErrorHandler(onError)
             .setHttpURLConnection(httpURLConnection)
             .setCoroutineDispatcher(coroutineDispatcher)
-            .execute(apiRequest)
+            .executeAsync(apiRequest)
     }
 
     /**
@@ -349,7 +372,7 @@ class Virtusize(
                     })
                     .setHttpURLConnection(httpURLConnection)
                     .setCoroutineDispatcher(coroutineDispatcher)
-                    .execute(apiRequest)
+                    .executeAsync(apiRequest)
             }
         }, object : ErrorResponseHandler{
             override fun onError(error: VirtusizeError) {
@@ -386,7 +409,7 @@ class Virtusize(
                     .setErrorHandler(onError)
                     .setHttpURLConnection(httpURLConnection)
                     .setCoroutineDispatcher(coroutineDispatcher)
-                    .execute(apiRequest)
+                    .executeAsync(apiRequest)
             }
         }, object : ErrorResponseHandler{
             override fun onError(error: VirtusizeError) {
@@ -396,37 +419,19 @@ class Virtusize(
     }
 
     /**
-     * Retrieves the store product info
+     * Gets the API response for retrieving the store product info
      * @param productId the ID of the store product
-     * @param onSuccess the optional success callback to pass the [Product]
-     * @param onError the optional error callback to get the [VirtusizeError] in the API task
+     * @return the [VirtusizeApiResponse] with the data class [StoreProduct]
      */
-    internal fun getStoreProductInfo(
-        productId: Int,
-        onSuccess: ((Product) -> Unit)? = null,
-        onError: ((VirtusizeError) -> Unit)? = null
-    ) {
+    internal suspend fun getStoreProductResponse(productId: Int): VirtusizeApiResponse<Product?> = withContext(IO) {
         if(productId == 0) {
-            return
+            return@withContext VirtusizeApiResponse.Error(VirtusizeErrorType.NullProduct.virtusizeError())
         }
         val apiRequest = VirtusizeApi.getStoreProductInfo(productId.toString())
-        VirtusizeApiTask()
+        return@withContext VirtusizeApiTask()
             .setJsonParser(StoreProductJsonParser())
-            .setSuccessHandler(object : SuccessResponseHandler {
-                override fun onSuccess(data: Any?) {
-                    (data as? Product)?.let {
-                        onSuccess?.invoke(it)
-                    }
-                }
-            })
-            .setErrorHandler(object : ErrorResponseHandler {
-                override fun onError(error: VirtusizeError) {
-                    onError?.invoke(error)
-                }
-            })
             .setHttpURLConnection(httpURLConnection)
-            .setCoroutineDispatcher(coroutineDispatcher)
-            .execute(apiRequest)
+            .execute(apiRequest) as VirtusizeApiResponse<Product?>
     }
 
     /**
@@ -453,92 +458,43 @@ class Virtusize(
             })
             .setHttpURLConnection(httpURLConnection)
             .setCoroutineDispatcher(coroutineDispatcher)
-            .execute(apiRequest)
+            .executeAsync(apiRequest)
     }
 
     /**
-     * Gets the i18n localization texts
-     * @param onSuccess the optional success callback to pass the [I18nLocalization] from the response when [VirtusizeApiTask] is successful
-     * @param onError the optional error callback to get the [VirtusizeError] in the API task
+     * Gets the API response for fetching the i18n localization texts
+     * @return the [VirtusizeApiResponse] with the data class [I18nLocalization]
      */
-    internal fun getI18nText(
-        onSuccess: ((I18nLocalization) -> Unit)? = null,
-        onError: ((VirtusizeError) -> Unit)? = null
-    ) {
+    internal suspend fun getI18nResponse(): VirtusizeApiResponse<I18nLocalization?> = withContext(IO) {
         val apiRequest = VirtusizeApi.getI18n(params.language ?: (VirtusizeLanguage.values().find { it.value == Locale.getDefault().language } ?: VirtusizeLanguage.EN))
         VirtusizeApiTask()
             .setJsonParser(I18nLocalizationJsonParser(context, params.language))
-            .setSuccessHandler(object : SuccessResponseHandler {
-                override fun onSuccess(data: Any?) {
-                    (data as? I18nLocalization)?.let {
-                        onSuccess?.invoke(it)
-                    }
-                }
-            })
-            .setErrorHandler(object : ErrorResponseHandler {
-                override fun onError(error: VirtusizeError) {
-                    onError?.invoke(error)
-                }
-            })
             .setHttpURLConnection(httpURLConnection)
-            .setCoroutineDispatcher(coroutineDispatcher)
-            .execute(apiRequest)
+            .execute(apiRequest) as VirtusizeApiResponse<I18nLocalization?>
     }
 
     /**
-     * Retrieves a list of user products
-     * @param onSuccess the optional success callback to pass the list of [Product]
-     * @param onError the optional error callback to get the [VirtusizeError] in the API task
+     * Gets the API response for retrieving a list of user products
+     * @return the [VirtusizeApiResponse] with the list of [Product]
      */
-    internal fun getUserProducts(
-        onSuccess: ((List<Product>?) -> Unit)? = null,
-        onError: ((VirtusizeError) -> Unit)? = null
-    ) {
+    internal suspend fun getUserProductsApiResponse(): VirtusizeApiResponse<List<Product>?> = withContext(IO) {
         val apiRequest = VirtusizeApi.getUserProducts()
-        VirtusizeApiTask()
+        return@withContext VirtusizeApiTask()
             .setJsonParser(UserProductJsonParser())
-            .setSuccessHandler(object : SuccessResponseHandler {
-                override fun onSuccess(data: Any?) {
-                    onSuccess?.invoke(data as? List<Product>)
-                }
-            })
-            .setErrorHandler(object : ErrorResponseHandler {
-                override fun onError(error: VirtusizeError) {
-                    onError?.invoke(error)
-                }
-            })
             .setHttpURLConnection(httpURLConnection)
-            .setCoroutineDispatcher(coroutineDispatcher)
-            .execute(apiRequest)
+            .execute(apiRequest) as VirtusizeApiResponse<List<Product>?>
     }
 
     /**
-     * Retrieves the current user body profile such as age, height, weight and body measurements
-     * @param onSuccess the optional success callback to pass [UserBodyProfile]
-     * @param onError the optional error callback to get the [VirtusizeError] in the API task
+     * Gets the API response for retrieving the current user body profile such as age, height, weight and body measurements
+     * @return the [VirtusizeApiResponse] with the data class [UserBodyProfile]
      */
-    internal fun getUserBodyProfile(
-        onSuccess: ((UserBodyProfile) -> Unit)? = null,
-        onError: ((VirtusizeError) -> Unit)? = null
-    ) {
+    internal suspend fun getUserBodyProfileResponse(): VirtusizeApiResponse<UserBodyProfile?>? = withContext(IO) {
         val apiRequest = VirtusizeApi.getUserBodyProfile()
         VirtusizeApiTask()
             .setJsonParser(UserBodyProfileJsonParser())
-            .setSuccessHandler(object : SuccessResponseHandler {
-                override fun onSuccess(data: Any?) {
-                    (data as? UserBodyProfile)?.let {
-                        onSuccess?.invoke(it)
-                    }
-                }
-            })
-            .setErrorHandler(object : ErrorResponseHandler {
-                override fun onError(error: VirtusizeError) {
-                    onError?.invoke(error)
-                }
-            })
             .setHttpURLConnection(httpURLConnection)
-            .setCoroutineDispatcher(coroutineDispatcher)
-            .execute(apiRequest)
+            .execute(apiRequest) as? VirtusizeApiResponse<UserBodyProfile?>
     }
 
     /**

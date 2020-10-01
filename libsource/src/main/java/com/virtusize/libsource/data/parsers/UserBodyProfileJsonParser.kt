@@ -1,10 +1,7 @@
 package com.virtusize.libsource.data.parsers
 
-import android.util.Log
 import com.virtusize.libsource.data.remote.Measurement
 import com.virtusize.libsource.data.remote.UserBodyProfile
-import com.virtusize.libsource.network.VirtusizeEndpoint
-import com.virtusize.libsource.network.getPath
 import org.json.JSONObject
 
 class UserBodyProfileJsonParser: VirtusizeJsonParser<UserBodyProfile> {
