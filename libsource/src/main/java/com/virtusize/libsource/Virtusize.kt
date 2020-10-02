@@ -17,6 +17,7 @@ import com.virtusize.libsource.ui.VirtusizeInPageStandard
 import com.virtusize.libsource.ui.VirtusizeInPageView
 import com.virtusize.libsource.ui.VirtusizeView
 import com.virtusize.libsource.util.Constants
+import com.virtusize.libsource.util.VirtusizeUtils
 import com.virtusize.libsource.util.trimI18nText
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -99,6 +100,53 @@ class Virtusize(
     }
 
     /**
+     * Registers a message handler.
+     * The registered message handlers will receive Virtusize errors, events, and the close action for Fit Illustrator.
+     * @param messageHandler an instance of VirtusizeMessageHandler
+     * @see VirtusizeMessageHandler
+     */
+    fun registerMessageHandler(messageHandler: VirtusizeMessageHandler) {
+        messageHandlers.add(messageHandler)
+    }
+
+    /**
+     * Unregisters a message handler.
+     * If a message handler is not unregistered when the associated activity or fragment dies,
+     * then when the activity or fragment opens again,
+     * it will keep listening to the events along with newly registered message handlers.
+     * @param messageHandler an instance of {@link VirtusizeMessageHandler}
+     * @see VirtusizeMessageHandler
+     */
+    fun unregisterMessageHandler(messageHandler: VirtusizeMessageHandler) {
+        messageHandlers.remove(messageHandler)
+    }
+
+    /**
+     * Sets the HTTP URL connection
+     * @param urlConnection an instance of [HttpURLConnection]
+     */
+    internal fun setHTTPURLConnection(urlConnection: HttpURLConnection?) {
+        this.httpURLConnection = urlConnection
+    }
+
+    /**
+     * Sets the Coroutine dispatcher
+     * @param dispatcher an instance of [CoroutineDispatcher]
+     */
+    internal fun setCoroutineDispatcher(dispatcher: CoroutineDispatcher) {
+        this.coroutineDispatcher = dispatcher
+    }
+
+    /**
+     * Handles the null product error
+     * @throws VirtusizeErrorType.NullProduct error
+     */
+    private fun handleNullProductError() {
+        messageHandler.onError(null, VirtusizeErrorType.NullProduct.virtusizeError())
+        throwError(errorType = VirtusizeErrorType.NullProduct)
+    }
+
+    /**
      * Sets up the product for the product detail page
      *
      * @param virtusizeProduct VirtusizeProduct that is being set to the VirtusizeView
@@ -169,15 +217,17 @@ class Virtusize(
                                         return@launch
                                     }
                                 }
-                                val userBodyRecommendedSize = getUserBodyRecommendedSize()
+                                val userProductsResponse = getUserProductsResponse()
+                                val productTypes = getProductTypesResponse().successData
+                                val userProductComparisonRecommendedSize = VirtusizeUtils.findBestMatch(userProducts = userProductsResponse.successData, storeProduct!!, productTypes = productTypes)
+                                Log.d(Constants.INPAGE_LOG_TAG, userProductComparisonRecommendedSize.toString())
+                                val userBodyRecommendedSize = getUserBodyRecommendedSize(productTypes)
                                 Log.d(Constants.INPAGE_LOG_TAG, userBodyRecommendedSize.toString())
                                 val i18nResponse = getI18nResponse()
-                                if (i18nResponse is VirtusizeApiResponse.Success && i18nResponse.data != null) {
+                                if (i18nResponse.isSuccessful) {
                                     val trimType = if (virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
                                     virtusizeView.setupRecommendationText(
-                                        storeProduct!!.getRecommendationText(
-                                            i18nResponse.data
-                                        ).trimI18nText(trimType)
+                                        storeProduct!!.getRecommendationText(i18nResponse.successData!!).trimI18nText(trimType)
                                     )
                                     if (virtusizeView is VirtusizeInPageStandard) {
                                         virtusizeView.setupProductImage(
@@ -248,21 +298,19 @@ class Virtusize(
      * Gets size recommendation for a store product that would best fit a user's body.
      * @return recommended size name. If it's not available, return null
      */
-    private suspend fun getUserBodyRecommendedSize(): String? {
+    private suspend fun getUserBodyRecommendedSize(productTypes: List<ProductType>?): String? {
         if(storeProduct!!.isAccessory()) {
             return null
         }
         val userBodyProfileResponse = getUserBodyProfileResponse()
-        val productTypesResponse = getProductTypesResponse()
-        if (productTypesResponse is VirtusizeApiResponse.Success && userBodyProfileResponse is VirtusizeApiResponse.Success) {
+
+        if (productTypes != null && userBodyProfileResponse.isSuccessful) {
             val bodyProfileRecommendedSizeResponse = getBodyProfileRecommendedSizeResponse(
-                productTypesResponse.data,
+                productTypes,
                 storeProduct!!,
-                userBodyProfileResponse.data
+                userBodyProfileResponse.successData!!
             )
-            if (bodyProfileRecommendedSizeResponse is VirtusizeApiResponse.Success) {
-                return bodyProfileRecommendedSizeResponse.data?.sizeName
-            }
+            return bodyProfileRecommendedSizeResponse.successData?.sizeName
         }
         return null
     }
@@ -504,61 +552,11 @@ class Virtusize(
             .execute(apiRequest) as VirtusizeApiResponse<UserBodyProfile?>
     }
 
-    internal suspend fun getBodyProfileRecommendedSizeResponse(productTypes: List<ProductType>?, storeProduct: Product, userBodyProfile: UserBodyProfile?): VirtusizeApiResponse<BodyProfileRecommendedSize?> = withContext(IO) {
-        if(productTypes == null || userBodyProfile == null) {
-            return@withContext VirtusizeApiResponse.Success(null)
-        }
+    internal suspend fun getBodyProfileRecommendedSizeResponse(productTypes: List<ProductType>, storeProduct: Product, userBodyProfile: UserBodyProfile): VirtusizeApiResponse<BodyProfileRecommendedSize?> = withContext(IO) {
         val apiRequest = VirtusizeApi.getSize(productTypes, storeProduct, userBodyProfile)
         VirtusizeApiTask()
             .setJsonParser(BodyProfileRecommendedSizeJsonParser())
             .setHttpURLConnection(httpURLConnection)
             .execute(apiRequest) as VirtusizeApiResponse<BodyProfileRecommendedSize?>
-    }
-
-    /**
-     * Registers a message handler.
-     * The registered message handlers will receive Virtusize errors, events, and the close action for Fit Illustrator.
-     * @param messageHandler an instance of VirtusizeMessageHandler
-     * @see VirtusizeMessageHandler
-     */
-    fun registerMessageHandler(messageHandler: VirtusizeMessageHandler) {
-        messageHandlers.add(messageHandler)
-    }
-
-    /**
-     * Unregisters a message handler.
-     * If a message handler is not unregistered when the associated activity or fragment dies,
-     * then when the activity or fragment opens again,
-     * it will keep listening to the events along with newly registered message handlers.
-     * @param messageHandler an instance of {@link VirtusizeMessageHandler}
-     * @see VirtusizeMessageHandler
-     */
-    fun unregisterMessageHandler(messageHandler: VirtusizeMessageHandler) {
-        messageHandlers.remove(messageHandler)
-    }
-
-    /**
-     * Sets the HTTP URL connection
-     * @param urlConnection an instance of [HttpURLConnection]
-     */
-    internal fun setHTTPURLConnection(urlConnection: HttpURLConnection?) {
-        this.httpURLConnection = urlConnection
-    }
-
-    /**
-     * Sets the Coroutine dispatcher
-     * @param dispatcher an instance of [CoroutineDispatcher]
-     */
-    internal fun setCoroutineDispatcher(dispatcher: CoroutineDispatcher) {
-        this.coroutineDispatcher = dispatcher
-    }
-
-    /**
-     * Handles the null product error
-     * @throws VirtusizeErrorType.NullProduct error
-     */
-    private fun handleNullProductError() {
-        messageHandler.onError(null, VirtusizeErrorType.NullProduct.virtusizeError())
-        throwError(errorType = VirtusizeErrorType.NullProduct)
     }
 }

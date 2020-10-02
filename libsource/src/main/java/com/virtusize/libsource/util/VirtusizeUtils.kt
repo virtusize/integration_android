@@ -4,8 +4,15 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.os.Build
 import android.os.LocaleList
+import com.virtusize.libsource.data.local.StoreProductFitInfo
+import com.virtusize.libsource.data.local.UserProductRecommendedSize
 import com.virtusize.libsource.data.local.VirtusizeLanguage
+import com.virtusize.libsource.data.remote.Product
+import com.virtusize.libsource.data.remote.ProductSize
+import com.virtusize.libsource.data.remote.ProductType
+import com.virtusize.libsource.data.remote.Weight
 import java.util.*
+import kotlin.math.abs
 
 // The object that wraps Virtusize utility functions
 internal object VirtusizeUtils {
@@ -47,5 +54,60 @@ internal object VirtusizeUtils {
             VirtusizeLanguage.KR -> configureLocale(context, Locale.KOREA)
             else -> configureLocale(context, Locale.getDefault())
         }
+    }
+
+    // TODO: add comment
+    fun findBestMatch(userProducts: List<Product>?, storeProduct: Product, productTypes: List<ProductType>?): UserProductRecommendedSize? {
+        if(userProducts == null || productTypes == null) {
+            return null
+        }
+        val storeProductType = productTypes.find { it.id == storeProduct.productType } ?: return null
+        val compatibleUserProducts = userProducts.filter { it.productType in storeProductType.compatibleTypes }
+        val userProductComparisonRecommendedSize = UserProductRecommendedSize()
+
+        compatibleUserProducts.forEach { userProduct ->
+            val userProductSize = userProduct.sizes[0]
+            storeProduct.sizes.forEach { storeProductSize ->
+                val storeProductFitInfo = getStoreProductFitInfo(
+                    userProductSize,
+                    storeProductSize,
+                    storeProductType.weights
+                )
+                if (storeProductFitInfo.fitScore > userProductComparisonRecommendedSize.bestFitScore) {
+                    userProductComparisonRecommendedSize.apply {
+                        storeProductFitInfo.apply {
+                            bestFitScore = fitScore
+                            bestUserProduct = userProduct
+                            isStoreProductSmaller = isSmaller
+                        }
+                    }
+                }
+            }
+        }
+        return userProductComparisonRecommendedSize
+    }
+
+    fun getStoreProductFitInfo(
+        userProductSize: ProductSize,
+        storeProductSize: ProductSize,
+        storeProductTypeScoreWeights: Set<Weight>
+    ): StoreProductFitInfo {
+        var rawScore = 0f
+        var isSmaller: Boolean? = null
+
+        val sortedStoreProductTypeScoreWeights = storeProductTypeScoreWeights.sortedByDescending { it.value }
+        sortedStoreProductTypeScoreWeights.forEach { weight ->
+            val userProductSizeMeasurement = userProductSize.measurements.find { it.name == weight.factor }?.millimeter
+            val storeProductSizeMeasurement = storeProductSize.measurements.find { it.name == weight.factor }?.millimeter
+            if (userProductSizeMeasurement != null && storeProductSizeMeasurement != null) {
+                rawScore += abs(weight.value * (userProductSizeMeasurement - storeProductSizeMeasurement))
+                isSmaller = isSmaller ?: (userProductSizeMeasurement - storeProductSizeMeasurement > 0)
+            }
+        }
+
+        val adjustScore = rawScore / 10
+        val fitScore = (100 - adjustScore).coerceAtLeast(20f)
+
+        return StoreProductFitInfo(fitScore, isSmaller)
     }
 }

@@ -337,7 +337,7 @@ class VirtusizeTest {
         assertThat(productTypesResponse is VirtusizeApiResponse.Success<List<ProductType>?>)
         val actualProductTypeList = (productTypesResponse as VirtusizeApiResponse.Success<List<ProductType>?>).data
 
-        assertThat(actualProductTypeList?.size).isEqualTo(3)
+        assertThat(actualProductTypeList?.size).isEqualTo(4)
         assertThat(actualProductTypeList?.get(0)).isEqualTo(
             ProductType(
                 1,
