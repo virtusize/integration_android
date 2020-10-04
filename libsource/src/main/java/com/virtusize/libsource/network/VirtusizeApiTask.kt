@@ -1,7 +1,5 @@
 package com.virtusize.libsource.network
 
-import android.util.Log
-import com.virtusize.libsource.util.Constants
 import com.virtusize.libsource.ErrorResponseHandler
 import com.virtusize.libsource.SuccessResponseHandler
 import com.virtusize.libsource.data.local.*
@@ -160,10 +158,7 @@ internal class VirtusizeApiTask {
                         HttpURLConnection.HTTP_NOT_FOUND -> {
                             // If the product cannot be found in the Virtusize Server
                             if (response is ProductCheck) {
-                                Log.d(
-                                    Constants.VIRTUSIZE_LOG_TAG,
-                                    VirtusizeErrorType.InvalidProduct.message(response.productId)
-                                )
+                                errorHandler?.onError(VirtusizeErrorType.InvalidProduct.virtusizeError(response.productId))
                                 return VirtusizeApiResponse.Success(response)
                             }
                             virtusizeNetworkError(urlConnection, response)
@@ -177,7 +172,6 @@ internal class VirtusizeApiTask {
                 else -> return VirtusizeApiResponse.Error(virtusizeNetworkError(urlConnection, urlConnection.responseMessage))
             }
         } catch (e: IOException) {
-            Log.e(Constants.VIRTUSIZE_LOG_TAG, "Virtusize API task failed. Error: $e")
             return VirtusizeApiResponse.Error(virtusizeNetworkError(urlConnection, e.localizedMessage))
         } finally {
             urlConnection?.disconnect()
@@ -233,7 +227,7 @@ internal class VirtusizeApiTask {
                             jsonParser.parse(jsonObject)
                         }
                 } catch (e: JSONException) {
-                    Log.d(Constants.VIRTUSIZE_LOG_TAG, "JSONException: $e")
+                    errorHandler?.onError(VirtusizeErrorType.JsonParsingError.virtusizeError("JSONException: $e"))
                 }
             }
             if(isErrorStream && result == null) {

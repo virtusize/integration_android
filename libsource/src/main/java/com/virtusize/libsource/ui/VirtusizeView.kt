@@ -53,7 +53,7 @@ interface VirtusizeView {
      * A clickable function to open the Virtusize WebView
      */
     fun openVirtusizeWebView(context: Context) {
-        virtusizeMessageHandler.onEvent(this, VirtusizeEvent(VirtusizeEvents.UserOpenedWidget.getEventName()))
+        virtusizeMessageHandler.onEvent(VirtusizeEvent(VirtusizeEvents.UserOpenedWidget.getEventName()))
         val fragmentTransaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
         val previousFragment = context.supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
         previousFragment?.let {fragment ->

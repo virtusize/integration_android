@@ -9,7 +9,7 @@ interface VirtusizeMessageHandler {
 
     fun virtusizeControllerShouldClose(virtusizeView: VirtusizeView)
 
-    fun onEvent(virtusizeView: VirtusizeView?, event: VirtusizeEvent)
+    fun onEvent(event: VirtusizeEvent)
 
-    fun onError(virtusizeView: VirtusizeView?, error: VirtusizeError)
+    fun onError(error: VirtusizeError)
 }
