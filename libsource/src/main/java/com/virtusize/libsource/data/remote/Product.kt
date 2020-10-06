@@ -34,20 +34,19 @@ data class Product(
      */
     internal fun getRecommendationText(
         i18nLocalization: I18nLocalization,
-        storeProduct: Product,
         sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?,
         bodyProfileRecommendedSizeName: String?
     ): String {
         return when {
             isAccessory() -> accessoryText(i18nLocalization, sizeComparisonRecommendedSize)
-            storeProduct.sizes.size == 1 -> oneSizeText(i18nLocalization, sizeComparisonRecommendedSize, bodyProfileRecommendedSizeName)
+            sizes.size == 1 -> oneSizeText(i18nLocalization, sizeComparisonRecommendedSize, bodyProfileRecommendedSizeName)
             else -> multiSizeText(i18nLocalization, sizeComparisonRecommendedSize, bodyProfileRecommendedSizeName)
         }
     }
 
     // TODO: add comment
     private fun accessoryText(i18nLocalization: I18nLocalization, sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?): String {
-        return if (sizeComparisonRecommendedSize == null) i18nLocalization.getHasProductAccessoryText() else i18nLocalization.defaultAccessoryText
+        return if (sizeComparisonRecommendedSize?.bestUserProduct?.name != null) i18nLocalization.getHasProductAccessoryText() else i18nLocalization.defaultAccessoryText
     }
 
     private fun oneSizeText(

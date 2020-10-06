@@ -266,7 +266,6 @@ class Virtusize(
                                     virtusizeView.setupRecommendationText(
                                         storeProduct.getRecommendationText(
                                             i18nLocalization!!,
-                                            storeProduct,
                                             userProductRecommendedSize,
                                             userBodyRecommendedSize
                                         ).trimI18nText(trimType)
