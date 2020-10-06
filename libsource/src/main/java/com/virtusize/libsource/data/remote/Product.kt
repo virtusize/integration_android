@@ -1,5 +1,7 @@
 package com.virtusize.libsource.data.remote
 
+import com.virtusize.libsource.data.local.SizeComparisonRecommendedSize
+
 /**
  * This class represents the product info from the Virtusize API
  * @param id the internal product ID in the Virtusize server
@@ -30,13 +32,50 @@ data class Product(
      * @param i18nLocalization [I18nLocalization]
      * @return the InPage text
      */
-    fun getRecommendationText(i18nLocalization: I18nLocalization): String {
+    internal fun getRecommendationText(
+        i18nLocalization: I18nLocalization,
+        storeProduct: Product,
+        sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?,
+        bodyProfileRecommendedSizeName: String?
+    ): String {
         return when {
-            isAccessory() -> {
-                i18nLocalization.defaultAccessoryText
-            }
-            else -> i18nLocalization.defaultNoDataText
+            isAccessory() -> accessoryText(i18nLocalization, sizeComparisonRecommendedSize)
+            storeProduct.sizes.size == 1 -> oneSizeText(i18nLocalization, sizeComparisonRecommendedSize, bodyProfileRecommendedSizeName)
+            else -> multiSizeText(i18nLocalization, sizeComparisonRecommendedSize, bodyProfileRecommendedSizeName)
         }
+    }
+
+    // TODO: add comment
+    private fun accessoryText(i18nLocalization: I18nLocalization, sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?): String {
+        return if (sizeComparisonRecommendedSize == null) i18nLocalization.getHasProductAccessoryText() else i18nLocalization.defaultAccessoryText
+    }
+
+    private fun oneSizeText(
+        i18nLocalization: I18nLocalization,
+        sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?,
+        bodyProfileRecommendedSizeName: String?
+    ): String {
+        sizeComparisonRecommendedSize?.let {
+            return i18nLocalization.getSizeComparisonOneSizeText(it)
+        }
+        bodyProfileRecommendedSizeName?.let {
+            return i18nLocalization.bodyProfileOneSizeText
+        }
+        return i18nLocalization.defaultNoDataText
+    }
+
+    private fun multiSizeText(
+        i18nLocalization: I18nLocalization,
+        sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?,
+        bodyProfileRecommendedSizeName: String?
+    ): String {
+        sizeComparisonRecommendedSize?.bestUserProduct?.sizes?.get(0)?.name?.let {
+            return i18nLocalization.getSizeComparisonMultiSizeText(it)
+        }
+        bodyProfileRecommendedSizeName?.let {
+            return i18nLocalization.getBodyProfileMultiSizeText(it)
+        }
+        return i18nLocalization.defaultNoDataText
     }
 
     /**
