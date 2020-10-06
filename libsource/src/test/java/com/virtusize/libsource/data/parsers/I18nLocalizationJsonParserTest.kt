@@ -94,8 +94,8 @@ class I18nLocalizationJsonParserTest {
             localizedContext.getString(R.string.inpage_one_size_smaller_bottom_text),
             localizedContext.getString(R.string.inpage_one_size_larger_bottom_text),
             localizedContext.getString(R.string.inpage_one_size_body_profile_text),
-            localizedContext.getString(R.string.inpage_mutli_size_comparison_text),
-            localizedContext.getString(R.string.inpage_mutli_size_body_profile_text),
+            localizedContext.getString(R.string.inpage_multi_size_comparison_text),
+            localizedContext.getString(R.string.inpage_multi_size_body_profile_text),
             localizedContext.getString(R.string.inpage_no_data_text)
         )
     }

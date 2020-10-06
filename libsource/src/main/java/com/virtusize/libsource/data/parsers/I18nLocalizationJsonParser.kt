@@ -79,12 +79,12 @@ internal class I18nLocalizationJsonParser(
 
         val sizeComparisonMultiSizeText = multiSizeJSONObject?.optString(
             FIELD_SIZE_COMPARISON,
-            configuredContext?.getString(R.string.inpage_mutli_size_comparison_text) ?: ""
+            configuredContext?.getString(R.string.inpage_multi_size_comparison_text) ?: ""
         ) ?: ""
 
         val bodyProfileMultiSizeText = multiSizeJSONObject?.optString(
             FIELD_BODY_PROFILE,
-            configuredContext?.getString(R.string.inpage_mutli_size_body_profile_text) ?: ""
+            configuredContext?.getString(R.string.inpage_multi_size_body_profile_text) ?: ""
         ) ?: ""
 
         val defaultNoDataText = inpageJSONObject?.optString(

@@ -7,7 +7,6 @@ import com.google.common.truth.Truth.assertThat
 import com.virtusize.libsource.R
 import com.virtusize.libsource.data.local.SizeComparisonRecommendedSize
 import com.virtusize.libsource.fixtures.ProductFixtures
-import com.virtusize.libsource.fixtures.TestFixtures
 import org.junit.Before
 import org.junit.Test
 
@@ -38,8 +37,8 @@ class ProductTest {
             context.getString(R.string.inpage_one_size_smaller_bottom_text),
             context.getString(R.string.inpage_one_size_larger_bottom_text),
             context.getString(R.string.inpage_one_size_body_profile_text),
-            context.getString(R.string.inpage_mutli_size_comparison_text),
-            context.getString(R.string.inpage_mutli_size_body_profile_text),
+            context.getString(R.string.inpage_multi_size_comparison_text),
+            context.getString(R.string.inpage_multi_size_body_profile_text),
             context.getString(R.string.inpage_no_data_text)
         )
     }
@@ -145,7 +144,7 @@ class ProductTest {
                 ProductSize("M", mutableSetOf())
             )
         )
-        val multiSizeComparisonText = context.getString(R.string.inpage_mutli_size_comparison_text)
+        val multiSizeComparisonText = context.getString(R.string.inpage_multi_size_comparison_text)
         assertThat(
             ProductFixtures.storeProduct(
                 sizeList = mutableListOf(
@@ -163,7 +162,7 @@ class ProductTest {
     @Test
     fun getRecommendationText_multiSizeProduct_hasBodyProfileRecommendedSize_returnMultiSizeBodyProfileText() {
         bodyProfileRecommendedSizeName = "S"
-        val multiSizeBodyProfileText = context.getString(R.string.inpage_mutli_size_body_profile_text)
+        val multiSizeBodyProfileText = context.getString(R.string.inpage_multi_size_body_profile_text)
         assertThat(
             ProductFixtures.storeProduct(
                 sizeList = mutableListOf(
