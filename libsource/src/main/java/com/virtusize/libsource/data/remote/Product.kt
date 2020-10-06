@@ -46,7 +46,7 @@ data class Product(
 
     // TODO: add comment
     private fun accessoryText(i18nLocalization: I18nLocalization, sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?): String {
-        return if (sizeComparisonRecommendedSize?.bestUserProduct?.name != null) i18nLocalization.getHasProductAccessoryText() else i18nLocalization.defaultAccessoryText
+        return if (sizeComparisonRecommendedSize?.bestUserProduct?.sizes?.get(0)?.name != null) i18nLocalization.getHasProductAccessoryText() else i18nLocalization.defaultAccessoryText
     }
 
     private fun oneSizeText(

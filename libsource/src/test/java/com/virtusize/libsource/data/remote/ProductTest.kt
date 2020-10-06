@@ -54,6 +54,148 @@ class ProductTest {
     }
 
     @Test
+    fun getRecommendationText_productIsAnAccessory_hasSizeComparisonRecommendedSize_returnHasProductAccessoryText() {
+        sizeComparisonRecommendedSize = SizeComparisonRecommendedSize()
+        sizeComparisonRecommendedSize?.bestUserProduct = ProductFixtures.storeProduct(18)
+        val hasProductAccessoryTopText = context.getString(R.string.inpage_has_product_top_text)
+        assertThat(ProductFixtures.storeProduct(18).getRecommendationText(i18nLocalization, sizeComparisonRecommendedSize, bodyProfileRecommendedSizeName)).contains(hasProductAccessoryTopText)
+        assertThat(ProductFixtures.storeProduct(19).getRecommendationText(i18nLocalization, sizeComparisonRecommendedSize, bodyProfileRecommendedSizeName)).contains(hasProductAccessoryTopText)
+        assertThat(ProductFixtures.storeProduct(25).getRecommendationText(i18nLocalization, sizeComparisonRecommendedSize, bodyProfileRecommendedSizeName)).contains(hasProductAccessoryTopText)
+        assertThat(ProductFixtures.storeProduct(26).getRecommendationText(i18nLocalization, sizeComparisonRecommendedSize, bodyProfileRecommendedSizeName)).contains(hasProductAccessoryTopText)
+    }
+
+    @Test
+    fun getRecommendationText_oneSizeProduct_fitScoreLargerThan84_returnSizeComparisonOneSizeCloseText() {
+        sizeComparisonRecommendedSize = SizeComparisonRecommendedSize()
+        sizeComparisonRecommendedSize?.bestFitScore = 84.5f
+        val oneSizeCloseTopText = context.getString(R.string.inpage_one_size_close_top_text)
+        assertThat(
+            ProductFixtures.storeProduct(
+                sizeList = mutableListOf(
+                    ProductSize("FREE", mutableSetOf())
+                )
+            ).getRecommendationText(
+                i18nLocalization,
+                sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName
+            )
+        ).contains(oneSizeCloseTopText)
+    }
+
+    @Test
+    fun getRecommendationText_oneSizeProduct_storeProductIsSmaller_returnSizeComparisonOneSizeSmallerText() {
+        sizeComparisonRecommendedSize = SizeComparisonRecommendedSize()
+        sizeComparisonRecommendedSize?.isStoreProductSmaller = true
+        val oneSizeSmallerTopText = context.getString(R.string.inpage_one_size_smaller_top_text)
+        assertThat(
+            ProductFixtures.storeProduct(
+                sizeList = mutableListOf(
+                    ProductSize("FREE", mutableSetOf())
+                )
+            ).getRecommendationText(
+                i18nLocalization,
+                sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName
+            )
+        ).contains(oneSizeSmallerTopText)
+    }
+
+    @Test
+    fun getRecommendationText_oneSizeProduct_storeProductIsLarger_returnSizeComparisonOneSizeLargerText() {
+        sizeComparisonRecommendedSize = SizeComparisonRecommendedSize()
+        sizeComparisonRecommendedSize?.bestFitScore = 60f
+        sizeComparisonRecommendedSize?.isStoreProductSmaller = false
+        val oneSizeLargerTopText = context.getString(R.string.inpage_one_size_larger_top_text)
+        assertThat(
+            ProductFixtures.storeProduct(
+                sizeList = mutableListOf(
+                    ProductSize("FREE", mutableSetOf())
+                )
+            ).getRecommendationText(
+                i18nLocalization,
+                sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName
+            )
+        ).contains(oneSizeLargerTopText)
+    }
+
+    @Test
+    fun getRecommendationText_oneSizeProduct_onlyHasBodyProfileRecommendedSize_returnOneSizeBodyProfileText() {
+        bodyProfileRecommendedSizeName = "Small"
+        val oneSizeBodyProfileText = context.getString(R.string.inpage_one_size_body_profile_text)
+        assertThat(
+            ProductFixtures.storeProduct(
+                sizeList = mutableListOf(
+                    ProductSize("FREE", mutableSetOf())
+                )
+            ).getRecommendationText(
+                i18nLocalization,
+                sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName
+            )
+        ).contains(oneSizeBodyProfileText)
+    }
+
+    @Test
+    fun getRecommendationText_multiSizeProduct_hasSizeComparisonRecommendedSize_returnMultiSizeComparisonText() {
+        sizeComparisonRecommendedSize = SizeComparisonRecommendedSize()
+        sizeComparisonRecommendedSize?.bestUserProduct = ProductFixtures.storeProduct(
+            sizeList = mutableListOf(
+                ProductSize("S", mutableSetOf()),
+                ProductSize("M", mutableSetOf())
+            )
+        )
+        val multiSizeComparisonText = context.getString(R.string.inpage_mutli_size_comparison_text)
+        assertThat(
+            ProductFixtures.storeProduct(
+                sizeList = mutableListOf(
+                    ProductSize("S", mutableSetOf()),
+                    ProductSize("M", mutableSetOf())
+                )
+            ).getRecommendationText(
+                i18nLocalization,
+                sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName
+            )
+        ).contains(multiSizeComparisonText)
+    }
+
+    @Test
+    fun getRecommendationText_multiSizeProduct_hasBodyProfileRecommendedSize_returnMultiSizeBodyProfileText() {
+        bodyProfileRecommendedSizeName = "S"
+        val multiSizeBodyProfileText = context.getString(R.string.inpage_mutli_size_body_profile_text)
+        assertThat(
+            ProductFixtures.storeProduct(
+                sizeList = mutableListOf(
+                    ProductSize("S", mutableSetOf()),
+                    ProductSize("M", mutableSetOf())
+                )
+            ).getRecommendationText(
+                i18nLocalization,
+                sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName
+            )
+        ).contains(multiSizeBodyProfileText)
+    }
+
+    @Test
+    fun getRecommendationText_multiSizeProduct_noRecommendedSizes_returnNoDataText() {
+        val noDataText = context.getString(R.string.inpage_no_data_text)
+        assertThat(
+            ProductFixtures.storeProduct(
+                sizeList = mutableListOf(
+                    ProductSize("S", mutableSetOf()),
+                    ProductSize("M", mutableSetOf())
+                )
+            ).getRecommendationText(
+                i18nLocalization,
+                sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName
+            )
+        ).contains(noDataText)
+    }
+
+    @Test
     fun getRecommendationText_productIsNotAnAccessory_returnNoDataText() {
         val noDataText = context.getString(R.string.inpage_no_data_text)
         assertThat(ProductFixtures.storeProduct(4).getRecommendationText(i18nLocalization, sizeComparisonRecommendedSize, bodyProfileRecommendedSizeName)).isEqualTo(noDataText)
