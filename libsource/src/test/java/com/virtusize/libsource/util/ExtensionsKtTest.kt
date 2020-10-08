@@ -19,7 +19,7 @@ class ExtensionsKtTest {
     fun getStringResourceByName_existingResources_shouldBeNotNull() {
         assertThat(context.getStringResourceByName("inpage_default_accessory_text")).isNotNull()
         assertThat(context.getStringResourceByName("inpage_no_data_text")).isNotNull()
-        assertThat(context.getStringResourceByName("inpage_standard_loading_text")).isNotNull()
+        assertThat(context.getStringResourceByName("inpage_loading_text")).isNotNull()
         assertThat(context.getStringResourceByName("inpage_long_error_text")).isNotNull()
     }
 
@@ -27,6 +27,6 @@ class ExtensionsKtTest {
     fun getStringResourceByName_nonExistingResources_shouldBeNull() {
         assertThat(context.getStringResourceByName("random_text")).isNull()
         assertThat(context.getStringResourceByName("inpage_size_text")).isNull()
-        assertThat(context.getStringResourceByName("inpage_loading_text")).isNull()
+        assertThat(context.getStringResourceByName("inpage_standard_loading_text")).isNull()
     }
 }
