@@ -49,8 +49,8 @@ class VirtusizeApiTest {
     }
 
     @Test
-    fun virtusize_shouldReturnExpectedUrl() {
-        val actualUrl = VirtusizeApi.virtusizeURL()
+    fun virtusizeWebView_shouldReturnExpectedUrl() {
+        val actualUrl = VirtusizeApi.virtusizeWebViewURL()
 
         val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-webview.html"
 
@@ -211,6 +211,17 @@ class VirtusizeApiTest {
     }
 
     @Test
+    fun getSessions_shouldReturnExpectedApiRequest() {
+        val actualApiRequest = VirtusizeApi.getSessions()
+
+        val expectedUrl = "https://staging.virtusize.com/a/api/v3/sessions"
+
+        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.POST)
+
+        assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
+    }
+
+    @Test
     fun getUserProducts_shouldReturnExpectedApiRequest() {
         val actualApiRequest = VirtusizeApi.getUserProducts()
 
@@ -227,7 +238,7 @@ class VirtusizeApiTest {
 
         val expectedUrl = "https://staging.virtusize.com/a/api/v3/user-body-measurements"
 
-        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET, mutableMapOf(), true)
+        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET, mutableMapOf(),  true)
 
         assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
     }

@@ -6,14 +6,15 @@ package com.virtusize.libsource.network
 internal enum class VirtusizeEndpoint {
     ProductCheck,
     GetSize,
-    Virtusize,
+    VirtusizeWebView,
     ProductMetaDataHints,
     Events,
     Orders,
     StoreViewApiKey,
     StoreProducts,
-    UserProducts,
     ProductType,
+    Sessions,
+    UserProducts,
     UserBodyMeasurements,
     I18N
 }
@@ -30,8 +31,8 @@ internal fun VirtusizeEndpoint.getPath(): String {
          VirtusizeEndpoint.GetSize -> {
              "/ds-functions/size-rec/get-size"
          }
-         VirtusizeEndpoint.Virtusize -> {
-             "/a/aoyama/latest/sdk-webview.html"
+         VirtusizeEndpoint.VirtusizeWebView -> {
+             "/a/aoyama/testing/auth-sdk-events/sdk-webview.html"
          }
          VirtusizeEndpoint.ProductMetaDataHints -> {
              "/rest-api/v1/product-meta-data-hints"
@@ -48,11 +49,14 @@ internal fun VirtusizeEndpoint.getPath(): String {
          VirtusizeEndpoint.StoreProducts -> {
              "/a/api/v3/store-products/"
          }
-         VirtusizeEndpoint.UserProducts -> {
-             "/a/api/v3/user-products"
-         }
          VirtusizeEndpoint.ProductType -> {
              "/a/api/v3/product-types"
+         }
+         VirtusizeEndpoint.Sessions -> {
+             "/a/api/v3/sessions"
+         }
+         VirtusizeEndpoint.UserProducts -> {
+             "/a/api/v3/user-products"
          }
          VirtusizeEndpoint.UserBodyMeasurements -> {
              "/a/api/v3/user-body-measurements"

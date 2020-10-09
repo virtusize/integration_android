@@ -24,7 +24,12 @@ internal enum class HttpMethod {
  * @param params the MutableMap of query parameters to be sent to the server
  * @param authorization if it's true, it means you need the auth token to make the API request
  */
-internal data class ApiRequest(val url: String, val method: HttpMethod, val params: Map<String, Any> = mutableMapOf(), val authorization: Boolean = false)
+internal data class ApiRequest(
+    val url: String,
+    val method: HttpMethod,
+    val params: Map<String, Any> = mutableMapOf(),
+    val authorization: Boolean = false
+)
 
 /**
  * This object represents the Virtusize API
@@ -70,11 +75,11 @@ internal object VirtusizeApi {
     }
 
     /**
-     * Gets the Virtusize URL for a VirtusizeProduct
-     * @return the Virtusize URL as String
+     * Gets the Virtusize web view URL for a VirtusizeProduct
+     * @return the Virtusize web view URL as String
      */
-    fun virtusizeURL(): String {
-        val urlBuilder = Uri.parse(environment.virtusizeUrl() + VirtusizeEndpoint.Virtusize.getPath())
+    fun virtusizeWebViewURL(): String {
+        val urlBuilder = Uri.parse(environment.virtusizeUrl() + VirtusizeEndpoint.VirtusizeWebView.getPath())
             .buildUpon()
         return urlBuilder.build().toString()
     }
@@ -252,6 +257,14 @@ internal object VirtusizeApi {
             .build()
             .toString()
         return ApiRequest(url, HttpMethod.GET)
+    }
+
+    fun getSessions(): ApiRequest {
+        val url = Uri.parse(environment.defaultApiUrl() + VirtusizeEndpoint.Sessions.getPath())
+            .buildUpon()
+            .build()
+            .toString()
+        return ApiRequest(url, HttpMethod.POST)
     }
 
     /**
