@@ -14,7 +14,8 @@ enum class VirtusizeErrorType {
     ImageUrlNotValid,
     NullProduct,
     InvalidProduct,
-    NetworkError
+    NetworkError,
+    JsonParsingError
 }
 
 /**
@@ -42,7 +43,8 @@ fun VirtusizeErrorType.message(extraMessage: String? = null): String {
         VirtusizeErrorType.ImageUrlNotValid -> "Image URL is invalid"
         VirtusizeErrorType.NullProduct -> "Product can not null"
         VirtusizeErrorType.InvalidProduct -> "Product $extraMessage is not valid in the Virtusize server"
-        VirtusizeErrorType.NetworkError -> "Network error"
+        VirtusizeErrorType.NetworkError -> "Network error: $extraMessage"
+        VirtusizeErrorType.JsonParsingError -> "JSON parsing error: $extraMessage"
     }
 }
 
@@ -50,8 +52,8 @@ fun VirtusizeErrorType.message(extraMessage: String? = null): String {
  * Returns the [VirtusizeError] corresponding to the VirtusizeErrorType
  * @return the [VirtusizeError] for the VirtusizeErrorType
  */
-internal fun VirtusizeErrorType.virtusizeError(): VirtusizeError {
-    return VirtusizeError(this, this.code(), this.message())
+internal fun VirtusizeErrorType.virtusizeError(extraMessage: String? = null): VirtusizeError {
+    return VirtusizeError(this, this.code(), this.message(extraMessage))
 }
 
 /**

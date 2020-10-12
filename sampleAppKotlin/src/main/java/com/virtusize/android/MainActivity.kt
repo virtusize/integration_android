@@ -125,11 +125,11 @@ class MainActivity : AppCompatActivity() {
             virtusizeView.dismissVirtusizeView()
         }
 
-        override fun onEvent(virtusizeView: VirtusizeView?, event: VirtusizeEvent) {
+        override fun onEvent(event: VirtusizeEvent) {
             Log.i(TAG, event.name)
         }
 
-        override fun onError(virtusizeView: VirtusizeView?, errorType: VirtusizeError) {
+        override fun onError(errorType: VirtusizeError) {
             Log.e(TAG, errorType.message)
         }
     }

@@ -7,6 +7,14 @@ import com.virtusize.libsource.data.local.VirtusizeError
  * @param <T>
  */
 internal sealed class VirtusizeApiResponse<out R> {
+    val isSuccessful
+        get() = this is Success<*> && data != null
+
+    val successData: R?
+        get() = if (this is Success<*> && data != null) data as R? else null
+    val failureData: VirtusizeError?
+        get() = if (this is Error) error else null
+
     // The successful response with data of <T>
     data class Success<out T>(val data: T) : VirtusizeApiResponse<T>()
     // The error response with an error of [VirtusizeError]

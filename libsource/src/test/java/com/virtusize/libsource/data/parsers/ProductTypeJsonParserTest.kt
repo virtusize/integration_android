@@ -20,7 +20,8 @@ class ProductTypeJsonParserTest {
                 Weight("bust", 1f),
                 Weight("waist", 1f),
                 Weight("height", 0.25f)
-            )
+            ),
+            mutableListOf(1, 16)
         )
 
         assertThat(actualProductType).isEqualTo(expectedProductType)

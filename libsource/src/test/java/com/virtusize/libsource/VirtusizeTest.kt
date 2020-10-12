@@ -332,12 +332,11 @@ class VirtusizeTest {
             MockedResponse(200, ProductFixtures.PRODUCT_TYPE_JSON_ARRAY.toString().byteInputStream())
         ))
 
-
         val productTypesResponse = virtusize.getProductTypesResponse()
         assertThat(productTypesResponse is VirtusizeApiResponse.Success<List<ProductType>?>)
         val actualProductTypeList = (productTypesResponse as VirtusizeApiResponse.Success<List<ProductType>?>).data
 
-        assertThat(actualProductTypeList?.size).isEqualTo(3)
+        assertThat(actualProductTypeList?.size).isEqualTo(4)
         assertThat(actualProductTypeList?.get(0)).isEqualTo(
             ProductType(
                 1,
@@ -346,10 +345,11 @@ class VirtusizeTest {
                     Weight("bust", 1f),
                     Weight("waist", 1f),
                     Weight("height", 0.25f)
-                )
+                ),
+                mutableListOf(1, 16)
             )
         )
-        assertThat(actualProductTypeList?.get(2)).isEqualTo(
+        assertThat(actualProductTypeList?.get(3)).isEqualTo(
             ProductType(
                 18,
                 "bag",
@@ -357,7 +357,8 @@ class VirtusizeTest {
                     Weight("depth", 1f),
                     Weight("width", 2f),
                     Weight("height", 1f)
-                )
+                ),
+                mutableListOf(18, 19, 25, 26)
             )
         )
     }

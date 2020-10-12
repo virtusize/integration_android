@@ -52,12 +52,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onEvent(@org.jetbrains.annotations.Nullable VirtusizeView virtusizeView, @NotNull VirtusizeEvent event) {
+            public void onEvent(@NotNull VirtusizeEvent event) {
                 Log.i(TAG, event.getName());
             }
 
             @Override
-            public void onError(VirtusizeView virtusizeView, @NonNull VirtusizeError error) {
+            public void onError(@NonNull VirtusizeError error) {
                 Log.e(TAG, error.getMessage());
             }
         };

@@ -123,7 +123,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
                 }
             }
         } else {
-            virtusizeMessageHandler.onError(this, VirtusizeErrorType.NullProduct.virtusizeError())
+            virtusizeMessageHandler.onError(VirtusizeErrorType.NullProduct.virtusizeError())
             throwError(VirtusizeErrorType.NullProduct)
         }
     }
