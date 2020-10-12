@@ -332,7 +332,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
      * Sets up the InPage Standard footer margins
      */
     private fun getCloudinaryImageUrl(cloudinaryPublicId: String): String {
-        return "https://res.cloudinary.com/virtusize/image/upload/q_auto,f_auto/$cloudinaryPublicId.jpg"
+        return "https://res.cloudinary.com/virtusize/image/upload/w_${36.dpInPx},h_${36.dpInPx}/q_auto,f_auto,dpr_auto/$cloudinaryPublicId.jpg"
     }
 
     /**
