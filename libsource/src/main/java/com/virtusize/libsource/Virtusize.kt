@@ -264,8 +264,11 @@ class Virtusize(
                                     val trimType =
                                         if (virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
                                     virtusizeView.setupRecommendationText(
-                                        storeProduct.getRecommendationText(i18nLocalization!!)
-                                            .trimI18nText(trimType)
+                                        storeProduct.getRecommendationText(
+                                            i18nLocalization!!,
+                                            userProductRecommendedSize,
+                                            userBodyRecommendedSize
+                                        ).trimI18nText(trimType)
                                     )
                                     if (virtusizeView is VirtusizeInPageStandard) {
                                         virtusizeView.setupProductImage(

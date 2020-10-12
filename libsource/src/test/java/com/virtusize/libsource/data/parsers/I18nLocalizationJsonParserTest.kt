@@ -27,10 +27,7 @@ class I18nLocalizationJsonParserTest {
         val actualI18nLocalization = I18nLocalizationJsonParser(context, VirtusizeLanguage.EN).parse(
             TestUtils.readFileFromAssets("/i18n_en.json"))
 
-        val expectedI18nLocalization = I18nLocalization(
-            context.getString(R.string.inpage_default_accessory_text),
-            context.getString(R.string.inpage_no_data_text)
-        )
+        val expectedI18nLocalization = getExpectedI18nLocalization(context)
 
         assertThat(actualI18nLocalization).isEqualTo(expectedI18nLocalization)
     }
@@ -41,6 +38,17 @@ class I18nLocalizationJsonParserTest {
             TestFixtures.EMPTY_JSON_DATA)
 
         val expectedI18nLocalization = I18nLocalization(
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
             "",
             ""
         )
@@ -56,10 +64,7 @@ class I18nLocalizationJsonParserTest {
         conf = Configuration(conf)
         conf.setLocale(Locale.JAPAN)
         val localizedContext = context.createConfigurationContext(conf)
-        val expectedI18nLocalization = I18nLocalization(
-            localizedContext.getString(R.string.inpage_default_accessory_text),
-            localizedContext.getString(R.string.inpage_no_data_text)
-        )
+        val expectedI18nLocalization = getExpectedI18nLocalization(localizedContext)
 
         assertThat(actualI18nLocalization).isEqualTo(expectedI18nLocalization)
     }
@@ -72,11 +77,26 @@ class I18nLocalizationJsonParserTest {
         conf = Configuration(conf)
         conf.setLocale(Locale.KOREA)
         val localizedContext = context.createConfigurationContext(conf)
-        val expectedI18nLocalization = I18nLocalization(
-            localizedContext.getString(R.string.inpage_default_accessory_text),
-            localizedContext.getString(R.string.inpage_no_data_text)
-        )
+        val expectedI18nLocalization = getExpectedI18nLocalization(localizedContext)
 
         assertThat(actualI18nLocalization).isEqualTo(expectedI18nLocalization)
+    }
+
+    private fun getExpectedI18nLocalization(localizedContext: Context): I18nLocalization {
+        return I18nLocalization(
+            localizedContext.getString(R.string.inpage_default_accessory_text),
+            localizedContext.getString(R.string.inpage_has_product_top_text),
+            localizedContext.getString(R.string.inpage_has_product_bottom_text),
+            localizedContext.getString(R.string.inpage_one_size_close_top_text),
+            localizedContext.getString(R.string.inpage_one_size_smaller_top_text),
+            localizedContext.getString(R.string.inpage_one_size_larger_top_text),
+            localizedContext.getString(R.string.inpage_one_size_close_bottom_text),
+            localizedContext.getString(R.string.inpage_one_size_smaller_bottom_text),
+            localizedContext.getString(R.string.inpage_one_size_larger_bottom_text),
+            localizedContext.getString(R.string.inpage_one_size_body_profile_text),
+            localizedContext.getString(R.string.inpage_multi_size_comparison_text),
+            localizedContext.getString(R.string.inpage_multi_size_body_profile_text),
+            localizedContext.getString(R.string.inpage_no_data_text)
+        )
     }
 }

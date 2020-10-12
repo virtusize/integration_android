@@ -22,20 +22,4 @@ data class StoreProductAdditionalInfo(
     val fit: String?,
     val style: String?,
     val brandSizing: BrandSizing?
-) {
-    /**
-     * Gets the general fit key for the fitting related InPage texts
-     */
-    fun getGeneralFitKey(): String? {
-        if(fit == null) {
-            return null
-        }
-        if(mutableListOf("loose", "wide", "flared").contains(fit)) {
-            return I18nConstants.GENERAL_FIT_LOOSE_KEY
-        }
-        if(mutableListOf("tight", "slim").contains(fit)) {
-            return I18nConstants.GENERAL_FIT_TIGHT_KEY
-        }
-        return I18nConstants.GENERAL_FIT_REGULAR_KEY
-    }
-}
+)

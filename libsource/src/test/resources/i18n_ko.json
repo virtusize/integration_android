@@ -6,10 +6,27 @@
     "apps": {
       "aoyama": {
         "inpage": {
-          "closestSizeToItem": "당신의 상품과 유사한 사이즈 %{value}",
           "defaultAccessoryText": "상품이 어울리는지 확인해보세요.",
-          "hasProductAccessoryText": "%{boldStart}소장 상품%{boldEnd}과 구매 상품의 사이즈를 비교해보세요.",
-          "noDataText": "구매 전에 당신에게 맞는 사이즈를 찾아보세요."
+          "noDataText": "구매 전에 당신에게 맞는 사이즈를 찾아보세요.",
+          "oneSize": {
+            "closeLead": "이 상품의 사이즈는",
+            "smallerLead": "이 상품의 사이즈는 더",
+            "largerLead": "이 상품의 사이즈는 더",
+            "close": "당신의 상품과 유사합니다",
+            "smaller": "작습니다",
+            "larger": "큽니다",
+            "bodyProfile": "입어보고 당신의 사이즈를 찾아보세요.",
+            "bodyProfileMini": "입어보고 당신의 사이즈를 찾아보세요."
+          },
+          "multiSize": {
+            "sizeComparison": "가장 유사한 상품은",
+            "bodyProfile": "추천하는 사이즈는"
+          },
+          "accessory": {
+            "hasProductLead": "사이즈 차이 보기",
+            "hasProduct": "당신의 상품",
+            "noData": "생필품과 어떻게 맞는지 확인해보세요."
+          }
         }
       }
     }

@@ -46,8 +46,13 @@ internal fun Context.getTypefaceByName(fontFileName: String): Typeface? {
  */
 internal fun String.trimI18nText(trimType: I18nLocalizationJsonParser.TrimType = I18nLocalizationJsonParser.TrimType.ONELINE): String {
     return when (trimType) {
-        I18nLocalizationJsonParser.TrimType.ONELINE -> replace("%{boldStart}", "").replace("%{boldEnd}", "")
-        I18nLocalizationJsonParser.TrimType.MULTIPLELINES -> replace("%{boldStart}", "<br>").replace("%{boldEnd}", "")
+        I18nLocalizationJsonParser.TrimType.ONELINE ->
+            replace(I18nConstants.BOLD_START_PLACEHOLDER, "")
+                .replace("<br>", "")
+                .replace(I18nConstants.BOLD_END_PLACEHOLDER, "")
+        I18nLocalizationJsonParser.TrimType.MULTIPLELINES ->
+            replace(I18nConstants.BOLD_START_PLACEHOLDER, "<br>")
+                .replace(I18nConstants.BOLD_END_PLACEHOLDER, "")
     }
 }
 
