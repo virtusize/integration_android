@@ -1,9 +1,7 @@
 package com.virtusize.libsource
 
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.content.res.Configuration
-import android.util.Log
 import android.view.WindowManager
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.parsers.*
@@ -63,15 +61,8 @@ class Virtusize(
 
     }
 
-    // The BrowserIdentifier contains the browser identifier for the current SDK
-    private var browserIdentifier: BrowserIdentifier = BrowserIdentifier(
-        sharedPrefs =
-        context.getSharedPreferences(
-            Constants.SHARED_PREFS_NAME,
-            MODE_PRIVATE
-        )
-    )
-
+    // TODO: add comment
+    private var sharedPreferencesHelper: SharedPreferencesHelper = SharedPreferencesHelper.getInstance(context)
     // Device screen resolution
     private lateinit var resolution: String
 
@@ -156,7 +147,7 @@ class Virtusize(
         }
         this.virtusizeProduct = virtusizeProduct
 
-        params.bid = browserIdentifier.getBrowserId()
+        params.bid = sharedPreferencesHelper.getBrowserId()
         params.virtusizeProduct = virtusizeProduct
 
         // API Request to perform Product check on Virtusize server
@@ -227,14 +218,6 @@ class Virtusize(
                                 showErrorForInPage(storeProductResponse.failureData)
                                 return@launch
                             }
-                            val userProducts: List<Product>?
-                            val userProductsResponse = getUserProductsResponse()
-                            if (userProductsResponse.isSuccessful) {
-                                userProducts = userProductsResponse.successData
-                            } else {
-                                showErrorForInPage(userProductsResponse.failureData)
-                                return@launch
-                            }
 
                             val productTypes: List<ProductType>?
                             val productTypesResponse = getProductTypesResponse()
@@ -245,10 +228,31 @@ class Virtusize(
                                 return@launch
                             }
 
-                            val userProductRecommendedSize = VirtusizeUtils.findBestMatchedProductSize(userProducts = userProducts!!, storeProduct!!, productTypes = productTypes!!)
-                            Log.d("productRecommendedSize", userProductRecommendedSize.toString())
+                            val userSessionInfo: UserSessionInfo?
+                            val userSessionInfoResponse = getUserSessionInfoResponse()
+                            if (userSessionInfoResponse.isSuccessful) {
+                                userSessionInfo = userSessionInfoResponse.successData!!
+                                sharedPreferencesHelper.setAuthToken(userSessionInfo.id)
+                            } else {
+                                showErrorForInPage(userSessionInfoResponse.failureData)
+                                return@launch
+                            }
+
+                            var userProducts: List<Product>? = null
+                            val userProductsResponse = getUserProductsResponse()
+                            if (userProductsResponse.isSuccessful) {
+                                userProducts = userProductsResponse.successData
+                            } else if(userProductsResponse.failureData?.code != HttpURLConnection.HTTP_NOT_FOUND) {
+                                showErrorForInPage(userProductsResponse.failureData)
+                                return@launch
+                            }
+
+                            val userProductRecommendedSize = VirtusizeUtils.findBestMatchedProductSize(
+                                userProducts = userProducts,
+                                storeProduct!!,
+                                productTypes = productTypes!!
+                            )
                             val userBodyRecommendedSize = getUserBodyRecommendedSize(storeProduct, productTypes)
-                            Log.d("bodyRecommendedSize", userBodyRecommendedSize.toString())
 
                             val i18nLocalization: I18nLocalization?
                             val i18nResponse = getI18nResponse()
@@ -343,7 +347,7 @@ class Virtusize(
                 userBodyProfileResponse.successData!!
             )
             return bodyProfileRecommendedSizeResponse.successData?.sizeName
-        } else {
+        } else if(userBodyProfileResponse.failureData?.code != HttpURLConnection.HTTP_NOT_FOUND) {
             userBodyProfileResponse.failureData?.let {
                 messageHandler.onError(it)
             }
@@ -361,14 +365,12 @@ class Virtusize(
                                   errorHandler: ErrorResponseHandler,
                                   apiRequest: ApiRequest
     ) {
-        VirtusizeApiTask()
-            .setBrowserID(browserIdentifier.getBrowserId())
+        VirtusizeApiTask(httpURLConnection)
             .setSuccessHandler(productValidCheckListener)
             .setJsonParser(ProductCheckJsonParser())
             .setErrorHandler(errorHandler)
-            .setHttpURLConnection(httpURLConnection)
-            .setCoroutineDispatcher(coroutineDispatcher)
-            .executeAsync(apiRequest)
+            .setSharedPreferencesHelper(sharedPreferencesHelper)
+            .executeAsync(apiRequest, coroutineDispatcher)
     }
 
     /**
@@ -382,14 +384,12 @@ class Virtusize(
         successHandler: SuccessResponseHandler? = null,
         errorHandler: ErrorResponseHandler) {
         val apiRequest = VirtusizeApi.sendProductImageToBackend(product = product)
-        VirtusizeApiTask()
-            .setBrowserID(browserIdentifier.getBrowserId())
+        VirtusizeApiTask(httpURLConnection)
             .setJsonParser(ProductMetaDataHintsJsonParser())
             .setSuccessHandler(successHandler)
             .setErrorHandler(errorHandler)
-            .setHttpURLConnection(httpURLConnection)
-            .setCoroutineDispatcher(coroutineDispatcher)
-            .executeAsync(apiRequest)
+            .setSharedPreferencesHelper(sharedPreferencesHelper)
+            .executeAsync(apiRequest, coroutineDispatcher)
     }
 
     /**
@@ -418,13 +418,11 @@ class Virtusize(
             versionCode = context.packageManager
                 .getPackageInfo(context.packageName, 0).versionCode
         )
-        VirtusizeApiTask()
-            .setBrowserID(browserIdentifier.getBrowserId())
+        VirtusizeApiTask(httpURLConnection)
             .setSuccessHandler(successHandler)
             .setErrorHandler(errorHandler)
-            .setHttpURLConnection(httpURLConnection)
-            .setCoroutineDispatcher(coroutineDispatcher)
-            .executeAsync(apiRequest)
+            .setSharedPreferencesHelper(sharedPreferencesHelper)
+            .executeAsync(apiRequest, coroutineDispatcher)
     }
 
     /**
@@ -436,13 +434,11 @@ class Virtusize(
         onSuccess: SuccessResponseHandler? = null,
         onError: ErrorResponseHandler? = null) {
         val apiRequest = VirtusizeApi.getStoreInfo()
-        VirtusizeApiTask()
+        VirtusizeApiTask(httpURLConnection)
             .setJsonParser(StoreJsonParser())
             .setSuccessHandler(onSuccess)
             .setErrorHandler(onError)
-            .setHttpURLConnection(httpURLConnection)
-            .setCoroutineDispatcher(coroutineDispatcher)
-            .executeAsync(apiRequest)
+            .executeAsync(apiRequest, coroutineDispatcher)
     }
 
     /**
@@ -465,8 +461,7 @@ class Virtusize(
                 // Sets the region from the store info
                 order.setRegion((data as? Store)?.region)
                 val apiRequest = VirtusizeApi.sendOrder(order)
-                VirtusizeApiTask()
-                    .setBrowserID(browserIdentifier.getBrowserId())
+                VirtusizeApiTask(httpURLConnection)
                     .setSuccessHandler(object : SuccessResponseHandler {
                         override fun onSuccess(data: Any?) {
                             onSuccess?.invoke()
@@ -477,9 +472,8 @@ class Virtusize(
                             onError?.invoke(error)
                         }
                     })
-                    .setHttpURLConnection(httpURLConnection)
-                    .setCoroutineDispatcher(coroutineDispatcher)
-                    .executeAsync(apiRequest)
+                    .setSharedPreferencesHelper(sharedPreferencesHelper)
+                    .executeAsync(apiRequest, coroutineDispatcher)
             }
         }, object : ErrorResponseHandler{
             override fun onError(error: VirtusizeError) {
@@ -510,13 +504,11 @@ class Virtusize(
                 // Sets the region from the store info
                 order.setRegion((data as? Store)?.region)
                 val apiRequest = VirtusizeApi.sendOrder(order)
-                VirtusizeApiTask()
-                    .setBrowserID(browserIdentifier.getBrowserId())
+                VirtusizeApiTask(httpURLConnection)
                     .setSuccessHandler(onSuccess)
                     .setErrorHandler(onError)
-                    .setHttpURLConnection(httpURLConnection)
-                    .setCoroutineDispatcher(coroutineDispatcher)
-                    .executeAsync(apiRequest)
+                    .setSharedPreferencesHelper(sharedPreferencesHelper)
+                    .executeAsync(apiRequest, coroutineDispatcher)
             }
         }, object : ErrorResponseHandler{
             override fun onError(error: VirtusizeError) {
@@ -535,9 +527,8 @@ class Virtusize(
             return@withContext VirtusizeApiResponse.Error(VirtusizeErrorType.NullProduct.virtusizeError())
         }
         val apiRequest = VirtusizeApi.getStoreProductInfo(productId.toString())
-        return@withContext VirtusizeApiTask()
+        return@withContext VirtusizeApiTask(httpURLConnection)
             .setJsonParser(StoreProductJsonParser())
-            .setHttpURLConnection(httpURLConnection)
             .execute(apiRequest) as VirtusizeApiResponse<Product?>
     }
 
@@ -546,22 +537,17 @@ class Virtusize(
      */
     internal suspend fun getProductTypesResponse(): VirtusizeApiResponse<List<ProductType>?> = withContext(IO) {
         val apiRequest = VirtusizeApi.getProductTypes()
-        return@withContext VirtusizeApiTask()
+        return@withContext VirtusizeApiTask(httpURLConnection)
             .setJsonParser(ProductTypeJsonParser())
-            .setHttpURLConnection(httpURLConnection)
             .execute(apiRequest) as VirtusizeApiResponse<List<ProductType>?>
     }
 
-    /**
-     * Gets the API response for fetching the i18n localization texts
-     * @return the [VirtusizeApiResponse] with the data class [I18nLocalization]
-     */
-    internal suspend fun getI18nResponse(): VirtusizeApiResponse<I18nLocalization?> = withContext(IO) {
-        val apiRequest = VirtusizeApi.getI18n(params.language ?: (VirtusizeLanguage.values().find { it.value == Locale.getDefault().language } ?: VirtusizeLanguage.EN))
-        VirtusizeApiTask()
-            .setJsonParser(I18nLocalizationJsonParser(context, params.language))
-            .setHttpURLConnection(httpURLConnection)
-            .execute(apiRequest) as VirtusizeApiResponse<I18nLocalization?>
+    internal suspend fun getUserSessionInfoResponse(): VirtusizeApiResponse<UserSessionInfo?> = withContext(IO) {
+        val apiRequest = VirtusizeApi.getSessions()
+        return@withContext VirtusizeApiTask(httpURLConnection)
+            .setJsonParser(UserSessionInfoJsonParser())
+            .setSharedPreferencesHelper(sharedPreferencesHelper)
+            .execute(apiRequest) as VirtusizeApiResponse<UserSessionInfo?>
     }
 
     /**
@@ -570,9 +556,9 @@ class Virtusize(
      */
     internal suspend fun getUserProductsResponse(): VirtusizeApiResponse<List<Product>?> = withContext(IO) {
         val apiRequest = VirtusizeApi.getUserProducts()
-        return@withContext VirtusizeApiTask()
+        return@withContext VirtusizeApiTask(httpURLConnection)
             .setJsonParser(UserProductJsonParser())
-            .setHttpURLConnection(httpURLConnection)
+            .setSharedPreferencesHelper(sharedPreferencesHelper)
             .execute(apiRequest) as VirtusizeApiResponse<List<Product>?>
     }
 
@@ -582,17 +568,28 @@ class Virtusize(
      */
     internal suspend fun getUserBodyProfileResponse(): VirtusizeApiResponse<UserBodyProfile?> = withContext(IO) {
         val apiRequest = VirtusizeApi.getUserBodyProfile()
-        VirtusizeApiTask()
+        VirtusizeApiTask(httpURLConnection)
             .setJsonParser(UserBodyProfileJsonParser())
-            .setHttpURLConnection(httpURLConnection)
+            .setSharedPreferencesHelper(sharedPreferencesHelper)
             .execute(apiRequest) as VirtusizeApiResponse<UserBodyProfile?>
     }
 
     internal suspend fun getBodyProfileRecommendedSizeResponse(productTypes: List<ProductType>, storeProduct: Product, userBodyProfile: UserBodyProfile): VirtusizeApiResponse<BodyProfileRecommendedSize?> = withContext(IO) {
         val apiRequest = VirtusizeApi.getSize(productTypes, storeProduct, userBodyProfile)
-        VirtusizeApiTask()
+        VirtusizeApiTask(httpURLConnection)
             .setJsonParser(BodyProfileRecommendedSizeJsonParser())
-            .setHttpURLConnection(httpURLConnection)
+            .setSharedPreferencesHelper(sharedPreferencesHelper)
             .execute(apiRequest) as VirtusizeApiResponse<BodyProfileRecommendedSize?>
+    }
+
+    /**
+     * Gets the API response for fetching the i18n localization texts
+     * @return the [VirtusizeApiResponse] with the data class [I18nLocalization]
+     */
+    internal suspend fun getI18nResponse(): VirtusizeApiResponse<I18nLocalization?> = withContext(IO) {
+        val apiRequest = VirtusizeApi.getI18n(params.language ?: (VirtusizeLanguage.values().find { it.value == Locale.getDefault().language } ?: VirtusizeLanguage.EN))
+        VirtusizeApiTask(httpURLConnection)
+            .setJsonParser(I18nLocalizationJsonParser(context, params.language))
+            .execute(apiRequest) as VirtusizeApiResponse<I18nLocalization?>
     }
 }

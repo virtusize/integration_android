@@ -32,7 +32,9 @@ fun VirtusizeEnvironment.defaultApiUrl(): String {
 fun VirtusizeEnvironment.servicesApiUrl(): String {
     return when(this) {
         STAGING -> "https://services.virtusize.com/stg"
-        else -> "https://services.virtusize.com/"
+        GLOBAL -> "https://services.virtusize.com"
+        JAPAN -> "https://services.virtusize.jp"
+        KOREA -> "https://services.virtusize.kr"
     }
 }
 
@@ -42,8 +44,8 @@ fun VirtusizeEnvironment.servicesApiUrl(): String {
  */
 fun VirtusizeEnvironment.virtusizeUrl(): String {
     return when(this) {
-        STAGING, JAPAN -> "https://static.api.virtusize.jp"
-        GLOBAL -> "https://static.api.virtusize.com"
+        STAGING, GLOBAL -> "https://static.api.virtusize.com"
+        JAPAN -> "https://static.api.virtusize.jp"
         KOREA -> "https://static.api.virtusize.kr"
     }
 }

@@ -57,7 +57,10 @@ internal object VirtusizeUtils {
     }
 
     // TODO: add comment
-    fun findBestMatchedProductSize(userProducts: List<Product>, storeProduct: Product, productTypes: List<ProductType>): SizeComparisonRecommendedSize? {
+    fun findBestMatchedProductSize(userProducts: List<Product>?, storeProduct: Product, productTypes: List<ProductType>): SizeComparisonRecommendedSize? {
+        if(userProducts == null) {
+            return null
+        }
         val storeProductType = productTypes.find { it.id == storeProduct.productType } ?: return null
         val compatibleUserProducts = userProducts.filter { it.productType in storeProductType.compatibleTypes }
         val sizeComparisonRecommendedSize = SizeComparisonRecommendedSize()
