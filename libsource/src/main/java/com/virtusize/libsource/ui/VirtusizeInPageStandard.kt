@@ -4,10 +4,8 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -18,11 +16,11 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.ViewCompat
 import com.virtusize.libsource.R
 import com.virtusize.libsource.data.local.*
+import com.virtusize.libsource.data.remote.Product
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.util.*
 import com.virtusize.libsource.util.FontUtils
 import com.virtusize.libsource.util.VirtusizeUtils
-import com.virtusize.libsource.util.getDrawableResourceByName
 import kotlinx.android.synthetic.main.view_inpage_standard.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -50,6 +48,8 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
      */
     override var virtusizeDialogFragment = VirtusizeWebView()
         private set
+
+    private var userBestMatchedProduct: Product? = null
 
     // The VirtusizeViewStyle that clients can choose to use for this InPage Standard view
     var virtusizeViewStyle = VirtusizeViewStyle.NONE
@@ -124,7 +124,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             }
         } else {
             virtusizeMessageHandler.onError(VirtusizeErrorType.NullProduct.virtusizeError())
-            throwError(VirtusizeErrorType.NullProduct)
+            VirtusizeErrorType.NullProduct.throwError()
         }
     }
 
@@ -133,7 +133,8 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
      * @param loading pass true when it's loading, and pass false when finishing loading
      */
     private fun setLoadingScreen(loading: Boolean) {
-        inpage_standard_product_border_card_view.visibility = if(loading) View.INVISIBLE else View.VISIBLE
+        inpage_standard_store_product_image_view.visibility = if(loading) View.INVISIBLE else View.VISIBLE
+        inpage_standard_user_product_image_view.visibility = if(loading || userBestMatchedProduct == null) View.GONE else View.VISIBLE
         vs_signature_image_view.visibility = if(loading) View.INVISIBLE else View.VISIBLE
         privacy_policy_text.visibility = if(loading) View.INVISIBLE else View.VISIBLE
         vs_icon_image_view.visibility = if(loading) View.VISIBLE else View.GONE
@@ -188,14 +189,42 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
     }
 
     /**
-     * Sets up the store product image
-     * @param imageUrl the image URL that clients provide when setting up the product info
-     * @param cloudinaryPublicId the Cloudinary image public ID
-     * @param productType the product type, which is fetched from the store product info
-     * @param style the product style, which is fetched from the store product info
+     * Sets the product images with the info of the store product and the best fit user product
+     * @param storeProduct the store product
+     * @param userBestFitProduct the best fit user product. If it's not available, it will be null
      */
-    internal fun setupProductImage(imageUrl: String?, cloudinaryPublicId: String, productType: Int, style: String?) {
-        setProductImageFromURL(imageUrl ?: getCloudinaryImageUrl(cloudinaryPublicId), productType, style)
+    internal fun setProductImages(storeProduct: Product, userBestFitProduct: Product?) {
+        this.userBestMatchedProduct = userBestFitProduct
+        val productMap = mutableMapOf<VirtusizeProductImageView, Product>()
+        productMap[inpage_standard_store_product_image_view] = storeProduct
+        if(userBestFitProduct != null) {
+            productMap[inpage_standard_user_product_image_view] = userBestFitProduct
+        } else {
+            val productImageHorizontalMargin = resources.getDimension(R.dimen.inpage_standard_product_image_horizontal_margin)
+            val productImageOffset = resources.getDimension(R.dimen.inpage_standard_product_image_offset_horizontal_margin)
+            inpage_standard_store_product_image_view.setPadding(productImageHorizontalMargin.toInt() - productImageOffset.toInt(), 0, 0, 0)
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            for (map in productMap.entries) {
+                val productImageView = map.key
+                val product = map.value
+                try {
+                    URL(product.getProductImageURL()).openStream().use {
+                        val bitmap = BitmapFactory.decodeStream(it)
+                        withContext(Dispatchers.Main) {
+                            productImageView.setProductImageView(bitmap)
+                        }
+                    }
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        productImageView.setProductPlaceHolder(product.productType, product.storeProductMeta?.additionalInfo?.style)
+                    }
+                }
+            }
+            withContext(Dispatchers.Main) {
+                setLoadingScreen(false)
+            }
+        }
     }
 
     /**
@@ -278,7 +307,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             try {
                 context.startActivity(intent)
             } catch (e: Exception) {
-                Log.d(Constants.INPAGE_LOG_TAG, e.localizedMessage)
+                virtusizeMessageHandler.onError(VirtusizeErrorType.PrivacyLinkNotOpen.virtusizeError(e.localizedMessage))
             }
         }
     }
@@ -326,70 +355,5 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         )
         layoutParams.setMargins(left, top, right, bottom)
         inpage_standard_footer.layoutParams = layoutParams
-    }
-
-    /**
-     * Sets up the InPage Standard footer margins
-     */
-    private fun getCloudinaryImageUrl(cloudinaryPublicId: String): String {
-        return "https://res.cloudinary.com/virtusize/image/upload/w_${36.dpInPx},h_${36.dpInPx}/q_auto,f_auto,dpr_auto/$cloudinaryPublicId.jpg"
-    }
-
-    /**
-     * Sets up the store product image from URL
-     * @param imageUrl the image URL
-     * @param productType the product type, which is fetched from the store product info
-     * @param style the product style, which is fetched from the store product info
-     */
-    private fun setProductImageFromURL(imageUrl: String?, productType: Int?, style: String?) {
-        if(imageUrl.isNullOrBlank()) {
-            return
-        }
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                URL(imageUrl).openStream().use {
-                    val bitmap = BitmapFactory.decodeStream(it)
-                    withContext(Dispatchers.Main) {
-                        inpage_standard_product_image_view.setImageBitmap(bitmap)
-                        inpage_standard_product_image_view.setPadding(0, 0, 0, 0)
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e(Constants.INPAGE_LOG_TAG, e.localizedMessage)
-                withContext(Dispatchers.Main) {
-                    inpage_standard_product_card_view.setCardBackgroundColor(
-                        ContextCompat.getColor(
-                            context,
-                            R.color.color_gray_200
-                        )
-                    )
-                    inpage_standard_product_image_view.setImageDrawable(
-                        getProductPlaceholderImage(productType, style)
-                    )
-                }
-            }
-            withContext(Dispatchers.Main) {
-                setLoadingScreen(false)
-            }
-        }
-    }
-
-    /**
-     * Gets the product placeholder image by the product type and style
-     * @param productType the product type, which is fetched from the store product info
-     * @param style the product style, which is fetched from the store product info
-     * @return a Drawable of product placeholder image
-     */
-    private fun getProductPlaceholderImage(productType: Int?, style: String?): Drawable? {
-        var productPlaceholderImage = context.getDrawableResourceByName(
-            "ic_product_type_$productType"
-        )
-        val productTypeImageWithStyle = context.getDrawableResourceByName(
-            "ic_product_type_${productType}_$style"
-        )
-        if(productTypeImageWithStyle != null) {
-            productPlaceholderImage = productTypeImageWithStyle
-        }
-        return productPlaceholderImage
     }
 }

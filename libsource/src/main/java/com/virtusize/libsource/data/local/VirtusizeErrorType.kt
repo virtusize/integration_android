@@ -16,7 +16,8 @@ enum class VirtusizeErrorType {
     InvalidProduct,
     NetworkError,
     JsonParsingError,
-    WardrobeNotFound
+    WardrobeNotFound,
+    PrivacyLinkNotOpen
 }
 
 /**
@@ -47,6 +48,7 @@ fun VirtusizeErrorType.message(extraMessage: String? = null): String {
         VirtusizeErrorType.NetworkError -> "Network error: $extraMessage"
         VirtusizeErrorType.JsonParsingError -> "JSON parsing error: $extraMessage"
         VirtusizeErrorType.WardrobeNotFound -> "The user's wardrobe hasn't been created in the Virtusize server yet"
+        VirtusizeErrorType.PrivacyLinkNotOpen -> "The privacy link can not be open. The error is: $extraMessage"
     }
 }
 

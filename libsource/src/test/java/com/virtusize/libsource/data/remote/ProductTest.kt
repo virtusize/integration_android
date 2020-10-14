@@ -55,7 +55,7 @@ class ProductTest {
     @Test
     fun getRecommendationText_productIsAnAccessory_hasSizeComparisonRecommendedSize_returnHasProductAccessoryText() {
         sizeComparisonRecommendedSize = SizeComparisonRecommendedSize()
-        sizeComparisonRecommendedSize?.bestUserProduct = ProductFixtures.storeProduct(18)
+        sizeComparisonRecommendedSize?.bestSize = ProductFixtures.storeProduct(18).sizes.get(0)
         val hasProductAccessoryTopText = context.getString(R.string.inpage_has_product_top_text)
         assertThat(ProductFixtures.storeProduct(18).getRecommendationText(i18nLocalization, sizeComparisonRecommendedSize, bodyProfileRecommendedSizeName)).contains(hasProductAccessoryTopText)
         assertThat(ProductFixtures.storeProduct(19).getRecommendationText(i18nLocalization, sizeComparisonRecommendedSize, bodyProfileRecommendedSizeName)).contains(hasProductAccessoryTopText)
@@ -138,12 +138,12 @@ class ProductTest {
     @Test
     fun getRecommendationText_multiSizeProduct_hasSizeComparisonRecommendedSize_returnMultiSizeComparisonText() {
         sizeComparisonRecommendedSize = SizeComparisonRecommendedSize()
-        sizeComparisonRecommendedSize?.bestUserProduct = ProductFixtures.storeProduct(
+        sizeComparisonRecommendedSize?.bestSize = ProductFixtures.storeProduct(
             sizeList = mutableListOf(
                 ProductSize("S", mutableSetOf()),
                 ProductSize("M", mutableSetOf())
             )
-        )
+        ).sizes[0]
         val multiSizeComparisonText = context.getString(R.string.inpage_multi_size_comparison_text)
         assertThat(
             ProductFixtures.storeProduct(

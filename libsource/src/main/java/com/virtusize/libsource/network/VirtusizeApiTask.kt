@@ -95,8 +95,9 @@ internal class VirtusizeApiTask(private var urlConnection: HttpURLConnection? = 
                     connectTimeout = CONNECT_TIMEOUT
                     requestMethod = apiRequest.method.name
 
-                    val browserID = sharedPreferencesHelper?.getBrowserId()
-                    setRequestProperty(HEADER_BROWSER_ID, browserID)
+                    sharedPreferencesHelper?.getBrowserId()?.let {
+                        setRequestProperty(HEADER_BROWSER_ID, it)
+                    }
 
                     if (apiRequest.authorization) {
                         sharedPreferencesHelper?.getAuthToken()?.let {

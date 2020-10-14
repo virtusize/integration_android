@@ -91,8 +91,7 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
                 }
             }
         } else {
-            virtusizeMessageHandler.onError(VirtusizeErrorType.NullProduct.virtusizeError())
-            throwError(VirtusizeErrorType.NullProduct)
+            VirtusizeErrorType.NullProduct.throwError()
         }
     }
 

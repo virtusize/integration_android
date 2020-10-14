@@ -68,6 +68,11 @@ class VirtusizeWebView: DialogFragment() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 if(url != null && url.contains(virtusizeWebAppUrl)) {
                     executeJavascript(view, vsParamsFromSDKScript)
+                    getBrowserIDFromCookies()?.let { bid ->
+                        if(bid != sharedPreferencesHelper.getBrowserId()) {
+                            sharedPreferencesHelper.storeBrowserId(bid)
+                        }
+                    }
                 }
             }
 
@@ -178,6 +183,24 @@ class VirtusizeWebView: DialogFragment() {
         } else {
             webView?.loadUrl(script)
         }
+    }
+
+    /**
+     * Returns virtusize.bid from the web view cookies
+     */
+    private fun getBrowserIDFromCookies(): String? {
+        var bidValue: String? = null
+        val cookieManager = CookieManager.getInstance()
+        val cookies = cookieManager.getCookie(virtusizeWebAppUrl)
+        if (cookies != null) {
+            val cookiesArray = cookies.split(";".toRegex()).toTypedArray()
+            for (cookie in cookiesArray) {
+                if (cookie.contains("virtusize.bid")) {
+                    bidValue = cookie.split("=".toRegex()).toTypedArray()[1]
+                }
+            }
+        }
+        return bidValue
     }
 
     /**

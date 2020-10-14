@@ -21,8 +21,9 @@
     <dimen name="virtusize_inpage_standard_layout_card_elevation">14dp</dimen>
     <dimen name="virtusize_inpage_standard_product_image_border_size">40dp</dimen>
     <dimen name="virtusize_inpage_standard_product_image_border_cardCornerRadius">20dp</dimen>
-    <dimen name="virtusize_inpage_standard_product_image_border_card_horizontal_margin">10dp</dimen>
-    <dimen name="virtusize_inpage_standard_product_image_border_card_vertical_margin">14dp</dimen>
+    <dimen name="inpage_standard_product_image_offset_horizontal_margin">-2dp</dimen>
+    <dimen name="inpage_standard_product_image_horizontal_margin">8dp</dimen>
+    <dimen name="inpage_standard_product_image_vertical_margin">14dp</dimen>
     <dimen name="virtusize_inpage_standard_product_image_size">36dp</dimen>
     <dimen name="virtusize_inpage_standard_product_image_cardCornerRadius">18dp</dimen>
     <dimen name="virtusize_inpage_standard_product_image_padding">6dp</dimen>

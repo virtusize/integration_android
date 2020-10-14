@@ -14,7 +14,6 @@ import com.virtusize.libsource.network.VirtusizeApiTask
 import com.virtusize.libsource.ui.VirtusizeInPageStandard
 import com.virtusize.libsource.ui.VirtusizeInPageView
 import com.virtusize.libsource.ui.VirtusizeView
-import com.virtusize.libsource.util.Constants
 import com.virtusize.libsource.util.VirtusizeUtils
 import com.virtusize.libsource.util.trimI18nText
 import kotlinx.coroutines.CoroutineDispatcher
@@ -126,15 +125,6 @@ class Virtusize(
     }
 
     /**
-     * Handles the null product error
-     * @throws VirtusizeErrorType.NullProduct error
-     */
-    private fun handleNullProductError() {
-        messageHandler.onError(VirtusizeErrorType.NullProduct.virtusizeError())
-        throwError(errorType = VirtusizeErrorType.NullProduct)
-    }
-
-    /**
      * Sets up the product for the product detail page
      *
      * @param virtusizeProduct VirtusizeProduct that is being set to the VirtusizeView
@@ -142,7 +132,7 @@ class Virtusize(
     fun setupVirtusizeProduct(virtusizeProduct: VirtusizeProduct?) {
         // Throws NullProduct error if the product is null
         if (virtusizeProduct == null) {
-            handleNullProductError()
+            VirtusizeErrorType.NullProduct.throwError()
             return
         }
         this.virtusizeProduct = virtusizeProduct
@@ -193,8 +183,7 @@ class Virtusize(
                                     errorHandler = errorHandler
                                 )
                             } else {
-                                messageHandler.onError(VirtusizeErrorType.ImageUrlNotValid.virtusizeError())
-                                throwError(VirtusizeErrorType.ImageUrlNotValid)
+                                VirtusizeErrorType.ImageUrlNotValid.throwError()
                             }
                         }
                         // Send API Event UserSawWidgetButton
@@ -228,11 +217,10 @@ class Virtusize(
                                 return@launch
                             }
 
-                            val userSessionInfo: UserSessionInfo?
                             val userSessionInfoResponse = getUserSessionInfoResponse()
                             if (userSessionInfoResponse.isSuccessful) {
-                                userSessionInfo = userSessionInfoResponse.successData!!
-                                sharedPreferencesHelper.setAuthToken(userSessionInfo.id)
+                                sharedPreferencesHelper.setAuthToken(userSessionInfoResponse.successData!!.id)
+                                sharedPreferencesHelper.setAuthToken("eyJ1aWQiOjI1NzMzMywiZWF0IjoxNjAyNzYwNDk3LCJhdXRoIjoyfQ:1kSeMz:kjL3nq4wu-3T3yZmnvDNzGOtWDM")
                             } else {
                                 showErrorForInPage(userSessionInfoResponse.failureData)
                                 return@launch
@@ -275,12 +263,8 @@ class Virtusize(
                                         ).trimI18nText(trimType)
                                     )
                                     if (virtusizeView is VirtusizeInPageStandard) {
-                                        virtusizeView.setupProductImage(
-                                            params.virtusizeProduct?.imageUrl,
-                                            storeProduct.cloudinaryPublicId,
-                                            storeProduct.productType,
-                                            storeProduct.storeProductMeta?.additionalInfo?.style
-                                        )
+                                        storeProduct.imageURL = params.virtusizeProduct?.imageUrl
+                                        virtusizeView.setProductImages(storeProduct, userProductRecommendedSize?.bestUserProduct)
                                     }
                                 }
                             }
@@ -317,14 +301,13 @@ class Virtusize(
     fun setupVirtusizeView(virtusizeView: VirtusizeView?) {
         // Throws NullProduct error if the product is not set yet
         if (virtusizeProduct == null) {
-            handleNullProductError()
+            VirtusizeErrorType.NullProduct.throwError()
             return
         }
 
         // Throws VirtusizeError.NullVirtusizeButtonError error if button is null
         if (virtusizeView == null) {
-            messageHandler.onError(VirtusizeErrorType.NullVirtusizeButtonError.virtusizeError())
-            throwError(errorType = VirtusizeErrorType.NullVirtusizeButtonError)
+            VirtusizeErrorType.NullVirtusizeButtonError.throwError()
             return
         }
 
@@ -456,7 +439,7 @@ class Virtusize(
                  * Throws the error if the user id is not set up or empty during the initialization of the [Virtusize] class
                  */
                 if(params.externalUserId.isNullOrEmpty()) {
-                    throwError(VirtusizeErrorType.UserIdNullOrEmpty)
+                    VirtusizeErrorType.UserIdNullOrEmpty.throwError()
                 }
                 // Sets the region from the store info
                 order.setRegion((data as? Store)?.region)
@@ -499,7 +482,7 @@ class Virtusize(
                  * Throws the error if the user id is not set up or empty during the initialization of the [Virtusize] class
                  */
                 if(params.externalUserId.isNullOrEmpty()) {
-                    throwError(VirtusizeErrorType.UserIdNullOrEmpty)
+                    VirtusizeErrorType.UserIdNullOrEmpty.throwError()
                 }
                 // Sets the region from the store info
                 order.setRegion((data as? Store)?.region)
