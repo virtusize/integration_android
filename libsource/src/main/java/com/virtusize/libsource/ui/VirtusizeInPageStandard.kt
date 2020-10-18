@@ -1,15 +1,21 @@
 package com.virtusize.libsource.ui
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewTreeObserver.OnPreDrawListener
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -18,9 +24,9 @@ import com.virtusize.libsource.R
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.Product
 import com.virtusize.libsource.data.remote.ProductCheck
-import com.virtusize.libsource.util.*
 import com.virtusize.libsource.util.FontUtils
 import com.virtusize.libsource.util.VirtusizeUtils
+import com.virtusize.libsource.util.dpInPx
 import kotlinx.android.synthetic.main.view_inpage_standard.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,7 +55,12 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
     override var virtusizeDialogFragment = VirtusizeWebView()
         private set
 
+    // TODO: add comment
     private var userBestMatchedProduct: Product? = null
+
+    private var shouldDisplayTwoImageViewsInOne = false
+
+    private val productImageVerticalMargin = resources.getDimension(R.dimen.inpage_standard_product_image_vertical_margin).toInt()
 
     // The VirtusizeViewStyle that clients can choose to use for this InPage Standard view
     var virtusizeViewStyle = VirtusizeViewStyle.NONE
@@ -63,7 +74,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         private set
 
     // The horizontal margin between the edges of InPage Standard view and the phone screen
-    var horizontalMargin = -1f
+    var horizontalMargin = -1
         set(value) {
             field = value
             setStyle()
@@ -88,7 +99,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         horizontalMargin = attrsArray.getDimension(
             R.styleable.VirtusizeInPageStandard_inPageStandardHorizontalMargin,
             -1f
-        )
+        ).toInt()
         attrsArray.recycle()
         setStyle()
     }
@@ -152,6 +163,9 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
                 inpage_standard_bottom_text.visibility = View.VISIBLE
             }
         }
+        if(!loading && userBestMatchedProduct != null && shouldDisplayTwoImageViewsInOne) {
+            displayTwoProductImageViewsInOne()
+        }
     }
 
     /**
@@ -200,9 +214,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         if(userBestFitProduct != null) {
             productMap[inpage_standard_user_product_image_view] = userBestFitProduct
         } else {
-            val productImageHorizontalMargin = resources.getDimension(R.dimen.inpage_standard_product_image_horizontal_margin)
-            val productImageOffset = resources.getDimension(R.dimen.inpage_standard_product_image_offset_horizontal_margin)
-            inpage_standard_store_product_image_view.setPadding(productImageHorizontalMargin.toInt() - productImageOffset.toInt(), 0, 0, 0)
+            addLeftPaddingToStoreProductImageView()
         }
         CoroutineScope(Dispatchers.IO).launch {
             for (map in productMap.entries) {
@@ -227,6 +239,16 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         }
     }
 
+    private fun addLeftPaddingToStoreProductImageView() {
+        val productImageHorizontalMargin = resources.getDimension(R.dimen.inpage_standard_product_image_horizontal_margin)
+        inpage_standard_store_product_image_view.setPadding(
+            productImageHorizontalMargin.toInt(),
+            productImageVerticalMargin,
+            0,
+            productImageVerticalMargin
+        )
+    }
+
     /**
      * Sets the InPage Standard style corresponding to [VirtusizeViewStyle] and [horizontalMargin]
      */
@@ -241,17 +263,66 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         }
 
         // Set horizontal margins
-        val inPageStandardFooterTopMargin = if(horizontalMargin.toInt() >= 2.dpInPx) 10.dpInPx - horizontalMargin.toInt() else horizontalMargin.toInt() + 8.dpInPx
-        if (horizontalMargin < 0f) {
+        val inPageStandardFooterTopMargin = if(horizontalMargin >= 2.dpInPx) 10.dpInPx - horizontalMargin else horizontalMargin + 8.dpInPx
+        if (horizontalMargin < 0) {
             return
         }
-        setupMargins(inpage_standard_card_view, horizontalMargin.toInt(), horizontalMargin.toInt(), horizontalMargin.toInt(), horizontalMargin.toInt())
+        setupMargins(inpage_standard_card_view, horizontalMargin, horizontalMargin, horizontalMargin, horizontalMargin)
         setupInPageStandardFooterMargins(
-            horizontalMargin.toInt() + 2.dpInPx,
+            horizontalMargin + 2.dpInPx,
             inPageStandardFooterTopMargin,
-            horizontalMargin.toInt() + 2.dpInPx,
+            horizontalMargin + 2.dpInPx,
             0
         )
+
+        viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                if (viewTreeObserver.isAlive) {
+                    viewTreeObserver.removeOnPreDrawListener(this)
+                }
+                if (width < 411.dpInPx) {
+                    shouldDisplayTwoImageViewsInOne = true
+                }
+                return true
+            }
+        })
+
+    }
+
+    private fun displayTwoProductImageViewsInOne() {
+        addLeftPaddingToStoreProductImageView()
+        val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        inpage_standard_store_product_image_view.layoutParams = params
+        setupMargins(inpage_standard_user_product_image_view, 0, productImageVerticalMargin, 0, productImageVerticalMargin)
+        crossFadeProductImageViews(inpage_standard_store_product_image_view, inpage_standard_user_product_image_view)
+    }
+
+    private fun crossFadeProductImageViews(imageViewOne: VirtusizeProductImageView, imageViewTwo: VirtusizeProductImageView) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            val shortAnimationDuration = 750
+
+            imageViewOne.apply {
+                alpha = 0f
+                visibility = View.VISIBLE
+
+                animate()
+                    .alpha(1f)
+                    .setDuration(shortAnimationDuration.toLong())
+                    .setListener(object : AnimatorListenerAdapter() {
+                        override fun onAnimationEnd(animation: Animator) {
+                            imageViewTwo.visibility = View.INVISIBLE
+                        }
+                    })
+            }
+            imageViewTwo.animate()
+                .alpha(0f)
+                .setDuration(shortAnimationDuration.toLong())
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        crossFadeProductImageViews(imageViewTwo, imageViewOne)
+                    }
+                })
+        }, 2500)
     }
 
     /**

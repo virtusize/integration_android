@@ -220,7 +220,6 @@ class Virtusize(
                             val userSessionInfoResponse = getUserSessionInfoResponse()
                             if (userSessionInfoResponse.isSuccessful) {
                                 sharedPreferencesHelper.setAuthToken(userSessionInfoResponse.successData!!.id)
-                                sharedPreferencesHelper.setAuthToken("eyJ1aWQiOjI1NzMzMywiZWF0IjoxNjAyNzYwNDk3LCJhdXRoIjoyfQ:1kSeMz:kjL3nq4wu-3T3yZmnvDNzGOtWDM")
                             } else {
                                 showErrorForInPage(userSessionInfoResponse.failureData)
                                 return@launch
