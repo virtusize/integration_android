@@ -15,7 +15,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewTreeObserver.OnPreDrawListener
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -59,8 +58,6 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
     private var userBestMatchedProduct: Product? = null
 
     private var shouldDisplayTwoImageViewsInOne = false
-
-    private val productImageVerticalMargin = resources.getDimension(R.dimen.inpage_standard_product_image_vertical_margin).toInt()
 
     // The VirtusizeViewStyle that clients can choose to use for this InPage Standard view
     var virtusizeViewStyle = VirtusizeViewStyle.NONE
@@ -241,12 +238,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
 
     private fun addLeftPaddingToStoreProductImageView() {
         val productImageHorizontalMargin = resources.getDimension(R.dimen.inpage_standard_product_image_horizontal_margin)
-        inpage_standard_store_product_image_view.setPadding(
-            productImageHorizontalMargin.toInt(),
-            productImageVerticalMargin,
-            0,
-            productImageVerticalMargin
-        )
+        inpage_standard_store_product_image_view.setPadding(productImageHorizontalMargin.toInt(), 0, 0, 0)
     }
 
     /**
@@ -293,7 +285,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         addLeftPaddingToStoreProductImageView()
         val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         inpage_standard_store_product_image_view.layoutParams = params
-        setupMargins(inpage_standard_user_product_image_view, 0, productImageVerticalMargin, 0, productImageVerticalMargin)
+        setupMargins(inpage_standard_user_product_image_view, 0, 0, 0, 0)
         crossFadeProductImageViews(inpage_standard_store_product_image_view, inpage_standard_user_product_image_view)
     }
 
