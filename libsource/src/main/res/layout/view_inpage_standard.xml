@@ -109,7 +109,6 @@
                     android:id="@+id/inpage_standard_top_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/virtusize_inpage_standard_top_text_marginBottom"
                     android:includeFontPadding="false"
                     android:textColor="@color/color_gray_900"
                     android:textSize="@dimen/virtusize_inpage_standard_normal_textSize"

@@ -174,6 +174,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             inpage_standard_top_text.text = splitTexts[0]
             inpage_standard_bottom_text.text = splitTexts[1]
         } else {
+            inpage_standard_top_text.text = ""
             inpage_standard_top_text.visibility = View.GONE
             inpage_standard_bottom_text.text = splitTexts[0]
         }
@@ -210,8 +211,9 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         productMap[inpage_standard_store_product_image_view] = storeProduct
         if(userBestFitProduct != null) {
             productMap[inpage_standard_user_product_image_view] = userBestFitProduct
+            removeLeftPaddingFromStoreProductImageView()
         } else {
-            addLeftPaddingToStoreProductImageView()
+            addLeftPaddingToStoreProductImageView(true)
         }
         CoroutineScope(Dispatchers.IO).launch {
             for (map in productMap.entries) {
@@ -236,9 +238,18 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         }
     }
 
-    private fun addLeftPaddingToStoreProductImageView() {
+    private fun addLeftPaddingToStoreProductImageView(addExtraPadding: Boolean) {
+        val productImageOverlapMargin = resources.getDimension(R.dimen.inpage_standard_product_image_overlap_margin)
         val productImageHorizontalMargin = resources.getDimension(R.dimen.inpage_standard_product_image_horizontal_margin)
-        inpage_standard_store_product_image_view.setPadding(productImageHorizontalMargin.toInt(), 0, 0, 0)
+        var addedPadding = productImageHorizontalMargin.toInt()
+        if(addExtraPadding) {
+            addedPadding -= productImageOverlapMargin.toInt()
+        }
+        inpage_standard_store_product_image_view.setPadding(addedPadding, 0, 0, 0)
+    }
+
+    private fun removeLeftPaddingFromStoreProductImageView() {
+        inpage_standard_store_product_image_view.setPadding(0, 0, 0, 0)
     }
 
     /**
@@ -281,28 +292,44 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
 
     }
 
+    private var running = false
+    private var stop = false
+
     private fun displayTwoProductImageViewsInOne() {
-        addLeftPaddingToStoreProductImageView()
+        addLeftPaddingToStoreProductImageView(false)
         val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         inpage_standard_store_product_image_view.layoutParams = params
         setupMargins(inpage_standard_user_product_image_view, 0, 0, 0, 0)
+        if(running) {
+            stopCrossFadeProductImageViews()
+        }
         crossFadeProductImageViews(inpage_standard_store_product_image_view, inpage_standard_user_product_image_view)
     }
 
+    private fun stopCrossFadeProductImageViews() {
+        stop = true
+    }
+
     private fun crossFadeProductImageViews(imageViewOne: VirtusizeProductImageView, imageViewTwo: VirtusizeProductImageView) {
+        if(stop) {
+            stop = false
+            running = false
+            return
+        }
+        running = true
         Handler(Looper.getMainLooper()).postDelayed({
             val shortAnimationDuration = 750
 
             imageViewOne.apply {
                 alpha = 0f
-                visibility = View.VISIBLE
+                visibility = VISIBLE
 
                 animate()
                     .alpha(1f)
                     .setDuration(shortAnimationDuration.toLong())
                     .setListener(object : AnimatorListenerAdapter() {
                         override fun onAnimationEnd(animation: Animator) {
-                            imageViewTwo.visibility = View.INVISIBLE
+                            imageViewTwo.visibility = INVISIBLE
                         }
                     })
             }
@@ -362,6 +389,10 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
 
         setConfiguredDimensions(configuredContext)
 
+        if(virtusizeParams?.language == VirtusizeLanguage.JP) {
+            inpage_standard_bottom_text.includeFontPadding = true
+        }
+
         privacy_policy_text.setOnClickListener {
             val intent = Intent(
                 Intent.ACTION_VIEW,
@@ -395,6 +426,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         }
         configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_top_text_marginBottom)?.let {
             setupMargins(inpage_standard_top_text, 0, 0, 0, it.toInt())
+            inpage_standard_top_text.setLineSpacing(it, 1f)
             inpage_standard_bottom_text.setLineSpacing(it, 1f)
         }
     }

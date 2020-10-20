@@ -114,6 +114,7 @@ internal class VirtusizeApiTask(private var urlConnection: HttpURLConnection? = 
                         if(apiRequest.url.contains(VirtusizeEndpoint.Sessions.getPath())) {
                             sharedPreferencesHelper?.getAuthHeader()?.let {
                                 setRequestProperty(HEADER_AUTH, it)
+                                setRequestProperty("Cookie", "")
                             }
                         }
 

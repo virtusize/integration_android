@@ -11,10 +11,7 @@ import android.webkit.*
 import androidx.fragment.app.DialogFragment
 import com.virtusize.libsource.R
 import com.virtusize.libsource.SharedPreferencesHelper
-import com.virtusize.libsource.data.local.VirtusizeErrorType
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler
-import com.virtusize.libsource.data.local.virtusizeError
-import com.virtusize.libsource.data.parsers.UserAuthDataJsonParser
 import com.virtusize.libsource.data.parsers.VirtusizeEventJsonParser
 import com.virtusize.libsource.util.Constants
 import kotlinx.android.synthetic.main.web_activity.*
@@ -228,9 +225,6 @@ class VirtusizeWebView: DialogFragment() {
             if(event?.name == "user-clicked-start") {
                 userAcceptedPrivacyPolicy()
             }
-            if(event?.name == "user-auth-data") {
-                setupUserAuthData(eventInfo)
-            }
         }
     }
 
@@ -244,17 +238,6 @@ class VirtusizeWebView: DialogFragment() {
             } else {
                 webView.loadUrl("javascript:localStorage.setItem('acceptedPrivacyPolicy','true');")
             }
-        }
-    }
-
-    private fun setupUserAuthData(eventJsonString: String) {
-        try {
-            val jsonObject = JSONObject(eventJsonString)
-            val userAutoData = UserAuthDataJsonParser().parse(jsonObject)
-            sharedPreferencesHelper.storeBrowserId(userAutoData?.bid)
-            sharedPreferencesHelper.setAuthHeader(userAutoData?.auth)
-        } catch (e: JSONException) {
-            virtusizeMessageHandler.onError(VirtusizeErrorType.JsonParsingError.virtusizeError("JSONException: $e"))
         }
     }
 }
