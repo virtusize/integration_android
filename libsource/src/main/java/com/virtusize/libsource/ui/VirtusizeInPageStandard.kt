@@ -55,9 +55,12 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         private set
 
     // TODO: add comment
-    private var userBestMatchedProduct: Product? = null
+    private var smallScreenWidth = false
+    private var crossFadeAnimationStatus = CrossFadeAnimationStatus.STOP
 
-    private var shouldDisplayTwoImageViewsInOne = false
+    private enum class CrossFadeAnimationStatus {
+        STOP, SHOULD_STOP, RUNNING
+    }
 
     // The VirtusizeViewStyle that clients can choose to use for this InPage Standard view
     var virtusizeViewStyle = VirtusizeViewStyle.NONE
@@ -140,9 +143,9 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
      * Sets up the styles for the loading screen and the screen after finishing loading
      * @param loading pass true when it's loading, and pass false when finishing loading
      */
-    private fun setLoadingScreen(loading: Boolean) {
+    private fun setLoadingScreen(loading: Boolean, userBestFitProduct: Product? = null) {
         inpage_standard_store_product_image_view.visibility = if(loading) View.INVISIBLE else View.VISIBLE
-        inpage_standard_user_product_image_view.visibility = if(loading || userBestMatchedProduct == null) View.GONE else View.VISIBLE
+        inpage_standard_user_product_image_view.visibility = if(userBestFitProduct == null) View.GONE else View.VISIBLE
         vs_signature_image_view.visibility = if(loading) View.INVISIBLE else View.VISIBLE
         privacy_policy_text.visibility = if(loading) View.INVISIBLE else View.VISIBLE
         vs_icon_image_view.visibility = if(loading) View.VISIBLE else View.GONE
@@ -160,7 +163,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
                 inpage_standard_bottom_text.visibility = View.VISIBLE
             }
         }
-        if(!loading && userBestMatchedProduct != null && shouldDisplayTwoImageViewsInOne) {
+        if(!loading && userBestFitProduct != null && smallScreenWidth) {
             displayTwoProductImageViewsInOne()
         }
     }
@@ -206,7 +209,6 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
      * @param userBestFitProduct the best fit user product. If it's not available, it will be null
      */
     internal fun setProductImages(storeProduct: Product, userBestFitProduct: Product?) {
-        this.userBestMatchedProduct = userBestFitProduct
         val productMap = mutableMapOf<VirtusizeProductImageView, Product>()
         productMap[inpage_standard_store_product_image_view] = storeProduct
         if(userBestFitProduct != null) {
@@ -233,7 +235,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
                 }
             }
             withContext(Dispatchers.Main) {
-                setLoadingScreen(false)
+                setLoadingScreen(false, userBestFitProduct)
             }
         }
     }
@@ -257,12 +259,16 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
      */
     private fun setStyle() {
         // Set Virtusize default style
-        if(virtusizeButtonBackgroundColor!= 0) {
-            setSizeCheckButtonBackgroundTint(virtusizeButtonBackgroundColor)
-        } else if(virtusizeViewStyle == VirtusizeViewStyle.TEAL) {
-            setSizeCheckButtonBackgroundTint(ContextCompat.getColor(context, R.color.virtusizeTeal))
-        } else {
-            setSizeCheckButtonBackgroundTint(ContextCompat.getColor(context, R.color.color_gray_900))
+        when {
+            virtusizeButtonBackgroundColor!= 0 -> {
+                setSizeCheckButtonBackgroundTint(virtusizeButtonBackgroundColor)
+            }
+            virtusizeViewStyle == VirtusizeViewStyle.TEAL -> {
+                setSizeCheckButtonBackgroundTint(ContextCompat.getColor(context, R.color.virtusizeTeal))
+            }
+            else -> {
+                setSizeCheckButtonBackgroundTint(ContextCompat.getColor(context, R.color.color_gray_900))
+            }
         }
 
         // Set horizontal margins
@@ -284,41 +290,32 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
                     viewTreeObserver.removeOnPreDrawListener(this)
                 }
                 if (width < 411.dpInPx) {
-                    shouldDisplayTwoImageViewsInOne = true
+                    smallScreenWidth = true
                 }
                 return true
             }
         })
 
     }
-
-    private var running = false
-    private var stop = false
-
     private fun displayTwoProductImageViewsInOne() {
         addLeftPaddingToStoreProductImageView(false)
         val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         inpage_standard_store_product_image_view.layoutParams = params
         setupMargins(inpage_standard_user_product_image_view, 0, 0, 0, 0)
-        if(running) {
-            stopCrossFadeProductImageViews()
+        if(crossFadeAnimationStatus == CrossFadeAnimationStatus.RUNNING) {
+            crossFadeAnimationStatus = CrossFadeAnimationStatus.SHOULD_STOP
         }
-        crossFadeProductImageViews(inpage_standard_store_product_image_view, inpage_standard_user_product_image_view)
+        displayProductImagesWithCrossFadeAnimation(inpage_standard_store_product_image_view, inpage_standard_user_product_image_view)
     }
 
-    private fun stopCrossFadeProductImageViews() {
-        stop = true
-    }
-
-    private fun crossFadeProductImageViews(imageViewOne: VirtusizeProductImageView, imageViewTwo: VirtusizeProductImageView) {
-        if(stop) {
-            stop = false
-            running = false
+    private fun displayProductImagesWithCrossFadeAnimation(imageViewOne: VirtusizeProductImageView, imageViewTwo: VirtusizeProductImageView) {
+        if(crossFadeAnimationStatus == CrossFadeAnimationStatus.SHOULD_STOP) {
+            crossFadeAnimationStatus = CrossFadeAnimationStatus.STOP
             return
         }
-        running = true
+        crossFadeAnimationStatus = CrossFadeAnimationStatus.RUNNING
         Handler(Looper.getMainLooper()).postDelayed({
-            val shortAnimationDuration = 750
+            val crossFadeAnimationDuration = 750
 
             imageViewOne.apply {
                 alpha = 0f
@@ -326,7 +323,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
 
                 animate()
                     .alpha(1f)
-                    .setDuration(shortAnimationDuration.toLong())
+                    .setDuration(crossFadeAnimationDuration.toLong())
                     .setListener(object : AnimatorListenerAdapter() {
                         override fun onAnimationEnd(animation: Animator) {
                             imageViewTwo.visibility = INVISIBLE
@@ -335,10 +332,10 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             }
             imageViewTwo.animate()
                 .alpha(0f)
-                .setDuration(shortAnimationDuration.toLong())
+                .setDuration(crossFadeAnimationDuration.toLong())
                 .setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
-                        crossFadeProductImageViews(imageViewTwo, imageViewOne)
+                        displayProductImagesWithCrossFadeAnimation(imageViewTwo, imageViewOne)
                     }
                 })
         }, 2500)
