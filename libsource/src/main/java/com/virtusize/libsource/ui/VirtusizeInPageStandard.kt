@@ -56,11 +56,9 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
 
     // TODO: add comment
     private var smallScreenWidth = false
-    private var crossFadeAnimationStatus = CrossFadeAnimationStatus.STOP
-
-    private enum class CrossFadeAnimationStatus {
-        STOP, SHOULD_STOP, RUNNING
-    }
+    private val crossFadeAnimationDuration = 750
+    private var crossFadeRunnable: Runnable? = null
+    private var crossFadeHandler: Handler = Handler(Looper.getMainLooper())
 
     // The VirtusizeViewStyle that clients can choose to use for this InPage Standard view
     var virtusizeViewStyle = VirtusizeViewStyle.NONE
@@ -163,8 +161,12 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
                 inpage_standard_bottom_text.visibility = View.VISIBLE
             }
         }
-        if(!loading && userBestFitProduct != null && smallScreenWidth) {
-            displayTwoProductImageViewsInOne()
+        if(smallScreenWidth && !loading) {
+            if (userBestFitProduct != null) {
+                startCrossFadeProductImageViews()
+            } else {
+                stopCrossFadeProductImageViews()
+            }
         }
     }
 
@@ -297,48 +299,60 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         })
 
     }
-    private fun displayTwoProductImageViewsInOne() {
+    private fun startCrossFadeProductImageViews() {
         addLeftPaddingToStoreProductImageView(false)
         val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         inpage_standard_store_product_image_view.layoutParams = params
         setupMargins(inpage_standard_user_product_image_view, 0, 0, 0, 0)
-        if(crossFadeAnimationStatus == CrossFadeAnimationStatus.RUNNING) {
-            crossFadeAnimationStatus = CrossFadeAnimationStatus.SHOULD_STOP
+        if(crossFadeRunnable == null) {
+            crossFadeRunnable = Runnable {
+                if(inpage_standard_user_product_image_view.visibility == View.VISIBLE) {
+                    inpage_standard_store_product_image_view.visibility == View.INVISIBLE
+                    fadeInAnimation(inpage_standard_store_product_image_view, inpage_standard_user_product_image_view)
+                    fadeOutAnimation(inpage_standard_user_product_image_view)
+                } else {
+                    fadeInAnimation(inpage_standard_user_product_image_view, inpage_standard_store_product_image_view)
+                    fadeOutAnimation(inpage_standard_store_product_image_view)
+                }
+            }
+            crossFadeHandler.postDelayed(crossFadeRunnable!!, 2500)
         }
-        displayProductImagesWithCrossFadeAnimation(inpage_standard_store_product_image_view, inpage_standard_user_product_image_view)
     }
 
-    private fun displayProductImagesWithCrossFadeAnimation(imageViewOne: VirtusizeProductImageView, imageViewTwo: VirtusizeProductImageView) {
-        if(crossFadeAnimationStatus == CrossFadeAnimationStatus.SHOULD_STOP) {
-            crossFadeAnimationStatus = CrossFadeAnimationStatus.STOP
-            return
+    private fun stopCrossFadeProductImageViews() {
+        crossFadeRunnable?.let { crossFadeHandler.removeCallbacks(it) }
+        crossFadeRunnable = null
+        inpage_standard_user_product_image_view.alpha = 1f
+        inpage_standard_store_product_image_view.alpha = 1f
+    }
+
+    private fun fadeInAnimation(imageViewOne: VirtusizeProductImageView, imageViewTwo: VirtusizeProductImageView) {
+        imageViewOne.apply {
+            alpha = 0f
+            visibility = VISIBLE
+
+            animate()
+                .alpha(1f)
+                .setDuration(crossFadeAnimationDuration.toLong())
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        imageViewTwo.visibility = INVISIBLE
+                    }
+                })
         }
-        crossFadeAnimationStatus = CrossFadeAnimationStatus.RUNNING
-        Handler(Looper.getMainLooper()).postDelayed({
-            val crossFadeAnimationDuration = 750
+    }
 
-            imageViewOne.apply {
-                alpha = 0f
-                visibility = VISIBLE
-
-                animate()
-                    .alpha(1f)
-                    .setDuration(crossFadeAnimationDuration.toLong())
-                    .setListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationEnd(animation: Animator) {
-                            imageViewTwo.visibility = INVISIBLE
-                        }
-                    })
-            }
-            imageViewTwo.animate()
+    private fun fadeOutAnimation(imageView: VirtusizeProductImageView) {
+        imageView.apply {
+            animate()
                 .alpha(0f)
                 .setDuration(crossFadeAnimationDuration.toLong())
                 .setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
-                        displayProductImagesWithCrossFadeAnimation(imageViewTwo, imageViewOne)
+                        crossFadeRunnable?.let { crossFadeHandler.postDelayed(it, 2500) }
                     }
                 })
-        }, 2500)
+        }
     }
 
     /**
