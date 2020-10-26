@@ -51,32 +51,32 @@ class Virtusize(
         override fun onEvent(event: VirtusizeEvent) {
             messageHandlers.forEach { messageHandler ->
                 messageHandler.onEvent(event)
-                if (event.name == VirtusizeEvents.UserSelectedProduct.name || event.name == VirtusizeEvents.UserOpenedPanelCompare.name) {
-                    val userProductId = event.data?.optInt("userProductId")
-                    CoroutineScope(Main).launch {
-                        setupRecommendation(userProductId)
-                    }
+            }
+            if (event.name == VirtusizeEvents.UserSelectedProduct.getEventName() || event.name == VirtusizeEvents.UserOpenedPanelCompare.getEventName()) {
+                val userProductId = event.data?.optInt("userProductId")
+                CoroutineScope(Main).launch {
+                    setupRecommendation(userProductId)
                 }
-                if (event.name == VirtusizeEvents.UserAddedProduct.name) {
-                    CoroutineScope(Main).launch {
-                        setupRecommendation()
-                    }
+            }
+            if (event.name == VirtusizeEvents.UserAddedProduct.getEventName()) {
+                CoroutineScope(Main).launch {
+                    setupRecommendation()
                 }
-                if (event.name == VirtusizeEvents.UserAuthData.name) {
-                    event.data?.let { setupUserAuthData(messageHandler, it) }
+            }
+            if (event.name == VirtusizeEvents.UserAuthData.getEventName()) {
+                event.data?.let { setupUserAuthData(it) }
+            }
+            if (event.name == VirtusizeEvents.UserLoggedIn.getEventName()) {
+                CoroutineScope(Main).launch {
+                    updateUserSession()
+                    setupRecommendation()
                 }
-                if (event.name == VirtusizeEvents.UserLoggedIn.name) {
-                    CoroutineScope(Main).launch {
-                        updateUserSession()
-                        setupRecommendation()
-                    }
-                }
-                if (event.name == VirtusizeEvents.UserLoggedOut.name) {
-                    sharedPreferencesHelper.setAuthHeader("")
-                    CoroutineScope(Main).launch {
-                        updateUserSession()
-                        setupRecommendation(null, true)
-                    }
+            }
+            if (event.name == VirtusizeEvents.UserLoggedOut.getEventName()) {
+                sharedPreferencesHelper.setAuthHeader("")
+                CoroutineScope(Main).launch {
+                    updateUserSession()
+                    setupRecommendation(null, true)
                 }
             }
         }
@@ -87,13 +87,15 @@ class Virtusize(
             }
         }
 
-        private fun setupUserAuthData(messageHandler: VirtusizeMessageHandler, eventJsonObject: JSONObject) {
+        private fun setupUserAuthData(eventJsonObject: JSONObject) {
             try {
                 val userAutoData = UserAuthDataJsonParser().parse(eventJsonObject)
                 sharedPreferencesHelper.storeBrowserId(userAutoData?.bid)
                 sharedPreferencesHelper.setAuthHeader(userAutoData?.auth)
             } catch (e: JSONException) {
-                messageHandler.onError(VirtusizeErrorType.JsonParsingError.virtusizeError("JSONException: $e"))
+                messageHandlers.forEach { messageHandler ->
+                    messageHandler.onError(VirtusizeErrorType.JsonParsingError.virtusizeError("JSONException: $e"))
+                }
             }
         }
     }
