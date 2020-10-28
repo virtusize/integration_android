@@ -65,7 +65,8 @@
                     android:layout_marginTop="@dimen/inpage_standard_product_image_vertical_margin"
                     android:layout_marginBottom="@dimen/inpage_standard_product_image_vertical_margin"
                     android:layout_toEndOf="@+id/inpage_standard_user_product_image_view"
-                    android:layout_toRightOf="@+id/inpage_standard_user_product_image_view" />
+                    android:layout_toRightOf="@+id/inpage_standard_user_product_image_view"
+                    app:productImageType="store_product"/>
 
                 <com.virtusize.libsource.ui.VirtusizeProductImageView
                     android:id="@+id/inpage_standard_user_product_image_view"
