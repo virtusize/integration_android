@@ -346,19 +346,17 @@ There are two types of InPage in our Virtusize SDK.
 
   Here are some possible layouts 
 
-  <img src="https://user-images.githubusercontent.com/7802052/97396729-ff734f80-192a-11eb-84fb-2adc27cd2975.gif">
-
-  |             Top left             |                 Top right                  |
-  | :------------------------------: | :----------------------------------------: |
-  | 1 thumbnail + 2 lines of message |     2 thumbnails + 2 lines of message      |
-  |         **Bottom left**          |              **Bottom right**              |
-  | 1 thumbnail + 1 line of message  | 2 animated thumbnails + 2 lines of message |
-
+  |               1 thumbnail + 2 lines of message               |              2 thumbnails + 2 lines of message               |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | ![1 thumbnail + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399368-5e879300-1930-11eb-8b77-b49e06813550.png) | ![2 thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399370-5f202980-1930-11eb-9a2d-7b71714aa7b4.png) |
+  |             **1 thumbnail + 1 line of message**              |        **2 animated thumbnails + 2 lines of message**        |
+  | ![1 thumbnail + 1 line of message](https://user-images.githubusercontent.com/7802052/97399373-5f202980-1930-11eb-81fe-9946b656eb4c.png) | ![2 animated thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399355-59c2df00-1930-11eb-8a52-292956b8762d.gif) |
+  
 - ##### Recommended Placement
   
-- Near the size table
+  - Near the size table
   
-- In the size info section
+  - In the size info section
   
   <img src="https://user-images.githubusercontent.com/7802052/92672185-15b15600-f353-11ea-921d-397f207cf616.png" style="zoom:50%;" />
   
