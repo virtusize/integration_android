@@ -116,7 +116,7 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
     }
 
     /**
-     * Sets up the background color of InPage Mini view
+     * Sets up the background color of the InPage Mini
      * @param color a color int
      */
     fun setInPageMiniBackgroundColor(@ColorInt color: Int) {

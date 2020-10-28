@@ -7,7 +7,7 @@ import java.net.HttpURLConnection
  * This enum contains all available error types in Virtusize library
  */
 enum class VirtusizeErrorType {
-    NullVirtusizeButtonError,
+    NullVirtusizeViewError,
     ApiKeyNullOrInvalid,
     UserIdNullOrEmpty,
     NullContext,
@@ -38,15 +38,15 @@ fun VirtusizeErrorType.code(): Int? {
  */
 fun VirtusizeErrorType.message(extraMessage: String? = null): String {
     return when(this) {
-        VirtusizeErrorType.NullVirtusizeButtonError -> "Virtusize Button is null."
-        VirtusizeErrorType.ApiKeyNullOrInvalid -> "Api Key is not set or invalid"
-        VirtusizeErrorType.UserIdNullOrEmpty -> "The unique user ID from the client system is not set up or empty"
-        VirtusizeErrorType.NullContext -> "Context can not be null"
-        VirtusizeErrorType.ImageUrlNotValid -> "Image URL is invalid"
-        VirtusizeErrorType.NullProduct -> "Product can not null"
-        VirtusizeErrorType.InvalidProduct -> "Product $extraMessage is not valid in the Virtusize server"
-        VirtusizeErrorType.NetworkError -> "Network error: $extraMessage"
-        VirtusizeErrorType.JsonParsingError -> "JSON parsing error: $extraMessage"
+        VirtusizeErrorType.NullVirtusizeViewError -> "The Virtusize view in the layout is null."
+        VirtusizeErrorType.ApiKeyNullOrInvalid -> "The Virtusize API key is not set or invalid."
+        VirtusizeErrorType.UserIdNullOrEmpty -> "The unique user ID from the client system is not set up or empty."
+        VirtusizeErrorType.NullContext -> "Context can not be null."
+        VirtusizeErrorType.ImageUrlNotValid -> "The image URL is invalid."
+        VirtusizeErrorType.NullProduct -> "The store product is null. Please set up your store product"
+        VirtusizeErrorType.InvalidProduct -> "The store product $extraMessage is not valid in the Virtusize server"
+        VirtusizeErrorType.NetworkError -> "Virtusize API error: $extraMessage"
+        VirtusizeErrorType.JsonParsingError -> "JSON response parsing error: $extraMessage"
         VirtusizeErrorType.WardrobeNotFound -> "The user's wardrobe hasn't been created in the Virtusize server yet"
         VirtusizeErrorType.PrivacyLinkNotOpen -> "The privacy link can not be open. The error is: $extraMessage"
     }

@@ -5,12 +5,26 @@ import com.virtusize.libsource.data.remote.ProductType
 import com.virtusize.libsource.data.remote.UserBodyProfile
 import org.json.JSONObject
 
-// TODO: add comment
+/**
+ * The class that wraps the parameters for the API request of getting the recommended size based on the user's body profile
+ *
+ * @param productTypes the list of available [ProductType]
+ * @param storeProduct the store product info in the type of [Product]
+ * @param userBodyProfile the user body profile
+ * @see ProductType
+ * @see Product
+ * @see UserBodyProfile
+ */
 internal data class BodyProfileRecommendedSizeParams constructor(
     private val productTypes: List<ProductType>,
     private val storeProduct: Product,
     private val userBodyProfile: UserBodyProfile
 ) {
+
+    /**
+     * Returns the map that represents the API request body
+     * @return the name of the event
+     */
     fun paramsToMap(): Map<String, Any> {
         return emptyMap<String, Any>()
             .plus(
@@ -30,6 +44,9 @@ internal data class BodyProfileRecommendedSizeParams constructor(
             )
     }
 
+    /**
+     * Creates the map that represents the store product additional info
+     */
     fun createAdditionalInfoParams(): Map<String, Any?> {
         val brand = storeProduct.storeProductMeta?.additionalInfo?.brand ?: storeProduct.storeProductMeta?.brand
         val sizeHashMap = storeProduct.storeProductMeta?.additionalInfo?.sizes?.map {
@@ -56,6 +73,9 @@ internal data class BodyProfileRecommendedSizeParams constructor(
             )
     }
 
+    /**
+     * Creates the map that represents the user body data
+     */
     fun createBodyDataParams(): Map<String, Any?> {
         var chestValue: Int? = null
         return emptyMap<String, Any?>()
@@ -72,6 +92,9 @@ internal data class BodyProfileRecommendedSizeParams constructor(
             )
     }
 
+    /**
+     * Creates the map that represents the store product size info
+     */
     fun createItemSizesParams(): Map<String, Any?> {
         return emptyMap<String, Any?>()
             .plus(

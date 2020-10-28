@@ -1,8 +1,5 @@
 package com.virtusize.libsource.data.local
 
-import android.util.Log
-import com.virtusize.libsource.util.Constants
-
 /**
  * The class that wraps Virtusize specific error information
  *

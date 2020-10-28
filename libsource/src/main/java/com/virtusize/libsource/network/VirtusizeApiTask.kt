@@ -42,7 +42,7 @@ internal class VirtusizeApiTask(private var urlConnection: HttpURLConnection? = 
         private const val HEADER_COOKIE = "Cookie"
     }
 
-    // TODO: add comment
+    // The helper to save data locally using Shared Preferences
     private var sharedPreferencesHelper: SharedPreferencesHelper? = null
     // The Json parser interface for converting the JSON response to a given type of Java object
     private var jsonParser: VirtusizeJsonParser<Any>? = null
@@ -100,8 +100,9 @@ internal class VirtusizeApiTask(private var urlConnection: HttpURLConnection? = 
                         setRequestProperty(HEADER_BROWSER_ID, it)
                     }
 
+                    // Set the access token in the header if the request needs authentication
                     if (apiRequest.authorization) {
-                        sharedPreferencesHelper?.getAuthToken()?.let {
+                        sharedPreferencesHelper?.getAccessToken()?.let {
                             setRequestProperty(HEADER_AUTHORIZATION, "Token $it")
                         }
                     }
@@ -111,9 +112,9 @@ internal class VirtusizeApiTask(private var urlConnection: HttpURLConnection? = 
                         doOutput = true
                         setRequestProperty(HEADER_CONTENT_TYPE, "application/json")
 
-                        // Set up auth header for the sessions API
+                        // Set up the request header for the sessions API
                         if(apiRequest.url.contains(VirtusizeEndpoint.Sessions.getPath())) {
-                            sharedPreferencesHelper?.getAuthHeader()?.let {
+                            sharedPreferencesHelper?.getAuthToken()?.let {
                                 setRequestProperty(HEADER_AUTH, it)
                                 setRequestProperty(HEADER_COOKIE, "")
                             }
@@ -152,11 +153,7 @@ internal class VirtusizeApiTask(private var urlConnection: HttpURLConnection? = 
                         HttpURLConnection.HTTP_NOT_FOUND -> {
                             // If the product cannot be found in the Virtusize Server
                             if (response is ProductCheck) {
-                                errorHandler?.onError(
-                                    VirtusizeErrorType.InvalidProduct.virtusizeError(
-                                        response.productId
-                                    )
-                                )
+                                errorHandler?.onError(VirtusizeErrorType.InvalidProduct.virtusizeError(response.name))
                                 return VirtusizeApiResponse.Success(response)
                             }
                             virtusizeNetworkError(urlConnection, response)
@@ -167,20 +164,10 @@ internal class VirtusizeApiTask(private var urlConnection: HttpURLConnection? = 
                     }
                     return VirtusizeApiResponse.Error(error)
                 }
-                else -> return VirtusizeApiResponse.Error(
-                    virtusizeNetworkError(
-                        urlConnection,
-                        urlConnection.responseMessage
-                    )
-                )
+                else -> return VirtusizeApiResponse.Error(virtusizeNetworkError(urlConnection, urlConnection.responseMessage))
             }
         } catch (e: IOException) {
-            return VirtusizeApiResponse.Error(
-                virtusizeNetworkError(
-                    urlConnection,
-                    e.localizedMessage
-                )
-            )
+            return VirtusizeApiResponse.Error(virtusizeNetworkError(urlConnection, e.localizedMessage))
         } finally {
             urlConnection?.disconnect()
             inputStream?.close()
@@ -246,7 +233,10 @@ internal class VirtusizeApiTask(private var urlConnection: HttpURLConnection? = 
         return result
     }
 
-    // TODO: comment
+    /**
+     * Check if the response of the API request is a JSON array
+     * @param apiRequestUrl The input stream of bytes
+     */
     private fun responseIsJsonArray(apiRequestUrl: String): Boolean {
         return apiRequestUrl.contains(VirtusizeEndpoint.ProductType.getPath())
                 || apiRequestUrl.contains(VirtusizeEndpoint.UserProducts.getPath())
@@ -270,7 +260,7 @@ internal class VirtusizeApiTask(private var urlConnection: HttpURLConnection? = 
         return VirtusizeError(
             VirtusizeErrorType.NetworkError,
             urlConnection?.responseCode,
-            "Virtusize API error: ${urlConnection?.url?.path} - ${response?.toString() ?: urlConnection?.responseMessage}"
+            "${urlConnection?.url?.path} - ${response?.toString() ?: urlConnection?.responseMessage}"
         )
     }
 }

@@ -9,7 +9,7 @@ class VirtusizeUtilsTest {
 
     @Test
     fun getStoreProductFitInfo_withUserShirtXS_shouldHaveExpectedFitInfo() {
-        val actualStoreProductFitInfo = VirtusizeUtils.getStoreProductFitInfo(
+        val actualStoreProductFitInfo = VirtusizeUtils.getProductComparisonFitInfo(
             userShirtXS.sizes[0],
             storeShirt.sizes[0],
             shirtProductWeights
@@ -21,7 +21,7 @@ class VirtusizeUtilsTest {
 
     @Test
     fun getStoreProductFitInfo_withUserShirtS_shouldHaveExpectedFitInfo() {
-        val actualStoreProductFitInfo = VirtusizeUtils.getStoreProductFitInfo(
+        val actualStoreProductFitInfo = VirtusizeUtils.getProductComparisonFitInfo(
             userShirtS.sizes[0],
             storeShirt.sizes[0],
             shirtProductWeights
@@ -33,7 +33,7 @@ class VirtusizeUtilsTest {
 
     @Test
     fun getStoreProductFitInfo_withUserShirtM_shouldHaveExpectedFitInfo() {
-        val actualStoreProductFitInfo = VirtusizeUtils.getStoreProductFitInfo(
+        val actualStoreProductFitInfo = VirtusizeUtils.getProductComparisonFitInfo(
             userShirtM.sizes[0],
             storeShirt.sizes[0],
             shirtProductWeights
@@ -45,7 +45,7 @@ class VirtusizeUtilsTest {
 
     @Test
     fun getStoreProductFitInfo_withUserShirtL_shouldHaveExpectedFitInfo() {
-        val actualStoreProductFitInfo = VirtusizeUtils.getStoreProductFitInfo(
+        val actualStoreProductFitInfo = VirtusizeUtils.getProductComparisonFitInfo(
             userShirtL.sizes[0],
             storeShirt.sizes[0],
             shirtProductWeights
@@ -58,7 +58,7 @@ class VirtusizeUtilsTest {
     @Test
     fun getFindBestMatch_shouldReturnExpectedRecommendedSize() {
 
-        val userProductRecommendedSize = VirtusizeUtils.findBestMatchedProductSize(userShirts, storeShirt, ProductFixtures.productTypes())
+        val userProductRecommendedSize = VirtusizeUtils.findBestFitProductSize(userShirts, storeShirt, ProductFixtures.productTypes())
 
         assertThat(userProductRecommendedSize?.bestFitScore).isEqualTo(96.25f)
         assertThat(userProductRecommendedSize?.bestUserProduct).isEqualTo(userShirts[2])

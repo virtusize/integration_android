@@ -1,7 +1,5 @@
 package com.virtusize.libsource.data.remote
 
-import com.virtusize.libsource.util.I18nConstants
-
 /**
  * This class represents the brand sizing info
  * @param compare the comparing key. eg. "true", "large", or "small"

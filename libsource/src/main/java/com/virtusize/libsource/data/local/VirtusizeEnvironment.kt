@@ -64,6 +64,10 @@ fun VirtusizeEnvironment.virtusizeRegion(): VirtusizeRegion {
     }
 }
 
+/**
+ * Gets the environment for the web view
+ * @return A String value of the web view environment
+ */
 fun VirtusizeEnvironment.virtusizeWebViewEnv(): String {
     return when(this) {
         STAGING -> "staging"
@@ -71,5 +75,7 @@ fun VirtusizeEnvironment.virtusizeWebViewEnv(): String {
     }
 }
 
-// The URL for i18n
+/**
+ * The URL for i18n
+ */
 const val I18N_URL = "https://i18n.virtusize.jp"

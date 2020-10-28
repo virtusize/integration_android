@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.os.Build
 import android.os.LocaleList
-import com.virtusize.libsource.data.local.StoreProductFitInfo
+import com.virtusize.libsource.data.local.ProductComparisonFitInfo
 import com.virtusize.libsource.data.local.SizeComparisonRecommendedSize
 import com.virtusize.libsource.data.local.VirtusizeLanguage
 import com.virtusize.libsource.data.remote.Product
@@ -56,8 +56,14 @@ internal object VirtusizeUtils {
         }
     }
 
-    // TODO: add comment
-    fun findBestMatchedProductSize(userProducts: List<Product>?, storeProduct: Product, productTypes: List<ProductType>): SizeComparisonRecommendedSize? {
+    /**
+     * Finds the size of the best fit product by comparing user products with the store product
+     * @param userProducts the list of user products
+     * @param storeProduct the store product
+     * @param productTypes the list of available product types
+     * @return [SizeComparisonRecommendedSize]
+     */
+    fun findBestFitProductSize(userProducts: List<Product>?, storeProduct: Product, productTypes: List<ProductType>): SizeComparisonRecommendedSize? {
         if(userProducts == null) {
             return null
         }
@@ -68,16 +74,16 @@ internal object VirtusizeUtils {
         compatibleUserProducts.forEach { userProduct ->
             val userProductSize = userProduct.sizes[0]
             storeProduct.sizes.forEach { storeProductSize ->
-                val storeProductFitInfo = getStoreProductFitInfo(
+                val productComparisonFitInfo = getProductComparisonFitInfo(
                     userProductSize,
                     storeProductSize,
                     storeProductType.weights
                 )
-                if (storeProductFitInfo.fitScore > sizeComparisonRecommendedSize.bestFitScore) {
+                if (productComparisonFitInfo.fitScore > sizeComparisonRecommendedSize.bestFitScore) {
                     sizeComparisonRecommendedSize.apply {
-                        storeProductFitInfo.apply {
+                        productComparisonFitInfo.apply {
                             bestFitScore = fitScore
-                            bestSize = storeProductSize
+                            bestStoreProductSize = storeProductSize
                             bestUserProduct = userProduct
                             isStoreProductSmaller = isSmaller
                         }
@@ -88,11 +94,18 @@ internal object VirtusizeUtils {
         return sizeComparisonRecommendedSize
     }
 
-    fun getStoreProductFitInfo(
+    /**
+     * Gets the product comparison fit info
+     * @param userProductSize the size of a user product
+     * @param storeProductSize the size of a store product
+     * @param storeProductTypeScoreWeights the weights of the store product for calculation
+     * @return [ProductComparisonFitInfo]
+     */
+    fun getProductComparisonFitInfo(
         userProductSize: ProductSize,
         storeProductSize: ProductSize,
         storeProductTypeScoreWeights: Set<Weight>
-    ): StoreProductFitInfo {
+    ): ProductComparisonFitInfo {
         var rawScore = 0f
         var isSmaller: Boolean? = null
 
@@ -109,6 +122,6 @@ internal object VirtusizeUtils {
         val adjustScore = rawScore / 10
         val fitScore = (100 - adjustScore).coerceAtLeast(20f)
 
-        return StoreProductFitInfo(fitScore, isSmaller)
+        return ProductComparisonFitInfo(fitScore, isSmaller)
     }
 }

@@ -54,10 +54,14 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
     override var virtusizeDialogFragment = VirtusizeWebView()
         private set
 
-    // TODO: add comment
-    private var smallScreenWidth = false
+    // If the width of the InPage is small than 411dp, the value is true
+    private var smallInPageWidth = false
+
+    // The duration of how long the cross fade animation for product images should be
     private val crossFadeAnimationDuration = 750
+    // The cross fade animation Runnable
     private var crossFadeRunnable: Runnable? = null
+    // The cross fade animation Handler
     private var crossFadeHandler: Handler = Handler(Looper.getMainLooper())
 
     // The VirtusizeViewStyle that clients can choose to use for this InPage Standard view
@@ -140,6 +144,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
     /**
      * Sets up the styles for the loading screen and the screen after finishing loading
      * @param loading pass true when it's loading, and pass false when finishing loading
+     * @param userBestFitProduct pass the user best fit product to determine whether to display the user product image or not
      */
     private fun setLoadingScreen(loading: Boolean, userBestFitProduct: Product? = null) {
         inpage_standard_store_product_image_view.visibility = if(loading) View.INVISIBLE else View.VISIBLE
@@ -161,7 +166,9 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
                 inpage_standard_bottom_text.visibility = View.VISIBLE
             }
         }
-        if(smallScreenWidth && !loading) {
+
+        // If the InPage width is small and when the loading is finished
+        if(smallInPageWidth && !loading) {
             if (userBestFitProduct != null) {
                 startCrossFadeProductImageViews()
             } else {
@@ -227,12 +234,12 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
                     URL(product.getProductImageURL()).openStream().use {
                         val bitmap = BitmapFactory.decodeStream(it)
                         withContext(Dispatchers.Main) {
-                            productImageView.setProductImageView(bitmap)
+                            productImageView.setProductImage(bitmap)
                         }
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
-                        productImageView.setProductPlaceHolder(product.productType, product.storeProductMeta?.additionalInfo?.style)
+                        productImageView.setProductPlaceHolderImage(product.productType, product.storeProductMeta?.additionalInfo?.style)
                     }
                 }
             }
@@ -242,6 +249,9 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         }
     }
 
+    /**
+     * Adds the left padding to the store product image view
+     */
     private fun addLeftPaddingToStoreProductImageView(addExtraPadding: Boolean) {
         val productImageOverlapMargin = resources.getDimension(R.dimen.inpage_standard_product_image_overlap_margin)
         val productImageHorizontalMargin = resources.getDimension(R.dimen.inpage_standard_product_image_horizontal_margin)
@@ -292,21 +302,29 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
                     viewTreeObserver.removeOnPreDrawListener(this)
                 }
                 if (width < 411.dpInPx) {
-                    smallScreenWidth = true
+                    smallInPageWidth = true
                 }
                 return true
             }
         })
 
     }
+
+    /**
+     * Starts the cross fade animation to display the user and store product images in an alternating way
+     */
     private fun startCrossFadeProductImageViews() {
-        addLeftPaddingToStoreProductImageView(false)
+        // Remove the settings for layout_toEndOf and layout_toRightOf
         val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         inpage_standard_store_product_image_view.layoutParams = params
+        // Add left padding to the store image to math the position of the user image
+        addLeftPaddingToStoreProductImageView(false)
+        // Remove any margins to the user product image
         setupMargins(inpage_standard_user_product_image_view, 0, 0, 0, 0)
         if(crossFadeRunnable == null) {
             crossFadeRunnable = Runnable {
                 if(inpage_standard_user_product_image_view.visibility == View.VISIBLE) {
+                    // Make sure the store product image is invisible when the animation starts
                     inpage_standard_store_product_image_view.visibility == View.INVISIBLE
                     fadeInAnimation(inpage_standard_store_product_image_view, inpage_standard_user_product_image_view)
                     fadeOutAnimation(inpage_standard_user_product_image_view)
@@ -319,13 +337,24 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         }
     }
 
+
+    /**
+     * Stops the cross fade animation
+     */
     private fun stopCrossFadeProductImageViews() {
+        // Remove the runnable from the handler
         crossFadeRunnable?.let { crossFadeHandler.removeCallbacks(it) }
         crossFadeRunnable = null
+        // Make sure the alpha values for product images are back to 1f if they got changed during the animation.=
         inpage_standard_user_product_image_view.alpha = 1f
         inpage_standard_store_product_image_view.alpha = 1f
     }
 
+    /**
+     * Fades in an image
+     * @param imageViewOne the image to be faded in
+     * @param imageViewTwo the image to be set invisible after the animation is done
+     */
     private fun fadeInAnimation(imageViewOne: VirtusizeProductImageView, imageViewTwo: VirtusizeProductImageView) {
         imageViewOne.apply {
             alpha = 0f
@@ -342,6 +371,10 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         }
     }
 
+    /**
+     * Fades out an image
+     * @param imageView the image to be faded out
+     */
     private fun fadeOutAnimation(imageView: VirtusizeProductImageView) {
         imageView.apply {
             animate()

@@ -52,31 +52,28 @@ class Virtusize(
             messageHandlers.forEach { messageHandler ->
                 messageHandler.onEvent(event)
             }
+            // Handle different user events from the web view
             if (event.name == VirtusizeEvents.UserSelectedProduct.getEventName() || event.name == VirtusizeEvents.UserOpenedPanelCompare.getEventName()) {
                 val userProductId = event.data?.optInt("userProductId")
                 CoroutineScope(Main).launch {
-                    setupRecommendation(userProductId)
+                    setupInPageRecommendation(userProductId)
                 }
-            }
-            if (event.name == VirtusizeEvents.UserAddedProduct.getEventName()) {
+            } else if (event.name == VirtusizeEvents.UserAddedProduct.getEventName()) {
                 CoroutineScope(Main).launch {
-                    setupRecommendation()
+                    setupInPageRecommendation()
                 }
-            }
-            if (event.name == VirtusizeEvents.UserAuthData.getEventName()) {
-                event.data?.let { setupUserAuthData(it) }
-            }
-            if (event.name == VirtusizeEvents.UserLoggedIn.getEventName()) {
+            } else if (event.name == VirtusizeEvents.UserAuthData.getEventName()) {
+                event.data?.let { updateUserAuthData(it) }
+            } else if (event.name == VirtusizeEvents.UserLoggedIn.getEventName()) {
                 CoroutineScope(Main).launch {
                     updateUserSession()
-                    setupRecommendation()
+                    setupInPageRecommendation()
                 }
-            }
-            if (event.name == VirtusizeEvents.UserLoggedOut.getEventName()) {
-                sharedPreferencesHelper.setAuthHeader("")
+            } else if (event.name == VirtusizeEvents.UserLoggedOut.getEventName()) {
+                sharedPreferencesHelper.storeAuthToken("")
                 CoroutineScope(Main).launch {
                     updateUserSession()
-                    setupRecommendation(null, true)
+                    setupInPageRecommendation(null, true)
                 }
             }
         }
@@ -87,21 +84,26 @@ class Virtusize(
             }
         }
 
-        private fun setupUserAuthData(eventJsonObject: JSONObject) {
+        /**
+         * Updates the browser ID and the auth token from the data of the event user-auth-data
+         * @param eventJsonObject the event data in JSONObject
+         */
+        private fun updateUserAuthData(eventJsonObject: JSONObject) {
             try {
                 val userAutoData = UserAuthDataJsonParser().parse(eventJsonObject)
                 sharedPreferencesHelper.storeBrowserId(userAutoData?.bid)
-                sharedPreferencesHelper.setAuthHeader(userAutoData?.auth)
+                sharedPreferencesHelper.storeAuthToken(userAutoData?.auth)
             } catch (e: JSONException) {
                 messageHandlers.forEach { messageHandler ->
-                    messageHandler.onError(VirtusizeErrorType.JsonParsingError.virtusizeError("JSONException: $e"))
+                    messageHandler.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(e.localizedMessage))
                 }
             }
         }
     }
 
-    // TODO: add comment
+    // The helper to store data locally using Shared Preferences
     private var sharedPreferencesHelper: SharedPreferencesHelper = SharedPreferencesHelper.getInstance(context)
+
     // Device screen resolution
     private lateinit var resolution: String
 
@@ -114,10 +116,16 @@ class Virtusize(
     // This variable holds the product information from the client and the product data check API
     private var virtusizeProduct: VirtusizeProduct? = null
 
+    // This variable holds the Virtusize view that clients use on their application
     private var virtusizeViews = mutableSetOf<VirtusizeView>()
 
+    // This variable holds the list of product types from the Virtusize API
     private var productTypes: List<ProductType>? = null
+
+    // This variable holds the store product from the Virtusize API
     private var storeProduct: Product? = null
+
+    // This variable holds the i18n localization texts
     private var i18nLocalization: I18nLocalization? = null
 
     init {
@@ -198,10 +206,10 @@ class Virtusize(
              * when Product check Request is performed on server on Virtusize server
              */
             override fun onValidProductCheckCompleted(productCheck: ProductCheck) {
-                var containInPage = false
+                var virtusizeViewsContainInPage = false
                 for(virtusizeView in virtusizeViews) {
                     if(virtusizeView is VirtusizeInPageView) {
-                        containInPage = true
+                        virtusizeViewsContainInPage = true
                     }
                     virtusizeView.setup(params = params, messageHandler = messageHandler)
                     virtusizeView.setupProductCheckResponseData(productCheck)
@@ -238,7 +246,7 @@ class Virtusize(
                     }
                 }
 
-                if(containInPage) {
+                if(virtusizeViewsContainInPage) {
                     productCheck.data?.productDataId?.let { productId ->
                         CoroutineScope(Main).launch {
                             val storeProductResponse = getStoreProductResponse(productId)
@@ -264,8 +272,9 @@ class Virtusize(
                                 showErrorForInPage(i18nResponse.failureData)
                                 return@launch
                             }
+
                             updateUserSession()
-                            setupRecommendation()
+                            setupInPageRecommendation()
                         }
                     } ?: run {
                         showErrorForInPage(VirtusizeErrorType.InvalidProduct.virtusizeError())
@@ -277,12 +286,15 @@ class Virtusize(
         productDataCheck(productValidCheckListener, errorHandler, apiRequest)
     }
 
+    /**
+     * Updates the user session by calling the session API
+     */
     private suspend fun updateUserSession() {
         val userSessionInfoResponse = getUserSessionInfoResponse()
         if (userSessionInfoResponse.isSuccessful) {
-            sharedPreferencesHelper.setAuthToken(userSessionInfoResponse.successData!!.id)
-            if(userSessionInfoResponse.successData!!.authHeader.isNotBlank()) {
-                sharedPreferencesHelper.setAuthHeader(userSessionInfoResponse.successData!!.authHeader)
+            sharedPreferencesHelper.storeAccessToken(userSessionInfoResponse.successData!!.accessToken)
+            if(userSessionInfoResponse.successData!!.authToken.isNotBlank()) {
+                sharedPreferencesHelper.storeAuthToken(userSessionInfoResponse.successData!!.authToken)
             }
         } else {
             showErrorForInPage(userSessionInfoResponse.failureData)
@@ -290,11 +302,16 @@ class Virtusize(
         }
     }
 
-    private suspend fun setupRecommendation(selectedUserProductId: Int? = null, loggedOutUser: Boolean = false) {
+    /**
+     * Updates the recommendation for InPage
+     * @param selectedUserProductId the selected product Id from the web view to decide a specific user product to compare with the store product
+     * @param ignoreUserData pass the boolean vale to determine whether to ignore the API requests that is related to the user data
+     */
+    private suspend fun setupInPageRecommendation(selectedUserProductId: Int? = null, ignoreUserData: Boolean = false) {
         var userProducts: List<Product>? = null
         var userProductRecommendedSize: SizeComparisonRecommendedSize? = null
         var userBodyRecommendedSize: String? = null
-        if(!loggedOutUser) {
+        if(!ignoreUserData) {
             val userProductsResponse = getUserProductsResponse()
             if (userProductsResponse.isSuccessful) {
                 userProducts = userProductsResponse.successData
@@ -302,7 +319,8 @@ class Virtusize(
                 showErrorForInPage(userProductsResponse.failureData)
                 return
             }
-            userProductRecommendedSize = VirtusizeUtils.findBestMatchedProductSize(
+
+            userProductRecommendedSize = VirtusizeUtils.findBestFitProductSize(
                 userProducts = if(selectedUserProductId != null) userProducts?.filter { it.id == selectedUserProductId } else userProducts,
                 storeProduct!!,
                 productTypes = productTypes!!
@@ -322,13 +340,17 @@ class Virtusize(
                     ).trimI18nText(trimType)
                 )
                 if (virtusizeView is VirtusizeInPageStandard) {
-                    storeProduct!!.imageURL = params.virtusizeProduct?.imageUrl
+                    storeProduct!!.clientProductImageURL = params.virtusizeProduct?.imageUrl
                     virtusizeView.setProductImages(storeProduct!!, userProductRecommendedSize?.bestUserProduct)
                 }
             }
         }
     }
 
+    /**
+     * Shows the error for InPage
+     * @param error pass a [VirtusizeError] for the messageHandler
+     */
     private fun showErrorForInPage(error: VirtusizeError?) {
         error?.let { messageHandler.onError(it) }
         for(virtusizeView in virtusizeViews) {
@@ -352,7 +374,7 @@ class Virtusize(
 
         // Throws VirtusizeError.NullVirtusizeButtonError error if button is null
         if (virtusizeView == null) {
-            VirtusizeErrorType.NullVirtusizeButtonError.throwError()
+            VirtusizeErrorType.NullVirtusizeViewError.throwError()
             return
         }
 
@@ -361,6 +383,8 @@ class Virtusize(
 
     /**
      * Gets size recommendation for a store product that would best fit a user's body.
+     * @param storeProduct the store product
+     * @param productTypes a list of product types
      * @return recommended size name. If it's not available, return null
      */
     private suspend fun getUserBodyRecommendedSize(storeProduct: Product, productTypes: List<ProductType>): String? {
@@ -404,6 +428,7 @@ class Virtusize(
     /**
      * Sends an image URL of VirtusizeProduct to the Virtusize server
      * @param product VirtusizeProduct
+     * @param successHandler the success callback to get the API response data
      * @param errorHandler
      * @see VirtusizeProduct
      */
@@ -424,6 +449,7 @@ class Virtusize(
      * Sends an event to the Virtusize server
      * @param event VirtusizeEvent
      * @param withDataProduct ProductCheckResponse corresponding to VirtusizeProduct
+     * @param successHandler the success callback to get the API response data
      * @param errorHandler the error callback to get the [VirtusizeError] in the API task
      */
     internal fun sendEventToApi(
@@ -456,7 +482,7 @@ class Virtusize(
     /**
      * Retrieves the specific store info
      * @param onSuccess the success callback to get the [Store] in the API task
-     * @param errorHandler the error callback to get the [VirtusizeError] in the API task
+     * @param onError the error callback to get the [VirtusizeError] in the API task
      */
     internal fun getStoreInfo(
         onSuccess: SuccessResponseHandler? = null,
@@ -562,6 +588,7 @@ class Virtusize(
 
     /**
      * Gets the API response for retrieving the list of the product types
+     * @return the [VirtusizeApiResponse] with a list of [ProductType]
      */
     internal suspend fun getProductTypesResponse(): VirtusizeApiResponse<List<ProductType>?> = withContext(IO) {
         val apiRequest = VirtusizeApi.getProductTypes()
@@ -570,7 +597,11 @@ class Virtusize(
             .execute(apiRequest) as VirtusizeApiResponse<List<ProductType>?>
     }
 
-    internal suspend fun getUserSessionInfoResponse(): VirtusizeApiResponse<UserSessionInfo?> = withContext(IO) {
+    /**
+     * Gets the API response for getting the user session data
+     * @return the [VirtusizeApiResponse] with [UserSessionInfo]
+     */
+    private suspend fun getUserSessionInfoResponse(): VirtusizeApiResponse<UserSessionInfo?> = withContext(IO) {
         val apiRequest = VirtusizeApi.getSessions()
         return@withContext VirtusizeApiTask(httpURLConnection)
             .setJsonParser(UserSessionInfoJsonParser())
@@ -602,6 +633,13 @@ class Virtusize(
             .execute(apiRequest) as VirtusizeApiResponse<UserBodyProfile?>
     }
 
+    /**
+     * Gets the API response for retrieving the recommended size based on the user body profile
+     * @param productTypes a list of product types
+     * @param storeProduct the store product
+     * @param userBodyProfile the user body profile
+     * @return the [VirtusizeApiResponse] with the data class [UserBodyProfile]
+     */
     internal suspend fun getBodyProfileRecommendedSizeResponse(productTypes: List<ProductType>, storeProduct: Product, userBodyProfile: UserBodyProfile): VirtusizeApiResponse<BodyProfileRecommendedSize?> = withContext(IO) {
         val apiRequest = VirtusizeApi.getSize(productTypes, storeProduct, userBodyProfile)
         VirtusizeApiTask(httpURLConnection)

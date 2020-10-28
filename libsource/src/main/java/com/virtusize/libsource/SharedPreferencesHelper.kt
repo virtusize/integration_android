@@ -6,48 +6,63 @@ import java.util.*
 import kotlin.random.Random
 
 /**
- * This class is used to get a browser identifier and user auth data specific to this SDK
- * @param context the application context
+ * This class is used to store and get the browser identifier and user auth data specific to this SDK
  */
 class SharedPreferencesHelper {
 
     companion object {
-        private var obj: SharedPreferencesHelper? = null
+        private const val SHARED_PREFS_NAME = "VIRTUSIZE_SHARED_PREFS"
+        private const val PREFS_BID_KEY = "BID_KEY_VIRTUSIZE"
+        private const val PREFS_AUTH_TOKEN_KEY = "AUTH_TOKEN_KEY_VIRTUSIZE"
+        private const val PREFS_ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY_VIRTUSIZE"
+
+        private var sharedPreferenceHelper: SharedPreferencesHelper? = null
         private lateinit var preferences: SharedPreferences
+
+        // Gets the instance of [SharedPreferencesHelper]
         fun getInstance(context: Context): SharedPreferencesHelper {
             preferences = context.getSharedPreferences(
                 SHARED_PREFS_NAME,
                 Context.MODE_PRIVATE
             )
-            if (obj == null) {
-                obj = SharedPreferencesHelper()
+            if (sharedPreferenceHelper == null) {
+                sharedPreferenceHelper = SharedPreferencesHelper()
             }
-            return obj as SharedPreferencesHelper
+            return sharedPreferenceHelper as SharedPreferencesHelper
         }
-
-        private const val SHARED_PREFS_NAME = "VIRTUSIZE_SHARED_PREFS"
-        private const val PREFS_BID_KEY = "BID_KEY_VIRTUSIZE"
-        private const val PREFS_AUTH_HEADER_KEY = "AUTH_HEADER_KEY_VIRTUSIZE"
-        private const val PREFS_AUTH_TOKEN_KEY = "AUTH_TOKEN_KEY_VIRTUSIZE"
     }
 
-    fun setAuthHeader(authHeader: String?) {
-        if(authHeader == null) {
+    /**
+     * Stores the auth token for the session API
+     */
+    fun storeAuthToken(authToken: String?) {
+        if(authToken == null) {
             return
         }
-        preferences.edit().putString(PREFS_AUTH_HEADER_KEY, authHeader).apply()
-    }
-
-    fun getAuthHeader(): String? {
-        return preferences.getString(PREFS_AUTH_HEADER_KEY, null)
-    }
-
-    fun setAuthToken(authToken: String) {
         preferences.edit().putString(PREFS_AUTH_TOKEN_KEY, authToken).apply()
     }
 
+    /**
+     * Gets the auth token for the session API
+     * @return the auth token as a string
+     */
     fun getAuthToken(): String? {
         return preferences.getString(PREFS_AUTH_TOKEN_KEY, null)
+    }
+
+    /**
+     * Stores the access token for the session API
+     */
+    fun storeAccessToken(authToken: String) {
+        preferences.edit().putString(PREFS_ACCESS_TOKEN_KEY, authToken).apply()
+    }
+
+    /**
+     * Gets the access token for the session API
+     * @return the access token as a string
+     */
+    fun getAccessToken(): String? {
+        return preferences.getString(PREFS_ACCESS_TOKEN_KEY, null)
     }
 
     /**

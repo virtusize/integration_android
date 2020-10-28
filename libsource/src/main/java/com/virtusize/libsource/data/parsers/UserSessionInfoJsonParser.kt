@@ -3,13 +3,16 @@ package com.virtusize.libsource.data.parsers
 import com.virtusize.libsource.data.remote.UserSessionInfo
 import org.json.JSONObject
 
+/**
+ * This class parses a JSONObject to the [UserSessionInfo] object
+ */
 internal class UserSessionInfoJsonParser : VirtusizeJsonParser<UserSessionInfo> {
 
     override fun parse(json: JSONObject): UserSessionInfo? {
-        val id = json.optString(FIELD_ID)
-        val authHeader = json.optString(FIELD_VS_AUTH)
+        val accessToken = json.optString(FIELD_ID)
+        val authToken = json.optString(FIELD_VS_AUTH)
         val bid = json.optJSONObject(FIELD_USER)?.optString(FIELD_BID)
-        return UserSessionInfo(id, bid, authHeader)
+        return UserSessionInfo(accessToken, bid, authToken)
     }
 
     private companion object {
