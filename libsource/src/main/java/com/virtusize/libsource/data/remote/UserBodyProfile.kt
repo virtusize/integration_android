@@ -6,7 +6,7 @@ package com.virtusize.libsource.data.remote
  * @param age the user's age
  * @param height the user's height
  * @param weight the user's weight
- * @param bodyData the user's body data, such as hip, bust, waist and so on.
+ * @param bodyData the user's body measurement data, such as hip, bust, waist and so on.
  */
 data class UserBodyProfile(
     val gender: String,

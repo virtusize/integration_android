@@ -56,24 +56,24 @@ class Virtusize(
             if (event.name == VirtusizeEvents.UserSelectedProduct.getEventName() || event.name == VirtusizeEvents.UserOpenedPanelCompare.getEventName()) {
                 val userProductId = event.data?.optInt("userProductId")
                 CoroutineScope(Main).launch {
-                    setupInPageRecommendation(userProductId)
+                    updateInPageRecommendation(userProductId)
                 }
             } else if (event.name == VirtusizeEvents.UserAddedProduct.getEventName()) {
                 CoroutineScope(Main).launch {
-                    setupInPageRecommendation()
+                    updateInPageRecommendation()
                 }
             } else if (event.name == VirtusizeEvents.UserAuthData.getEventName()) {
                 event.data?.let { updateUserAuthData(it) }
             } else if (event.name == VirtusizeEvents.UserLoggedIn.getEventName()) {
                 CoroutineScope(Main).launch {
                     updateUserSession()
-                    setupInPageRecommendation()
+                    updateInPageRecommendation()
                 }
             } else if (event.name == VirtusizeEvents.UserLoggedOut.getEventName()) {
                 sharedPreferencesHelper.storeAuthToken("")
                 CoroutineScope(Main).launch {
                     updateUserSession()
-                    setupInPageRecommendation(null, true)
+                    updateInPageRecommendation(null, true)
                 }
             }
         }
@@ -274,7 +274,7 @@ class Virtusize(
                             }
 
                             updateUserSession()
-                            setupInPageRecommendation()
+                            updateInPageRecommendation()
                         }
                     } ?: run {
                         showErrorForInPage(VirtusizeErrorType.InvalidProduct.virtusizeError())
@@ -307,7 +307,7 @@ class Virtusize(
      * @param selectedUserProductId the selected product Id from the web view to decide a specific user product to compare with the store product
      * @param ignoreUserData pass the boolean vale to determine whether to ignore the API requests that is related to the user data
      */
-    private suspend fun setupInPageRecommendation(selectedUserProductId: Int? = null, ignoreUserData: Boolean = false) {
+    private suspend fun updateInPageRecommendation(selectedUserProductId: Int? = null, ignoreUserData: Boolean = false) {
         var userProducts: List<Product>? = null
         var userProductRecommendedSize: SizeComparisonRecommendedSize? = null
         var userBodyRecommendedSize: String? = null

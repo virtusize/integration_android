@@ -600,7 +600,7 @@ __**Note:**__ * means the attribute is required
 
 | Attribute  | Data Type | Example                                  | Description                                                  |
 | ---------- | --------- | ---------------------------------------- | ------------------------------------------------------------ |
-| productId* | String    | "A001"                                   | The product ID provided by the client. It must be unique for each product. |
+| productId* | String    | "A001"                                   | The external product ID provided by the client. It must be unique for each product. |
 | size*      | String    | "S", "M", etc.                           | The name of the size                                         |
 | sizeAlias  | String    | "Small", "Large", etc.                   | The alias of the size is added if the size name is not identical from the product page |
 | variantId  | String    | "A001_SIZES_RED"                         | An ID that is set on the product SKU, color, or size if there are several options for the item |
