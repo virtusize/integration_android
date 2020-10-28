@@ -160,11 +160,11 @@ Please do not forget to unregister message handler in activity or fragment's lif
           virtusizeView.dismissVirtusizeView()
       }
   
-      override fun onEvent(virtusizeView: VirtusizeView?, event: VirtusizeEvent) {
+      override fun onEvent(event: VirtusizeEvent) {
           Log.i(TAG, event.name)
       }
   
-      override fun onError(virtusizeView: VirtusizeView?, errorType: VirtusizeError) {
+      override fun onError(errorType: VirtusizeError) {
           Log.e(TAG, errorType.message)
       }
   }
@@ -180,26 +180,29 @@ Please do not forget to unregister message handler in activity or fragment's lif
 - Java
 
   ```java
+  VirtusizeMessageHandler virtusizeMessageHandler;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
       //...
       App app = (App) getApplication();
-      app.Virtusize.registerMessageHandler(new VirtusizeMessageHandler() {
+    
+      virtusizeMessageHandler = new VirtusizeMessageHandler() {
           @Override
           public void virtusizeControllerShouldClose(@NotNull VirtusizeView virtusizeView) {
               Log.i(TAG, "Close Virtusize View");
           }
   
           @Override
-          public void onEvent(@org.jetbrains.annotations.Nullable VirtusizeView virtusizeView, @NotNull VirtusizeEvent event) {
+          public void onEvent(@NotNull VirtusizeEvent event) {
               Log.i(TAG, event.getName());
           }
   
           @Override
-          public void onError(VirtusizeView virtusizeView, @NonNull VirtusizeError error) {
+          public void onError(@NonNull VirtusizeError error) {
               Log.e(TAG, error.getMessage());
           }
-      });
+      }
+      app.Virtusize.registerMessageHandler(virtusizeMessageHandler);
       //...
   }
   ```
@@ -212,7 +215,7 @@ A message handler is tied to an activity or fragment's lifecycle, but the Virtus
 
   ```kotlin
   private val activityMessageHandler: VirtusizeMessageHandler
-      override fun onPause() {
+  override fun onPause() {
           // Always un register message handler in onPause() or depending on implementation onStop().
           (application as App).Virtusize.unregisterMessageHandler(activityMessageHandler)
           super.onPause()
@@ -222,6 +225,7 @@ A message handler is tied to an activity or fragment's lifecycle, but the Virtus
 - Java
 
   ```java
+  VirtusizeMessageHandler virtusizeMessageHandler;
   @Override
   protected void onPause() {
       app.Virtusize.unregisterMessageHandler(virtusizeMessageHandler);
@@ -297,9 +301,7 @@ In order to use our default button styles, set `app:virtusizeButtonStyle="virtus
 - Kotlin
 
   ```kotlin
-  (application as App)
-      .Virtusize
-      .setupVirtusizeView(exampleVirtusizeButton)
+  (application as App).Virtusize.setupVirtusizeView(exampleVirtusizeButton)
   ```
   
 - Java
@@ -344,17 +346,22 @@ There are two types of InPage in our Virtusize SDK.
 
   Here are some possible layouts 
 
-  |               1 thumbnail + 2 lines of message               |               1 thumbnail + 1 line of message                |
-  | :----------------------------------------------------------: | :----------------------------------------------------------: |
-  | <img src="https://user-images.githubusercontent.com/7802052/92672132-ff0aff00-f352-11ea-8058-4ca7c149d6f2.png"> | <img src="https://user-images.githubusercontent.com/7802052/92672134-003c2c00-f353-11ea-842b-8ec54ba3585b.png"> |
+  <img src="https://user-images.githubusercontent.com/7802052/97396729-ff734f80-192a-11eb-84fb-2adc27cd2975.gif">
+
+  |             Top left             |                 Top right                  |
+  | :------------------------------: | :----------------------------------------: |
+  | 1 thumbnail + 2 lines of message |     2 thumbnails + 2 lines of message      |
+  |         **Bottom left**          |              **Bottom right**              |
+  | 1 thumbnail + 1 line of message  | 2 animated thumbnails + 2 lines of message |
 
 - ##### Recommended Placement
-  - Near the size table
-
-  - In the size info section
-
-    <img src="https://user-images.githubusercontent.com/7802052/92672185-15b15600-f353-11ea-921d-397f207cf616.png" style="zoom:50%;" />
-
+  
+- Near the size table
+  
+- In the size info section
+  
+  <img src="https://user-images.githubusercontent.com/7802052/92672185-15b15600-f353-11ea-921d-397f207cf616.png" style="zoom:50%;" />
+  
 - ##### UI customization
 
   - **You can:**
@@ -407,7 +414,7 @@ There are two types of InPage in our Virtusize SDK.
     exampleVirtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
     // Set the horizontal margins between the edges of the app screen and the InPageStandard
     // Note: Use the helper extension function `dpInPx` if you like
-    exampleVirtusizeInPageStandard.horizontalMargin = 16.dpInPx.toFloat()
+    exampleVirtusizeInPageStandard.horizontalMargin = 16.dpInPx
     // Set the background color of the check size button in InPage Standard
     exampleVirtusizeInPageStandard.setButtonBackgroundColor(ContextCompat.getColor(this, R.color.your_custom_color))
     ```
