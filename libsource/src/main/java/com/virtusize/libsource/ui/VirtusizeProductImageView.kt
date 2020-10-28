@@ -89,15 +89,21 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet):
             productPlaceholderImage = productTypeImageWithStyle
         }
         if (productImageType == ProductImageType.USER) {
-            val vsTealColor = ContextCompat.getColor(context, R.color.virtusizeTeal)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                productPlaceholderImage?.setTint(vsTealColor)
-            } else {
-                productPlaceholderImage?.let {
-                    DrawableCompat.setTint(DrawableCompat.wrap(it), vsTealColor)
-                }
-            }
+            setProductPlaceholderImageTintColor(productPlaceholderImage, R.color.virtusizeTeal)
+        } else {
+            setProductPlaceholderImageTintColor(productPlaceholderImage, R.color.virtusizeBlack)
         }
         return productPlaceholderImage
+    }
+
+    private fun setProductPlaceholderImageTintColor(productPlaceholderImage: Drawable?, color: Int) {
+        val tinColor = ContextCompat.getColor(context, color)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            productPlaceholderImage?.setTint(tinColor)
+        } else {
+            productPlaceholderImage?.let {
+                DrawableCompat.setTint(DrawableCompat.wrap(it), tinColor)
+            }
+        }
     }
 }
