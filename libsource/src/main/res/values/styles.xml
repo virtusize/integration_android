@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name = "NoActionBar" parent = "@android:style/Theme.Holo.Light">
-        <item name = "android:windowActionBar">false</item>
-        <item name = "android:windowNoTitle">true</item>
+
+    <style name="NoActionBar" parent="@android:style/Theme.Holo.Light">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
 
     <style name="FullScreenDialogStyle" parent="Theme.AppCompat.Dialog">
@@ -38,7 +39,7 @@
         <item name="android:textColor">@color/color_gray_900</item>
     </style>
 
-    <style name="InPageMiniTextStyle">
+    <style name="VirtusizeInPageMiniTextStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>

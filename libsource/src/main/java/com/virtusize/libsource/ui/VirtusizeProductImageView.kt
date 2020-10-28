@@ -43,9 +43,9 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet):
         )]
 
         if(productImageType == ProductImageType.USER) {
-            border_image_view.setImageResource(R.drawable.ic_image_border_green_dash)
+            inpageBorderImageView.setImageResource(R.drawable.ic_image_border_green_dash)
         } else {
-            border_image_view.setImageResource(R.drawable.ic_image_border_gray)
+            inpageBorderImageView.setImageResource(R.drawable.ic_image_border_gray)
         }
 
         typedArray.recycle()
@@ -56,8 +56,8 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet):
      * @param bitmap the bitmap of the image
      */
     fun setProductImage(bitmap: Bitmap) {
-        inpage_product_image_view.setImageBitmap(bitmap)
-        inpage_product_image_view.setPadding(0, 0, 0, 0)
+        inpageProductImageView.setImageBitmap(bitmap)
+        inpageProductImageView.setPadding(0, 0, 0, 0)
     }
 
     /**
@@ -67,9 +67,9 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet):
      */
     fun setProductPlaceHolderImage(productType: Int?, style: String?) {
         if (productImageType == ProductImageType.STORE) {
-            inpage_product_card_view.setCardBackgroundColor(ContextCompat.getColor(context, R.color.color_gray_200))
+            inpageProductCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.color_gray_200))
         }
-        inpage_product_image_view.setImageDrawable(getProductPlaceholderImage(productType, style))
+        inpageProductImageView.setImageDrawable(getProductPlaceholderImage(productType, style))
     }
 
     /**
@@ -96,6 +96,11 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet):
         return productPlaceholderImage
     }
 
+    /**
+     * Sets the tine color of the product placeholder image
+     * @param productPlaceholderImage the drawable of the place holder image
+     * @param color the res Id of the color
+     */
     private fun setProductPlaceholderImageTintColor(productPlaceholderImage: Drawable?, color: Int) {
         val tinColor = ContextCompat.getColor(context, color)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
