@@ -5,9 +5,11 @@ package com.virtusize.libsource.data.remote
  * @param accessToken the access token
  * @param bid the browser ID
  * @param authToken the auth token
+ * @param userSessionResponse the API response as a string
  */
 internal data class UserSessionInfo(
     val accessToken: String,
     val bid: String?,
-    val authToken: String
+    val authToken: String,
+    val userSessionResponse: String
 )

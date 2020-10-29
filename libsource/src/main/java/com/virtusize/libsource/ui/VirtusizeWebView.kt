@@ -21,7 +21,7 @@ class VirtusizeWebView: DialogFragment() {
 
     private var virtusizeWebAppUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-webview.html"
     private var vsParamsFromSDKScript = ""
-    private var vsEventFromSDKScript = "javascript:vsEventFromSDK({ name: 'sdk-back-button-tapped'})"
+    private var backButtonClickEventFromSDKScript = "javascript:vsEventFromSDK({ name: 'sdk-back-button-tapped'})"
 
     private lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
     private lateinit var virtusizeView: VirtusizeView
@@ -63,6 +63,7 @@ class VirtusizeWebView: DialogFragment() {
         webView.webViewClient = object: WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 if(url != null && url.contains(virtusizeWebAppUrl)) {
+                    executeJavascript(view, updateSessionDataScript())
                     executeJavascript(view, vsParamsFromSDKScript)
                     getBrowserIDFromCookies()?.let { bid ->
                         if(bid != sharedPreferencesHelper.getBrowserId()) {
@@ -129,7 +130,7 @@ class VirtusizeWebView: DialogFragment() {
                         webView.removeAllViews()
                         webView.reload()
                     }
-                    else -> executeJavascript(webView, vsEventFromSDKScript)
+                    else -> executeJavascript(webView, backButtonClickEventFromSDKScript)
                 }
             }
             true
@@ -179,6 +180,13 @@ class VirtusizeWebView: DialogFragment() {
         } else {
             webView?.loadUrl(script)
         }
+    }
+
+    /**
+     * Returns the Javascript script to update the user session
+     */
+    private fun updateSessionDataScript(): String {
+        return "javascript:vsEventFromSDK({ name: 'update-session-data', payload: ${SharedPreferencesHelper.getInstance(requireContext()).getSessionData()} })"
     }
 
     /**

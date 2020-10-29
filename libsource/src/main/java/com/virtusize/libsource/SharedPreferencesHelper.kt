@@ -15,6 +15,7 @@ class SharedPreferencesHelper {
         private const val PREFS_BID_KEY = "BID_KEY_VIRTUSIZE"
         private const val PREFS_AUTH_TOKEN_KEY = "AUTH_TOKEN_KEY_VIRTUSIZE"
         private const val PREFS_ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY_VIRTUSIZE"
+        private const val PREFS_SESSION_DATA_KEY = "SESSION_DATA_KEY_VIRTUSIZE"
 
         private var sharedPreferenceHelper: SharedPreferencesHelper? = null
         private lateinit var preferences: SharedPreferences
@@ -63,6 +64,21 @@ class SharedPreferencesHelper {
      */
     fun getAccessToken(): String? {
         return preferences.getString(PREFS_ACCESS_TOKEN_KEY, null)
+    }
+
+    /**
+     * Stores the session data from the session API
+     */
+    fun storeSessionData(sessionData: String) {
+        preferences.edit().putString(PREFS_SESSION_DATA_KEY, sessionData).apply()
+    }
+
+    /**
+     * Gets the session data from the session API
+     * @return the session API response as a string
+     */
+    fun getSessionData(): String? {
+        return preferences.getString(PREFS_SESSION_DATA_KEY, null)
     }
 
     /**
