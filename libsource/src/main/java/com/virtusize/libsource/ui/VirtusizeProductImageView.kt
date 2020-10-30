@@ -43,9 +43,17 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet):
         )]
 
         if(productImageType == ProductImageType.USER) {
-            inpageBorderImageView.setImageResource(R.drawable.ic_image_border_green_dash)
+            inpageBorderImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_image_border_green_dash))
         } else {
-            inpageBorderImageView.setImageResource(R.drawable.ic_image_border_gray)
+            inpageBorderImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_image_border_gray))
+        }
+
+        // Make sure there's no extra padding for the card views when the app's API is below 21 (pre-lollipop)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            inpageProductBorderCardView.useCompatPadding = true
+            inpageProductBorderCardView.preventCornerOverlap = false
+            inpageProductCardView.useCompatPadding = true
+            inpageProductCardView.preventCornerOverlap = false
         }
 
         typedArray.recycle()

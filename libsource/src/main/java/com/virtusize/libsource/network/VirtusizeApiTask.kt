@@ -1,5 +1,6 @@
 package com.virtusize.libsource.network
 
+import android.os.Build
 import com.virtusize.libsource.ErrorResponseHandler
 import com.virtusize.libsource.SharedPreferencesHelper
 import com.virtusize.libsource.SuccessResponseHandler
@@ -19,15 +20,17 @@ import org.json.JSONObject
 import java.io.DataOutputStream
 import java.io.IOException
 import java.io.InputStream
-import java.net.*
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.*
 import java.util.concurrent.TimeUnit
+import javax.net.ssl.HttpsURLConnection
 
 /**
  * The asynchronous task to make an API request in the background thread
  * @param urlConnection the HTTP URL connection that is used to make a single request
  */
-internal class VirtusizeApiTask(private var urlConnection: HttpURLConnection? = null) {
+internal class VirtusizeApiTask(private var urlConnection: HttpsURLConnection? = null) {
 
     companion object {
         // The read timeout to use for all the requests, which is 80 seconds
@@ -85,13 +88,18 @@ internal class VirtusizeApiTask(private var urlConnection: HttpURLConnection? = 
      * @param apiRequest [ApiRequest]
      */
     fun execute(apiRequest: ApiRequest): VirtusizeApiResponse<Any?> {
-        var urlConnection: HttpURLConnection? = urlConnection
+        var urlConnection: HttpsURLConnection? = urlConnection
         var inputStream: InputStream? = null
         var errorStream: InputStream? = null
         try {
             if (urlConnection == null) {
 
-                urlConnection = (URL(apiRequest.url).openConnection() as HttpURLConnection).apply {
+                urlConnection = (URL(apiRequest.url).openConnection() as HttpsURLConnection).apply {
+                    // Enable TLS 1.2 for the devices whose API is below 21 (pre-lollipop)
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                        sslSocketFactory = TLSSocketFactory()
+                    }
+
                     readTimeout = READ_TIMEOUT
                     connectTimeout = CONNECT_TIMEOUT
                     requestMethod = apiRequest.method.name

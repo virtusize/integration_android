@@ -7,6 +7,7 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
@@ -288,7 +289,13 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         if (horizontalMargin < 0) {
             return
         }
-        setupMargins(inpageCardView, horizontalMargin, horizontalMargin, horizontalMargin, horizontalMargin)
+        var horizontalOffset = 0
+        // Adjust the CardView margins for the devices whose API is below 21 (pre-lollipop)
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
+            inpageCardView.useCompatPadding = true
+            horizontalOffset = (-14).dpInPx
+        }
+        setupMargins(inpageCardView, horizontalMargin + horizontalOffset, horizontalMargin + horizontalOffset, horizontalMargin + horizontalOffset, horizontalMargin + horizontalOffset)
         setupInPageStandardFooterMargins(
             horizontalMargin + 2.dpInPx,
             inPageStandardFooterTopMargin,

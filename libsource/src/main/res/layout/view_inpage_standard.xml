@@ -35,7 +35,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/virtusize_inpage_standard_error_text_horizontal_margin"
+                android:layout_marginLeft="@dimen/virtusize_inpage_standard_error_text_horizontal_margin"
                 android:layout_marginEnd="@dimen/virtusize_inpage_standard_error_text_horizontal_margin"
+                android:layout_marginRight="@dimen/virtusize_inpage_standard_error_text_horizontal_margin"
                 android:gravity="center_horizontal"
                 android:text="@string/inpage_long_error_text"
                 android:textColor="@color/color_gray_700" />
@@ -66,7 +68,7 @@
                     android:layout_marginBottom="@dimen/virtusize_inpage_standard_product_image_vertical_margin"
                     android:layout_toEndOf="@+id/inpageUserProductImageView"
                     android:layout_toRightOf="@+id/inpageUserProductImageView"
-                    app:productImageType="store_product"/>
+                    app:productImageType="store_product" />
 
                 <com.virtusize.libsource.ui.VirtusizeProductImageView
                     android:id="@+id/inpageUserProductImageView"
@@ -97,8 +99,10 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/virtusize_inpage_standard_texts_horizontal_margin"
+                android:layout_marginLeft="@dimen/virtusize_inpage_standard_texts_horizontal_margin"
                 android:layout_marginTop="@dimen/virtusize_inpage_standard_texts_vertical_margin"
                 android:layout_marginEnd="@dimen/virtusize_inpage_standard_texts_horizontal_margin"
+                android:layout_marginRight="@dimen/virtusize_inpage_standard_texts_horizontal_margin"
                 android:layout_marginBottom="@dimen/virtusize_inpage_standard_texts_vertical_margin"
                 android:layout_toStartOf="@+id/inpageButton"
                 android:layout_toLeftOf="@+id/inpageButton"
@@ -164,8 +168,10 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/virtusize_inpage_standard_footer_height"
         android:layout_marginStart="@dimen/virtusize_inpage_standard_footer_horizontal_margin"
+        android:layout_marginLeft="@dimen/virtusize_inpage_standard_footer_horizontal_margin"
         android:layout_marginTop="@dimen/virtusize_inpage_standard_footer_marginTop"
-        android:layout_marginEnd="@dimen/virtusize_inpage_standard_footer_horizontal_margin">
+        android:layout_marginEnd="@dimen/virtusize_inpage_standard_footer_horizontal_margin"
+        android:layout_marginRight="@dimen/virtusize_inpage_standard_footer_horizontal_margin">
 
         <ImageView
             android:id="@+id/vsSignatureImageView"

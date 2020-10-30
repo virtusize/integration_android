@@ -26,6 +26,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.util.*
+import javax.net.ssl.HttpsURLConnection
 
 /**
  * This is the main class that can be used by Virtusize Clients to perform all available operations related to fit check
@@ -108,7 +109,7 @@ class Virtusize(
     private lateinit var resolution: String
 
     // The HTTP URL connection that is used to make a single request
-    private var httpURLConnection: HttpURLConnection? = null
+    private var httpURLConnection: HttpsURLConnection? = null
 
     // The dispatcher that determines what thread the corresponding coroutine uses for its execution
     private var coroutineDispatcher: CoroutineDispatcher = IO
@@ -161,9 +162,9 @@ class Virtusize(
 
     /**
      * Sets the HTTP URL connection
-     * @param urlConnection an instance of [HttpURLConnection]
+     * @param urlConnection an instance of [HttpsURLConnection]
      */
-    internal fun setHTTPURLConnection(urlConnection: HttpURLConnection?) {
+    internal fun setHTTPURLConnection(urlConnection: HttpsURLConnection?) {
         this.httpURLConnection = urlConnection
     }
 
