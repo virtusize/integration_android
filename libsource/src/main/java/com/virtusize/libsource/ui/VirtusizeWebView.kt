@@ -63,7 +63,6 @@ class VirtusizeWebView: DialogFragment() {
         webView.webViewClient = object: WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 if(url != null && url.contains(virtusizeWebAppUrl)) {
-                    executeJavascript(view, updateSessionDataScript())
                     executeJavascript(view, vsParamsFromSDKScript)
                     getBrowserIDFromCookies()?.let { bid ->
                         if(bid != sharedPreferencesHelper.getBrowserId()) {
@@ -180,13 +179,6 @@ class VirtusizeWebView: DialogFragment() {
         } else {
             webView?.loadUrl(script)
         }
-    }
-
-    /**
-     * Returns the Javascript script to update the user session
-     */
-    private fun updateSessionDataScript(): String {
-        return "javascript:vsEventFromSDK({ name: 'update-session-data', payload: ${SharedPreferencesHelper.getInstance(requireContext()).getSessionData()} })"
     }
 
     /**

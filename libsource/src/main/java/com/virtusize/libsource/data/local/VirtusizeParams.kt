@@ -1,7 +1,11 @@
 package com.virtusize.libsource.data.local
 
+import android.content.Context
+import com.virtusize.libsource.SharedPreferencesHelper
+
 /**
  * The class that wraps the parameters we can pass to the Virtusize web app
+ * @param context the application context
  * @param apiKey the API key that is unique to every Virtusize Client
  * @param bid the browser ID that is specific to the Virtusize WebView
  * @param environment the [VirtusizeEnvironment] that is used in the SDK
@@ -14,6 +18,7 @@ package com.virtusize.libsource.data.local
  * @param detailsPanelCards the info categories that will be displayed in the Product Details tab
  */
 data class VirtusizeParams(
+    internal val context: Context,
     internal var apiKey: String?,
     internal var bid: String?,
     internal var environment: VirtusizeEnvironment,
@@ -30,8 +35,10 @@ data class VirtusizeParams(
      * Returns the virtusize parameter string to be passed to the JavaScript function vsParamsFromSDK
      */
     internal fun vsParamsString(): String {
+        val sessionData = SharedPreferencesHelper.getInstance(context).getSessionData()
         return "{$PARAM_API_KEY: '$apiKey', " +
                 (if (bid != null) "$PARAM_BID: '$bid', " else "") +
+                (if (sessionData != null) "$PARAM_SESSION_DATA: $sessionData, " else "") +
                 "$PARAM_STORE_PRODUCT_ID: '${virtusizeProduct?.productCheckData?.productId}', " +
                 (if (externalUserId != null) "$PARAM_EXTERNAL_USER_ID: '$externalUserId', " else "") +
                 "$PARAM_LANGUAGE: '${language?.value}', " +
@@ -45,6 +52,7 @@ data class VirtusizeParams(
     private companion object {
         private const val PARAM_API_KEY = "apiKey"
         private const val PARAM_BID = "bid"
+        private const val PARAM_SESSION_DATA = "sessionData"
         private const val PARAM_REGION = "region"
         private const val PARAM_ENVIRONMENT = "env"
         private const val PARAM_LANGUAGE = "language"
