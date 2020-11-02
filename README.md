@@ -17,7 +17,7 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 
 ## Requirements
 
-- minSdkVersion >= 15
+- minSdkVersion >= 21
 - compileSdkVersion >= 30
 - Setup in AppCompatActivity
 
