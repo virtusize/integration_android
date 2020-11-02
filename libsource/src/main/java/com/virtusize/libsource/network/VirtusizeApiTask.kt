@@ -95,11 +95,6 @@ internal class VirtusizeApiTask(private var urlConnection: HttpsURLConnection? =
             if (urlConnection == null) {
 
                 urlConnection = (URL(apiRequest.url).openConnection() as HttpsURLConnection).apply {
-                    // Enable TLS 1.2 for the devices whose API is below 21 (pre-lollipop)
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                        sslSocketFactory = TLSSocketFactory()
-                    }
-
                     readTimeout = READ_TIMEOUT
                     connectTimeout = CONNECT_TIMEOUT
                     requestMethod = apiRequest.method.name

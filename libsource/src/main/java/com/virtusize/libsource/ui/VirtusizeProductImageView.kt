@@ -48,14 +48,6 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet):
             inpageBorderImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_image_border_gray))
         }
 
-        // Make sure there's no extra padding for the card views when the app's API is below 21 (pre-lollipop)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            inpageProductBorderCardView.useCompatPadding = true
-            inpageProductBorderCardView.preventCornerOverlap = false
-            inpageProductCardView.useCompatPadding = true
-            inpageProductCardView.preventCornerOverlap = false
-        }
-
         typedArray.recycle()
     }
 
@@ -97,26 +89,10 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet):
             productPlaceholderImage = productTypeImageWithStyle
         }
         if (productImageType == ProductImageType.USER) {
-            setProductPlaceholderImageTintColor(productPlaceholderImage, R.color.virtusizeTeal)
+            productPlaceholderImage?.setTint(ContextCompat.getColor(context, R.color.virtusizeTeal))
         } else {
-            setProductPlaceholderImageTintColor(productPlaceholderImage, R.color.virtusizeBlack)
+            productPlaceholderImage?.setTint(ContextCompat.getColor(context, R.color.virtusizeBlack))
         }
         return productPlaceholderImage
-    }
-
-    /**
-     * Sets the tine color of the product placeholder image
-     * @param productPlaceholderImage the drawable of the place holder image
-     * @param color the res Id of the color
-     */
-    private fun setProductPlaceholderImageTintColor(productPlaceholderImage: Drawable?, color: Int) {
-        val tinColor = ContextCompat.getColor(context, color)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            productPlaceholderImage?.setTint(tinColor)
-        } else {
-            productPlaceholderImage?.let {
-                DrawableCompat.setTint(DrawableCompat.wrap(it), tinColor)
-            }
-        }
     }
 }
