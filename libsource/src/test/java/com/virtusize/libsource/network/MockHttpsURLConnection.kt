@@ -3,15 +3,28 @@ package com.virtusize.libsource.network
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.io.OutputStream
-import java.net.HttpURLConnection
 import java.net.URL
+import java.security.cert.Certificate
+import javax.net.ssl.HttpsURLConnection
 
-class MockHttpURLConnection constructor(url: URL, private val mockedResponse: MockedResponse) :
-    HttpURLConnection(url) {
+class MockHttpsURLConnection constructor(url: URL, private val mockedResponse: MockedResponse) :
+    HttpsURLConnection(url) {
 
     override fun getInputStream(): InputStream? = mockedResponse.response
 
     override fun getErrorStream(): InputStream? = mockedResponse.response
+
+    override fun getCipherSuite(): String {
+        return ""
+    }
+
+    override fun getLocalCertificates(): Array<Certificate> {
+        return arrayOf()
+    }
+
+    override fun getServerCertificates(): Array<Certificate> {
+        return arrayOf()
+    }
 
     override fun getHeaderField(name: String?): String? = name?.let { mockedResponse.headers[it] }
 

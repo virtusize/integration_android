@@ -57,7 +57,7 @@ class VirtusizeTest {
     fun testProductDataCheck_isValidProduct_hasExpectedData() = runBlocking {
         var actualProductCheck: ProductCheck? = null
 
-        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+        virtusize.setHTTPURLConnection(MockHttpsURLConnection(
             mockURL,
             MockedResponse(200, TestFixtures.PRODUCT_DATA_CHECK.toString().byteInputStream())
         ))
@@ -85,7 +85,7 @@ class VirtusizeTest {
     fun testProductDataCheck_isInvalidProduct() = runBlocking {
         var actualProductCheck: ProductCheck? = null
 
-        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+        virtusize.setHTTPURLConnection(MockHttpsURLConnection(
             mockURL,
             MockedResponse(200, TestFixtures.INVALID_PRODUCT_DATA_CHECK.toString().byteInputStream())
         ))
@@ -104,7 +104,7 @@ class VirtusizeTest {
 
     @Test
     fun testProductDataCheck_provideWrongAPIKey_hasNetworkError() = runBlocking {
-        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+        virtusize.setHTTPURLConnection(MockHttpsURLConnection(
             mockURL,
             MockedResponse(HttpURLConnection.HTTP_FORBIDDEN, "{ \"Code\": \"ForbiddenError\", \"Message\": \"ForbiddenError: \" }".byteInputStream())
         ))
@@ -125,7 +125,7 @@ class VirtusizeTest {
     fun testSendProductImageToBackend_whenSuccessful_hasExpectedProductMetaDataHints() = runBlocking {
         var actualProductMetaDataHints: ProductMetaDataHints? = null
 
-        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+        virtusize.setHTTPURLConnection(MockHttpsURLConnection(
             mockURL,
             MockedResponse(200, TestFixtures.PRODUCT_META_DATA_HINTS.toString().byteInputStream())
         ))
@@ -145,7 +145,7 @@ class VirtusizeTest {
 
     @Test
     fun testSendProductImageToBackend_whenFailed_hasExpectedErrorInfo() = runBlocking {
-        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+        virtusize.setHTTPURLConnection(MockHttpsURLConnection(
             mockURL,
             MockedResponse(500, INTERNAL_SERVER_ERROR_RESPONSE.byteInputStream(), null)
         )
@@ -167,7 +167,7 @@ class VirtusizeTest {
     fun testSendUserSawProductEvent_whenSuccessful_onSuccessShouldBeCalled() = runBlocking {
         var isSuccessful = false
 
-        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+        virtusize.setHTTPURLConnection(MockHttpsURLConnection(
             mockURL,
             MockedResponse(201,
                 TestFixtures.USER_SAW_PRODUCT_EVENT_RESPONSE.toString().byteInputStream())
@@ -190,7 +190,7 @@ class VirtusizeTest {
     fun testRetrieveStoreInfo_getsFullStoreInfoResponse_hasExpectedStore() = runBlocking {
         var actualStore: Store? = null
 
-        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+        virtusize.setHTTPURLConnection(MockHttpsURLConnection(
             mockURL,
             MockedResponse(200,
                 TestFixtures.STORE_WITH_FULL_INFO.toString().byteInputStream())
@@ -222,7 +222,7 @@ class VirtusizeTest {
     fun testRetrieveStoreInfo_getsSomeNullValuesForStoreInfo_hasExpectedStore() = runBlocking {
         var actualStore: Store? = null
 
-        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+        virtusize.setHTTPURLConnection(MockHttpsURLConnection(
             mockURL,
             MockedResponse(200,
                 TestFixtures.STORE_WITH_NULL_VALUES.toString().byteInputStream())
@@ -254,7 +254,7 @@ class VirtusizeTest {
     fun testSendOrder_whenSuccessful_onSuccessShouldBeCalled() = runBlocking {
         var isSuccessful = false
 
-        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+        virtusize.setHTTPURLConnection(MockHttpsURLConnection(
             mockURL,
             MockedResponse(204, "".byteInputStream())
         ))
@@ -274,7 +274,7 @@ class VirtusizeTest {
 
     @Test
     fun testGetStoreProductInfo_whenSuccessful_onSuccessShouldReturnExpectedStoreProduct() = runBlocking {
-        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+        virtusize.setHTTPURLConnection(MockHttpsURLConnection(
             mockURL,
             MockedResponse(200, ProductFixtures.STORE_PRODUCT_INFO_JSON_DATA.toString().byteInputStream())
         ))
@@ -327,7 +327,7 @@ class VirtusizeTest {
 
     @Test
     fun testGetProductTypesResponse_whenSuccessful_onSuccessShouldReturnExpectedProductTypeList() = runBlocking {
-        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+        virtusize.setHTTPURLConnection(MockHttpsURLConnection(
             mockURL,
             MockedResponse(200, ProductFixtures.PRODUCT_TYPE_JSON_ARRAY.toString().byteInputStream())
         ))
@@ -365,7 +365,7 @@ class VirtusizeTest {
 
     @Test
     fun testGetUserProductsResponse_userHasItemsInTheWardrobe_shouldReturnExpectedUserProducts() = runBlocking {
-        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+        virtusize.setHTTPURLConnection(MockHttpsURLConnection(
             mockURL,
             MockedResponse(200, ProductFixtures.USER_PRODUCT_JSON_ARRAY.toString().byteInputStream())
         ))
@@ -393,7 +393,7 @@ class VirtusizeTest {
 
     @Test
     fun testGetUserProductsResponse_userHasEmptyWardrobe_shouldReturnEmptyUserProductList() = runBlocking {
-        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+        virtusize.setHTTPURLConnection(MockHttpsURLConnection(
             mockURL,
             MockedResponse(200, ProductFixtures.EMPTY_PRODUCT_JSON_ARRAY.toString().byteInputStream())
         ))
@@ -406,7 +406,7 @@ class VirtusizeTest {
 
     @Test
     fun testGetUserProductsResponse_wardrobeDoesNotExist_shouldReturn404Error() = runBlocking {
-        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+        virtusize.setHTTPURLConnection(MockHttpsURLConnection(
             mockURL,
             MockedResponse(404, ProductFixtures.WARDROBE_NOT_FOUND_ERROR_JSONObject.toString().byteInputStream())
         ))
@@ -422,7 +422,7 @@ class VirtusizeTest {
 
     @Test
     fun testGetUserBodyProfileResponse_userHasValidBodyProfile_shouldReturnExpectedBodyProfile() = runBlocking {
-        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+        virtusize.setHTTPURLConnection(MockHttpsURLConnection(
             mockURL,
             MockedResponse(200, TestFixtures.USER_BODY_JSONObject.toString().byteInputStream())
         ))
@@ -465,7 +465,7 @@ class VirtusizeTest {
 
     @Test
     fun testGetUserBodyProfileResponse_userHasEmptyBodyProfile_shouldExpectNull() = runBlocking {
-        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+        virtusize.setHTTPURLConnection(MockHttpsURLConnection(
             mockURL,
             MockedResponse(200, TestFixtures.NULL_USER_BODY_PROFILE.toString().byteInputStream())
         ))
@@ -479,7 +479,7 @@ class VirtusizeTest {
 
     @Test
     fun testGetUserBodyProfileResponse_wardrobeDoesNotExist_shouldReturn404Error() = runBlocking {
-        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+        virtusize.setHTTPURLConnection(MockHttpsURLConnection(
             mockURL,
             MockedResponse(404, ProductFixtures.WARDROBE_NOT_FOUND_ERROR_JSONObject.toString().byteInputStream())
         ))
@@ -495,7 +495,7 @@ class VirtusizeTest {
 
     @Test
     fun testI18nResponse_whenSuccessful_shouldReturnExpectedI18Localization() = runBlocking {
-        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+        virtusize.setHTTPURLConnection(MockHttpsURLConnection(
             mockURL,
             MockedResponse(200, TestUtils.readFileFromAssets("/i18n_en.json").toString().byteInputStream())
         ))
@@ -510,7 +510,7 @@ class VirtusizeTest {
 
     @Test
     fun testBodyRecommendedSize_whenSuccessful_shouldReturnExpectedBodyProfileRecommendedSize() = runBlocking {
-        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+        virtusize.setHTTPURLConnection(MockHttpsURLConnection(
             mockURL,
             MockedResponse(200, "{\"sizeName\": \"29/33\"}".byteInputStream())
         ))
@@ -528,7 +528,7 @@ class VirtusizeTest {
 
     @Test
     fun testBodyRecommendedSize_whenStoreProductIsAnAccessory_shouldReturn400Error() = runBlocking {
-        virtusize.setHTTPURLConnection(MockHttpURLConnection(
+        virtusize.setHTTPURLConnection(MockHttpsURLConnection(
             URL("https://services.virtusize.com/stg/ds-functions/size-rec/get-size"),
             MockedResponse(400, "{\"Code\": \"BadRequestError\", \"Message\": \"BadRequestError: \"}".byteInputStream())
         ))
