@@ -40,7 +40,16 @@ internal data class BodyProfileRecommendedSizeParams constructor(
                 mapOf(PARAM_PRODUCT_TYPE to (productTypes.find { it.id == storeProduct.productType }?.name ?: ""))
             )
             .plus(
-                mapOf(PARAM_USER_GENDER to (userBodyProfile.gender ?: ""))
+                mapOf(PARAM_USER_GENDER to (userBodyProfile.gender))
+            )
+            .plus(
+                mapOf(PARAM_USER_HEIGHT to (userBodyProfile.height))
+            )
+            .plus(
+                mapOf(PARAM_USER_WEIGHT to (userBodyProfile.weight))
+            )
+            .plus(
+                mapOf(PARAM_EXTERNAL_PRODUCT_ID to (storeProduct.externalId ?: ""))
             )
     }
 
@@ -112,6 +121,9 @@ internal data class BodyProfileRecommendedSizeParams constructor(
         const val PARAM_ITEM_SIZES = "item_sizes_orig"
         const val PARAM_PRODUCT_TYPE = "product_type"
         const val PARAM_USER_GENDER = "user_gender"
+        const val PARAM_USER_HEIGHT = "user_height"
+        const val PARAM_USER_WEIGHT = "user_weight"
+        const val PARAM_EXTERNAL_PRODUCT_ID = "ext_product_id"
 
         const val PARAM_BRAND = "brand"
         const val PARAM_FIT = "fit"

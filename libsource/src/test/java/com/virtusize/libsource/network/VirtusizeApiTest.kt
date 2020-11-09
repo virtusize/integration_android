@@ -251,7 +251,7 @@ class VirtusizeApiTest {
             TestFixtures.userBodyProfile
         )
 
-        val expectedUrl = "https://services.virtusize.jp/stg/ds-functions/size-rec/get-size"
+        val expectedUrl = "https://services.virtusize.jp/stg/ds-functions/size-rec/get-size-new"
 
         val expectedParamsMap = mutableMapOf(
             "user_gender" to "female",

@@ -224,6 +224,9 @@ class BodyProfileRecommendedSizeParamsTests {
             """
                 {
                     "user_gender": "female",
+                    "user_height": 1630,
+                    "user_weight": "50.00",
+                    "ext_product_id": "694",
                     "item_sizes_orig": {
                         "38": {
                             "bust": 660,
