@@ -215,6 +215,8 @@ class VirtusizeWebView: DialogFragment() {
     }
 
     private fun userAcceptedPrivacyPolicy() {
-        webView.evaluateJavascript("localStorage.setItem('acceptedPrivacyPolicy','true');", null)
+        webView.post {
+            webView.evaluateJavascript("localStorage.setItem('acceptedPrivacyPolicy','true');", null)
+        }
     }
 }
