@@ -40,13 +40,13 @@ internal data class BodyProfileRecommendedSizeParams constructor(
                 mapOf(PARAM_PRODUCT_TYPE to (productTypes.find { it.id == storeProduct.productType }?.name ?: ""))
             )
             .plus(
-                mapOf(PARAM_USER_GENDER to (userBodyProfile.gender))
+                mapOf(PARAM_USER_GENDER to userBodyProfile.gender)
             )
             .plus(
-                mapOf(PARAM_USER_HEIGHT to (userBodyProfile.height))
+                mapOf(PARAM_USER_HEIGHT to userBodyProfile.height.toString())
             )
             .plus(
-                mapOf(PARAM_USER_WEIGHT to (userBodyProfile.weight))
+                mapOf(PARAM_USER_WEIGHT to userBodyProfile.weight)
             )
             .plus(
                 mapOf(PARAM_EXTERNAL_PRODUCT_ID to (storeProduct.externalId ?: ""))

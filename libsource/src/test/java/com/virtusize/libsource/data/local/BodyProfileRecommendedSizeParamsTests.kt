@@ -223,22 +223,6 @@ class BodyProfileRecommendedSizeParamsTests {
         assertThat(JSONObject(bodyProfileRecommendedSizeParamsMap).toString()).isEqualTo(
             """
                 {
-                    "user_gender": "female",
-                    "user_height": 1630,
-                    "user_weight": "50.00",
-                    "ext_product_id": "694",
-                    "item_sizes_orig": {
-                        "38": {
-                            "bust": 660,
-                            "sleeve": 845,
-                            "height": 760
-                        },
-                        "36": {
-                            "bust": 645,
-                            "sleeve": 825,
-                            "height": 750
-                        }
-                    },
                     "product_type": "jacket",
                     "additional_info": {
                         "fit": "regular",
@@ -264,6 +248,22 @@ class BodyProfileRecommendedSizeParamsTests {
                             "height": 165
                         }
                     },
+                    "user_weight": "50.00",
+                    "user_gender": "female",
+                    "user_height": "1630",
+                      "item_sizes_orig": {
+                        "38": {
+                            "bust": 660,
+                            "sleeve": 845,
+                            "height": 760
+                        },
+                        "36": {
+                            "bust": 645,
+                            "sleeve": 825,
+                            "height": 750
+                        }
+                    },
+                    "ext_product_id": "694",
                     "body_data": {
                         "waistWidth": {
                             "value": 225,

@@ -255,6 +255,9 @@ class VirtusizeApiTest {
 
         val expectedParamsMap = mutableMapOf(
             "user_gender" to "female",
+            "user_height" to "1630",
+            "user_weight" to "50.00",
+            "ext_product_id" to "694",
             "item_sizes_orig" to mutableMapOf(
                 "38" to mutableMapOf(
                     "bust" to 660,
