@@ -26,6 +26,19 @@ fun VirtusizeEnvironment.apiUrl(): String {
 }
 
 /**
+ * Gets the event API URL corresponding to the Virtusize Environment
+ * @return A String value of the event API URL
+ */
+fun VirtusizeEnvironment.eventApiUrl(): String {
+    return when(this) {
+        STAGING -> "https://events.staging.virtusize.jp"
+        JAPAN -> "https://events.virtusize.jp"
+        GLOBAL -> "https://events.virtusize.com"
+        KOREA -> "https://events.virtusize.kr"
+    }
+}
+
+/**
  * Gets the URL for the API endpoint Product Data Check corresponding to the Virtusize Environment
  * @return A String value of the URL for the API endpoint Product Data Check
  */
