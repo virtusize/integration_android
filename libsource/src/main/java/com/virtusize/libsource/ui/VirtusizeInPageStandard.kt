@@ -265,7 +265,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         val configuredContext = VirtusizeUtils.getConfiguredContext(context, virtusizeParams?.language)
         inpage_standard_button.text = configuredContext?.getText(R.string.virtusize_button_text)
         privacy_policy_text.text = configuredContext?.getText(R.string.virtusize_privacy_policy)
-        inpage_standard_loading_text.text = configuredContext?.getText(R.string.inpage_standard_loading_text)
+        inpage_standard_loading_text.text = configuredContext?.getText(R.string.inpage_loading_text)
         inpage_standard_error_text.text = configuredContext?.getText(R.string.inpage_long_error_text)
 
         setConfiguredDimensions(configuredContext)
