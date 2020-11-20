@@ -77,6 +77,7 @@ internal object VirtusizeUtils {
                     sizeComparisonRecommendedSize.apply {
                         storeProductFitInfo.apply {
                             bestFitScore = fitScore
+                            bestSize = storeProductSize
                             bestUserProduct = userProduct
                             isStoreProductSmaller = isSmaller
                         }

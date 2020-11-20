@@ -3,7 +3,6 @@ package com.virtusize.android
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.VirtusizeOrder
 import com.virtusize.libsource.ui.VirtusizeView
@@ -45,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         exampleVirtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
         // If you like, you can set up the horizontal margins between the edges of the app screen and the InPage Standard view
         // Note: Use the helper extension function `dpInPx` if you like
-        exampleVirtusizeInPageStandard.horizontalMargin = 16.dpInPx.toFloat()
+        exampleVirtusizeInPageStandard.horizontalMargin = 16.dpInPx
         /*
          * If you like, you can set up the background color of the check size button in InPage Standard,
          * as long as it passes WebAIM contrast test.

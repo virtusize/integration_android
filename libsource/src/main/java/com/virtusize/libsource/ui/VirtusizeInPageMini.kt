@@ -91,8 +91,7 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
                 }
             }
         } else {
-            virtusizeMessageHandler.onError(VirtusizeErrorType.NullProduct.virtusizeError())
-            throwError(VirtusizeErrorType.NullProduct)
+            VirtusizeErrorType.NullProduct.throwError()
         }
     }
 
@@ -191,6 +190,10 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
         inpage_mini_button.text = configuredContext?.getText(R.string.virtusize_button_text)
         inpage_mini_loading_text.text = configuredContext?.getText(R.string.inpage_loading_text)
         setConfiguredDimensions()
+
+        if(virtusizeParams?.language == VirtusizeLanguage.JP) {
+            inpage_mini_text.includeFontPadding = true
+        }
     }
 
     /**

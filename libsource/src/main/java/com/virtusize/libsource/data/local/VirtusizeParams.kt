@@ -39,7 +39,7 @@ data class VirtusizeParams(
                 "$PARAM_ALLOW_LANGUAGES: ${allowedLanguages.map { "{label: \"${it.label}\", value: \"${it.value}\"}" }}, " +
                     "$PARAM_DETAILS_PANEL_CARDS: ${detailsPanelCards.map { "\"${it.value}\"" }}, " +
                 "$PARAM_REGION: '${region.value}', " +
-                "$PARAM_ENVIRONMENT: 'production'}"
+                "$PARAM_ENVIRONMENT: '${environment.virtusizeWebViewEnv()}'}"
     }
 
     private companion object {

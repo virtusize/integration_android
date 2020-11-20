@@ -39,9 +39,10 @@ internal class VirtusizeApiTask(private var urlConnection: HttpURLConnection? = 
         private const val HEADER_AUTH = "x-vs-auth"
         private const val HEADER_AUTHORIZATION = "Authorization"
         private const val HEADER_CONTENT_TYPE = "Content-Type"
+        private const val HEADER_COOKIE = "Cookie"
     }
 
-    // TODO: integrate the sessions API to get the auth token
+    // TODO: add comment
     private var sharedPreferencesHelper: SharedPreferencesHelper? = null
     // The Json parser interface for converting the JSON response to a given type of Java object
     private var jsonParser: VirtusizeJsonParser<Any>? = null
@@ -95,8 +96,9 @@ internal class VirtusizeApiTask(private var urlConnection: HttpURLConnection? = 
                     connectTimeout = CONNECT_TIMEOUT
                     requestMethod = apiRequest.method.name
 
-                    val browserID = sharedPreferencesHelper?.getBrowserId()
-                    setRequestProperty(HEADER_BROWSER_ID, browserID)
+                    sharedPreferencesHelper?.getBrowserId()?.let {
+                        setRequestProperty(HEADER_BROWSER_ID, it)
+                    }
 
                     if (apiRequest.authorization) {
                         sharedPreferencesHelper?.getAuthToken()?.let {
@@ -113,6 +115,7 @@ internal class VirtusizeApiTask(private var urlConnection: HttpURLConnection? = 
                         if(apiRequest.url.contains(VirtusizeEndpoint.Sessions.getPath())) {
                             sharedPreferencesHelper?.getAuthHeader()?.let {
                                 setRequestProperty(HEADER_AUTH, it)
+                                setRequestProperty(HEADER_COOKIE, "")
                             }
                         }
 

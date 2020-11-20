@@ -1,6 +1,7 @@
 package com.virtusize.libsource.data.remote
 
 import com.virtusize.libsource.data.local.SizeComparisonRecommendedSize
+import com.virtusize.libsource.util.dpInPx
 
 /**
  * This class represents the product info from the Virtusize API
@@ -13,6 +14,7 @@ import com.virtusize.libsource.data.local.SizeComparisonRecommendedSize
  * @param isFavorite is true if the product is marked as a favorite
  * @param storeId the ID of the store that this product belongs to
  * @param storeProductMeta the additional data of this product
+ * @param imageURL the product image URL that the client provides
  * @see ProductSize
  * @see StoreProductMeta
  */
@@ -25,7 +27,8 @@ data class Product(
     val cloudinaryPublicId: String,
     var isFavorite: Boolean? = null,
     val storeId: Int,
-    var storeProductMeta: StoreProductMeta? = null
+    var storeProductMeta: StoreProductMeta? = null,
+    var imageURL: String? = null
 ) {
     /**
      * Gets the InPage recommendation text based on the product info
@@ -45,8 +48,12 @@ data class Product(
     }
 
     // TODO: add comment
+    fun getProductImageURL(): String {
+        return imageURL ?: "https://res.cloudinary.com/virtusize/image/upload/w_${36.dpInPx},h_${36.dpInPx}/q_auto,f_auto,dpr_auto/$cloudinaryPublicId.jpg"
+    }
+
     private fun accessoryText(i18nLocalization: I18nLocalization, sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?): String {
-        return if (sizeComparisonRecommendedSize?.bestUserProduct?.sizes?.get(0)?.name != null) i18nLocalization.getHasProductAccessoryText() else i18nLocalization.defaultAccessoryText
+        return if (sizeComparisonRecommendedSize?.bestSize?.name != null) i18nLocalization.getHasProductAccessoryText() else i18nLocalization.defaultAccessoryText
     }
 
     private fun oneSizeText(
@@ -68,7 +75,7 @@ data class Product(
         sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?,
         bodyProfileRecommendedSizeName: String?
     ): String {
-        sizeComparisonRecommendedSize?.bestUserProduct?.sizes?.get(0)?.name?.let {
+        sizeComparisonRecommendedSize?.bestSize?.name?.let {
             return i18nLocalization.getSizeComparisonMultiSizeText(it)
         }
         bodyProfileRecommendedSizeName?.let {

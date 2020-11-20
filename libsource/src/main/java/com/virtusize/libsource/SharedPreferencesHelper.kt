@@ -9,7 +9,7 @@ import kotlin.random.Random
  * This class is used to get a browser identifier and user auth data specific to this SDK
  * @param context the application context
  */
-internal class SharedPreferencesHelper {
+class SharedPreferencesHelper {
 
     companion object {
         private var obj: SharedPreferencesHelper? = null

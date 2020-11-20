@@ -23,4 +23,11 @@
         <attr name="inPageStandardButtonBackgroundColor" format="color"/>
         <attr name="inPageStandardHorizontalMargin" format="dimension"/>
     </declare-styleable>
+
+    <declare-styleable name="VirtusizeProductImageView">
+        <attr name="productImageType">
+            <enum name="store_product" value="0" />
+            <enum name="user_product" value="1" />
+        </attr>
+    </declare-styleable>
 </resources>

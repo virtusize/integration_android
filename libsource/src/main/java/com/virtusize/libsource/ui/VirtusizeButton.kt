@@ -110,8 +110,7 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, Ap
                 }
             }
         } else {
-            virtusizeMessageHandler.onError(VirtusizeErrorType.NullProduct.virtusizeError())
-            throwError(VirtusizeErrorType.NullProduct)
+            VirtusizeErrorType.NullProduct.throwError()
         }
     }
 

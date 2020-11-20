@@ -16,13 +16,13 @@
         app:cardElevation="@dimen/virtusize_inpage_standard_layout_card_elevation">
 
         <LinearLayout
-            android:paddingTop="@dimen/virtusize_inpage_standard_error_layout_vertical_padding"
-            android:paddingBottom="@dimen/virtusize_inpage_standard_error_layout_vertical_padding"
             android:id="@+id/inpage_standard_error_screen_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical"
+            android:paddingTop="@dimen/virtusize_inpage_standard_error_layout_vertical_padding"
+            android:paddingBottom="@dimen/virtusize_inpage_standard_error_layout_vertical_padding"
             android:visibility="gone">
 
             <ImageView
@@ -36,9 +36,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/inpage_standard_error_text_horizontal_margin"
                 android:layout_marginEnd="@dimen/inpage_standard_error_text_horizontal_margin"
-                android:textColor="@color/color_gray_700"
                 android:gravity="center_horizontal"
-                android:text="@string/inpage_long_error_text" />
+                android:text="@string/inpage_long_error_text"
+                android:textColor="@color/color_gray_700" />
 
         </LinearLayout>
 
@@ -47,60 +47,50 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/inpage_standard_product_border_card_view"
-                android:layout_width="@dimen/virtusize_inpage_standard_product_image_border_size"
-                android:layout_height="@dimen/virtusize_inpage_standard_product_image_border_size"
+            <RelativeLayout
+                android:id="@+id/inpage_standard_image_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/virtusize_inpage_standard_product_image_border_card_horizontal_margin"
-                android:layout_marginLeft="@dimen/virtusize_inpage_standard_product_image_border_card_horizontal_margin"
-                android:layout_marginTop="@dimen/virtusize_inpage_standard_product_image_border_card_vertical_margin"
-                android:layout_marginBottom="@dimen/virtusize_inpage_standard_product_image_border_card_vertical_margin"
-                app:cardCornerRadius="@dimen/virtusize_inpage_standard_product_image_border_cardCornerRadius"
-                app:cardElevation="0dp">
+                android:layout_centerVertical="true">
+
+                <com.virtusize.libsource.ui.VirtusizeProductImageView
+                    android:id="@+id/inpage_standard_store_product_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/inpage_standard_product_image_overlap_margin"
+                    android:layout_marginLeft="@dimen/inpage_standard_product_image_overlap_margin"
+                    android:layout_marginTop="@dimen/inpage_standard_product_image_vertical_margin"
+                    android:layout_marginBottom="@dimen/inpage_standard_product_image_vertical_margin"
+                    android:layout_toEndOf="@+id/inpage_standard_user_product_image_view"
+                    android:layout_toRightOf="@+id/inpage_standard_user_product_image_view"
+                    app:productImageType="store_product"/>
+
+                <com.virtusize.libsource.ui.VirtusizeProductImageView
+                    android:id="@+id/inpage_standard_user_product_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/inpage_standard_product_image_horizontal_margin"
+                    android:layout_marginLeft="@dimen/inpage_standard_product_image_horizontal_margin"
+                    app:productImageType="user_product" />
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/ic_image_border_inpage_standard"
-                    android:scaleType="centerCrop" />
+                    android:id="@+id/vs_icon_image_view"
+                    android:layout_width="@dimen/virtusize_inpage_standard_product_image_border_size"
+                    android:layout_height="@dimen/virtusize_inpage_standard_product_image_border_size"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/inpage_standard_product_image_horizontal_margin"
+                    android:layout_marginLeft="@dimen/inpage_standard_product_image_horizontal_margin"
+                    android:layout_marginTop="@dimen/inpage_standard_product_image_vertical_margin"
+                    android:layout_marginBottom="@dimen/inpage_standard_product_image_vertical_margin"
+                    android:src="@drawable/ic_vs_icon_black" />
+            </RelativeLayout>
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/inpage_standard_product_card_view"
-                    android:layout_width="@dimen/virtusize_inpage_standard_product_image_size"
-                    android:layout_height="@dimen/virtusize_inpage_standard_product_image_size"
-                    android:layout_gravity="center"
-                    app:cardCornerRadius="@dimen/virtusize_inpage_standard_product_image_cardCornerRadius"
-                    app:cardElevation="0dp">
-
-                    <ImageView
-                        android:id="@+id/inpage_standard_product_image_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="@dimen/virtusize_inpage_standard_product_image_padding"
-                        android:scaleType="centerInside"
-                        tools:srcCompat="@drawable/ic_product_type_1" />
-
-                </androidx.cardview.widget.CardView>
-
-            </androidx.cardview.widget.CardView>
-
-            <ImageView
-                android:id="@+id/vs_icon_image_view"
-                android:layout_width="@dimen/virtusize_inpage_standard_product_image_border_size"
-                android:layout_height="@dimen/virtusize_inpage_standard_product_image_border_size"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/virtusize_inpage_standard_product_image_border_card_horizontal_margin"
-                android:layout_marginLeft="@dimen/virtusize_inpage_standard_product_image_border_card_horizontal_margin"
-                android:layout_marginTop="@dimen/virtusize_inpage_standard_product_image_border_card_vertical_margin"
-                android:layout_marginBottom="@dimen/virtusize_inpage_standard_product_image_border_card_vertical_margin"
-                android:src="@drawable/ic_vs_icon_black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -112,15 +102,14 @@
                 android:layout_marginBottom="@dimen/virtusize_inpage_standard_texts_vertical_margin"
                 android:layout_toStartOf="@+id/inpage_standard_button"
                 android:layout_toLeftOf="@+id/inpage_standard_button"
-                android:layout_toEndOf="@+id/inpage_standard_product_border_card_view"
-                android:layout_toRightOf="@+id/inpage_standard_product_border_card_view"
+                android:layout_toEndOf="@+id/inpage_standard_image_layout"
+                android:layout_toRightOf="@+id/inpage_standard_image_layout"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/inpage_standard_top_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/virtusize_inpage_standard_top_text_marginBottom"
                     android:includeFontPadding="false"
                     android:textColor="@color/color_gray_900"
                     android:textSize="@dimen/virtusize_inpage_standard_normal_textSize"
