@@ -83,6 +83,11 @@ class Virtusize(
         )
     }
 
+    fun setUserId(userId: String) {
+        VirtusizeApi.updateUserId(userId)
+        params.externalUserId = userId
+    }
+
     /**
      * Sets up the Virtusize button by setting VirtusizeProduct to this button
      * @param virtusizeButton VirtusizeButton that is being set up
@@ -276,7 +281,7 @@ class Virtusize(
         retrieveStoreInfo(object : SuccessResponseHandler{
             override fun onSuccess(data: Any?) {
                 /**
-                 * Throws the error if the user id is not set up or empty during the initialization of the [Virtusize] class
+                 * Throws the error if the user id is not set up or empty
                  */
                 if(params.externalUserId.isNullOrEmpty()) {
                     throwError(VirtusizeErrorType.UserIdNullOrEmpty)
