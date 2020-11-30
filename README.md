@@ -177,11 +177,18 @@ The order API enables Virtusize to show your customers the items they have recen
 
 #### 1. Initialization
 
-Make sure to set up the **user ID** in your Application class's `onCreate` method before you start.
+Make sure to set up the **user ID** before sending orders to Virtusize. You can set up the user ID either:
+
+in your Application class's `onCreate` method before the app is launched 
+
+or 
+
+in your activity or fragment after the app is launched
 
 * Kotlin
 
 ```kotlin
+// In your Application class's `onCreate` method before the app is launched 
 lateinit var Virtusize: Virtusize
 override fun onCreate() {
     super.onCreate()
@@ -191,11 +198,15 @@ override fun onCreate() {
             .setEnv(VirtusizeEnvironment.STAGING)
             .build()
 }
+
+// In your activity or fragment after the app is launched
+(application as App).Virtusize.setUserID("user_id")
 ```
 
 * Java
 
 ~~~~java
+// In your Application class's `onCreate` method before the app is launched 
 Virtusize Virtusize;
 @Override
 public void onCreate() {
@@ -206,6 +217,10 @@ Virtusize = new VirtusizeBuilder()
         .setUserId(user_id)
         .setEnv(VirtusizeEnvironment.STAGING)
         .build();
+  
+// In your activity or fragment after the app is launched
+app = (App) getApplication();
+app.Virtusize.setUserId("user_id");
 ~~~~
 
 #### 2. Create a *VirtusizeOrder* object for order data

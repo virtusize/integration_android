@@ -46,6 +46,10 @@ internal object VirtusizeApi {
         this.userId = userId
     }
 
+    fun updateUserId(userId: String) {
+        this.userId = userId
+    }
+
     /**
      * Gets the API request for product check
      * It checks if the product is supported by Virtusize before loading anything on the frontend
