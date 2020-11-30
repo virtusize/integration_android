@@ -281,7 +281,7 @@ class Virtusize(
         retrieveStoreInfo(object : SuccessResponseHandler{
             override fun onSuccess(data: Any?) {
                 /**
-                 * Throws the error if the user id is not set up or empty during the initialization of the [Virtusize] class or after the user is logged in
+                 * Throws the error if the user id is not set up or empty
                  */
                 if(params.externalUserId.isNullOrEmpty()) {
                     throwError(VirtusizeErrorType.UserIdNullOrEmpty)
