@@ -185,7 +185,7 @@ Please do not forget to unregister message handler in activity or fragment's lif
   protected void onCreate(Bundle savedInstanceState) {
       //...
       App app = (App) getApplication();
-    
+
       virtusizeMessageHandler = new VirtusizeMessageHandler() {
           @Override
           public void virtusizeControllerShouldClose(@NotNull VirtusizeView virtusizeView) {
@@ -351,15 +351,15 @@ There are two types of InPage in our Virtusize SDK.
   | ![1 thumbnail + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399368-5e879300-1930-11eb-8b77-b49e06813550.png) | ![2 thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399370-5f202980-1930-11eb-9a2d-7b71714aa7b4.png) |
   |             **1 thumbnail + 1 line of message**              |        **2 animated thumbnails + 2 lines of message**        |
   | ![1 thumbnail + 1 line of message](https://user-images.githubusercontent.com/7802052/97399373-5f202980-1930-11eb-81fe-9946b656eb4c.png) | ![2 animated thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399355-59c2df00-1930-11eb-8a52-292956b8762d.gif) |
-  
+
 - ##### Recommended Placement
-  
+
   - Near the size table
-  
+
   - In the size info section
-  
+
   <img src="https://user-images.githubusercontent.com/7802052/92672185-15b15600-f353-11ea-921d-397f207cf616.png" style="zoom:50%;" />
-  
+
 - ##### UI customization
 
   - **You can:**
@@ -551,11 +551,18 @@ The order API enables Virtusize to show your customers the items they have recen
 
 #### 1. Initialization
 
-Make sure to set up the **user ID** in your Application class's `onCreate` method before you start.
+Make sure to set up the **user ID** before sending orders to Virtusize. You can set up the user ID either:
+
+in your Application class's `onCreate` method before the app is launched
+
+or
+
+in your activity or fragment after the app is launched
 
 * Kotlin
 
 ```kotlin
+// In your Application class's `onCreate` method before the app is launched
 lateinit var Virtusize: Virtusize
 override fun onCreate() {
     super.onCreate()
@@ -565,11 +572,15 @@ override fun onCreate() {
         .setEnv(VirtusizeEnvironment.STAGING)
         .build()
 }
+
+// In your activity or fragment after the app is launched
+(application as App).Virtusize.setUserID("user_id")
 ```
 
 * Java
 
 ~~~~java
+// In your Application class's `onCreate` method before the app is launched
 Virtusize Virtusize;
 @Override
 public void onCreate() {
@@ -581,6 +592,10 @@ public void onCreate() {
         .setEnv(VirtusizeEnvironment.STAGING)
         .build();
 }
+
+// In your activity or fragment after the app is launched
+app = (App) getApplication();
+app.Virtusize.setUserId("user_id");
 ~~~~
 
 #### 2. Create a *VirtusizeOrder* object for order data
