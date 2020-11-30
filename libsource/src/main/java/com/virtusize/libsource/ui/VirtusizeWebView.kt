@@ -11,10 +11,7 @@ import android.webkit.*
 import androidx.fragment.app.DialogFragment
 import com.virtusize.libsource.R
 import com.virtusize.libsource.SharedPreferencesHelper
-import com.virtusize.libsource.data.local.VirtusizeErrorType
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler
-import com.virtusize.libsource.data.local.virtusizeError
-import com.virtusize.libsource.data.parsers.UserAuthDataJsonParser
 import com.virtusize.libsource.data.parsers.VirtusizeEventJsonParser
 import com.virtusize.libsource.util.Constants
 import kotlinx.android.synthetic.main.web_activity.*
@@ -68,6 +65,11 @@ class VirtusizeWebView: DialogFragment() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 if(url != null && url.contains(virtusizeWebAppUrl)) {
                     executeJavascript(view, vsParamsFromSDKScript)
+                    getBrowserIDFromCookies()?.let { bid ->
+                        if(bid != sharedPreferencesHelper.getBrowserId()) {
+                            sharedPreferencesHelper.storeBrowserId(bid)
+                        }
+                    }
                 }
             }
 
@@ -181,6 +183,24 @@ class VirtusizeWebView: DialogFragment() {
     }
 
     /**
+     * Returns virtusize.bid from the web view cookies
+     */
+    private fun getBrowserIDFromCookies(): String? {
+        var bidValue: String? = null
+        val cookieManager = CookieManager.getInstance()
+        val cookies = cookieManager.getCookie(virtusizeWebAppUrl)
+        if (cookies != null) {
+            val cookiesArray = cookies.split(";".toRegex()).toTypedArray()
+            for (cookie in cookiesArray) {
+                if (cookie.contains("virtusize.bid")) {
+                    bidValue = cookie.split("=".toRegex()).toTypedArray()[1]
+                }
+            }
+        }
+        return bidValue
+    }
+
+    /**
      * Checks if the URL is an external link to be opened with a browser app
      */
     private fun isExternalLink(url: String): Boolean {
@@ -205,9 +225,6 @@ class VirtusizeWebView: DialogFragment() {
             if(event?.name == "user-clicked-start") {
                 userAcceptedPrivacyPolicy()
             }
-            if(event?.name == "user-auth-data") {
-                setupUserAuthData(eventInfo)
-            }
         }
     }
 
@@ -221,17 +238,6 @@ class VirtusizeWebView: DialogFragment() {
             } else {
                 webView.loadUrl("javascript:localStorage.setItem('acceptedPrivacyPolicy','true');")
             }
-        }
-    }
-
-    private fun setupUserAuthData(eventJsonString: String) {
-        try {
-            val jsonObject = JSONObject(eventJsonString)
-            val userAutoData = UserAuthDataJsonParser().parse(jsonObject)
-            sharedPreferencesHelper.storeBrowserId(userAutoData?.bid)
-            sharedPreferencesHelper.setAuthHeader(userAutoData?.auth)
-        } catch (e: JSONException) {
-            virtusizeMessageHandler.onError(VirtusizeErrorType.JsonParsingError.virtusizeError("JSONException: $e"))
         }
     }
 }

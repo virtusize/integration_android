@@ -1,16 +1,19 @@
 package com.virtusize.libsource.ui
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewTreeObserver.OnPreDrawListener
 import android.widget.LinearLayout
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
@@ -18,11 +21,11 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.ViewCompat
 import com.virtusize.libsource.R
 import com.virtusize.libsource.data.local.*
+import com.virtusize.libsource.data.remote.Product
 import com.virtusize.libsource.data.remote.ProductCheck
-import com.virtusize.libsource.util.*
 import com.virtusize.libsource.util.FontUtils
 import com.virtusize.libsource.util.VirtusizeUtils
-import com.virtusize.libsource.util.getDrawableResourceByName
+import com.virtusize.libsource.util.dpInPx
 import kotlinx.android.synthetic.main.view_inpage_standard.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -51,6 +54,12 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
     override var virtusizeDialogFragment = VirtusizeWebView()
         private set
 
+    // TODO: add comment
+    private var smallScreenWidth = false
+    private val crossFadeAnimationDuration = 750
+    private var crossFadeRunnable: Runnable? = null
+    private var crossFadeHandler: Handler = Handler(Looper.getMainLooper())
+
     // The VirtusizeViewStyle that clients can choose to use for this InPage Standard view
     var virtusizeViewStyle = VirtusizeViewStyle.NONE
         set(value) {
@@ -63,7 +72,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         private set
 
     // The horizontal margin between the edges of InPage Standard view and the phone screen
-    var horizontalMargin = -1f
+    var horizontalMargin = -1
         set(value) {
             field = value
             setStyle()
@@ -88,7 +97,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         horizontalMargin = attrsArray.getDimension(
             R.styleable.VirtusizeInPageStandard_inPageStandardHorizontalMargin,
             -1f
-        )
+        ).toInt()
         attrsArray.recycle()
         setStyle()
     }
@@ -124,7 +133,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             }
         } else {
             virtusizeMessageHandler.onError(VirtusizeErrorType.NullProduct.virtusizeError())
-            throwError(VirtusizeErrorType.NullProduct)
+            VirtusizeErrorType.NullProduct.throwError()
         }
     }
 
@@ -132,8 +141,9 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
      * Sets up the styles for the loading screen and the screen after finishing loading
      * @param loading pass true when it's loading, and pass false when finishing loading
      */
-    private fun setLoadingScreen(loading: Boolean) {
-        inpage_standard_product_border_card_view.visibility = if(loading) View.INVISIBLE else View.VISIBLE
+    private fun setLoadingScreen(loading: Boolean, userBestFitProduct: Product? = null) {
+        inpage_standard_store_product_image_view.visibility = if(loading) View.INVISIBLE else View.VISIBLE
+        inpage_standard_user_product_image_view.visibility = if(userBestFitProduct == null) View.GONE else View.VISIBLE
         vs_signature_image_view.visibility = if(loading) View.INVISIBLE else View.VISIBLE
         privacy_policy_text.visibility = if(loading) View.INVISIBLE else View.VISIBLE
         vs_icon_image_view.visibility = if(loading) View.VISIBLE else View.GONE
@@ -151,6 +161,13 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
                 inpage_standard_bottom_text.visibility = View.VISIBLE
             }
         }
+        if(smallScreenWidth && !loading) {
+            if (userBestFitProduct != null) {
+                startCrossFadeProductImageViews()
+            } else {
+                stopCrossFadeProductImageViews()
+            }
+        }
     }
 
     /**
@@ -162,6 +179,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             inpage_standard_top_text.text = splitTexts[0]
             inpage_standard_bottom_text.text = splitTexts[1]
         } else {
+            inpage_standard_top_text.text = ""
             inpage_standard_top_text.visibility = View.GONE
             inpage_standard_bottom_text.text = splitTexts[0]
         }
@@ -188,14 +206,54 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
     }
 
     /**
-     * Sets up the store product image
-     * @param imageUrl the image URL that clients provide when setting up the product info
-     * @param cloudinaryPublicId the Cloudinary image public ID
-     * @param productType the product type, which is fetched from the store product info
-     * @param style the product style, which is fetched from the store product info
+     * Sets the product images with the info of the store product and the best fit user product
+     * @param storeProduct the store product
+     * @param userBestFitProduct the best fit user product. If it's not available, it will be null
      */
-    internal fun setupProductImage(imageUrl: String?, cloudinaryPublicId: String, productType: Int, style: String?) {
-        setProductImageFromURL(imageUrl ?: getCloudinaryImageUrl(cloudinaryPublicId), productType, style)
+    internal fun setProductImages(storeProduct: Product, userBestFitProduct: Product?) {
+        val productMap = mutableMapOf<VirtusizeProductImageView, Product>()
+        productMap[inpage_standard_store_product_image_view] = storeProduct
+        if(userBestFitProduct != null) {
+            productMap[inpage_standard_user_product_image_view] = userBestFitProduct
+            removeLeftPaddingFromStoreProductImageView()
+        } else {
+            addLeftPaddingToStoreProductImageView(true)
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            for (map in productMap.entries) {
+                val productImageView = map.key
+                val product = map.value
+                try {
+                    URL(product.getProductImageURL()).openStream().use {
+                        val bitmap = BitmapFactory.decodeStream(it)
+                        withContext(Dispatchers.Main) {
+                            productImageView.setProductImageView(bitmap)
+                        }
+                    }
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        productImageView.setProductPlaceHolder(product.productType, product.storeProductMeta?.additionalInfo?.style)
+                    }
+                }
+            }
+            withContext(Dispatchers.Main) {
+                setLoadingScreen(false, userBestFitProduct)
+            }
+        }
+    }
+
+    private fun addLeftPaddingToStoreProductImageView(addExtraPadding: Boolean) {
+        val productImageOverlapMargin = resources.getDimension(R.dimen.inpage_standard_product_image_overlap_margin)
+        val productImageHorizontalMargin = resources.getDimension(R.dimen.inpage_standard_product_image_horizontal_margin)
+        var addedPadding = productImageHorizontalMargin.toInt()
+        if(addExtraPadding) {
+            addedPadding -= productImageOverlapMargin.toInt()
+        }
+        inpage_standard_store_product_image_view.setPadding(addedPadding, 0, 0, 0)
+    }
+
+    private fun removeLeftPaddingFromStoreProductImageView() {
+        inpage_standard_store_product_image_view.setPadding(0, 0, 0, 0)
     }
 
     /**
@@ -203,26 +261,98 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
      */
     private fun setStyle() {
         // Set Virtusize default style
-        if(virtusizeButtonBackgroundColor!= 0) {
-            setSizeCheckButtonBackgroundTint(virtusizeButtonBackgroundColor)
-        } else if(virtusizeViewStyle == VirtusizeViewStyle.TEAL) {
-            setSizeCheckButtonBackgroundTint(ContextCompat.getColor(context, R.color.virtusizeTeal))
-        } else {
-            setSizeCheckButtonBackgroundTint(ContextCompat.getColor(context, R.color.color_gray_900))
+        when {
+            virtusizeButtonBackgroundColor!= 0 -> {
+                setSizeCheckButtonBackgroundTint(virtusizeButtonBackgroundColor)
+            }
+            virtusizeViewStyle == VirtusizeViewStyle.TEAL -> {
+                setSizeCheckButtonBackgroundTint(ContextCompat.getColor(context, R.color.virtusizeTeal))
+            }
+            else -> {
+                setSizeCheckButtonBackgroundTint(ContextCompat.getColor(context, R.color.color_gray_900))
+            }
         }
 
         // Set horizontal margins
-        val inPageStandardFooterTopMargin = if(horizontalMargin.toInt() >= 2.dpInPx) 10.dpInPx - horizontalMargin.toInt() else horizontalMargin.toInt() + 8.dpInPx
-        if (horizontalMargin < 0f) {
+        val inPageStandardFooterTopMargin = if(horizontalMargin >= 2.dpInPx) 10.dpInPx - horizontalMargin else horizontalMargin + 8.dpInPx
+        if (horizontalMargin < 0) {
             return
         }
-        setupMargins(inpage_standard_card_view, horizontalMargin.toInt(), horizontalMargin.toInt(), horizontalMargin.toInt(), horizontalMargin.toInt())
+        setupMargins(inpage_standard_card_view, horizontalMargin, horizontalMargin, horizontalMargin, horizontalMargin)
         setupInPageStandardFooterMargins(
-            horizontalMargin.toInt() + 2.dpInPx,
+            horizontalMargin + 2.dpInPx,
             inPageStandardFooterTopMargin,
-            horizontalMargin.toInt() + 2.dpInPx,
+            horizontalMargin + 2.dpInPx,
             0
         )
+
+        viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                if (viewTreeObserver.isAlive) {
+                    viewTreeObserver.removeOnPreDrawListener(this)
+                }
+                if (width < 411.dpInPx) {
+                    smallScreenWidth = true
+                }
+                return true
+            }
+        })
+
+    }
+    private fun startCrossFadeProductImageViews() {
+        addLeftPaddingToStoreProductImageView(false)
+        val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        inpage_standard_store_product_image_view.layoutParams = params
+        setupMargins(inpage_standard_user_product_image_view, 0, 0, 0, 0)
+        if(crossFadeRunnable == null) {
+            crossFadeRunnable = Runnable {
+                if(inpage_standard_user_product_image_view.visibility == View.VISIBLE) {
+                    inpage_standard_store_product_image_view.visibility == View.INVISIBLE
+                    fadeInAnimation(inpage_standard_store_product_image_view, inpage_standard_user_product_image_view)
+                    fadeOutAnimation(inpage_standard_user_product_image_view)
+                } else {
+                    fadeInAnimation(inpage_standard_user_product_image_view, inpage_standard_store_product_image_view)
+                    fadeOutAnimation(inpage_standard_store_product_image_view)
+                }
+            }
+            crossFadeHandler.postDelayed(crossFadeRunnable!!, 2500)
+        }
+    }
+
+    private fun stopCrossFadeProductImageViews() {
+        crossFadeRunnable?.let { crossFadeHandler.removeCallbacks(it) }
+        crossFadeRunnable = null
+        inpage_standard_user_product_image_view.alpha = 1f
+        inpage_standard_store_product_image_view.alpha = 1f
+    }
+
+    private fun fadeInAnimation(imageViewOne: VirtusizeProductImageView, imageViewTwo: VirtusizeProductImageView) {
+        imageViewOne.apply {
+            alpha = 0f
+            visibility = VISIBLE
+
+            animate()
+                .alpha(1f)
+                .setDuration(crossFadeAnimationDuration.toLong())
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        imageViewTwo.visibility = INVISIBLE
+                    }
+                })
+        }
+    }
+
+    private fun fadeOutAnimation(imageView: VirtusizeProductImageView) {
+        imageView.apply {
+            animate()
+                .alpha(0f)
+                .setDuration(crossFadeAnimationDuration.toLong())
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        crossFadeRunnable?.let { crossFadeHandler.postDelayed(it, 2500) }
+                    }
+                })
+        }
     }
 
     /**
@@ -270,6 +400,10 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
 
         setConfiguredDimensions(configuredContext)
 
+        if(virtusizeParams?.language == VirtusizeLanguage.JP) {
+            inpage_standard_bottom_text.includeFontPadding = true
+        }
+
         privacy_policy_text.setOnClickListener {
             val intent = Intent(
                 Intent.ACTION_VIEW,
@@ -278,7 +412,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             try {
                 context.startActivity(intent)
             } catch (e: Exception) {
-                Log.d(Constants.INPAGE_LOG_TAG, e.localizedMessage)
+                virtusizeMessageHandler.onError(VirtusizeErrorType.PrivacyLinkNotOpen.virtusizeError(e.localizedMessage))
             }
         }
     }
@@ -303,6 +437,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         }
         configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_top_text_marginBottom)?.let {
             setupMargins(inpage_standard_top_text, 0, 0, 0, it.toInt())
+            inpage_standard_top_text.setLineSpacing(it, 1f)
             inpage_standard_bottom_text.setLineSpacing(it, 1f)
         }
     }
@@ -326,70 +461,5 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         )
         layoutParams.setMargins(left, top, right, bottom)
         inpage_standard_footer.layoutParams = layoutParams
-    }
-
-    /**
-     * Sets up the InPage Standard footer margins
-     */
-    private fun getCloudinaryImageUrl(cloudinaryPublicId: String): String {
-        return "https://res.cloudinary.com/virtusize/image/upload/w_${36.dpInPx},h_${36.dpInPx}/q_auto,f_auto,dpr_auto/$cloudinaryPublicId.jpg"
-    }
-
-    /**
-     * Sets up the store product image from URL
-     * @param imageUrl the image URL
-     * @param productType the product type, which is fetched from the store product info
-     * @param style the product style, which is fetched from the store product info
-     */
-    private fun setProductImageFromURL(imageUrl: String?, productType: Int?, style: String?) {
-        if(imageUrl.isNullOrBlank()) {
-            return
-        }
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                URL(imageUrl).openStream().use {
-                    val bitmap = BitmapFactory.decodeStream(it)
-                    withContext(Dispatchers.Main) {
-                        inpage_standard_product_image_view.setImageBitmap(bitmap)
-                        inpage_standard_product_image_view.setPadding(0, 0, 0, 0)
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e(Constants.INPAGE_LOG_TAG, e.localizedMessage)
-                withContext(Dispatchers.Main) {
-                    inpage_standard_product_card_view.setCardBackgroundColor(
-                        ContextCompat.getColor(
-                            context,
-                            R.color.color_gray_200
-                        )
-                    )
-                    inpage_standard_product_image_view.setImageDrawable(
-                        getProductPlaceholderImage(productType, style)
-                    )
-                }
-            }
-            withContext(Dispatchers.Main) {
-                setLoadingScreen(false)
-            }
-        }
-    }
-
-    /**
-     * Gets the product placeholder image by the product type and style
-     * @param productType the product type, which is fetched from the store product info
-     * @param style the product style, which is fetched from the store product info
-     * @return a Drawable of product placeholder image
-     */
-    private fun getProductPlaceholderImage(productType: Int?, style: String?): Drawable? {
-        var productPlaceholderImage = context.getDrawableResourceByName(
-            "ic_product_type_$productType"
-        )
-        val productTypeImageWithStyle = context.getDrawableResourceByName(
-            "ic_product_type_${productType}_$style"
-        )
-        if(productTypeImageWithStyle != null) {
-            productPlaceholderImage = productTypeImageWithStyle
-        }
-        return productPlaceholderImage
     }
 }

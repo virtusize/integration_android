@@ -123,10 +123,10 @@ class VirtusizeBuilder {
      */
     fun build(): Virtusize {
         if (apiKey.isNullOrEmpty()) {
-            throwError(VirtusizeErrorType.ApiKeyNullOrInvalid)
+            VirtusizeErrorType.ApiKeyNullOrInvalid.throwError()
         }
         if (context == null) {
-            throwError(VirtusizeErrorType.NullContext)
+            VirtusizeErrorType.NullContext.throwError()
         }
         val params = VirtusizeParams(
             apiKey = apiKey,
