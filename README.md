@@ -51,7 +51,7 @@ If you'd like to continue using the old Version 1.x.x, refer to the branch [v1](
 
 ### 1. Initialize Virtusize
 
-Initialize the Virtusize object in your Application class's `onCreate` method using the **VirtusizeBuilder** to set up the configuration. Possible configuration methods are shown in the following table: 
+Initialize the Virtusize object in your Application class's `onCreate` method using the **VirtusizeBuilder** to set up the configuration. Possible configuration methods are shown in the following table:
 
 **VirtusizeBuilder**
 
@@ -69,7 +69,7 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
 
   ```kotlin
   lateinit var Virtusize: Virtusize
-  
+
   override fun onCreate() {
      super.onCreate()
      Virtusize = VirtusizeBuilder().init(this)
@@ -95,7 +95,7 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
 
   ```java
   Virtusize Virtusize;
-  
+
   @Override
   public void onCreate() {
      super.onCreate();
@@ -128,7 +128,7 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
    ```kotlin
    (application as App)
        .Virtusize
-       .setupVirtusizeProduct( 
+       .setupVirtusizeProduct(
            VirtusizeProduct(
                externalId = "694",
                imageUrl = "http://www.image.com/goods/12345.jpg"
@@ -159,16 +159,16 @@ Please do not forget to unregister message handler in activity or fragment's lif
           Log.i(TAG, "Close Virtusize View")
           virtusizeView.dismissVirtusizeView()
       }
-  
+
       override fun onEvent(virtusizeView: VirtusizeView?, event: VirtusizeEvent) {
           Log.i(TAG, event.name)
       }
-  
+
       override fun onError(virtusizeView: VirtusizeView?, errorType: VirtusizeError) {
           Log.e(TAG, errorType.message)
       }
   }
-  
+
   override fun onCreate(savedInstanceState: Bundle?) {
       //...
       // Register message handler to listen to events from Virtusize
@@ -189,12 +189,12 @@ Please do not forget to unregister message handler in activity or fragment's lif
           public void virtusizeControllerShouldClose(@NotNull VirtusizeView virtusizeView) {
               Log.i(TAG, "Close Virtusize View");
           }
-  
+
           @Override
           public void onEvent(@org.jetbrains.annotations.Nullable VirtusizeView virtusizeView, @NotNull VirtusizeEvent event) {
               Log.i(TAG, event.getName());
           }
-  
+
           @Override
           public void onError(VirtusizeView virtusizeView, @NonNull VirtusizeError error) {
               Log.e(TAG, error.getMessage());
@@ -253,7 +253,7 @@ There are two default styles of the Virtusize Button in our Virtusize SDK.
 
 #### (3) Usage
 
-**A. Add a VirtusizeButton in your activity's XML layout file.** 
+**A. Add a VirtusizeButton in your activity's XML layout file.**
 
 In order to use our default button styles, set `app:virtusizeButtonStyle="virtusize_black"` or `app:virtusizeButtonStyle="virtusize_teal"` in XML:
 
@@ -301,7 +301,7 @@ In order to use our default button styles, set `app:virtusizeButtonStyle="virtus
       .Virtusize
       .setupVirtusizeView(exampleVirtusizeButton)
   ```
-  
+
 - Java
 
   ```java
@@ -342,7 +342,7 @@ There are two types of InPage in our Virtusize SDK.
 
 - ##### Layout Variations
 
-  Here are some possible layouts 
+  Here are some possible layouts
 
   |               1 thumbnail + 2 lines of message               |               1 thumbnail + 1 line of message                |
   | :----------------------------------------------------------: | :----------------------------------------------------------: |
@@ -371,9 +371,9 @@ There are two types of InPage in our Virtusize SDK.
 
 #### B. Usage
 
-- **Add a VirtusizeInPageStand in your activity's XML layout file.** 
+- **Add a VirtusizeInPageStand in your activity's XML layout file.**
 
-  In order to use our default styles, set `app:virtusizeInPageStandardStyle="virtusize_black"` or `app:virtusizeInPageStandardStyle="virtusize_teal"` 
+  In order to use our default styles, set `app:virtusizeInPageStandardStyle="virtusize_black"` or `app:virtusizeInPageStandardStyle="virtusize_teal"`
 
   If you'd like to change the background color of the CTA button, you can use `app:inPageStandardButtonBackgroundColor="#123456"`
 
@@ -385,7 +385,7 @@ There are two types of InPage in our Virtusize SDK.
     <com.virtusize.libsource.ui.VirtusizeInPageStandard
         android:id="@+id/exampleVirtusizeInPageStandard"
         app:virtusizeInPageStandardStyle="virtusize_black"
-        app:inPageStandardHorizontalMargin="16dp"                                               
+        app:inPageStandardHorizontalMargin="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     ```
@@ -480,9 +480,9 @@ This is a mini version of InPage you can place in your application. The discreet
 
 #### B. Usage
 
-- **Add a VirtusizeInPageMini in your activity's XML layout file.** 
+- **Add a VirtusizeInPageMini in your activity's XML layout file.**
 
-  In order to use our default styles, set `app:virtusizeInPageMiniStyle="virtusize_black"` or `app:virtusizeInPageMiniStyle="virtusize_teal"` 
+  In order to use our default styles, set `app:virtusizeInPageMiniStyle="virtusize_black"` or `app:virtusizeInPageMiniStyle="virtusize_teal"`
 
   If you'd like to change the background color of the bar, you can use `app:inPageMiniBackgroundColor="#123456"`
 
@@ -491,7 +491,7 @@ This is a mini version of InPage you can place in your application. The discreet
     ```xml
     <com.virtusize.libsource.ui.VirtusizeInPageMini
         android:id="@+id/exampleVirtusizeInPageMini"
-        app:virtusizeInPageMiniStyle="virtusize_teal"                                            
+        app:virtusizeInPageMiniStyle="virtusize_teal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     ```
@@ -546,11 +546,18 @@ The order API enables Virtusize to show your customers the items they have recen
 
 #### 1. Initialization
 
-Make sure to set up the **user ID** in your Application class's `onCreate` method before you start.
+Make sure to set up the **user ID** before sending orders to Virtusize. You can set up the user ID either:
+
+in your Application class's `onCreate` method before the app is launched
+
+or
+
+in your activity or fragment after the app is launched
 
 * Kotlin
 
 ```kotlin
+// In your Application class's `onCreate` method before the app is launched
 lateinit var Virtusize: Virtusize
 override fun onCreate() {
     super.onCreate()
@@ -560,11 +567,15 @@ override fun onCreate() {
         .setEnv(VirtusizeEnvironment.STAGING)
         .build()
 }
+
+// In your activity or fragment after the app is launched
+(application as App).Virtusize.setUserID("user_id")
 ```
 
 * Java
 
 ~~~~java
+// In your Application class's `onCreate` method before the app is launched
 Virtusize Virtusize;
 @Override
 public void onCreate() {
@@ -576,6 +587,10 @@ public void onCreate() {
         .setEnv(VirtusizeEnvironment.STAGING)
         .build();
 }
+
+// In your activity or fragment after the app is launched
+app = (App) getApplication();
+app.Virtusize.setUserId("user_id");
 ~~~~
 
 #### 2. Create a *VirtusizeOrder* object for order data

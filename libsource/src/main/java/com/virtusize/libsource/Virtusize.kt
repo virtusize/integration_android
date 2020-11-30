@@ -96,6 +96,11 @@ class Virtusize(
         )
     }
 
+    fun setUserId(userId: String) {
+        VirtusizeApi.updateUserId(userId)
+        params.externalUserId = userId
+    }
+
     /**
      * Registers a message handler.
      * The registered message handlers will receive Virtusize errors, events, and the close action for Fit Illustrator.
@@ -457,7 +462,7 @@ class Virtusize(
         getStoreInfo(object : SuccessResponseHandler{
             override fun onSuccess(data: Any?) {
                 /**
-                 * Throws the error if the user id is not set up or empty during the initialization of the [Virtusize] class
+                 * Throws the error if the user id is not set up or empty
                  */
                 if(params.externalUserId.isNullOrEmpty()) {
                     throwError(VirtusizeErrorType.UserIdNullOrEmpty)

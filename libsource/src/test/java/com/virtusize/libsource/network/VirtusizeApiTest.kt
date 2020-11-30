@@ -115,7 +115,7 @@ class VirtusizeApiTest {
             expectedParams.plus(JsonUtils.jsonObjectToMap(it))
         }
 
-        assertThat(actualApiRequest.url).isEqualTo("https://staging.virtusize.com/a/api/v3/events")
+        assertThat(actualApiRequest.url).isEqualTo("https://events.staging.virtusize.jp")
         assertThat(actualApiRequest.method).isEquivalentAccordingToCompareTo(HttpMethod.POST)
         assertThat(actualApiRequest.params).containsExactlyEntriesIn(expectedParams)
     }

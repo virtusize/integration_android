@@ -8,7 +8,6 @@ internal enum class VirtusizeEndpoint {
     GetSize,
     Virtusize,
     ProductMetaDataHints,
-    Events,
     Orders,
     StoreViewApiKey,
     StoreProducts,
@@ -35,9 +34,6 @@ internal fun VirtusizeEndpoint.getPath(): String {
          }
          VirtusizeEndpoint.ProductMetaDataHints -> {
              "/rest-api/v1/product-meta-data-hints"
-         }
-         VirtusizeEndpoint.Events -> {
-             "/a/api/v3/events"
          }
          VirtusizeEndpoint.Orders -> {
              "/a/api/v3/orders"
