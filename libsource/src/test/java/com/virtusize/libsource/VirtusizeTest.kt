@@ -147,14 +147,7 @@ class VirtusizeTest {
     fun testSendProductImageToBackend_whenFailed_hasExpectedErrorInfo() = runBlocking {
         virtusize.setHTTPURLConnection(MockHttpURLConnection(
             mockURL,
-            MockedResponse(
-                500,
-                ("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n<title>500 Internal Server Error</title>\n" +
-                        "<h1>Internal Server Error</h1>\n" +
-                        "<p>The server encountered an internal error and was unable to complete your request.  " +
-                        "Either the server is overloaded or there is an error in the application.</p>").byteInputStream(),
-                "Internal Server Error"
-            )
+            MockedResponse(500, INTERNAL_SERVER_ERROR_RESPONSE.byteInputStream(), null)
         )
         )
         virtusize.sendProductImageToBackend(TestFixtures.VIRTUSIZE_PRODUCT, object: SuccessResponseHandler {
@@ -166,7 +159,7 @@ class VirtusizeTest {
         })
 
         assertThat(actualError?.code).isEqualTo(500)
-        assertThat(actualError?.message).isEqualTo("Internal Server Error")
+        assertThat(actualError?.message).contains(INTERNAL_SERVER_ERROR_RESPONSE)
         assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.NetworkError)
     }
 
@@ -276,5 +269,12 @@ class VirtusizeTest {
         )
 
         assertThat(isSuccessful).isTrue()
+    }
+
+    companion object {
+        private const val INTERNAL_SERVER_ERROR_RESPONSE = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n<title>500 Internal Server Error</title>\n" +
+                "<h1>Internal Server Error</h1>\n" +
+                "<p>The server encountered an internal error and was unable to complete your request.  " +
+                "Either the server is overloaded or there is an error in the application.</p>"
     }
 }

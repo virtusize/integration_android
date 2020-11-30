@@ -114,7 +114,7 @@ internal object VirtusizeApi {
         screenResolution: String,
         versionCode: Int
     ): ApiRequest {
-        val url = Uri.parse(environment.apiUrl() + VirtusizeEndpoint.Events.getPath())
+        val url = Uri.parse(environment.eventApiUrl())
             .buildUpon()
             .build()
             .toString()
