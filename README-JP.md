@@ -496,10 +496,14 @@ app.Virtusize.sendOrder(order,
 );
 ~~~~
 
+
+
 ## Examples
 
 1. Kotlin example https://github.com/virtusize/integration_android/tree/master/sampleAppKotlin
 2. Java example https://github.com/virtusize/integration_android/tree/master/sampleappjava
+
+
 
 ## License
 
