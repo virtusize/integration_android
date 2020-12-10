@@ -37,7 +37,7 @@ If you'd like to continue using the old Version 1.x.x, refer to the branch [v1](
 
   ```groovy
   dependencies {
-      implementation 'com.github.virtusize:integration_android:2.0.2'
+      implementation 'com.github.virtusize:integration_android:2.0.3'
   }
   ```
 
