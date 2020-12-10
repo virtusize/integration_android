@@ -139,6 +139,12 @@ internal class VirtusizeApiTask {
                     urlConnection.isSuccessful() -> {
                         inputStream = urlConnection.inputStream
                         val result = parseURLConnectionStream(inputStream)
+                        if(result is ProductCheck && result.data?.validProduct == false) {
+                            Log.i(
+                                Constants.LOG_TAG,
+                                VirtusizeErrorType.InvalidProduct.message(result.productId)
+                            )
+                        }
                         withContext(Main) {
                             successHandler?.onSuccess(result)
                         }
@@ -155,14 +161,14 @@ internal class VirtusizeApiTask {
                             HttpURLConnection.HTTP_NOT_FOUND -> {
                                 // If the product cannot be found in the Virtusize Server
                                 if (response is ProductCheck) {
-                                    Log.d(
+                                    Log.i(
                                         Constants.LOG_TAG,
                                         VirtusizeErrorType.InvalidProduct.message(response.productId)
                                     )
                                     withContext(Main) {
                                         successHandler?.onSuccess(response)
-                                        return@withContext
                                     }
+                                    return@launch
                                 }
                                 VirtusizeError(
                                     VirtusizeErrorType.NetworkError,
