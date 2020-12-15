@@ -13,11 +13,15 @@ import com.virtusize.libsource.R
 import com.virtusize.libsource.util.getDrawableResourceByName
 import kotlinx.android.synthetic.main.view_product_image.view.*
 
-// TODO: add comment
+/**
+ * A custom class for a product image view
+ */
 internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet): LinearLayout(context, attrs) {
 
+    // The product type to determine the UI style
     private var productImageType: ProductImageType = ProductImageType.STORE
 
+    // This enum contains the possible product types
     enum class ProductImageType {
         STORE, USER
     }
@@ -39,31 +43,33 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet):
         )]
 
         if(productImageType == ProductImageType.USER) {
-            border_image_view.setImageResource(R.drawable.ic_image_border_green_dash)
+            inpageBorderImageView.setImageResource(R.drawable.ic_image_border_green_dash)
         } else {
-            border_image_view.setImageResource(R.drawable.ic_image_border_gray)
+            inpageBorderImageView.setImageResource(R.drawable.ic_image_border_gray)
         }
 
         typedArray.recycle()
     }
 
-    fun setProductImageView(bitmap: Bitmap) {
-        inpage_standard_product_image_view.setImageBitmap(bitmap)
-        inpage_standard_product_image_view.setPadding(0, 0, 0, 0)
+    /**
+     * Sets the product image
+     * @param bitmap the bitmap of the image
+     */
+    fun setProductImage(bitmap: Bitmap) {
+        inpageProductImageView.setImageBitmap(bitmap)
+        inpageProductImageView.setPadding(0, 0, 0, 0)
     }
 
-    fun setProductPlaceHolder(productType: Int?, style: String?) {
-        if (this.productImageType == ProductImageType.STORE) {
-            inpage_standard_product_card_view.setCardBackgroundColor(
-                ContextCompat.getColor(
-                    context,
-                    R.color.color_gray_200
-                )
-            )
+    /**
+     * Sets the product placeholder image by the product type and style
+     * @param productType the product type, which is fetched from the store product info
+     * @param style the product style, which is fetched from the store product info
+     */
+    fun setProductPlaceHolderImage(productType: Int?, style: String?) {
+        if (productImageType == ProductImageType.STORE) {
+            inpageProductCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.color_gray_200))
         }
-        inpage_standard_product_image_view.setImageDrawable(
-            getProductPlaceholderImage(productType, style)
-        )
+        inpageProductImageView.setImageDrawable(getProductPlaceholderImage(productType, style))
     }
 
     /**
@@ -90,6 +96,11 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet):
         return productPlaceholderImage
     }
 
+    /**
+     * Sets the tine color of the product placeholder image
+     * @param productPlaceholderImage the drawable of the place holder image
+     * @param color the res Id of the color
+     */
     private fun setProductPlaceholderImageTintColor(productPlaceholderImage: Drawable?, color: Int) {
         val tinColor = ContextCompat.getColor(context, color)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

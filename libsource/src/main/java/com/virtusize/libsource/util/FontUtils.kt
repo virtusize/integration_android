@@ -25,14 +25,14 @@ internal object FontUtils {
     }
 
     /**
-     * Sets up the TypeFace for a TextView
+     * Sets up the TypeFace for a TextView by the display language
      */
     fun setTypeFace(context: Context, textView: TextView, language: VirtusizeLanguage?, fontType: FontType) {
         setTypeFaces(context, mutableListOf(textView), language, fontType)
     }
 
     /**
-     * Sets up the TypeFaces for a list of TextView
+     * Sets up the TypeFaces for a list of TextView by the display language
      */
     fun setTypeFaces(context: Context, textViews: List<TextView>, language: VirtusizeLanguage?, fontType: FontType) {
         when(language) {
@@ -48,12 +48,18 @@ internal object FontUtils {
         }
     }
 
+    /**
+     * Sets up the TypeFaces for a list of TextView by the font name
+     */
     private fun setTypeFace(context: Context, textViews: List<TextView>, fontName: FontName, fontType: FontType) {
         for (textView in textViews) {
             setTypeFace(context, textView, fontName, fontType)
         }
     }
 
+    /**
+     * Sets up the TypeFaces for a TextView by the font name
+     */
     private fun setTypeFace(context: Context, textView: TextView, fontName: FontName, fontType: FontType) {
         textView.typeface = context.getTypefaceByName(fontName.value + fontType.value)
     }

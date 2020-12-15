@@ -3,7 +3,6 @@ package com.virtusize.libsource
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import com.virtusize.libsource.data.local.VirtusizeError
-import com.virtusize.libsource.data.local.VirtusizeErrorType
 import com.virtusize.libsource.data.remote.ProductCheck
 
 

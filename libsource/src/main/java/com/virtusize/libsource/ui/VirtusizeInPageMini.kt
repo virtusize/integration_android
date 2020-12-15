@@ -85,7 +85,7 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
                     setOnClickListener {
                         openVirtusizeWebView(context)
                     }
-                    inpage_mini_button.setOnClickListener {
+                    inpageMiniButton.setOnClickListener {
                         openVirtusizeWebView(context)
                     }
                 }
@@ -99,7 +99,7 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
      * @see VirtusizeInPageView.setupRecommendationText
      */
     override fun setupRecommendationText(text: String) {
-        inpage_mini_text.text = text
+        inpageMiniText.text = text
         setLoadingScreen(false)
     }
 
@@ -107,16 +107,16 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
      * @see VirtusizeInPageView.showErrorScreen
      */
     override fun showErrorScreen() {
-        inpage_mini_loading_text.visibility = View.GONE
-        inpage_mini_text.visibility = View.VISIBLE
-        inpage_mini_text.text = configuredContext?.getText(R.string.inpage_short_error_text)
-        inpage_mini_text.setTextColor(ContextCompat.getColor(context, R.color.color_gray_700))
-        inpage_mini_image_view.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_error_hanger))
+        inpageMiniLoadingText.visibility = View.GONE
+        inpageMiniText.visibility = View.VISIBLE
+        inpageMiniText.text = configuredContext?.getText(R.string.inpage_short_error_text)
+        inpageMiniText.setTextColor(ContextCompat.getColor(context, R.color.color_gray_700))
+        inpageMiniImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_error_hanger))
         setOnClickListener {}
     }
 
     /**
-     * Sets up the background color of InPage Mini view
+     * Sets up the background color of the InPage Mini
      * @param color a color int
      */
     fun setInPageMiniBackgroundColor(@ColorInt color: Int) {
@@ -130,22 +130,22 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
      */
     private fun setLoadingScreen(loading: Boolean) {
         if(loading) {
-            inpage_mini_layout.setBackgroundColor(ContextCompat.getColor(context, R.color.virtusizeWhite))
-            inpage_mini_loading_text.startAnimation()
+            inpageMiniLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.virtusizeWhite))
+            inpageMiniLoadingText.startAnimation()
         } else {
-            inpage_mini_layout.setBackgroundColor(virtusizeBackgroundColor)
-            inpage_mini_loading_text.stopAnimation()
+            inpageMiniLayout.setBackgroundColor(virtusizeBackgroundColor)
+            inpageMiniLoadingText.stopAnimation()
         }
         FontUtils.setTypeFace(
             context,
-            inpage_mini_loading_text,
+            inpageMiniLoadingText,
             virtusizeParams?.language,
             if (loading) FontUtils.FontType.BOLD else FontUtils.FontType.REGULAR
         )
-        inpage_mini_image_view.visibility = if(loading) View.VISIBLE else View.GONE
-        inpage_mini_text.visibility = if(loading) View.GONE else View.VISIBLE
-        inpage_mini_loading_text.visibility = if(loading) View.VISIBLE else View.GONE
-        inpage_mini_button.visibility = if(loading) View.GONE else View.VISIBLE
+        inpageMiniImageView.visibility = if(loading) View.VISIBLE else View.GONE
+        inpageMiniText.visibility = if(loading) View.GONE else View.VISIBLE
+        inpageMiniLoadingText.visibility = if(loading) View.VISIBLE else View.GONE
+        inpageMiniButton.visibility = if(loading) View.GONE else View.VISIBLE
     }
 
     /**
@@ -153,12 +153,12 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
      */
     private fun setStyle() {
         if(virtusizeBackgroundColor != 0) {
-            inpage_mini_layout.setBackgroundColor(virtusizeBackgroundColor)
-            inpage_mini_button.setTextColor(virtusizeBackgroundColor)
+            inpageMiniLayout.setBackgroundColor(virtusizeBackgroundColor)
+            inpageMiniButton.setTextColor(virtusizeBackgroundColor)
             setButtonRightArrowColor(virtusizeBackgroundColor)
         } else if(virtusizeViewStyle == VirtusizeViewStyle.TEAL) {
-            inpage_mini_layout.setBackgroundColor(ContextCompat.getColor(context, R.color.virtusizeTeal))
-            inpage_mini_button.setTextColor(ContextCompat.getColor(context, R.color.virtusizeTeal))
+            inpageMiniLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.virtusizeTeal))
+            inpageMiniButton.setTextColor(ContextCompat.getColor(context, R.color.virtusizeTeal))
             setButtonRightArrowColor(ContextCompat.getColor(context, R.color.virtusizeTeal))
         }
     }
@@ -172,7 +172,7 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
         drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
         DrawableCompat.setTint(drawable, color)
 
-        inpage_mini_button.setCompoundDrawables(null, null, drawable, null)
+        inpageMiniButton.setCompoundDrawables(null, null, drawable, null)
     }
 
     /**
@@ -182,17 +182,17 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
         FontUtils.setTypeFaces(
             context,
             mutableListOf(
-                inpage_mini_text,
-                inpage_mini_button
+                inpageMiniText,
+                inpageMiniButton
             ), virtusizeParams?.language, FontUtils.FontType.REGULAR
         )
         configuredContext = VirtusizeUtils.getConfiguredContext(context, virtusizeParams?.language)
-        inpage_mini_button.text = configuredContext?.getText(R.string.virtusize_button_text)
-        inpage_mini_loading_text.text = configuredContext?.getText(R.string.inpage_loading_text)
+        inpageMiniButton.text = configuredContext?.getText(R.string.virtusize_button_text)
+        inpageMiniLoadingText.text = configuredContext?.getText(R.string.inpage_loading_text)
         setConfiguredDimensions()
 
         if(virtusizeParams?.language == VirtusizeLanguage.JP) {
-            inpage_mini_text.includeFontPadding = true
+            inpageMiniText.includeFontPadding = true
         }
     }
 
@@ -201,11 +201,11 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
      */
     private fun setConfiguredDimensions() {
         configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_mini_message_textSize)?.let {
-            inpage_mini_loading_text.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
-            inpage_mini_text.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+            inpageMiniLoadingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+            inpageMiniText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
         }
         configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_default_textSize)?.let {
-            inpage_mini_button.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+            inpageMiniButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
         }
     }
 }

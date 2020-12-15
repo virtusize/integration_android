@@ -51,7 +51,7 @@ If you'd like to continue using the old Version 1.x.x, refer to the branch [v1](
 
 ### 1. Initialize Virtusize
 
-Initialize the Virtusize object in your Application class's `onCreate` method using the **VirtusizeBuilder** to set up the configuration. Possible configuration methods are shown in the following table:
+Initialize the Virtusize object in your Application class's `onCreate` method using the **VirtusizeBuilder** to set up the configuration. Possible configuration methods are shown in the following table: 
 
 **VirtusizeBuilder**
 
@@ -69,7 +69,7 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
 
   ```kotlin
   lateinit var Virtusize: Virtusize
-
+  
   override fun onCreate() {
      super.onCreate()
      Virtusize = VirtusizeBuilder().init(this)
@@ -95,7 +95,7 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
 
   ```java
   Virtusize Virtusize;
-
+  
   @Override
   public void onCreate() {
      super.onCreate();
@@ -128,7 +128,7 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
    ```kotlin
    (application as App)
        .Virtusize
-       .setupVirtusizeProduct(
+       .setupVirtusizeProduct( 
            VirtusizeProduct(
                externalId = "694",
                imageUrl = "http://www.image.com/goods/12345.jpg"
@@ -159,16 +159,16 @@ Please do not forget to unregister message handler in activity or fragment's lif
           Log.i(TAG, "Close Virtusize View")
           virtusizeView.dismissVirtusizeView()
       }
-
-      override fun onEvent(virtusizeView: VirtusizeView?, event: VirtusizeEvent) {
+  
+      override fun onEvent(event: VirtusizeEvent) {
           Log.i(TAG, event.name)
       }
-
-      override fun onError(virtusizeView: VirtusizeView?, errorType: VirtusizeError) {
+  
+      override fun onError(errorType: VirtusizeError) {
           Log.e(TAG, errorType.message)
       }
   }
-
+  
   override fun onCreate(savedInstanceState: Bundle?) {
       //...
       // Register message handler to listen to events from Virtusize
@@ -180,26 +180,29 @@ Please do not forget to unregister message handler in activity or fragment's lif
 - Java
 
   ```java
+  VirtusizeMessageHandler virtusizeMessageHandler;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
       //...
       App app = (App) getApplication();
-      app.Virtusize.registerMessageHandler(new VirtusizeMessageHandler() {
+
+      virtusizeMessageHandler = new VirtusizeMessageHandler() {
           @Override
           public void virtusizeControllerShouldClose(@NotNull VirtusizeView virtusizeView) {
               Log.i(TAG, "Close Virtusize View");
           }
-
+  
           @Override
-          public void onEvent(@org.jetbrains.annotations.Nullable VirtusizeView virtusizeView, @NotNull VirtusizeEvent event) {
+          public void onEvent(@NotNull VirtusizeEvent event) {
               Log.i(TAG, event.getName());
           }
-
+  
           @Override
-          public void onError(VirtusizeView virtusizeView, @NonNull VirtusizeError error) {
+          public void onError(@NonNull VirtusizeError error) {
               Log.e(TAG, error.getMessage());
           }
-      });
+      }
+      app.Virtusize.registerMessageHandler(virtusizeMessageHandler);
       //...
   }
   ```
@@ -212,7 +215,7 @@ A message handler is tied to an activity or fragment's lifecycle, but the Virtus
 
   ```kotlin
   private val activityMessageHandler: VirtusizeMessageHandler
-      override fun onPause() {
+  override fun onPause() {
           // Always un register message handler in onPause() or depending on implementation onStop().
           (application as App).Virtusize.unregisterMessageHandler(activityMessageHandler)
           super.onPause()
@@ -222,6 +225,7 @@ A message handler is tied to an activity or fragment's lifecycle, but the Virtus
 - Java
 
   ```java
+  VirtusizeMessageHandler virtusizeMessageHandler;
   @Override
   protected void onPause() {
       app.Virtusize.unregisterMessageHandler(virtusizeMessageHandler);
@@ -253,7 +257,7 @@ There are two default styles of the Virtusize Button in our Virtusize SDK.
 
 #### (3) Usage
 
-**A. Add a VirtusizeButton in your activity's XML layout file.**
+**A. Add a VirtusizeButton in your activity's XML layout file.** 
 
 In order to use our default button styles, set `app:virtusizeButtonStyle="virtusize_black"` or `app:virtusizeButtonStyle="virtusize_teal"` in XML:
 
@@ -297,11 +301,9 @@ In order to use our default button styles, set `app:virtusizeButtonStyle="virtus
 - Kotlin
 
   ```kotlin
-  (application as App)
-      .Virtusize
-      .setupVirtusizeView(exampleVirtusizeButton)
+  (application as App).Virtusize.setupVirtusizeView(exampleVirtusizeButton)
   ```
-
+  
 - Java
 
   ```java
@@ -342,18 +344,21 @@ There are two types of InPage in our Virtusize SDK.
 
 - ##### Layout Variations
 
-  Here are some possible layouts
+  Here are some possible layouts 
 
-  |               1 thumbnail + 2 lines of message               |               1 thumbnail + 1 line of message                |
+  |               1 thumbnail + 2 lines of message               |              2 thumbnails + 2 lines of message               |
   | :----------------------------------------------------------: | :----------------------------------------------------------: |
-  | <img src="https://user-images.githubusercontent.com/7802052/92672132-ff0aff00-f352-11ea-8058-4ca7c149d6f2.png"> | <img src="https://user-images.githubusercontent.com/7802052/92672134-003c2c00-f353-11ea-842b-8ec54ba3585b.png"> |
+  | ![1 thumbnail + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399368-5e879300-1930-11eb-8b77-b49e06813550.png) | ![2 thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399370-5f202980-1930-11eb-9a2d-7b71714aa7b4.png) |
+  |             **1 thumbnail + 1 line of message**              |        **2 animated thumbnails + 2 lines of message**        |
+  | ![1 thumbnail + 1 line of message](https://user-images.githubusercontent.com/7802052/97399373-5f202980-1930-11eb-81fe-9946b656eb4c.png) | ![2 animated thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399355-59c2df00-1930-11eb-8a52-292956b8762d.gif) |
 
 - ##### Recommended Placement
+
   - Near the size table
 
   - In the size info section
 
-    <img src="https://user-images.githubusercontent.com/7802052/92672185-15b15600-f353-11ea-921d-397f207cf616.png" style="zoom:50%;" />
+  <img src="https://user-images.githubusercontent.com/7802052/92672185-15b15600-f353-11ea-921d-397f207cf616.png" style="zoom:50%;" />
 
 - ##### UI customization
 
@@ -371,9 +376,9 @@ There are two types of InPage in our Virtusize SDK.
 
 #### B. Usage
 
-- **Add a VirtusizeInPageStand in your activity's XML layout file.**
+- **Add a VirtusizeInPageStand in your activity's XML layout file.** 
 
-  In order to use our default styles, set `app:virtusizeInPageStandardStyle="virtusize_black"` or `app:virtusizeInPageStandardStyle="virtusize_teal"`
+  In order to use our default styles, set `app:virtusizeInPageStandardStyle="virtusize_black"` or `app:virtusizeInPageStandardStyle="virtusize_teal"` 
 
   If you'd like to change the background color of the CTA button, you can use `app:inPageStandardButtonBackgroundColor="#123456"`
 
@@ -385,7 +390,7 @@ There are two types of InPage in our Virtusize SDK.
     <com.virtusize.libsource.ui.VirtusizeInPageStandard
         android:id="@+id/exampleVirtusizeInPageStandard"
         app:virtusizeInPageStandardStyle="virtusize_black"
-        app:inPageStandardHorizontalMargin="16dp"
+        app:inPageStandardHorizontalMargin="16dp"                                               
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     ```
@@ -407,7 +412,7 @@ There are two types of InPage in our Virtusize SDK.
     exampleVirtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
     // Set the horizontal margins between the edges of the app screen and the InPageStandard
     // Note: Use the helper extension function `dpInPx` if you like
-    exampleVirtusizeInPageStandard.horizontalMargin = 16.dpInPx.toFloat()
+    exampleVirtusizeInPageStandard.horizontalMargin = 16.dpInPx
     // Set the background color of the check size button in InPage Standard
     exampleVirtusizeInPageStandard.setButtonBackgroundColor(ContextCompat.getColor(this, R.color.your_custom_color))
     ```
@@ -480,9 +485,9 @@ This is a mini version of InPage you can place in your application. The discreet
 
 #### B. Usage
 
-- **Add a VirtusizeInPageMini in your activity's XML layout file.**
+- **Add a VirtusizeInPageMini in your activity's XML layout file.** 
 
-  In order to use our default styles, set `app:virtusizeInPageMiniStyle="virtusize_black"` or `app:virtusizeInPageMiniStyle="virtusize_teal"`
+  In order to use our default styles, set `app:virtusizeInPageMiniStyle="virtusize_black"` or `app:virtusizeInPageMiniStyle="virtusize_teal"` 
 
   If you'd like to change the background color of the bar, you can use `app:inPageMiniBackgroundColor="#123456"`
 
@@ -491,7 +496,7 @@ This is a mini version of InPage you can place in your application. The discreet
     ```xml
     <com.virtusize.libsource.ui.VirtusizeInPageMini
         android:id="@+id/exampleVirtusizeInPageMini"
-        app:virtusizeInPageMiniStyle="virtusize_teal"
+        app:virtusizeInPageMiniStyle="virtusize_teal"                                            
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     ```
@@ -610,7 +615,7 @@ __**Note:**__ * means the attribute is required
 
 | Attribute  | Data Type | Example                                  | Description                                                  |
 | ---------- | --------- | ---------------------------------------- | ------------------------------------------------------------ |
-| productId* | String    | "A001"                                   | The product ID provided by the client. It must be unique for each product. |
+| productId* | String    | "A001"                                   | The external product ID provided by the client. It must be unique for each product. |
 | size*      | String    | "S", "M", etc.                           | The name of the size                                         |
 | sizeAlias  | String    | "Small", "Large", etc.                   | The alias of the size is added if the size name is not identical from the product page |
 | variantId  | String    | "A001_SIZES_RED"                         | An ID that is set on the product SKU, color, or size if there are several options for the item |

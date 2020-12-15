@@ -15,7 +15,6 @@ import com.virtusize.libsource.data.local.VirtusizeMessageHandler
 import com.virtusize.libsource.data.parsers.VirtusizeEventJsonParser
 import com.virtusize.libsource.util.Constants
 import kotlinx.android.synthetic.main.web_activity.*
-import org.json.JSONException
 import org.json.JSONObject
 
 class VirtusizeWebView: DialogFragment() {
@@ -206,6 +205,7 @@ class VirtusizeWebView: DialogFragment() {
     private fun isExternalLink(url: String): Boolean {
         return url.contains("privacy") || url.contains("survey")
     }
+
     /**
      * The JavaScript interface to interact the web app with the web view
      */

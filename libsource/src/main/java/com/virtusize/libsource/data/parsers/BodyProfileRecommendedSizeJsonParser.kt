@@ -3,7 +3,9 @@ package com.virtusize.libsource.data.parsers
 import com.virtusize.libsource.data.remote.BodyProfileRecommendedSize
 import org.json.JSONObject
 
-// TODO: add comment
+/**
+ * This class parses a JSONObject to the [BodyProfileRecommendedSize] object
+ */
 class BodyProfileRecommendedSizeJsonParser : VirtusizeJsonParser<BodyProfileRecommendedSize> {
 
     override fun parse(json: JSONObject): BodyProfileRecommendedSize? {

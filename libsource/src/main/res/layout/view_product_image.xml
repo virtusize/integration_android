@@ -4,20 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/inpage_standard_user_product_border_card_view"
+        android:id="@+id/inpageProductBorderCardView"
         android:layout_width="@dimen/virtusize_inpage_standard_product_image_border_size"
         android:layout_height="@dimen/virtusize_inpage_standard_product_image_border_size"
         app:cardCornerRadius="@dimen/virtusize_inpage_standard_product_image_border_cardCornerRadius"
         app:cardElevation="0dp">
 
         <ImageView
-            android:id="@+id/border_image_view"
+            android:id="@+id/inpageBorderImageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop" />
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/inpage_standard_product_card_view"
+            android:id="@+id/inpageProductCardView"
             android:layout_width="@dimen/virtusize_inpage_standard_product_image_size"
             android:layout_height="@dimen/virtusize_inpage_standard_product_image_size"
             android:layout_gravity="center"
@@ -25,7 +25,7 @@
             app:cardElevation="0dp">
 
             <ImageView
-                android:id="@+id/inpage_standard_product_image_view"
+                android:id="@+id/inpageProductImageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="@dimen/virtusize_inpage_standard_product_image_padding"
