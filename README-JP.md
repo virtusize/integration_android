@@ -40,7 +40,7 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 
   ```groovy
   dependencies {
-      implementation 'com.github.virtusize:integration_android:2.0.2'
+      implementation 'com.github.virtusize:integration_android:2.0.3'
   }
   ```
 
