@@ -144,6 +144,7 @@ internal class VirtusizeApiTask {
                 // If the request was successful, then read the input stream and parse the response.
                 urlConnection.isSuccessful() -> {
                     inputStream = urlConnection.inputStream
+                    // TODO: handle invalid product data check log
                     return VirtusizeApiResponse.Success(parseInputStreamAsObject(apiRequest.url, inputStream))
                 }
                 // If the request fails but it has a error response, then read the error stream and parse the response.
