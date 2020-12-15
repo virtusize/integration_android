@@ -1,7 +1,6 @@
 package com.virtusize.libsource.ui
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -10,12 +9,13 @@ import android.os.Message
 import android.view.*
 import android.webkit.*
 import androidx.fragment.app.DialogFragment
-import com.virtusize.libsource.BrowserIdentifier
 import com.virtusize.libsource.R
+import com.virtusize.libsource.SharedPreferencesHelper
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler
 import com.virtusize.libsource.data.parsers.VirtusizeEventJsonParser
 import com.virtusize.libsource.util.Constants
 import kotlinx.android.synthetic.main.web_activity.*
+import org.json.JSONException
 import org.json.JSONObject
 
 class VirtusizeWebView: DialogFragment() {
@@ -27,18 +27,12 @@ class VirtusizeWebView: DialogFragment() {
     private lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
     private lateinit var virtusizeView: VirtusizeView
 
-    private lateinit var browserIdentifier: BrowserIdentifier
+    private lateinit var sharedPreferencesHelper: SharedPreferencesHelper
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         dialog?.window?.attributes?.windowAnimations = R.style.VirtusizeDialogFragmentAnimation
-        browserIdentifier = BrowserIdentifier(
-            sharedPrefs =
-            requireContext().getSharedPreferences(
-                Constants.SHARED_PREFS_NAME,
-                Context.MODE_PRIVATE
-            )
-        )
+        sharedPreferencesHelper = SharedPreferencesHelper.getInstance(requireContext())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,8 +66,8 @@ class VirtusizeWebView: DialogFragment() {
                 if(url != null && url.contains(virtusizeWebAppUrl)) {
                     executeJavascript(view, vsParamsFromSDKScript)
                     getBrowserIDFromCookies()?.let { bid ->
-                        if(bid != browserIdentifier.getBrowserId()) {
-                            browserIdentifier.storeBrowserId(bid)
+                        if(bid != sharedPreferencesHelper.getBrowserId()) {
+                            sharedPreferencesHelper.storeBrowserId(bid)
                         }
                     }
                 }
@@ -234,7 +228,7 @@ class VirtusizeWebView: DialogFragment() {
         }
     }
 
-    fun userAcceptedPrivacyPolicy() {
+    private fun userAcceptedPrivacyPolicy() {
         webView.post {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 webView.evaluateJavascript(

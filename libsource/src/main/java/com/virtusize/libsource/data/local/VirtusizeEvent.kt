@@ -1,5 +1,8 @@
 package com.virtusize.libsource.data.local
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 /**
@@ -8,7 +11,13 @@ import org.json.JSONObject
 enum class VirtusizeEvents {
     UserSawProduct,
     UserSawWidgetButton,
-    UserOpenedWidget
+    UserOpenedWidget,
+    UserSelectedProduct,
+    UserOpenedPanelCompare,
+    UserAddedProduct,
+    UserAuthData,
+    UserLoggedIn,
+    UserLoggedOut
 }
 
 /**
@@ -20,6 +29,12 @@ fun VirtusizeEvents.getEventName(): String {
         VirtusizeEvents.UserSawProduct -> "user-saw-product"
         VirtusizeEvents.UserSawWidgetButton -> "user-saw-widget-button"
         VirtusizeEvents.UserOpenedWidget -> "user-opened-widget"
+        VirtusizeEvents.UserSelectedProduct -> "user-selected-product"
+        VirtusizeEvents.UserOpenedPanelCompare -> "user-opened-panel-compare"
+        VirtusizeEvents.UserAddedProduct -> "user-added-product"
+        VirtusizeEvents.UserAuthData -> "user-auth-data"
+        VirtusizeEvents.UserLoggedIn -> "user-logged-in"
+        VirtusizeEvents.UserLoggedOut -> "user-logged-out"
     }
 }
 

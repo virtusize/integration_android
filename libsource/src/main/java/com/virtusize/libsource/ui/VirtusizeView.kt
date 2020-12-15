@@ -1,16 +1,12 @@
 package com.virtusize.libsource.ui
 
 import android.content.Context
-import android.content.ContextWrapper
 import android.os.Bundle
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.network.VirtusizeApi
 import com.virtusize.libsource.util.Constants
-import com.virtusize.libsource.util.VirtusizeUtils
-import java.util.*
 
 /**
  * An interface for the Virtusize specific views such as VirtusizeButton and VirtusizeInPageView
@@ -61,7 +57,7 @@ interface VirtusizeView {
         }
         fragmentTransaction.addToBackStack(null)
         val args = Bundle()
-        args.putString(Constants.URL_KEY, VirtusizeApi.virtusizeURL())
+        args.putString(Constants.URL_KEY, VirtusizeApi.virtusizeWebViewURL())
         virtusizeParams?.let {
             args.putString(Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY, "javascript:vsParamsFromSDK(${it.vsParamsString()})")
         }

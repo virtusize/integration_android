@@ -28,7 +28,7 @@
         android:layout_toEndOf="@+id/inpage_mini_image_view"
         android:layout_toRightOf="@+id/inpage_mini_image_view"
         android:textColor="@color/virtusizeWhite"
-        tools:text="@string/inpage_default_text" />
+        tools:text="@string/inpage_no_data_text" />
 
     <com.virtusize.libsource.ui.DotsLoadingTextView
         android:id="@+id/inpage_mini_loading_text"
@@ -38,7 +38,7 @@
         android:layout_toEndOf="@+id/inpage_mini_image_view"
         android:layout_toRightOf="@+id/inpage_mini_image_view"
         android:textColor="@color/color_gray_900"
-        tools:text="@string/inpage_mini_loading_text" />
+        tools:text="@string/inpage_loading_text" />
 
     <Button
         android:id="@+id/inpage_mini_button"

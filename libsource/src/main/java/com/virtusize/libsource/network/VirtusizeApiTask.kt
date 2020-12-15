@@ -1,13 +1,15 @@
 package com.virtusize.libsource.network
 
 import com.virtusize.libsource.ErrorResponseHandler
+import com.virtusize.libsource.SharedPreferencesHelper
 import com.virtusize.libsource.SuccessResponseHandler
-import com.virtusize.libsource.data.local.*
+import com.virtusize.libsource.data.local.VirtusizeError
+import com.virtusize.libsource.data.local.VirtusizeErrorType
+import com.virtusize.libsource.data.local.virtusizeError
 import com.virtusize.libsource.data.parsers.VirtusizeJsonParser
 import com.virtusize.libsource.data.remote.ProductCheck
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -17,15 +19,15 @@ import org.json.JSONObject
 import java.io.DataOutputStream
 import java.io.IOException
 import java.io.InputStream
-import java.net.HttpURLConnection
-import java.net.URL
+import java.net.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
  * The asynchronous task to make an API request in the background thread
+ * @param urlConnection the HTTP URL connection that is used to make a single request
  */
-internal class VirtusizeApiTask {
+internal class VirtusizeApiTask(private var urlConnection: HttpURLConnection? = null) {
 
     companion object {
         // The read timeout to use for all the requests, which is 80 seconds
@@ -34,32 +36,20 @@ internal class VirtusizeApiTask {
         private val CONNECT_TIMEOUT = TimeUnit.SECONDS.toMillis(60).toInt()
         // The request header keys
         private const val HEADER_BROWSER_ID = "x-vs-bid"
+        private const val HEADER_AUTH = "x-vs-auth"
         private const val HEADER_AUTHORIZATION = "Authorization"
         private const val HEADER_CONTENT_TYPE = "Content-Type"
+        private const val HEADER_COOKIE = "Cookie"
     }
 
-    // The dispatcher that determines what thread the corresponding coroutine uses for its execution
-    private var coroutineDispatcher: CoroutineDispatcher = IO
-    // The HTTP URL connection that is used to make a single request
-    private var urlConnection: HttpURLConnection? = null
-    // The Browser ID for the request header
-    private var browserID: String? = null
-    // TODO: integrate the sessions API to get the auth token
-    private var autoToken: String? = null
+    // TODO: add comment
+    private var sharedPreferencesHelper: SharedPreferencesHelper? = null
     // The Json parser interface for converting the JSON response to a given type of Java object
     private var jsonParser: VirtusizeJsonParser<Any>? = null
     // The callback for a successful API response
     private var successHandler: SuccessResponseHandler? = null
     // The error callback for a unsuccessful API response
     private var errorHandler: ErrorResponseHandler? = null
-
-    /**
-     * Sets up the browser ID
-     */
-    fun setBrowserID(browserID: String?): VirtusizeApiTask {
-        this.browserID = browserID
-        return this
-    }
 
     /**
      * Sets up the JSON parser for converting the JSON response to a given type of Java object
@@ -85,22 +75,10 @@ internal class VirtusizeApiTask {
         return this
     }
 
-    /**
-     * Sets up the HTTP URL connection
-     */
-    fun setHttpURLConnection(urlConnection: HttpURLConnection?): VirtusizeApiTask {
-        this.urlConnection = urlConnection
+    fun setSharedPreferencesHelper(sharedPreferencesHelper: SharedPreferencesHelper): VirtusizeApiTask {
+        this.sharedPreferencesHelper = sharedPreferencesHelper
         return this
     }
-
-    /**
-     * Sets up the Coroutine dispatcher
-     */
-    fun setCoroutineDispatcher(dispatcher: CoroutineDispatcher): VirtusizeApiTask {
-        this.coroutineDispatcher = dispatcher
-        return this
-    }
-
 
     /**
      * Executes the API request and returns the response
@@ -112,23 +90,34 @@ internal class VirtusizeApiTask {
         var errorStream: InputStream? = null
         try {
             if (urlConnection == null) {
+
                 urlConnection = (URL(apiRequest.url).openConnection() as HttpURLConnection).apply {
                     readTimeout = READ_TIMEOUT
                     connectTimeout = CONNECT_TIMEOUT
                     requestMethod = apiRequest.method.name
 
-                    browserID?.let {
-                        setRequestProperty(HEADER_BROWSER_ID, browserID)
+                    sharedPreferencesHelper?.getBrowserId()?.let {
+                        setRequestProperty(HEADER_BROWSER_ID, it)
                     }
 
                     if (apiRequest.authorization) {
-                        setRequestProperty(HEADER_AUTHORIZATION, "Token $autoToken")
+                        sharedPreferencesHelper?.getAuthToken()?.let {
+                            setRequestProperty(HEADER_AUTHORIZATION, "Token $it")
+                        }
                     }
 
                     // Send the POST request
                     if (apiRequest.method == HttpMethod.POST) {
                         doOutput = true
                         setRequestProperty(HEADER_CONTENT_TYPE, "application/json")
+
+                        // Set up auth header for the sessions API
+                        if(apiRequest.url.contains(VirtusizeEndpoint.Sessions.getPath())) {
+                            sharedPreferencesHelper?.getAuthHeader()?.let {
+                                setRequestProperty(HEADER_AUTH, it)
+                                setRequestProperty(HEADER_COOKIE, "")
+                            }
+                        }
 
                         // Write the byte array of the request body to the output stream
                         if (apiRequest.params.isNotEmpty()) {
@@ -145,7 +134,12 @@ internal class VirtusizeApiTask {
                 urlConnection.isSuccessful() -> {
                     inputStream = urlConnection.inputStream
                     // TODO: handle invalid product data check log
-                    return VirtusizeApiResponse.Success(parseInputStreamAsObject(apiRequest.url, inputStream))
+                    return VirtusizeApiResponse.Success(
+                        parseInputStreamAsObject(
+                            apiRequest.url,
+                            inputStream
+                        )
+                    )
                 }
                 // If the request fails but it has a error response, then read the error stream and parse the response.
                 urlConnection.errorStream != null -> {
@@ -159,7 +153,11 @@ internal class VirtusizeApiTask {
                         HttpURLConnection.HTTP_NOT_FOUND -> {
                             // If the product cannot be found in the Virtusize Server
                             if (response is ProductCheck) {
-                                errorHandler?.onError(VirtusizeErrorType.InvalidProduct.virtusizeError(response.productId))
+                                errorHandler?.onError(
+                                    VirtusizeErrorType.InvalidProduct.virtusizeError(
+                                        response.productId
+                                    )
+                                )
                                 return VirtusizeApiResponse.Success(response)
                             }
                             virtusizeNetworkError(urlConnection, response)
@@ -170,10 +168,20 @@ internal class VirtusizeApiTask {
                     }
                     return VirtusizeApiResponse.Error(error)
                 }
-                else -> return VirtusizeApiResponse.Error(virtusizeNetworkError(urlConnection, urlConnection.responseMessage))
+                else -> return VirtusizeApiResponse.Error(
+                    virtusizeNetworkError(
+                        urlConnection,
+                        urlConnection.responseMessage
+                    )
+                )
             }
         } catch (e: IOException) {
-            return VirtusizeApiResponse.Error(virtusizeNetworkError(urlConnection, e.localizedMessage))
+            return VirtusizeApiResponse.Error(
+                virtusizeNetworkError(
+                    urlConnection,
+                    e.localizedMessage
+                )
+            )
         } finally {
             urlConnection?.disconnect()
             inputStream?.close()
@@ -184,8 +192,9 @@ internal class VirtusizeApiTask {
     /**
      * Asynchronously executes the API request and passes the response to callbacks
      * @param apiRequest [ApiRequest]
+     * @param coroutineDispatcher the dispatcher that determines what thread the corresponding coroutine uses for its execution
      */
-    fun executeAsync(apiRequest: ApiRequest) {
+    fun executeAsync(apiRequest: ApiRequest, coroutineDispatcher: CoroutineDispatcher) {
         CoroutineScope(coroutineDispatcher).launch {
             val apiResponse = execute(apiRequest)
             if (apiResponse is VirtusizeApiResponse.Success) {
@@ -259,6 +268,10 @@ internal class VirtusizeApiTask {
      * @param response The response from the API request
      */
     private fun virtusizeNetworkError(urlConnection: HttpURLConnection?, response: Any?): VirtusizeError {
-        return VirtusizeError(VirtusizeErrorType.NetworkError, urlConnection?.responseCode, "Virtusize API error: ${urlConnection?.url?.path} - ${response?.toString() ?: urlConnection?.responseMessage}")
+        return VirtusizeError(
+            VirtusizeErrorType.NetworkError,
+            urlConnection?.responseCode,
+            "Virtusize API error: ${urlConnection?.url?.path} - ${response?.toString() ?: urlConnection?.responseMessage}"
+        )
     }
 }
