@@ -47,14 +47,14 @@ In your app `build.gradle` file, add the following dependencies:
 
 ```groovy
 dependencies {
-  implementation 'com.github.virtusize:integration_android:2.0.3'
+  implementation 'com.github.virtusize:integration_android:2.0.4'
 }
 ```
 
 
 
 ### 2. Proguard rules
-  
+
 If you are using Proguard, add following rules to your proguard rules file:
 
 ```
