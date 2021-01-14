@@ -1,6 +1,8 @@
+# Android SDK 実装ガイド
+
 [![](https://jitpack.io/v/virtusize/integration_android.svg)](https://jitpack.io/#virtusize/integration_android)
 
-# Android SDK 実装ガイド
+[English](README.md)
 
 Virtusize helps retailers to illustrate the size and fit of clothing, shoes and bags online, by letting customers compare the
 measurements of an item they want to buy (on a retailer's product page) with an item that they already own (a reference item).
@@ -19,10 +21,12 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 
 - minSdkVersion >= 15
 - compileSdkVersion >= 30
-
+- Setup in AppCompatActivity
 
 
 ## はじめに
+
+If you'd like to continue using the old Version 1.x.x, refer to the branch [v1](https://github.com/virtusize/integration_android/tree/v1).
 
 #### 1. Virtusize SDKを実装する
 
@@ -70,7 +74,7 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
 
 ##### B. UserIdの設定（[Order API](#order-apiについて)が使われている場合必須）
 
-​	String形式にてユーザーがアプリでログインしている場合にUser IDを設定アプリローンチ後にユーザーIDを設定することも可能	です。詳しくは[Order API](#order-apiについて)の1項を参照してください。
+​	String形式にてユーザーがアプリでログインしている場合にUser IDを設定。アプリローンチ後にユーザーIDを設定することも可能	です。詳しくは[Order API](#order-apiについて)の1項を参照してください。
 
 ##### C. Envの設定リージョンの設定が可能です。
 
@@ -507,4 +511,4 @@ app.Virtusize.sendOrder(order,
 
 ## License
 
-Copyright (c) 2018-20 Virtusize CO LTD (https://www.virtusize.jp)
+Copyright (c) 2018-21 Virtusize CO LTD (https://www.virtusize.jp)
