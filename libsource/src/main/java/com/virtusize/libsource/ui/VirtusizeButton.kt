@@ -37,7 +37,11 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : AppCompatButton(c
         }
 
     init {
-        visibility = View.INVISIBLE
+        visibility = if (visibility == View.GONE) {
+            View.GONE
+        } else {
+            View.INVISIBLE
+        }
         val attrsArray = context.obtainStyledAttributes(attrs, R.styleable.VirtusizeButton, 0, 0)
         val buttonStyle = attrsArray.getInt(R.styleable.VirtusizeButton_virtusizeButtonStyle, VirtusizeButtonStyle.NONE.value)
         if(buttonStyle == VirtusizeButtonStyle.DEFAULT_STYLE.value) {
@@ -83,9 +87,11 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : AppCompatButton(c
     }
 
     /**
-     * Sets up the button with the corresponding VirtusizeProduct
-     * @param product the VirtusizeProduct that is set for this button
-     * @see VirtusizeProduct
+     * Sets up the VirtusizeView with the corresponding VirtusizeParams
+     * @param params the VirtusizeParams that is set for this VirtusizeView
+     * @param messageHandler pass VirtusizeMessageHandler to listen to any Virtusize-related messages
+     * @see VirtusizeParams
+     * @see VirtusizeMessageHandler
      */
     internal fun setup(params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
         virtusizeParams = params
