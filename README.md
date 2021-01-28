@@ -1,6 +1,8 @@
+# Virtusize Android Integration
+
 [![](https://jitpack.io/v/virtusize/integration_android.svg)](https://jitpack.io/#virtusize/integration_android)
 
-# Virtusize Android Integration
+[日本語](README-JP.md)
 
 Virtusize helps retailers to illustrate the size and fit of clothing, shoes and bags online, by letting customers compare the
 measurements of an item they want to buy (on a retailer's product page) with an item that they already own (a reference item).
@@ -23,28 +25,39 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 
 
 
-## Installation
+## Getting Started
 
 If you'd like to continue using the old Version 1.x.x, refer to the branch [v1](https://github.com/virtusize/integration_android/tree/v1).
 
-- In your root `build.gradle` file, add the following dependency:
 
-  ```groovy
-  allprojects {
-      repositories {
-          maven { url 'https://jitpack.io' }
-      }
+### 1. Installation
+
+In your root `build.gradle` file, add the following dependency:
+
+```groovy
+allprojects {
+  repositories {
+      maven { url 'https://jitpack.io' }
   }
-  ```
+}
+```
 
-- In your app `build.gradle` file, add the following dependencies:
+In your app `build.gradle` file, add the following dependencies:
 
-  ```groovy
-  dependencies {
-      implementation 'com.github.virtusize:integration_android:2.1'
-  }
-  ```
+```groovy
+dependencies {
+  implementation 'com.github.virtusize:integration_android:2.1'
+}
+```
 
+
+### 2. Proguard Rules
+
+If you are using Proguard, add following rules to your proguard rules file:
+
+```
+-keep class com.virtusize.libsource.**
+```
 
 
 ## Setup
@@ -65,59 +78,6 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
 | setAllowedLanguages  | A list of `VirtusizeLanguage`     | In Kotlin, setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))<br />In Java, setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP)) | The languages which the user can switch to using the Language Selector | No. By default, the integration allows all possible languages to be displayed, including English, Japanese and Korean. |
 | setDetailsPanelCards | A list of `VirtusizeInfoCategory` | In Kotlin, setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))<br />In Java, setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT)) | The info categories which will be display in the Product Details tab. Possible categories are: `VirtusizeInfoCategory.MODEL_INFO`, `VirtusizeInfoCategory.GENERAL_FIT`, `VirtusizeInfoCategory.BRAND_SIZING` and `VirtusizeInfoCategory.MATERIAL` | No. By default, the integration displays all the possible info categories in the Product Details tab. |
 
-- Kotlin
-
-  ```kotlin
-  lateinit var Virtusize: Virtusize
-  
-  override fun onCreate() {
-     super.onCreate()
-     Virtusize = VirtusizeBuilder().init(this)
-              // Only the API key is required
-              .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
-              // For using the Order API, a user ID is required
-              .setUserId("123")
-              // By default, the Virtusize environment will be set to GLOBAL
-              .setEnv(VirtusizeEnvironment.STAGING)
-              // By default, the initial language will be set based on the Virtusize environment
-              .setLanguage(VirtusizeLanguage.EN)
-              // By default, ShowSGI is false
-              .setShowSGI(true)
-              // By default, Virtusize allows all the possible languages
-              .setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
-              // By default, Virtusize displays all the possible info categories in the Product Details tab
-              .setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
-              .build()
-  }
-  ```
-
-- Java
-
-  ```java
-  Virtusize Virtusize;
-  
-  @Override
-  public void onCreate() {
-     super.onCreate();
-     // Initialize Virtusize instance for your application
-     Virtusize = new VirtusizeBuilder().init(this)
-              // Only the API key is required
-              .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
-              // For using the Order API, a user ID is required
-              .setUserId("123")
-              // By default, the Virtusize environment will be set to GLOBAL
-              .setEnv(VirtusizeEnvironment.STAGING)
-              // By default, the initial language will be set based on the Virtusize environment
-              .setLanguage(VirtusizeLanguage.EN)
-              // By default, ShowSGI is false
-              .setShowSGI(true)
-              // By default, Virtusize allows all the possible languages
-              .setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
-              // By default, Virtusize displays all the possible info categories in the Product Details tab
-              .setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
-              .build();
-  }
-  ```
 
 ### 2. Set Up Product Details
 
@@ -185,7 +145,7 @@ Please do not forget to unregister message handler in activity or fragment's lif
   protected void onCreate(Bundle savedInstanceState) {
       //...
       App app = (App) getApplication();
-    
+
       virtusizeMessageHandler = new VirtusizeMessageHandler() {
           @Override
           public void virtusizeControllerShouldClose(@NotNull VirtusizeView virtusizeView) {
@@ -351,15 +311,15 @@ There are two types of InPage in our Virtusize SDK.
   | ![1 thumbnail + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399368-5e879300-1930-11eb-8b77-b49e06813550.png) | ![2 thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399370-5f202980-1930-11eb-9a2d-7b71714aa7b4.png) |
   |             **1 thumbnail + 1 line of message**              |        **2 animated thumbnails + 2 lines of message**        |
   | ![1 thumbnail + 1 line of message](https://user-images.githubusercontent.com/7802052/97399373-5f202980-1930-11eb-81fe-9946b656eb4c.png) | ![2 animated thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399355-59c2df00-1930-11eb-8a52-292956b8762d.gif) |
-  
+
 - ##### Recommended Placement
-  
+
   - Near the size table
-  
+
   - In the size info section
-  
+
   <img src="https://user-images.githubusercontent.com/7802052/92672185-15b15600-f353-11ea-921d-397f207cf616.png" style="zoom:50%;" />
-  
+
 - ##### UI customization
 
   - **You can:**
@@ -551,38 +511,50 @@ The order API enables Virtusize to show your customers the items they have recen
 
 #### 1. Initialization
 
-Make sure to set up the **user ID** in your Application class's `onCreate` method before you start.
+Make sure to set up the **user ID** before sending orders to Virtusize. You can set up the user ID either:
+
+in your Application class's `onCreate` method before the app is launched
+
+or
+
+in your activity or fragment after the app is launched
 
 * Kotlin
 
-```kotlin
-lateinit var Virtusize: Virtusize
-override fun onCreate() {
-    super.onCreate()
-    Virtusize = VirtusizeBuilder().init(this)
-        .setApiKey(api_key)
-        .setUserId(user_id)
-        .setEnv(VirtusizeEnvironment.STAGING)
-        .build()
-}
-```
+    ```kotlin
+    // In your Application class's `onCreate` method before the app is launched
+    lateinit var Virtusize: Virtusize
+    override fun onCreate() {
+        super.onCreate()
+        Virtusize = VirtusizeBuilder().init(this)
+            .setApiKey(api_key)
+            .setUserId(user_id)
+            .setEnv(VirtusizeEnvironment.STAGING)
+            .build()
+    }
 
+    // In your activity or fragment after the app is launched
+    (application as App).Virtusize.setUserID("user_id")
+    ```
 * Java
 
-~~~~java
-Virtusize Virtusize;
-@Override
-public void onCreate() {
+    ~~~~java
+    // In your Application class's `onCreate` method before the app is launched 
+    Virtusize Virtusize;
+    @Override
+    public void onCreate() {
     super.onCreate();
     Virtusize = new VirtusizeBuilder()
-        .init(this)
-        .setApiKey(api_key)
-        .setUserId(user_id)
-        .setEnv(VirtusizeEnvironment.STAGING)
-        .build();
-}
-~~~~
-
+            .init(this)
+            .setApiKey(api_key)
+            .setUserId(user_id)
+            .setEnv(VirtusizeEnvironment.STAGING)
+            .build();
+      
+    // In your activity or fragment after the app is launched
+    app = (App) getApplication();
+    app.Virtusize.setUserId("user_id");
+    ~~~~
 #### 2. Create a *VirtusizeOrder* object for order data
 
 The ***VirtusizeOrder*** object gets passed to the `Virtusize.sendOrder` method, and has the following attributes:
@@ -616,44 +588,46 @@ __**Note:**__ * means the attribute is required
 
 * Kotlin
 
-~~~~kotlin
-val order = VirtusizeOrder("20200601586")
-order.items = mutableListOf(
-    VirtusizeOrderItem(
-        "A001",
-        "L",
-        "Large",
-        "A001_SIZEL_RED",
-        "http://images.example.com/products/A001/red/image1xl.jpg",
-        "Red",
-        "W",
-        5100.00,
-        "JPY",
-        1,
-        "http://example.com/products/A001"
+    ~~~~kotlin
+    val order = VirtusizeOrder("20200601586")
+    order.items = mutableListOf(
+        VirtusizeOrderItem(
+            "A001",
+            "L",
+            "Large",
+            "A001_SIZEL_RED",
+            "http://images.example.com/products/A001/red/image1xl.jpg",
+            "Red",
+            "W",
+            5100.00,
+            "JPY",
+            1,
+            "http://example.com/products/A001"
+        )
     )
-)
-~~~~
+    ~~~~
 
 * Java
 
-~~~~java
-VirtusizeOrder order = new VirtusizeOrder("20200601586");
-ArrayList<VirtusizeOrderItem> items = new ArrayList<>();
-items.add(new VirtusizeOrderItem(
-        "A001",
-        "L",
-        "Large",
-        "A001_SIZEL_RED",
-        "http://images.example.com/products/A001/red/image1xl.jpg",
-        "Red",
-        "W",
-        5100.00,
-        "JPY",
-        1,
-        "http://example.com/products/A001"
-));
-~~~~
+    ~~~~java
+    VirtusizeOrder order = new VirtusizeOrder("20200601586");
+    ArrayList<VirtusizeOrderItem> items = new ArrayList<>();
+    items.add(new VirtusizeOrderItem(
+            "A001",
+            "L",
+            "Large",
+            "A001_SIZEL_RED",
+            "http://images.example.com/products/A001/red/image1xl.jpg",
+            "Red",
+            "W",
+            5100.00,
+            "JPY",
+            1,
+            "http://example.com/products/A001"
+    ));
+    ~~~~
+
+
 
 #### 3. Send an Order
 
@@ -661,58 +635,55 @@ Call the `Virtusize.sendOrder` method in your activity or fragment when the user
 
 * Kotlin
 
-The `onSuccess` and `onError` callbacks are optional.
-
-~~~~kotlin
-(application as App)
-    .Virtusize
-    .sendOrder(order,
-        // This success callback is optional and gets called when the app successfully sends the order
-        onSuccess = {
-            Log.i(TAG, "Successfully sent the order")
-        },
-        // This error callback is optional and gets called when an error occurs when the app is sending the order
-        onError = { error ->
-            Log.e(TAG, error.message)
-        })
-~~~~
+    The `onSuccess` and `onError` callbacks are optional.
+    
+    ~~~~kotlin
+    (application as App)
+        .Virtusize
+        .sendOrder(order,
+            // This success callback is optional and gets called when the app successfully sends the order
+            onSuccess = {
+                Log.i(TAG, "Successfully sent the order")
+            },
+            // This error callback is optional and gets called when an error occurs when the app is sending the order
+            onError = { error ->
+                Log.e(TAG, error.message)
+            }
+        )
+    ~~~~
 
 * Java
 
-The `SuccessResponseHandler` and `ErrorResponseHandler` callbacks are optional.
-
-~~~~java
-app.Virtusize.sendOrder(order,
-        // This success callback is optional and gets called when the app successfully sends the order
-        new SuccessResponseHandler() {
-            @Override
-            public void onSuccess(@Nullable Object data) {
-                Log.i(TAG, "Successfully sent the order");
+    The `SuccessResponseHandler` and `ErrorResponseHandler` callbacks are optional.
+    
+    ~~~~java
+    app.Virtusize.sendOrder(order,
+            // This success callback is optional and gets called when the app successfully sends the order
+            new SuccessResponseHandler() {
+                @Override
+                public void onSuccess(@Nullable Object data) {
+                    Log.i(TAG, "Successfully sent the order");
+                }
+            },
+            // This error callback is optional and gets called when an error occurs when the app is sending the order
+            new ErrorResponseHandler() {
+                @Override
+                public void onError(@NotNull VirtusizeError error) {
+                    Log.e(TAG, error.getMessage());
+                }
             }
-        },
-        // This error callback is optional and gets called when an error occurs when the app is sending the order
-        new ErrorResponseHandler() {
-            @Override
-            public void onError(@NotNull VirtusizeError error) {
-                Log.e(TAG, error.getMessage());
-            }
-        }
-);
-~~~~
+    );
+    ~~~~
 
-## Proguard rules
 
-Add following rules to your proguard rules file:
-
-```
--keep class com.virtusize.libsource.**
-```
 
 ## Examples
 
 1. Kotlin example https://github.com/virtusize/integration_android/tree/master/sampleAppKotlin
 2. Java example https://github.com/virtusize/integration_android/tree/master/sampleappjava
 
+
+
 ## License
 
-Copyright (c) 2018-20 Virtusize CO LTD (https://www.virtusize.jp)
+Copyright (c) 2018-21 Virtusize CO LTD (https://www.virtusize.jp)
