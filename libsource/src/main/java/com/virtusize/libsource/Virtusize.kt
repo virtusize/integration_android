@@ -1,14 +1,11 @@
 package com.virtusize.libsource
 
 import android.content.Context
-import android.content.res.Configuration
-import android.view.WindowManager
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.parsers.*
 import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser.TrimType
 import com.virtusize.libsource.data.remote.*
 import com.virtusize.libsource.network.*
-import com.virtusize.libsource.network.ApiRequest
 import com.virtusize.libsource.network.VirtusizeApi
 import com.virtusize.libsource.network.VirtusizeApiTask
 import com.virtusize.libsource.ui.VirtusizeInPageStandard
@@ -21,7 +18,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.json.JSONException
 import org.json.JSONObject
 import java.net.HttpURLConnection
@@ -420,40 +416,24 @@ class Virtusize(
      * @param onSuccess the optional success callback to notify [VirtusizeApiTask] is successful
      * @param onError the optional error callback to get the [VirtusizeError] in the API task
      */
-    fun sendOrder(order: VirtusizeOrder,
-                  onSuccess: (() -> Unit)? = null,
-                  onError: ((VirtusizeError) -> Unit)? = null) {
-        VirtusizeAPIService.getInstance(context).getStoreInfo(object : SuccessResponseHandler{
-            override fun onSuccess(data: Any?) {
-                /**
-                 * Throws the error if the user id is not set up or empty
-                 */
-                if(params.externalUserId.isNullOrEmpty()) {
-                    VirtusizeErrorType.UserIdNullOrEmpty.throwError()
+    fun sendOrder(
+        order: VirtusizeOrder,
+        onSuccess: (() -> Unit)? = null,
+        onError: ((VirtusizeError) -> Unit)? = null
+    ) {
+        CoroutineScope(Main).launch {
+            val storeInfoResponse = VirtusizeAPIService.getInstance(context).getStoreInfoResponse()
+            if (storeInfoResponse.isSuccessful) {
+                val sendOrderResponse = VirtusizeAPIService.getInstance(context).sendOrder(params, storeInfoResponse.successData, order)
+                if (sendOrderResponse.isSuccessful) {
+                    onSuccess?.invoke()
+                } else {
+                    sendOrderResponse.failureData?.let { onError?.invoke(it) }
                 }
-                // Sets the region from the store info
-                order.setRegion((data as? Store)?.region)
-                val apiRequest = VirtusizeApi.sendOrder(order)
-                VirtusizeApiTask(httpURLConnection)
-                    .setSuccessHandler(object : SuccessResponseHandler {
-                        override fun onSuccess(data: Any?) {
-                            onSuccess?.invoke()
-                        }
-                    })
-                    .setErrorHandler(object : ErrorResponseHandler {
-                        override fun onError(error: VirtusizeError) {
-                            onError?.invoke(error)
-                        }
-                    })
-                    .setSharedPreferencesHelper(sharedPreferencesHelper)
-                    .executeAsync<VirtusizeOrder>(apiRequest, coroutineDispatcher)
+            } else {
+                storeInfoResponse.failureData?.let { onError?.invoke(it) }
             }
-        }, object : ErrorResponseHandler{
-            override fun onError(error: VirtusizeError) {
-                onError?.invoke(error)
-            }
-
-        })
+        }
     }
 
     /**
@@ -465,28 +445,20 @@ class Virtusize(
     fun sendOrder(
         order: VirtusizeOrder,
         onSuccess: SuccessResponseHandler? = null,
-        onError: ErrorResponseHandler? = null) {
-        VirtusizeAPIService.getInstance(context).getStoreInfo(object : SuccessResponseHandler{
-            override fun onSuccess(data: Any?) {
-                /**
-                 * Throws the error if the user id is not set up or empty during the initialization of the [Virtusize] class
-                 */
-                if(params.externalUserId.isNullOrEmpty()) {
-                    VirtusizeErrorType.UserIdNullOrEmpty.throwError()
+        onError: ErrorResponseHandler? = null
+    ) {
+        CoroutineScope(Main).launch {
+            val storeInfoResponse = VirtusizeAPIService.getInstance(context).getStoreInfoResponse()
+            if (storeInfoResponse.isSuccessful) {
+                val sendOrderResponse = VirtusizeAPIService.getInstance(context).sendOrder(params, storeInfoResponse.successData, order)
+                if (sendOrderResponse.isSuccessful) {
+                    onSuccess?.onSuccess(sendOrderResponse.successData)
+                } else {
+                    sendOrderResponse.failureData?.let { onError?.onError(it) }
                 }
-                // Sets the region from the store info
-                order.setRegion((data as? Store)?.region)
-                val apiRequest = VirtusizeApi.sendOrder(order)
-                VirtusizeApiTask(httpURLConnection)
-                    .setSuccessHandler(onSuccess)
-                    .setErrorHandler(onError)
-                    .setSharedPreferencesHelper(sharedPreferencesHelper)
-                    .executeAsync<VirtusizeOrder>(apiRequest, coroutineDispatcher)
+            } else {
+                storeInfoResponse.failureData?.let { onError?.onError(it) }
             }
-        }, object : ErrorResponseHandler{
-            override fun onError(error: VirtusizeError) {
-                onError(error)
-            }
-        })
+        }
     }
 }

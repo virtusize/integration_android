@@ -1,6 +1,5 @@
 package com.virtusize.libsource.network
 
-import android.os.Build
 import com.virtusize.libsource.ErrorResponseHandler
 import com.virtusize.libsource.SharedPreferencesHelper
 import com.virtusize.libsource.SuccessResponseHandler

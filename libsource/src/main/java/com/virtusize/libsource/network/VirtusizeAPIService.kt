@@ -14,7 +14,6 @@ import com.virtusize.libsource.data.remote.UserSessionInfo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.net.HttpURLConnection
 import java.util.*
 import javax.net.ssl.HttpsURLConnection
 
@@ -144,17 +143,49 @@ class VirtusizeAPIService(private var context: Context) {
             .executeAsync<Any>(apiRequest, coroutineDispatcher)
     }
 
+    /**
+     * Sends an order to the Virtusize server
+     * @return the [VirtusizeApiResponse] with no content
+     */
+    internal suspend fun sendOrder(
+        params: VirtusizeParams,
+        store: Store?,
+        order: VirtusizeOrder
+    ): VirtusizeApiResponse<Any?> = withContext(Dispatchers.IO) {
+        // Throws the error if the user id is not set up or empty
+        if (params.externalUserId.isNullOrEmpty()) {
+            VirtusizeErrorType.UserIdNullOrEmpty.throwError()
+        }
+        // Sets the region from the store info
+        order.setRegion(store?.region)
+        val apiRequest = VirtusizeApi.sendOrder(order)
+        return@withContext VirtusizeApiTask(httpURLConnection)
+            .setSharedPreferencesHelper(sharedPreferencesHelper)
+            .execute(apiRequest)
+    }
+
+    /**
+     * Gets the API response for retrieving the specific store info
+     * @return the [VirtusizeApiResponse] with the data class [Store]
+     */
+    internal suspend fun getStoreInfoResponse(): VirtusizeApiResponse<Store?> = withContext(Dispatchers.IO) {
+        val apiRequest = VirtusizeApi.getStoreInfo()
+        return@withContext VirtusizeApiTask(httpURLConnection)
+            .setJsonParser(StoreJsonParser())
+            .execute(apiRequest)
+    }
+
 
     /**
      * Gets the API response for retrieving the store product info
      * @param productId the ID of the store product
-     * @return the [VirtusizeApiResponse] with the data class [StoreProduct]
+     * @return the [VirtusizeApiResponse] with the data class [Product]
      */
     internal suspend fun getStoreProductResponse(productId: Int): VirtusizeApiResponse<Product?> = withContext(
         Dispatchers.IO
     ) {
         if(productId == 0) {
-            return@withContext VirtusizeApiResponse.Error(com.virtusize.libsource.data.local.VirtusizeErrorType.NullProduct.virtusizeError())
+            return@withContext VirtusizeApiResponse.Error(VirtusizeErrorType.NullProduct.virtusizeError())
         }
         val apiRequest = VirtusizeApi.getStoreProductInfo(productId.toString())
         return@withContext VirtusizeApiTask(httpURLConnection)
