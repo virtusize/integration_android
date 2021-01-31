@@ -222,7 +222,7 @@ class Virtusize(
                 }
 
                 // Send API Event UserSawProduct
-                sendEventToApi(
+                VirtusizeAPIService.getInstance(context).sendEventToApi(
                     event = VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()),
                     withDataProduct = productCheck,
                     errorHandler = errorHandler
@@ -234,7 +234,7 @@ class Virtusize(
                         if (fetchMetaData) {
                             if (params.virtusizeProduct?.imageUrl != null) {
                                 // If image URL is valid, send image URL to server
-                                sendProductImageToBackend(
+                                VirtusizeAPIService.getInstance(context).sendProductImageToBackend(
                                     product = virtusizeProduct,
                                     errorHandler = errorHandler
                                 )
@@ -243,7 +243,7 @@ class Virtusize(
                             }
                         }
                         // Send API Event UserSawWidgetButton
-                        sendEventToApi(
+                        VirtusizeAPIService.getInstance(context).sendEventToApi(
                             event = VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName()),
                             withDataProduct = productCheck,
                             errorHandler = errorHandler
@@ -255,7 +255,7 @@ class Virtusize(
                 if(virtusizeViewsContainInPage) {
                     productCheck.data?.productDataId?.let { productId ->
                         CoroutineScope(Main).launch {
-                            val storeProductResponse = getStoreProductResponse(productId)
+                            val storeProductResponse = VirtusizeAPIService.getInstance(context).getStoreProductResponse(productId)
                             if (storeProductResponse.isSuccessful) {
                                 storeProduct = storeProductResponse.successData
                             } else {
@@ -263,7 +263,7 @@ class Virtusize(
                                 return@launch
                             }
 
-                            val productTypesResponse = getProductTypesResponse()
+                            val productTypesResponse = VirtusizeAPIService.getInstance(context).getProductTypesResponse()
                             if (productTypesResponse.isSuccessful) {
                                 productTypes = productTypesResponse.successData
                             } else {
@@ -271,7 +271,7 @@ class Virtusize(
                                 return@launch
                             }
 
-                            val i18nResponse = getI18nResponse()
+                            val i18nResponse = VirtusizeAPIService(context).getI18nResponse(params)
                             if (i18nResponse.isSuccessful) {
                                 i18nLocalization = i18nResponse.successData
                             } else {
@@ -289,14 +289,14 @@ class Virtusize(
             }
         }
 
-        productDataCheck(productValidCheckListener, errorHandler, apiRequest)
+        VirtusizeAPIService.getInstance(context).productDataCheck(productValidCheckListener, errorHandler, apiRequest)
     }
 
     /**
      * Updates the user session by calling the session API
      */
     private suspend fun updateUserSession() {
-        val userSessionInfoResponse = getUserSessionInfoResponse()
+        val userSessionInfoResponse = VirtusizeAPIService.getInstance(context).getUserSessionInfoResponse()
         if (userSessionInfoResponse.isSuccessful) {
             sharedPreferencesHelper.storeSessionData(userSessionInfoResponse.successData!!.userSessionResponse)
             sharedPreferencesHelper.storeAccessToken(userSessionInfoResponse.successData!!.accessToken)
@@ -319,7 +319,7 @@ class Virtusize(
         var userProductRecommendedSize: SizeComparisonRecommendedSize? = null
         var userBodyRecommendedSize: String? = null
         if(!ignoreUserData) {
-            val userProductsResponse = getUserProductsResponse()
+            val userProductsResponse = VirtusizeAPIService.getInstance(context).getUserProductsResponse()
             if (userProductsResponse.isSuccessful) {
                 userProducts = userProductsResponse.successData
             } else if(userProductsResponse.failureData?.code != HttpURLConnection.HTTP_NOT_FOUND) {
@@ -398,9 +398,9 @@ class Virtusize(
         if(storeProduct.isAccessory()) {
             return null
         }
-        val userBodyProfileResponse = getUserBodyProfileResponse()
+        val userBodyProfileResponse = VirtusizeAPIService.getInstance(context).getUserBodyProfileResponse()
         if (userBodyProfileResponse.isSuccessful) {
-            val bodyProfileRecommendedSizeResponse = getBodyProfileRecommendedSizeResponse(
+            val bodyProfileRecommendedSizeResponse = VirtusizeAPIService.getInstance(context).getBodyProfileRecommendedSizeResponse(
                 productTypes,
                 storeProduct,
                 userBodyProfileResponse.successData!!
@@ -415,94 +415,6 @@ class Virtusize(
     }
 
     /**
-     * Executes the API task to make a network request for Product Check
-     * @param productValidCheckListener VirtusizeButton that is being set up
-     * @param errorHandler VirtusizeProduct that is being set to this button
-     * @param apiRequest [ApiRequest]
-    */
-    internal fun productDataCheck(productValidCheckListener: ValidProductCheckHandler,
-                                  errorHandler: ErrorResponseHandler,
-                                  apiRequest: ApiRequest
-    ) {
-        VirtusizeApiTask(httpURLConnection)
-            .setSuccessHandler(productValidCheckListener)
-            .setJsonParser(ProductCheckJsonParser())
-            .setErrorHandler(errorHandler)
-            .setSharedPreferencesHelper(sharedPreferencesHelper)
-            .executeAsync(apiRequest, coroutineDispatcher)
-    }
-
-    /**
-     * Sends an image URL of VirtusizeProduct to the Virtusize server
-     * @param product VirtusizeProduct
-     * @param successHandler the success callback to get the API response data
-     * @param errorHandler
-     * @see VirtusizeProduct
-     */
-    internal fun sendProductImageToBackend(
-        product: VirtusizeProduct,
-        successHandler: SuccessResponseHandler? = null,
-        errorHandler: ErrorResponseHandler) {
-        val apiRequest = VirtusizeApi.sendProductImageToBackend(product = product)
-        VirtusizeApiTask(httpURLConnection)
-            .setJsonParser(ProductMetaDataHintsJsonParser())
-            .setSuccessHandler(successHandler)
-            .setErrorHandler(errorHandler)
-            .setSharedPreferencesHelper(sharedPreferencesHelper)
-            .executeAsync(apiRequest, coroutineDispatcher)
-    }
-
-    /**
-     * Sends an event to the Virtusize server
-     * @param event VirtusizeEvent
-     * @param withDataProduct ProductCheckResponse corresponding to VirtusizeProduct
-     * @param successHandler the success callback to get the API response data
-     * @param errorHandler the error callback to get the [VirtusizeError] in the API task
-     */
-    internal fun sendEventToApi(
-        event: VirtusizeEvent,
-        withDataProduct: ProductCheck? = null,
-        successHandler: SuccessResponseHandler? = null,
-        errorHandler: ErrorResponseHandler) {
-        val defaultDisplay =
-            (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
-        resolution = "${defaultDisplay.height}x${defaultDisplay.width}"
-
-        val apiRequest = VirtusizeApi.sendEventToAPI(
-            virtusizeEvent = event,
-            productCheck = withDataProduct,
-            deviceOrientation = if (context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) context.getString(
-                R.string.landscape
-            )
-            else context.getString(R.string.portrait),
-            screenResolution = resolution,
-            versionCode = context.packageManager
-                .getPackageInfo(context.packageName, 0).versionCode
-        )
-        VirtusizeApiTask(httpURLConnection)
-            .setSuccessHandler(successHandler)
-            .setErrorHandler(errorHandler)
-            .setSharedPreferencesHelper(sharedPreferencesHelper)
-            .executeAsync(apiRequest, coroutineDispatcher)
-    }
-
-    /**
-     * Retrieves the specific store info
-     * @param onSuccess the success callback to get the [Store] in the API task
-     * @param onError the error callback to get the [VirtusizeError] in the API task
-     */
-    internal fun getStoreInfo(
-        onSuccess: SuccessResponseHandler? = null,
-        onError: ErrorResponseHandler? = null) {
-        val apiRequest = VirtusizeApi.getStoreInfo()
-        VirtusizeApiTask(httpURLConnection)
-            .setJsonParser(StoreJsonParser())
-            .setSuccessHandler(onSuccess)
-            .setErrorHandler(onError)
-            .executeAsync(apiRequest, coroutineDispatcher)
-    }
-
-    /**
      * Sends an order to the Virtusize server for Kotlin apps
      * @param order
      * @param onSuccess the optional success callback to notify [VirtusizeApiTask] is successful
@@ -511,7 +423,7 @@ class Virtusize(
     fun sendOrder(order: VirtusizeOrder,
                   onSuccess: (() -> Unit)? = null,
                   onError: ((VirtusizeError) -> Unit)? = null) {
-        getStoreInfo(object : SuccessResponseHandler{
+        VirtusizeAPIService.getInstance(context).getStoreInfo(object : SuccessResponseHandler{
             override fun onSuccess(data: Any?) {
                 /**
                  * Throws the error if the user id is not set up or empty
@@ -534,7 +446,7 @@ class Virtusize(
                         }
                     })
                     .setSharedPreferencesHelper(sharedPreferencesHelper)
-                    .executeAsync(apiRequest, coroutineDispatcher)
+                    .executeAsync<VirtusizeOrder>(apiRequest, coroutineDispatcher)
             }
         }, object : ErrorResponseHandler{
             override fun onError(error: VirtusizeError) {
@@ -554,7 +466,7 @@ class Virtusize(
         order: VirtusizeOrder,
         onSuccess: SuccessResponseHandler? = null,
         onError: ErrorResponseHandler? = null) {
-        getStoreInfo(object : SuccessResponseHandler{
+        VirtusizeAPIService.getInstance(context).getStoreInfo(object : SuccessResponseHandler{
             override fun onSuccess(data: Any?) {
                 /**
                  * Throws the error if the user id is not set up or empty during the initialization of the [Virtusize] class
@@ -569,100 +481,12 @@ class Virtusize(
                     .setSuccessHandler(onSuccess)
                     .setErrorHandler(onError)
                     .setSharedPreferencesHelper(sharedPreferencesHelper)
-                    .executeAsync(apiRequest, coroutineDispatcher)
+                    .executeAsync<VirtusizeOrder>(apiRequest, coroutineDispatcher)
             }
         }, object : ErrorResponseHandler{
             override fun onError(error: VirtusizeError) {
                 onError(error)
             }
         })
-    }
-
-    /**
-     * Gets the API response for retrieving the store product info
-     * @param productId the ID of the store product
-     * @return the [VirtusizeApiResponse] with the data class [StoreProduct]
-     */
-    internal suspend fun getStoreProductResponse(productId: Int): VirtusizeApiResponse<Product?> = withContext(IO) {
-        if(productId == 0) {
-            return@withContext VirtusizeApiResponse.Error(VirtusizeErrorType.NullProduct.virtusizeError())
-        }
-        val apiRequest = VirtusizeApi.getStoreProductInfo(productId.toString())
-        return@withContext VirtusizeApiTask(httpURLConnection)
-            .setJsonParser(StoreProductJsonParser())
-            .execute(apiRequest) as VirtusizeApiResponse<Product?>
-    }
-
-    /**
-     * Gets the API response for retrieving the list of the product types
-     * @return the [VirtusizeApiResponse] with a list of [ProductType]
-     */
-    internal suspend fun getProductTypesResponse(): VirtusizeApiResponse<List<ProductType>?> = withContext(IO) {
-        val apiRequest = VirtusizeApi.getProductTypes()
-        return@withContext VirtusizeApiTask(httpURLConnection)
-            .setJsonParser(ProductTypeJsonParser())
-            .execute(apiRequest) as VirtusizeApiResponse<List<ProductType>?>
-    }
-
-    /**
-     * Gets the API response for getting the user session data
-     * @return the [VirtusizeApiResponse] with [UserSessionInfo]
-     */
-    private suspend fun getUserSessionInfoResponse(): VirtusizeApiResponse<UserSessionInfo?> = withContext(IO) {
-        val apiRequest = VirtusizeApi.getSessions()
-        return@withContext VirtusizeApiTask(httpURLConnection)
-            .setJsonParser(UserSessionInfoJsonParser())
-            .setSharedPreferencesHelper(sharedPreferencesHelper)
-            .execute(apiRequest) as VirtusizeApiResponse<UserSessionInfo?>
-    }
-
-    /**
-     * Gets the API response for retrieving a list of user products
-     * @return the [VirtusizeApiResponse] with the list of [Product]
-     */
-    internal suspend fun getUserProductsResponse(): VirtusizeApiResponse<List<Product>?> = withContext(IO) {
-        val apiRequest = VirtusizeApi.getUserProducts()
-        return@withContext VirtusizeApiTask(httpURLConnection)
-            .setJsonParser(UserProductJsonParser())
-            .setSharedPreferencesHelper(sharedPreferencesHelper)
-            .execute(apiRequest) as VirtusizeApiResponse<List<Product>?>
-    }
-
-    /**
-     * Gets the API response for retrieving the current user body profile such as age, height, weight and body measurements
-     * @return the [VirtusizeApiResponse] with the data class [UserBodyProfile]
-     */
-    internal suspend fun getUserBodyProfileResponse(): VirtusizeApiResponse<UserBodyProfile?> = withContext(IO) {
-        val apiRequest = VirtusizeApi.getUserBodyProfile()
-        VirtusizeApiTask(httpURLConnection)
-            .setJsonParser(UserBodyProfileJsonParser())
-            .setSharedPreferencesHelper(sharedPreferencesHelper)
-            .execute(apiRequest) as VirtusizeApiResponse<UserBodyProfile?>
-    }
-
-    /**
-     * Gets the API response for retrieving the recommended size based on the user body profile
-     * @param productTypes a list of product types
-     * @param storeProduct the store product
-     * @param userBodyProfile the user body profile
-     * @return the [VirtusizeApiResponse] with the data class [UserBodyProfile]
-     */
-    internal suspend fun getBodyProfileRecommendedSizeResponse(productTypes: List<ProductType>, storeProduct: Product, userBodyProfile: UserBodyProfile): VirtusizeApiResponse<BodyProfileRecommendedSize?> = withContext(IO) {
-        val apiRequest = VirtusizeApi.getSize(productTypes, storeProduct, userBodyProfile)
-        VirtusizeApiTask(httpURLConnection)
-            .setJsonParser(BodyProfileRecommendedSizeJsonParser())
-            .setSharedPreferencesHelper(sharedPreferencesHelper)
-            .execute(apiRequest) as VirtusizeApiResponse<BodyProfileRecommendedSize?>
-    }
-
-    /**
-     * Gets the API response for fetching the i18n localization texts
-     * @return the [VirtusizeApiResponse] with the data class [I18nLocalization]
-     */
-    internal suspend fun getI18nResponse(): VirtusizeApiResponse<I18nLocalization?> = withContext(IO) {
-        val apiRequest = VirtusizeApi.getI18n(params.language ?: (VirtusizeLanguage.values().find { it.value == Locale.getDefault().language } ?: VirtusizeLanguage.EN))
-        VirtusizeApiTask(httpURLConnection)
-            .setJsonParser(I18nLocalizationJsonParser(context, params.language))
-            .execute(apiRequest) as VirtusizeApiResponse<I18nLocalization?>
     }
 }

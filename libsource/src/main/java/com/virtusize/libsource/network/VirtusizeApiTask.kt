@@ -87,7 +87,7 @@ internal class VirtusizeApiTask(private var urlConnection: HttpsURLConnection? =
      * Executes the API request and returns the response
      * @param apiRequest [ApiRequest]
      */
-    fun execute(apiRequest: ApiRequest): VirtusizeApiResponse<Any?> {
+    fun <T> execute(apiRequest: ApiRequest): VirtusizeApiResponse<T?> {
         var urlConnection: HttpsURLConnection? = urlConnection
         var inputStream: InputStream? = null
         var errorStream: InputStream? = null
@@ -143,7 +143,7 @@ internal class VirtusizeApiTask(private var urlConnection: HttpsURLConnection? =
                             apiRequest.url,
                             inputStream
                         )
-                    )
+                    ) as VirtusizeApiResponse.Success<T>
                 }
                 // If the request fails but it has a error response, then read the error stream and parse the response.
                 urlConnection.errorStream != null -> {
@@ -158,7 +158,7 @@ internal class VirtusizeApiTask(private var urlConnection: HttpsURLConnection? =
                             // If the product cannot be found in the Virtusize Server
                             if (response is ProductCheck) {
                                 errorHandler?.onError(VirtusizeErrorType.InvalidProduct.virtusizeError(response.name))
-                                return VirtusizeApiResponse.Success(response)
+                                return VirtusizeApiResponse.Success(response) as VirtusizeApiResponse.Success<T>
                             }
                             virtusizeNetworkError(urlConnection, response)
                         }
@@ -184,10 +184,10 @@ internal class VirtusizeApiTask(private var urlConnection: HttpsURLConnection? =
      * @param apiRequest [ApiRequest]
      * @param coroutineDispatcher the dispatcher that determines what thread the corresponding coroutine uses for its execution
      */
-    fun executeAsync(apiRequest: ApiRequest, coroutineDispatcher: CoroutineDispatcher) {
+    fun <T> executeAsync(apiRequest: ApiRequest, coroutineDispatcher: CoroutineDispatcher) {
         CoroutineScope(coroutineDispatcher).launch {
-            val apiResponse = execute(apiRequest)
-            if (apiResponse is VirtusizeApiResponse.Success) {
+            val apiResponse = execute<T>(apiRequest)
+            if (apiResponse is VirtusizeApiResponse.Success<Any?>) {
                 withContext(Main) {
                     successHandler?.onSuccess(apiResponse.data)
                 }
