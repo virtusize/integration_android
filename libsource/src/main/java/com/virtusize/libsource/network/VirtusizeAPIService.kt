@@ -11,6 +11,7 @@ import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser
 import com.virtusize.libsource.data.parsers.UserSessionInfoJsonParser
 import com.virtusize.libsource.data.remote.*
 import com.virtusize.libsource.data.remote.UserSessionInfo
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.*
@@ -21,7 +22,7 @@ import javax.net.ssl.HttpsURLConnection
  * @param context the application context
  * @param messageHandler pass VirtusizeMessageHandler to listen to any Virtusize-related messages
  */
-class VirtusizeAPIService(private var context: Context, private var messageHandler: VirtusizeMessageHandler) {
+internal class VirtusizeAPIService(private var context: Context, private var messageHandler: VirtusizeMessageHandler) {
 
     companion object {
         private var INSTANCE: VirtusizeAPIService? = null
@@ -48,12 +49,23 @@ class VirtusizeAPIService(private var context: Context, private var messageHandl
     // The HTTP URL connection that is used to make a single request
     private var httpURLConnection: HttpsURLConnection? = null
 
+    // The dispatcher that determines what thread the corresponding coroutine uses for its execution
+    private var coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
+
     /**
      * Sets the HTTP URL connection
      * @param urlConnection an instance of [HttpsURLConnection]
      */
     internal fun setHTTPURLConnection(urlConnection: HttpsURLConnection?) {
         this.httpURLConnection = urlConnection
+    }
+
+    /**
+     * Sets the Coroutine dispatcher
+     * @param dispatcher an instance of [CoroutineDispatcher]
+     */
+    internal fun setCoroutineDispatcher(dispatcher: CoroutineDispatcher) {
+        this.coroutineDispatcher = dispatcher
     }
 
     /**

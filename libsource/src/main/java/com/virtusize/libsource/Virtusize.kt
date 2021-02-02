@@ -11,16 +11,12 @@ import com.virtusize.libsource.network.VirtusizeApiTask
 import com.virtusize.libsource.ui.VirtusizeInPageStandard
 import com.virtusize.libsource.ui.VirtusizeInPageView
 import com.virtusize.libsource.ui.VirtusizeView
-import com.virtusize.libsource.util.VirtusizeUtils
 import com.virtusize.libsource.util.trimI18nText
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
-import java.net.HttpURLConnection
 import java.util.*
 
 /**
@@ -52,24 +48,24 @@ class Virtusize(
             if (event.name == VirtusizeEvents.UserSelectedProduct.getEventName() || event.name == VirtusizeEvents.UserOpenedPanelCompare.getEventName()) {
                 val userProductId = event.data?.optInt("userProductId")
                 CoroutineScope(Main).launch {
-                    updateInPageRecommendation(userProductId)
+                    virtusizeRepository.updateInPageRecommendation(storeProduct, productTypes, userProductId)
                 }
             } else if (event.name == VirtusizeEvents.UserAddedProduct.getEventName()) {
                 CoroutineScope(Main).launch {
-                    updateInPageRecommendation()
+                    virtusizeRepository.updateInPageRecommendation(storeProduct, productTypes)
                 }
             } else if (event.name == VirtusizeEvents.UserAuthData.getEventName()) {
                 event.data?.let { updateUserAuthData(it) }
             } else if (event.name == VirtusizeEvents.UserLoggedIn.getEventName()) {
                 CoroutineScope(Main).launch {
-                    updateUserSession()
-                    updateInPageRecommendation()
+                    virtusizeRepository.updateUserSession()
+                    virtusizeRepository.updateInPageRecommendation(storeProduct, productTypes)
                 }
             } else if (event.name == VirtusizeEvents.UserLoggedOut.getEventName()) {
                 sharedPreferencesHelper.storeAuthToken("")
                 CoroutineScope(Main).launch {
-                    updateUserSession()
-                    updateInPageRecommendation(null, true)
+                    virtusizeRepository.updateUserSession()
+                    virtusizeRepository.updateInPageRecommendation(storeProduct, productTypes, null, true)
                 }
             }
         }
@@ -97,14 +93,79 @@ class Virtusize(
         }
     }
 
+    private val virtusizePresenter = object: VirtusizePresenter {
+        override fun onProductCheck(productCheck: ProductCheck) {
+            for(virtusizeView in virtusizeViews) {
+                virtusizeView.setup(params = params, messageHandler = messageHandler)
+                virtusizeView.setupProductCheckResponseData(productCheck)
+            }
+        }
+
+        override fun onProductId(productId: Int) {
+            if(virtusizeViewsContainInPage()) {
+                CoroutineScope(Main).launch {
+                    virtusizeRepository.fetchInitialData(params, productId)
+                    virtusizeRepository.updateUserSession()
+                    virtusizeRepository.updateInPageRecommendation(storeProduct, productTypes)
+                }
+            }
+        }
+
+        override fun showErrorForInPage(error: VirtusizeError?) {
+            error?.let { messageHandler.onError(it) }
+            for(virtusizeView in virtusizeViews) {
+                if (virtusizeView is VirtusizeInPageView) {
+                    virtusizeView.showErrorScreen()
+                }
+            }
+        }
+
+        override fun onStoreProduct(storeProduct: Product?) {
+            this@Virtusize.storeProduct = storeProduct
+        }
+
+        override fun onProductTypes(productTypes: List<ProductType>?) {
+            this@Virtusize.productTypes = productTypes
+        }
+
+        override fun onI18nLocalization(i18nLocalization: I18nLocalization?) {
+            this@Virtusize.i18nLocalization = i18nLocalization
+        }
+
+        override fun updateInPageRecommendation(
+            userProductRecommendedSize: SizeComparisonRecommendedSize?,
+            userBodyRecommendedSize: String?
+        ) {
+            for(virtusizeView in virtusizeViews) {
+                if(virtusizeView is VirtusizeInPageView) {
+                    val trimType = if (virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
+                    storeProduct?.apply {
+                        i18nLocalization?.let { i18nLocalization ->
+                            getRecommendationText(
+                                i18nLocalization,
+                                userProductRecommendedSize,
+                                userBodyRecommendedSize
+                            ).trimI18nText(trimType).let {
+                                virtusizeView.setupRecommendationText(it)
+
+                            }
+                        }
+                        if (virtusizeView is VirtusizeInPageStandard) {
+                            clientProductImageURL = params.virtusizeProduct?.imageUrl
+                            virtusizeView.setProductImages(this, userProductRecommendedSize?.bestUserProduct)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     // The helper to store data locally using Shared Preferences
     private var sharedPreferencesHelper: SharedPreferencesHelper = SharedPreferencesHelper.getInstance(context)
 
-    // This variable is the instance of VirtusizeAPIService to handle Virtusize API requests
-    private var virtusizeAPIService = VirtusizeAPIService.getInstance(context, messageHandler)
+    private var virtusizeRepository: VirtusizeRepository = VirtusizeRepository(context, messageHandler, virtusizePresenter)
 
-    // The dispatcher that determines what thread the corresponding coroutine uses for its execution
-    private var coroutineDispatcher: CoroutineDispatcher = IO
+    private var virtusizeAPIService = VirtusizeAPIService.getInstance(context, messageHandler)
 
     // This variable holds the product information from the client and the product data check API
     private var virtusizeProduct: VirtusizeProduct? = null
@@ -162,14 +223,6 @@ class Virtusize(
     }
 
     /**
-     * Sets the Coroutine dispatcher
-     * @param dispatcher an instance of [CoroutineDispatcher]
-     */
-    internal fun setCoroutineDispatcher(dispatcher: CoroutineDispatcher) {
-        this.coroutineDispatcher = dispatcher
-    }
-
-    /**
      * Sets up the product for the product detail page
      *
      * @param virtusizeProduct VirtusizeProduct that is being set to the VirtusizeView
@@ -185,163 +238,7 @@ class Virtusize(
         params.bid = sharedPreferencesHelper.getBrowserId()
         params.virtusizeProduct = virtusizeProduct
         CoroutineScope(Main).launch {
-            val productCheckResponse = virtusizeAPIService.productDataCheck(virtusizeProduct)
-            if (productCheckResponse.isSuccessful) {
-                val productCheck = productCheckResponse.successData!!
-                var virtusizeViewsContainInPage = false
-                for(virtusizeView in virtusizeViews) {
-                    if(virtusizeView is VirtusizeInPageView) {
-                        virtusizeViewsContainInPage = true
-                    }
-                    virtusizeView.setup(params = params, messageHandler = messageHandler)
-                    virtusizeView.setupProductCheckResponseData(productCheck)
-                }
-
-                // Send API Event UserSawProduct
-                val sendEventResponse = virtusizeAPIService.sendEvent(
-                    event = VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()),
-                    withDataProduct = productCheck
-                )
-                if(sendEventResponse.isSuccessful) {
-                    messageHandler.onEvent(VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()))
-                }
-
-                productCheck.data?.apply {
-                    if (validProduct) {
-                        if (fetchMetaData) {
-                            if (params.virtusizeProduct?.imageUrl != null) {
-                                // If image URL is valid, send image URL to server
-                                val sendProductImageResponse = virtusizeAPIService.sendProductImageToBackend(product = virtusizeProduct)
-                                if (!sendProductImageResponse.isSuccessful) {
-                                    sendProductImageResponse.failureData?.let { messageHandler.onError(it) }
-                                }
-                            } else {
-                                VirtusizeErrorType.ImageUrlNotValid.throwError()
-                            }
-                        }
-                        // Send API Event UserSawWidgetButton
-                        virtusizeAPIService.sendEvent(
-                            event = VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName()),
-                            withDataProduct = productCheck
-                        )
-                        if(sendEventResponse.isSuccessful) {
-                            messageHandler.onEvent(VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName()))
-                        }
-                    }
-                }
-
-                if(virtusizeViewsContainInPage) {
-                    productCheck.data?.productDataId?.let { productId ->
-                        CoroutineScope(Main).launch {
-                            val storeProductResponse = virtusizeAPIService.getStoreProduct(productId)
-                            if (storeProductResponse.isSuccessful) {
-                                storeProduct = storeProductResponse.successData
-                            } else {
-                                showErrorForInPage(storeProductResponse.failureData)
-                                return@launch
-                            }
-
-                            val productTypesResponse = virtusizeAPIService.getProductTypes()
-                            if (productTypesResponse.isSuccessful) {
-                                productTypes = productTypesResponse.successData
-                            } else {
-                                showErrorForInPage(productTypesResponse.failureData)
-                                return@launch
-                            }
-
-                            val i18nResponse = virtusizeAPIService.getI18n(params)
-                            if (i18nResponse.isSuccessful) {
-                                i18nLocalization = i18nResponse.successData
-                            } else {
-                                showErrorForInPage(i18nResponse.failureData)
-                                return@launch
-                            }
-
-                            updateUserSession()
-                            updateInPageRecommendation()
-                        }
-                    } ?: run {
-                        showErrorForInPage(VirtusizeErrorType.InvalidProduct.virtusizeError())
-                    }
-                }
-            } else {
-                productCheckResponse.failureData?.let { messageHandler.onError(it) }
-            }
-        }
-    }
-
-    /**
-     * Updates the user session by calling the session API
-     */
-    private suspend fun updateUserSession() {
-        val userSessionInfoResponse = virtusizeAPIService.getUserSessionInfo()
-        if (userSessionInfoResponse.isSuccessful) {
-            sharedPreferencesHelper.storeSessionData(userSessionInfoResponse.successData!!.userSessionResponse)
-            sharedPreferencesHelper.storeAccessToken(userSessionInfoResponse.successData!!.accessToken)
-            if(userSessionInfoResponse.successData!!.authToken.isNotBlank()) {
-                sharedPreferencesHelper.storeAuthToken(userSessionInfoResponse.successData!!.authToken)
-            }
-        } else {
-            showErrorForInPage(userSessionInfoResponse.failureData)
-            return
-        }
-    }
-
-    /**
-     * Updates the recommendation for InPage
-     * @param selectedUserProductId the selected product Id from the web view to decide a specific user product to compare with the store product
-     * @param ignoreUserData pass the boolean vale to determine whether to ignore the API requests that is related to the user data
-     */
-    private suspend fun updateInPageRecommendation(selectedUserProductId: Int? = null, ignoreUserData: Boolean = false) {
-        var userProducts: List<Product>? = null
-        var userProductRecommendedSize: SizeComparisonRecommendedSize? = null
-        var userBodyRecommendedSize: String? = null
-        if(!ignoreUserData) {
-            val userProductsResponse = virtusizeAPIService.getUserProducts()
-            if (userProductsResponse.isSuccessful) {
-                userProducts = userProductsResponse.successData
-            } else if(userProductsResponse.failureData?.code != HttpURLConnection.HTTP_NOT_FOUND) {
-                showErrorForInPage(userProductsResponse.failureData)
-                return
-            }
-
-            userProductRecommendedSize = VirtusizeUtils.findBestFitProductSize(
-                userProducts = if(selectedUserProductId != null) userProducts?.filter { it.id == selectedUserProductId } else userProducts,
-                storeProduct = storeProduct!!,
-                productTypes = productTypes!!
-            )
-            userBodyRecommendedSize = getUserBodyRecommendedSize(storeProduct!!, productTypes!!)
-        }
-
-        for(virtusizeView in virtusizeViews) {
-            if(virtusizeView is VirtusizeInPageView) {
-                val trimType =
-                    if (virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
-                virtusizeView.setupRecommendationText(
-                    storeProduct!!.getRecommendationText(
-                        i18nLocalization!!,
-                        userProductRecommendedSize,
-                        userBodyRecommendedSize
-                    ).trimI18nText(trimType)
-                )
-                if (virtusizeView is VirtusizeInPageStandard) {
-                    storeProduct!!.clientProductImageURL = params.virtusizeProduct?.imageUrl
-                    virtusizeView.setProductImages(storeProduct!!, userProductRecommendedSize?.bestUserProduct)
-                }
-            }
-        }
-    }
-
-    /**
-     * Shows the error for InPage
-     * @param error pass a [VirtusizeError] for the messageHandler
-     */
-    private fun showErrorForInPage(error: VirtusizeError?) {
-        error?.let { messageHandler.onError(it) }
-        for(virtusizeView in virtusizeViews) {
-            if (virtusizeView is VirtusizeInPageView) {
-                virtusizeView.showErrorScreen()
-            }
+            virtusizeRepository.productDataCheck(params)
         }
     }
 
@@ -364,32 +261,6 @@ class Virtusize(
         }
 
         virtusizeViews.add(virtusizeView)
-    }
-
-    /**
-     * Gets size recommendation for a store product that would best fit a user's body.
-     * @param storeProduct the store product
-     * @param productTypes a list of product types
-     * @return recommended size name. If it's not available, return null
-     */
-    private suspend fun getUserBodyRecommendedSize(storeProduct: Product, productTypes: List<ProductType>): String? {
-        if(storeProduct.isAccessory()) {
-            return null
-        }
-        val userBodyProfileResponse = virtusizeAPIService.getUserBodyProfile()
-        if (userBodyProfileResponse.isSuccessful) {
-            val bodyProfileRecommendedSizeResponse = virtusizeAPIService.getBodyProfileRecommendedSize(
-                productTypes,
-                storeProduct,
-                userBodyProfileResponse.successData!!
-            )
-            return bodyProfileRecommendedSizeResponse.successData?.sizeName
-        } else if(userBodyProfileResponse.failureData?.code != HttpURLConnection.HTTP_NOT_FOUND) {
-            userBodyProfileResponse.failureData?.let {
-                messageHandler.onError(it)
-            }
-        }
-        return null
     }
 
     /**
@@ -442,5 +313,14 @@ class Virtusize(
                 storeInfoResponse.failureData?.let { onError?.onError(it) }
             }
         }
+    }
+
+    private fun virtusizeViewsContainInPage(): Boolean {
+        for(virtusizeView in virtusizeViews) {
+            if(virtusizeView is VirtusizeInPageView) {
+                return true
+            }
+        }
+        return false
     }
 }

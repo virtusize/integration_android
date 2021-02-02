@@ -128,8 +128,7 @@ internal class VirtusizeApiTask(
                         HttpURLConnection.HTTP_NOT_FOUND -> {
                             // If the product cannot be found in the Virtusize Server
                             if (response is ProductCheck) {
-                                messageHandler.onError(VirtusizeErrorType.InvalidProduct.virtusizeError(response.name))
-                                return VirtusizeApiResponse.Success(response) as VirtusizeApiResponse.Success<T>
+                                return VirtusizeApiResponse.Error(VirtusizeErrorType.UnParsedProduct.virtusizeError(response.productId))
                             }
                             virtusizeNetworkError(urlConnection, response)
                         }
