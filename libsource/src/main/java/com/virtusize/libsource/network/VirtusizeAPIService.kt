@@ -11,21 +11,28 @@ import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser
 import com.virtusize.libsource.data.parsers.UserSessionInfoJsonParser
 import com.virtusize.libsource.data.remote.*
 import com.virtusize.libsource.data.remote.UserSessionInfo
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.*
 import javax.net.ssl.HttpsURLConnection
 
-class VirtusizeAPIService(private var context: Context) {
+/**
+ * A class that handles API requests to the Virtusize server
+ * @param context the application context
+ * @param messageHandler pass VirtusizeMessageHandler to listen to any Virtusize-related messages
+ */
+class VirtusizeAPIService(private var context: Context, private var messageHandler: VirtusizeMessageHandler) {
 
     companion object {
         private var INSTANCE: VirtusizeAPIService? = null
 
-        fun getInstance(context: Context): VirtusizeAPIService {
+        /**
+         * Gets the instance of [VirtusizeAPIService]
+         */
+        fun getInstance(context: Context, messageHandler: VirtusizeMessageHandler): VirtusizeAPIService {
             if (INSTANCE == null) {
                 synchronized(VirtusizeAPIService::javaClass) {
-                    INSTANCE = VirtusizeAPIService(context)
+                    INSTANCE = VirtusizeAPIService(context, messageHandler)
                 }
             }
             return INSTANCE!!
@@ -41,9 +48,6 @@ class VirtusizeAPIService(private var context: Context) {
     // The HTTP URL connection that is used to make a single request
     private var httpURLConnection: HttpsURLConnection? = null
 
-    // The dispatcher that determines what thread the corresponding coroutine uses for its execution
-    private var coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
-
     /**
      * Sets the HTTP URL connection
      * @param urlConnection an instance of [HttpsURLConnection]
@@ -54,57 +58,46 @@ class VirtusizeAPIService(private var context: Context) {
 
     /**
      * Executes the API task to make a network request for Product Check
-     * @param productValidCheckListener VirtusizeButton that is being set up
-     * @param errorHandler VirtusizeProduct that is being set to this button
-     * @param apiRequest [ApiRequest]
+     * @param product [VirtusizeProduct]
+     * @return the [VirtusizeApiResponse] with the data class [ProductCheck]
      */
-    internal fun productDataCheck(
-        productValidCheckListener: ValidProductCheckHandler,
-        errorHandler: ErrorResponseHandler,
-        apiRequest: ApiRequest
-    ) {
-        VirtusizeApiTask(httpURLConnection)
-            .setSuccessHandler(productValidCheckListener)
+    internal suspend fun productDataCheck(product: VirtusizeProduct): VirtusizeApiResponse<ProductCheck> = withContext(Dispatchers.IO) {
+        val apiRequest = VirtusizeApi.productCheck(product)
+        VirtusizeApiTask(
+            httpURLConnection,
+            sharedPreferencesHelper,
+            messageHandler
+        )
             .setJsonParser(ProductCheckJsonParser())
-            .setErrorHandler(errorHandler)
-            .setSharedPreferencesHelper(sharedPreferencesHelper)
-            .executeAsync<ProductCheck>(apiRequest, coroutineDispatcher)
+            .execute(apiRequest)
     }
 
     /**
      * Sends an image URL of VirtusizeProduct to the Virtusize server
-     * @param product VirtusizeProduct
-     * @param successHandler the success callback to get the API response data
-     * @param errorHandler
-     * @see VirtusizeProduct
+     * @param product [VirtusizeProduct]
+     * @return the [VirtusizeApiResponse] with the data class [ProductMetaDataHints]
      */
-    internal fun sendProductImageToBackend(
-        product: VirtusizeProduct,
-        successHandler: SuccessResponseHandler? = null,
-        errorHandler: ErrorResponseHandler
-    ) {
+    internal suspend fun sendProductImageToBackend(product: VirtusizeProduct): VirtusizeApiResponse<ProductMetaDataHints> = withContext(Dispatchers.IO) {
         val apiRequest = VirtusizeApi.sendProductImageToBackend(product = product)
-        VirtusizeApiTask(httpURLConnection)
+        VirtusizeApiTask(
+            httpURLConnection,
+            sharedPreferencesHelper,
+            messageHandler
+        )
             .setJsonParser(ProductMetaDataHintsJsonParser())
-            .setSuccessHandler(successHandler)
-            .setErrorHandler(errorHandler)
-            .setSharedPreferencesHelper(sharedPreferencesHelper)
-            .executeAsync<Any>(apiRequest, coroutineDispatcher)
+            .execute(apiRequest)
     }
 
     /**
      * Sends an event to the Virtusize server
      * @param event VirtusizeEvent
      * @param withDataProduct ProductCheckResponse corresponding to VirtusizeProduct
-     * @param successHandler the success callback to get the API response data
-     * @param errorHandler the error callback to get the [VirtusizeError] in the API task
+     * @return the [VirtusizeApiResponse]
      */
-    internal fun sendEventToApi(
+    internal suspend fun sendEvent(
         event: VirtusizeEvent,
-        withDataProduct: ProductCheck? = null,
-        successHandler: SuccessResponseHandler? = null,
-        errorHandler: ErrorResponseHandler
-    ) {
+        withDataProduct: ProductCheck? = null
+    ): VirtusizeApiResponse<Any> = withContext(Dispatchers.IO) {
         val defaultDisplay =
             (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
         resolution = "${defaultDisplay.height}x${defaultDisplay.width}"
@@ -120,38 +113,23 @@ class VirtusizeAPIService(private var context: Context) {
             versionCode = context.packageManager
                 .getPackageInfo(context.packageName, 0).versionCode
         )
-        VirtusizeApiTask(httpURLConnection)
-            .setSuccessHandler(successHandler)
-            .setErrorHandler(errorHandler)
-            .setSharedPreferencesHelper(sharedPreferencesHelper)
-            .executeAsync<Any>(apiRequest, coroutineDispatcher)
-    }
-
-    /**
-     * Retrieves the specific store info
-     * @param onSuccess the success callback to get the [Store] in the API task
-     * @param onError the error callback to get the [VirtusizeError] in the API task
-     */
-    internal fun getStoreInfo(
-        onSuccess: SuccessResponseHandler? = null,
-        onError: ErrorResponseHandler? = null) {
-        val apiRequest = VirtusizeApi.getStoreInfo()
-        VirtusizeApiTask(httpURLConnection)
-            .setJsonParser(StoreJsonParser())
-            .setSuccessHandler(onSuccess)
-            .setErrorHandler(onError)
-            .executeAsync<Any>(apiRequest, coroutineDispatcher)
+        VirtusizeApiTask(
+            httpURLConnection,
+            sharedPreferencesHelper,
+            messageHandler
+        )
+            .execute(apiRequest)
     }
 
     /**
      * Sends an order to the Virtusize server
-     * @return the [VirtusizeApiResponse] with no content
+     * @return the [VirtusizeApiResponse]
      */
     internal suspend fun sendOrder(
         params: VirtusizeParams,
         store: Store?,
         order: VirtusizeOrder
-    ): VirtusizeApiResponse<Any?> = withContext(Dispatchers.IO) {
+    ): VirtusizeApiResponse<Any> = withContext(Dispatchers.IO) {
         // Throws the error if the user id is not set up or empty
         if (params.externalUserId.isNullOrEmpty()) {
             VirtusizeErrorType.UserIdNullOrEmpty.throwError()
@@ -159,8 +137,11 @@ class VirtusizeAPIService(private var context: Context) {
         // Sets the region from the store info
         order.setRegion(store?.region)
         val apiRequest = VirtusizeApi.sendOrder(order)
-        return@withContext VirtusizeApiTask(httpURLConnection)
-            .setSharedPreferencesHelper(sharedPreferencesHelper)
+        VirtusizeApiTask(
+            httpURLConnection,
+            sharedPreferencesHelper,
+            messageHandler
+        )
             .execute(apiRequest)
     }
 
@@ -168,9 +149,13 @@ class VirtusizeAPIService(private var context: Context) {
      * Gets the API response for retrieving the specific store info
      * @return the [VirtusizeApiResponse] with the data class [Store]
      */
-    internal suspend fun getStoreInfoResponse(): VirtusizeApiResponse<Store?> = withContext(Dispatchers.IO) {
+    internal suspend fun getStoreInfo(): VirtusizeApiResponse<Store> = withContext(Dispatchers.IO) {
         val apiRequest = VirtusizeApi.getStoreInfo()
-        return@withContext VirtusizeApiTask(httpURLConnection)
+        VirtusizeApiTask(
+            httpURLConnection,
+            sharedPreferencesHelper,
+            messageHandler
+        )
             .setJsonParser(StoreJsonParser())
             .execute(apiRequest)
     }
@@ -181,14 +166,18 @@ class VirtusizeAPIService(private var context: Context) {
      * @param productId the ID of the store product
      * @return the [VirtusizeApiResponse] with the data class [Product]
      */
-    internal suspend fun getStoreProductResponse(productId: Int): VirtusizeApiResponse<Product?> = withContext(
+    internal suspend fun getStoreProduct(productId: Int): VirtusizeApiResponse<Product> = withContext(
         Dispatchers.IO
     ) {
         if(productId == 0) {
             return@withContext VirtusizeApiResponse.Error(VirtusizeErrorType.NullProduct.virtusizeError())
         }
         val apiRequest = VirtusizeApi.getStoreProductInfo(productId.toString())
-        return@withContext VirtusizeApiTask(httpURLConnection)
+        VirtusizeApiTask(
+            httpURLConnection,
+            sharedPreferencesHelper,
+            messageHandler
+        )
             .setJsonParser(StoreProductJsonParser())
             .execute(apiRequest)
     }
@@ -197,11 +186,15 @@ class VirtusizeAPIService(private var context: Context) {
      * Gets the API response for retrieving the list of the product types
      * @return the [VirtusizeApiResponse] with a list of [ProductType]
      */
-    internal suspend fun getProductTypesResponse(): VirtusizeApiResponse<List<ProductType>?> = withContext(
+    internal suspend fun getProductTypes(): VirtusizeApiResponse<List<ProductType>> = withContext(
         Dispatchers.IO
     ) {
         val apiRequest = VirtusizeApi.getProductTypes()
-        return@withContext VirtusizeApiTask(httpURLConnection)
+        VirtusizeApiTask(
+            httpURLConnection,
+            sharedPreferencesHelper,
+            messageHandler
+        )
             .setJsonParser(ProductTypeJsonParser())
             .execute(apiRequest)
     }
@@ -210,13 +203,16 @@ class VirtusizeAPIService(private var context: Context) {
      * Gets the API response for getting the user session data
      * @return the [VirtusizeApiResponse] with [UserSessionInfo]
      */
-    internal suspend fun getUserSessionInfoResponse(): VirtusizeApiResponse<UserSessionInfo?> = withContext(
+    internal suspend fun getUserSessionInfo(): VirtusizeApiResponse<UserSessionInfo> = withContext(
         Dispatchers.IO
     ) {
         val apiRequest = VirtusizeApi.getSessions()
-        return@withContext VirtusizeApiTask(httpURLConnection)
+        VirtusizeApiTask(
+            httpURLConnection,
+            sharedPreferencesHelper,
+            messageHandler
+        )
             .setJsonParser(UserSessionInfoJsonParser())
-            .setSharedPreferencesHelper(sharedPreferencesHelper)
             .execute(apiRequest)
     }
 
@@ -224,13 +220,16 @@ class VirtusizeAPIService(private var context: Context) {
      * Gets the API response for retrieving a list of user products
      * @return the [VirtusizeApiResponse] with the list of [Product]
      */
-    internal suspend fun getUserProductsResponse(): VirtusizeApiResponse<List<Product>?> = withContext(
+    internal suspend fun getUserProducts(): VirtusizeApiResponse<List<Product>> = withContext(
         Dispatchers.IO
     ) {
         val apiRequest = VirtusizeApi.getUserProducts()
-        return@withContext VirtusizeApiTask(httpURLConnection)
+        VirtusizeApiTask(
+            httpURLConnection,
+            sharedPreferencesHelper,
+            messageHandler
+        )
             .setJsonParser(UserProductJsonParser())
-            .setSharedPreferencesHelper(sharedPreferencesHelper)
             .execute(apiRequest)
     }
 
@@ -238,13 +237,16 @@ class VirtusizeAPIService(private var context: Context) {
      * Gets the API response for retrieving the current user body profile such as age, height, weight and body measurements
      * @return the [VirtusizeApiResponse] with the data class [UserBodyProfile]
      */
-    internal suspend fun getUserBodyProfileResponse(): VirtusizeApiResponse<UserBodyProfile?> = withContext(
+    internal suspend fun getUserBodyProfile(): VirtusizeApiResponse<UserBodyProfile> = withContext(
         Dispatchers.IO
     ) {
         val apiRequest = VirtusizeApi.getUserBodyProfile()
-        VirtusizeApiTask(httpURLConnection)
+        VirtusizeApiTask(
+            httpURLConnection,
+            sharedPreferencesHelper,
+            messageHandler
+        )
             .setJsonParser(UserBodyProfileJsonParser())
-            .setSharedPreferencesHelper(sharedPreferencesHelper)
             .execute(apiRequest)
     }
 
@@ -255,25 +257,37 @@ class VirtusizeAPIService(private var context: Context) {
      * @param userBodyProfile the user body profile
      * @return the [VirtusizeApiResponse] with the data class [UserBodyProfile]
      */
-    internal suspend fun getBodyProfileRecommendedSizeResponse(productTypes: List<ProductType>, storeProduct: Product, userBodyProfile: UserBodyProfile): VirtusizeApiResponse<BodyProfileRecommendedSize?> = withContext(
+    internal suspend fun getBodyProfileRecommendedSize(
+        productTypes: List<ProductType>,
+        storeProduct: Product,
+        userBodyProfile: UserBodyProfile
+    ): VirtusizeApiResponse<BodyProfileRecommendedSize?> = withContext(
         Dispatchers.IO
     ) {
         val apiRequest = VirtusizeApi.getSize(productTypes, storeProduct, userBodyProfile)
-        VirtusizeApiTask(httpURLConnection)
+        VirtusizeApiTask(
+            httpURLConnection,
+            sharedPreferencesHelper,
+            messageHandler
+        )
             .setJsonParser(BodyProfileRecommendedSizeJsonParser())
-            .setSharedPreferencesHelper(sharedPreferencesHelper)
             .execute(apiRequest)
     }
 
     /**
      * Gets the API response for fetching the i18n localization texts
+     * @param params [VirtusizeParams] to get the language that is set by a client
      * @return the [VirtusizeApiResponse] with the data class [I18nLocalization]
      */
-    internal suspend fun getI18nResponse(params: VirtusizeParams): VirtusizeApiResponse<I18nLocalization?> = withContext(
+    internal suspend fun getI18n(params: VirtusizeParams): VirtusizeApiResponse<I18nLocalization> = withContext(
         Dispatchers.IO
     ) {
         val apiRequest = VirtusizeApi.getI18n(params.language ?: (VirtusizeLanguage.values().find { it.value == Locale.getDefault().language } ?: VirtusizeLanguage.EN))
-        VirtusizeApiTask(httpURLConnection)
+        VirtusizeApiTask(
+            httpURLConnection,
+            sharedPreferencesHelper,
+            messageHandler
+        )
             .setJsonParser(I18nLocalizationJsonParser(context, params.language))
             .execute(apiRequest)
     }
