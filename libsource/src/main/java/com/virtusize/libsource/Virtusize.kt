@@ -275,17 +275,11 @@ class Virtusize(
         onError: ((VirtusizeError) -> Unit)? = null
     ) {
         CoroutineScope(Main).launch {
-            val storeInfoResponse = virtusizeAPIService.getStoreInfo()
-            if (storeInfoResponse.isSuccessful) {
-                val sendOrderResponse = virtusizeAPIService.sendOrder(params, storeInfoResponse.successData, order)
-                if (sendOrderResponse.isSuccessful) {
-                    onSuccess?.invoke()
-                } else {
-                    sendOrderResponse.failureData?.let { onError?.invoke(it) }
-                }
-            } else {
-                storeInfoResponse.failureData?.let { onError?.invoke(it) }
-            }
+            virtusizeRepository.sendOrder(params, order, { _ ->
+                onSuccess?.invoke()
+            }, { error ->
+                onError?.invoke(error)
+            })
         }
     }
 
@@ -301,17 +295,11 @@ class Virtusize(
         onError: ErrorResponseHandler? = null
     ) {
         CoroutineScope(Main).launch {
-            val storeInfoResponse = virtusizeAPIService.getStoreInfo()
-            if (storeInfoResponse.isSuccessful) {
-                val sendOrderResponse = virtusizeAPIService.sendOrder(params, storeInfoResponse.successData, order)
-                if (sendOrderResponse.isSuccessful) {
-                    onSuccess?.onSuccess(sendOrderResponse.successData)
-                } else {
-                    sendOrderResponse.failureData?.let { onError?.onError(it) }
-                }
-            } else {
-                storeInfoResponse.failureData?.let { onError?.onError(it) }
-            }
+            virtusizeRepository.sendOrder(params, order, { data ->
+                onSuccess?.onSuccess(data)
+            }, { error ->
+                onError?.onError(error)
+            })
         }
     }
 

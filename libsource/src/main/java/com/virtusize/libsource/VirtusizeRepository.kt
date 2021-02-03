@@ -1,7 +1,6 @@
 package com.virtusize.libsource
 
 import android.content.Context
-import android.util.Log
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.SizeComparisonRecommendedSize
 import com.virtusize.libsource.data.remote.Product
@@ -170,5 +169,31 @@ internal class VirtusizeRepository(
             }
         }
         return null
+    }
+
+    /**
+     * Sends an order to the Virtusize server
+     * @param params [VirtusizeParams]
+     * @param order [VirtusizeOrder]
+     * @param onSuccess the optional success callback to notify sending an order is successful
+     * @param onError the optional error callback to get the [VirtusizeError]
+     */
+    internal suspend fun sendOrder(
+        params: VirtusizeParams,
+        order: VirtusizeOrder,
+        onSuccess: ((Any?) -> Unit)?,
+        onError: ((VirtusizeError) -> Unit)?
+    ) {
+        val storeInfoResponse = virtusizeAPIService.getStoreInfo()
+        if (storeInfoResponse.isSuccessful) {
+            val sendOrderResponse = virtusizeAPIService.sendOrder(params, storeInfoResponse.successData, order)
+            if (sendOrderResponse.isSuccessful) {
+                onSuccess?.invoke(sendOrderResponse.successData)
+            } else {
+                sendOrderResponse.failureData?.let { onError?.invoke(it) }
+            }
+        } else {
+            storeInfoResponse.failureData?.let { onError?.invoke(it) }
+        }
     }
 }
