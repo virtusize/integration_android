@@ -130,14 +130,14 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         viewModel =  factory.create(VirtusizeInPageStandardViewModel::class.java)
 
         context.lifecycleOwner()?.apply {
-            viewModel?.productImageBitmapLiveData?.observe(this, { pair ->
-                pair.first.setProductImage(pair.second)
+            viewModel?.productImageBitmapLiveData?.observe(this, { productImageViewBitMapPair ->
+                productImageViewBitMapPair.first.setProductImage(productImageViewBitMapPair.second)
             })
 
-            viewModel?.productLiveData?.observe(this, { product ->
-                product.first.setProductPlaceHolderImage(
-                    product.second.productType,
-                    product.second.storeProductMeta?.additionalInfo?.style
+            viewModel?.productLiveData?.observe(this, { productImageViewDataPair ->
+                productImageViewDataPair.first.setProductPlaceHolderImage(
+                    productImageViewDataPair.second.productType,
+                    productImageViewDataPair.second.storeProductMeta?.additionalInfo?.style
                 )
             })
 
@@ -147,7 +147,6 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
                 }
             })
         }
-
     }
 
     /**
