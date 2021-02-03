@@ -198,5 +198,5 @@ internal class VirtusizeRepository(
         }
     }
 
-    internal fun loadImage(urlString: String): Bitmap? = virtusizeAPIService.loadImage(urlString)
+    internal suspend fun loadImage(urlString: String): Bitmap? = virtusizeAPIService.loadImage(urlString)
 }

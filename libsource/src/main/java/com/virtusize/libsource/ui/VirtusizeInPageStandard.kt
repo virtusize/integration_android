@@ -27,7 +27,6 @@ import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.util.FontUtils
 import com.virtusize.libsource.util.VirtusizeUtils
 import com.virtusize.libsource.util.dpInPx
-import com.virtusize.libsource.util.lifecycleOwner
 import kotlinx.android.synthetic.main.view_inpage_standard.view.*
 
 
@@ -129,7 +128,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
 
         viewModel =  factory.create(VirtusizeInPageStandardViewModel::class.java)
 
-        context.lifecycleOwner()?.apply {
+        (context as? LifecycleOwner)?.apply {
             viewModel?.productImageBitmapLiveData?.observe(this, { productImageViewBitMapPair ->
                 productImageViewBitMapPair.first.setProductImage(productImageViewBitMapPair.second)
             })

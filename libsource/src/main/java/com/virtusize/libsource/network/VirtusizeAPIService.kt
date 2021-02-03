@@ -307,13 +307,15 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
             .execute(apiRequest)
     }
 
-    internal fun loadImage(urlString: String): Bitmap? {
+    internal suspend fun loadImage(urlString: String): Bitmap? = withContext(
+        Dispatchers.IO
+    ) {
         try {
             URL(urlString).openStream().use {
-                return BitmapFactory.decodeStream(it)
+                return@withContext BitmapFactory.decodeStream(it)
             }
         } catch (e: Exception) {
-            return null
+            return@withContext null
         }
     }
 }

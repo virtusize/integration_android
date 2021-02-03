@@ -43,19 +43,6 @@ internal fun Context.getTypefaceByName(fontFileName: String): Typeface? {
     return ResourcesCompat.getFont(this, resId)
 }
 
-fun Context.lifecycleOwner(): LifecycleOwner? {
-    var curContext = this
-    var maxDepth = 20
-    while (maxDepth-- > 0 && curContext !is LifecycleOwner) {
-        curContext = (curContext as ContextWrapper).baseContext
-    }
-    return if (curContext is LifecycleOwner) {
-        curContext
-    } else {
-        null
-    }
-}
-
 /**
  * The String extension function to trim the text from i18n localization
  */
