@@ -25,7 +25,7 @@ import javax.net.ssl.HttpsURLConnection
  * @param context the application context
  * @param messageHandler pass VirtusizeMessageHandler to listen to any Virtusize-related messages
  */
-internal class VirtusizeAPIService(private var context: Context, private var messageHandler: VirtusizeMessageHandler) {
+internal class VirtusizeAPIService(private var context: Context, private var messageHandler: VirtusizeMessageHandler?) {
 
     companion object {
         private var INSTANCE: VirtusizeAPIService? = null
@@ -33,7 +33,7 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
         /**
          * Gets the instance of [VirtusizeAPIService]
          */
-        fun getInstance(context: Context, messageHandler: VirtusizeMessageHandler): VirtusizeAPIService {
+        fun getInstance(context: Context, messageHandler: VirtusizeMessageHandler?): VirtusizeAPIService {
             if (INSTANCE == null) {
                 synchronized(VirtusizeAPIService::javaClass) {
                     INSTANCE = VirtusizeAPIService(context, messageHandler)
@@ -141,16 +141,11 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
      * @return the [VirtusizeApiResponse]
      */
     internal suspend fun sendOrder(
-        params: VirtusizeParams,
-        store: Store?,
+        region: String?,
         order: VirtusizeOrder
     ): VirtusizeApiResponse<Any> = withContext(Dispatchers.IO) {
-        // Throws the error if the user id is not set up or empty
-        if (params.externalUserId.isNullOrEmpty()) {
-            VirtusizeErrorType.UserIdNullOrEmpty.throwError()
-        }
         // Sets the region from the store info
-        order.setRegion(store?.region)
+        order.setRegion(region)
         val apiRequest = VirtusizeApi.sendOrder(order)
         VirtusizeApiTask(
             httpURLConnection,
@@ -294,16 +289,16 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
      * @param params [VirtusizeParams] to get the language that is set by a client
      * @return the [VirtusizeApiResponse] with the data class [I18nLocalization]
      */
-    internal suspend fun getI18n(params: VirtusizeParams): VirtusizeApiResponse<I18nLocalization> = withContext(
+    internal suspend fun getI18n(language: VirtusizeLanguage?): VirtusizeApiResponse<I18nLocalization> = withContext(
         Dispatchers.IO
     ) {
-        val apiRequest = VirtusizeApi.getI18n(params.language ?: (VirtusizeLanguage.values().find { it.value == Locale.getDefault().language } ?: VirtusizeLanguage.EN))
+        val apiRequest = VirtusizeApi.getI18n(language ?: (VirtusizeLanguage.values().find { it.value == Locale.getDefault().language } ?: VirtusizeLanguage.EN))
         VirtusizeApiTask(
             httpURLConnection,
             sharedPreferencesHelper,
             messageHandler
         )
-            .setJsonParser(I18nLocalizationJsonParser(context, params.language))
+            .setJsonParser(I18nLocalizationJsonParser(context, language))
             .execute(apiRequest)
     }
 

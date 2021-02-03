@@ -84,7 +84,7 @@ internal class VirtusizeRepository(
             return
         }
 
-        val i18nResponse = virtusizeAPIService.getI18n(params)
+        val i18nResponse = virtusizeAPIService.getI18n(params.language)
         i18nResponse.successData?.let { i18nLocalization ->
             presenter?.onI18nLocalization(i18nLocalization)
         } ?: run {
@@ -185,9 +185,13 @@ internal class VirtusizeRepository(
         onSuccess: ((Any?) -> Unit)?,
         onError: ((VirtusizeError) -> Unit)?
     ) {
+        // Throws the error if the user id is not set up or empty
+        if (params.externalUserId.isNullOrEmpty()) {
+            VirtusizeErrorType.UserIdNullOrEmpty.throwError()
+        }
         val storeInfoResponse = virtusizeAPIService.getStoreInfo()
         if (storeInfoResponse.isSuccessful) {
-            val sendOrderResponse = virtusizeAPIService.sendOrder(params, storeInfoResponse.successData, order)
+            val sendOrderResponse = virtusizeAPIService.sendOrder(storeInfoResponse.successData?.region, order)
             if (sendOrderResponse.isSuccessful) {
                 onSuccess?.invoke(sendOrderResponse.successData)
             } else {

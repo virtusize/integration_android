@@ -28,7 +28,7 @@ import javax.net.ssl.HttpsURLConnection
 internal class VirtusizeApiTask(
     private var urlConnection: HttpsURLConnection?,
     private var sharedPreferencesHelper: SharedPreferencesHelper,
-    private var messageHandler: VirtusizeMessageHandler
+    private var messageHandler: VirtusizeMessageHandler?
 ) {
 
     companion object {
@@ -175,7 +175,7 @@ internal class VirtusizeApiTask(
                     }
                 } catch (e: JSONException) {
                     if (!isErrorStream) {
-                        messageHandler.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(e.localizedMessage))
+                        messageHandler?.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(e.localizedMessage))
                     }
                 }
             }
