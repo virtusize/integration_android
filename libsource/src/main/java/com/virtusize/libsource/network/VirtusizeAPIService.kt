@@ -302,6 +302,11 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
             .execute(apiRequest)
     }
 
+    /**
+     * Loads an image URL and returns the bitmap of the image
+     * @param urlString the image URL string
+     * @return the Bitmap of the image
+     */
     internal suspend fun loadImage(urlString: String): Bitmap? = withContext(
         Dispatchers.IO
     ) {

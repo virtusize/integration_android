@@ -44,6 +44,7 @@ class Virtusize(
             messageHandlers.forEach { messageHandler ->
                 messageHandler.onEvent(event)
             }
+            // TODO: Fix Handling events from the web view
             // Handle different user events from the web view
             if (event.name == VirtusizeEvents.UserSelectedProduct.getEventName() || event.name == VirtusizeEvents.UserOpenedPanelCompare.getEventName()) {
                 val userProductId = event.data?.optInt("userProductId")
@@ -55,16 +56,15 @@ class Virtusize(
                     virtusizeRepository.updateInPageRecommendation(storeProduct, productTypes)
                 }
             } else if (event.name == VirtusizeEvents.UserAuthData.getEventName()) {
-                event.data?.let { updateUserAuthData(it) }
+                event.data?.let { virtusizeRepository.updateUserAuthData(it) }
             } else if (event.name == VirtusizeEvents.UserLoggedIn.getEventName()) {
                 CoroutineScope(Main).launch {
                     virtusizeRepository.updateUserSession()
                     virtusizeRepository.updateInPageRecommendation(storeProduct, productTypes)
                 }
             } else if (event.name == VirtusizeEvents.UserLoggedOut.getEventName()) {
-                sharedPreferencesHelper.storeAuthToken("")
                 CoroutineScope(Main).launch {
-                    virtusizeRepository.updateUserSession()
+                    virtusizeRepository.updateUserSession(true)
                     virtusizeRepository.updateInPageRecommendation(storeProduct, productTypes, null, true)
                 }
             }
@@ -75,43 +75,30 @@ class Virtusize(
                 messageHandler.onError(error)
             }
         }
-
-        /**
-         * Updates the browser ID and the auth token from the data of the event user-auth-data
-         * @param eventJsonObject the event data in JSONObject
-         */
-        private fun updateUserAuthData(eventJsonObject: JSONObject) {
-            try {
-                val userAutoData = UserAuthDataJsonParser().parse(eventJsonObject)
-                sharedPreferencesHelper.storeBrowserId(userAutoData?.bid)
-                sharedPreferencesHelper.storeAuthToken(userAutoData?.auth)
-            } catch (e: JSONException) {
-                messageHandlers.forEach { messageHandler ->
-                    messageHandler.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(e.localizedMessage))
-                }
-            }
-        }
     }
 
+    /**
+     * The VirtusizePresenter handles the data passed from the actions of VirtusizeRepository
+     */
     private val virtusizePresenter = object: VirtusizePresenter {
-        override fun onProductCheck(productCheck: ProductCheck) {
+        override fun finishedProductCheck(productCheck: ProductCheck) {
             for(virtusizeView in virtusizeViews) {
                 virtusizeView.setup(params = params, messageHandler = messageHandler)
                 virtusizeView.setupProductCheckResponseData(productCheck)
             }
         }
 
-        override fun onProductId(productId: Int) {
+        override fun onValidProductId(productId: Int) {
             if(virtusizeViewsContainInPage()) {
                 CoroutineScope(Main).launch {
-                    virtusizeRepository.fetchInitialData(params, productId)
+                    virtusizeRepository.fetchInitialData(params.language, productId)
                     virtusizeRepository.updateUserSession()
                     virtusizeRepository.updateInPageRecommendation(storeProduct, productTypes)
                 }
             }
         }
 
-        override fun showErrorForInPage(error: VirtusizeError?) {
+        override fun hasInPageError(error: VirtusizeError?) {
             error?.let { messageHandler.onError(it) }
             for(virtusizeView in virtusizeViews) {
                 if (virtusizeView is VirtusizeInPageView) {
@@ -120,35 +107,31 @@ class Virtusize(
             }
         }
 
-        override fun onStoreProduct(storeProduct: Product?) {
+        override fun gotInitialData(
+            storeProduct: Product,
+            productTypes: List<ProductType>,
+            i18nLocalization: I18nLocalization
+        ) {
             this@Virtusize.storeProduct = storeProduct
-        }
-
-        override fun onProductTypes(productTypes: List<ProductType>?) {
             this@Virtusize.productTypes = productTypes
-        }
-
-        override fun onI18nLocalization(i18nLocalization: I18nLocalization?) {
             this@Virtusize.i18nLocalization = i18nLocalization
         }
 
-        override fun updateInPageRecommendation(
+        override fun gotSizeRecommendations(
             userProductRecommendedSize: SizeComparisonRecommendedSize?,
             userBodyRecommendedSize: String?
         ) {
             for(virtusizeView in virtusizeViews) {
                 if(virtusizeView is VirtusizeInPageView) {
-                    val trimType = if (virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
                     storeProduct?.apply {
                         i18nLocalization?.let { i18nLocalization ->
-                            getRecommendationText(
+                            val trimType = if (virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
+                            val recommendationText = getRecommendationText(
                                 i18nLocalization,
                                 userProductRecommendedSize,
                                 userBodyRecommendedSize
-                            ).trimI18nText(trimType).let {
-                                virtusizeView.setupRecommendationText(it)
-
-                            }
+                            ).trimI18nText(trimType)
+                            virtusizeView.setupRecommendationText(recommendationText)
                         }
                         if (virtusizeView is VirtusizeInPageStandard) {
                             clientProductImageURL = params.virtusizeProduct?.imageUrl
@@ -159,9 +142,6 @@ class Virtusize(
             }
         }
     }
-
-    // The helper to store data locally using Shared Preferences
-    private var sharedPreferencesHelper: SharedPreferencesHelper = SharedPreferencesHelper.getInstance(context)
 
     private var virtusizeRepository: VirtusizeRepository = VirtusizeRepository(context, messageHandler, virtusizePresenter)
 
@@ -232,9 +212,8 @@ class Virtusize(
             return
         }
         this.virtusizeProduct = virtusizeProduct
-
-        params.bid = sharedPreferencesHelper.getBrowserId()
         params.virtusizeProduct = virtusizeProduct
+
         CoroutineScope(Main).launch {
             virtusizeRepository.productDataCheck(params)
         }

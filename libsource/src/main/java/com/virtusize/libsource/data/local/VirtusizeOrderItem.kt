@@ -2,7 +2,7 @@ package com.virtusize.libsource.data.local
 
 /**
  * The class that wraps the parameters of the order item for the API request of sending the order
- * @param productId the provide ID provided by the client. It must be unique for a product.
+ * @param productId the product ID provided by the client. It must be unique for a product.
  * @param size the name of the size, e.g. "S", "M", etc.
  * @param sizeAlias the alias of the size is added if the size name is not identical from the product page
  * @param variantId the variant ID that is set on the product SKU, color, or size if there are several options

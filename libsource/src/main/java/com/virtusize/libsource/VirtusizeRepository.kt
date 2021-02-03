@@ -4,12 +4,16 @@ import android.content.Context
 import android.graphics.Bitmap
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.SizeComparisonRecommendedSize
+import com.virtusize.libsource.data.parsers.UserAuthDataJsonParser
 import com.virtusize.libsource.data.remote.Product
 import com.virtusize.libsource.data.remote.ProductType
 import com.virtusize.libsource.network.VirtusizeAPIService
 import com.virtusize.libsource.util.VirtusizeUtils
+import org.json.JSONException
+import org.json.JSONObject
 import java.net.HttpURLConnection
 
+// This class is used to handle the logic required to access remote and local data sources
 internal class VirtusizeRepository(
     private val context: Context,
     private var messageHandler: VirtusizeMessageHandler,
@@ -22,11 +26,16 @@ internal class VirtusizeRepository(
     // The helper to store data locally using Shared Preferences
     private var sharedPreferencesHelper: SharedPreferencesHelper = SharedPreferencesHelper.getInstance(context)
 
+    /**
+     * Checks if the product is valid
+     * @param params the params set by a client
+     */
     internal suspend fun productDataCheck(params: VirtusizeParams) {
+        params.bid = sharedPreferencesHelper.getBrowserId()
         val productCheckResponse = virtusizeAPIService.productDataCheck(params.virtusizeProduct!!)
         if (productCheckResponse.isSuccessful) {
             val productCheck = productCheckResponse.successData!!
-            presenter?.onProductCheck(productCheck)
+            presenter?.finishedProductCheck(productCheck)
 
             // Send API Event UserSawProduct
             val sendEventResponse = virtusizeAPIService.sendEvent(
@@ -57,9 +66,9 @@ internal class VirtusizeRepository(
                     if (sendEventResponse.isSuccessful) {
                         messageHandler.onEvent(VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName()))
                     }
-                    presenter?.onProductId(productDataId)
+                    presenter?.onValidProductId(productDataId)
                 } else {
-                    presenter?.showErrorForInPage(VirtusizeErrorType.InvalidProduct.virtusizeError(params.virtusizeProduct!!.externalId))
+                    presenter?.hasInPageError(VirtusizeErrorType.InvalidProduct.virtusizeError(params.virtusizeProduct!!.externalId))
                 }
             }
         } else {
@@ -67,36 +76,41 @@ internal class VirtusizeRepository(
         }
     }
 
-    internal suspend fun fetchInitialData(params: VirtusizeParams, productId: Int) {
+    /**
+     * Fetches the initial data such as store product info, product type lists and i18 localization
+     * @param language the display language set by the client
+     * @param productId the product ID provided by the client
+     */
+    internal suspend fun fetchInitialData(language: VirtusizeLanguage?, productId: Int) {
         val storeProductResponse = virtusizeAPIService.getStoreProduct(productId)
-        storeProductResponse.successData?.let { product ->
-            presenter?.onStoreProduct(product)
-        } ?: run {
-            presenter?.showErrorForInPage(storeProductResponse.failureData)
+        if(storeProductResponse.successData == null) {
+            presenter?.hasInPageError(storeProductResponse.failureData)
             return
         }
 
         val productTypesResponse = virtusizeAPIService.getProductTypes()
-        productTypesResponse.successData?.let { productTypes ->
-            presenter?.onProductTypes(productTypes)
-        } ?: run {
-            presenter?.showErrorForInPage(productTypesResponse.failureData)
+        if(productTypesResponse.successData == null) {
+            presenter?.hasInPageError(productTypesResponse.failureData)
             return
         }
 
-        val i18nResponse = virtusizeAPIService.getI18n(params.language)
-        i18nResponse.successData?.let { i18nLocalization ->
-            presenter?.onI18nLocalization(i18nLocalization)
-        } ?: run {
-            presenter?.showErrorForInPage(i18nResponse.failureData)
+        val i18nResponse = virtusizeAPIService.getI18n(language)
+        if(i18nResponse.successData == null) {
+            presenter?.hasInPageError(i18nResponse.failureData)
             return
         }
+
+        presenter?.gotInitialData(storeProductResponse.successData!!, productTypesResponse.successData!!, i18nResponse.successData!!)
     }
 
     /**
      * Updates the user session by calling the session API
+     * @param isLoggedOut a Boolean value to set if the user is logged out
      */
-    internal suspend fun updateUserSession(){
+    internal suspend fun updateUserSession(isLoggedOut: Boolean = false){
+        if (isLoggedOut) {
+            sharedPreferencesHelper.storeAuthToken("")
+        }
         val userSessionInfoResponse = virtusizeAPIService.getUserSessionInfo()
         if (userSessionInfoResponse.isSuccessful) {
             sharedPreferencesHelper.storeSessionData(userSessionInfoResponse.successData!!.userSessionResponse)
@@ -105,12 +119,14 @@ internal class VirtusizeRepository(
                 sharedPreferencesHelper.storeAuthToken(userSessionInfoResponse.successData!!.authToken)
             }
         } else {
-            presenter?.showErrorForInPage(userSessionInfoResponse.failureData)
+            presenter?.hasInPageError(userSessionInfoResponse.failureData)
         }
     }
 
     /**
      * Updates the recommendation for InPage
+     * @param storeProduct the store product info in the type of [Product]
+     * @param productTypes a list of product types
      * @param selectedUserProductId the selected product Id from the web view to decide a specific user product to compare with the store product
      * @param ignoreUserData pass the boolean vale to determine whether to ignore the API requests that is related to the user data
      */
@@ -131,7 +147,7 @@ internal class VirtusizeRepository(
             if (userProductsResponse.isSuccessful) {
                 userProducts = userProductsResponse.successData
             } else if(userProductsResponse.failureData?.code != HttpURLConnection.HTTP_NOT_FOUND) {
-                presenter?.showErrorForInPage(userProductsResponse.failureData)
+                presenter?.hasInPageError(userProductsResponse.failureData)
                 return
             }
 
@@ -143,7 +159,7 @@ internal class VirtusizeRepository(
             userBodyRecommendedSize = getUserBodyRecommendedSize(storeProduct, productTypes)
         }
 
-        presenter?.updateInPageRecommendation(userProductRecommendedSize, userBodyRecommendedSize)
+        presenter?.gotSizeRecommendations(userProductRecommendedSize, userBodyRecommendedSize)
     }
 
     /**
@@ -202,5 +218,24 @@ internal class VirtusizeRepository(
         }
     }
 
+    /**
+     * Loads an image URL and returns the bitmap of the image
+     * @param urlString the image URL string
+     * @return the bitmap of the image
+     */
     internal suspend fun loadImage(urlString: String): Bitmap? = virtusizeAPIService.loadImage(urlString)
+
+    /**
+     * Updates the browser ID and the auth token from the data of the event user-auth-data
+     * @param eventJsonObject the event data in JSONObject
+     */
+    internal fun updateUserAuthData(eventJsonObject: JSONObject) {
+        try {
+            val userAutoData = UserAuthDataJsonParser().parse(eventJsonObject)
+            sharedPreferencesHelper.storeBrowserId(userAutoData?.bid)
+            sharedPreferencesHelper.storeAuthToken(userAutoData?.auth)
+        } catch (e: JSONException) {
+            messageHandler.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(e.localizedMessage))
+        }
+    }
 }

@@ -27,26 +27,3 @@ interface ErrorResponseHandler {
      */
     fun onError(@NonNull error: VirtusizeError)
 }
-
-/**
- * This interface can be implemented by any class that wants to receive ProductCheckResponse when server returns valid product for product check response
- * @see ProductCheck
- */
-interface ValidProductCheckHandler: SuccessResponseHandler {
-
-    /**
-     * Invoke this method on object to pass ProductCheckResponse to object
-     * @param data of type ProductCheckResponse
-     */
-    override fun onSuccess(data: Any?) {
-        if (data is ProductCheck)
-            onValidProductCheckCompleted(data)
-    }
-
-    /**
-     * Passes productCheckResponse to object
-     * @param productCheck is ProductCheckResponse
-     * @see ProductCheck
-     */
-    fun onValidProductCheckCompleted(productCheck: ProductCheck)
-}
