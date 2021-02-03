@@ -5,9 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
@@ -20,22 +18,23 @@ import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.ViewCompat
+import androidx.lifecycle.*
 import com.virtusize.libsource.R
+import com.virtusize.libsource.VirtusizeRepository
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.Product
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.util.FontUtils
 import com.virtusize.libsource.util.VirtusizeUtils
 import com.virtusize.libsource.util.dpInPx
+import com.virtusize.libsource.util.lifecycleOwner
 import kotlinx.android.synthetic.main.view_inpage_standard.view.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.net.URL
 
 
-class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : VirtusizeInPageView(context, attrs) {
+class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : VirtusizeInPageView(
+    context,
+    attrs
+) {
 
     /**
      * @see VirtusizeView.virtusizeParams
@@ -65,6 +64,8 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
     // The cross fade animation Handler
     private var crossFadeHandler: Handler = Handler(Looper.getMainLooper())
 
+    private var userBestFitProduct: Product? = null
+
     // The VirtusizeViewStyle that clients can choose to use for this InPage Standard view
     var virtusizeViewStyle = VirtusizeViewStyle.NONE
         set(value) {
@@ -83,6 +84,8 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             setStyle()
         }
 
+    private var viewModel: VirtusizeInPageStandardViewModel? = null
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_inpage_standard, this, true)
         visibility = View.INVISIBLE
@@ -98,7 +101,10 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             VirtusizeViewStyle.NONE.value
         )
         virtusizeViewStyle = VirtusizeViewStyle.values().firstOrNull { it.value == buttonStyle } ?: VirtusizeViewStyle.NONE
-        virtusizeButtonBackgroundColor = attrsArray.getColor(R.styleable.VirtusizeInPageStandard_inPageStandardButtonBackgroundColor, 0)
+        virtusizeButtonBackgroundColor = attrsArray.getColor(
+            R.styleable.VirtusizeInPageStandard_inPageStandardButtonBackgroundColor,
+            0
+        )
         horizontalMargin = attrsArray.getDimension(
             R.styleable.VirtusizeInPageStandard_inPageStandardHorizontalMargin,
             -1f
@@ -114,6 +120,34 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         super.setup(params, messageHandler)
         virtusizeParams = params
         virtusizeMessageHandler = messageHandler
+
+        val factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return  VirtusizeInPageStandardViewModel(VirtusizeRepository(context, virtusizeMessageHandler)) as T
+            }
+        }
+
+        viewModel =  factory.create(VirtusizeInPageStandardViewModel::class.java)
+
+        context.lifecycleOwner()?.apply {
+            viewModel?.productImageBitmapLiveData?.observe(this, { pair ->
+                pair.first.setProductImage(pair.second)
+            })
+
+            viewModel?.productLiveData?.observe(this, { product ->
+                product.first.setProductPlaceHolderImage(
+                    product.second.productType,
+                    product.second.storeProductMeta?.additionalInfo?.style
+                )
+            })
+
+            viewModel?.finishLoadingProductImage?.observe(this, { finishLoading ->
+                if(finishLoading) {
+                    setLoadingScreen(false, userBestFitProduct)
+                }
+            })
+        }
+
     }
 
     /**
@@ -219,6 +253,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
      * @param userBestFitProduct the best fit user product. If it's not available, it will be null
      */
     internal fun setProductImages(storeProduct: Product, userBestFitProduct: Product?) {
+        this.userBestFitProduct = userBestFitProduct
         val productMap = mutableMapOf<VirtusizeProductImageView, Product>()
         productMap[inpageStoreProductImageView] = storeProduct
         if(userBestFitProduct != null) {
@@ -227,27 +262,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         } else {
             addLeftPaddingToStoreProductImageView(true)
         }
-        CoroutineScope(Dispatchers.IO).launch {
-            for (map in productMap.entries) {
-                val productImageView = map.key
-                val product = map.value
-                try {
-                    URL(product.getProductImageURL()).openStream().use {
-                        val bitmap = BitmapFactory.decodeStream(it)
-                        withContext(Dispatchers.Main) {
-                            productImageView.setProductImage(bitmap)
-                        }
-                    }
-                } catch (e: Exception) {
-                    withContext(Dispatchers.Main) {
-                        productImageView.setProductPlaceHolderImage(product.productType, product.storeProductMeta?.additionalInfo?.style)
-                    }
-                }
-            }
-            withContext(Dispatchers.Main) {
-                setLoadingScreen(false, userBestFitProduct)
-            }
-        }
+        viewModel?.loadProductImages(productMap)
     }
 
     /**
@@ -277,10 +292,20 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
                 setSizeCheckButtonBackgroundTint(virtusizeButtonBackgroundColor)
             }
             virtusizeViewStyle == VirtusizeViewStyle.TEAL -> {
-                setSizeCheckButtonBackgroundTint(ContextCompat.getColor(context, R.color.virtusizeTeal))
+                setSizeCheckButtonBackgroundTint(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.virtusizeTeal
+                    )
+                )
             }
             else -> {
-                setSizeCheckButtonBackgroundTint(ContextCompat.getColor(context, R.color.color_gray_900))
+                setSizeCheckButtonBackgroundTint(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.color_gray_900
+                    )
+                )
             }
         }
 
@@ -289,7 +314,13 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         if (horizontalMargin < 0) {
             return
         }
-        setupMargins(inpageCardView, horizontalMargin, horizontalMargin, horizontalMargin, horizontalMargin)
+        setupMargins(
+            inpageCardView,
+            horizontalMargin,
+            horizontalMargin,
+            horizontalMargin,
+            horizontalMargin
+        )
         setupInPageStandardFooterMargins(
             horizontalMargin + 2.dpInPx,
             inPageStandardFooterTopMargin,
@@ -356,7 +387,10 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
      * @param imageViewOne the image to be faded in
      * @param imageViewTwo the image to be set invisible after the animation is done
      */
-    private fun fadeInAnimation(imageViewOne: VirtusizeProductImageView, imageViewTwo: VirtusizeProductImageView) {
+    private fun fadeInAnimation(
+        imageViewOne: VirtusizeProductImageView,
+        imageViewTwo: VirtusizeProductImageView
+    ) {
         imageViewOne.apply {
             alpha = 0f
             visibility = VISIBLE
@@ -426,7 +460,10 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             FontUtils.FontType.BOLD
         )
 
-        val configuredContext = VirtusizeUtils.getConfiguredContext(context, virtusizeParams?.language)
+        val configuredContext = VirtusizeUtils.getConfiguredContext(
+            context,
+            virtusizeParams?.language
+        )
         inpageButton.text = configuredContext?.getText(R.string.virtusize_button_text)
         privacyPolicyText.text = configuredContext?.getText(R.string.virtusize_privacy_policy)
         inpageLoadingText.text = configuredContext?.getText(R.string.inpage_loading_text)
@@ -446,7 +483,11 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             try {
                 context.startActivity(intent)
             } catch (e: Exception) {
-                virtusizeMessageHandler.onError(VirtusizeErrorType.PrivacyLinkNotOpen.virtusizeError(e.localizedMessage))
+                virtusizeMessageHandler.onError(
+                    VirtusizeErrorType.PrivacyLinkNotOpen.virtusizeError(
+                        e.localizedMessage
+                    )
+                )
             }
         }
     }

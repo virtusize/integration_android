@@ -165,8 +165,6 @@ class Virtusize(
 
     private var virtusizeRepository: VirtusizeRepository = VirtusizeRepository(context, messageHandler, virtusizePresenter)
 
-    private var virtusizeAPIService = VirtusizeAPIService.getInstance(context, messageHandler)
-
     // This variable holds the product information from the client and the product data check API
     private var virtusizeProduct: VirtusizeProduct? = null
 

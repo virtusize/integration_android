@@ -1,11 +1,13 @@
 package com.virtusize.libsource.util
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.res.Resources
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.LifecycleOwner
 import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser
 
 /**
@@ -39,6 +41,19 @@ internal fun Context.getTypefaceByName(fontFileName: String): Typeface? {
         return null
     }
     return ResourcesCompat.getFont(this, resId)
+}
+
+fun Context.lifecycleOwner(): LifecycleOwner? {
+    var curContext = this
+    var maxDepth = 20
+    while (maxDepth-- > 0 && curContext !is LifecycleOwner) {
+        curContext = (curContext as ContextWrapper).baseContext
+    }
+    return if (curContext is LifecycleOwner) {
+        curContext
+    } else {
+        null
+    }
 }
 
 /**

@@ -2,6 +2,8 @@ package com.virtusize.libsource.network
 
 import android.content.Context
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.view.WindowManager
 import com.virtusize.libsource.*
 import com.virtusize.libsource.data.local.*
@@ -14,6 +16,7 @@ import com.virtusize.libsource.data.remote.UserSessionInfo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.net.URL
 import java.util.*
 import javax.net.ssl.HttpsURLConnection
 
@@ -302,5 +305,15 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
         )
             .setJsonParser(I18nLocalizationJsonParser(context, params.language))
             .execute(apiRequest)
+    }
+
+    internal fun loadImage(urlString: String): Bitmap? {
+        try {
+            URL(urlString).openStream().use {
+                return BitmapFactory.decodeStream(it)
+            }
+        } catch (e: Exception) {
+            return null
+        }
     }
 }
