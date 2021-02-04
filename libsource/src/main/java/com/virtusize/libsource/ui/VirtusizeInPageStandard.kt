@@ -120,13 +120,13 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         virtusizeParams = params
         virtusizeMessageHandler = messageHandler
 
-        val factory = object : ViewModelProvider.Factory {
+        val viewModelFactory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 return  VirtusizeInPageStandardViewModel(VirtusizeRepository(context, virtusizeMessageHandler)) as T
             }
         }
 
-        viewModel =  factory.create(VirtusizeInPageStandardViewModel::class.java)
+        viewModel =  viewModelFactory.create(VirtusizeInPageStandardViewModel::class.java)
 
         (context as? LifecycleOwner)?.apply {
             viewModel?.productImageBitmapLiveData?.observe(this, { productImageViewBitMapPair ->
