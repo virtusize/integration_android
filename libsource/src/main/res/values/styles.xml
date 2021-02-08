@@ -7,13 +7,10 @@
 
     <style name="FullScreenDialogStyle" parent="Theme.AppCompat.Dialog">
         <item name="android:windowNoTitle">true</item>
-        <item name="colorPrimaryDark">@color/virtusizeBlack</item>
-        <item name="colorPrimary">@color/virtusizeBlack</item>
-
-        <!-- Full Screen without status bar -->
         <item name="android:windowFullscreen">false</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowBackground">@color/virtusizeWhite</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
     <style name="VirtusizeDialogFragmentAnimation">
