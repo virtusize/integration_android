@@ -7,7 +7,6 @@ import com.virtusize.libsource.data.local.*
  * This class utilizes the builder pattern to build and return a Virtusize object
  * @param userId the user id that is the unique user id from the client system
  * @param apiKey the API key that is unique to every Virtusize Client
- * @param browserID the browser ID that is specific to the Virtusize WebView
  * @param env the Virtusize environment
  * @param context Android Application Context
  * @param region the [VirtusizeRegion] that is used to set the region of the config url domains within the Virtusize web app
@@ -19,7 +18,6 @@ import com.virtusize.libsource.data.local.*
 class VirtusizeBuilder {
     private var userId: String? = null
     private var apiKey: String? = null
-    private var browserID: String? = null
     private var env = VirtusizeEnvironment.GLOBAL
     private var context: Context? = null
     private var region: VirtusizeRegion = VirtusizeRegion.JP
@@ -131,7 +129,6 @@ class VirtusizeBuilder {
         val params = VirtusizeParams(
             context = context!!,
             apiKey = apiKey,
-            bid = browserID,
             environment = env,
             region = region,
             language = language,

@@ -7,7 +7,6 @@ import com.virtusize.libsource.SharedPreferencesHelper
  * The class that wraps the parameters we can pass to the Virtusize web app
  * @param context the application context
  * @param apiKey the API key that is unique to every Virtusize Client
- * @param bid the browser ID that is specific to the Virtusize WebView
  * @param environment the [VirtusizeEnvironment] that is used in the SDK
  * @param region the [VirtusizeRegion] that is used to set the region of the config url domains within the Virtusize web app
  * @param language the [VirtusizeLanguage] that sets the initial language the Virtusize web app will load in
@@ -20,7 +19,6 @@ import com.virtusize.libsource.SharedPreferencesHelper
 data class VirtusizeParams(
     internal val context: Context,
     internal var apiKey: String?,
-    internal var bid: String?,
     internal var environment: VirtusizeEnvironment,
     private var region: VirtusizeRegion,
     internal val language: VirtusizeLanguage?,
@@ -36,8 +34,9 @@ data class VirtusizeParams(
      */
     internal fun vsParamsString(): String {
         val sessionData = SharedPreferencesHelper.getInstance(context).getSessionData()
+        val bid = SharedPreferencesHelper.getInstance(context).getBrowserId()
         return "{$PARAM_API_KEY: '$apiKey', " +
-                (if (bid != null) "$PARAM_BID: '$bid', " else "") +
+                "$PARAM_BID: '$bid', " +
                 (if (sessionData != null) "$PARAM_SESSION_DATA: $sessionData, " else "") +
                 "$PARAM_STORE_PRODUCT_ID: '${virtusizeProduct?.productCheckData?.productId}', " +
                 (if (externalUserId != null) "$PARAM_EXTERNAL_USER_ID: '$externalUserId', " else "") +

@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.SizeComparisonRecommendedSize
 import com.virtusize.libsource.data.parsers.UserAuthDataJsonParser
+import com.virtusize.libsource.data.remote.I18nLocalization
 import com.virtusize.libsource.data.remote.Product
 import com.virtusize.libsource.data.remote.ProductType
 import com.virtusize.libsource.network.VirtusizeAPIService
@@ -26,13 +27,29 @@ internal class VirtusizeRepository(
     // The helper to store data locally using Shared Preferences
     private var sharedPreferencesHelper: SharedPreferencesHelper = SharedPreferencesHelper.getInstance(context)
 
+    private var userProducts: List<Product>? = null
+    private var userProductRecommendedSize: SizeComparisonRecommendedSize? = null
+    private var userBodyRecommendedSize: String? = null
+
+    // This variable holds the product information from the client and the product data check API
+    internal var virtusizeProduct: VirtusizeProduct? = null
+
+    // This variable holds the list of product types from the Virtusize API
+    private var productTypes: List<ProductType>? = null
+
+    // This variable holds the store product from the Virtusize API
+    internal var storeProduct: Product? = null
+
+    // This variable holds the i18n localization texts
+    internal var i18nLocalization: I18nLocalization? = null
+
     /**
      * Checks if the product is valid
-     * @param params the params set by a client
+     * @param virtusizeProduct the product info set by a client
      */
-    internal suspend fun productDataCheck(params: VirtusizeParams) {
-        params.bid = sharedPreferencesHelper.getBrowserId()
-        val productCheckResponse = virtusizeAPIService.productDataCheck(params.virtusizeProduct!!)
+    internal suspend fun productDataCheck(virtusizeProduct: VirtusizeProduct) {
+        this.virtusizeProduct = virtusizeProduct
+        val productCheckResponse = virtusizeAPIService.productDataCheck(virtusizeProduct)
         if (productCheckResponse.isSuccessful) {
             val productCheck = productCheckResponse.successData!!
             presenter?.finishedProductCheck(productCheck)
@@ -48,9 +65,9 @@ internal class VirtusizeRepository(
             productCheck.data?.apply {
                 if (validProduct) {
                     if (fetchMetaData) {
-                        if (params.virtusizeProduct?.imageUrl != null) {
+                        if (virtusizeProduct.imageUrl != null) {
                             // If image URL is valid, send image URL to server
-                            val sendProductImageResponse = virtusizeAPIService.sendProductImageToBackend(product = params.virtusizeProduct!!)
+                            val sendProductImageResponse = virtusizeAPIService.sendProductImageToBackend(product = virtusizeProduct)
                             if (!sendProductImageResponse.isSuccessful) {
                                 sendProductImageResponse.failureData?.let { messageHandler.onError(it) }
                             }
@@ -68,7 +85,7 @@ internal class VirtusizeRepository(
                     }
                     presenter?.onValidProductId(productDataId)
                 } else {
-                    presenter?.hasInPageError(VirtusizeErrorType.InvalidProduct.virtusizeError(params.virtusizeProduct!!.externalId))
+                    presenter?.hasInPageError(VirtusizeErrorType.InvalidProduct.virtusizeError(virtusizeProduct.externalId))
                 }
             }
         } else {
@@ -100,7 +117,9 @@ internal class VirtusizeRepository(
             return
         }
 
-        presenter?.gotInitialData(storeProductResponse.successData!!, productTypesResponse.successData!!, i18nResponse.successData!!)
+        storeProduct = storeProductResponse.successData!!
+        productTypes = productTypesResponse.successData!!
+        i18nLocalization = i18nResponse.successData!!
     }
 
     /**
@@ -125,41 +144,47 @@ internal class VirtusizeRepository(
 
     /**
      * Updates the recommendation for InPage
-     * @param storeProduct the store product info in the type of [Product]
-     * @param productTypes a list of product types
      * @param selectedUserProductId the selected product Id from the web view to decide a specific user product to compare with the store product
-     * @param ignoreUserData pass the boolean vale to determine whether to ignore the API requests that is related to the user data
+     * @param recommendedType the selected size recommendation compare view type
+     * @param clearUserData pass the boolean vale to determine whether to ignore the API requests that is related to the user data
      */
     internal suspend fun updateInPageRecommendation(
-        storeProduct: Product?,
-        productTypes: List<ProductType>?,
         selectedUserProductId: Int? = null,
-        ignoreUserData: Boolean = false
+        recommendedType: SizeRecommendationType? = null,
+        clearUserData: Boolean = false
     ) {
         if (storeProduct == null || productTypes == null) {
             return
         }
-        var userProducts: List<Product>? = null
-        var userProductRecommendedSize: SizeComparisonRecommendedSize? = null
-        var userBodyRecommendedSize: String? = null
-        if(!ignoreUserData) {
-            val userProductsResponse = virtusizeAPIService.getUserProducts()
-            if (userProductsResponse.isSuccessful) {
-                userProducts = userProductsResponse.successData
-            } else if(userProductsResponse.failureData?.code != HttpURLConnection.HTTP_NOT_FOUND) {
-                presenter?.hasInPageError(userProductsResponse.failureData)
-                return
-            }
 
-            userProductRecommendedSize = VirtusizeUtils.findBestFitProductSize(
-                userProducts = if(selectedUserProductId != null) userProducts?.filter { it.id == selectedUserProductId } else userProducts,
-                storeProduct = storeProduct,
-                productTypes = productTypes
-            )
-            userBodyRecommendedSize = getUserBodyRecommendedSize(storeProduct, productTypes)
+        if(clearUserData) {
+            userProducts = null
+            userProductRecommendedSize = null
+            userBodyRecommendedSize = null
         }
 
-        presenter?.gotSizeRecommendations(userProductRecommendedSize, userBodyRecommendedSize)
+        val userProductsResponse = virtusizeAPIService.getUserProducts()
+        if (userProductsResponse.isSuccessful) {
+            userProducts = userProductsResponse.successData
+        } else if (userProductsResponse.failureData?.code != HttpURLConnection.HTTP_NOT_FOUND) {
+            presenter?.hasInPageError(userProductsResponse.failureData)
+            return
+        }
+        userProductRecommendedSize = VirtusizeUtils.findBestFitProductSize(
+            userProducts = if(selectedUserProductId != null) userProducts?.filter { it.id == selectedUserProductId } else userProducts,
+            storeProduct = storeProduct!!,
+            productTypes = productTypes!!
+        )
+
+        userBodyRecommendedSize = getUserBodyRecommendedSize(storeProduct!!, productTypes!!)
+
+        if(recommendedType == SizeRecommendationType.compareProduct && userProductRecommendedSize?.bestStoreProductSize != null) {
+            presenter?.gotSizeRecommendations(userProductRecommendedSize, null)
+        } else if(recommendedType == SizeRecommendationType.body && userBodyRecommendedSize != null) {
+            presenter?.gotSizeRecommendations(null, userBodyRecommendedSize)
+        } else {
+            presenter?.gotSizeRecommendations(userProductRecommendedSize, userBodyRecommendedSize)
+        }
     }
 
     /**
@@ -173,7 +198,7 @@ internal class VirtusizeRepository(
             return null
         }
         val userBodyProfileResponse = virtusizeAPIService.getUserBodyProfile()
-        if (userBodyProfileResponse.isSuccessful) {
+        if (userBodyProfileResponse.successData != null) {
             val bodyProfileRecommendedSizeResponse = virtusizeAPIService.getBodyProfileRecommendedSize(
                 productTypes,
                 storeProduct,

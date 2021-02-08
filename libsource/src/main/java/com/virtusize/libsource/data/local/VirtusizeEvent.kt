@@ -10,8 +10,9 @@ enum class VirtusizeEvents {
     UserSawWidgetButton,
     UserOpenedWidget,
     UserSelectedProduct,
-    UserOpenedPanelCompare,
     UserAddedProduct,
+    UserChangedRecommendationType,
+    UserCreatedSilhouette,
     UserAuthData,
     UserLoggedIn,
     UserLoggedOut
@@ -27,12 +28,18 @@ fun VirtusizeEvents.getEventName(): String {
         VirtusizeEvents.UserSawWidgetButton -> "user-saw-widget-button"
         VirtusizeEvents.UserOpenedWidget -> "user-opened-widget"
         VirtusizeEvents.UserSelectedProduct -> "user-selected-product"
-        VirtusizeEvents.UserOpenedPanelCompare -> "user-opened-panel-compare"
         VirtusizeEvents.UserAddedProduct -> "user-added-product"
+        VirtusizeEvents.UserChangedRecommendationType -> "user-changed-recommendation-type"
+        VirtusizeEvents.UserCreatedSilhouette -> "user-created-silhouette"
         VirtusizeEvents.UserAuthData -> "user-auth-data"
         VirtusizeEvents.UserLoggedIn -> "user-logged-in"
         VirtusizeEvents.UserLoggedOut -> "user-logged-out"
     }
+}
+
+enum class SizeRecommendationType {
+    body,
+    compareProduct
 }
 
 /**

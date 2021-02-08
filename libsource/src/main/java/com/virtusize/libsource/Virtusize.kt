@@ -2,21 +2,18 @@ package com.virtusize.libsource
 
 import android.content.Context
 import com.virtusize.libsource.data.local.*
-import com.virtusize.libsource.data.parsers.*
 import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser.TrimType
 import com.virtusize.libsource.data.remote.*
-import com.virtusize.libsource.network.*
 import com.virtusize.libsource.network.VirtusizeApi
 import com.virtusize.libsource.network.VirtusizeApiTask
 import com.virtusize.libsource.ui.VirtusizeInPageStandard
 import com.virtusize.libsource.ui.VirtusizeInPageView
 import com.virtusize.libsource.ui.VirtusizeView
 import com.virtusize.libsource.util.trimI18nText
+import com.virtusize.libsource.util.valueOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
-import org.json.JSONException
-import org.json.JSONObject
 import java.util.*
 
 /**
@@ -44,28 +41,44 @@ class Virtusize(
             messageHandlers.forEach { messageHandler ->
                 messageHandler.onEvent(event)
             }
-            // TODO: Fix Handling events from the web view
             // Handle different user events from the web view
-            if (event.name == VirtusizeEvents.UserSelectedProduct.getEventName() || event.name == VirtusizeEvents.UserOpenedPanelCompare.getEventName()) {
-                val userProductId = event.data?.optInt("userProductId")
-                CoroutineScope(Main).launch {
-                    virtusizeRepository.updateInPageRecommendation(storeProduct, productTypes, userProductId)
+            when (event.name) {
+                VirtusizeEvents.UserAuthData.getEventName() -> {
+                    event.data?.let { data ->
+                        virtusizeRepository.updateUserAuthData(data)
+                    }
                 }
-            } else if (event.name == VirtusizeEvents.UserAddedProduct.getEventName()) {
-                CoroutineScope(Main).launch {
-                    virtusizeRepository.updateInPageRecommendation(storeProduct, productTypes)
+                VirtusizeEvents.UserSelectedProduct.getEventName(), VirtusizeEvents.UserAddedProduct.getEventName() -> {
+                    val userProductId = event.data?.optInt("userProductId")
+                    CoroutineScope(Main).launch {
+                        virtusizeRepository.updateInPageRecommendation(userProductId)
+                    }
                 }
-            } else if (event.name == VirtusizeEvents.UserAuthData.getEventName()) {
-                event.data?.let { virtusizeRepository.updateUserAuthData(it) }
-            } else if (event.name == VirtusizeEvents.UserLoggedIn.getEventName()) {
-                CoroutineScope(Main).launch {
-                    virtusizeRepository.updateUserSession()
-                    virtusizeRepository.updateInPageRecommendation(storeProduct, productTypes)
+                VirtusizeEvents.UserChangedRecommendationType.getEventName() -> {
+                    var recommendationType: SizeRecommendationType? = null
+                    event.data?.optString("recommendationType")?.let {
+                        recommendationType = valueOf<SizeRecommendationType>(it)
+                    }
+                    CoroutineScope(Main).launch {
+                        virtusizeRepository.updateInPageRecommendation(recommendedType = recommendationType)
+                    }
                 }
-            } else if (event.name == VirtusizeEvents.UserLoggedOut.getEventName()) {
-                CoroutineScope(Main).launch {
-                    virtusizeRepository.updateUserSession(true)
-                    virtusizeRepository.updateInPageRecommendation(storeProduct, productTypes, null, true)
+                VirtusizeEvents.UserCreatedSilhouette.getEventName() -> {
+                    CoroutineScope(Main).launch {
+                        virtusizeRepository.updateInPageRecommendation()
+                    }
+                }
+                VirtusizeEvents.UserLoggedIn.getEventName() -> {
+                    CoroutineScope(Main).launch {
+                        virtusizeRepository.updateUserSession()
+                        virtusizeRepository.updateInPageRecommendation()
+                    }
+                }
+                VirtusizeEvents.UserLoggedOut.getEventName() -> {
+                    CoroutineScope(Main).launch {
+                        virtusizeRepository.updateUserSession(true)
+                        virtusizeRepository.updateInPageRecommendation(clearUserData = true)
+                    }
                 }
             }
         }
@@ -93,7 +106,7 @@ class Virtusize(
                 CoroutineScope(Main).launch {
                     virtusizeRepository.fetchInitialData(params.language, productId)
                     virtusizeRepository.updateUserSession()
-                    virtusizeRepository.updateInPageRecommendation(storeProduct, productTypes)
+                    virtusizeRepository.updateInPageRecommendation()
                 }
             }
         }
@@ -107,24 +120,14 @@ class Virtusize(
             }
         }
 
-        override fun gotInitialData(
-            storeProduct: Product,
-            productTypes: List<ProductType>,
-            i18nLocalization: I18nLocalization
-        ) {
-            this@Virtusize.storeProduct = storeProduct
-            this@Virtusize.productTypes = productTypes
-            this@Virtusize.i18nLocalization = i18nLocalization
-        }
-
         override fun gotSizeRecommendations(
             userProductRecommendedSize: SizeComparisonRecommendedSize?,
             userBodyRecommendedSize: String?
         ) {
             for(virtusizeView in virtusizeViews) {
                 if(virtusizeView is VirtusizeInPageView) {
-                    storeProduct?.apply {
-                        i18nLocalization?.let { i18nLocalization ->
+                    virtusizeRepository.storeProduct?.apply {
+                        virtusizeRepository.i18nLocalization?.let { i18nLocalization ->
                             val trimType = if (virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
                             val recommendationText = getRecommendationText(
                                 i18nLocalization,
@@ -145,20 +148,8 @@ class Virtusize(
 
     private var virtusizeRepository: VirtusizeRepository = VirtusizeRepository(context, messageHandler, virtusizePresenter)
 
-    // This variable holds the product information from the client and the product data check API
-    private var virtusizeProduct: VirtusizeProduct? = null
-
     // This variable holds the Virtusize view that clients use on their application
     private var virtusizeViews = mutableSetOf<VirtusizeView>()
-
-    // This variable holds the list of product types from the Virtusize API
-    private var productTypes: List<ProductType>? = null
-
-    // This variable holds the store product from the Virtusize API
-    private var storeProduct: Product? = null
-
-    // This variable holds the i18n localization texts
-    private var i18nLocalization: I18nLocalization? = null
 
     init {
         // Virtusize API for building API requests
@@ -211,11 +202,11 @@ class Virtusize(
             VirtusizeErrorType.NullProduct.throwError()
             return
         }
-        this.virtusizeProduct = virtusizeProduct
+
         params.virtusizeProduct = virtusizeProduct
 
         CoroutineScope(Main).launch {
-            virtusizeRepository.productDataCheck(params)
+            virtusizeRepository.productDataCheck(virtusizeProduct)
         }
     }
 
@@ -226,7 +217,7 @@ class Virtusize(
      */
     fun setupVirtusizeView(virtusizeView: VirtusizeView?) {
         // Throws NullProduct error if the product is not set yet
-        if (virtusizeProduct == null) {
+        if (virtusizeRepository.virtusizeProduct == null) {
             VirtusizeErrorType.NullProduct.throwError()
             return
         }
