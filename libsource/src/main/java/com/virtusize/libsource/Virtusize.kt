@@ -63,7 +63,7 @@ class Virtusize(
                         virtusizeRepository.updateInPageRecommendation(recommendedType = recommendationType)
                     }
                 }
-                VirtusizeEvents.UserCreatedSilhouette.getEventName() -> {
+                VirtusizeEvents.UserCreatedSilhouette.getEventName(), VirtusizeEvents.UserUpdatedBodyMeasurements.getEventName() -> {
                     CoroutineScope(Main).launch {
                         virtusizeRepository.updateInPageRecommendation()
                     }

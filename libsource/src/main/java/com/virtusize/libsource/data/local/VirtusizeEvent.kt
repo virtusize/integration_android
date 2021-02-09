@@ -13,6 +13,7 @@ enum class VirtusizeEvents {
     UserAddedProduct,
     UserChangedRecommendationType,
     UserCreatedSilhouette,
+    UserUpdatedBodyMeasurements,
     UserAuthData,
     UserLoggedIn,
     UserLoggedOut
@@ -31,6 +32,7 @@ fun VirtusizeEvents.getEventName(): String {
         VirtusizeEvents.UserAddedProduct -> "user-added-product"
         VirtusizeEvents.UserChangedRecommendationType -> "user-changed-recommendation-type"
         VirtusizeEvents.UserCreatedSilhouette -> "user-created-silhouette"
+        VirtusizeEvents.UserUpdatedBodyMeasurements -> "user-updated-body-measurements"
         VirtusizeEvents.UserAuthData -> "user-auth-data"
         VirtusizeEvents.UserLoggedIn -> "user-logged-in"
         VirtusizeEvents.UserLoggedOut -> "user-logged-out"
