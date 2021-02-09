@@ -16,7 +16,8 @@ enum class VirtusizeEvents {
     UserUpdatedBodyMeasurements,
     UserAuthData,
     UserLoggedIn,
-    UserLoggedOut
+    UserLoggedOut,
+    UserDeletedData
 }
 
 /**
@@ -36,6 +37,7 @@ fun VirtusizeEvents.getEventName(): String {
         VirtusizeEvents.UserAuthData -> "user-auth-data"
         VirtusizeEvents.UserLoggedIn -> "user-logged-in"
         VirtusizeEvents.UserLoggedOut -> "user-logged-out"
+        VirtusizeEvents.UserDeletedData -> "user-deleted-data"
     }
 }
 

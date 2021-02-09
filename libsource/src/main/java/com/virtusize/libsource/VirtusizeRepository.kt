@@ -123,12 +123,8 @@ internal class VirtusizeRepository(
 
     /**
      * Updates the user session by calling the session API
-     * @param isLoggedOut a Boolean value to set if the user is logged out
      */
-    internal suspend fun updateUserSession(isLoggedOut: Boolean = false){
-        if (isLoggedOut) {
-            sharedPreferencesHelper.storeAuthToken("")
-        }
+    internal suspend fun updateUserSession(){
         val userSessionInfoResponse = virtusizeAPIService.getUserSessionInfo()
         if (userSessionInfoResponse.isSuccessful) {
             sharedPreferencesHelper.storeSessionData(userSessionInfoResponse.successData!!.userSessionResponse)
@@ -142,32 +138,22 @@ internal class VirtusizeRepository(
     }
 
     /**
-     * Updates the recommendation for InPage
+     * Fetches data for InPage recommendation
      * @param selectedUserProductId the selected product Id from the web view to decide a specific user product to compare with the store product
-     * @param recommendedType the selected size recommendation compare view type
-     * @param clearUserData pass the boolean vale to determine whether to ignore the API requests that is related to the user data
      */
-    internal suspend fun updateInPageRecommendation(
-        selectedUserProductId: Int? = null,
-        recommendedType: SizeRecommendationType? = null,
-        clearUserData: Boolean = false
-    ) {
-        if (storeProduct == null || productTypes == null) {
-            return
+    internal suspend fun fetchDataForInPageRecommendation(shouldUpdateUserProducts: Boolean = true, selectedUserProductId: Int? = null) {
+        if(shouldUpdateUserProducts) {
+            val userProductsResponse = virtusizeAPIService.getUserProducts()
+            if (userProductsResponse.isSuccessful) {
+                userProducts = userProductsResponse.successData
+            } else if (userProductsResponse.failureData?.code != HttpURLConnection.HTTP_NOT_FOUND) {
+                presenter?.hasInPageError(userProductsResponse.failureData)
+                return
+            }
         }
 
-        if(clearUserData) {
-            userProducts = null
-            userProductRecommendedSize = null
-            userBodyRecommendedSize = null
-        }
-
-        val userProductsResponse = virtusizeAPIService.getUserProducts()
-        if (userProductsResponse.isSuccessful) {
-            userProducts = userProductsResponse.successData
-        } else if (userProductsResponse.failureData?.code != HttpURLConnection.HTTP_NOT_FOUND) {
-            presenter?.hasInPageError(userProductsResponse.failureData)
-            return
+        if(selectedUserProductId == null) {
+            userBodyRecommendedSize = getUserBodyRecommendedSize(storeProduct!!, productTypes!!)
         }
 
         userProductRecommendedSize = VirtusizeUtils.findBestFitProductSize(
@@ -175,16 +161,38 @@ internal class VirtusizeRepository(
             storeProduct = storeProduct!!,
             productTypes = productTypes!!
         )
+    }
 
-        userBodyRecommendedSize = getUserBodyRecommendedSize(storeProduct!!, productTypes!!)
+    internal fun updateUserBodyRecommendedSize(recommendedSize: String?) {
+        userBodyRecommendedSize = recommendedSize
+    }
 
-        if(recommendedType == SizeRecommendationType.compareProduct && userProductRecommendedSize?.bestStoreProductSize != null) {
-            presenter?.gotSizeRecommendations(userProductRecommendedSize, null)
-        } else if(recommendedType == SizeRecommendationType.body && userBodyRecommendedSize != null) {
-            presenter?.gotSizeRecommendations(null, userBodyRecommendedSize)
-        } else {
-            presenter?.gotSizeRecommendations(userProductRecommendedSize, userBodyRecommendedSize)
+    /**
+     * Switch the recommendation for InPage based on the recommendation type
+     * @param selectedRecommendedType the selected recommendation compare view type
+     */
+    internal fun switchInPageRecommendation(
+        selectedRecommendedType: SizeRecommendationType? = null
+    ) {
+        when (selectedRecommendedType) {
+            SizeRecommendationType.compareProduct -> {
+                presenter?.gotSizeRecommendations(userProductRecommendedSize, null)
+            }
+            SizeRecommendationType.body -> {
+                presenter?.gotSizeRecommendations(null, userBodyRecommendedSize)
+            }
+            else -> {
+                presenter?.gotSizeRecommendations(userProductRecommendedSize, userBodyRecommendedSize)
+            }
         }
+    }
+
+    internal fun clearUserData() {
+        sharedPreferencesHelper.storeAuthToken("")
+
+        userProducts = null
+        userProductRecommendedSize = null
+        userBodyRecommendedSize = null
     }
 
     /**
