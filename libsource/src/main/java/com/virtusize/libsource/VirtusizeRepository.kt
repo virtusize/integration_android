@@ -48,7 +48,6 @@ internal class VirtusizeRepository(
      * @param virtusizeProduct the product info set by a client
      */
     internal suspend fun productDataCheck(virtusizeProduct: VirtusizeProduct) {
-        this.virtusizeProduct = virtusizeProduct
         val productCheckResponse = virtusizeAPIService.productDataCheck(virtusizeProduct)
         if (productCheckResponse.isSuccessful) {
             val productCheck = productCheckResponse.successData!!
@@ -170,6 +169,7 @@ internal class VirtusizeRepository(
             presenter?.hasInPageError(userProductsResponse.failureData)
             return
         }
+
         userProductRecommendedSize = VirtusizeUtils.findBestFitProductSize(
             userProducts = if(selectedUserProductId != null) userProducts?.filter { it.id == selectedUserProductId } else userProducts,
             storeProduct = storeProduct!!,

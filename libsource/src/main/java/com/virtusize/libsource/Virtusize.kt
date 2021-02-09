@@ -204,6 +204,7 @@ class Virtusize(
         }
 
         params.virtusizeProduct = virtusizeProduct
+        virtusizeRepository.virtusizeProduct = virtusizeProduct
 
         CoroutineScope(Main).launch {
             virtusizeRepository.productDataCheck(virtusizeProduct)
