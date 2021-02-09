@@ -48,6 +48,7 @@ class Virtusize(
                     }
                 }
                 VirtusizeEvents.UserSelectedProduct.getEventName() -> {
+                    // Filters userProducts by the selected product ID to get userProductRecommendedSize
                     val userProductId = event.data?.optInt("userProductId")
                     CoroutineScope(Main).launch {
                         virtusizeRepository.fetchDataForInPageRecommendation(false, userProductId)
@@ -55,6 +56,8 @@ class Virtusize(
                     }
                 }
                 VirtusizeEvents.UserAddedProduct.getEventName() -> {
+                    // Gets updated user products from the server,
+                    // and then filters userProducts by the selected product ID to get userProductRecommendedSize
                     val userProductId = event.data?.optInt("userProductId")
                     CoroutineScope(Main).launch {
                         virtusizeRepository.fetchDataForInPageRecommendation(true, userProductId)
@@ -62,6 +65,7 @@ class Virtusize(
                     }
                 }
                 VirtusizeEvents.UserChangedRecommendationType.getEventName() -> {
+                    // Switches the view for InPage based on user selected size recommendation type
                     var recommendationType: SizeRecommendationType? = null
                     event.data?.optString("recommendationType")?.let {
                         recommendationType = valueOf<SizeRecommendationType>(it)
@@ -71,6 +75,7 @@ class Virtusize(
                     }
                 }
                 VirtusizeEvents.UserUpdatedBodyMeasurements.getEventName() -> {
+                    // Updates the body recommendation size and switches the view to the body comparison
                     val sizeRecName = event.data?.optString("sizeRecName")
                     CoroutineScope(Main).launch {
                         virtusizeRepository.updateUserBodyRecommendedSize(sizeRecName)
@@ -78,6 +83,7 @@ class Virtusize(
                     }
                 }
                 VirtusizeEvents.UserLoggedIn.getEventName() -> {
+                    // Updates the user session and fetches updated user prodcuts and body profile from the server
                     CoroutineScope(Main).launch {
                         virtusizeRepository.updateUserSession()
                         virtusizeRepository.fetchDataForInPageRecommendation()
@@ -85,6 +91,8 @@ class Virtusize(
                     }
                 }
                 VirtusizeEvents.UserLoggedOut.getEventName(), VirtusizeEvents.UserDeletedData.getEventName() -> {
+                    // Clears user related data and updates the session,
+                    // and then re-fetches user products and body profile from the server
                     CoroutineScope(Main).launch {
                         virtusizeRepository.clearUserData()
                         virtusizeRepository.updateUserSession()
