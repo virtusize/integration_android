@@ -42,6 +42,11 @@ class Virtusize(
             }
             // Handle different user events from the web view
             when (event.name) {
+                VirtusizeEvents.UserOpenedWidget.getEventName() -> {
+                    CoroutineScope(Main).launch {
+                        virtusizeRepository.fetchDataForInPageRecommendation(false)
+                    }
+                }
                 VirtusizeEvents.UserAuthData.getEventName() -> {
                     event.data?.let { data ->
                         virtusizeRepository.updateUserAuthData(data)
