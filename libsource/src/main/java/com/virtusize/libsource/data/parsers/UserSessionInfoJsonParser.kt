@@ -12,7 +12,7 @@ internal class UserSessionInfoJsonParser : VirtusizeJsonParser<UserSessionInfo> 
         val accessToken = json.optString(FIELD_ID)
         val authToken = json.optString(FIELD_VS_AUTH)
         val bid = json.optJSONObject(FIELD_USER)?.optString(FIELD_BID)
-        return UserSessionInfo(accessToken, bid, authToken)
+        return UserSessionInfo(accessToken, bid, authToken, json.toString())
     }
 
     private companion object {

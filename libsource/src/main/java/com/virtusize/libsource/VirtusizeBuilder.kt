@@ -129,6 +129,7 @@ class VirtusizeBuilder {
             VirtusizeErrorType.NullContext.throwError()
         }
         val params = VirtusizeParams(
+            context = context!!,
             apiKey = apiKey,
             bid = browserID,
             environment = env,

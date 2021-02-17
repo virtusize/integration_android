@@ -21,7 +21,7 @@ class VirtusizeWebView: DialogFragment() {
 
     private var virtusizeWebAppUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-webview.html"
     private var vsParamsFromSDKScript = ""
-    private var vsEventFromSDKScript = "javascript:vsEventFromSDK({ name: 'sdk-back-button-tapped'})"
+    private var backButtonClickEventFromSDKScript = "javascript:vsEventFromSDK({ name: 'sdk-back-button-tapped'})"
 
     private lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
     private lateinit var virtusizeView: VirtusizeView
@@ -129,7 +129,7 @@ class VirtusizeWebView: DialogFragment() {
                         webView.removeAllViews()
                         webView.reload()
                     }
-                    else -> executeJavascript(webView, vsEventFromSDKScript)
+                    else -> executeJavascript(webView, backButtonClickEventFromSDKScript)
                 }
             }
             true

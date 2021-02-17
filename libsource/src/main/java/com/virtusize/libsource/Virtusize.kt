@@ -297,6 +297,7 @@ class Virtusize(
     private suspend fun updateUserSession() {
         val userSessionInfoResponse = getUserSessionInfoResponse()
         if (userSessionInfoResponse.isSuccessful) {
+            sharedPreferencesHelper.storeSessionData(userSessionInfoResponse.successData!!.userSessionResponse)
             sharedPreferencesHelper.storeAccessToken(userSessionInfoResponse.successData!!.accessToken)
             if(userSessionInfoResponse.successData!!.authToken.isNotBlank()) {
                 sharedPreferencesHelper.storeAuthToken(userSessionInfoResponse.successData!!.authToken)
