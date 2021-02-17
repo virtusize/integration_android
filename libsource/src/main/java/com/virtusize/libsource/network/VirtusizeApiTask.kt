@@ -1,19 +1,12 @@
 package com.virtusize.libsource.network
 
-import android.os.Build
-import com.virtusize.libsource.ErrorResponseHandler
 import com.virtusize.libsource.SharedPreferencesHelper
-import com.virtusize.libsource.SuccessResponseHandler
 import com.virtusize.libsource.data.local.VirtusizeError
 import com.virtusize.libsource.data.local.VirtusizeErrorType
+import com.virtusize.libsource.data.local.VirtusizeMessageHandler
 import com.virtusize.libsource.data.local.virtusizeError
 import com.virtusize.libsource.data.parsers.VirtusizeJsonParser
 import com.virtusize.libsource.data.remote.ProductCheck
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -29,8 +22,14 @@ import javax.net.ssl.HttpsURLConnection
 /**
  * The asynchronous task to make an API request in the background thread
  * @param urlConnection the HTTP URL connection that is used to make a single request
+ * @param sharedPreferencesHelper the helper to store data locally using Shared Preferences
+ * @param messageHandler pass VirtusizeMessageHandler to listen to any Virtusize-related messages
  */
-internal class VirtusizeApiTask(private var urlConnection: HttpsURLConnection? = null) {
+internal class VirtusizeApiTask(
+    private var urlConnection: HttpsURLConnection?,
+    private var sharedPreferencesHelper: SharedPreferencesHelper,
+    private var messageHandler: VirtusizeMessageHandler?
+) {
 
     companion object {
         // The read timeout to use for all the requests, which is 80 seconds
@@ -45,14 +44,8 @@ internal class VirtusizeApiTask(private var urlConnection: HttpsURLConnection? =
         private const val HEADER_COOKIE = "Cookie"
     }
 
-    // The helper to save data locally using Shared Preferences
-    private var sharedPreferencesHelper: SharedPreferencesHelper? = null
     // The Json parser interface for converting the JSON response to a given type of Java object
     private var jsonParser: VirtusizeJsonParser<Any>? = null
-    // The callback for a successful API response
-    private var successHandler: SuccessResponseHandler? = null
-    // The error callback for a unsuccessful API response
-    private var errorHandler: ErrorResponseHandler? = null
 
     /**
      * Sets up the JSON parser for converting the JSON response to a given type of Java object
@@ -63,31 +56,10 @@ internal class VirtusizeApiTask(private var urlConnection: HttpsURLConnection? =
     }
 
     /**
-     * Sets up the error callback
-     */
-    fun setErrorHandler(errorHandler: ErrorResponseHandler?): VirtusizeApiTask {
-        this.errorHandler = errorHandler
-        return this
-    }
-
-    /**
-     * Sets up the success callback
-     */
-    fun setSuccessHandler(successHandler: SuccessResponseHandler?): VirtusizeApiTask {
-        this.successHandler = successHandler
-        return this
-    }
-
-    fun setSharedPreferencesHelper(sharedPreferencesHelper: SharedPreferencesHelper): VirtusizeApiTask {
-        this.sharedPreferencesHelper = sharedPreferencesHelper
-        return this
-    }
-
-    /**
      * Executes the API request and returns the response
      * @param apiRequest [ApiRequest]
      */
-    fun execute(apiRequest: ApiRequest): VirtusizeApiResponse<Any?> {
+    fun <T> execute(apiRequest: ApiRequest): VirtusizeApiResponse<T> {
         var urlConnection: HttpsURLConnection? = urlConnection
         var inputStream: InputStream? = null
         var errorStream: InputStream? = null
@@ -99,15 +71,11 @@ internal class VirtusizeApiTask(private var urlConnection: HttpsURLConnection? =
                     connectTimeout = CONNECT_TIMEOUT
                     requestMethod = apiRequest.method.name
 
-                    sharedPreferencesHelper?.getBrowserId()?.let {
-                        setRequestProperty(HEADER_BROWSER_ID, it)
-                    }
+                    setRequestProperty(HEADER_BROWSER_ID, sharedPreferencesHelper.getBrowserId())
 
                     // Set the access token in the header if the request needs authentication
                     if (apiRequest.authorization) {
-                        sharedPreferencesHelper?.getAccessToken()?.let {
-                            setRequestProperty(HEADER_AUTHORIZATION, "Token $it")
-                        }
+                        setRequestProperty(HEADER_AUTHORIZATION, "Token ${sharedPreferencesHelper.getAccessToken()}")
                     }
 
                     // Send the POST request
@@ -117,7 +85,7 @@ internal class VirtusizeApiTask(private var urlConnection: HttpsURLConnection? =
 
                         // Set up the request header for the sessions API
                         if(apiRequest.url.contains(VirtusizeEndpoint.Sessions.getPath())) {
-                            sharedPreferencesHelper?.getAuthToken()?.let {
+                            sharedPreferencesHelper.getAuthToken()?.let {
                                 setRequestProperty(HEADER_AUTH, it)
                                 setRequestProperty(HEADER_COOKIE, "")
                             }
@@ -137,13 +105,16 @@ internal class VirtusizeApiTask(private var urlConnection: HttpsURLConnection? =
                 // If the request was successful, then read the input stream and parse the response.
                 urlConnection.isSuccessful() -> {
                     inputStream = urlConnection.inputStream
-                    // TODO: handle invalid product data check log
-                    return VirtusizeApiResponse.Success(
-                        parseInputStreamAsObject(
-                            apiRequest.url,
-                            inputStream
-                        )
-                    )
+                    return try {
+                        VirtusizeApiResponse.Success(
+                            parseInputStreamAsObject(
+                                apiRequest.url,
+                                inputStream
+                            )
+                        ) as VirtusizeApiResponse<T>
+                    } catch (e: JSONException) {
+                        VirtusizeApiResponse.Error(VirtusizeErrorType.JsonParsingError.virtusizeError("${apiRequest.url} ${e.localizedMessage}"))
+                    }
                 }
                 // If the request fails but it has a error response, then read the error stream and parse the response.
                 urlConnection.errorStream != null -> {
@@ -157,8 +128,7 @@ internal class VirtusizeApiTask(private var urlConnection: HttpsURLConnection? =
                         HttpURLConnection.HTTP_NOT_FOUND -> {
                             // If the product cannot be found in the Virtusize Server
                             if (response is ProductCheck) {
-                                errorHandler?.onError(VirtusizeErrorType.InvalidProduct.virtusizeError(response.name))
-                                return VirtusizeApiResponse.Success(response)
+                                return VirtusizeApiResponse.Error(VirtusizeErrorType.UnParsedProduct.virtusizeError(response.productId))
                             }
                             virtusizeNetworkError(urlConnection, response)
                         }
@@ -180,28 +150,6 @@ internal class VirtusizeApiTask(private var urlConnection: HttpsURLConnection? =
     }
 
     /**
-     * Asynchronously executes the API request and passes the response to callbacks
-     * @param apiRequest [ApiRequest]
-     * @param coroutineDispatcher the dispatcher that determines what thread the corresponding coroutine uses for its execution
-     */
-    fun executeAsync(apiRequest: ApiRequest, coroutineDispatcher: CoroutineDispatcher) {
-        CoroutineScope(coroutineDispatcher).launch {
-            val apiResponse = execute(apiRequest)
-            if (apiResponse is VirtusizeApiResponse.Success) {
-                withContext(Main) {
-                    successHandler?.onSuccess(apiResponse.data)
-                }
-            } else {
-                (apiResponse as? VirtusizeApiResponse.Error)?.error?.let {
-                    withContext(Main) {
-                        errorHandler?.onError(it)
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * Parses the contents of an InputStream
      * @param apiRequestUrl the API request URL
      * @param inputStream The input stream of bytes
@@ -216,18 +164,19 @@ internal class VirtusizeApiTask(private var urlConnection: HttpsURLConnection? =
         readInputStreamAsString(stream)?.let { streamString ->
             jsonParser?.let { jsonParser ->
                 try {
-                    result =
-                        if (apiRequestUrl != null && responseIsJsonArray(apiRequestUrl)) {
-                            val productTypeJsonArray = JSONArray(streamString)
-                            (0 until productTypeJsonArray.length())
-                                .map { idx -> productTypeJsonArray.getJSONObject(idx) }
-                                .mapNotNull { jsonParser.parse(it) }
-                        } else {
-                            val jsonObject = JSONObject(streamString)
-                            jsonParser.parse(jsonObject)
-                        }
+                    result = if (apiRequestUrl != null && responseIsJsonArray(apiRequestUrl)) {
+                        val productTypeJsonArray = JSONArray(streamString)
+                        (0 until productTypeJsonArray.length())
+                            .map { idx -> productTypeJsonArray.getJSONObject(idx) }
+                            .mapNotNull { jsonParser.parse(it) }
+                    } else {
+                        val jsonObject = JSONObject(streamString)
+                        jsonParser.parse(jsonObject)
+                    }
                 } catch (e: JSONException) {
-                    errorHandler?.onError(VirtusizeErrorType.JsonParsingError.virtusizeError("JSONException: $e"))
+                    if (!isErrorStream) {
+                        messageHandler?.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(e.localizedMessage))
+                    }
                 }
             }
             if(isErrorStream && result == null) {

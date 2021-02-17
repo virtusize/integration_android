@@ -41,6 +41,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
 
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+
     testImplementation "junit:junit:$junit_version"
     testImplementation "com.google.truth:truth:1.0.1"
     testImplementation 'org.json:json:20190722'
