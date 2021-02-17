@@ -41,6 +41,10 @@ fun VirtusizeEvents.getEventName(): String {
     }
 }
 
+/**
+ * This enum contains the size comparison types Virtusize provides
+ * Based on a user's selection of the type in the web view, the SDK displays a corresponding InPage comparison
+ */
 enum class SizeRecommendationType {
     body,
     compareProduct

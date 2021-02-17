@@ -163,6 +163,10 @@ internal class VirtusizeRepository(
         )
     }
 
+    /**
+     * Updates the user body recommended size
+     * @param recommendedSize the recommended size got from the web view
+     */
     internal fun updateUserBodyRecommendedSize(recommendedSize: String?) {
         userBodyRecommendedSize = recommendedSize
     }
@@ -187,6 +191,9 @@ internal class VirtusizeRepository(
         }
     }
 
+    /**
+     * Clear user session and the data related to size recommendations
+     */
     internal fun clearUserData() {
         sharedPreferencesHelper.storeAuthToken("")
 
