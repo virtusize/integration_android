@@ -40,7 +40,16 @@ internal data class BodyProfileRecommendedSizeParams constructor(
                 mapOf(PARAM_PRODUCT_TYPE to (productTypes.find { it.id == storeProduct.productType }?.name ?: ""))
             )
             .plus(
-                mapOf(PARAM_USER_GENDER to (userBodyProfile.gender ?: ""))
+                mapOf(PARAM_USER_GENDER to userBodyProfile.gender)
+            )
+            .plus(
+                mapOf(PARAM_USER_HEIGHT to userBodyProfile.height)
+            )
+            .plus(
+                userBodyProfile.weight.toFloatOrNull()?.let { mapOf(PARAM_USER_WEIGHT to it)}.orEmpty()
+            )
+            .plus(
+                mapOf(PARAM_EXTERNAL_PRODUCT_ID to (storeProduct.externalId ?: ""))
             )
     }
 
@@ -107,16 +116,19 @@ internal data class BodyProfileRecommendedSizeParams constructor(
     }
 
     private companion object {
-        const val PARAM_ADDITIONAL_INFO = "additional_info"
-        const val PARAM_BODY_DATA = "body_data"
-        const val PARAM_ITEM_SIZES = "item_sizes_orig"
-        const val PARAM_PRODUCT_TYPE = "product_type"
-        const val PARAM_USER_GENDER = "user_gender"
+        const val PARAM_ADDITIONAL_INFO = "additionalInfo"
+        const val PARAM_BODY_DATA = "bodyData"
+        const val PARAM_ITEM_SIZES = "itemSizesOrig"
+        const val PARAM_PRODUCT_TYPE = "productType"
+        const val PARAM_USER_GENDER = "userGender"
+        const val PARAM_USER_HEIGHT = "userHeight"
+        const val PARAM_USER_WEIGHT = "userWeight"
+        const val PARAM_EXTERNAL_PRODUCT_ID = "extProductId"
 
         const val PARAM_BRAND = "brand"
         const val PARAM_FIT = "fit"
         const val PARAM_SIZES = "sizes"
-        const val PARAM_MODEL_INFO = "model_info"
+        const val PARAM_MODEL_INFO = "modelInfo"
         const val PARAM_GENDER = "gender"
 
         const val PARAM_BODY_MEASUREMENT_VALUE = "value"

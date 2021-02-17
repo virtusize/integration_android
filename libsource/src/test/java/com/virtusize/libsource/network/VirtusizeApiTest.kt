@@ -251,11 +251,18 @@ class VirtusizeApiTest {
             TestFixtures.userBodyProfile
         )
 
-        val expectedUrl = "https://services.virtusize.jp/stg/ds-functions/size-rec/get-size"
+        val expectedUrl = "https://services.virtusize.jp/stg/ds-functions/size-rec/get-size-new"
 
-        val expectedParamsMap = mutableMapOf(
-            "user_gender" to "female",
-            "item_sizes_orig" to mutableMapOf(
+        assertThat(actualApiRequest.url).isEqualTo(expectedUrl)
+        assertThat(actualApiRequest.method).isEqualTo(HttpMethod.POST)
+        assertThat(actualApiRequest.authorization).isEqualTo(false)
+        assertThat(actualApiRequest.params["userGender"]).isEqualTo("female")
+        assertThat(actualApiRequest.params["userHeight"]).isEqualTo(1630)
+        assertThat(actualApiRequest.params["userWeight"]).isEqualTo(50)
+        assertThat(actualApiRequest.params["extProductId"]).isEqualTo("694")
+        assertThat(actualApiRequest.params["productType"]).isEqualTo("jacket")
+        assertThat(actualApiRequest.params["itemSizesOrig"]).isEqualTo(
+            mutableMapOf(
                 "38" to mutableMapOf(
                     "bust" to 660,
                     "sleeve" to 845,
@@ -266,9 +273,10 @@ class VirtusizeApiTest {
                     "sleeve" to 825,
                     "height" to 750
                 )
-            ),
-            "product_type" to "jacket",
-            "additional_info" to mutableMapOf(
+            )
+        )
+        assertThat(actualApiRequest.params["additionalInfo"]).isEqualTo(
+            mutableMapOf(
                 "fit" to "regular",
                 "sizes" to mutableMapOf(
                     "38" to mutableMapOf(
@@ -284,15 +292,17 @@ class VirtusizeApiTest {
                 ),
                 "gender" to "female",
                 "brand" to "Virtusize",
-                "model_info" to mutableMapOf(
+                "modelInfo" to mutableMapOf(
                     "waist" to 56,
                     "bust" to 78,
                     "size" to "38",
                     "hip" to 85,
                     "height" to 165
                 )
-            ),
-            "body_data" to mutableMapOf(
+            )
+        )
+        assertThat(actualApiRequest.params["bodyData"]).isEqualTo(
+            mutableMapOf(
                 "waistWidth" to mutableMapOf(
                     "value" to 225,
                     "predicted" to true
@@ -383,9 +393,5 @@ class VirtusizeApiTest {
                 )
             )
         )
-
-        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.POST, expectedParamsMap)
-
-        assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
     }
 }

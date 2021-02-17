@@ -329,7 +329,7 @@ class Virtusize(
 
             userProductRecommendedSize = VirtusizeUtils.findBestFitProductSize(
                 userProducts = if(selectedUserProductId != null) userProducts?.filter { it.id == selectedUserProductId } else userProducts,
-                storeProduct!!,
+                storeProduct = storeProduct!!,
                 productTypes = productTypes!!
             )
             userBodyRecommendedSize = getUserBodyRecommendedSize(storeProduct!!, productTypes!!)

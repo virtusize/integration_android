@@ -42,15 +42,15 @@ class BodyProfileRecommendedSizeParamsTests {
                             "height": 750
                         }
                     },
-                    "gender": "female",
-                    "brand": "Virtusize",
-                    "model_info": {
+                    "modelInfo": {
                         "waist": 56,
                         "bust": 78,
                         "size": "38",
                         "hip": 85,
                         "height": 165
-                    }
+                    },
+                    "gender": "female",
+                    "brand": "Virtusize"
                 }
             """.trimIndent().replace("\\s+|[\\n]+".toRegex(), "")
         )
@@ -74,9 +74,9 @@ class BodyProfileRecommendedSizeParamsTests {
                 {
                     "fit": "regular",
                     "sizes": {},
+                    "modelInfo": {},
                     "gender": null,
-                    "brand": "",
-                    "model_info": {}
+                    "brand": ""
                 }
             """.trimIndent().replace("\\s+|[\\n]+".toRegex(), "")
         )
@@ -220,11 +220,32 @@ class BodyProfileRecommendedSizeParamsTests {
             TestFixtures.userBodyProfile
         )
         val bodyProfileRecommendedSizeParamsMap = bodyProfileRecommendedSizeParams.paramsToMap()
-        assertThat(JSONObject(bodyProfileRecommendedSizeParamsMap).toString()).isEqualTo(
+        assertThat(bodyProfileRecommendedSizeParamsMap["userGender"]).isEqualTo("female")
+        assertThat(bodyProfileRecommendedSizeParamsMap["userWeight"]).isEqualTo(50)
+        assertThat(bodyProfileRecommendedSizeParamsMap["userHeight"]).isEqualTo(1630)
+        assertThat(bodyProfileRecommendedSizeParamsMap["extProductId"]).isEqualTo("694")
+        assertThat(bodyProfileRecommendedSizeParamsMap["productType"]).isEqualTo("jacket")
+        assertThat(JSONObject(bodyProfileRecommendedSizeParamsMap["itemSizesOrig"] as Map<String, Any>).toString()).isEqualTo(
             """
                 {
-                    "user_gender": "female",
-                    "item_sizes_orig": {
+                    "38": {
+                        "bust": 660,
+                        "sleeve": 845,
+                        "height": 760
+                    },
+                    "36": {
+                        "bust": 645,
+                        "sleeve": 825,
+                        "height": 750
+                    }
+                } 
+            """.trimIndent().replace("\\s+|[\\n]+".toRegex(), "")
+        )
+        assertThat(JSONObject(bodyProfileRecommendedSizeParamsMap["additionalInfo"] as Map<String, Any>).toString()).isEqualTo(
+            """
+                {
+                    "fit": "regular",
+                    "sizes": {
                         "38": {
                             "bust": 660,
                             "sleeve": 845,
@@ -236,120 +257,108 @@ class BodyProfileRecommendedSizeParamsTests {
                             "height": 750
                         }
                     },
-                    "product_type": "jacket",
-                    "additional_info": {
-                        "fit": "regular",
-                        "sizes": {
-                            "38": {
-                                "bust": 660,
-                                "sleeve": 845,
-                                "height": 760
-                            },
-                            "36": {
-                                "bust": 645,
-                                "sleeve": 825,
-                                "height": 750
-                            }
-                        },
-                        "gender": "female",
-                        "brand": "Virtusize",
-                        "model_info": {
-                            "waist": 56,
-                            "bust": 78,
-                            "size": "38",
-                            "hip": 85,
-                            "height": 165
-                        }
+                    "modelInfo": {
+                        "waist": 56,
+                        "bust": 78,
+                        "size": "38",
+                        "hip": 85,
+                        "height": 165
                     },
-                    "body_data": {
-                        "waistWidth": {
-                            "value": 225,
-                            "predicted": true
-                        },
-                        "chest": {
-                            "value": 755,
-                            "predicted": true
-                        },
-                        "bustWidth": {
-                            "value": 245,
-                            "predicted": true
-                        },
-                        "thigh": {
-                            "value": 480,
-                            "predicted": true
-                        },
-                        "shoulderWidth": {
-                            "value": 340,
-                            "predicted": true
-                        },
-                        "hipHeight": {
-                            "value": 750,
-                            "predicted": true
-                        },
-                        "kneeHeight": {
-                            "value": 395,
-                            "predicted": true
-                        },
-                        "neck": {
-                            "value": 300,
-                            "predicted": true
-                        },
-                        "waistHeight": {
-                            "value": 920,
-                            "predicted": true
-                        },
-                        "hip": {
-                            "value": 830,
-                            "predicted": true
-                        },
-                        "armpitHeight": {
-                            "value": 1130,
-                            "predicted": true
-                        },
-                        "bicep": {
-                            "value": 220,
-                            "predicted": true
-                        },
-                        "inseam": {
-                            "value": 700,
-                            "predicted": true
-                        },
-                        "headHeight": {
-                            "value": 215,
-                            "predicted": true
-                        },
-                        "hipWidth": {
-                            "value": 300,
-                            "predicted": true
-                        },
-                        "sleeve": {
-                            "value": 720,
-                            "predicted": true
-                        },
-                        "bust": {
-                            "value": 755,
-                            "predicted": true
-                        },
-                        "waist": {
-                            "value": 630,
-                            "predicted": true
-                        },
-                        "sleeveLength": {
-                            "value": 520,
-                            "predicted": true
-                        },
-                        "rise": {
-                            "value": 215,
-                            "predicted": true
-                        },
-                        "shoulder": {
-                            "value": 370,
-                            "predicted": true
-                        },
-                        "shoulderHeight": {
-                            "value": 1240,
-                            "predicted": true
-                        }
+                    "gender": "female",
+                    "brand": "Virtusize"
+                }
+            """.trimIndent().replace("\\s+|[\\n]+".toRegex(), "")
+        )
+        assertThat(JSONObject(bodyProfileRecommendedSizeParamsMap["bodyData"] as Map<String, Any>).toString()).isEqualTo(
+            """
+                {
+                    "waistWidth": {
+                        "value": 225,
+                        "predicted": true
+                    },
+                    "chest": {
+                        "value": 755,
+                        "predicted": true
+                    },
+                    "bustWidth": {
+                        "value": 245,
+                        "predicted": true
+                    },
+                    "thigh": {
+                        "value": 480,
+                        "predicted": true
+                    },
+                    "shoulderWidth": {
+                        "value": 340,
+                        "predicted": true
+                    },
+                    "hipHeight": {
+                        "value": 750,
+                        "predicted": true
+                    },
+                    "kneeHeight": {
+                        "value": 395,
+                        "predicted": true
+                    },
+                    "neck": {
+                        "value": 300,
+                        "predicted": true
+                    },
+                    "waistHeight": {
+                        "value": 920,
+                        "predicted": true
+                    },
+                    "hip": {
+                        "value": 830,
+                        "predicted": true
+                    },
+                    "armpitHeight": {
+                        "value": 1130,
+                        "predicted": true
+                    },
+                    "bicep": {
+                        "value": 220,
+                        "predicted": true
+                    },
+                    "inseam": {
+                        "value": 700,
+                        "predicted": true
+                    },
+                    "headHeight": {
+                        "value": 215,
+                        "predicted": true
+                    },
+                    "hipWidth": {
+                        "value": 300,
+                        "predicted": true
+                    },
+                    "sleeve": {
+                        "value": 720,
+                        "predicted": true
+                    },
+                    "bust": {
+                        "value": 755,
+                        "predicted": true
+                    },
+                    "waist": {
+                        "value": 630,
+                        "predicted": true
+                    },
+                    "sleeveLength": {
+                        "value": 520,
+                        "predicted": true
+                    },
+                    "rise": {
+                        "value": 215,
+                        "predicted": true
+                    },
+                    "shoulder": {
+                        "value": 370,
+                        "predicted": true
+                    },
+                    "shoulderHeight": {
+                        "value": 1240,
+                        "predicted": true
                     }
                 }
             """.trimIndent().replace("\\s+|[\\n]+".toRegex(), "")
