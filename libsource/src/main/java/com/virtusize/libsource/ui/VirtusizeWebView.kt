@@ -3,7 +3,6 @@ package com.virtusize.libsource.ui
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Message
 import android.view.*
@@ -63,7 +62,7 @@ class VirtusizeWebView: DialogFragment() {
         webView.webViewClient = object: WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 if(url != null && url.contains(virtusizeWebAppUrl)) {
-                    executeJavascript(view, vsParamsFromSDKScript)
+                    webView?.evaluateJavascript(vsParamsFromSDKScript, null)
                     getBrowserIDFromCookies()?.let { bid ->
                         if(bid != sharedPreferencesHelper.getBrowserId()) {
                             sharedPreferencesHelper.storeBrowserId(bid)
@@ -129,7 +128,7 @@ class VirtusizeWebView: DialogFragment() {
                         webView.removeAllViews()
                         webView.reload()
                     }
-                    else -> executeJavascript(webView, backButtonClickEventFromSDKScript)
+                    else -> webView.evaluateJavascript(backButtonClickEventFromSDKScript, null)
                 }
             }
             true
@@ -166,19 +165,6 @@ class VirtusizeWebView: DialogFragment() {
     ) {
         virtusizeMessageHandler = messageHandler
         this.virtusizeView = virtusizeView
-    }
-
-    /**
-     * Executes a Javascript function in the Virtusize web app from the SDK
-     * @param webView the web view to load the script
-     * @param script the string value of the script in JavaScript
-     */
-    private fun executeJavascript(webView: WebView?, script: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            webView?.evaluateJavascript(script, null)
-        } else {
-            webView?.loadUrl(script)
-        }
     }
 
     /**
@@ -230,14 +216,7 @@ class VirtusizeWebView: DialogFragment() {
 
     private fun userAcceptedPrivacyPolicy() {
         webView.post {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                webView.evaluateJavascript(
-                    "localStorage.setItem('acceptedPrivacyPolicy','true');",
-                    null
-                )
-            } else {
-                webView.loadUrl("javascript:localStorage.setItem('acceptedPrivacyPolicy','true');")
-            }
+            webView.evaluateJavascript("localStorage.setItem('acceptedPrivacyPolicy','true');", null)
         }
     }
 }

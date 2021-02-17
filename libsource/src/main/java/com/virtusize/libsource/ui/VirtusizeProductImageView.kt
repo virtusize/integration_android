@@ -43,9 +43,9 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet):
         )]
 
         if(productImageType == ProductImageType.USER) {
-            inpageBorderImageView.setImageResource(R.drawable.ic_image_border_green_dash)
+            inpageBorderImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_image_border_green_dash))
         } else {
-            inpageBorderImageView.setImageResource(R.drawable.ic_image_border_gray)
+            inpageBorderImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_image_border_gray))
         }
 
         typedArray.recycle()
@@ -89,26 +89,10 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet):
             productPlaceholderImage = productTypeImageWithStyle
         }
         if (productImageType == ProductImageType.USER) {
-            setProductPlaceholderImageTintColor(productPlaceholderImage, R.color.virtusizeTeal)
+            productPlaceholderImage?.setTint(ContextCompat.getColor(context, R.color.virtusizeTeal))
         } else {
-            setProductPlaceholderImageTintColor(productPlaceholderImage, R.color.virtusizeBlack)
+            productPlaceholderImage?.setTint(ContextCompat.getColor(context, R.color.virtusizeBlack))
         }
         return productPlaceholderImage
-    }
-
-    /**
-     * Sets the tine color of the product placeholder image
-     * @param productPlaceholderImage the drawable of the place holder image
-     * @param color the res Id of the color
-     */
-    private fun setProductPlaceholderImageTintColor(productPlaceholderImage: Drawable?, color: Int) {
-        val tinColor = ContextCompat.getColor(context, color)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            productPlaceholderImage?.setTint(tinColor)
-        } else {
-            productPlaceholderImage?.let {
-                DrawableCompat.setTint(DrawableCompat.wrap(it), tinColor)
-            }
-        }
     }
 }
