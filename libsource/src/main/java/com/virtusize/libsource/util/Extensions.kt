@@ -59,6 +59,17 @@ internal fun String.trimI18nText(trimType: I18nLocalizationJsonParser.TrimType =
 }
 
 /**
+ * The Enum extension function to convert a string to an enum type safely
+ */
+inline fun <reified T : Enum<T>> valueOf(type: String): T? {
+    return try {
+        java.lang.Enum.valueOf(T::class.java, type)
+    } catch (e: IllegalArgumentException) {
+        null
+    }
+}
+
+/**
  * Integer extension function to convert dp to px
  */
 val Int.dpInPx: Int

@@ -31,7 +31,7 @@ internal fun VirtusizeEndpoint.getPath(): String {
              "/ds-functions/size-rec/get-size-new"
          }
          VirtusizeEndpoint.VirtusizeWebView -> {
-             "/a/aoyama/testing/auth-sdk-events/sdk-webview.html"
+             "/a/aoyama/staging/sdk-webview.html"
          }
          VirtusizeEndpoint.ProductMetaDataHints -> {
              "/rest-api/v1/product-meta-data-hints"

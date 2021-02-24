@@ -10,11 +10,14 @@ enum class VirtusizeEvents {
     UserSawWidgetButton,
     UserOpenedWidget,
     UserSelectedProduct,
-    UserOpenedPanelCompare,
     UserAddedProduct,
+    UserChangedRecommendationType,
+    UserCreatedSilhouette,
+    UserUpdatedBodyMeasurements,
     UserAuthData,
     UserLoggedIn,
-    UserLoggedOut
+    UserLoggedOut,
+    UserDeletedData
 }
 
 /**
@@ -27,12 +30,24 @@ fun VirtusizeEvents.getEventName(): String {
         VirtusizeEvents.UserSawWidgetButton -> "user-saw-widget-button"
         VirtusizeEvents.UserOpenedWidget -> "user-opened-widget"
         VirtusizeEvents.UserSelectedProduct -> "user-selected-product"
-        VirtusizeEvents.UserOpenedPanelCompare -> "user-opened-panel-compare"
         VirtusizeEvents.UserAddedProduct -> "user-added-product"
+        VirtusizeEvents.UserChangedRecommendationType -> "user-changed-recommendation-type"
+        VirtusizeEvents.UserCreatedSilhouette -> "user-created-silhouette"
+        VirtusizeEvents.UserUpdatedBodyMeasurements -> "user-updated-body-measurements"
         VirtusizeEvents.UserAuthData -> "user-auth-data"
         VirtusizeEvents.UserLoggedIn -> "user-logged-in"
         VirtusizeEvents.UserLoggedOut -> "user-logged-out"
+        VirtusizeEvents.UserDeletedData -> "user-deleted-data"
     }
+}
+
+/**
+ * This enum contains the size comparison types Virtusize provides
+ * Based on a user's selection of the type in the web view, the SDK displays a corresponding InPage comparison
+ */
+enum class SizeRecommendationType {
+    body,
+    compareProduct
 }
 
 /**
