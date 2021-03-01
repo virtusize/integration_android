@@ -1,6 +1,7 @@
 package com.virtusize.libsource
 
 import android.content.Context
+import android.view.View
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser.TrimType
 import com.virtusize.libsource.data.remote.*
@@ -254,6 +255,16 @@ class Virtusize(
             VirtusizeErrorType.NullVirtusizeViewError.throwError()
             return
         }
+
+        (virtusizeView as? View)?.addOnAttachStateChangeListener(object: View.OnAttachStateChangeListener{
+            override fun onViewAttachedToWindow(v: View?) {}
+
+            override fun onViewDetachedFromWindow(v: View?) {
+                val detachedVirtusizeView = v as? VirtusizeView
+                if (virtusizeViews.contains(detachedVirtusizeView))
+                    virtusizeViews.remove(detachedVirtusizeView)
+            }
+        })
 
         virtusizeViews.add(virtusizeView)
     }
