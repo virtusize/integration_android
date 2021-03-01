@@ -1,5 +1,7 @@
 package com.virtusize.libsource.network
 
+import com.virtusize.libsource.data.local.VirtusizeEnvironment
+
 /**
  * This enum represents all available Virtusize endpoints
  */
@@ -22,7 +24,7 @@ internal enum class VirtusizeEndpoint {
  * This method returns a URL corresponding to the Virtusize endpoint that it is called upon
  * @return the Virtusize Endpoint URL
  */
-internal fun VirtusizeEndpoint.getPath(): String {
+internal fun VirtusizeEndpoint.getPath(env: VirtusizeEnvironment? = null): String {
      return when (this) {
          VirtusizeEndpoint.ProductCheck -> {
              "/product/check"
@@ -31,7 +33,7 @@ internal fun VirtusizeEndpoint.getPath(): String {
              "/ds-functions/size-rec/get-size-new"
          }
          VirtusizeEndpoint.VirtusizeWebView -> {
-             "/a/aoyama/latest/sdk-webview.html"
+             "/a/aoyama/${if(env == VirtusizeEnvironment.STAGING) "staging" else "latest"}/sdk-webview.html"
          }
          VirtusizeEndpoint.ProductMetaDataHints -> {
              "/rest-api/v1/product-meta-data-hints"

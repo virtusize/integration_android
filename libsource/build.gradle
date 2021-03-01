@@ -14,11 +14,11 @@ android {
     }
 
     buildTypes {
-        release {
+        debug {
             consumerProguardFiles 'proguard-rules.pro'
         }
 
-        debug {
+        release {
             consumerProguardFiles 'proguard-rules.pro'
         }
     }
