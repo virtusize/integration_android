@@ -19,7 +19,7 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 
 ## 対応バージョン
 
-- minSdkVersion >= 15
+- minSdkVersion >= 21
 - compileSdkVersion >= 30
 - Setup in AppCompatActivity
 
@@ -44,7 +44,7 @@ If you'd like to continue using the old Version 1.x.x, refer to the branch [v1](
 
   ```groovy
   dependencies {
-      implementation 'com.github.virtusize:integration_android:2.0.5'
+      implementation 'com.github.virtusize:integration_android:2.1'
   }
   ```
 

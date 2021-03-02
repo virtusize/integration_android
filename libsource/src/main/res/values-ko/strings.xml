@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="virtusize_name">버츄사이즈</string>
+    <string name="virtusize_button_text">사이즈 확인</string>
+    <string name="virtusize_privacy_policy">개인정보 처리방침</string>
+    <string name="virtusize_privacy_policy_link">http://www.virtusize.kr/privacy-policy</string>
+    <string name="inpage_default_accessory_text">상품이 어울리는지 확인해보세요.</string>
+    <string name="inpage_has_product_top_text">사이즈 차이 보기</string>
+    <string name="inpage_has_product_bottom_text">당신의 상품</string>
+    <string name="inpage_one_size_close_top_text">이 상품의 사이즈는</string>
+    <string name="inpage_one_size_smaller_top_text">이 상품의 사이즈는 더</string>
+    <string name="inpage_one_size_larger_top_text">이 상품의 사이즈는 더</string>
+    <string name="inpage_one_size_close_bottom_text">당신의 상품과 유사합니다</string>
+    <string name="inpage_one_size_smaller_bottom_text">작습니다</string>
+    <string name="inpage_one_size_larger_bottom_text">큽니다</string>
+    <string name="inpage_one_size_body_profile_text">입어보고 당신의 사이즈를 찾아보세요.</string>
+    <string name="inpage_multi_size_comparison_text">가장 유사한 상품은</string>
+    <string name="inpage_multi_size_body_profile_text">추천하는 사이즈는</string>
+    <string name="inpage_no_data_text">구매 전에 당신에게 맞는 사이즈를 찾아보세요.</string>
+    <string name="inpage_loading_text">사이즈 분석 중</string>
+    <string name="inpage_long_error_text">현재 버츄사이즈 서비스를 이용할 수 없습니다.\n 즐거운 쇼핑되세요.</string>
+    <string name="inpage_short_error_text">현재 버츄사이즈 서비스를 이용할 수 없습니다.</string>
+</resources>

@@ -7,7 +7,7 @@ package com.virtusize.libsource.data.remote
 data class Data(
 	val validProduct: Boolean,
 	val fetchMetaData: Boolean,
-	val userData: UserData?,
+	val shouldSeePhTooltip: Boolean,
 	val productDataId: Int,
 	val productTypeName: String,
 	val storeName: String,

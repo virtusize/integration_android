@@ -6,8 +6,8 @@ import org.json.JSONObject
 /**
  * This class parses a JSONObject to the [ProductCheck] object
  */
-internal class ProductCheckJsonParser: VirtusizeJsonParser {
-    override fun parse(json: JSONObject): ProductCheck? {
+internal class ProductCheckJsonParser: VirtusizeJsonParser<ProductCheck> {
+    override fun parse(json: JSONObject): ProductCheck {
         val data = json.optJSONObject(FIELD_DATA)?.let {
             DataJsonParser().parse(it)
         }
@@ -16,7 +16,7 @@ internal class ProductCheckJsonParser: VirtusizeJsonParser {
         return ProductCheck(data, productId, name)
     }
 
-    private companion object {
+    companion object {
         private const val FIELD_DATA = "data"
         private const val FIELD_PRODUCT_ID = "productId"
         private const val FIELD_NAME = "name"

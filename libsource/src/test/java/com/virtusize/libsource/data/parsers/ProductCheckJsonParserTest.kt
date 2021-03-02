@@ -1,10 +1,9 @@
 package com.virtusize.libsource.data.parsers
 
 import com.google.common.truth.Truth.assertThat
-import com.virtusize.libsource.TestFixtures
+import com.virtusize.libsource.fixtures.TestFixtures
 import com.virtusize.libsource.data.remote.Data
 import com.virtusize.libsource.data.remote.ProductCheck
-import com.virtusize.libsource.data.remote.UserData
 import org.junit.Test
 
 class ProductCheckJsonParserTest {
@@ -16,7 +15,7 @@ class ProductCheckJsonParserTest {
         val expectedData = Data(
             true,
             false,
-            UserData(false, false, false, false, false),
+            true,
             7110384,
             "pants",
             "virtusize",

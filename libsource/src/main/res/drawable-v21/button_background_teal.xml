@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android" android:color="@color/virtusizeWhite">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="@dimen/virtusize_button_corner_radius" />
+            <solid android:color="@color/virtusizeTealPressed" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="@dimen/virtusize_button_corner_radius" />
+            <solid android:color="@color/virtusizeTeal" />
+        </shape>
+    </item>
+</ripple>

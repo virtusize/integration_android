@@ -1,0 +1,34 @@
+{
+  "bundle": "aoyama",
+  "id": "aoyama.ja",
+  "language": "ja",
+  "keys": {
+    "apps": {
+      "aoyama": {
+        "inpage": {
+          "defaultAccessoryText": "日用品と比較する",
+          "noDataText": "購入前に簡単サイズチェック",
+          "oneSize": {
+            "closeLead": "持っている服と",
+            "smallerLead": "持っている服より",
+            "largerLead": "持っている服より",
+            "close": "近いサイズ感です",
+            "smaller": "小さめです",
+            "larger": "大きめです",
+            "bodyProfile": "あなたの体で\nサイズを簡単チェック",
+            "bodyProfileMini": "あなたの体でサイズを簡単チェック"
+          },
+          "multiSize": {
+            "sizeComparison": "あなたのアイテムに近いサイズ",
+            "bodyProfile": "あなたにおすすめのサイズ"
+          },
+          "accessory": {
+            "hasProductLead": "あなたのアイテムと",
+            "hasProduct": "大きさを比較",
+            "noData": "日用品と比較する"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="virtusize_name">バーチャサイズ</string>
     <string name="virtusize_button_text">サイズチェック</string>
+    <string name="virtusize_privacy_policy">プライバシーポリシー</string>
+    <string name="virtusize_privacy_policy_link">http://www.virtusize.jp/privacy-policy</string>
+    <string name="inpage_default_accessory_text">日用品と比較する</string>
+    <string name="inpage_has_product_top_text">あなたのアイテムと</string>
+    <string name="inpage_has_product_bottom_text">大きさを比較</string>
+    <string name="inpage_one_size_close_top_text">持っている服と</string>
+    <string name="inpage_one_size_smaller_top_text">持っている服より</string>
+    <string name="inpage_one_size_larger_top_text">持っている服より</string>
+    <string name="inpage_one_size_close_bottom_text">近いサイズ感です</string>
+    <string name="inpage_one_size_smaller_bottom_text">小さめです</string>
+    <string name="inpage_one_size_larger_bottom_text">大きめです</string>
+    <string name="inpage_one_size_body_profile_text">あなたの体で\nサイズを簡単チェック</string>
+    <string name="inpage_multi_size_comparison_text">あなたのアイテムに近いサイズ</string>
+    <string name="inpage_multi_size_body_profile_text">あなたにおすすめのサイズ</string>
+    <string name="inpage_no_data_text">購入前に簡単サイズチェック</string>
+    <string name="inpage_loading_text">サイズを分析中</string>
+    <string name="inpage_long_error_text">現在バーチャサイズは使えませんが、\nそのままお買い物をお楽しみください。</string>
+    <string name="inpage_short_error_text">現在バーチャサイズは使えません。</string>
 </resources>

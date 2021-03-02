@@ -1,0 +1,34 @@
+{
+  "bundle": "aoyama",
+  "id": "aoyama.en",
+  "language": "en",
+  "keys": {
+    "apps": {
+      "aoyama": {
+        "inpage": {
+          "defaultAccessoryText": "See how everyday items fit",
+          "noDataText": "Find the right size before purchasing",
+          "oneSize": {
+            "closeLead": "This item size is",
+            "smallerLead": "This item size is",
+            "largerLead": "This item size is",
+            "close": "close to your item",
+            "smaller": "smaller than your item",
+            "larger": "larger than your item",
+            "bodyProfile": "Try it on and find your size",
+            "bodyProfileMini": "Try it on and find your size"
+          },
+          "multiSize": {
+            "sizeComparison": "The closest size to your item is",
+            "bodyProfile": "Your recommended size is"
+          },
+          "accessory": {
+            "hasProductLead": "See the size difference from",
+            "hasProduct": "your own item",
+            "noData": "See how everyday items fit"
+          }
+        }
+      }
+    }
+  }
+}

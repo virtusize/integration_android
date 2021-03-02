@@ -1,15 +1,15 @@
 package com.virtusize.libsource.data.local
 
-import com.virtusize.libsource.ui.VirtusizeButton
+import com.virtusize.libsource.ui.VirtusizeView
 
 /**
  * This interface can be implemented by an object to receive Virtusize specific messages
  */
 interface VirtusizeMessageHandler {
 
-    fun virtusizeControllerShouldClose(virtusizeButton: VirtusizeButton)
+    fun virtusizeControllerShouldClose(virtusizeView: VirtusizeView)
 
-    fun onEvent(virtusizeButton: VirtusizeButton?, event: VirtusizeEvent)
+    fun onEvent(event: VirtusizeEvent)
 
-    fun onError(virtusizeButton: VirtusizeButton?, error: VirtusizeError)
+    fun onError(error: VirtusizeError)
 }

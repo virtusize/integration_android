@@ -13,12 +13,12 @@ enum class VirtusizeEnvironment {
 }
 
 /**
- * Gets the API URL corresponding to the Virtusize Environment
- * @return A String value of the API URL
+ * Gets the default API URL corresponding to the Virtusize Environment
+ * @return A String value of the default API URL
  */
-fun VirtusizeEnvironment.apiUrl(): String {
+fun VirtusizeEnvironment.defaultApiUrl(): String {
     return when(this) {
-        STAGING -> "https://staging.virtusize.com"
+        STAGING -> "https://staging.virtusize.jp"
         GLOBAL -> "https://api.virtusize.com"
         JAPAN -> "https://api.virtusize.jp"
         KOREA -> "https://api.virtusize.kr"
@@ -39,13 +39,15 @@ fun VirtusizeEnvironment.eventApiUrl(): String {
 }
 
 /**
- * Gets the URL for the API endpoint Product Data Check corresponding to the Virtusize Environment
- * @return A String value of the URL for the API endpoint Product Data Check
+ * Gets the services API URL corresponding to the Virtusize Environment
+ * @return A String value of the services API URL
  */
-fun VirtusizeEnvironment.productDataCheckUrl(): String {
+fun VirtusizeEnvironment.servicesApiUrl(): String {
     return when(this) {
-        STAGING -> "https://services.virtusize.com/stg"
-        else -> "https://services.virtusize.com/"
+        STAGING -> "https://services.virtusize.jp/stg"
+        GLOBAL -> "https://services.virtusize.com"
+        JAPAN -> "https://services.virtusize.jp"
+        KOREA -> "https://services.virtusize.kr"
     }
 }
 
@@ -74,3 +76,19 @@ fun VirtusizeEnvironment.virtusizeRegion(): VirtusizeRegion {
         KOREA -> VirtusizeRegion.KR
     }
 }
+
+/**
+ * Gets the environment for the web view
+ * @return A String value of the web view environment
+ */
+fun VirtusizeEnvironment.virtusizeWebViewEnv(): String {
+    return when(this) {
+        STAGING -> "staging"
+        else -> "production"
+    }
+}
+
+/**
+ * The URL for i18n
+ */
+const val I18N_URL = "https://i18n.virtusize.jp"

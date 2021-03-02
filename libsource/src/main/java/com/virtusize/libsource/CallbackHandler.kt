@@ -3,7 +3,6 @@ package com.virtusize.libsource
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import com.virtusize.libsource.data.local.VirtusizeError
-import com.virtusize.libsource.data.local.VirtusizeErrorType
 import com.virtusize.libsource.data.remote.ProductCheck
 
 
@@ -23,57 +22,8 @@ interface SuccessResponseHandler {
  */
 interface ErrorResponseHandler {
     /**
-     * Passes optional error of type [VirtusizeErrorType]
-     * @param errorCode Any error code that wanted to passed
-     * @param errorMessage Any error message that wants to be passed
-     * @param errorType Any error that wants to be passed
+     * Passes the error of type [VirtusizeError]
+     * @param error Any error that wants to be passed
      */
     fun onError(@NonNull error: VirtusizeError)
-}
-
-/**
- * This interface can be implemented by any class that wants to receive ProductCheckResponse, that is received from the product data check endpoint
- * @see ProductCheck
- */
-interface VirtusizeButtonSetupHandler: SuccessResponseHandler {
-
-    /**
-     * Invokes this method to pass ProductCheckResponse to object
-     * @param data the data whose type is ProductCheckResponse
-     * @see ProductCheck
-     */
-    override fun onSuccess(data: Any?) {
-        if (data is ProductCheck)
-            setupProductCheckResponseData(data)
-    }
-
-    /**
-     * This methods sets up productCheckResponse received from Virtusize server to object
-     * @param productCheck is ProductCheckResponse
-     * @see ProductCheck
-     */
-    fun setupProductCheckResponseData(productCheck: ProductCheck)
-}
-
-/**
- * This interface can be implemented by any class that wants to receive ProductCheckResponse when server returns valid product for product check response
- * @see ProductCheck
- */
-interface ValidProductCheckHandler: SuccessResponseHandler {
-
-    /**
-     * Invoke this method on object to pass ProductCheckResponse to object
-     * @param data of type ProductCheckResponse
-     */
-    override fun onSuccess(data: Any?) {
-        if (data is ProductCheck)
-            onValidProductCheckCompleted(data)
-    }
-
-    /**
-     * Passes productCheckResponse to object
-     * @param productCheck is ProductCheckResponse
-     * @see ProductCheck
-     */
-    fun onValidProductCheckCompleted(productCheck: ProductCheck)
 }

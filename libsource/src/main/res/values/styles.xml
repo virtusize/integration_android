@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name = "NoActionBar" parent = "@android:style/Theme.Holo.Light">
-        <item name = "android:windowActionBar">false</item>
-        <item name = "android:windowNoTitle">true</item>
+
+    <style name="NoActionBar" parent="@android:style/Theme.Holo.Light">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
 
     <style name="FullScreenDialogStyle" parent="Theme.AppCompat.Dialog">
@@ -22,6 +23,26 @@
     <style name="VirtusizeButtonTextAppearance">
         <item name="android:textColor">@color/virtusizeWhite</item>
         <item name="android:textSize">@dimen/virtusize_button_textSize</item>
+    </style>
+
+    <style name="VirtusizeInPageButtonStyle" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:drawableEnd">@drawable/ic_arrow_right_black</item>
+        <item name="android:drawableRight">@drawable/ic_arrow_right_black</item>
+        <item name="android:paddingStart">@dimen/virtusize_inpage_mini_button_padding</item>
+        <item name="android:paddingLeft">@dimen/virtusize_inpage_mini_button_padding</item>
+        <item name="android:paddingEnd">@dimen/virtusize_inpage_mini_button_padding</item>
+        <item name="android:paddingRight">@dimen/virtusize_inpage_mini_button_padding</item>
+        <item name="android:text">@string/virtusize_button_text</item>
+        <item name="android:textColor">@color/color_gray_900</item>
+    </style>
+
+    <style name="VirtusizeInPageMiniTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:lineSpacingExtra">@dimen/virtusize_inpage_mini_text_line_spacing</item>
+        <item name="android:textSize">@dimen/virtusize_inpage_mini_message_textSize</item>
     </style>
 
 </resources>

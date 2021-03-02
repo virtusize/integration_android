@@ -5,9 +5,10 @@ import android.os.Build
 import android.view.WindowManager
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
-import com.virtusize.libsource.TestFixtures
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.parsers.JsonUtils
+import com.virtusize.libsource.fixtures.ProductFixtures
+import com.virtusize.libsource.fixtures.TestFixtures
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -37,7 +38,7 @@ class VirtusizeApiTest {
     fun productCheck_shouldReturnExpectedApiRequest() {
         val actualApiRequest = VirtusizeApi.productCheck(TestFixtures.VIRTUSIZE_PRODUCT)
 
-        val expectedUrl = "https://services.virtusize.com/stg/product/check" +
+        val expectedUrl = "https://services.virtusize.jp/stg/product/check" +
                 "?apiKey=${TestFixtures.API_KEY}" +
                 "&externalId=${TestFixtures.EXTERNAL_ID}" +
                 "&version=1"
@@ -48,8 +49,22 @@ class VirtusizeApiTest {
     }
 
     @Test
-    fun virtusize_shouldReturnExpectedUrl() {
-        val actualUrl = VirtusizeApi.virtusizeURL()
+    fun virtusizeWebView_stagingEnv_shouldReturnExpectedUrl() {
+        val actualUrl = VirtusizeApi.virtusizeWebViewURL()
+
+        val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/staging/sdk-webview.html"
+
+        assertThat(actualUrl).isEqualTo(expectedUrl)
+    }
+
+    @Test
+    fun virtusizeWebView_japanEnv_shouldReturnExpectedUrl() {
+        VirtusizeApi.init(
+            VirtusizeEnvironment.JAPAN,
+            TestFixtures.API_KEY,
+            TestFixtures.USER_ID
+        )
+        val actualUrl = VirtusizeApi.virtusizeWebViewURL()
 
         val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-webview.html"
 
@@ -60,7 +75,7 @@ class VirtusizeApiTest {
     fun sendProductImageToBackend_shouldReturnExpectedApiRequest() {
         val actualApiRequest = VirtusizeApi.sendProductImageToBackend(TestFixtures.VIRTUSIZE_PRODUCT)
 
-        val expectedUrl = "https://staging.virtusize.com/rest-api/v1/product-meta-data-hints"
+        val expectedUrl = "https://staging.virtusize.jp/rest-api/v1/product-meta-data-hints"
 
         val expectedParams = mutableMapOf<String, Any>()
         TestFixtures.VIRTUSIZE_PRODUCT.productCheckData?.data?.storeId?.let {
@@ -107,14 +122,6 @@ class VirtusizeApiTest {
                 expectedParams["storeId"] = data.storeId.toString()
                 expectedParams["storeName"] = data.storeName
                 expectedParams["storeProductType"] = data.productTypeName
-
-                data.userData?.let { userData ->
-                    expectedParams["wardrobeActive"] = userData.wardrobeActive
-                    expectedParams["wardrobeHasM"] = userData.wardrobeHasM
-                    expectedParams["wardrobeHasP"] = userData.wardrobeHasP
-                    expectedParams["wardrobeHasR"] = userData.wardrobeHasR
-                }
-
             }
         }
 
@@ -166,20 +173,239 @@ class VirtusizeApiTest {
             ))
         )
 
-        assertThat(actualApiRequest.url).isEqualTo("https://staging.virtusize.com/a/api/v3/orders")
+        assertThat(actualApiRequest.url).isEqualTo("https://staging.virtusize.jp/a/api/v3/orders")
         assertThat(actualApiRequest.method).isEquivalentAccordingToCompareTo(HttpMethod.POST)
         assertThat(actualApiRequest.params).containsExactlyEntriesIn(expectedParams)
     }
 
     @Test
     fun retrieveStoreInfo_shouldReturnExpectedApiRequest() {
-        val actualApiRequest = VirtusizeApi.retrieveStoreInfo()
+        val actualApiRequest = VirtusizeApi.getStoreInfo()
 
-        val expectedUrl = "https://staging.virtusize.com/a/api/v3/stores/api-key/test_apiKey" +
+        val expectedUrl = "https://staging.virtusize.jp/a/api/v3/stores/api-key/test_apiKey" +
                 "?format=json"
 
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
 
         assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
+    }
+
+    @Test
+    fun getStoreProductInfo_shouldReturnExpectedApiRequest() {
+        val actualApiRequest = VirtusizeApi.getStoreProductInfo("16099122")
+
+        val expectedUrl = "https://staging.virtusize.jp/a/api/v3/store-products/16099122" +
+                "?format=json"
+
+        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
+
+        assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
+    }
+
+    @Test
+    fun getProductTypes_shouldReturnExpectedApiRequest() {
+        val actualApiRequest = VirtusizeApi.getProductTypes()
+
+        val expectedUrl = "https://staging.virtusize.jp/a/api/v3/product-types"
+
+        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
+
+        assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
+    }
+
+    @Test
+    fun getI18n_shouldReturnExpectedApiRequest() {
+        val actualApiRequest = VirtusizeApi.getI18n(VirtusizeLanguage.KR)
+
+        val expectedUrl = "https://i18n.virtusize.jp/bundle-payloads/aoyama/ko"
+
+        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
+
+        assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
+    }
+
+    @Test
+    fun getSessions_shouldReturnExpectedApiRequest() {
+        val actualApiRequest = VirtusizeApi.getSessions()
+
+        val expectedUrl = "https://staging.virtusize.jp/a/api/v3/sessions"
+
+        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.POST)
+
+        assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
+    }
+
+    @Test
+    fun getUserProducts_shouldReturnExpectedApiRequest() {
+        val actualApiRequest = VirtusizeApi.getUserProducts()
+
+        val expectedUrl = "https://staging.virtusize.jp/a/api/v3/user-products"
+
+        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET, mutableMapOf(), true)
+
+        assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
+    }
+
+    @Test
+    fun getUserBodyProfile_shouldReturnExpectedApiRequest() {
+        val actualApiRequest = VirtusizeApi.getUserBodyProfile()
+
+        val expectedUrl = "https://staging.virtusize.jp/a/api/v3/user-body-measurements"
+
+        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET, mutableMapOf(), true)
+
+        assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
+    }
+
+    @Test
+    fun getSize_shouldReturnExpectedApiRequest() {
+        val actualApiRequest = VirtusizeApi.getSize(
+            ProductFixtures.productTypes(),
+            ProductFixtures.storeProduct(),
+            TestFixtures.userBodyProfile
+        )
+
+        val expectedUrl = "https://services.virtusize.jp/stg/ds-functions/size-rec/get-size-new"
+
+        assertThat(actualApiRequest.url).isEqualTo(expectedUrl)
+        assertThat(actualApiRequest.method).isEqualTo(HttpMethod.POST)
+        assertThat(actualApiRequest.authorization).isEqualTo(false)
+        assertThat(actualApiRequest.params["userGender"]).isEqualTo("female")
+        assertThat(actualApiRequest.params["userHeight"]).isEqualTo(1630)
+        assertThat(actualApiRequest.params["userWeight"]).isEqualTo(50)
+        assertThat(actualApiRequest.params["extProductId"]).isEqualTo("694")
+        assertThat(actualApiRequest.params["productType"]).isEqualTo("jacket")
+        assertThat(actualApiRequest.params["itemSizesOrig"]).isEqualTo(
+            mutableMapOf(
+                "38" to mutableMapOf(
+                    "bust" to 660,
+                    "sleeve" to 845,
+                    "height" to 760
+                ),
+                "36" to mutableMapOf(
+                    "bust" to 645,
+                    "sleeve" to 825,
+                    "height" to 750
+                )
+            )
+        )
+        assertThat(actualApiRequest.params["additionalInfo"]).isEqualTo(
+            mutableMapOf(
+                "fit" to "regular",
+                "sizes" to mutableMapOf(
+                    "38" to mutableMapOf(
+                        "bust" to 660,
+                        "sleeve" to 845,
+                        "height" to 760
+                    ),
+                    "36" to mutableMapOf(
+                        "bust" to 645,
+                        "sleeve" to 825,
+                        "height" to 750
+                    )
+                ),
+                "gender" to "female",
+                "brand" to "Virtusize",
+                "modelInfo" to mutableMapOf(
+                    "waist" to 56,
+                    "bust" to 78,
+                    "size" to "38",
+                    "hip" to 85,
+                    "height" to 165
+                )
+            )
+        )
+        assertThat(actualApiRequest.params["bodyData"]).isEqualTo(
+            mutableMapOf(
+                "waistWidth" to mutableMapOf(
+                    "value" to 225,
+                    "predicted" to true
+                ),
+                "chest" to mutableMapOf(
+                    "value" to 755,
+                    "predicted" to true
+                ),
+                "bustWidth" to mutableMapOf(
+                    "value" to 245,
+                    "predicted" to true
+                ),
+                "thigh" to mutableMapOf(
+                    "value" to 480,
+                    "predicted" to true
+                ),
+                "shoulderWidth" to mutableMapOf(
+                    "value" to 340,
+                    "predicted" to true
+                ),
+                "hipHeight" to mutableMapOf(
+                    "value" to 750,
+                    "predicted" to true
+                ),
+                "kneeHeight" to mutableMapOf(
+                    "value" to 395,
+                    "predicted" to true
+                ),
+                "neck" to mutableMapOf(
+                    "value" to 300,
+                    "predicted" to true
+                ),
+                "waistHeight" to mutableMapOf(
+                    "value" to 920,
+                    "predicted" to true
+                ),
+                "hip" to mutableMapOf(
+                    "value" to 830,
+                    "predicted" to true
+                ),
+                "armpitHeight" to mutableMapOf(
+                    "value" to 1130,
+                    "predicted" to true
+                ),
+                "bicep" to mutableMapOf(
+                    "value" to 220,
+                    "predicted" to true
+                ),
+                "inseam" to mutableMapOf(
+                    "value" to 700,
+                    "predicted" to true
+                ),
+                "headHeight" to mutableMapOf(
+                    "value" to 215,
+                    "predicted" to true
+                ),
+                "hipWidth" to mutableMapOf(
+                    "value" to 300,
+                    "predicted" to true
+                ),
+                "sleeve" to mutableMapOf(
+                    "value" to 720,
+                    "predicted" to true
+                ),
+                "bust" to mutableMapOf(
+                    "value" to 755,
+                    "predicted" to true
+                ),
+                "waist" to mutableMapOf(
+                    "value" to 630,
+                    "predicted" to true
+                ),
+                "sleeveLength" to mutableMapOf(
+                    "value" to 520,
+                    "predicted" to true
+                ),
+                "rise" to mutableMapOf(
+                    "value" to 215,
+                    "predicted" to true
+                ),
+                "shoulder" to mutableMapOf(
+                    "value" to 370,
+                    "predicted" to true
+                ),
+                "shoulderHeight" to mutableMapOf(
+                    "value" to 1240,
+                    "predicted" to true
+                )
+            )
+        )
     }
 }

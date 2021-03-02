@@ -8,7 +8,16 @@ import org.json.JSONObject
 enum class VirtusizeEvents {
     UserSawProduct,
     UserSawWidgetButton,
-    UserOpenedWidget
+    UserOpenedWidget,
+    UserSelectedProduct,
+    UserAddedProduct,
+    UserChangedRecommendationType,
+    UserCreatedSilhouette,
+    UserUpdatedBodyMeasurements,
+    UserAuthData,
+    UserLoggedIn,
+    UserLoggedOut,
+    UserDeletedData
 }
 
 /**
@@ -20,7 +29,25 @@ fun VirtusizeEvents.getEventName(): String {
         VirtusizeEvents.UserSawProduct -> "user-saw-product"
         VirtusizeEvents.UserSawWidgetButton -> "user-saw-widget-button"
         VirtusizeEvents.UserOpenedWidget -> "user-opened-widget"
+        VirtusizeEvents.UserSelectedProduct -> "user-selected-product"
+        VirtusizeEvents.UserAddedProduct -> "user-added-product"
+        VirtusizeEvents.UserChangedRecommendationType -> "user-changed-recommendation-type"
+        VirtusizeEvents.UserCreatedSilhouette -> "user-created-silhouette"
+        VirtusizeEvents.UserUpdatedBodyMeasurements -> "user-updated-body-measurements"
+        VirtusizeEvents.UserAuthData -> "user-auth-data"
+        VirtusizeEvents.UserLoggedIn -> "user-logged-in"
+        VirtusizeEvents.UserLoggedOut -> "user-logged-out"
+        VirtusizeEvents.UserDeletedData -> "user-deleted-data"
     }
+}
+
+/**
+ * This enum contains the size comparison types Virtusize provides
+ * Based on a user's selection of the type in the web view, the SDK displays a corresponding InPage comparison
+ */
+enum class SizeRecommendationType {
+    body,
+    compareProduct
 }
 
 /**
