@@ -38,10 +38,26 @@ class VirtusizeApiTest {
     }
 
     @Test
-    fun productCheck_shouldReturnExpectedApiRequest() {
+    fun productCheck_stagingEnv_shouldReturnExpectedApiRequest() {
         val actualApiRequest = VirtusizeApi.productCheck(TestFixtures.VIRTUSIZE_PRODUCT)
 
-        val expectedUrl = "https://staging.virtusize.com/integration/v3/product-data-check" +
+        val expectedUrl = "https://services.virtusize.jp/stg/product/check" +
+                "?apiKey=${TestFixtures.API_KEY}" +
+                "&externalId=${TestFixtures.EXTERNAL_ID}" +
+                "&version=1"
+
+        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
+
+        assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
+    }
+
+    @Test
+    fun productCheck_koreaEnv_shouldReturnExpectedApiRequest() {
+        VirtusizeApi.setEnvironment(VirtusizeEnvironment.KOREA)
+
+        val actualApiRequest = VirtusizeApi.productCheck(TestFixtures.VIRTUSIZE_PRODUCT)
+
+        val expectedUrl = "https://services.virtusize.kr/product/check" +
                 "?apiKey=${TestFixtures.API_KEY}" +
                 "&externalId=${TestFixtures.EXTERNAL_ID}" +
                 "&version=1"
@@ -57,7 +73,7 @@ class VirtusizeApiTest {
 
         val expectedUrl = "https://static.api.virtusize.com/a/fit-illustrator/v2/staging/index.html"
 
-        assertThat(actualUrl).isEqualTo(expectedUrl)
+        assertThat(actualUrl).contains(expectedUrl)
 
         val actualUrlQuerySanitizer = UrlQuerySanitizer(actualUrl)
 

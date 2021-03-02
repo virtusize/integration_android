@@ -17,9 +17,9 @@ internal enum class VirtusizeEndpoint {
  */
 internal fun VirtusizeEndpoint.getPath(): String {
      return when(this) {
-        VirtusizeEndpoint.ProductCheck -> {
-            "/integration/v3/product-data-check"
-        }
+         VirtusizeEndpoint.ProductCheck -> {
+             "/product/check"
+         }
          VirtusizeEndpoint.ProductMetaDataHints -> {
              "/rest-api/v1/product-meta-data-hints"
          }
