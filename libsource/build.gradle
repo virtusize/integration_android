@@ -9,16 +9,16 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
 
-        versionCode 11
+        versionCode 13
         versionName "2.1"
     }
 
     buildTypes {
-        release {
+        debug {
             consumerProguardFiles 'proguard-rules.pro'
         }
 
-        debug {
+        release {
             consumerProguardFiles 'proguard-rules.pro'
         }
     }

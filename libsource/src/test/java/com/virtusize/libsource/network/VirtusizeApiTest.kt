@@ -5,10 +5,10 @@ import android.os.Build
 import android.view.WindowManager
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
-import com.virtusize.libsource.fixtures.TestFixtures
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.parsers.JsonUtils
 import com.virtusize.libsource.fixtures.ProductFixtures
+import com.virtusize.libsource.fixtures.TestFixtures
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -49,7 +49,21 @@ class VirtusizeApiTest {
     }
 
     @Test
-    fun virtusizeWebView_shouldReturnExpectedUrl() {
+    fun virtusizeWebView_stagingEnv_shouldReturnExpectedUrl() {
+        val actualUrl = VirtusizeApi.virtusizeWebViewURL()
+
+        val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/staging/sdk-webview.html"
+
+        assertThat(actualUrl).isEqualTo(expectedUrl)
+    }
+
+    @Test
+    fun virtusizeWebView_japanEnv_shouldReturnExpectedUrl() {
+        VirtusizeApi.init(
+            VirtusizeEnvironment.JAPAN,
+            TestFixtures.API_KEY,
+            TestFixtures.USER_ID
+        )
         val actualUrl = VirtusizeApi.virtusizeWebViewURL()
 
         val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-webview.html"
@@ -238,7 +252,7 @@ class VirtusizeApiTest {
 
         val expectedUrl = "https://staging.virtusize.jp/a/api/v3/user-body-measurements"
 
-        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET, mutableMapOf(),  true)
+        val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET, mutableMapOf(), true)
 
         assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
     }

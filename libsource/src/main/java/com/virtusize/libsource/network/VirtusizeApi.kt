@@ -83,7 +83,7 @@ internal object VirtusizeApi {
      * @return the Virtusize web view URL as String
      */
     fun virtusizeWebViewURL(): String {
-        val urlBuilder = Uri.parse(environment.virtusizeUrl() + VirtusizeEndpoint.VirtusizeWebView.getPath())
+        val urlBuilder = Uri.parse(environment.virtusizeUrl() + VirtusizeEndpoint.VirtusizeWebView.getPath(environment))
             .buildUpon()
         return urlBuilder.build().toString()
     }
