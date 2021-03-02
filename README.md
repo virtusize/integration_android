@@ -2,7 +2,7 @@
 
 [![](https://jitpack.io/v/virtusize/integration_android.svg)](https://jitpack.io/#virtusize/integration_android)
 
-[日本語](README-JP.md)
+
 
 Virtusize helps retailers to illustrate the size and fit of clothing, shoes and bags online, by letting customers compare the
 measurements of an item they want to buy (on a retailer's product page) with an item that they already own (a reference item).
@@ -124,8 +124,8 @@ Please do not forget to unregister message handler in activity or fragment's lif
           Log.i(TAG, event.name)
       }
 
-      override fun onError(errorType: VirtusizeError) {
-          Log.e(TAG, errorType.message)
+      override fun onError(error: VirtusizeError) {
+          Log.e(TAG, error.message)
       }
   }
 

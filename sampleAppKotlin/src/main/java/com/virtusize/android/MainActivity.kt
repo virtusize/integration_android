@@ -128,8 +128,8 @@ class MainActivity : AppCompatActivity() {
             Log.i(TAG, event.name)
         }
 
-        override fun onError(errorType: VirtusizeError) {
-            Log.e(TAG, errorType.message)
+        override fun onError(error: VirtusizeError) {
+            Log.e(TAG, error.message)
         }
     }
 }
