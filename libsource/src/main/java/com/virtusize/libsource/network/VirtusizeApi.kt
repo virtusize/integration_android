@@ -55,6 +55,10 @@ internal object VirtusizeApi {
         this.language = language
     }
 
+    internal fun setEnvironment(env: VirtusizeEnvironment) {
+        environment = env
+    }
+
     /**
      * Gets the API request for product check
      * It checks if the product is supported by Virtusize before loading anything on the frontend
@@ -65,7 +69,7 @@ internal object VirtusizeApi {
      * @see ApiRequest
      */
     fun productCheck(product: VirtusizeProduct): ApiRequest {
-        val urlBuilder = Uri.parse(environment.value() + VirtusizeEndpoint.ProductCheck.getPath())
+        val urlBuilder = Uri.parse(environment.servicesApiUrl() + VirtusizeEndpoint.ProductCheck.getPath())
             .buildUpon()
             .appendQueryParameter("apiKey", apiKey)
             .appendQueryParameter("externalId", product.externalId)

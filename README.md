@@ -30,7 +30,7 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 - In your app `build.gradle` file, add below dependencies:
     ```groovy
     dependencies {
-        implementation 'com.github.virtusize:integration_android:1.7'
+        implementation 'com.github.virtusize:integration_android:1.7.1'
     }
     ```
 ## Setup
@@ -267,4 +267,4 @@ https://github.com/virtusize/integration_android/wiki
 
 ## License
 
-Copyright (c) 2018-20 Virtusize CO LTD (https://www.virtusize.jp)
+Copyright (c) 2018-21 Virtusize CO LTD (https://www.virtusize.jp)

@@ -124,7 +124,7 @@ class VirtusizeTest {
 
         assertThat(actualError?.code).isEqualTo(HttpURLConnection.HTTP_FORBIDDEN)
         assertThat(actualError?.message).isEqualTo(VirtusizeErrorType.ApiKeyNullOrInvalid.message())
-        assertThat(actualError).isEqualTo(VirtusizeErrorType.ApiKeyNullOrInvalid)
+        assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.ApiKeyNullOrInvalid)
     }
 
     @Test

@@ -25,6 +25,19 @@ fun VirtusizeEnvironment.value(): String {
     }
 }
 
+/**
+ * Gets the services API URL corresponding to the Virtusize Environment
+ * @return A String value of the services API URL
+ */
+fun VirtusizeEnvironment.servicesApiUrl(): String {
+    return when(this) {
+        STAGING -> "https://services.virtusize.jp/stg"
+        GLOBAL -> "https://services.virtusize.com"
+        JAPAN -> "https://services.virtusize.jp"
+        KOREA -> "https://services.virtusize.kr"
+    }
+}
+
 // Gets the Fit Illustrator URL corresponding to the Virtusize Environment
 fun VirtusizeEnvironment.fitIllustratorUrl(): String {
     return when(this) {
