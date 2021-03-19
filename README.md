@@ -2,7 +2,7 @@
 
 [![](https://jitpack.io/v/virtusize/integration_android.svg)](https://jitpack.io/#virtusize/integration_android)
 
-[日本語](https://github.com/virtusize/integration_ios/blob/master/README-JP.md)
+[日本語](https://github.com/virtusize/integration_android/blob/master/README-JP.md)
 
 Virtusize helps retailers to illustrate the size and fit of clothing, shoes and bags online, by letting customers compare the
 measurements of an item they want to buy (on a retailer's product page) with an item that they already own (a reference item).
