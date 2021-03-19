@@ -27,7 +27,7 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 
 ## はじめに
 
-もし、1.x.xの古いバージョンを引き続きご利用いただく場合は、[v1](https://github.com/virtusize/integration_ios/tree/v1)を参照くださいませ。
+もし、1.x.xの古いバージョンを引き続きご利用いただく場合は、[v1](https://github.com/virtusize/integration_android/tree/v1)を参照くださいませ。
 
 
 ### 1. Virtusize SDKを実装する
@@ -512,7 +512,7 @@ Virtusize SDKには2種類のInPageがあります。
 - ##### UI カスタマイゼーション
 
   - **変更可**
-    - CTAボタンの背景色（[WebAIM contrast test](https://webaim.org/resources/contrastchecker/).で問題がなければ）
+    - CTAボタンの背景色（[WebAIM contrast test](https://webaim.org/resources/contrastchecker/)で問題がなければ）
   - **変更不可:**
     - フォント
     - CTA ボタンの形状
