@@ -9,7 +9,7 @@ measurements of an item they want to buy (on a retailer's product page) with an 
 This is done by comparing the silhouettes of the retailer's product with the silhouette of the customer's reference Item.
 Virtusize is a widget which opens when clicking on the Virtusize button, which is located next to the size selection on the product page.
 
-Read more about Virtusize at https://www.virtusize.com
+Read more about Virtusize at [https://www.virtusize.jp](https://www.virtusize.jp/)
 
 You need a unique API key and an Admin account, only available to Virtusize customers. [Contact our sales team](mailto:sales@virtusize.com) to become a customer.
 
@@ -24,33 +24,35 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 - Setup in AppCompatActivity
 
 
+
 ## はじめに
 
-If you'd like to continue using the old Version 1.x.x, refer to the branch [v1](https://github.com/virtusize/integration_android/tree/v1).
+もし、1.x.xの古いバージョンを引き続きご利用いただく場合は、[v1](https://github.com/virtusize/integration_ios/tree/v1)を参照くださいませ。
 
-#### 1. Virtusize SDKを実装する
 
-- rootの `build.gradle`ファイルに下記のdependencyを追加
+### 1. Virtusize SDKを実装する
 
-  ```groovy
-  allprojects {
-      repositories {
-          maven { url 'https://jitpack.io' }
-      }
+rootの`build.gradle`ファイルに下記のdependencyを追加
+
+```groovy
+allprojects {
+  repositories {
+      maven { url 'https://jitpack.io' }
   }
-  ```
+}
+```
 
-- In your appのbuild.gradleファイルに下記のdependencyを追加
+In your appの`build.gradle`ファイルに下記のdependencyを追加
 
-  ```groovy
-  dependencies {
-      implementation 'com.github.virtusize:integration_android:2.1'
-  }
-  ```
+```groovy
+dependencies {
+  implementation 'com.github.virtusize:integration_android:2.1'
+}
+```
 
 
 
-#### 2. Proguardの設定
+### 2. Proguardの設定
 
 Proguardをお使いの場合、Proguardのルールファイルに下記のルールを追加
 
@@ -62,156 +64,255 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
 
 ## セットアップ
 
-#### 1. VirtusizeBuilderを使用
+### 1. はじめに
 
-**Config**をセットアップするために、**VirtusizeBuilder**を使ってアプリ内クラスの`onCreate`にてバーチャサイズオブジェクトをイニシャライズします。
+アプリケーションクラスの`onCreate`メソッドでVirtusizeオブジェクトを**VirtusizeBuilder**を使って初期化し、設定を行います。可能な設定方法を以下の表に示します。
 
- **VirtusizeBuilder の設定方法は下記です：**
+**VirtusizeBuilder**
 
-##### A. APIキーの設定（必須）
+| 項目                 | データ形式                          | 例                                                           | 説明                                                         | 要件                                                         |
+| -------------------- | ----------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| setApiKey            | String                              | setApiKey("api_key")                                         | 固有のAPIキーは各Virtusizeクライアントに提供されます。       | あり。                                                       |
+| setUserId            | String                              | setUserId("123")                                             | ユーザーがクライアントのアプリにログインしている場合に、クライアントから渡されます。 | あり。Order APIを使用する場合。                              |
+| setEnv               | VirtusizeEnvironment                | setEnv(VirtusizeEnvironment.STAGING)                         | 環境は実装をしている環境を選択してください、`VirtusizeEnvironment.STAGING`,  `VirtusizeEnvironment.GLOBAL`, `VirtusizeEnvironment.JAPAN` or `VirtusizeEnvironment.KOREA`のいずれかです。 | 特になし。デフォルトでは、`VirtusizeEnvironment.GLOBAL`に設定されます。 |
+| setLanguage          | VirtusizeLanguage                   | setLanguage(VirtusizeLanguage.EN)                            | インテグレーションをロードする際の初期言語を設定します。設定可能な値は以下：`VirtusizeLanguage.EN`, `VirtusizeLanguage.JP` および`VirtusizeLanguage.KR` | 特になし。デフォルトでは、初期言語はVirtusizeの環境に基づいて設定されます。 |
+| setShowSGI           | Boolean                             | setShowSGI(true)                                             | ユーザーが生成したアイテムをワードローブに追加するために、SGIを取得してSGIフローを使用するかどうかを決定します。 | 特になし。デフォルトではShowSGIはfalseに設定されています。   |
+| setAllowedLanguages  | `VirtusizeLanguage`列挙のリスト     | In Kotlin, setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))<br />In Java, setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP)) | ユーザーが言語選択ボタンより選択できる言語                   | 特になし。デフォルトでは、英語、日本語、韓国語など、表示可能なすべての言語が表示されるようになっています。 |
+| setDetailsPanelCards | `VirtusizeInfoCategory`列挙のリスト | In Kotlin, setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))<br />In Java, setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT)) | 商品詳細タブに表示する情報のカテゴリ。表示可能カテゴリは以下：`VirtusizeInfoCategory.MODELINFO`, `VirtusizeInfoCategory.GENERALFIT`, `VirtusizeInfoCategory.BRANDSIZING` および `VirtusizeInfoCategory.MATERIAL` | 特になし。デフォルトでは、商品詳細タブに表示可能なすべての情報カテゴリが表示されます。 |
 
-​	各クライアント様ごとに割り当てられたAPIキーを設定します
-
-##### B. UserIdの設定（[Order API](#order-apiについて)が使われている場合必須）
-
-​	String形式にてユーザーがアプリでログインしている場合にUser IDを設定。アプリローンチ後にユーザーIDを設定することも可能	です。詳しくは[Order API](#order-apiについて)の1項を参照してください。
-
-##### C. Envの設定リージョンの設定が可能です。
-
-​	デフォルトでは`GLOBAL`に設定されています。
-
-​	**実装可能例：**
-
-​	`VirtusizeEnvironment.STAGING`, 
-
-​	`VirtusizeEnvironment.GLOBAL`, 
-
-​	`VirtusizeEnvironment.JAPAN` and
-
-​	`VirtusizeEnvironment.KOREA`.
-
-##### D. Languageの設定
-
-​	実装する言語を設定します。デフォルトではVirtusizeEnvironmentの言語設定に従います。
-
-​	**実装可能例：**
-
-​	`VirtusizeLanguage.EN`, 
-
-​	`VirtusizeLanguage.JP` and
-
-​	`VirtusizeLanguage.KR`.
-
-##### E. ShowSGIの設定
-
-​	実装がSGIフローを利用してユーザーにワードローブへのSGIを利用した追加機能を使わせるかどうかをブーリアン値で設定します。**SGIを使用するかどうかはご担当者にご相談ください。**デフォルトでは`false`に設定されています。
-
-##### F. AllowedLanguagesの設定
-
-​	ユーザーが切り替え可能な言語を設定します。デフォルトでは全ての言語に切り替え可能になっています。
-
-##### G. DetailsPanelCardsの設定
-
-​	サービス内の商品詳細タブで表示する項目を設定します。デフォルトでは表示可能な項目全てが表示される設定です。
-
-​	**設定可能な項目：** 
-
-​	`VirtusizeInfoCategory.MODEL_INFO`, 
-
-​	`VirtusizeInfoCategory.GENERAL_FIT`, 
-
-​	`VirtusizeInfoCategory.BRAND_SIZING` and 
-
-​	`VirtusizeInfoCategory.MATERIAL`.
-
-- **Kotlinの場合の例**
+- Kotlin
 
   ```kotlin
   lateinit var Virtusize: Virtusize
   override fun onCreate() {
       super.onCreate()
-     Virtusize = VirtusizeBuilder().init(this)
-              // Only the API key is required
-              .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
-              // For using the Order API, a user ID is required
-              .setUserId("123")
-              // By default, the Virtusize environment will be set to GLOBAL
-              .setEnv(VirtusizeEnvironment.STAGING)
-              // By default, the initial language will be set based on the Virtusize environment
-              .setLanguage(VirtusizeLanguage.EN)
-              // By default, ShowSGI is false
-              .setShowSGI(true)
-              // By default, Virtusize allows all the possible languages
-              .setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
-              // By default, Virtusize displays all the possible info categories in the Product Details tab
-              .setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
-              .build()
+  
+      // Initialize Virtusize instance for your application
+      Virtusize = VirtusizeBuilder().init(this)
+      // Only the API key is required
+      .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
+      // For using the Order API, a user ID is required
+      .setUserId("123")
+      // By default, the Virtusize environment will be set to GLOBAL
+      .setEnv(VirtusizeEnvironment.STAGING)
+      // By default, the initial language will be set based on the Virtusize environment
+      .setLanguage(VirtusizeLanguage.EN)
+      // By default, ShowSGI is false
+      .setShowSGI(true)
+      // By default, Virtusize allows all the possible languages
+      .setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
+      // By default, Virtusize displays all the possible info categories in the Product Details tab
+      .setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
+      .build()
   }
   ```
-- **Javaの場合の例**
 
-    ```java
-    Virtusize Virtusize;
+- Java
 
-    @Override
-    public void onCreate() {
-       super.onCreate();
-            // Initialize Virtusize instance for your application
-            Virtusize = new VirtusizeBuilder().init(this)
-                    // Only the API key is required
-                    .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
-                    // For using the Order API, a user ID is required
-                    .setUserId("123")
-                    // By default, the Virtusize environment will be set to GLOBAL
-                    .setEnv(VirtusizeEnvironment.STAGING)
-                    // By default, the initial language will be set based on the Virtusize environment
-                    .setLanguage(VirtusizeLanguage.EN)
-                    // By default, ShowSGI is false
-                    .setShowSGI(true)
-                    // By default, Virtusize allows all the possible languages
-                    .setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
-                    // By default, Virtusize displays all the possible info categories in the Product Details tab
-                    .setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
-                    .build();
-    ```
+  ```java
+  Virtusize Virtusize;
+  
+  @Override
+  public void onCreate() {
+      super.onCreate();
+  
+      // Initialize Virtusize instance for your application
+      Virtusize = new VirtusizeBuilder().init(this)
+        // Only the API key is required
+        .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
+        // For using the Order API, a user ID is required
+        .setUserId("123")
+        // By default, the Virtusize environment will be set to GLOBAL
+        .setEnv(VirtusizeEnvironment.STAGING)
+        // By default, the initial language will be set based on the Virtusize environment
+        .setLanguage(VirtusizeLanguage.EN)
+        // By default, ShowSGI is false
+        .setShowSGI(true)
+        // By default, Virtusize allows all the possible languages
+        .setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
+        // By default, Virtusize displays all the possible info categories in the Product Details tab
+        .setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
+        .build();
+  }
+  ```
+
+### 
+
+### 2. 商品詳細をセットする
+
+1. アクティビティ内では、比較ビューに反映させるために商品の `imageUrl` と、API で商品を参照するために使用する `externalId` を渡して、商品の詳細を設定します。
+
+   Kotlin
+
+   ```kotlin
+   (application as App)
+       .Virtusize
+       .setupVirtusizeProduct(
+           VirtusizeProduct(
+               externalId = "694",
+               imageUrl = "http://www.image.com/goods/12345.jpg"
+           )
+       )
+   ```
+
+   Java
+
+   ```java
+   app.Virtusize.setupVirtusizeProduct(
+           new VirtusizeProduct(
+                   "694",
+                   "http://www.image.com/goods/12345.jpg"
+           )
+   );
+   ```
+
+### 
+
+### 3.  Virtusize Message Handlerの登録
+
+アクティビティやフラグメントが終了したり削除されたりする前に、アクティビティ（activity）やフラグメント（fragment）のライフサイクル（lifecycle）・メソッドでメッセージ・ハンドラの登録を解除することを忘れないでください。方法については次のセクションを参照してください。
+
+- Kotlin
+
+  ```kotlin
+  private val activityMessageHandler = object : VirtusizeMessageHandler {
+      override fun virtusizeControllerShouldClose(virtusizeView: VirtusizeView) {
+          Log.i(TAG, "Close Virtusize View")
+          virtusizeView.dismissVirtusizeView()
+      }
+  
+      override fun onEvent(event: VirtusizeEvent) {
+          Log.i(TAG, event.name)
+      }
+  
+      override fun onError(error: VirtusizeError) {
+          Log.e(TAG, error.message)
+      }
+  }
+  
+  override fun onCreate(savedInstanceState: Bundle?) {
+      //...
+      // Register message handler to listen to events from Virtusize
+      (application as App).Virtusize.registerMessageHandler(activityMessageHandler)
+      //...
+  }
+  ```
+
+- Java
+
+  ```java
+  VirtusizeMessageHandler virtusizeMessageHandler;
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+      //...
+      App app = (App) getApplication();
+  
+      virtusizeMessageHandler = new VirtusizeMessageHandler() {
+          @Override
+          public void virtusizeControllerShouldClose(@NotNull VirtusizeView virtusizeView) {
+              Log.i(TAG, "Close Virtusize View");
+          }
+  
+          @Override
+          public void onEvent(@NotNull VirtusizeEvent event) {
+              Log.i(TAG, event.getName());
+          }
+  
+          @Override
+          public void onError(@NonNull VirtusizeError error) {
+              Log.e(TAG, error.getMessage());
+          }
+      }
+      app.Virtusize.registerMessageHandler(virtusizeMessageHandler);
+      //...
+  }
+  ```
+
+### 
+
+### 4. Virtusize Message Handler登録解除
+
+Message Handlerはアクティビティ（activity）やフラグメント（fragment）のライフサイクル（lifecycle）に結びついていますが、Virtusizeライブラリオブジェクトはアプリケーションのライフサイクルに結びついています。そのため、Message Handlerの登録解除を忘れると、アクティビティが終了したりフラグメントが削除されたりしても、イベントを聞き続けることになります。アクティビティの場合、ライフサイクルのどこでMessage Handlerを登録したかによって、superメソッドが呼ばれる前に`onPause`または`onStop`メソッドで登録を解除する必要があります。フラグメントの場合も、同様のガイドラインに従ってください。
+
+- Kotlin
+
+  ```kotlin
+  private val activityMessageHandler: VirtusizeMessageHandler
+  override fun onPause() {
+          // Always un register message handler in onPause() or depending on implementation onStop().
+          (application as App).Virtusize.unregisterMessageHandler(activityMessageHandler)
+          super.onPause()
+  }
+  ```
+
+- Java
+
+  ```java
+  VirtusizeMessageHandler virtusizeMessageHandler;
+  @Override
+  protected void onPause() {
+      app.Virtusize.unregisterMessageHandler(virtusizeMessageHandler);
+      super.onPause();
+  }
+  ```
 
 
 
-#### 2. バーチャサイズのボタンの追加
+## Virtusize Views
 
-バーチャサイズのボタンはバーチャサイズのサービスを立ち上げるUIエレメントです。ボタン追加にはレイアウトXMLファイル内に追加します。
+SDKをセットアップした後、`VirtusizeView`を追加して、顧客が理想的なサイズを見つけられるようにします。Virtusize SDKはユーザーが使用するために2つの主要なUIコンポーネントを提供します。:
 
-##### (1) バーチャサイズのボタンスタイルを利用する場合
+### 1. バーチャサイズボタン（Virtusize Button）
 
-XML内で`app:virtusizeButtonStyle="default_style"`を使用することで、デフォルトのボタンスタイルを利用できます。
+#### (1) はじめに
+
+VirtusizeButtonはこのSDKの中でもっとシンプルなUIのボタンです。ユーザーが正しいサイズを見つけられるように、ウェブビューでアプリケーションを開きます。
+
+
+
+#### (2) デフォルトスタイル
+
+SDKのVirtusizeボタンには2つのデフォルトスタイルがあります。
+
+|                          Teal Theme                          |                         Black Theme                          |
+| :----------------------------------------------------------: | :----------------------------------------------------------: |
+| <img src="https://user-images.githubusercontent.com/7802052/92671785-22817a00-f352-11ea-8ce9-6b4f7fcb43c4.png" /> | <img src="https://user-images.githubusercontent.com/7802052/92671771-172e4e80-f352-11ea-8443-dcb8b05f5a07.png" /> |
+
+もしご希望であれば、ボタンのスタイルもカスタマイズすることができます。
+
+
+
+#### (3) 使用方法
+
+**A.  アクティビティのXMLレイアウトファイルにVirtusizeButtonを追加してください。**
+
+私たちのデフォルトのボタンスタイルを使用するために、XMLで`app:virtusizeButtonStyle="virtusize_black "`または`app:virtusizeButtonStyle="virtusize_teal "`を設定します。
 
 - XML
 
   ```xml
   <com.virtusize.libsource.ui.VirtusizeButton
       android:id="@+id/exampleVirtusizeButton"
-      app:virtusizeButtonStyle="default_style"
+      app:virtusizeButtonStyle="virtusize_black"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content" />
   ```
 
- あるいはプログラムで下記のように実装も可能です
+もしくは、プログラムとして設定します。
 
 - Kotlin
 
   ```kotlin
-  exampleVirtusizeButton.buttonStyle = VirtusizeButtonStyle.DEFAULT_STYLE
+  exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.BLACK
   ```
 
 - Java
 
   ```java
-  virtusizeButton.setButtonStyle(VirtusizeButtonStyle.DEFAULT_STYLE);
+  virtusizeButton.setVirtusizeViewStyle(VirtusizeViewStyle.TEAL);
   ```
 
-##### (2) ボタンのスタイルをカスタマイズする場合
-
-任意のボタンスタイルを下記のような形でバーチャサイズ適用することも可能です。
+**B. また、他のボタンスタイルを使用したり、ボタンの属性（テキスト、高さ、幅など）を定義することもできます。**
 
 ```xml
 <com.virtusize.libsource.ui.VirtusizeButton
@@ -222,114 +323,260 @@ XML内で`app:virtusizeButtonStyle="default_style"`を使用することで、�
     android:text="@string/virtusize_button_text" />
 ```
 
-
-
-#### 3. バーチャサイズボタンの設定
-
-Activity内にて、商品詳細ページから送られる`imageUrl`と`externalId`を使ってバーチャサイズボタンを設定します。`imageUrl`は商品画像、`externalId`はAPIキーをもとに商品を参照するために使われます。
+**C. アクティビティの**`setupVirtusizeView`**関数を使用して、VirtusizeボタンをVirtusize APIに接続します。**
 
 - Kotlin
 
   ```kotlin
-  (application as App)
-  .Virtusize
-  .setupVirtusizeButton(
-      virtusizeButton = exampleVirtusizeButton,
-      virtusizeProduct = VirtusizeProduct(externalId = "694", imageUrl = "http://simage-kr.uniqlo.com/goods/31/12/11/71/414571_COL_COL02_570.jpg"))
+  (application as App).Virtusize.setupVirtusizeView(exampleVirtusizeButton)
   ```
 
 - Java
 
   ```java
-  VirtusizeButton exampleVirtusizeButton;
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
-      setContentView(R.layout.activity_main);
-      exampleVirtusizeButton = findViewById(R.id.exampleVirtusizeButton);
-      App app = (App) getApplication();
-      app.Virtusize.setupVirtusizeButton(virtusizeButton, new VirtusizeProduct("694", "https://www.publicdomainpictures.net/pictures/120000/velka/dress-1950-vintage-style.jpg"));
-  }
+  app.Virtusize.setupVirtusizeView(virtusizeButton);
   ```
 
 
 
-#### 4. バーチャサイズウィジェットをマニュアルで閉じる
+### 2. バーチャサイズ・インページ（Virtusize InPage）
 
-- Kotlin
+#### (1) はじめに
 
-  ```kotlin
-  exampleVirtusizeButton.dismissVirtusizeView()
-  ```
+Virtusize InPageは、私たちのサービスのスタートボタンのような役割を果たすボタンです。また、このボタンは、お客様が正しいサイズを見つけるためのフィッティングガイドとしても機能します。
 
-- Java
+##### **InPageの種類**
 
-  ```java
-  exampleVirtusizeButton.dismissVirtusizeView();
-  ```
+Virtusize SDKには2種類のInPageがあります。
 
+|                       InPage Standard                        |                         InPage Mini                          |
+| :----------------------------------------------------------: | :----------------------------------------------------------: |
+| ![InPageStandard](https://user-images.githubusercontent.com/7802052/92671977-9cb1fe80-f352-11ea-803b-5e3cb3469be4.png) | ![InPageMini](https://user-images.githubusercontent.com/7802052/92671979-9e7bc200-f352-11ea-8594-ed441649855c.png) |
 
+⚠️**注意事項**⚠️
 
-#### 5. Virtusize Message Handlerの設定
+1. InPageはVirtusizeボタンと一緒に導入することはできません。オンラインショップでは、InPageかVirtusizeボタンのどちらかをお選びください。
 
-activityあるいはfragmentのライフサイクルが終わる、あるいは除去される前にMessage Handler解除するのを忘れないようにしてください。
-
-- Kotlin
-
-  ```kotlin
-  private val activityMessageHandler = object : VirtusizeMessageHandler {
-       override fun virtusizeControllerShouldClose(virtusizeButton: VirtusizeButton) {
-           Log.i(TAG, "Close Virtusize View")
-           virtusizeButton.dismissVirtusizeView()
-       }
-  
-       override fun onEvent(virtusizeButton: VirtusizeButton?, event: VirtusizeEvent) {
-           Log.i(TAG, event.name)
-       }
-  
-       override fun onError(virtusizeButton: VirtusizeButton?, errorType: VirtusizeError) {
-           Log.e(TAG, errorType.message)
-       }
-   }
-   override fun onCreate(savedInstanceState: Bundle?) {
-       //...
-       // Register message handler to listen to events from Virtusize
-       (application as App).Virtusize.registerMessageHandler(activityMessageHandler)
-       //...
-   }
-  ```
-
-- Java
-
-  ```java
-  @Override
-   protected void onCreate(Bundle savedInstanceState) {
-       //...
-       App app = (App) getApplication();
-       app.Virtusize.registerMessageHandler(new VirtusizeMessageHandler() {
-           @Override
-           public void virtusizeControllerShouldClose(@NotNull VirtusizeButton virtusizeButton) {
-               Log.i(TAG, "Close Virtusize View");
-           }
-  
-           @Override
-           public void onEvent(@org.jetbrains.annotations.Nullable VirtusizeButton virtusizeButton, @NotNull VirtusizeEvent event) {
-               Log.i(TAG, event.getName());
-           }
-  
-           @Override
-           public void onError(VirtusizeButton virtusizeButton, @NonNull VirtusizeError error) {
-               Log.e(TAG, error.getMessage());
-           }
-       });
-   }
-  ```
+2. InPage Miniは、必ずInPage Standardと組み合わせてご利用ください。
 
 
 
-#### 6. Virtusize Message Handlerの解除
+#### (2) InPage Standard
 
-Message Handlerはアクティビティあるいはfragmentのライフサイクルに紐づいていますが、バーチャサイズのオブジェクトはアプリケーションのライフサイクルに紐づいています。なので、Message Handlerを解除し忘れた場合、アクティビティが無効な場合やFragmentが除去された後でもイベントを参照し続けてしまいます。Message Handlerをどこに登録したかによりますんが、Super methodが呼び出される前に`onPause`か`onStop`にて解除する必要がある場合があります。 
+##### A. デザインガイドライン
+
+- ##### デフォルトデザイン
+
+  デフォルトデザインは2種類あります。
+
+  |                          Teal Theme                          |                         Black Theme                          |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | ![InPageStandardTeal](https://user-images.githubusercontent.com/7802052/92672035-b9e6cd00-f352-11ea-9e9e-5385a19e96da.png) | ![InPageStandardBlack](https://user-images.githubusercontent.com/7802052/92672031-b81d0980-f352-11ea-8b7a-564dd6c2a7f1.png) |
+
+- ##### レイアウトのバリエーション
+
+  設定可能なレイアウト例
+
+  |               1 thumbnail + 2 lines of message               |              2 thumbnails + 2 lines of message               |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | ![1 thumbnail + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399368-5e879300-1930-11eb-8b77-b49e06813550.png) | ![2 thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399370-5f202980-1930-11eb-9a2d-7b71714aa7b4.png) |
+  |             **1 thumbnail + 1 line of message**              |        **2 animated thumbnails + 2 lines of message**        |
+  | ![1 thumbnail + 1 line of message](https://user-images.githubusercontent.com/7802052/97399373-5f202980-1930-11eb-81fe-9946b656eb4c.png) | ![2 animated thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399355-59c2df00-1930-11eb-8a52-292956b8762d.gif) |
+
+- ##### 推奨設定箇所
+
+  - サイズテーブルの近く
+
+  - サイズ情報掲載箇所
+
+  <img src="https://user-images.githubusercontent.com/7802052/92672185-15b15600-f353-11ea-921d-397f207cf616.png" style="zoom:50%;" />
+
+- ##### UI カスタマイゼーション
+
+  - **変更可:**
+    - CTAボタンの背景色（[WebAIM contrast test](https://webaim.org/resources/contrastchecker/)で問題がなければ）
+    - Inpageの横幅（アプリの横幅に合わせて変更可）
+
+  - **変更不可**:
+    - 形状やスペースなどのインターフェイスコンポーネント
+    - フォント
+    - CTA ボタンの形状
+    - テキスト文言
+    - ボタンシャドウ（削除も不可）
+    - VIRTUSIZE ロゴと プライバシーポリシーのテキストが入ったフッター（削除も不可）
+
+##### B.  使用方法
+
+- **アクティビティのXMLレイアウトファイルにVirtusizeInPageStandを追加します。**
+
+  私たちのデフォルトスタイルを使用するために、 `app:virtusizeInPageStandardStyle="virtusize_black"` または `app:virtusizeInPageStandardStyle="virtusize_teal"` を設定してください。
+
+  CTAボタンの背景色を変更したい場合は、`app:inPageStandardButtonBackgroundColor="#123456 "`を使用できます。
+
+  アプリ画面の端とInPageStandardの間の水平方向の余白を設定したい場合は、`app:inPageStandardHorizontalMargin="16dp"`とします。
+
+  - XML
+
+    ```xml
+    <com.virtusize.libsource.ui.VirtusizeInPageStandard
+        android:id="@+id/exampleVirtusizeInPageStandard"
+        app:virtusizeInPageStandardStyle="virtusize_black"
+        app:inPageStandardHorizontalMargin="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    ```
+
+    ```xml
+    <com.virtusize.libsource.ui.VirtusizeInPageStandard
+        android:id="@+id/exampleVirtusizeInPageStandard"
+        app:inPageStandardButtonBackgroundColor="#123456"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content" />
+    ```
+
+    または、プログラムとして設定します。
+
+  - Kotlin
+
+    ```kotlin
+    // Set the Virtusize view style
+    exampleVirtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
+    // Set the horizontal margins between the edges of the app screen and the InPageStandard
+    // Note: Use the helper extension function `dpInPx` if you like
+    exampleVirtusizeInPageStandard.horizontalMargin = 16.dpInPx
+    // Set the background color of the check size button in InPage Standard
+    exampleVirtusizeInPageStandard.setButtonBackgroundColor(ContextCompat.getColor(this, R.color.your_custom_color))
+    ```
+
+  - Java
+
+    ```java
+    virtusizeInPageStandard.setVirtusizeViewStyle(VirtusizeViewStyle.BLACK);
+    virtusizeInPageStandard.setHorizontalMargin(ExtensionsKt.getDpInPx(16));
+    virtusizeInPageStandard.setButtonBackgroundColor(ContextCompat.getColor(this, R.color.your_custom_color));
+    ```
+
+- **アクティビティで**`setupVirtusizeView`**関数を使用して、InPage StandardとVirtusize APIを接続します。**
+
+  - Kotlin
+
+    ```kotlin
+    (application as App)
+        .Virtusize
+        .setupVirtusizeView(exampleVirtusizeInPageStandard)
+    ```
+
+  - Java
+
+    ```java
+    app.Virtusize.setupVirtusizeView(virtusizeInPageStandard);
+    ```
+
+
+
+#### (3) InPage Mini
+
+こちらは、InPageのミニバージョンで、アプリに配置することができます。目立たないデザインなので、お客様が商品画像やサイズ表を閲覧するようなレイアウトに適しています。
+
+##### A. デザインガイドライン
+
+- ##### デフォルト デザイン
+
+  ２種類のでフォルトデザインを用意しています。
+
+  |                          Teal Theme                          |                         Black Theme                          |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | ![InPageMiniTeal](https://user-images.githubusercontent.com/7802052/92672234-2d88da00-f353-11ea-99d9-b9e9b6aa5620.png) | ![InPageMiniBlack](https://user-images.githubusercontent.com/7802052/92672232-2c57ad00-f353-11ea-80f6-55a9c72fb0b5.png) |
+
+- ##### 推奨設置箇所
+
+  |                 Underneath the product image                 |              Underneath or near the size table               |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | <img src="https://user-images.githubusercontent.com/7802052/92672261-3c6f8c80-f353-11ea-995c-ede56e0aacc3.png" /> | <img src="https://user-images.githubusercontent.com/7802052/92672266-40031380-f353-11ea-8f63-a67c9cf46c68.png" /> |
+
+- ##### デフォルトのフォント
+
+  - **Japanese**
+    - Noto Sans CJK JP
+    - 12sp (メッセージ文言)
+    - 10sp (ボタン内テキスト)
+  - **Noto Sans CJK JP**
+    - Noto Sans CJK KR
+    - 12sp (メッセージ文言)
+    - 10sp (ボタン内テキスト)
+  - **Noto Sans CJK JP**
+    - Proxima Nova
+    - 14sp (メッセージ文言)
+    - 12sp (ボタン内テキスト)
+
+- ##### UI カスタマイゼーション
+
+  - **変更可**
+    - CTAボタンの背景色（[WebAIM contrast test](https://webaim.org/resources/contrastchecker/).で問題がなければ）
+  - **変更不可:**
+    - フォント
+    - CTA ボタンの形状
+    - テキスト文言
+
+##### B. 使用方法
+
+- **アクティビティのXMLレイアウトファイルにVirtusizeInPageMiniを追加します。**
+
+  私たちのデフォルトスタイルを使用するには、`app:virtusizeInPageMiniStyle="virtusize_black"` または `app:virtusizeInPageMiniStyle="virtusize_teal"` を設定してください。
+
+  バーの背景色を変更したい場合は、`app:inPageMiniBackgroundColor="#123456"` とします。
+
+  - XML
+
+    ```xml
+    <com.virtusize.libsource.ui.VirtusizeInPageMini
+        android:id="@+id/exampleVirtusizeInPageMini"
+        app:virtusizeInPageMiniStyle="virtusize_teal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    ```
+
+    ```xml
+    <com.virtusize.libsource.ui.VirtusizeInPageMini
+        android:id="@+id/exampleVirtusizeInPageMini"
+        app:inPageMiniBackgroundColor="#123456"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content" />
+    ```
+
+    もしくは、プログラムとして設定します。
+
+  - Kotlin
+
+    ```kotlin
+    // Set the Virtusize view style
+    exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.BLACK
+    // Set the background color of the InPageMini view
+    exampleVirtusizeInPageMini.setInPageMiniBackgroundColor(ContextCompat.getColor(this, R.color.your_custom_color))
+    ```
+
+  - Java
+
+    ```java
+    virtusizeInPageMini.setVirtusizeViewStyle(VirtusizeViewStyle.TEAL);
+    virtusizeInPageMini.setInPageMiniBackgroundColor(ContextCompat.getColor(this, R.color.your_custom_color));
+    ```
+
+- **アクティビティで**`setupVirtusizeView`**関数を使用して、InPage MiniをVirtusize APIに接続します。**
+
+  - Kotlin
+
+    ```kotlin
+    (application as App)
+        .Virtusize
+        .setupVirtusizeView(exampleVirtusizeInPageMini)
+    ```
+
+  - Java
+
+    ```java
+    app.Virtusize.setupVirtusizeView(virtusizeInPageMini);
+    ```
 
 
 
@@ -382,6 +629,8 @@ Virtusize = new VirtusizeBuilder()
 app = (App) getApplication();
 app.Virtusize.setUserId("user_id");
 ~~~~
+
+
 
 #### 2. 注文データ向けに*VirtusizeOrder* オブジェクトを作成
 
@@ -454,6 +703,8 @@ items.add(new VirtusizeOrderItem(
         "http://example.com/products/A001"
 ));
 ~~~~
+
+
 
 #### 3. 注文情報の送信
 

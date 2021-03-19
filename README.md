@@ -2,7 +2,7 @@
 
 [![](https://jitpack.io/v/virtusize/integration_android.svg)](https://jitpack.io/#virtusize/integration_android)
 
-
+[日本語](https://github.com/virtusize/integration_ios/blob/master/README-JP.md)
 
 Virtusize helps retailers to illustrate the size and fit of clothing, shoes and bags online, by letting customers compare the
 measurements of an item they want to buy (on a retailer's product page) with an item that they already own (a reference item).
@@ -60,6 +60,7 @@ If you are using Proguard, add following rules to your proguard rules file:
 ```
 
 
+
 ## Setup
 
 ### 1. Initialize Virtusize
@@ -78,6 +79,63 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
 | setAllowedLanguages  | A list of `VirtusizeLanguage`     | In Kotlin, setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))<br />In Java, setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP)) | The languages which the user can switch to using the Language Selector | No. By default, the integration allows all possible languages to be displayed, including English, Japanese and Korean. |
 | setDetailsPanelCards | A list of `VirtusizeInfoCategory` | In Kotlin, setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))<br />In Java, setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT)) | The info categories which will be display in the Product Details tab. Possible categories are: `VirtusizeInfoCategory.MODEL_INFO`, `VirtusizeInfoCategory.GENERAL_FIT`, `VirtusizeInfoCategory.BRAND_SIZING` and `VirtusizeInfoCategory.MATERIAL` | No. By default, the integration displays all the possible info categories in the Product Details tab. |
 
+- Kotlin
+
+  ```kotlin
+  lateinit var Virtusize: Virtusize
+  override fun onCreate() {
+      super.onCreate()
+  
+      // Initialize Virtusize instance for your application
+      Virtusize = VirtusizeBuilder().init(this)
+      // Only the API key is required
+      .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
+      // For using the Order API, a user ID is required
+      .setUserId("123")
+      // By default, the Virtusize environment will be set to GLOBAL
+      .setEnv(VirtusizeEnvironment.STAGING)
+      // By default, the initial language will be set based on the Virtusize environment
+      .setLanguage(VirtusizeLanguage.EN)
+      // By default, ShowSGI is false
+      .setShowSGI(true)
+      // By default, Virtusize allows all the possible languages
+      .setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
+      // By default, Virtusize displays all the possible info categories in the Product Details tab
+      .setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
+      .build()
+  }
+  ```
+
+- Java
+
+  ```java
+  Virtusize Virtusize;
+  
+  @Override
+  public void onCreate() {
+      super.onCreate();
+  
+      // Initialize Virtusize instance for your application
+      Virtusize = new VirtusizeBuilder().init(this)
+        // Only the API key is required
+        .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
+        // For using the Order API, a user ID is required
+        .setUserId("123")
+        // By default, the Virtusize environment will be set to GLOBAL
+        .setEnv(VirtusizeEnvironment.STAGING)
+        // By default, the initial language will be set based on the Virtusize environment
+        .setLanguage(VirtusizeLanguage.EN)
+        // By default, ShowSGI is false
+        .setShowSGI(true)
+        // By default, Virtusize allows all the possible languages
+        .setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
+        // By default, Virtusize displays all the possible info categories in the Product Details tab
+        .setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
+        .build();
+  }
+  ```
+
+### 
 
 ### 2. Set Up Product Details
 
@@ -106,6 +164,8 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
            )
    );
    ```
+
+
 
 ### 3. Register Virtusize Message Handler
 
@@ -167,9 +227,11 @@ Please do not forget to unregister message handler in activity or fragment's lif
   }
   ```
 
+
+
 ### 4. Unregister Virtusize Message Handler
 
-A message handler is tied to an activity or fragment's lifecycle, but the Virtusize library object is tied to the application's lifecycle. So if you forget to unregister message handler, then it will keep listening to events even after activity is dead or fragment has been removed. In the case of an activity; depending on where in the lifecycle you registered the message handler, you may need to unregister it in your onPause or onStop method before the super method is called. Follow the same guidelines in the case of fragment as well.
+A message handler is tied to an activity or fragment's lifecycle, but the Virtusize library object is tied to the application's lifecycle. So if you forget to unregister message handler, then it will keep listening to events even after activity is dead or fragment has been removed. In the case of an activity; depending on where in the lifecycle you registered the message handler, you may need to unregister it in your `onPause` or `onStop` method before the super method is called. Follow the same guidelines in the case of fragment as well.
 
 - Kotlin
 
@@ -197,6 +259,8 @@ A message handler is tied to an activity or fragment's lifecycle, but the Virtus
 
 ## Virtusize Views
 
+After setting up the SDK, add a `VirtusizeView` to allow your customers to find their ideal size.
+
 Virtusize SDK provides two main UI components for clients to use:
 
 ### 1. Virtusize Button
@@ -204,6 +268,8 @@ Virtusize SDK provides two main UI components for clients to use:
 #### (1) Introduction
 
 VirtusizeButton is the simplest UI Button for our SDK. It opens our application in the web view to support customers finding the right size.
+
+
 
 #### (2) Default Styles
 
@@ -214,6 +280,8 @@ There are two default styles of the Virtusize Button in our Virtusize SDK.
 | <img src="https://user-images.githubusercontent.com/7802052/92671785-22817a00-f352-11ea-8ce9-6b4f7fcb43c4.png" /> | <img src="https://user-images.githubusercontent.com/7802052/92671771-172e4e80-f352-11ea-8443-dcb8b05f5a07.png" /> |
 
  If you like, you can also customize the button style.
+
+
 
 #### (3) Usage
 
@@ -270,9 +338,11 @@ In order to use our default button styles, set `app:virtusizeButtonStyle="virtus
   app.Virtusize.setupVirtusizeView(virtusizeButton);
   ```
 
+
+
 ### 2. Virtusize InPage
 
-### (1) Introduction
+#### (1) Introduction
 
 Virtusize InPage is a button that behaves like a start button for our service. The button also behaves as a fitting guide that supports people to find the right size.
 
@@ -287,12 +357,13 @@ There are two types of InPage in our Virtusize SDK.
 ⚠️**Caution**⚠️
 
 1. InPage cannot be implemented together with the Virtusize button. Please pick either InPage or Virtusize button for your online shop.
-
 2. InPage Mini must always be used in combination with InPage Standard.
 
-### (2) InPage Standard
 
-#### A. Design Guidelines
+
+#### (2) InPage Standard
+
+##### A. Design Guidelines
 
 - ##### Default Designs
 
@@ -334,7 +405,7 @@ There are two types of InPage in our Virtusize SDK.
     - change or hide the box shadow.
     - hide the footer that contains VIRTUSIZE logo and Privacy Policy text link.
 
-#### B. Usage
+##### B. Usage
 
 - **Add a VirtusizeInPageStand in your activity's XML layout file.**
 
@@ -400,6 +471,8 @@ There are two types of InPage in our Virtusize SDK.
     ```java
     app.Virtusize.setupVirtusizeView(virtusizeInPageStandard);
     ```
+
+
 
 ### (3) InPage Mini
 
@@ -555,6 +628,9 @@ in your activity or fragment after the app is launched
     app = (App) getApplication();
     app.Virtusize.setUserId("user_id");
     ~~~~
+
+
+
 #### 2. Create a *VirtusizeOrder* object for order data
 
 The ***VirtusizeOrder*** object gets passed to the `Virtusize.sendOrder` method, and has the following attributes:
