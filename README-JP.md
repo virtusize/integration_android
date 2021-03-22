@@ -176,11 +176,6 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
 
   ```kotlin
   private val activityMessageHandler = object : VirtusizeMessageHandler {
-      override fun virtusizeControllerShouldClose(virtusizeView: VirtusizeView) {
-          Log.i(TAG, "Close Virtusize View")
-          virtusizeView.dismissVirtusizeView()
-      }
-  
       override fun onEvent(event: VirtusizeEvent) {
           Log.i(TAG, event.name)
       }
@@ -208,11 +203,6 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
       App app = (App) getApplication();
   
       virtusizeMessageHandler = new VirtusizeMessageHandler() {
-          @Override
-          public void virtusizeControllerShouldClose(@NotNull VirtusizeView virtusizeView) {
-              Log.i(TAG, "Close Virtusize View");
-          }
-  
           @Override
           public void onEvent(@NotNull VirtusizeEvent event) {
               Log.i(TAG, event.getName());

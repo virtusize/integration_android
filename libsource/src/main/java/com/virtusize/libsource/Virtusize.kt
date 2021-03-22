@@ -31,12 +31,6 @@ class Virtusize(
 
     // The Virtusize message handler passes received errors and events to registered message handlers
     private val messageHandler = object : VirtusizeMessageHandler {
-        override fun virtusizeControllerShouldClose(virtusizeView: VirtusizeView) {
-            messageHandlers.forEach { messageHandler ->
-                messageHandler.virtusizeControllerShouldClose(virtusizeView)
-            }
-        }
-
         override fun onEvent(event: VirtusizeEvent) {
             messageHandlers.forEach { messageHandler ->
                 messageHandler.onEvent(event)

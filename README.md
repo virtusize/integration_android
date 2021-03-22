@@ -175,11 +175,6 @@ Please do not forget to unregister message handler in activity or fragment's lif
 
   ```kotlin
   private val activityMessageHandler = object : VirtusizeMessageHandler {
-      override fun virtusizeControllerShouldClose(virtusizeView: VirtusizeView) {
-          Log.i(TAG, "Close Virtusize View")
-          virtusizeView.dismissVirtusizeView()
-      }
-
       override fun onEvent(event: VirtusizeEvent) {
           Log.i(TAG, event.name)
       }
@@ -207,11 +202,6 @@ Please do not forget to unregister message handler in activity or fragment's lif
       App app = (App) getApplication();
 
       virtusizeMessageHandler = new VirtusizeMessageHandler() {
-          @Override
-          public void virtusizeControllerShouldClose(@NotNull VirtusizeView virtusizeView) {
-              Log.i(TAG, "Close Virtusize View");
-          }
-
           @Override
           public void onEvent(@NotNull VirtusizeEvent event) {
               Log.i(TAG, event.getName());
