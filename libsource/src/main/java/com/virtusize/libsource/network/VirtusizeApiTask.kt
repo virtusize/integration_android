@@ -130,18 +130,18 @@ internal class VirtusizeApiTask(
                             if (response is ProductCheck) {
                                 return VirtusizeApiResponse.Error(VirtusizeErrorType.UnParsedProduct.virtusizeError(response.productId))
                             }
-                            virtusizeNetworkError(urlConnection, response)
+                            virtusizeNetworkError(urlConnection.url?.path, urlConnection.responseCode,response ?: urlConnection.responseMessage)
                         }
                         else -> {
-                            virtusizeNetworkError(urlConnection, response)
+                            virtusizeNetworkError(urlConnection.url?.path, urlConnection.responseCode,response ?: urlConnection.responseMessage)
                         }
                     }
                     return VirtusizeApiResponse.Error(error)
                 }
-                else -> return VirtusizeApiResponse.Error(virtusizeNetworkError(urlConnection, urlConnection.responseMessage))
+                else -> return VirtusizeApiResponse.Error(virtusizeNetworkError(urlConnection.url?.path, urlConnection.responseCode, urlConnection.responseMessage))
             }
         } catch (e: IOException) {
-            return VirtusizeApiResponse.Error(virtusizeNetworkError(urlConnection, e.localizedMessage))
+            return VirtusizeApiResponse.Error(virtusizeNetworkError(urlConnection?.url?.path, null, e.localizedMessage))
         } finally {
             urlConnection?.disconnect()
             inputStream?.close()
@@ -206,14 +206,11 @@ internal class VirtusizeApiTask(
 
     /**
      * Returns the VirtusizeError that is associated with an API error
-     * @param urlConnection The HTTP URL connection
-     * @param response The response from the API request
+     * @param urlPath The endpoint path of an API request
+     * @param responseCode The response code of an API request
+     * @param response The response from an API request
      */
-    private fun virtusizeNetworkError(urlConnection: HttpURLConnection?, response: Any?): VirtusizeError {
-        return VirtusizeError(
-            VirtusizeErrorType.NetworkError,
-            urlConnection?.responseCode,
-            "${urlConnection?.url?.path} - ${response?.toString() ?: urlConnection?.responseMessage}"
-        )
+    private fun virtusizeNetworkError(urlPath: String?, responseCode: Int?, response: Any?): VirtusizeError {
+        return VirtusizeError(VirtusizeErrorType.NetworkError, responseCode, "$urlPath - ${response?.toString()}")
     }
 }
