@@ -135,7 +135,7 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
   }
   ```
 
-### 
+
 
 ### 2. Set Up Product Details
 
@@ -167,7 +167,7 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
 
 
 
-### 3. Register Virtusize Message Handler
+### 3. Register Virtusize Message Handler (Optional)
 
 Please do not forget to unregister message handler in activity or fragment's lifecycle method before it dies or is removed. See the next section for a how-to.
 
@@ -219,7 +219,7 @@ Please do not forget to unregister message handler in activity or fragment's lif
 
 
 
-### 4. Unregister Virtusize Message Handler
+### 4. Unregister Virtusize Message Handler (Optional)
 
 A message handler is tied to an activity or fragment's lifecycle, but the Virtusize library object is tied to the application's lifecycle. So if you forget to unregister message handler, then it will keep listening to events even after activity is dead or fragment has been removed. In the case of an activity; depending on where in the lifecycle you registered the message handler, you may need to unregister it in your `onPause` or `onStop` method before the super method is called. Follow the same guidelines in the case of fragment as well.
 
