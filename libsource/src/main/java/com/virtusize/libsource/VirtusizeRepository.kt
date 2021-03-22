@@ -153,13 +153,13 @@ internal class VirtusizeRepository(
         }
 
         if(selectedUserProductId == null) {
-            userBodyRecommendedSize = getUserBodyRecommendedSize(storeProduct!!, productTypes!!)
+            userBodyRecommendedSize = getUserBodyRecommendedSize(storeProduct, productTypes)
         }
 
         userProductRecommendedSize = VirtusizeUtils.findBestFitProductSize(
             userProducts = if(selectedUserProductId != null) userProducts?.filter { it.id == selectedUserProductId } else userProducts,
-            storeProduct = storeProduct!!,
-            productTypes = productTypes!!
+            storeProduct = storeProduct,
+            productTypes = productTypes
         )
     }
 
@@ -208,8 +208,8 @@ internal class VirtusizeRepository(
      * @param productTypes a list of product types
      * @return recommended size name. If it's not available, return null
      */
-    private suspend fun getUserBodyRecommendedSize(storeProduct: Product, productTypes: List<ProductType>): String? {
-        if(storeProduct.isAccessory()) {
+    private suspend fun getUserBodyRecommendedSize(storeProduct: Product?, productTypes: List<ProductType>?): String? {
+        if(storeProduct == null || productTypes == null || storeProduct.isAccessory()) {
             return null
         }
         val userBodyProfileResponse = virtusizeAPIService.getUserBodyProfile()

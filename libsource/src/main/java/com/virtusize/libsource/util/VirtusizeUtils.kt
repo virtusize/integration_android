@@ -63,8 +63,8 @@ internal object VirtusizeUtils {
      * @param productTypes the list of available product types
      * @return [SizeComparisonRecommendedSize]
      */
-    fun findBestFitProductSize(userProducts: List<Product>?, storeProduct: Product, productTypes: List<ProductType>): SizeComparisonRecommendedSize? {
-        if(userProducts == null) {
+    fun findBestFitProductSize(userProducts: List<Product>?, storeProduct: Product?, productTypes: List<ProductType>?): SizeComparisonRecommendedSize? {
+        if(userProducts == null || storeProduct == null || productTypes == null) {
             return null
         }
         val storeProductType = productTypes.find { it.id == storeProduct.productType } ?: return null
