@@ -6,9 +6,6 @@ import com.virtusize.libsource.ui.VirtusizeView
  * This interface can be implemented by an object to receive Virtusize specific messages
  */
 interface VirtusizeMessageHandler {
-
-    fun virtusizeControllerShouldClose(virtusizeView: VirtusizeView)
-
     fun onEvent(event: VirtusizeEvent)
 
     fun onError(error: VirtusizeError)

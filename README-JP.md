@@ -46,7 +46,7 @@ In your appの`build.gradle`ファイルに下記のdependencyを追加
 
 ```groovy
 dependencies {
-  implementation 'com.github.virtusize:integration_android:2.1'
+  implementation 'com.github.virtusize:integration_android:2.1.1'
 }
 ```
 
@@ -136,7 +136,7 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
   }
   ```
 
-### 
+
 
 ### 2. 商品詳細をセットする
 
@@ -166,9 +166,9 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
    );
    ```
 
-### 
 
-### 3.  Virtusize Message Handlerの登録
+
+### 3.  Virtusize Message Handlerの登録（オプション）
 
 アクティビティやフラグメントが終了したり削除されたりする前に、アクティビティ（activity）やフラグメント（fragment）のライフサイクル（lifecycle）・メソッドでメッセージ・ハンドラの登録を解除することを忘れないでください。方法については次のセクションを参照してください。
 
@@ -176,11 +176,6 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
 
   ```kotlin
   private val activityMessageHandler = object : VirtusizeMessageHandler {
-      override fun virtusizeControllerShouldClose(virtusizeView: VirtusizeView) {
-          Log.i(TAG, "Close Virtusize View")
-          virtusizeView.dismissVirtusizeView()
-      }
-  
       override fun onEvent(event: VirtusizeEvent) {
           Log.i(TAG, event.name)
       }
@@ -209,11 +204,6 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
   
       virtusizeMessageHandler = new VirtusizeMessageHandler() {
           @Override
-          public void virtusizeControllerShouldClose(@NotNull VirtusizeView virtusizeView) {
-              Log.i(TAG, "Close Virtusize View");
-          }
-  
-          @Override
           public void onEvent(@NotNull VirtusizeEvent event) {
               Log.i(TAG, event.getName());
           }
@@ -228,9 +218,9 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
   }
   ```
 
-### 
 
-### 4. Virtusize Message Handler登録解除
+
+### 4. Virtusize Message Handler登録解除（オプション）
 
 Message Handlerはアクティビティ（activity）やフラグメント（fragment）のライフサイクル（lifecycle）に結びついていますが、Virtusizeライブラリオブジェクトはアプリケーションのライフサイクルに結びついています。そのため、Message Handlerの登録解除を忘れると、アクティビティが終了したりフラグメントが削除されたりしても、イベントを聞き続けることになります。アクティビティの場合、ライフサイクルのどこでMessage Handlerを登録したかによって、superメソッドが呼ばれる前に`onPause`または`onStop`メソッドで登録を解除する必要があります。フラグメントの場合も、同様のガイドラインに従ってください。
 

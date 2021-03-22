@@ -119,11 +119,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val activityMessageHandler = object : VirtusizeMessageHandler {
-        override fun virtusizeControllerShouldClose(virtusizeView: VirtusizeView) {
-            Log.i(TAG, "Close Virtusize View")
-            virtusizeView.dismissVirtusizeView()
-        }
-
         override fun onEvent(event: VirtusizeEvent) {
             Log.i(TAG, event.name)
         }
