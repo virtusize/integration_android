@@ -179,7 +179,7 @@ internal class VirtusizeApiTask(
                     }
                 }
             }
-            if(isErrorStream && result == null) {
+            if(result == null) {
                 result = streamString
             }
         }

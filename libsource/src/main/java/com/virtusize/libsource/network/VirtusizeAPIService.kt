@@ -226,6 +226,18 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
             .execute(apiRequest)
     }
 
+    internal suspend fun deleteUser(): VirtusizeApiResponse<Any> = withContext(
+        Dispatchers.IO
+    ) {
+        val apiRequest = VirtusizeApi.deleteUser()
+        VirtusizeApiTask(
+            httpURLConnection,
+            sharedPreferencesHelper,
+            messageHandler
+        )
+            .execute(apiRequest)
+    }
+
     /**
      * Gets the API response for retrieving a list of user products
      * @return the [VirtusizeApiResponse] with the list of [Product]

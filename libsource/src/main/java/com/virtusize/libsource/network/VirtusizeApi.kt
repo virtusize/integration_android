@@ -14,7 +14,8 @@ import com.virtusize.libsource.data.remote.UserBodyProfile
  */
 internal enum class HttpMethod {
     GET,
-    POST
+    POST,
+    DELETE
 }
 
 /**
@@ -269,6 +270,14 @@ internal object VirtusizeApi {
             .build()
             .toString()
         return ApiRequest(url, HttpMethod.POST)
+    }
+
+    fun deleteUser(): ApiRequest {
+        val url = Uri.parse(environment.defaultApiUrl() + VirtusizeEndpoint.User.getPath())
+            .buildUpon()
+            .build()
+            .toString()
+        return ApiRequest(url, HttpMethod.DELETE)
     }
 
     /**
