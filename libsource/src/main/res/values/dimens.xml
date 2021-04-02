@@ -11,7 +11,7 @@
     <dimen name="virtusize_inpage_standard_bold_textSize">18sp</dimen>
     <dimen name="virtusize_inpage_standard_privacy_policy_textSize">12sp</dimen>
 
-    <dimen name="virtusize_button_corner_radius">40dp</dimen>
+    <dimen name="virtusize_button_corner_radius">32dp</dimen>
     <dimen name="virtusize_button_vertical_padding">10dp</dimen>
     <dimen name="virtusize_button_horizontal_padding">12dp</dimen>
     <dimen name="virtusize_button_logo_default_width">18dp</dimen>
