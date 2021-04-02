@@ -47,16 +47,18 @@
         android:id="@+id/inpageMiniButton"
         style="@style/VirtusizeInPageButtonStyle"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/virtusize_inpage_mini_button_height"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="@dimen/virtusize_inpage_mini_margin_between_message_button"
         android:layout_marginLeft="@dimen/virtusize_inpage_mini_margin_between_message_button"
         android:background="@drawable/button_background_white"
-        app:backgroundTint="@color/virtusizeWhite"
         android:includeFontPadding="false"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
         android:textAllCaps="false"
-        android:textSize="@dimen/virtusize_inpage_default_textSize" />
+        android:textSize="@dimen/virtusize_inpage_default_textSize"
+        app:backgroundTint="@color/virtusizeWhite" />
 
 </RelativeLayout>

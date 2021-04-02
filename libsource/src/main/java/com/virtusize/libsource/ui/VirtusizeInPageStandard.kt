@@ -24,9 +24,9 @@ import com.virtusize.libsource.VirtusizeRepository
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.Product
 import com.virtusize.libsource.data.remote.ProductCheck
+import com.virtusize.libsource.util.*
 import com.virtusize.libsource.util.FontUtils
 import com.virtusize.libsource.util.VirtusizeUtils
-import com.virtusize.libsource.util.dpInPx
 import kotlinx.android.synthetic.main.view_inpage_standard.view.*
 
 
@@ -103,7 +103,8 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             R.styleable.VirtusizeInPageStandard_virtusizeInPageStandardStyle,
             VirtusizeViewStyle.NONE.value
         )
-        virtusizeViewStyle = VirtusizeViewStyle.values().firstOrNull { it.value == buttonStyle } ?: VirtusizeViewStyle.NONE
+        virtusizeViewStyle = VirtusizeViewStyle.values().firstOrNull { it.value == buttonStyle }
+            ?: VirtusizeViewStyle.NONE
         virtusizeButtonBackgroundColor = attrsArray.getColor(
             R.styleable.VirtusizeInPageStandard_inPageStandardButtonBackgroundColor,
             0
@@ -112,7 +113,11 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             R.styleable.VirtusizeInPageStandard_inPageStandardHorizontalMargin,
             -1f
         ).toInt()
+        messageTextSize = attrsArray.getDimension(R.styleable.VirtusizeInPageStandard_inPageStandardMessageTextSize, -1f)
+        buttonTextSize = attrsArray.getDimension(R.styleable.VirtusizeInPageStandard_inPageStandardButtonTextSize, -1f)
+
         attrsArray.recycle()
+
         setStyle()
     }
 
@@ -126,11 +131,16 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
 
         val viewModelFactory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return  VirtusizeInPageStandardViewModel(VirtusizeRepository(context, virtusizeMessageHandler)) as T
+                return VirtusizeInPageStandardViewModel(
+                    VirtusizeRepository(
+                        context,
+                        virtusizeMessageHandler
+                    )
+                ) as T
             }
         }
 
-        viewModel =  viewModelFactory.create(VirtusizeInPageStandardViewModel::class.java)
+        viewModel = viewModelFactory.create(VirtusizeInPageStandardViewModel::class.java)
 
         (context as? LifecycleOwner)?.apply {
             viewModel?.productImageBitmapLiveData?.observe(this, { productImageViewBitMapPair ->
@@ -145,7 +155,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             })
 
             viewModel?.finishLoadingProductImage?.observe(this, { finishLoading ->
-                if(finishLoading) {
+                if (finishLoading) {
                     setLoadingScreen(false, userBestFitProduct)
                 }
             })
@@ -184,28 +194,29 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
      * @param userBestFitProduct pass the user best fit product to determine whether to display the user product image or not
      */
     private fun setLoadingScreen(loading: Boolean, userBestFitProduct: Product? = null) {
-        inpageStoreProductImageView.visibility = if(loading) View.INVISIBLE else View.VISIBLE
-        inpageUserProductImageView.visibility = if(userBestFitProduct == null) View.GONE else View.VISIBLE
-        vsSignatureImageView.visibility = if(loading) View.INVISIBLE else View.VISIBLE
-        privacyPolicyText.visibility = if(loading) View.INVISIBLE else View.VISIBLE
-        inpageVSIconImageView.visibility = if(loading) View.VISIBLE else View.GONE
-        inpageLoadingText.visibility = if(loading) View.VISIBLE else View.GONE
-        if(loading) {
+        inpageStoreProductImageView.visibility = if (loading) View.INVISIBLE else View.VISIBLE
+        inpageUserProductImageView.visibility =
+            if (userBestFitProduct == null) View.GONE else View.VISIBLE
+        vsSignatureImageView.visibility = if (loading) View.INVISIBLE else View.VISIBLE
+        privacyPolicyText.visibility = if (loading) View.INVISIBLE else View.VISIBLE
+        inpageVSIconImageView.visibility = if (loading) View.VISIBLE else View.GONE
+        inpageLoadingText.visibility = if (loading) View.VISIBLE else View.GONE
+        if (loading) {
             inpageLoadingText.startAnimation()
             inpageTopText.visibility = View.GONE
             inpageBottomText.visibility = View.GONE
         } else {
             inpageLoadingText.stopAnimation()
-            if(!inpageTopText.text.isNullOrBlank()) {
+            if (!inpageTopText.text.isNullOrBlank()) {
                 inpageTopText.visibility = View.VISIBLE
             }
-            if(!inpageBottomText.text.isNullOrBlank()) {
+            if (!inpageBottomText.text.isNullOrBlank()) {
                 inpageBottomText.visibility = View.VISIBLE
             }
         }
 
         // If the InPage width is small and when the loading is finished
-        if(smallInPageWidth && !loading) {
+        if (smallInPageWidth && !loading) {
             if (userBestFitProduct != null) {
                 startCrossFadeProductImageViews()
             } else {
@@ -219,7 +230,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
      */
     override fun setupRecommendationText(text: String) {
         val splitTexts = text.split("<br>")
-        if(splitTexts.size == 2) {
+        if (splitTexts.size == 2) {
             inpageTopText.text = splitTexts[0]
             inpageBottomText.text = splitTexts[1]
         } else {
@@ -258,7 +269,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         this.userBestFitProduct = userBestFitProduct
         val productMap = mutableMapOf<VirtusizeProductImageView, Product>()
         productMap[inpageStoreProductImageView] = storeProduct
-        if(userBestFitProduct != null) {
+        if (userBestFitProduct != null) {
             productMap[inpageUserProductImageView] = userBestFitProduct
             removeLeftPaddingFromStoreProductImageView()
         } else {
@@ -271,10 +282,12 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
      * Adds the left padding to the store product image view
      */
     private fun addLeftPaddingToStoreProductImageView(addExtraPadding: Boolean) {
-        val productImageOverlapMargin = resources.getDimension(R.dimen.virtusize_inpage_standard_product_image_overlap_margin)
-        val productImageHorizontalMargin = resources.getDimension(R.dimen.virtusize_inpage_standard_product_image_horizontal_margin)
+        val productImageOverlapMargin =
+            resources.getDimension(R.dimen.virtusize_inpage_standard_product_image_overlap_margin)
+        val productImageHorizontalMargin =
+            resources.getDimension(R.dimen.virtusize_inpage_standard_product_image_horizontal_margin)
         var addedPadding = productImageHorizontalMargin.toInt()
-        if(addExtraPadding) {
+        if (addExtraPadding) {
             addedPadding -= productImageOverlapMargin.toInt()
         }
         inpageStoreProductImageView.setPadding(addedPadding, 0, 0, 0)
@@ -287,10 +300,10 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
     /**
      * Sets the InPage Standard style corresponding to [VirtusizeViewStyle] and [horizontalMargin]
      */
-    private fun setStyle() {
+    override fun setStyle() {
         // Set Virtusize default style
         when {
-            virtusizeButtonBackgroundColor!= 0 -> {
+            virtusizeButtonBackgroundColor != 0 -> {
                 setSizeCheckButtonBackgroundTint(virtusizeButtonBackgroundColor)
             }
             virtusizeViewStyle == VirtusizeViewStyle.TEAL -> {
@@ -312,7 +325,8 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         }
 
         // Set horizontal margins
-        val inPageStandardFooterTopMargin = if(horizontalMargin >= 2.dpInPx) 10.dpInPx - horizontalMargin else horizontalMargin + 8.dpInPx
+        val inPageStandardFooterTopMargin =
+            if (horizontalMargin >= 2.dpInPx) 10.dpInPx - horizontalMargin else horizontalMargin + 8.dpInPx
         if (horizontalMargin < 0) {
             return
         }
@@ -355,11 +369,11 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         addLeftPaddingToStoreProductImageView(false)
         // Remove any margins to the user product image
         setupMargins(inpageUserProductImageView, 0, 0, 0, 0)
-        if(crossFadeRunnable == null) {
+        if (crossFadeRunnable == null) {
             crossFadeRunnable = Runnable {
-                if(inpageUserProductImageView.visibility == View.VISIBLE) {
+                if (inpageUserProductImageView.visibility == View.VISIBLE) {
                     // Make sure the store product image is invisible when the animation starts
-                    inpageStoreProductImageView.visibility == View.INVISIBLE
+                    inpageStoreProductImageView.visibility = View.INVISIBLE
                     fadeInAnimation(inpageStoreProductImageView, inpageUserProductImageView)
                     fadeOutAnimation(inpageUserProductImageView)
                 } else {
@@ -473,7 +487,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
 
         setConfiguredDimensions(configuredContext)
 
-        if(virtusizeParams?.language == VirtusizeLanguage.JP) {
+        if (virtusizeParams?.language == VirtusizeLanguage.JP) {
             inpageBottomText.includeFontPadding = true
         }
 
@@ -498,25 +512,54 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
      * Sets up the text sizes and UI dimensions based on the configured context
      */
     private fun setConfiguredDimensions(configuredContext: ContextWrapper?) {
-        configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_normal_textSize)?.let {
-            inpageTopText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+        val additionalSize = if(virtusizeParams?.language == VirtusizeLanguage.EN) 2f.spToPx else 0f
+
+        if (messageTextSize != -1f) {
+            inpageTopText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + 2f.spToPx + additionalSize)
+            inpageLoadingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + 6f.spToPx + additionalSize)
+            inpageBottomText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + 6f.spToPx + additionalSize)
+            inpageErrorText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + additionalSize)
+            privacyPolicyText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + additionalSize)
+        } else {
+            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_normal_textSize)
+                ?.let {
+                    inpageTopText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+                }
+
+            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_bold_textSize)
+                ?.let {
+                    inpageLoadingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+                    inpageBottomText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+                }
+
+            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_default_textSize)
+                ?.let {
+                    inpageErrorText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+                }
+
+            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_privacy_policy_textSize)
+                ?.let {
+                    privacyPolicyText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+                }
         }
-        configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_bold_textSize)?.let {
-            inpageLoadingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
-            inpageBottomText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+
+        if (buttonTextSize != -1f) {
+            val size = buttonTextSize + additionalSize
+            inpageButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
+            inpageButton.rightDrawable(R.drawable.ic_arrow_right_black, 0.8f * size / 2, 0.8f * size)
+        } else {
+            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_default_textSize)
+                ?.let {
+                    inpageButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+                }
         }
-        configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_default_textSize)?.let {
-            inpageButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
-            inpageErrorText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
-        }
-        configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_privacy_policy_textSize)?.let {
-            privacyPolicyText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
-        }
-        configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_top_text_marginBottom)?.let {
-            setupMargins(inpageTopText, 0, 0, 0, it.toInt())
-            inpageTopText.setLineSpacing(it, 1f)
-            inpageBottomText.setLineSpacing(it, 1f)
-        }
+
+        configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_top_text_marginBottom)
+            ?.let {
+                setupMargins(inpageTopText, 0, 0, 0, it.toInt())
+                inpageTopText.setLineSpacing(it, 1f)
+                inpageBottomText.setLineSpacing(it, 1f)
+            }
     }
 
     /**

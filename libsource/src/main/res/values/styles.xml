@@ -28,10 +28,13 @@
     <style name="VirtusizeInPageButtonStyle" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:drawableEnd">@drawable/ic_arrow_right_black</item>
         <item name="android:drawableRight">@drawable/ic_arrow_right_black</item>
-        <item name="android:paddingStart">@dimen/virtusize_inpage_mini_button_padding</item>
-        <item name="android:paddingLeft">@dimen/virtusize_inpage_mini_button_padding</item>
-        <item name="android:paddingEnd">@dimen/virtusize_inpage_mini_button_padding</item>
-        <item name="android:paddingRight">@dimen/virtusize_inpage_mini_button_padding</item>
+        <item name="android:drawablePadding">@dimen/virtusize_inpage_button_horizontal_padding</item>
+        <item name="android:paddingStart">@dimen/virtusize_inpage_button_horizontal_padding</item>
+        <item name="android:paddingLeft">@dimen/virtusize_inpage_button_horizontal_padding</item>
+        <item name="android:paddingEnd">@dimen/virtusize_inpage_button_horizontal_padding</item>
+        <item name="android:paddingRight">@dimen/virtusize_inpage_button_horizontal_padding</item>
+        <item name="android:paddingTop">@dimen/virtusize_inpage_button_vertical_padding</item>
+        <item name="android:paddingBottom">@dimen/virtusize_inpage_button_vertical_padding</item>
         <item name="android:text">@string/virtusize_button_text</item>
         <item name="android:textColor">@color/color_gray_900</item>
     </style>
