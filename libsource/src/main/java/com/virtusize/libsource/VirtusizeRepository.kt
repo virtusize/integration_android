@@ -194,7 +194,8 @@ internal class VirtusizeRepository(
     /**
      * Clear user session and the data related to size recommendations
      */
-    internal fun clearUserData() {
+    internal suspend fun clearUserData() {
+        virtusizeAPIService.deleteUser()
         sharedPreferencesHelper.storeAuthToken("")
 
         userProducts = null

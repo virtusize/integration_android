@@ -15,6 +15,7 @@ internal enum class VirtusizeEndpoint {
     StoreProducts,
     ProductType,
     Sessions,
+    User,
     UserProducts,
     UserBodyMeasurements,
     I18N
@@ -52,6 +53,9 @@ internal fun VirtusizeEndpoint.getPath(env: VirtusizeEnvironment? = null): Strin
          }
          VirtusizeEndpoint.Sessions -> {
              "/a/api/v3/sessions"
+         }
+         VirtusizeEndpoint.User -> {
+             "/a/api/v3/users/me"
          }
          VirtusizeEndpoint.UserProducts -> {
              "/a/api/v3/user-products"

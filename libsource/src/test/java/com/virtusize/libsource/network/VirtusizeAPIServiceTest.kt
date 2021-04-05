@@ -288,6 +288,18 @@ class VirtusizeAPIServiceTest {
     }
 
     @Test
+    fun testGetDeleteUserResponse() = runBlocking {
+        val expectedDeleteUserJsonResponse= "{\"wardrobe(s) deleted from DB\":1,\"user product(s) deleted from DB\":1,\"duration\":0.04}"
+        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
+            mockURL,
+            MockedResponse(200, expectedDeleteUserJsonResponse.byteInputStream())
+        ))
+
+        val actualSuccessfulResponse = virtusizeAPIService.deleteUser().successData
+        assertThat(actualSuccessfulResponse).isEqualTo(expectedDeleteUserJsonResponse)
+    }
+
+    @Test
     fun testGetUserProductsResponse_userHasItemsInTheWardrobe_shouldReturnExpectedUserProducts() = runBlocking {
         virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
             mockURL,
