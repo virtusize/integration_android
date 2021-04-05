@@ -13,8 +13,8 @@ buildscript {
         coroutine_version = '1.4.1'
         gradle_version = '4.1.2'
         junit_version = '4.13.2'
-        kotlin_version = '1.4.21'
-        lifecycle_version = '2.3.0'
+        kotlin_version = '1.4.32'
+        lifecycle_version = '2.3.1'
     }
 
     repositories {
