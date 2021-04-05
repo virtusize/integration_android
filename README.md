@@ -405,7 +405,7 @@ There are two types of InPage in our Virtusize SDK.
 
   3. If you'd like to set the horizontal margins between the edges of the app screen and the InPageStandard, you can use `app:inPageStandardHorizontalMargin="16dp"`
 
-  4. If you'd like to change the font sizes of the InPageStandard, you can use the variables `app:inPageStandardMessageTextSize="10sp"` and `app:inPageStandardButtonTextSize="10sp"`.
+  4. If you'd like to change the font sizes of the InPageStandard, you can use `app:inPageStandardMessageTextSize="10sp"` and `app:inPageStandardButtonTextSize="10sp"`.
 
   - XML
 
@@ -523,7 +523,7 @@ This is a mini version of InPage you can place in your application. The discreet
 
   2. If you'd like to change the background color of the bar, you can use `app:inPageMiniBackgroundColor="#123456"`
 
-  3. If you'd like to change the font sizes, you can use the variables `app:inPageMiniMessageTextSize="12sp"` and `app:inPageMiniButtonTextSize="10sp"`.
+  3. If you'd like to change the font sizes, you can use `app:inPageMiniMessageTextSize="12sp"` and `app:inPageMiniButtonTextSize="10sp"`.
 
   - XML
 
