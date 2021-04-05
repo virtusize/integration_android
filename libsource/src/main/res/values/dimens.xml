@@ -11,12 +11,15 @@
     <dimen name="virtusize_inpage_standard_bold_textSize">18sp</dimen>
     <dimen name="virtusize_inpage_standard_privacy_policy_textSize">12sp</dimen>
 
-    <dimen name="virtusize_button_corner_radius">40dp</dimen>
+    <dimen name="virtusize_button_corner_radius">32dp</dimen>
     <dimen name="virtusize_button_vertical_padding">10dp</dimen>
     <dimen name="virtusize_button_horizontal_padding">12dp</dimen>
     <dimen name="virtusize_button_logo_default_width">18dp</dimen>
     <dimen name="virtusize_button_logo_default_height">13dp</dimen>
     <dimen name="virtusize_button_text_marginStart">5dp</dimen>
+
+    <dimen name="virtusize_inpage_button_horizontal_padding">6dp</dimen>
+    <dimen name="virtusize_inpage_button_vertical_padding">4.5dp</dimen>
 
     <dimen name="virtusize_inpage_standard_layout_card_elevation">14dp</dimen>
     <dimen name="virtusize_inpage_standard_product_image_border_size">40dp</dimen>
@@ -30,7 +33,6 @@
     <dimen name="virtusize_inpage_standard_texts_horizontal_margin">4dp</dimen>
     <dimen name="virtusize_inpage_standard_texts_vertical_margin">14dp</dimen>
     <dimen name="virtusize_inpage_standard_top_text_marginBottom">2dp</dimen>
-    <dimen name="virtusize_inpage_standard_button_height">28dp</dimen>
     <dimen name="virtusize_inpage_standard_button_horizontal_margin">8dp</dimen>
     <dimen name="virtusize_inpage_standard_button_vertical_margin">20dp</dimen>
     <dimen name="virtusize_inpage_standard_footer_height">15dp</dimen>
@@ -43,8 +45,6 @@
     <dimen name="virtusize_inpage_mini_padding_vertical">5dp</dimen>
     <dimen name="virtusize_inpage_mini_text_line_spacing">2.5dp</dimen>
     <dimen name="virtusize_inpage_mini_margin_between_message_button">4dp</dimen>
-    <dimen name="virtusize_inpage_mini_button_height">20dp</dimen>
-    <dimen name="virtusize_inpage_mini_button_padding">6dp</dimen>
 
     <dimen name="virtusize_inpage_standard_error_layout_vertical_padding">8dp</dimen>
     <dimen name="virtusize_inpage_standard_error_text_horizontal_margin">8dp</dimen>

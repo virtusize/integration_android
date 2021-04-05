@@ -399,11 +399,13 @@ There are two types of InPage in our Virtusize SDK.
 
 - **Add a VirtusizeInPageStand in your activity's XML layout file.**
 
-  In order to use our default styles, set `app:virtusizeInPageStandardStyle="virtusize_black"` or `app:virtusizeInPageStandardStyle="virtusize_teal"`
+  1. In order to use our default styles, set `app:virtusizeInPageStandardStyle="virtusize_black"` or `app:virtusizeInPageStandardStyle="virtusize_teal"`
 
-  If you'd like to change the background color of the CTA button, you can use `app:inPageStandardButtonBackgroundColor="#123456"`
+  2. If you'd like to change the background color of the CTA button, you can use `app:inPageStandardButtonBackgroundColor="#123456"`
 
-  If you'd like to set the horizontal margins between the edges of the app screen and the InPageStandard, you can use `app:inPageStandardHorizontalMargin="16dp"`
+  3. If you'd like to set the horizontal margins between the edges of the app screen and the InPageStandard, you can use `app:inPageStandardHorizontalMargin="16dp"`
+
+  4. If you'd like to change the font sizes of the InPageStandard, you can use `app:inPageStandardMessageTextSize="10sp"` and `app:inPageStandardButtonTextSize="10sp"`.
 
   - XML
 
@@ -412,6 +414,8 @@ There are two types of InPage in our Virtusize SDK.
         android:id="@+id/exampleVirtusizeInPageStandard"
         app:virtusizeInPageStandardStyle="virtusize_black"
         app:inPageStandardHorizontalMargin="16dp"
+        app:inPageStandardMessageTextSize="10sp"
+        app:inPageStandardButtonTextSize="10sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     ```
@@ -436,6 +440,9 @@ There are two types of InPage in our Virtusize SDK.
     exampleVirtusizeInPageStandard.horizontalMargin = 16.dpInPx
     // Set the background color of the check size button in InPage Standard
     exampleVirtusizeInPageStandard.setButtonBackgroundColor(ContextCompat.getColor(this, R.color.your_custom_color))
+    // Set the text sizes of the InPage message and the check size button
+    exampleVirtusizeInPageStandard.messageTextSize = 10f.spToPx
+    exampleVirtusizeInPageStandard.buttonTextSize = 10f.spToPx
     ```
 
   - Java
@@ -444,6 +451,8 @@ There are two types of InPage in our Virtusize SDK.
     virtusizeInPageStandard.setVirtusizeViewStyle(VirtusizeViewStyle.BLACK);
     virtusizeInPageStandard.setHorizontalMargin(ExtensionsKt.getDpInPx(16));
     virtusizeInPageStandard.setButtonBackgroundColor(ContextCompat.getColor(this, R.color.your_custom_color));
+    virtusizeInPageStandard.setMessageTextSize(ExtensionsKt.getSpToPx(10));
+    virtusizeInPageStandard.setButtonTextSize(ExtensionsKt.getSpToPx(10));
     ```
 
 - **Connect the InPage Standard to the Virtusize API by using the** `setupVirtusizeView` **function in your activity.**
@@ -510,16 +519,20 @@ This is a mini version of InPage you can place in your application. The discreet
 
 - **Add a VirtusizeInPageMini in your activity's XML layout file.**
 
-  In order to use our default styles, set `app:virtusizeInPageMiniStyle="virtusize_black"` or `app:virtusizeInPageMiniStyle="virtusize_teal"`
+  1. In order to use our default styles, set `app:virtusizeInPageMiniStyle="virtusize_black"` or `app:virtusizeInPageMiniStyle="virtusize_teal"`
 
-  If you'd like to change the background color of the bar, you can use `app:inPageMiniBackgroundColor="#123456"`
+  2. If you'd like to change the background color of the bar, you can use `app:inPageMiniBackgroundColor="#123456"`
+
+  3. If you'd like to change the font sizes, you can use `app:inPageMiniMessageTextSize="12sp"` and `app:inPageMiniButtonTextSize="10sp"`.
 
   - XML
 
     ```xml
     <com.virtusize.libsource.ui.VirtusizeInPageMini
         android:id="@+id/exampleVirtusizeInPageMini"
-        app:virtusizeInPageMiniStyle="virtusize_teal"
+        app:virtusizeInPageMiniStyle="virtusize_teal"                                                         
+        app:inPageMiniMessageTextSize="12sp"
+        app:inPageMiniButtonTextSize="10sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     ```
@@ -541,6 +554,9 @@ This is a mini version of InPage you can place in your application. The discreet
     exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.BLACK
     // Set the background color of the InPageMini view
     exampleVirtusizeInPageMini.setInPageMiniBackgroundColor(ContextCompat.getColor(this, R.color.your_custom_color))
+    // Set the text sizes of the InPage message and the check size button
+    exampleVirtusizeInPageMini.messageTextSize = 12f.spToPx
+    exampleVirtusizeInPageMini.buttonTextSize = 10f.spToPx
     ```
 
   - Java
@@ -548,6 +564,8 @@ This is a mini version of InPage you can place in your application. The discreet
     ```java
     virtusizeInPageMini.setVirtusizeViewStyle(VirtusizeViewStyle.TEAL);
     virtusizeInPageMini.setInPageMiniBackgroundColor(ContextCompat.getColor(this, R.color.your_custom_color));
+    virtusizeInPageMini.setMessageTextSize(ExtensionsKt.getSpToPx(12));
+    virtusizeInPageMini.setButtonTextSize(ExtensionsKt.getSpToPx(10));
     ```
 
 - **Connect the InPage Mini to the Virtusize API by using the** `setupVirtusizeView` **function in your activity.**

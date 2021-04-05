@@ -1,13 +1,14 @@
 package com.virtusize.libsource.util
 
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.res.Resources
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.util.TypedValue
+import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.LifecycleOwner
 import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser
 
 /**
@@ -70,7 +71,26 @@ inline fun <reified T : Enum<T>> valueOf(type: String): T? {
 }
 
 /**
+ * The TextView extension function to set the width and height for the right drawable of a Button
+ */
+internal fun TextView.rightDrawable(@DrawableRes id: Int = 0, width: Float, height: Float) {
+    val drawable = ContextCompat.getDrawable(context, id)
+    drawable?.setBounds(0, 0, width.toInt(), height.toInt())
+    this.setCompoundDrawables(null, null, drawable, null)
+}
+
+/**
  * Integer extension function to convert dp to px
  */
 val Int.dpInPx: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+
+/**
+ * Float extension function to convert sp to px
+ */
+val Float.spToPx: Float
+    get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_SP,
+        this,
+        Resources.getSystem().displayMetrics
+    )

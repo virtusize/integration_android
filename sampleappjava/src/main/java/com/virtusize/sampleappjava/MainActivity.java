@@ -19,7 +19,7 @@ import com.virtusize.libsource.data.local.VirtusizeViewStyle;
 import com.virtusize.libsource.ui.VirtusizeButton;
 import com.virtusize.libsource.ui.VirtusizeInPageMini;
 import com.virtusize.libsource.ui.VirtusizeInPageStandard;
-import com.virtusize.libsource.ui.VirtusizeView;
+import com.virtusize.libsource.util.ExtensionsKt;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -85,6 +85,11 @@ public class MainActivity extends AppCompatActivity {
          * virtusizeInPageStandard.setButtonBackgroundColor(ContextCompat.getColor(this, R.color.ocean_blue));
          */
 
+        // If you like, you can change the text sizes of the InPage message and the Check Size button
+        virtusizeInPageStandard.setMessageTextSize(ExtensionsKt.getSpToPx(10));
+        virtusizeInPageStandard.setButtonTextSize(ExtensionsKt.getSpToPx(10));
+
+
         app.Virtusize.setupVirtusizeView(virtusizeInPageMini);
         virtusizeInPageMini.setVirtusizeViewStyle(VirtusizeViewStyle.TEAL);
         /*
@@ -92,6 +97,10 @@ public class MainActivity extends AppCompatActivity {
          *
          * virtusizeInPageMini.setInPageMiniBackgroundColor(ContextCompat.getColor(this, R.color.ocean_blue));
          */
+
+        // If you like, you can change the text sizes of the InPage message and the Check Size button
+        virtusizeInPageMini.setMessageTextSize(ExtensionsKt.getSpToPx(12));
+        virtusizeInPageMini.setButtonTextSize(ExtensionsKt.getSpToPx(10));
 
         /*
          * To close the Virtusize page

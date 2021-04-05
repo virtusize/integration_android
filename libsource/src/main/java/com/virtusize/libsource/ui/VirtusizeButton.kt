@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import com.virtusize.libsource.R
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.ProductCheck
-import com.virtusize.libsource.data.local.throwError
 import com.virtusize.libsource.util.VirtusizeUtils
 
 class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, AppCompatButton(context, attrs) {
@@ -72,6 +71,10 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, Ap
 
         includeFontPadding = false
         isAllCaps = false
+        minHeight = 0
+        minWidth = 0
+        minimumWidth = 0
+        minimumHeight = resources.getDimension(R.dimen.virtusize_button_corner_radius).toInt()
 
         if(virtusizeViewStyle == VirtusizeViewStyle.TEAL) {
             setBackgroundResource(R.drawable.button_background_teal)

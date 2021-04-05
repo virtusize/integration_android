@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.VirtusizeOrder
-import com.virtusize.libsource.ui.VirtusizeView
 import com.virtusize.libsource.util.dpInPx
+import com.virtusize.libsource.util.spToPx
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -19,10 +19,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Register message handler to listen to events from Virtusize
+        /*
+         * Register message handler to listen to events from Virtusize
+         */
         (application as App).Virtusize.registerMessageHandler(activityMessageHandler)
 
-        // Set up Virtusize product for all the Virtusize views
+        /*
+         * Set up Virtusize product for all the Virtusize views
+         */
         (application as App).Virtusize.setupVirtusizeProduct(
                 VirtusizeProduct(
                     externalId = "694",
@@ -30,13 +34,17 @@ class MainActivity : AppCompatActivity() {
                 )
             )
 
-        // Set up Virtusize button
+        /*
+         * Set up Virtusize button
+         */
         // Virtusize opens automatically when button is clicked
         (application as App).Virtusize.setupVirtusizeView(exampleVirtusizeButton)
         // Set up the Virtusize view style programmatically
         exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.TEAL
 
-        // Set up Virtusize InPage Standard
+        /*
+         * Set up Virtusize InPage Standard
+         */
         (application as App).Virtusize
             .setupVirtusizeView(
                 virtusizeView = exampleVirtusizeInPageStandard
@@ -52,14 +60,25 @@ class MainActivity : AppCompatActivity() {
          * exampleVirtusizeInPageStandard.setButtonBackgroundColor(ContextCompat.getColor(this, R.color.ocean_blue))
          */
 
-        // Set up Virtusize InPage Mini
+        // If you like, you can change the text sizes of the InPage message and the Check Size button
+        exampleVirtusizeInPageStandard.messageTextSize = 10f.spToPx
+        exampleVirtusizeInPageStandard.buttonTextSize = 10f.spToPx
+
+        /*
+         * Set up Virtusize InPage Mini
+         */
         (application as App).Virtusize.setupVirtusizeView(virtusizeView = exampleVirtusizeInPageMini)
         exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.TEAL
+
         /*
          * If you like, you can set up the background of InPage Mini view as long as it passes WebAIM contrast test.
          *
          * exampleVirtusizeInPageMini.setInPageMiniBackgroundColor(ContextCompat.getColor(this, R.color.ocean_blue))
          */
+
+        // If you like, you can change the text sizes of the InPage message and the Check Size button
+        exampleVirtusizeInPageMini.messageTextSize = 12f.spToPx
+        exampleVirtusizeInPageMini.buttonTextSize = 10f.spToPx
 
         /*
          * To close the Virtusize page
@@ -69,7 +88,9 @@ class MainActivity : AppCompatActivity() {
          * exampleVirtusizeInPageMini.dismissVirtusizeView()
          */
 
-        // The sample function to send an order to the Virtusize server
+        /*
+         * The sample function to send an order to the Virtusize server
+         */
         sendOrderSample()
     }
 
