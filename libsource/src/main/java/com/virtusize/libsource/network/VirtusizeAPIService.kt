@@ -226,6 +226,10 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
             .execute(apiRequest)
     }
 
+    /**
+     * Gets the API response for deleting a user
+     * @return the [VirtusizeApiResponse]
+     */
     internal suspend fun deleteUser(): VirtusizeApiResponse<Any> = withContext(
         Dispatchers.IO
     ) {

@@ -272,6 +272,10 @@ internal object VirtusizeApi {
         return ApiRequest(url, HttpMethod.POST)
     }
 
+    /**
+     * Deletes a user
+     * @see ApiRequest
+     */
     fun deleteUser(): ApiRequest {
         val url = Uri.parse(environment.defaultApiUrl() + VirtusizeEndpoint.User.getPath())
             .buildUpon()
