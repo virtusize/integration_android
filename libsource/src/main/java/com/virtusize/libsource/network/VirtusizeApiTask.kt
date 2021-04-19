@@ -75,7 +75,10 @@ internal class VirtusizeApiTask(
 
                     // Set the access token in the header if the request needs authentication
                     if (apiRequest.authorization) {
-                        setRequestProperty(HEADER_AUTHORIZATION, "Token ${sharedPreferencesHelper.getAccessToken()}")
+                        setRequestProperty(
+                            HEADER_AUTHORIZATION,
+                            "Token ${sharedPreferencesHelper.getAccessToken()}"
+                        )
                     }
 
                     // Send the POST request
@@ -84,7 +87,7 @@ internal class VirtusizeApiTask(
                         setRequestProperty(HEADER_CONTENT_TYPE, "application/json")
 
                         // Set up the request header for the sessions API
-                        if(apiRequest.url.contains(VirtusizeEndpoint.Sessions.getPath())) {
+                        if (apiRequest.url.contains(VirtusizeEndpoint.Sessions.getPath())) {
                             sharedPreferencesHelper.getAuthToken()?.let {
                                 setRequestProperty(HEADER_AUTH, it)
                                 setRequestProperty(HEADER_COOKIE, "")
@@ -109,7 +112,11 @@ internal class VirtusizeApiTask(
                         val response = parseInputStreamToObject(apiRequest.url, inputStream)
                         VirtusizeApiResponse.Success(response) as VirtusizeApiResponse<T>
                     } catch (e: JSONException) {
-                        VirtusizeApiResponse.Error(VirtusizeErrorType.JsonParsingError.virtusizeError("${apiRequest.url} ${e.localizedMessage}"))
+                        VirtusizeApiResponse.Error(
+                            VirtusizeErrorType.JsonParsingError.virtusizeError(
+                                "${apiRequest.url} ${e.localizedMessage}"
+                            )
+                        )
                     }
                 }
                 // If the request fails but it has a error response, then read the error stream and parse the response.
@@ -124,20 +131,44 @@ internal class VirtusizeApiTask(
                         HttpURLConnection.HTTP_NOT_FOUND -> {
                             // If the product cannot be found in the Virtusize Server
                             if (response is ProductCheck) {
-                                return VirtusizeApiResponse.Error(VirtusizeErrorType.UnParsedProduct.virtusizeError(response.productId))
+                                return VirtusizeApiResponse.Error(
+                                    VirtusizeErrorType.UnParsedProduct.virtusizeError(
+                                        response.productId
+                                    )
+                                )
                             }
-                            virtusizeNetworkError(urlConnection.url?.path, urlConnection.responseCode,response ?: urlConnection.responseMessage)
+                            virtusizeNetworkError(
+                                urlConnection.url?.path,
+                                urlConnection.responseCode,
+                                response ?: urlConnection.responseMessage
+                            )
                         }
                         else -> {
-                            virtusizeNetworkError(urlConnection.url?.path, urlConnection.responseCode,response ?: urlConnection.responseMessage)
+                            virtusizeNetworkError(
+                                urlConnection.url?.path,
+                                urlConnection.responseCode,
+                                response ?: urlConnection.responseMessage
+                            )
                         }
                     }
                     return VirtusizeApiResponse.Error(error)
                 }
-                else -> return VirtusizeApiResponse.Error(virtusizeNetworkError(urlConnection.url?.path, urlConnection.responseCode, urlConnection.responseMessage))
+                else -> return VirtusizeApiResponse.Error(
+                    virtusizeNetworkError(
+                        urlConnection.url?.path,
+                        urlConnection.responseCode,
+                        urlConnection.responseMessage
+                    )
+                )
             }
         } catch (e: IOException) {
-            return VirtusizeApiResponse.Error(virtusizeNetworkError(urlConnection?.url?.path, null, e.localizedMessage))
+            return VirtusizeApiResponse.Error(
+                virtusizeNetworkError(
+                    urlConnection?.url?.path,
+                    null,
+                    e.localizedMessage
+                )
+            )
         } finally {
             urlConnection?.disconnect()
             inputStream?.close()
@@ -156,13 +187,13 @@ internal class VirtusizeApiTask(
         inputStream: InputStream
     ): Any? {
         var result: Any? = null
-            readInputStreamAsString(inputStream)?.let { streamString ->
-                try {
-                    result = parseStringToObject(apiRequestUrl, streamString)
-                } catch (e: JSONException) {
-                    messageHandler?.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(e.localizedMessage))
-                }
+        readInputStreamAsString(inputStream)?.let { streamString ->
+            try {
+                result = parseStringToObject(apiRequestUrl, streamString)
+            } catch (e: JSONException) {
+                messageHandler?.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(e.localizedMessage))
             }
+        }
         return result
     }
 
@@ -177,8 +208,8 @@ internal class VirtusizeApiTask(
         var result: Any? = null
         readInputStreamAsString(errorStream)?.let { streamString ->
             result = try {
-                parseStringToObject(streamString=streamString)
-            } catch (e: JSONException)  {
+                parseStringToObject(streamString = streamString)
+            } catch (e: JSONException) {
                 streamString
             }
         }
@@ -233,7 +264,15 @@ internal class VirtusizeApiTask(
      * @param responseCode The response code of an API request
      * @param response The response from an API request
      */
-    private fun virtusizeNetworkError(urlPath: String?, responseCode: Int?, response: Any?): VirtusizeError {
-        return VirtusizeError(VirtusizeErrorType.NetworkError, responseCode, "$urlPath - ${response?.toString()}")
+    private fun virtusizeNetworkError(
+        urlPath: String?,
+        responseCode: Int?,
+        response: Any?
+    ): VirtusizeError {
+        return VirtusizeError(
+            VirtusizeErrorType.NetworkError,
+            responseCode,
+            "$urlPath - ${response?.toString()}"
+        )
     }
 }
