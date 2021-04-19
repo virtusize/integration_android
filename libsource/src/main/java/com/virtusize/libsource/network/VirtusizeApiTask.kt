@@ -106,12 +106,8 @@ internal class VirtusizeApiTask(
                 urlConnection.isSuccessful() -> {
                     inputStream = urlConnection.inputStream
                     return try {
-                        VirtusizeApiResponse.Success(
-                            parseInputStreamAsObject(
-                                apiRequest.url,
-                                inputStream
-                            )
-                        ) as VirtusizeApiResponse<T>
+                        val response = parseInputStreamToObject(apiRequest.url, inputStream)
+                        VirtusizeApiResponse.Success(response) as VirtusizeApiResponse<T>
                     } catch (e: JSONException) {
                         VirtusizeApiResponse.Error(VirtusizeErrorType.JsonParsingError.virtusizeError("${apiRequest.url} ${e.localizedMessage}"))
                     }
@@ -119,7 +115,7 @@ internal class VirtusizeApiTask(
                 // If the request fails but it has a error response, then read the error stream and parse the response.
                 urlConnection.errorStream != null -> {
                     errorStream = urlConnection.errorStream
-                    val response = parseInputStreamAsObject(apiRequest.url, errorStream, true)
+                    val response = parseErrorStreamToObject(errorStream)
                     val error = when (urlConnection.responseCode) {
                         HttpURLConnection.HTTP_FORBIDDEN -> {
                             // If the API key is empty or invalid
@@ -150,37 +146,64 @@ internal class VirtusizeApiTask(
     }
 
     /**
-     * Parses the contents of an InputStream
+     * Parses the contents of an inputStream of the type [InputStream]
      * @param apiRequestUrl the API request URL
-     * @param inputStream The input stream of bytes
-     * @param isErrorStream pass true if it's parsing an error InputStream
+     * @param inputStream the input stream of bytes
+     * @return either an object that contains the contents of an inputStream or null
      */
-    private fun parseInputStreamAsObject(
+    private fun parseInputStreamToObject(
         apiRequestUrl: String? = null,
-        stream: InputStream,
-        isErrorStream: Boolean = false
+        inputStream: InputStream
     ): Any? {
         var result: Any? = null
-        readInputStreamAsString(stream)?.let { streamString ->
-            jsonParser?.let { jsonParser ->
+            readInputStreamAsString(inputStream)?.let { streamString ->
                 try {
-                    result = if (apiRequestUrl != null && responseIsJsonArray(apiRequestUrl)) {
-                        val productTypeJsonArray = JSONArray(streamString)
-                        (0 until productTypeJsonArray.length())
-                            .map { idx -> productTypeJsonArray.getJSONObject(idx) }
-                            .mapNotNull { jsonParser.parse(it) }
-                    } else {
-                        val jsonObject = JSONObject(streamString)
-                        jsonParser.parse(jsonObject)
-                    }
+                    result = parseStringToObject(apiRequestUrl, streamString)
                 } catch (e: JSONException) {
-                    if (!isErrorStream) {
-                        messageHandler?.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(e.localizedMessage))
-                    }
+                    messageHandler?.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(e.localizedMessage))
                 }
             }
-            if(result == null) {
-                result = streamString
+        return result
+    }
+
+    /**
+     * Parses the contents of an errorStream of the type [InputStream]
+     * @param errorStream the error stream of bytes
+     * @return either an object that contains the contents of an errorStream, the string of the error stream, or null
+     */
+    private fun parseErrorStreamToObject(
+        errorStream: InputStream
+    ): Any? {
+        var result: Any? = null
+        readInputStreamAsString(errorStream)?.let { streamString ->
+            result = try {
+                parseStringToObject(streamString=streamString)
+            } catch (e: JSONException)  {
+                streamString
+            }
+        }
+        return result
+    }
+
+    /**
+     * Parses the string of an input stream to an object
+     * @param apiRequestUrl the API request URL
+     * @param streamString the string of the input stream
+     */
+    private fun parseStringToObject(
+        apiRequestUrl: String? = null,
+        streamString: String
+    ): Any? {
+        var result: Any? = null
+        jsonParser?.let { jsonParser ->
+            result = if (apiRequestUrl != null && responseIsJsonArray(apiRequestUrl)) {
+                val jsonArray = JSONArray(streamString)
+                (0 until jsonArray.length())
+                    .map { idx -> jsonArray.getJSONObject(idx) }
+                    .mapNotNull { jsonParser.parse(it) }
+            } else {
+                val jsonObject = JSONObject(streamString)
+                jsonParser.parse(jsonObject)
             }
         }
         return result
