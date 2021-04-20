@@ -49,6 +49,7 @@ internal class VirtusizeApiTask(
 
     /**
      * Sets up the JSON parser for converting the JSON response to a given type of Java object
+     * @return the [VirtusizeApiTask] with the JSON parser set up
      */
     fun setJsonParser(jsonParser: VirtusizeJsonParser<Any>?): VirtusizeApiTask {
         this.jsonParser = jsonParser
@@ -58,6 +59,7 @@ internal class VirtusizeApiTask(
     /**
      * Executes the API request and returns the response
      * @param apiRequest [ApiRequest]
+     * @return VirtusizeApiResponse of the generic type T
      */
     fun <T> execute(apiRequest: ApiRequest): VirtusizeApiResponse<T> {
         var urlConnection: HttpsURLConnection? = urlConnection
@@ -220,6 +222,7 @@ internal class VirtusizeApiTask(
      * Parses the string of an input stream to an object
      * @param apiRequestUrl the API request URL
      * @param streamString the string of the input stream
+     * @return either the data object that is converted from streamString or null
      */
     private fun parseStringToObject(
         apiRequestUrl: String? = null,
@@ -243,6 +246,7 @@ internal class VirtusizeApiTask(
     /**
      * Check if the response of the API request is a JSON array
      * @param apiRequestUrl The input stream of bytes
+     * @return the boolean value to tell whether the response of the apiRequestUrl is a JSON array.
      */
     private fun responseIsJsonArray(apiRequestUrl: String): Boolean {
         return apiRequestUrl.contains(VirtusizeEndpoint.ProductType.getPath())
@@ -252,6 +256,7 @@ internal class VirtusizeApiTask(
     /**
      * Returns the contents of an [InputStream] as a String.
      * @param inputStream The input stream of bytes
+     * @return the string from scanning through the inputStream
      */
     private fun readInputStreamAsString(inputStream: InputStream): String? {
         val scanner: Scanner = Scanner(inputStream).useDelimiter("\\A")
@@ -263,6 +268,7 @@ internal class VirtusizeApiTask(
      * @param urlPath The endpoint path of an API request
      * @param responseCode The response code of an API request
      * @param response The response from an API request
+     * @return the network related [VirtusizeError]
      */
     private fun virtusizeAPIError(
         urlPath: String?,
