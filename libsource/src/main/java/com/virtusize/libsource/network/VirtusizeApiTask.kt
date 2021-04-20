@@ -137,14 +137,14 @@ internal class VirtusizeApiTask(
                                     )
                                 )
                             }
-                            virtusizeNetworkError(
+                            virtusizeAPIError(
                                 urlConnection.url?.path,
                                 urlConnection.responseCode,
                                 response ?: urlConnection.responseMessage
                             )
                         }
                         else -> {
-                            virtusizeNetworkError(
+                            virtusizeAPIError(
                                 urlConnection.url?.path,
                                 urlConnection.responseCode,
                                 response ?: urlConnection.responseMessage
@@ -154,7 +154,7 @@ internal class VirtusizeApiTask(
                     return VirtusizeApiResponse.Error(error)
                 }
                 else -> return VirtusizeApiResponse.Error(
-                    virtusizeNetworkError(
+                    virtusizeAPIError(
                         urlConnection.url?.path,
                         urlConnection.responseCode,
                         urlConnection.responseMessage
@@ -163,7 +163,7 @@ internal class VirtusizeApiTask(
             }
         } catch (e: IOException) {
             return VirtusizeApiResponse.Error(
-                virtusizeNetworkError(
+                virtusizeAPIError(
                     urlConnection?.url?.path,
                     null,
                     e.localizedMessage
@@ -180,7 +180,7 @@ internal class VirtusizeApiTask(
      * Parses the contents of an inputStream of the type [InputStream]
      * @param apiRequestUrl the API request URL
      * @param inputStream the input stream of bytes
-     * @return either an object that contains the contents of an inputStream or null
+     * @return either the object that contains the contents of an inputStream or null
      */
     private fun parseInputStreamToObject(
         apiRequestUrl: String? = null,
@@ -250,7 +250,7 @@ internal class VirtusizeApiTask(
     }
 
     /**
-     * Returns the contents of an InputStream as a String.
+     * Returns the contents of an [InputStream] as a String.
      * @param inputStream The input stream of bytes
      */
     private fun readInputStreamAsString(inputStream: InputStream): String? {
@@ -259,18 +259,18 @@ internal class VirtusizeApiTask(
     }
 
     /**
-     * Returns the VirtusizeError that is associated with an API error
+     * Returns the [VirtusizeError] that is associated with an API error
      * @param urlPath The endpoint path of an API request
      * @param responseCode The response code of an API request
      * @param response The response from an API request
      */
-    private fun virtusizeNetworkError(
+    private fun virtusizeAPIError(
         urlPath: String?,
         responseCode: Int?,
         response: Any?
     ): VirtusizeError {
         return VirtusizeError(
-            VirtusizeErrorType.NetworkError,
+            VirtusizeErrorType.APIError,
             responseCode,
             "$urlPath - ${response?.toString()}"
         )

@@ -125,7 +125,7 @@ class VirtusizeAPIServiceTest {
 
         assertThat(actualError?.code).isEqualTo(500)
         assertThat(actualError?.message).contains(INTERNAL_SERVER_ERROR_RESPONSE)
-        assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.NetworkError)
+        assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.APIError)
     }
 
     @Test
@@ -349,7 +349,7 @@ class VirtusizeAPIServiceTest {
 
         assertThat(actualError?.code).isEqualTo(HttpURLConnection.HTTP_NOT_FOUND)
         assertThat(actualError?.message).contains("{\"detail\":\"No wardrobe found\"}")
-        assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.NetworkError)
+        assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.APIError)
     }
 
     @Test
@@ -416,7 +416,7 @@ class VirtusizeAPIServiceTest {
 
         assertThat(actualError?.code).isEqualTo(HttpURLConnection.HTTP_NOT_FOUND)
         assertThat(actualError?.message).contains("{\"detail\":\"No wardrobe found\"}")
-        assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.NetworkError)
+        assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.APIError)
     }
 
     @Test
@@ -465,7 +465,7 @@ class VirtusizeAPIServiceTest {
 
         assertThat(actualError?.code).isEqualTo(HttpURLConnection.HTTP_BAD_REQUEST)
         assertThat(actualError?.message).contains("/stg/ds-functions/size-rec/get-size - {\"Code\": \"BadRequestError\", \"Message\": \"BadRequestError: \"}")
-        assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.NetworkError)
+        assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.APIError)
     }
 
     companion object {

@@ -15,7 +15,7 @@ enum class VirtusizeErrorType {
     NullProduct,
     UnParsedProduct,
     InvalidProduct,
-    NetworkError,
+    APIError,
     JsonParsingError,
     WardrobeNotFound,
     PrivacyLinkNotOpen
@@ -47,7 +47,7 @@ fun VirtusizeErrorType.message(extraMessage: String? = null): String {
         VirtusizeErrorType.NullProduct -> "The store product is null. Please set up your store product"
         VirtusizeErrorType.InvalidProduct -> "The store product $extraMessage is not valid in the Virtusize server"
         VirtusizeErrorType.UnParsedProduct -> "The store product $extraMessage is not parsed in the Virtusize server yet"
-        VirtusizeErrorType.NetworkError -> "Virtusize API error: $extraMessage"
+        VirtusizeErrorType.APIError -> "Virtusize API error: $extraMessage"
         VirtusizeErrorType.JsonParsingError -> "JSON response parsing error: $extraMessage"
         VirtusizeErrorType.WardrobeNotFound -> "The user's wardrobe hasn't been created in the Virtusize server yet"
         VirtusizeErrorType.PrivacyLinkNotOpen -> "The privacy link can not be open. The error is: $extraMessage"
