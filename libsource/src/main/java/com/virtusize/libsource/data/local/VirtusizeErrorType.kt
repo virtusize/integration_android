@@ -15,7 +15,7 @@ enum class VirtusizeErrorType {
     NullProduct,
     UnParsedProduct,
     InvalidProduct,
-    NetworkError,
+    APIError,
     JsonParsingError,
     WardrobeNotFound,
     PrivacyLinkNotOpen
@@ -28,7 +28,7 @@ enum class VirtusizeErrorType {
 fun VirtusizeErrorType.code(): Int? {
     return when(this) {
         VirtusizeErrorType.ApiKeyNullOrInvalid -> HttpURLConnection.HTTP_FORBIDDEN
-        VirtusizeErrorType.InvalidProduct -> HttpURLConnection.HTTP_NOT_FOUND
+        VirtusizeErrorType.InvalidProduct, VirtusizeErrorType.UnParsedProduct, VirtusizeErrorType.WardrobeNotFound -> HttpURLConnection.HTTP_NOT_FOUND
         else -> null
     }
 }
@@ -47,7 +47,7 @@ fun VirtusizeErrorType.message(extraMessage: String? = null): String {
         VirtusizeErrorType.NullProduct -> "The store product is null. Please set up your store product"
         VirtusizeErrorType.InvalidProduct -> "The store product $extraMessage is not valid in the Virtusize server"
         VirtusizeErrorType.UnParsedProduct -> "The store product $extraMessage is not parsed in the Virtusize server yet"
-        VirtusizeErrorType.NetworkError -> "Virtusize API error: $extraMessage"
+        VirtusizeErrorType.APIError -> "Virtusize API error: $extraMessage"
         VirtusizeErrorType.JsonParsingError -> "JSON response parsing error: $extraMessage"
         VirtusizeErrorType.WardrobeNotFound -> "The user's wardrobe hasn't been created in the Virtusize server yet"
         VirtusizeErrorType.PrivacyLinkNotOpen -> "The privacy link can not be open. The error is: $extraMessage"
@@ -56,10 +56,12 @@ fun VirtusizeErrorType.message(extraMessage: String? = null): String {
 
 /**
  * Returns the [VirtusizeError] corresponding to the VirtusizeErrorType
+ * @param code an error code
+ * @param extraMessage an extra error message specific to this error type
  * @return the [VirtusizeError] for the VirtusizeErrorType
  */
-internal fun VirtusizeErrorType.virtusizeError(extraMessage: String? = null): VirtusizeError {
-    return VirtusizeError(this, this.code(), this.message(extraMessage))
+internal fun VirtusizeErrorType.virtusizeError(code: Int? = null, extraMessage: String? = null): VirtusizeError {
+    return VirtusizeError(this, code ?: this.code(), this.message(extraMessage))
 }
 
 /**

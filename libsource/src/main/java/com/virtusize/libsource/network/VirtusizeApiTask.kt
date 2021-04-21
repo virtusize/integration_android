@@ -1,7 +1,6 @@
 package com.virtusize.libsource.network
 
 import com.virtusize.libsource.SharedPreferencesHelper
-import com.virtusize.libsource.data.local.VirtusizeError
 import com.virtusize.libsource.data.local.VirtusizeErrorType
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler
 import com.virtusize.libsource.data.local.virtusizeError
@@ -49,6 +48,7 @@ internal class VirtusizeApiTask(
 
     /**
      * Sets up the JSON parser for converting the JSON response to a given type of Java object
+     * @return the [VirtusizeApiTask] with the JSON parser set up
      */
     fun setJsonParser(jsonParser: VirtusizeJsonParser<Any>?): VirtusizeApiTask {
         this.jsonParser = jsonParser
@@ -58,6 +58,7 @@ internal class VirtusizeApiTask(
     /**
      * Executes the API request and returns the response
      * @param apiRequest [ApiRequest]
+     * @return VirtusizeApiResponse of the generic type T
      */
     fun <T> execute(apiRequest: ApiRequest): VirtusizeApiResponse<T> {
         var urlConnection: HttpsURLConnection? = urlConnection
@@ -75,7 +76,10 @@ internal class VirtusizeApiTask(
 
                     // Set the access token in the header if the request needs authentication
                     if (apiRequest.authorization) {
-                        setRequestProperty(HEADER_AUTHORIZATION, "Token ${sharedPreferencesHelper.getAccessToken()}")
+                        setRequestProperty(
+                            HEADER_AUTHORIZATION,
+                            "Token ${sharedPreferencesHelper.getAccessToken()}"
+                        )
                     }
 
                     // Send the POST request
@@ -84,7 +88,7 @@ internal class VirtusizeApiTask(
                         setRequestProperty(HEADER_CONTENT_TYPE, "application/json")
 
                         // Set up the request header for the sessions API
-                        if(apiRequest.url.contains(VirtusizeEndpoint.Sessions.getPath())) {
+                        if (apiRequest.url.contains(VirtusizeEndpoint.Sessions.getPath())) {
                             sharedPreferencesHelper.getAuthToken()?.let {
                                 setRequestProperty(HEADER_AUTH, it)
                                 setRequestProperty(HEADER_COOKIE, "")
@@ -106,20 +110,22 @@ internal class VirtusizeApiTask(
                 urlConnection.isSuccessful() -> {
                     inputStream = urlConnection.inputStream
                     return try {
-                        VirtusizeApiResponse.Success(
-                            parseInputStreamAsObject(
-                                apiRequest.url,
-                                inputStream
-                            )
-                        ) as VirtusizeApiResponse<T>
+                        val inputStreamString = readInputStreamAsString(inputStream)
+                        val response = parseInputStreamStringToObject(apiRequest.url, inputStreamString)
+                        VirtusizeApiResponse.Success(response) as VirtusizeApiResponse<T>
                     } catch (e: JSONException) {
-                        VirtusizeApiResponse.Error(VirtusizeErrorType.JsonParsingError.virtusizeError("${apiRequest.url} ${e.localizedMessage}"))
+                        VirtusizeApiResponse.Error(
+                            VirtusizeErrorType.JsonParsingError.virtusizeError(
+                                extraMessage = "${apiRequest.url} ${e.localizedMessage}"
+                            )
+                        )
                     }
                 }
                 // If the request fails but it has a error response, then read the error stream and parse the response.
                 urlConnection.errorStream != null -> {
                     errorStream = urlConnection.errorStream
-                    val response = parseInputStreamAsObject(apiRequest.url, errorStream, true)
+                    val errorStreamString = readInputStreamAsString(errorStream)
+                    val response = parseErrorStreamStringToObject(errorStreamString)
                     val error = when (urlConnection.responseCode) {
                         HttpURLConnection.HTTP_FORBIDDEN -> {
                             // If the API key is empty or invalid
@@ -128,20 +134,51 @@ internal class VirtusizeApiTask(
                         HttpURLConnection.HTTP_NOT_FOUND -> {
                             // If the product cannot be found in the Virtusize Server
                             if (response is ProductCheck) {
-                                return VirtusizeApiResponse.Error(VirtusizeErrorType.UnParsedProduct.virtusizeError(response.productId))
+                                return VirtusizeApiResponse.Error(
+                                    VirtusizeErrorType.UnParsedProduct.virtusizeError(
+                                        extraMessage = response.productId
+                                    )
+                                )
                             }
-                            virtusizeNetworkError(urlConnection.url?.path, urlConnection.responseCode,response ?: urlConnection.responseMessage)
+                            VirtusizeErrorType.APIError.virtusizeError(
+                                urlConnection.responseCode,
+                                getAPIErrorMessage(
+                                    urlConnection.url?.path,
+                                    response ?: urlConnection.responseMessage
+                                )
+                            )
                         }
                         else -> {
-                            virtusizeNetworkError(urlConnection.url?.path, urlConnection.responseCode,response ?: urlConnection.responseMessage)
+                            VirtusizeErrorType.APIError.virtusizeError(
+                                urlConnection.responseCode,
+                                getAPIErrorMessage(
+                                    urlConnection.url?.path,
+                                    response ?: urlConnection.responseMessage
+                                )
+                            )
                         }
                     }
                     return VirtusizeApiResponse.Error(error)
                 }
-                else -> return VirtusizeApiResponse.Error(virtusizeNetworkError(urlConnection.url?.path, urlConnection.responseCode, urlConnection.responseMessage))
+                else -> return VirtusizeApiResponse.Error(
+                    VirtusizeErrorType.APIError.virtusizeError(
+                        urlConnection.responseCode,
+                        getAPIErrorMessage(
+                            urlConnection.url?.path,
+                            urlConnection.responseMessage
+                        )
+                    )
+                )
             }
         } catch (e: IOException) {
-            return VirtusizeApiResponse.Error(virtusizeNetworkError(urlConnection?.url?.path, null, e.localizedMessage))
+            return VirtusizeApiResponse.Error(
+                VirtusizeErrorType.APIError.virtusizeError(
+                    extraMessage = getAPIErrorMessage(
+                        urlConnection?.url?.path,
+                        e.localizedMessage
+                    )
+                )
+            )
         } finally {
             urlConnection?.disconnect()
             inputStream?.close()
@@ -150,37 +187,65 @@ internal class VirtusizeApiTask(
     }
 
     /**
-     * Parses the contents of an InputStream
+     * Parses the string of the input stream to a data object
      * @param apiRequestUrl the API request URL
-     * @param inputStream The input stream of bytes
-     * @param isErrorStream pass true if it's parsing an error InputStream
+     * @param inputStreamString the string of the input stream
+     * @return either the object that contains the content of the string of the input stream or null
      */
-    private fun parseInputStreamAsObject(
+    private fun parseInputStreamStringToObject(
         apiRequestUrl: String? = null,
-        stream: InputStream,
-        isErrorStream: Boolean = false
+        inputStreamString: String? = null
     ): Any? {
         var result: Any? = null
-        readInputStreamAsString(stream)?.let { streamString ->
-            jsonParser?.let { jsonParser ->
-                try {
-                    result = if (apiRequestUrl != null && responseIsJsonArray(apiRequestUrl)) {
-                        val productTypeJsonArray = JSONArray(streamString)
-                        (0 until productTypeJsonArray.length())
-                            .map { idx -> productTypeJsonArray.getJSONObject(idx) }
-                            .mapNotNull { jsonParser.parse(it) }
-                    } else {
-                        val jsonObject = JSONObject(streamString)
-                        jsonParser.parse(jsonObject)
-                    }
-                } catch (e: JSONException) {
-                    if (!isErrorStream) {
-                        messageHandler?.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(e.localizedMessage))
-                    }
-                }
+        if (inputStreamString != null) {
+            try {
+                result = parseStringToObject(apiRequestUrl, inputStreamString)
+            } catch (e: JSONException) {
+                messageHandler?.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(extraMessage = e.localizedMessage))
             }
-            if(result == null) {
-                result = streamString
+        }
+        return result
+    }
+
+    /**
+     * Parses the string of the error stream to a data object
+     * @param errorStreamString the string of the error stream
+     * @return either an object that contains the content of the string of the input stream, the string of the error stream, or null
+     */
+    private fun parseErrorStreamStringToObject(
+        errorStreamString: String? = null
+    ): Any? {
+        var result: Any? = null
+        if (errorStreamString != null) {
+            result = try {
+                parseStringToObject(streamString = errorStreamString) ?: errorStreamString
+            } catch (e: JSONException) {
+                errorStreamString
+            }
+        }
+        return result
+    }
+
+    /**
+     * Parses the string of an input stream to an object
+     * @param apiRequestUrl the API request URL
+     * @param streamString the string of the input stream
+     * @return either the data object that is converted from streamString or null
+     */
+    private fun parseStringToObject(
+        apiRequestUrl: String? = null,
+        streamString: String
+    ): Any? {
+        var result: Any? = null
+        jsonParser?.let { jsonParser ->
+            result = if (apiRequestUrl != null && responseIsJsonArray(apiRequestUrl)) {
+                val jsonArray = JSONArray(streamString)
+                (0 until jsonArray.length())
+                    .map { idx -> jsonArray.getJSONObject(idx) }
+                    .mapNotNull { jsonParser.parse(it) }
+            } else {
+                val jsonObject = JSONObject(streamString)
+                jsonParser.parse(jsonObject)
             }
         }
         return result
@@ -189,6 +254,7 @@ internal class VirtusizeApiTask(
     /**
      * Check if the response of the API request is a JSON array
      * @param apiRequestUrl The input stream of bytes
+     * @return the boolean value to tell whether the response of the apiRequestUrl is a JSON array.
      */
     private fun responseIsJsonArray(apiRequestUrl: String): Boolean {
         return apiRequestUrl.contains(VirtusizeEndpoint.ProductType.getPath())
@@ -196,8 +262,9 @@ internal class VirtusizeApiTask(
     }
 
     /**
-     * Returns the contents of an InputStream as a String.
+     * Returns the contents of an [InputStream] as a String.
      * @param inputStream The input stream of bytes
+     * @return the string from scanning through the inputStream
      */
     private fun readInputStreamAsString(inputStream: InputStream): String? {
         val scanner: Scanner = Scanner(inputStream).useDelimiter("\\A")
@@ -205,12 +272,12 @@ internal class VirtusizeApiTask(
     }
 
     /**
-     * Returns the VirtusizeError that is associated with an API error
-     * @param urlPath The endpoint path of an API request
-     * @param responseCode The response code of an API request
-     * @param response The response from an API request
+     * Gets the API error message based on the path part of the request url
+     * @param requestPath the path part of the request URL
+     * @param response the response from an API request
+     * @return the message with the info of the request's path and response
      */
-    private fun virtusizeNetworkError(urlPath: String?, responseCode: Int?, response: Any?): VirtusizeError {
-        return VirtusizeError(VirtusizeErrorType.NetworkError, responseCode, "$urlPath - ${response?.toString()}")
+    private fun getAPIErrorMessage(requestPath: String?, response: Any?): String {
+        return "$requestPath - ${response?.toString()}"
     }
 }

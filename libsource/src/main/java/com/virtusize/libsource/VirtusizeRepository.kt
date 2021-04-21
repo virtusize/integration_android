@@ -84,7 +84,7 @@ internal class VirtusizeRepository(
                     }
                     presenter?.onValidProductId(productDataId)
                 } else {
-                    presenter?.hasInPageError(VirtusizeErrorType.InvalidProduct.virtusizeError(virtusizeProduct.externalId))
+                    presenter?.hasInPageError(VirtusizeErrorType.InvalidProduct.virtusizeError(extraMessage = virtusizeProduct.externalId))
                 }
             }
         } else {
@@ -276,7 +276,7 @@ internal class VirtusizeRepository(
             sharedPreferencesHelper.storeBrowserId(userAutoData?.bid)
             sharedPreferencesHelper.storeAuthToken(userAutoData?.auth)
         } catch (e: JSONException) {
-            messageHandler.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(e.localizedMessage))
+            messageHandler.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(extraMessage = e.localizedMessage))
         }
     }
 }
