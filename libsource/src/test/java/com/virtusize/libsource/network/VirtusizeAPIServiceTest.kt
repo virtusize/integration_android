@@ -413,7 +413,6 @@ class VirtusizeAPIServiceTest {
         ))
 
         val actualError = virtusizeAPIService.getUserBodyProfile().failureData
-        println(actualError.toString())
         assertThat(actualError?.code).isEqualTo(HttpURLConnection.HTTP_NOT_FOUND)
         assertThat(actualError?.message).contains("{\"detail\":\"No wardrobe found\"}")
         assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.APIError)
