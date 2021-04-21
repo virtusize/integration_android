@@ -153,7 +153,7 @@ class VirtusizeApiTaskTest {
                 virtusizeApiTask,
                 "{\"detail\":\"No wardrobe found\"}"
             )
-            assertThat(returnValue).isNull()
+            assertThat(returnValue).isEqualTo("{\"detail\":\"No wardrobe found\"}")
         }
     }
 

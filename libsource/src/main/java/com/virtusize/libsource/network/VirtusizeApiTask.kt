@@ -218,7 +218,7 @@ internal class VirtusizeApiTask(
         var result: Any? = null
         if (errorStreamString != null) {
             result = try {
-                parseStringToObject(streamString = errorStreamString)
+                parseStringToObject(streamString = errorStreamString) ?: errorStreamString
             } catch (e: JSONException) {
                 errorStreamString
             }
