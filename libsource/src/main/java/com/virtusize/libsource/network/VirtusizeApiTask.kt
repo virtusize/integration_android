@@ -1,7 +1,6 @@
 package com.virtusize.libsource.network
 
 import com.virtusize.libsource.SharedPreferencesHelper
-import com.virtusize.libsource.data.local.VirtusizeError
 import com.virtusize.libsource.data.local.VirtusizeErrorType
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler
 import com.virtusize.libsource.data.local.virtusizeError
@@ -117,7 +116,7 @@ internal class VirtusizeApiTask(
                     } catch (e: JSONException) {
                         VirtusizeApiResponse.Error(
                             VirtusizeErrorType.JsonParsingError.virtusizeError(
-                                "${apiRequest.url} ${e.localizedMessage}"
+                                extraMessage = "${apiRequest.url} ${e.localizedMessage}"
                             )
                         )
                     }
@@ -137,40 +136,47 @@ internal class VirtusizeApiTask(
                             if (response is ProductCheck) {
                                 return VirtusizeApiResponse.Error(
                                     VirtusizeErrorType.UnParsedProduct.virtusizeError(
-                                        response.productId
+                                        extraMessage = response.productId
                                     )
                                 )
                             }
-                            virtusizeAPIError(
-                                urlConnection.url?.path,
+                            VirtusizeErrorType.APIError.virtusizeError(
                                 urlConnection.responseCode,
-                                response ?: urlConnection.responseMessage
+                                getAPIErrorMessage(
+                                    urlConnection.url?.path,
+                                    response ?: urlConnection.responseMessage
+                                )
                             )
                         }
                         else -> {
-                            virtusizeAPIError(
-                                urlConnection.url?.path,
+                            VirtusizeErrorType.APIError.virtusizeError(
                                 urlConnection.responseCode,
-                                response ?: urlConnection.responseMessage
+                                getAPIErrorMessage(
+                                    urlConnection.url?.path,
+                                    response ?: urlConnection.responseMessage
+                                )
                             )
                         }
                     }
                     return VirtusizeApiResponse.Error(error)
                 }
                 else -> return VirtusizeApiResponse.Error(
-                    virtusizeAPIError(
-                        urlConnection.url?.path,
+                    VirtusizeErrorType.APIError.virtusizeError(
                         urlConnection.responseCode,
-                        urlConnection.responseMessage
+                        getAPIErrorMessage(
+                            urlConnection.url?.path,
+                            urlConnection.responseMessage
+                        )
                     )
                 )
             }
         } catch (e: IOException) {
             return VirtusizeApiResponse.Error(
-                virtusizeAPIError(
-                    urlConnection?.url?.path,
-                    null,
-                    e.localizedMessage
+                VirtusizeErrorType.APIError.virtusizeError(
+                    extraMessage = getAPIErrorMessage(
+                        urlConnection?.url?.path,
+                        e.localizedMessage
+                    )
                 )
             )
         } finally {
@@ -195,7 +201,7 @@ internal class VirtusizeApiTask(
             try {
                 result = parseStringToObject(apiRequestUrl, inputStreamString)
             } catch (e: JSONException) {
-                messageHandler?.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(e.localizedMessage))
+                messageHandler?.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(extraMessage = e.localizedMessage))
             }
         }
         return result
@@ -266,21 +272,12 @@ internal class VirtusizeApiTask(
     }
 
     /**
-     * Returns the [VirtusizeError] that is associated with an API error
-     * @param urlPath The endpoint path of an API request
-     * @param responseCode The response code of an API request
-     * @param response The response from an API request
-     * @return the network related [VirtusizeError]
+     * Gets the API error message based on the path part of the request url
+     * @param requestPath the path part of the request URL
+     * @param response the response from an API request
+     * @return the message with the info of the request's path and response
      */
-    private fun virtusizeAPIError(
-        urlPath: String?,
-        responseCode: Int?,
-        response: Any?
-    ): VirtusizeError {
-        return VirtusizeError(
-            VirtusizeErrorType.APIError,
-            responseCode,
-            "$urlPath - ${response?.toString()}"
-        )
+    private fun getAPIErrorMessage(requestPath: String?, response: Any?): String {
+        return "$requestPath - ${response?.toString()}"
     }
 }

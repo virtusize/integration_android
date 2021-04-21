@@ -501,7 +501,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             } catch (e: Exception) {
                 virtusizeMessageHandler.onError(
                     VirtusizeErrorType.PrivacyLinkNotOpen.virtusizeError(
-                        e.localizedMessage
+                        extraMessage = e.localizedMessage
                     )
                 )
             }
