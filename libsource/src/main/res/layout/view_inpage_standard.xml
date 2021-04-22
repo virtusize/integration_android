@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/virtusize_inpage_standard_layout_card_elevation"
-        android:background="@color/virtusizeWhite"
+        android:background="@color/vs_white"
         app:cardCornerRadius="0dp"
         app:cardElevation="@dimen/virtusize_inpage_standard_layout_card_elevation">
 
@@ -40,7 +40,7 @@
                 android:layout_marginRight="@dimen/virtusize_inpage_standard_error_text_horizontal_margin"
                 android:gravity="center_horizontal"
                 android:text="@string/inpage_long_error_text"
-                android:textColor="@color/color_gray_700" />
+                android:textColor="@color/vs_gray_400" />
 
         </LinearLayout>
 
@@ -115,7 +115,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
-                    android:textColor="@color/color_gray_900"
+                    android:textColor="@color/vs_gray_900"
                     android:textSize="@dimen/virtusize_inpage_standard_normal_textSize"
                     tools:text="This item is" />
 
@@ -125,7 +125,7 @@
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
                     android:lineSpacingExtra="@dimen/virtusize_inpage_standard_top_text_marginBottom"
-                    android:textColor="@color/color_gray_900"
+                    android:textColor="@color/vs_gray_900"
                     android:textSize="@dimen/virtusize_inpage_standard_bold_textSize"
                     tools:text="true to size" />
 
@@ -134,7 +134,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
-                    android:textColor="@color/color_gray_900"
+                    android:textColor="@color/vs_gray_900"
                     android:textSize="@dimen/virtusize_inpage_standard_bold_textSize"
                     tools:text="@string/inpage_loading_text" />
 
@@ -157,9 +157,9 @@
                 android:minWidth="0dp"
                 android:minHeight="0dp"
                 android:textAllCaps="false"
-                android:textColor="@color/virtusizeWhite"
+                android:textColor="@color/vs_white"
                 android:textSize="@dimen/virtusize_inpage_default_textSize"
-                app:drawableTint="@color/virtusizeWhite" />
+                app:drawableTint="@color/vs_white" />
 
         </RelativeLayout>
 
@@ -191,7 +191,7 @@
             android:layout_centerVertical="true"
             android:includeFontPadding="false"
             android:text="@string/virtusize_privacy_policy"
-            android:textColor="@color/color_gray_900"
+            android:textColor="@color/vs_gray_900"
             android:textSize="@dimen/virtusize_inpage_standard_privacy_policy_textSize" />
 
     </RelativeLayout>

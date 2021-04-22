@@ -117,7 +117,7 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
         inpageMiniLoadingText.visibility = View.GONE
         inpageMiniText.visibility = View.VISIBLE
         inpageMiniText.text = configuredContext?.getText(R.string.inpage_short_error_text)
-        inpageMiniText.setTextColor(ContextCompat.getColor(context, R.color.color_gray_700))
+        inpageMiniText.setTextColor(ContextCompat.getColor(context, R.color.vs_gray_400))
         inpageMiniImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_error_hanger))
         setOnClickListener {}
     }
@@ -137,7 +137,7 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
      */
     private fun setLoadingScreen(loading: Boolean) {
         if(loading) {
-            inpageMiniLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.virtusizeWhite))
+            inpageMiniLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.vs_white))
             inpageMiniLoadingText.startAnimation()
         } else {
             inpageMiniLayout.setBackgroundColor(virtusizeBackgroundColor)
@@ -164,9 +164,9 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
             inpageMiniButton.setTextColor(virtusizeBackgroundColor)
             setButtonRightArrowColor(virtusizeBackgroundColor)
         } else if(virtusizeViewStyle == VirtusizeViewStyle.TEAL) {
-            inpageMiniLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.virtusizeTeal))
-            inpageMiniButton.setTextColor(ContextCompat.getColor(context, R.color.virtusizeTeal))
-            setButtonRightArrowColor(ContextCompat.getColor(context, R.color.virtusizeTeal))
+            inpageMiniLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.vs_teal))
+            inpageMiniButton.setTextColor(ContextCompat.getColor(context, R.color.vs_teal))
+            setButtonRightArrowColor(ContextCompat.getColor(context, R.color.vs_teal))
         }
     }
 
