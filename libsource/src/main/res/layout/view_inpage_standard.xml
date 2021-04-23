@@ -10,7 +10,7 @@
         android:id="@+id/inpageCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/virtusize_inpage_standard_layout_card_elevation"
+        android:layout_margin="@dimen/virtusize_inpage_standard_layout_margin"
         android:background="@color/virtusizeWhite"
         app:cardCornerRadius="0dp"
         app:cardElevation="@dimen/virtusize_inpage_standard_layout_card_elevation">
