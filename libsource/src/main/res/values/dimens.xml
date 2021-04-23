@@ -21,7 +21,8 @@
     <dimen name="virtusize_inpage_button_horizontal_padding">6dp</dimen>
     <dimen name="virtusize_inpage_button_vertical_padding">4.5dp</dimen>
 
-    <dimen name="virtusize_inpage_standard_layout_card_elevation">14dp</dimen>
+    <dimen name="virtusize_inpage_standard_layout_margin">14dp</dimen>
+    <dimen name="virtusize_inpage_standard_layout_card_elevation">10dp</dimen>
     <dimen name="virtusize_inpage_standard_product_image_border_size">40dp</dimen>
     <dimen name="virtusize_inpage_standard_product_image_border_cardCornerRadius">20dp</dimen>
     <dimen name="virtusize_inpage_standard_product_image_overlap_margin">-4dp</dimen>
