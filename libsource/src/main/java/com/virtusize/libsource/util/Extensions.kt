@@ -34,17 +34,6 @@ internal fun Context.getDrawableResourceByName(drawableName: String): Drawable? 
 }
 
 /**
- * The Context extension function to get a Typeface by the font file name
- */
-internal fun Context.getTypefaceByName(fontFileName: String): Typeface? {
-    val resId = resources.getIdentifier(fontFileName, "font", packageName)
-    if(resId == 0) {
-        return null
-    }
-    return ResourcesCompat.getFont(this, resId)
-}
-
-/**
  * The String extension function to trim the text from i18n localization
  */
 internal fun String.trimI18nText(trimType: I18nLocalizationJsonParser.TrimType = I18nLocalizationJsonParser.TrimType.ONELINE): String {

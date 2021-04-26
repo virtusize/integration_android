@@ -27,6 +27,7 @@ import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.util.*
 import com.virtusize.libsource.util.FontUtils
 import com.virtusize.libsource.util.VirtusizeUtils
+import com.virtusize.ui.utils.Font
 import kotlinx.android.synthetic.main.view_inpage_standard.view.*
 
 
@@ -464,7 +465,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
                 privacyPolicyText
             ),
             virtusizeParams?.language,
-            FontUtils.FontType.REGULAR
+            Font.FontType.REGULAR
         )
         FontUtils.setTypeFaces(
             context,
@@ -473,7 +474,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
                 inpageBottomText
             ),
             virtusizeParams?.language,
-            FontUtils.FontType.BOLD
+            Font.FontType.BOLD
         )
 
         val configuredContext = VirtusizeUtils.getConfiguredContext(
