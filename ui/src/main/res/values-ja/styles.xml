@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="TextAppearance.Virtusize.FittingRoom.Headline1" parent="TextAppearance.AppCompat.Display4">
+
+    <style name="TextAppearance.Virtusize.Headline1" parent="TextAppearance.AppCompat.Display4">
         <item name="fontFamily">@font/noto_sans_cjk_jp_regular</item>
         <item name="android:fontFamily">@font/noto_sans_cjk_jp_regular</item>
         <item name="android:textFontWeight">800</item>
@@ -10,7 +11,7 @@
         <item name="android:textColor">@color/vs_black</item>
     </style>
 
-    <style name="TextAppearance.Virtusize.FittingRoom.Headline2" parent="TextAppearance.AppCompat.Display3">
+    <style name="TextAppearance.Virtusize.Headline2" parent="TextAppearance.AppCompat.Display3">
         <item name="fontFamily">@font/noto_sans_cjk_jp_regular</item>
         <item name="android:fontFamily">@font/noto_sans_cjk_jp_regular</item>
         <item name="android:textFontWeight">800</item>
@@ -20,67 +21,67 @@
         <item name="android:textColor">@color/vs_black</item>
     </style>
 
-    <style name="TextAppearance.Virtusize.FittingRoom.Headline3" parent="TextAppearance.AppCompat.Display2">
+    <style name="TextAppearance.Virtusize.Headline3" parent="TextAppearance.AppCompat.Display2">
         <item name="fontFamily">@font/noto_sans_cjk_jp_regular</item>
         <item name="android:fontFamily">@font/noto_sans_cjk_jp_regular</item>
         <item name="android:textFontWeight">800</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">@dimen/vs_xxlarge_text_size</item>
         <item name="android:textColor">@color/vs_black</item>
     </style>
 
-    <style name="TextAppearance.Virtusize.FittingRoom.Headline4" parent="TextAppearance.AppCompat.Display1">
+    <style name="TextAppearance.Virtusize.Headline4" parent="TextAppearance.AppCompat.Display1">
         <item name="fontFamily">@font/noto_sans_cjk_jp_regular</item>
         <item name="android:fontFamily">@font/noto_sans_cjk_jp_regular</item>
         <item name="android:textFontWeight">700</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/vs_large_text_size</item>
         <item name="android:textColor">@color/vs_gray_800</item>
     </style>
 
-    <style name="TextAppearance.Virtusize.FittingRoom.Headline5" parent="TextAppearance.AppCompat.Headline">
+    <style name="TextAppearance.Virtusize.Headline5" parent="TextAppearance.AppCompat.Headline">
         <item name="fontFamily">@font/noto_sans_cjk_jp_regular</item>
         <item name="android:fontFamily">@font/noto_sans_cjk_jp_regular</item>
         <item name="android:textFontWeight">400</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/vs_large_text_size</item>
         <item name="android:textColor">@color/vs_gray_800</item>
     </style>
 
-    <style name="TextAppearance.Virtusize.FittingRoom.Highlight" parent="TextAppearance.AppCompat.Title">
+    <style name="TextAppearance.Virtusize.Highlight" parent="TextAppearance.AppCompat.Title">
         <item name="fontFamily">@font/noto_sans_cjk_jp_regular</item>
         <item name="android:fontFamily">@font/noto_sans_cjk_jp_regular</item>
         <item name="android:textFontWeight">700</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/vs_normal_text_size</item>
         <item name="android:textColor">@color/vs_gray_800</item>
     </style>
 
-    <style name="TextAppearance.Virtusize.FittingRoom.Description" parent="TextAppearance.AppCompat.Body2">
+    <style name="TextAppearance.Virtusize.Description" parent="TextAppearance.AppCompat.Body2">
         <item name="fontFamily">@font/noto_sans_cjk_jp_regular</item>
         <item name="android:fontFamily">@font/noto_sans_cjk_jp_regular</item>
         <item name="android:textFontWeight">400</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/vs_normal_text_size</item>
         <item name="android:textColor">@color/vs_gray_800</item>
     </style>
 
-    <style name="TextAppearance.Virtusize.FittingRoom.Body" parent="TextAppearance.AppCompat.Body1">
+    <style name="TextAppearance.Virtusize.Body" parent="TextAppearance.AppCompat.Body1">
         <item name="fontFamily">@font/noto_sans_cjk_jp_regular</item>
         <item name="android:fontFamily">@font/noto_sans_cjk_jp_regular</item>
         <item name="android:textFontWeight">400</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">@dimen/vs_xsmall_text_size</item>
         <item name="android:textColor">@color/vs_gray_800</item>
     </style>
 
-    <style name="TextAppearance.Virtusize.FittingRoom.Body.Bold" parent="TextAppearance.Virtusize.FittingRoom.Body">
+    <style name="TextAppearance.Virtusize.Body.Bold" parent="TextAppearance.Virtusize.Body">
         <item name="android:textFontWeight">700</item>
     </style>
 </resources>
