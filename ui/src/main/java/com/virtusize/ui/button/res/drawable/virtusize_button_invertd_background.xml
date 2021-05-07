@@ -7,8 +7,6 @@
                 <shape>
                     <solid android:color="@color/vs_gray_900" />
 
-                    <padding android:bottom="@dimen/virtusize_button_vertical_padding" android:left="@dimen/virtusize_button_horizontal_padding" android:right="@dimen/virtusize_button_horizontal_padding" android:top="@dimen/virtusize_button_vertical_padding" />
-
                     <corners android:radius="@dimen/virtusize_button_corner_radius" />
                 </shape>
             </item>

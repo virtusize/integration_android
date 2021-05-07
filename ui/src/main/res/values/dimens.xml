@@ -15,7 +15,9 @@
     <dimen name="vs_thin_font_weight">200</dimen>
 
     <!--  Button  -->
-    <dimen name="virtusize_button_horizontal_padding">16dp</dimen>
-    <dimen name="virtusize_button_vertical_padding">14dp</dimen>
+    <dimen name="virtusize_button_standard_horizontal_padding">16dp</dimen>
+    <dimen name="virtusize_button_standard_vertical_padding">12dp</dimen>
+    <dimen name="virtusize_button_small_horizontal_padding">10dp</dimen>
+    <dimen name="virtusize_button_small_vertical_padding">6dp</dimen>
     <dimen name="virtusize_button_corner_radius">100dp</dimen>
 </resources>

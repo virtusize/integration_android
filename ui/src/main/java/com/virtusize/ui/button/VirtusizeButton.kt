@@ -22,32 +22,22 @@ class VirtusizeButton @JvmOverloads constructor(
             setView()
         }
 
+    var virtusizeButtonSize: VirtusizeButtonSize = VirtusizeButtonSize.STANDARD
+        set(value) {
+            field = value
+            setView()
+        }
+
+    private var virtusizeTextColor: Int = 0
+
+    private var virtusizeBackgroundColor: Int = 0
+
     init {
         setView()
 
         isClickable = true
     }
 
-    private fun setView() {
-        if(virtusizeButtonStyle == VirtusizeButtonStyle.NONE) {
-            return
-        }
-
-        setButtonStyle(virtusizeButtonStyle)
-
-        setElevation()
-
-        val styleId = if (virtusizeButtonStyle == VirtusizeButtonStyle.INVERTED) {
-            R.style.TextAppearance_Virtusize_Button_Inverted
-        } else {
-            R.style.TextAppearance_Virtusize_Button_Default
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            setTextAppearance(styleId)
-        } else {
-            setTextAppearance(context, styleId)
-        }
-    }
 
     override fun setPressed(pressed: Boolean) {
         super.setPressed(pressed)
@@ -59,19 +49,55 @@ class VirtusizeButton @JvmOverloads constructor(
         setElevation()
     }
 
-    private fun setButtonStyle(style: VirtusizeButtonStyle) {
-        if (style == VirtusizeButtonStyle.DEFAULT) {
-            setBackgroundResource(R.drawable.virtusize_button_default_background)
-        } else if (style == VirtusizeButtonStyle.INVERTED) {
-            setBackgroundResource(R.drawable.virtusize_button_invertd_background)
-        } else if (style == VirtusizeButtonStyle.FLAT) {
-            setBackgroundResource(R.drawable.virtusize_button_flat_background)
-            stateListAnimator = null
+    override fun setTextColor(color: Int) {
+        super.setTextColor(color)
+        virtusizeTextColor = color
+    }
+
+    private fun setView() {
+        if(virtusizeButtonStyle == VirtusizeButtonStyle.NONE) {
+            return
         }
+
+        isAllCaps = false
+        minHeight = 0
+        minWidth = 0
+        minimumHeight = 0
+        minimumWidth = 0
+
+        setButtonStyle()
+        setElevation()
+        setTextStyle()
     }
 
     fun setVirtusizeBackgroundColor(@ColorInt color: Int) {
-        DrawableCompat.setTint(background, color)
+        virtusizeBackgroundColor = color
+        setButtonStyle()
+    }
+
+    private fun setButtonStyle() {
+        if (virtusizeButtonStyle == VirtusizeButtonStyle.DEFAULT) {
+            setBackgroundResource(R.drawable.virtusize_button_default_background)
+        } else if (virtusizeButtonStyle == VirtusizeButtonStyle.INVERTED) {
+            setBackgroundResource(R.drawable.virtusize_button_invertd_background)
+        } else if (virtusizeButtonStyle == VirtusizeButtonStyle.FLAT) {
+            setBackgroundResource(R.drawable.virtusize_button_flat_background)
+            stateListAnimator = null
+        }
+        if(virtusizeBackgroundColor != 0) {
+            DrawableCompat.setTint(background, virtusizeBackgroundColor)
+        }
+
+        val horizontalPadding: Int
+        val verticalPadding: Int
+        if (virtusizeButtonSize == VirtusizeButtonSize.STANDARD) {
+            horizontalPadding = resources.getDimension(R.dimen.virtusize_button_standard_horizontal_padding).toInt()
+            verticalPadding = resources.getDimension(R.dimen.virtusize_button_standard_vertical_padding).toInt()
+        } else {
+            horizontalPadding = resources.getDimension(R.dimen.virtusize_button_small_horizontal_padding).toInt()
+            verticalPadding = resources.getDimension(R.dimen.virtusize_button_small_vertical_padding).toInt()
+        }
+        setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
     }
 
     private fun setElevation() {
@@ -83,6 +109,32 @@ class VirtusizeButton @JvmOverloads constructor(
             4.dp
         } else {
             0.dp
+        }
+    }
+
+    private fun setTextStyle() {
+        val styleId = if (virtusizeButtonStyle == VirtusizeButtonStyle.INVERTED) {
+            if (virtusizeButtonSize == VirtusizeButtonSize.STANDARD) {
+                R.style.TextAppearance_Virtusize_Button_Inverted
+            } else {
+                R.style.TextAppearance_Virtusize_Button_Inverted_Small
+            }
+
+        } else {
+            if (virtusizeButtonSize == VirtusizeButtonSize.STANDARD) {
+                R.style.TextAppearance_Virtusize_Button_Default
+            } else {
+                R.style.TextAppearance_Virtusize_Button_Default_Small
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            setTextAppearance(styleId)
+        } else {
+            setTextAppearance(context, styleId)
+        }
+
+        if(virtusizeTextColor != 0) {
+            setTextColor(virtusizeTextColor)
         }
     }
 }

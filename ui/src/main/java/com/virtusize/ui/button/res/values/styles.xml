@@ -4,7 +4,15 @@
         <item name="android:textColor">@color/virtusize_button_default_text_color</item>
     </style>
 
+    <style name="TextAppearance.Virtusize.Button.Default.Small">
+        <item name="android:textSize">@dimen/vs_small_text_size</item>
+    </style>
+
     <style name="TextAppearance.Virtusize.Button.Inverted" parent="TextAppearance.Virtusize.Highlight">
         <item name="android:textColor">@color/virtusize_button_inverted_text_color</item>
+    </style>
+
+    <style name="TextAppearance.Virtusize.Button.Inverted.Small">
+        <item name="android:textSize">@dimen/vs_small_text_size</item>
     </style>
 </resources>
