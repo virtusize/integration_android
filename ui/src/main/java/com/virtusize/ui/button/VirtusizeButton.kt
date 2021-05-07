@@ -3,7 +3,9 @@ package com.virtusize.ui.button
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
+import androidx.annotation.ColorInt
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.graphics.drawable.DrawableCompat
 import com.virtusize.ui.R
 import com.virtusize.ui.utils.dp
 
@@ -66,6 +68,10 @@ class VirtusizeButton @JvmOverloads constructor(
             setBackgroundResource(R.drawable.virtusize_button_flat_background)
             stateListAnimator = null
         }
+    }
+
+    fun setVirtusizeBackgroundColor(@ColorInt color: Int) {
+        DrawableCompat.setTint(background, color)
     }
 
     private fun setElevation() {
