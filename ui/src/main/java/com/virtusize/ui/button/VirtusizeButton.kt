@@ -1,6 +1,7 @@
 package com.virtusize.ui.button
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -36,8 +37,9 @@ class VirtusizeButton @JvmOverloads constructor(
         }
 
     private var virtusizeTextColor: Int = 0
-
     private var virtusizeBackgroundColor: Int = 0
+    private var leftDrawable: Drawable? = null
+    private var rightDrawable: Drawable? = null
 
     init {
         setView()
@@ -80,6 +82,23 @@ class VirtusizeButton @JvmOverloads constructor(
     fun setVirtusizeBackgroundColor(@ColorInt color: Int) {
         virtusizeBackgroundColor = color
         setButtonStyle()
+    }
+
+    fun setLeftIcon(left: Drawable?, width: Int? = null, height: Int? = null) {
+        leftDrawable = left
+        leftDrawable?.setBounds(0, 0, width ?: leftDrawable!!.minimumWidth, height ?: leftDrawable!!.minimumHeight)
+        setIcons()
+    }
+
+    fun setRightIcon(right: Drawable?, width: Int? = null, height: Int? = null) {
+        rightDrawable = right
+        rightDrawable?.setBounds(0, 0, width ?: rightDrawable!!.minimumWidth, height ?: rightDrawable!!.minimumHeight)
+        setIcons()
+    }
+
+    private fun setIcons() {
+        setCompoundDrawables(leftDrawable, null, rightDrawable, null)
+        compoundDrawablePadding = resources.getDimension(R.dimen.virtusize_button_icon_padding).toInt()
     }
 
     private fun setButtonStyle() {

@@ -20,4 +20,5 @@
     <dimen name="virtusize_button_small_horizontal_padding">10dp</dimen>
     <dimen name="virtusize_button_small_vertical_padding">6dp</dimen>
     <dimen name="virtusize_button_corner_radius">100dp</dimen>
+    <dimen name="virtusize_button_icon_padding">6dp</dimen>
 </resources>
