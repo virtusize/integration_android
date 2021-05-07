@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/virtusize_button_disable_background" android:state_enabled="false" />
+    <item android:state_enabled="true">
+        <ripple android:color="@color/vs_gray_300">
+            <item>
+                <shape>
+                    <solid android:color="@color/vs_white" />
+
+                    <stroke android:width="0.5dp" android:color="@color/vs_gray_800" />
+
+                    <padding android:bottom="@dimen/virtusize_button_vertical_padding" android:left="@dimen/virtusize_button_horizontal_padding" android:right="@dimen/virtusize_button_horizontal_padding" android:top="@dimen/virtusize_button_vertical_padding" />
+
+                    <corners android:radius="@dimen/virtusize_button_corner_radius" />
+                </shape>
+            </item>
+        </ripple>
+    </item>
+</selector>

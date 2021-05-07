@@ -11,21 +11,40 @@ import com.virtusize.ui.utils.dp
 class VirtusizeButton @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int = androidx.appcompat.R.attr.buttonStyle
 ) : AppCompatButton(context, attrs, defStyleAttr) {
 
-    init {
-        setBackgroundResource(R.drawable.virtusize_button_default_background)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            setTextAppearance(R.style.TextAppearance_Virtusize_Button)
-        } else {
-            setTextAppearance(context, R.style.TextAppearance_Virtusize_Button)
+    var virtusizeButtonStyle: VirtusizeButtonStyle = VirtusizeButtonStyle.NONE
+        set(value) {
+            field = value
+            setView()
         }
 
+    init {
+        setView()
+
         isClickable = true
+    }
+
+    private fun setView() {
+        if(virtusizeButtonStyle == VirtusizeButtonStyle.NONE) {
+            return
+        }
+
+        setButtonStyle(virtusizeButtonStyle)
 
         setElevation()
+
+        val styleId = if (virtusizeButtonStyle == VirtusizeButtonStyle.INVERTED) {
+            R.style.TextAppearance_Virtusize_Button_Inverted
+        } else {
+            R.style.TextAppearance_Virtusize_Button_Default
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            setTextAppearance(styleId)
+        } else {
+            setTextAppearance(context, styleId)
+        }
     }
 
     override fun setPressed(pressed: Boolean) {
@@ -38,9 +57,24 @@ class VirtusizeButton @JvmOverloads constructor(
         setElevation()
     }
 
+    private fun setButtonStyle(style: VirtusizeButtonStyle) {
+        if (style == VirtusizeButtonStyle.DEFAULT) {
+            setBackgroundResource(R.drawable.virtusize_button_default_background)
+        } else if (style == VirtusizeButtonStyle.INVERTED) {
+            setBackgroundResource(R.drawable.virtusize_button_invertd_background)
+        } else if (style == VirtusizeButtonStyle.FLAT) {
+            setBackgroundResource(R.drawable.virtusize_button_flat_background)
+            stateListAnimator = null
+        }
+    }
+
     private fun setElevation() {
-        elevation = if (isEnabled && !isPressed) {
-            1.dp
+        if(virtusizeButtonStyle == VirtusizeButtonStyle.NONE) {
+            return
+        }
+
+        elevation = if (virtusizeButtonStyle != VirtusizeButtonStyle.FLAT && isEnabled && !isPressed) {
+            4.dp
         } else {
             0.dp
         }
