@@ -3,6 +3,7 @@ package com.virtusize.ui.button
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
+import android.util.TypedValue
 import androidx.annotation.ColorInt
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.graphics.drawable.DrawableCompat
@@ -16,13 +17,19 @@ class VirtusizeButton @JvmOverloads constructor(
     defStyleAttr: Int = androidx.appcompat.R.attr.buttonStyle
 ) : AppCompatButton(context, attrs, defStyleAttr) {
 
-    var virtusizeButtonStyle: VirtusizeButtonStyle = VirtusizeButtonStyle.NONE
+    var virtusizeButtonStyle = VirtusizeButtonStyle.NONE
         set(value) {
             field = value
             setView()
         }
 
-    var virtusizeButtonSize: VirtusizeButtonSize = VirtusizeButtonSize.STANDARD
+    var virtusizeButtonSize = VirtusizeButtonSize.STANDARD
+        set(value) {
+            field = value
+            setView()
+        }
+
+    var virtusizeButtonTextSize = VirtusizeButtonTextSize.DEFAULT
         set(value) {
             field = value
             setView()
@@ -131,6 +138,21 @@ class VirtusizeButton @JvmOverloads constructor(
             setTextAppearance(styleId)
         } else {
             setTextAppearance(context, styleId)
+        }
+
+        when(virtusizeButtonTextSize) {
+            VirtusizeButtonTextSize.DEFAULT, VirtusizeButtonTextSize.NORMAL -> {
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.vs_normal_text_size))
+            }
+            VirtusizeButtonTextSize.SMALLER -> {
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.vs_small_text_size))
+            }
+            VirtusizeButtonTextSize.LARGE -> {
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.vs_large_text_size))
+            }
+            VirtusizeButtonTextSize.LARGER -> {
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.vs_xlarge_text_size))
+            }
         }
 
         if(virtusizeTextColor != 0) {
