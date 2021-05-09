@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Sample App Kotlin</string>
+    <string name="app_name" translatable="false">Sample App Kotlin</string>
+    <string name="virtusize_design_system" translatable="false">Virtusize Design System</string>
 </resources>

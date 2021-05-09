@@ -12,11 +12,11 @@ import androidx.core.graphics.drawable.DrawableCompat
 import com.virtusize.libsource.R
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.ProductCheck
+import com.virtusize.libsource.databinding.ViewInpageMiniBinding
 import com.virtusize.libsource.util.*
 import com.virtusize.libsource.util.FontUtils
 import com.virtusize.libsource.util.VirtusizeUtils
 import com.virtusize.ui.utils.Font
-import kotlinx.android.synthetic.main.view_inpage_mini.view.*
 
 class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPageView(context, attrs) {
 
@@ -52,8 +52,9 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
     // The configured context for localization
     private var configuredContext: ContextWrapper? = null
 
+    private var binding: ViewInpageMiniBinding = ViewInpageMiniBinding.inflate(LayoutInflater.from(context), this, true)
+
     init {
-        LayoutInflater.from(context).inflate(R.layout.view_inpage_mini, this, true)
         visibility = if (visibility == View.GONE) {
             View.GONE
         } else {
@@ -93,7 +94,7 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
                     setOnClickListener {
                         openVirtusizeWebView(context)
                     }
-                    inpageMiniButton.setOnClickListener {
+                    binding.inpageMiniButton.setOnClickListener {
                         openVirtusizeWebView(context)
                     }
                 }
@@ -107,7 +108,7 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
      * @see VirtusizeInPageView.setupRecommendationText
      */
     override fun setupRecommendationText(text: String) {
-        inpageMiniText.text = text
+        binding.inpageMiniText.text = text
         setLoadingScreen(false)
     }
 
@@ -115,11 +116,11 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
      * @see VirtusizeInPageView.showErrorScreen
      */
     override fun showErrorScreen() {
-        inpageMiniLoadingText.visibility = View.GONE
-        inpageMiniText.visibility = View.VISIBLE
-        inpageMiniText.text = configuredContext?.getText(R.string.inpage_short_error_text)
-        inpageMiniText.setTextColor(ContextCompat.getColor(context, R.color.vs_gray_400))
-        inpageMiniImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_error_hanger))
+        binding.inpageMiniLoadingText.visibility = View.GONE
+        binding.inpageMiniText.visibility = View.VISIBLE
+        binding.inpageMiniText.text = configuredContext?.getText(R.string.inpage_short_error_text)
+        binding.inpageMiniText.setTextColor(ContextCompat.getColor(context, R.color.vs_gray_400))
+        binding.inpageMiniImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_error_hanger))
         setOnClickListener {}
     }
 
@@ -138,22 +139,22 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
      */
     private fun setLoadingScreen(loading: Boolean) {
         if(loading) {
-            inpageMiniLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.vs_white))
-            inpageMiniLoadingText.startAnimation()
+            binding.inpageMiniLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.vs_white))
+            binding.inpageMiniLoadingText.startAnimation()
         } else {
-            inpageMiniLayout.setBackgroundColor(virtusizeBackgroundColor)
-            inpageMiniLoadingText.stopAnimation()
+            binding.inpageMiniLayout.setBackgroundColor(virtusizeBackgroundColor)
+            binding.inpageMiniLoadingText.stopAnimation()
         }
         FontUtils.setTypeFace(
             context,
-            inpageMiniLoadingText,
+            binding.inpageMiniLoadingText,
             virtusizeParams?.language,
             if (loading) Font.FontType.BOLD else Font.FontType.REGULAR
         )
-        inpageMiniImageView.visibility = if(loading) View.VISIBLE else View.GONE
-        inpageMiniText.visibility = if(loading) View.GONE else View.VISIBLE
-        inpageMiniLoadingText.visibility = if(loading) View.VISIBLE else View.GONE
-        inpageMiniButton.visibility = if(loading) View.GONE else View.VISIBLE
+        binding.inpageMiniImageView.visibility = if(loading) View.VISIBLE else View.GONE
+        binding.inpageMiniText.visibility = if(loading) View.GONE else View.VISIBLE
+        binding.inpageMiniLoadingText.visibility = if(loading) View.VISIBLE else View.GONE
+        binding.inpageMiniButton.visibility = if(loading) View.GONE else View.VISIBLE
     }
 
     /**
@@ -161,12 +162,12 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
      */
     override fun setStyle() {
         if(virtusizeBackgroundColor != 0) {
-            inpageMiniLayout.setBackgroundColor(virtusizeBackgroundColor)
-            inpageMiniButton.setTextColor(virtusizeBackgroundColor)
+            binding.inpageMiniLayout.setBackgroundColor(virtusizeBackgroundColor)
+            binding.inpageMiniButton.setTextColor(virtusizeBackgroundColor)
             setButtonRightArrowColor(virtusizeBackgroundColor)
         } else if(virtusizeViewStyle == VirtusizeViewStyle.TEAL) {
-            inpageMiniLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.vs_teal))
-            inpageMiniButton.setTextColor(ContextCompat.getColor(context, R.color.vs_teal))
+            binding.inpageMiniLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.vs_teal))
+            binding.inpageMiniButton.setTextColor(ContextCompat.getColor(context, R.color.vs_teal))
             setButtonRightArrowColor(ContextCompat.getColor(context, R.color.vs_teal))
         }
     }
@@ -180,7 +181,7 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
         drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
         DrawableCompat.setTint(drawable, color)
 
-        inpageMiniButton.setCompoundDrawables(null, null, drawable, null)
+        binding.inpageMiniButton.setCompoundDrawables(null, null, drawable, null)
     }
 
     /**
@@ -190,17 +191,17 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
         FontUtils.setTypeFaces(
             context,
             mutableListOf(
-                inpageMiniText,
-                inpageMiniButton
+                binding.inpageMiniText,
+                binding.inpageMiniButton
             ), virtusizeParams?.language, Font.FontType.REGULAR
         )
         configuredContext = VirtusizeUtils.getConfiguredContext(context, virtusizeParams?.language)
-        inpageMiniButton.text = configuredContext?.getText(R.string.virtusize_button_text)
-        inpageMiniLoadingText.text = configuredContext?.getText(R.string.inpage_loading_text)
+        binding.inpageMiniButton.text = configuredContext?.getText(R.string.virtusize_button_text)
+        binding.inpageMiniLoadingText.text = configuredContext?.getText(R.string.inpage_loading_text)
         setConfiguredDimensions()
 
         if(virtusizeParams?.language == VirtusizeLanguage.JP) {
-            inpageMiniText.includeFontPadding = true
+            binding.inpageMiniText.includeFontPadding = true
         }
     }
 
@@ -210,23 +211,23 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
     private fun setConfiguredDimensions() {
         val additionalSize = if(virtusizeParams?.language == VirtusizeLanguage.EN) 2f.spToPx else 0f
         if(messageTextSize != -1f) {
-            inpageMiniLoadingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + additionalSize)
-            inpageMiniText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + additionalSize)
+            binding.inpageMiniLoadingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + additionalSize)
+            binding.inpageMiniText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + additionalSize)
         } else {
             configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_mini_message_textSize)
                 ?.let {
-                    inpageMiniLoadingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
-                    inpageMiniText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+                    binding.inpageMiniLoadingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+                    binding.inpageMiniText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
                 }
         }
         if(buttonTextSize != -1f) {
             val size = buttonTextSize + additionalSize
-            inpageMiniButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
-            inpageMiniButton.rightDrawable(R.drawable.ic_arrow_right_black, 0.8f * size / 2, 0.8f * size)
+            binding.inpageMiniButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
+            binding.inpageMiniButton.rightDrawable(R.drawable.ic_arrow_right_black, 0.8f * size / 2, 0.8f * size)
         } else {
             configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_default_textSize)
                 ?.let {
-                    inpageMiniButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+                    binding.inpageMiniButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
                 }
         }
     }
