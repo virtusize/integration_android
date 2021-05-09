@@ -138,6 +138,9 @@ class VirtusizeButton @JvmOverloads constructor(
             VirtusizeButtonStyle.ROUND_INVERTED -> {
                 setBackgroundResource(R.drawable.virtusize_button_round_inverted_background)
             }
+            VirtusizeButtonStyle.SQUARE -> {
+                setBackgroundResource(R.drawable.virtusize_button_square_background)
+            }
         }
         if(virtusizeBackgroundColor != 0) {
             DrawableCompat.setTint(background, virtusizeBackgroundColor)
