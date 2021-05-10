@@ -5,12 +5,18 @@
     <string name="virtusize_button" translatable="false">Button</string>
 
     <string name="style_button_title" translatable="false">Default, Inverted, and Disabled Buttons</string>
+    <string name="color_button_title" translatable="false">Color</string>
+    <string name="size_button_title" translatable="false">Size</string>
+    <string name="text_size_button_title" translatable="false">Text Size</string>
+
     <string name="default_button" translatable="false">Default Button</string>
     <string name="flat_button" translatable="false">Flat Button</string>
     <string name="inverted_button" translatable="false">Inverted Button</string>
     <string name="disabled_button" translatable="false">Disabled Button</string>
-    <string name="color_button_title" translatable="false">Color</string>
-    <string name="size_button_title" translatable="false">Size</string>
     <string name="default_size_button" translatable="false">Default Size Button</string>
-    <string name="small_size_button" translatable="false">Small Size Button</string>
+    <string name="small_size_button" translatable="false">Small Button</string>
+    <string name="smaller_text_size_button" translatable="false">Smaller Button</string>
+    <string name="normal_text_size_button" translatable="false">Normal Button</string>
+    <string name="large_text_size_button" translatable="false">Large Button</string>
+    <string name="larger_text_size_button" translatable="false">Larger Button</string>
 </resources>

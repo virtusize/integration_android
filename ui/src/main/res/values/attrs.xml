@@ -14,5 +14,12 @@
             <enum name="standard" value="0" />
             <enum name="small" value="1" />
         </attr>
+        <attr name="virtusizeButtonTextSize">
+            <enum name="virtusize_default" value="0" />
+            <enum name="smaller" value="1" />
+            <enum name="normal" value="2" />
+            <enum name="large" value="3" />
+            <enum name="larger" value="4" />
+        </attr>
     </declare-styleable>
 </resources>

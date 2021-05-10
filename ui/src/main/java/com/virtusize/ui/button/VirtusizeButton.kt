@@ -56,6 +56,9 @@ class VirtusizeButton @JvmOverloads constructor(
 
         virtusizeBackgroundColor = attrsArray.getColor(R.styleable.VirtusizeButton_virtusizeBackgroundColor, 0)
 
+        val buttonTextSize = attrsArray.getInt(R.styleable.VirtusizeButton_virtusizeButtonTextSize, VirtusizeButtonTextSize.DEFAULT.ordinal)
+        virtusizeButtonTextSize = VirtusizeButtonTextSize.values().firstOrNull { it.ordinal == buttonTextSize } ?: VirtusizeButtonTextSize.DEFAULT
+
         attrsArray.recycle()
 
         setView()
