@@ -10,5 +10,9 @@
             <enum name="square" value="5" />
         </attr>
         <attr name="virtusizeBackgroundColor" format="color"/>
+        <attr name="virtusizeButtonSize">
+            <enum name="standard" value="0" />
+            <enum name="small" value="1" />
+        </attr>
     </declare-styleable>
 </resources>

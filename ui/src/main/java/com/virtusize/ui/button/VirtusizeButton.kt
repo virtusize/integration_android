@@ -44,13 +44,19 @@ class VirtusizeButton @JvmOverloads constructor(
     private var rightIconDrawable: Drawable? = null
 
     init {
-        val attrsArray = context.obtainStyledAttributes(attrs, R.styleable.VirtusizeButton, 0, 0)
-        val buttonStyle = attrsArray.getInt(R.styleable.VirtusizeButton_uiButtonStyle, VirtusizeButtonStyle.NONE.value)
-        virtusizeButtonStyle = VirtusizeButtonStyle.values().firstOrNull { it.value == buttonStyle } ?: VirtusizeButtonStyle.NONE
-        virtusizeBackgroundColor = attrsArray.getColor(R.styleable.VirtusizeButton_virtusizeBackgroundColor, 0)
-        attrsArray.recycle()
-
         setTextColor(currentTextColor)
+
+        val attrsArray = context.obtainStyledAttributes(attrs, R.styleable.VirtusizeButton, 0, 0)
+
+        val buttonStyle = attrsArray.getInt(R.styleable.VirtusizeButton_uiButtonStyle, VirtusizeButtonStyle.NONE.ordinal)
+        virtusizeButtonStyle = VirtusizeButtonStyle.values().firstOrNull { it.ordinal == buttonStyle } ?: VirtusizeButtonStyle.NONE
+
+        val buttonSize = attrsArray.getInt(R.styleable.VirtusizeButton_virtusizeButtonSize, VirtusizeButtonSize.STANDARD.ordinal)
+        virtusizeButtonSize = VirtusizeButtonSize.values().firstOrNull { it.ordinal == buttonSize } ?: VirtusizeButtonSize.STANDARD
+
+        virtusizeBackgroundColor = attrsArray.getColor(R.styleable.VirtusizeButton_virtusizeBackgroundColor, 0)
+
+        attrsArray.recycle()
 
         setView()
 

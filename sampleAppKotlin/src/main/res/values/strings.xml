@@ -10,4 +10,7 @@
     <string name="inverted_button" translatable="false">Inverted Button</string>
     <string name="disabled_button" translatable="false">Disabled Button</string>
     <string name="color_button_title" translatable="false">Color</string>
+    <string name="size_button_title" translatable="false">Size</string>
+    <string name="default_size_button" translatable="false">Default Size Button</string>
+    <string name="small_size_button" translatable="false">Small Size Button</string>
 </resources>

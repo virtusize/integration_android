@@ -13,7 +13,7 @@
             style="@style/TextAppearance.Virtusize.Headline4"
             android:textColor="@color/vs_gray_900"
             android:layout_margin="16dp"
-            android:id="@+id/styleTextView"
+            android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="Buttons" />
