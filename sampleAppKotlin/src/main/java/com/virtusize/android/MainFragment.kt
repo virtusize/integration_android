@@ -6,6 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import com.virtusize.android.databinding.FragmentMainBinding
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.util.dpInPx
@@ -105,7 +108,12 @@ class MainFragment : Fragment() {
          */
         sendOrderSample()
 
+        // Navigate to Virtusize Design System
         binding.designSystemButton.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
+        binding.designSystemButton.setOnClickListener {
+            val action = MainFragmentDirections.actionMainFragmentToDesignSystemFragment()
+            findNavController().navigate(action)
+        }
     }
 
     /**
@@ -151,6 +159,11 @@ class MainFragment : Fragment() {
         (activity?.application as App)
             .Virtusize.unregisterMessageHandler(activityMessageHandler)
         super.onPause()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private val activityMessageHandler = object : VirtusizeMessageHandler {
