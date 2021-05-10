@@ -13,42 +13,71 @@ class VirtusizeRoundImageButton @JvmOverloads constructor(
     defStyleAttr: Int = androidx.appcompat.R.attr.buttonStyle
 ) : androidx.appcompat.widget.AppCompatImageButton(context, attrs, defStyleAttr) {
 
-    var isInverted = false
+    var roundImageButtonStyle = VirtusizeRoundImageButtonStyle.DEFAULT
         set(value) {
             field = value
             setButtonStyle()
         }
 
+    var virtusizeButtonSize = VirtusizeButtonSize.STANDARD
+        set(value) {
+            field = value
+            setButtonSize()
+        }
+
     init {
+        val attrsArray = context.obtainStyledAttributes(attrs, R.styleable.VirtusizeRoundImageButton, 0, 0)
+
+        val buttonStyle = attrsArray.getInt(R.styleable.VirtusizeRoundImageButton_roundImageButtonStyle, VirtusizeRoundImageButtonStyle.DEFAULT.ordinal)
+        roundImageButtonStyle = VirtusizeRoundImageButtonStyle.values().firstOrNull { it.ordinal == buttonStyle } ?: VirtusizeRoundImageButtonStyle.DEFAULT
+
+        val buttonSize = attrsArray.getInt(R.styleable.VirtusizeRoundImageButton_roundImageButtonSize, VirtusizeButtonSize.STANDARD.ordinal)
+        virtusizeButtonSize = VirtusizeButtonSize.values().firstOrNull { it.ordinal == buttonSize } ?: VirtusizeButtonSize.STANDARD
+
+        attrsArray.recycle()
+
         adjustViewBounds = true
-        minimumWidth = 40.dp.toInt()
-        minimumHeight = 40.dp.toInt()
+        minimumWidth = 42.dp.toInt()
+        minimumHeight = 42.dp.toInt()
 
         viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 viewTreeObserver.removeOnGlobalLayoutListener(this)
-                val size = if (width > height) {
+                var size = if (width > height) {
                     width
                 } else {
                     height
+                }
+                if(size < 42.dp.toInt()) {
+                    size = 42.dp.toInt()
                 }
                 minimumWidth = size
                 minimumHeight = size
             }
         })
 
-        val horizontalPadding = resources.getDimension(R.dimen.virtusize_button_round_padding).toInt()
-        val verticalPadding = resources.getDimension(R.dimen.virtusize_button_round_padding).toInt()
-        setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
+        setButtonSize()
+        setButtonStyle()
+    }
+
+    private fun setButtonSize() {
+        val padding = if (virtusizeButtonSize == VirtusizeButtonSize.STANDARD) {
+            resources.getDimension(R.dimen.virtusize_button_round_standard_padding).toInt()
+        } else {
+            resources.getDimension(R.dimen.virtusize_button_round_small_padding).toInt()
+        }
+        setPadding(padding, padding, padding, padding)
     }
 
     private fun setButtonStyle() {
-        if(!isInverted) {
+        if(roundImageButtonStyle == VirtusizeRoundImageButtonStyle.DEFAULT) {
             setBackgroundResource(R.drawable.virtusize_button_round_background)
             setColorFilter(ContextCompat.getColor(context, R.color.vs_gray_900))
-        } else {
+        } else if(roundImageButtonStyle == VirtusizeRoundImageButtonStyle.INVERTED) {
             setBackgroundResource(R.drawable.virtusize_button_invertd_background)
             setColorFilter(ContextCompat.getColor(context, R.color.vs_white))
+        } else if(roundImageButtonStyle == VirtusizeRoundImageButtonStyle.COLOR) {
+            setBackgroundResource(R.drawable.virtusize_button_round_background)
         }
     }
 }

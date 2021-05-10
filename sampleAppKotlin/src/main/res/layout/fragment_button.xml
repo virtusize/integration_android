@@ -7,7 +7,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp">
 
         <TextView
             android:id="@+id/styleTextView"
@@ -297,6 +298,64 @@
             app:flow_wrapMode="chain"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iconTextView" />
+
+        <TextView
+            android:id="@+id/roundTextView"
+            style="@style/TextAppearance.Virtusize.Headline3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/round_button_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iconButtonFlow" />
+
+        <com.virtusize.ui.button.VirtusizeRoundImageButton
+            android:id="@+id/round1Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_heart_solid"
+            app:roundImageButtonStyle="color"
+            android:tint="@color/vs_red"/>
+
+        <com.virtusize.ui.button.VirtusizeRoundImageButton
+            android:id="@+id/round2Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_help"
+            app:roundImageButtonStyle="color"
+            app:roundImageButtonSize="small"
+            android:tint="@color/ocean_blue"/>
+
+        <com.virtusize.ui.button.VirtusizeButton
+            android:id="@+id/round3Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:uiButtonStyle="round"
+            android:text="cm" />
+
+        <com.virtusize.ui.button.VirtusizeRoundImageButton
+            android:id="@+id/round4Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_lock"
+            app:roundImageButtonStyle="inverted" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/roundButtonFlow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:constraint_referenced_ids="round1Button,round2Button,round3Button,round4Button"
+            app:flow_horizontalBias="0"
+            app:flow_horizontalGap="8dp"
+            app:flow_horizontalStyle="packed"
+            app:flow_verticalBias="0"
+            app:flow_verticalGap="8dp"
+            app:flow_wrapMode="chain"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/roundTextView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

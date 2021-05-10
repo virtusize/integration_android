@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.annotation.ColorInt
@@ -79,7 +78,6 @@ class VirtusizeButton @JvmOverloads constructor(
 
     override fun setTextColor(color: Int) {
         super.setTextColor(color)
-        Log.d("Kuei", "setTextColor $color")
         virtusizeTextColor = color
     }
 
@@ -169,8 +167,8 @@ class VirtusizeButton @JvmOverloads constructor(
         val verticalPadding: Int
         when {
             isRoundButton() -> {
-                horizontalPadding = resources.getDimension(R.dimen.virtusize_button_round_padding).toInt()
-                verticalPadding = resources.getDimension(R.dimen.virtusize_button_round_padding).toInt()
+                horizontalPadding = resources.getDimension(R.dimen.virtusize_button_round_standard_padding).toInt()
+                verticalPadding = resources.getDimension(R.dimen.virtusize_button_round_standard_padding).toInt()
             }
             virtusizeButtonSize == VirtusizeButtonSize.STANDARD -> {
                 horizontalPadding = resources.getDimension(R.dimen.virtusize_button_standard_horizontal_padding).toInt()

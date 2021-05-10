@@ -22,4 +22,15 @@
             <enum name="larger" value="4" />
         </attr>
     </declare-styleable>
+    <declare-styleable name="VirtusizeRoundImageButton">
+        <attr name="roundImageButtonStyle">
+            <enum name="virtusize_default" value="0" />
+            <enum name="inverted" value="1" />
+            <enum name="color" value="2" />
+        </attr>
+        <attr name="roundImageButtonSize">
+            <enum name="standard" value="0" />
+            <enum name="small" value="1" />
+        </attr>
+    </declare-styleable>
 </resources>

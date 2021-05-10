@@ -9,6 +9,7 @@
     <string name="size_button_title" translatable="false">Size</string>
     <string name="text_size_button_title" translatable="false">Text Size</string>
     <string name="icon_button_title" translatable="false">Leading and Trailing Icons</string>
+    <string name="round_button_title" translatable="false">Round Buttons</string>
 
     <string name="default_button" translatable="false">Default Button</string>
     <string name="flat_button" translatable="false">Flat Button</string>
