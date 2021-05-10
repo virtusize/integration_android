@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.annotation.ColorInt
@@ -22,7 +23,7 @@ class VirtusizeButton @JvmOverloads constructor(
     var virtusizeButtonStyle = VirtusizeButtonStyle.NONE
         set(value) {
             field = value
-            setView()
+            setButtonStyle()
         }
 
     var virtusizeButtonSize = VirtusizeButtonSize.STANDARD
@@ -46,7 +47,10 @@ class VirtusizeButton @JvmOverloads constructor(
         val attrsArray = context.obtainStyledAttributes(attrs, R.styleable.VirtusizeButton, 0, 0)
         val buttonStyle = attrsArray.getInt(R.styleable.VirtusizeButton_uiButtonStyle, VirtusizeButtonStyle.NONE.value)
         virtusizeButtonStyle = VirtusizeButtonStyle.values().firstOrNull { it.value == buttonStyle } ?: VirtusizeButtonStyle.NONE
+        virtusizeBackgroundColor = attrsArray.getColor(R.styleable.VirtusizeButton_virtusizeBackgroundColor, 0)
         attrsArray.recycle()
+
+        setTextColor(currentTextColor)
 
         setView()
 
@@ -66,6 +70,7 @@ class VirtusizeButton @JvmOverloads constructor(
 
     override fun setTextColor(color: Int) {
         super.setTextColor(color)
+        Log.d("Kuei", "setTextColor $color")
         virtusizeTextColor = color
     }
 
@@ -202,6 +207,11 @@ class VirtusizeButton @JvmOverloads constructor(
             setTextAppearance(context, styleId)
         }
 
+
+        if(virtusizeButtonStyle == VirtusizeButtonStyle.DEFAULT && virtusizeTextColor != 0) {
+            setTextColor(virtusizeTextColor)
+        }
+
         when(virtusizeButtonTextSize) {
             VirtusizeButtonTextSize.DEFAULT, VirtusizeButtonTextSize.NORMAL -> {
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.vs_normal_text_size))
@@ -215,10 +225,6 @@ class VirtusizeButton @JvmOverloads constructor(
             VirtusizeButtonTextSize.LARGER -> {
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.vs_xlarge_text_size))
             }
-        }
-
-        if(virtusizeTextColor != 0) {
-            setTextColor(virtusizeTextColor)
         }
     }
 

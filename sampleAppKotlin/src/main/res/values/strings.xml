@@ -4,9 +4,10 @@
 
     <string name="virtusize_button" translatable="false">Button</string>
 
-    <string name="button_title1" translatable="false">Default, Inverted, and Disabled Buttons</string>
+    <string name="style_button_title" translatable="false">Default, Inverted, and Disabled Buttons</string>
     <string name="default_button" translatable="false">Default Button</string>
     <string name="flat_button" translatable="false">Flat Button</string>
     <string name="inverted_button" translatable="false">Inverted Button</string>
     <string name="disabled_button" translatable="false">Disabled Button</string>
+    <string name="color_button_title" translatable="false">Color</string>
 </resources>

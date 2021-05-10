@@ -10,9 +10,10 @@
         android:layout_height="wrap_content">
 
         <TextView
-            style="@style/TextAppearance.Virtusize.Headline3"
+            style="@style/TextAppearance.Virtusize.Headline4"
+            android:textColor="@color/vs_gray_900"
             android:layout_margin="16dp"
-            android:id="@+id/textView"
+            android:id="@+id/styleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="Buttons" />
