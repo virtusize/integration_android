@@ -8,6 +8,7 @@
     <string name="color_button_title" translatable="false">Color</string>
     <string name="size_button_title" translatable="false">Size</string>
     <string name="text_size_button_title" translatable="false">Text Size</string>
+    <string name="icon_button_title" translatable="false">Leading and Trailing Icons</string>
 
     <string name="default_button" translatable="false">Default Button</string>
     <string name="flat_button" translatable="false">Flat Button</string>
@@ -19,4 +20,7 @@
     <string name="normal_text_size_button" translatable="false">Normal Button</string>
     <string name="large_text_size_button" translatable="false">Large Button</string>
     <string name="larger_text_size_button" translatable="false">Larger Button</string>
+    <string name="like" translatable="false">Like</string>
+    <string name="get_started" translatable="false">Get Started</string>
+    <string name="redirect_fb" translatable="false">Redirect to Facebook</string>
 </resources>
