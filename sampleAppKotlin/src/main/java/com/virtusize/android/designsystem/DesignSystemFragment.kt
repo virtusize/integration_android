@@ -5,13 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.virtusize.android.R
 import com.virtusize.android.databinding.FragmentDesignSystemBinding
 
 class DesignSystemFragment : Fragment() {
-
-    companion object {
-        private val data = arrayOf("Button")
-    }
 
     private var _binding: FragmentDesignSystemBinding? = null
     private val binding get() = _binding!!
@@ -25,7 +22,7 @@ class DesignSystemFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val adapter = DesignSystemAdapter(data)
+        val adapter = DesignSystemAdapter(requireContext(), arrayOf(requireContext().getString(R.string.virtusize_button)))
         binding.recyclerView.adapter = adapter
     }
 

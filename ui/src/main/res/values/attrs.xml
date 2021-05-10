@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="VirtusizeButton">
+        <attr name="uiButtonStyle">
+            <enum name="virtusize_default" value="0" />
+            <enum name="inverted" value="1" />
+            <enum name="flat" value="2" />
+            <enum name="round" value="3" />
+            <enum name="round_inverted" value="4" />
+            <enum name="square" value="5" />
+        </attr>
+    </declare-styleable>
+</resources>

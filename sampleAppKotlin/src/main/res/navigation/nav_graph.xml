@@ -17,5 +17,13 @@
     <fragment
         android:id="@+id/designSystemFragment"
         android:name="com.virtusize.android.designsystem.DesignSystemFragment"
-        android:label="Virtusize Design System" />
+        android:label="Virtusize Design System" >
+        <action
+            android:id="@+id/action_designSystemFragment_to_buttonFragment"
+            app:destination="@id/buttonFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/buttonFragment"
+        android:name="com.virtusize.android.designsystem.ButtonFragment"
+        android:label="Button" />
 </navigation>

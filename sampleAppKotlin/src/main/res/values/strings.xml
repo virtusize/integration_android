@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name" translatable="false">Sample App Kotlin</string>
     <string name="virtusize_design_system" translatable="false">Virtusize Design System</string>
+
+    <string name="virtusize_button" translatable="false">Button</string>
+
+    <string name="button_title1" translatable="false">Default, Inverted, and Disabled Buttons</string>
+    <string name="default_button" translatable="false">Default Button</string>
+    <string name="flat_button" translatable="false">Flat Button</string>
+    <string name="inverted_button" translatable="false">Inverted Button</string>
+    <string name="disabled_button" translatable="false">Disabled Button</string>
 </resources>

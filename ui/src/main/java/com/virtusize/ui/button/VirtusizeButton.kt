@@ -43,6 +43,11 @@ class VirtusizeButton @JvmOverloads constructor(
     private var rightIconDrawable: Drawable? = null
 
     init {
+        val attrsArray = context.obtainStyledAttributes(attrs, R.styleable.VirtusizeButton, 0, 0)
+        val buttonStyle = attrsArray.getInt(R.styleable.VirtusizeButton_uiButtonStyle, VirtusizeButtonStyle.NONE.value)
+        virtusizeButtonStyle = VirtusizeButtonStyle.values().firstOrNull { it.value == buttonStyle } ?: VirtusizeButtonStyle.NONE
+        attrsArray.recycle()
+
         setView()
 
         isClickable = true
