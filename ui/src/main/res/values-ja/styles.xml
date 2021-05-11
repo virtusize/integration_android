@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <style name="TextAppearance.Virtusize.Headline1" parent="TextAppearance.AppCompat.Display4">
         <item name="fontFamily">@font/noto_sans_cjk_jp_regular</item>
         <item name="android:fontFamily">@font/noto_sans_cjk_jp_regular</item>
