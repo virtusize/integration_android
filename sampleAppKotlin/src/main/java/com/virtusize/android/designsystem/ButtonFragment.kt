@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.virtusize.android.R
 import com.virtusize.android.databinding.FragmentButtonBinding
+import com.virtusize.ui.button.VirtusizeButtonSize
 import com.virtusize.ui.button.VirtusizeButtonStyle
 
 class ButtonFragment: Fragment() {
@@ -54,5 +55,11 @@ class ButtonFragment: Fragment() {
         binding.color4Button.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
         binding.color4Button.setTextColor(Color.parseColor("#07689F"))
         binding.color4Button.setVirtusizeBackgroundColor(Color.parseColor("#FFC93C"))
+
+        binding.defaultSizeButton.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
+        binding.defaultSizeButton.virtusizeButtonSize = VirtusizeButtonSize.STANDARD
+
+        binding.smallSizeButton.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
+        binding.smallSizeButton.virtusizeButtonSize = VirtusizeButtonSize.SMALL
     }
 }
