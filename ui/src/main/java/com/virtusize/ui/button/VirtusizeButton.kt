@@ -60,33 +60,9 @@ class VirtusizeButton @JvmOverloads constructor(
 
         attrsArray.recycle()
 
-        setView()
-
         isClickable = true
-    }
-
-
-    override fun setPressed(pressed: Boolean) {
-        super.setPressed(pressed)
-        setElevation()
-    }
-
-    override fun setEnabled(enabled: Boolean) {
-        super.setEnabled(enabled)
-        setElevation()
-    }
-
-    override fun setTextColor(color: Int) {
-        super.setTextColor(color)
-        virtusizeTextColor = color
-    }
-
-    private fun setView() {
-        if(virtusizeButtonStyle == VirtusizeButtonStyle.NONE) {
-            return
-        }
-
         isAllCaps = false
+
         minHeight = 0
         minWidth = 0
         minimumHeight = 0
@@ -109,6 +85,30 @@ class VirtusizeButton @JvmOverloads constructor(
                 }
             }
         })
+
+        setView()
+    }
+
+
+    override fun setPressed(pressed: Boolean) {
+        super.setPressed(pressed)
+        setElevation()
+    }
+
+    override fun setEnabled(enabled: Boolean) {
+        super.setEnabled(enabled)
+        setElevation()
+    }
+
+    override fun setTextColor(color: Int) {
+        super.setTextColor(color)
+        virtusizeTextColor = color
+    }
+
+    private fun setView() {
+        if(virtusizeButtonStyle == VirtusizeButtonStyle.NONE) {
+            return
+        }
 
         setButtonStyle()
         setElevation()

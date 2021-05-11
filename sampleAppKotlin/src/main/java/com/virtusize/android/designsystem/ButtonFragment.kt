@@ -1,10 +1,13 @@
 package com.virtusize.android.designsystem
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.virtusize.android.R
 import com.virtusize.android.databinding.FragmentButtonBinding
 import com.virtusize.ui.button.VirtusizeButtonStyle
 
@@ -32,5 +35,24 @@ class ButtonFragment: Fragment() {
 
         binding.disabledButton.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
         binding.disabledButton.isEnabled = false
+
+        binding.color1Button.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
+        binding.color1Button.setTextColor(ContextCompat.getColor(requireContext(), R.color.vs_white))
+        binding.color1Button.setVirtusizeBackgroundColor(ContextCompat.getColor(requireContext(), R.color.vs_teal))
+
+        binding.color1Button.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
+        binding.color1Button.setTextColor(ContextCompat.getColor(requireContext(), R.color.vs_white))
+        binding.color1Button.setVirtusizeBackgroundColor(ContextCompat.getColor(requireContext(), R.color.vs_teal))
+
+        binding.color2Button.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
+        binding.color2Button.setTextColor(ContextCompat.getColor(requireContext(), R.color.vs_white))
+        binding.color2Button.setVirtusizeBackgroundColor(ContextCompat.getColor(requireContext(), R.color.ocean_blue))
+
+        binding.color3Button.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
+        binding.color3Button.setVirtusizeBackgroundColor(ContextCompat.getColor(requireContext(), R.color.vs_red))
+
+        binding.color4Button.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
+        binding.color4Button.setTextColor(Color.parseColor("#07689F"))
+        binding.color4Button.setVirtusizeBackgroundColor(Color.parseColor("#FFC93C"))
     }
 }
