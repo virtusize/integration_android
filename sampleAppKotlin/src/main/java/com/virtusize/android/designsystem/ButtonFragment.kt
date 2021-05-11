@@ -11,6 +11,7 @@ import com.virtusize.android.R
 import com.virtusize.android.databinding.FragmentButtonBinding
 import com.virtusize.ui.button.VirtusizeButtonSize
 import com.virtusize.ui.button.VirtusizeButtonStyle
+import com.virtusize.ui.button.VirtusizeButtonTextSize
 
 class ButtonFragment: Fragment() {
 
@@ -61,5 +62,20 @@ class ButtonFragment: Fragment() {
 
         binding.smallSizeButton.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
         binding.smallSizeButton.virtusizeButtonSize = VirtusizeButtonSize.SMALL
+
+        binding.defaultTextSizeButton.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
+        binding.defaultTextSizeButton.virtusizeButtonTextSize = VirtusizeButtonTextSize.DEFAULT
+
+        binding.smallerTextSizeButton.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
+        binding.smallerTextSizeButton.virtusizeButtonTextSize = VirtusizeButtonTextSize.SMALLER
+
+        binding.normalTextSizeButton.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
+        binding.normalTextSizeButton.virtusizeButtonTextSize = VirtusizeButtonTextSize.NORMAL
+
+        binding.largeTextSizeButton.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
+        binding.largeTextSizeButton.virtusizeButtonTextSize = VirtusizeButtonTextSize.LARGE
+
+        binding.largerTextSizeButton.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
+        binding.largerTextSizeButton.virtusizeButtonTextSize = VirtusizeButtonTextSize.LARGER
     }
 }
