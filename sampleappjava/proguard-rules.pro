@@ -21,3 +21,4 @@
 #-renamesourcefileattribute SourceFile
 
 -keep class com.virtusize.libsource.**
+-keep class com.virtusize.ui.**

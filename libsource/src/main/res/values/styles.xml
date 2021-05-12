@@ -10,7 +10,7 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">false</item>
         <item name="android:windowIsFloating">false</item>
-        <item name="android:windowBackground">@color/virtusizeWhite</item>
+        <item name="android:windowBackground">@color/vs_white</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
@@ -21,7 +21,7 @@
 
     <!-- Virtusize Button Default TextAppearance -->
     <style name="VirtusizeButtonTextAppearance">
-        <item name="android:textColor">@color/virtusizeWhite</item>
+        <item name="android:textColor">@color/vs_white</item>
         <item name="android:textSize">@dimen/virtusize_button_textSize</item>
     </style>
 
@@ -36,7 +36,7 @@
         <item name="android:paddingTop">@dimen/virtusize_inpage_button_vertical_padding</item>
         <item name="android:paddingBottom">@dimen/virtusize_inpage_button_vertical_padding</item>
         <item name="android:text">@string/virtusize_button_text</item>
-        <item name="android:textColor">@color/color_gray_900</item>
+        <item name="android:textColor">@color/vs_gray_900</item>
     </style>
 
     <style name="VirtusizeInPageMiniTextStyle">

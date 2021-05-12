@@ -1,1 +1,1 @@
-include ':sampleAppKotlin', ':libsource', ':sampleappjava'
+include ':libsource', ':ui', ':sampleAppKotlin', ':sampleappjava'

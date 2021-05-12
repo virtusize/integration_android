@@ -67,7 +67,7 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet):
      */
     fun setProductPlaceHolderImage(productType: Int?, style: String?) {
         if (productImageType == ProductImageType.STORE) {
-            inpageProductCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.color_gray_200))
+            inpageProductCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.vs_gray_200))
         }
         inpageProductImageView.setImageDrawable(getProductPlaceholderImage(productType, style))
     }
@@ -89,9 +89,9 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet):
             productPlaceholderImage = productTypeImageWithStyle
         }
         if (productImageType == ProductImageType.USER) {
-            productPlaceholderImage?.setTint(ContextCompat.getColor(context, R.color.virtusizeTeal))
+            productPlaceholderImage?.setTint(ContextCompat.getColor(context, R.color.vs_teal))
         } else {
-            productPlaceholderImage?.setTint(ContextCompat.getColor(context, R.color.virtusizeBlack))
+            productPlaceholderImage?.setTint(ContextCompat.getColor(context, R.color.vs_black))
         }
         return productPlaceholderImage
     }

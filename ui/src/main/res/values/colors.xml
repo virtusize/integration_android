@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="vs_black">#000000</color>
+    <color name="vs_gray_900">#191919</color>
+    <color name="vs_gray_900_pressed">#323232</color>
+    <color name="vs_gray_800">#7F8382</color>
+    <color name="vs_gray_700">#575757</color>
+    <color name="vs_gray_600">#969696</color>
+    <color name="vs_gray_400">#B7B9B9</color>
+    <color name="vs_gray_300">#EDEDED</color>
+    <color name="vs_gray_200">#F5F5F5</color>
+    <color name="vs_white">#FFFFFF</color>
+    <color name="vs_neutral_wallpaper">#F6F7FB</color>
+    <color name="vs_red">#FF6C6C</color>
+    <color name="vs_teal">#3ED2BA</color>
+    <color name="vs_teal_pressed">#AD3ED2BA</color>
+    <color name="vs_grd_primary_dark">#16C6B9</color>
+    <color name="vs_grd_primary_light">#19F0B0</color>
+</resources>

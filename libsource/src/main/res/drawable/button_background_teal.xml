@@ -3,13 +3,13 @@
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <corners android:radius="@dimen/virtusize_button_corner_radius" />
-            <solid android:color="@color/virtusizeTealPressed" />
+            <solid android:color="@color/vs_teal_pressed" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
             <corners android:radius="@dimen/virtusize_button_corner_radius" />
-            <solid android:color="@color/virtusizeTeal" />
+            <solid android:color="@color/vs_teal" />
         </shape>
     </item>
 </selector>
