@@ -8,6 +8,7 @@ import android.util.TypedValue
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.annotation.ColorInt
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.virtusize.ui.R
 import com.virtusize.ui.utils.dp
@@ -111,6 +112,7 @@ class VirtusizeButton @JvmOverloads constructor(
         }
 
         setButtonStyle()
+        setIcons()
         setElevation()
         setTextStyle()
     }
@@ -123,12 +125,18 @@ class VirtusizeButton @JvmOverloads constructor(
     fun setLeftIcon(left: Drawable?, width: Int? = null, height: Int? = null) {
         leftIconDrawable = left
         leftIconDrawable?.setBounds(0, 0, width ?: leftIconDrawable!!.minimumWidth, height ?: leftIconDrawable!!.minimumHeight)
+        if(isInvertedButton() && leftIconDrawable != null) {
+            DrawableCompat.setTint(leftIconDrawable!!, ContextCompat.getColor(context, R.color.vs_white))
+        }
         setIcons()
     }
 
     fun setRightIcon(right: Drawable?, width: Int? = null, height: Int? = null) {
         rightIconDrawable = right
         rightIconDrawable?.setBounds(0, 0, width ?: rightIconDrawable!!.minimumWidth, height ?: rightIconDrawable!!.minimumHeight)
+        if(isInvertedButton() && rightIconDrawable != null) {
+            DrawableCompat.setTint(rightIconDrawable!!, ContextCompat.getColor(context, R.color.vs_white))
+        }
         setIcons()
     }
 

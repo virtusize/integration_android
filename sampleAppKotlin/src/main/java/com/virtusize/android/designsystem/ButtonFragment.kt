@@ -77,5 +77,26 @@ class ButtonFragment: Fragment() {
 
         binding.largerTextSizeButton.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
         binding.largerTextSizeButton.virtusizeButtonTextSize = VirtusizeButtonTextSize.LARGER
+
+        binding.icon1Button.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
+        binding.icon1Button.setText(R.string.like)
+        binding.icon1Button.virtusizeButtonTextSize = VirtusizeButtonTextSize.DEFAULT
+        val icon1ButtonDrawable = ContextCompat.getDrawable(requireContext(), com.virtusize.libsource.R.drawable.ic_heart_solid)
+        binding.icon1Button.setLeftIcon(icon1ButtonDrawable)
+
+        binding.icon2Button.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
+        binding.icon2Button.setText(R.string.get_started)
+        binding.icon2Button.virtusizeButtonTextSize = VirtusizeButtonTextSize.DEFAULT
+        val icon2ButtonDrawable = ContextCompat.getDrawable(requireContext(), com.virtusize.libsource.R.drawable.ic_angle_right)
+        binding.icon2Button.setRightIcon(icon2ButtonDrawable)
+
+        binding.icon3Button.virtusizeButtonStyle = VirtusizeButtonStyle.INVERTED
+        binding.icon3Button.setText(R.string.redirect_fb)
+        binding.icon3Button.virtusizeButtonSize = VirtusizeButtonSize.SMALL
+        binding.icon3Button.virtusizeButtonTextSize = VirtusizeButtonTextSize.DEFAULT
+        val icon3ButtonRightDrawable = ContextCompat.getDrawable(requireContext(), com.virtusize.libsource.R.drawable.ic_angle_right)
+        binding.icon3Button.setRightIcon(icon3ButtonRightDrawable)
+        val icon3ButtonLeftDrawable = ContextCompat.getDrawable(requireContext(), com.virtusize.libsource.R.drawable.ic_fb)
+        binding.icon3Button.setLeftIcon(icon3ButtonLeftDrawable)
     }
 }
