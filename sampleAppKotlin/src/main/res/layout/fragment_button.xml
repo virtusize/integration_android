@@ -332,7 +332,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:uiButtonStyle="round"
-            android:text="cm" />
+            android:text="@string/cm" />
 
         <com.virtusize.ui.button.VirtusizeRoundImageButton
             android:id="@+id/round4Button"

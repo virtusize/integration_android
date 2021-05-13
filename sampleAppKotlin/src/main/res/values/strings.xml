@@ -24,4 +24,5 @@
     <string name="like" translatable="false">Like</string>
     <string name="get_started" translatable="false">Get Started</string>
     <string name="redirect_fb" translatable="false">Redirect to Facebook</string>
+    <string name="cm" translatable="false">cm</string>
 </resources>

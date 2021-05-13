@@ -12,6 +12,7 @@ import com.virtusize.android.databinding.FragmentButtonBinding
 import com.virtusize.ui.button.VirtusizeButtonSize
 import com.virtusize.ui.button.VirtusizeButtonStyle
 import com.virtusize.ui.button.VirtusizeButtonTextSize
+import com.virtusize.ui.button.VirtusizeRoundImageButtonStyle
 
 class ButtonFragment: Fragment() {
 
@@ -98,5 +99,19 @@ class ButtonFragment: Fragment() {
         binding.icon3Button.setRightIcon(icon3ButtonRightDrawable)
         val icon3ButtonLeftDrawable = ContextCompat.getDrawable(requireContext(), com.virtusize.libsource.R.drawable.ic_fb)
         binding.icon3Button.setLeftIcon(icon3ButtonLeftDrawable)
+
+        binding.round1Button.roundImageButtonStyle = VirtusizeRoundImageButtonStyle.COLOR
+        binding.round1Button.setImageResource(R.drawable.ic_heart_solid)
+        binding.round1Button.setColorFilter(ContextCompat.getColor(requireContext(), com.virtusize.ui.R.color.vs_red))
+
+        binding.round2Button.roundImageButtonStyle = VirtusizeRoundImageButtonStyle.COLOR
+        binding.round2Button.virtusizeButtonSize = VirtusizeButtonSize.SMALL
+        binding.round2Button.setImageResource(R.drawable.ic_help)
+        binding.round2Button.setColorFilter(ContextCompat.getColor(requireContext(), R.color.ocean_blue))
+
+        binding.round3Button.virtusizeButtonStyle = VirtusizeButtonStyle.ROUND
+
+        binding.round4Button.roundImageButtonStyle = VirtusizeRoundImageButtonStyle.INVERTED
+        binding.round4Button.setImageResource(R.drawable.ic_lock)
     }
 }
