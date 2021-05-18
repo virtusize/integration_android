@@ -8,14 +8,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="16dp">
+        android:paddingBottom="@dimen/virtusize_16dp">
 
         <TextView
             android:id="@+id/styleTextView"
             style="@style/TextAppearance.Virtusize.Headline3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:padding="@dimen/virtusize_16dp"
             android:text="@string/style_button_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -52,17 +52,10 @@
 
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/styleButtonFlow"
+            style="@style/VirtusizeDesignSystemFlow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
             app:constraint_referenced_ids="defaultButton,flatButton,invertedButton,disabledButton"
-            app:flow_horizontalBias="0"
-            app:flow_horizontalGap="8dp"
-            app:flow_horizontalStyle="packed"
-            app:flow_verticalBias="0"
-            app:flow_verticalGap="8dp"
-            app:flow_wrapMode="chain"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/styleTextView" />
 
@@ -116,15 +109,8 @@
             android:id="@+id/colorButtonFlow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
+            style="@style/VirtusizeDesignSystemFlow"
             app:constraint_referenced_ids="color1Button,color2Button,color3Button,color4Button"
-            app:flow_horizontalBias="0"
-            app:flow_horizontalGap="8dp"
-            app:flow_horizontalStyle="packed"
-            app:flow_verticalBias="0"
-            app:flow_verticalGap="8dp"
-            app:flow_wrapMode="chain"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/colorTextView" />
 
@@ -157,17 +143,10 @@
 
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/sizeButtonFlow"
+            style="@style/VirtusizeDesignSystemFlow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
             app:constraint_referenced_ids="defaultSizeButton,smallSizeButton"
-            app:flow_horizontalBias="0"
-            app:flow_horizontalGap="8dp"
-            app:flow_horizontalStyle="packed"
-            app:flow_verticalBias="0"
-            app:flow_verticalGap="8dp"
-            app:flow_wrapMode="chain"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sizeTextView" />
 
@@ -224,17 +203,10 @@
 
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/textSizeButtonFlow"
+            style="@style/VirtusizeDesignSystemFlow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
             app:constraint_referenced_ids="defaultTextSizeButton,smallerTextSizeButton,normalTextSizeButton,largeTextSizeButton,largerTextSizeButton"
-            app:flow_horizontalBias="0"
-            app:flow_horizontalGap="8dp"
-            app:flow_horizontalStyle="packed"
-            app:flow_verticalBias="0"
-            app:flow_verticalGap="8dp"
-            app:flow_wrapMode="chain"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textSizeTextView" />
 
@@ -285,17 +257,10 @@
 
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/iconButtonFlow"
+            style="@style/VirtusizeDesignSystemFlow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
             app:constraint_referenced_ids="icon1Button,icon2Button,icon3Button"
-            app:flow_horizontalBias="0"
-            app:flow_horizontalGap="8dp"
-            app:flow_horizontalStyle="packed"
-            app:flow_verticalBias="0"
-            app:flow_verticalGap="8dp"
-            app:flow_wrapMode="chain"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iconTextView" />
 
@@ -343,17 +308,10 @@
 
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/roundButtonFlow"
+            style="@style/VirtusizeDesignSystemFlow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
             app:constraint_referenced_ids="round1Button,round2Button,round3Button,round4Button"
-            app:flow_horizontalBias="0"
-            app:flow_horizontalGap="8dp"
-            app:flow_horizontalStyle="packed"
-            app:flow_verticalBias="0"
-            app:flow_verticalGap="8dp"
-            app:flow_wrapMode="chain"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/roundTextView" />
 

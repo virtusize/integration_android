@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="virtusizeDp8">8dp</dimen>
-    <dimen name="virtusizeDp14">14dp</dimen>
-    <dimen name="virtusizeDp16">16dp</dimen>
-
     <dimen name="virtusize_button_textSize">14sp</dimen>
     <dimen name="virtusize_inpage_mini_message_textSize">14sp</dimen>
     <dimen name="virtusize_inpage_default_textSize">12sp</dimen>

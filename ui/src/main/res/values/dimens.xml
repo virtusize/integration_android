@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="virtusize_8dp">8dp</dimen>
+    <dimen name="virtusize_14dp">14dp</dimen>
+    <dimen name="virtusize_16dp">16dp</dimen>
+
     <!-- Text Size -->
     <dimen name="vs_xxlarge_text_size">28sp</dimen>
     <dimen name="vs_xlarge_text_size">22sp</dimen>

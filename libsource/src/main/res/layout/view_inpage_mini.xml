@@ -7,11 +7,11 @@
     android:layout_height="wrap_content"
     android:background="@color/vs_gray_900"
     android:orientation="vertical"
-    android:paddingStart="@dimen/virtusizeDp8"
-    android:paddingLeft="@dimen/virtusizeDp8"
+    android:paddingStart="@dimen/virtusize_8dp"
+    android:paddingLeft="@dimen/virtusize_8dp"
     android:paddingTop="@dimen/virtusize_inpage_mini_padding_vertical"
-    android:paddingEnd="@dimen/virtusizeDp8"
-    android:paddingRight="@dimen/virtusizeDp8"
+    android:paddingEnd="@dimen/virtusize_8dp"
+    android:paddingRight="@dimen/virtusize_8dp"
     android:paddingBottom="@dimen/virtusize_inpage_mini_padding_vertical">
 
     <ImageView

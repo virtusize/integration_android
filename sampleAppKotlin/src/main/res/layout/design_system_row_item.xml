@@ -5,14 +5,15 @@
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/virtusize_8dp"
+        android:foreground="?attr/selectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
+            android:padding="@dimen/virtusize_16dp"
             style="@style/TextAppearance.Virtusize.Headline4"
             android:textColor="@color/vs_gray_900"
-            android:layout_margin="16dp"
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

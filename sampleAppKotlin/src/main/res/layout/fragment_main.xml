@@ -18,15 +18,15 @@
 
     <com.virtusize.libsource.ui.VirtusizeInPageStandard
         android:id="@+id/exampleVirtusizeInPageStandard"
-        android:layout_marginTop="@dimen/virtusizeDp16"
-        app:inPageStandardHorizontalMargin="@dimen/virtusizeDp16"
+        android:layout_marginTop="@dimen/virtusize_16dp"
+        app:inPageStandardHorizontalMargin="@dimen/virtusize_16dp"
         app:virtusizeInPageStandardStyle="virtusize_teal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <com.virtusize.libsource.ui.VirtusizeInPageMini
         android:id="@+id/exampleVirtusizeInPageMini"
-        android:layout_margin="@dimen/virtusizeDp16"
+        android:layout_margin="@dimen/virtusize_16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:virtusizeInPageMiniStyle="virtusize_black"
@@ -36,7 +36,7 @@
         android:id="@+id/designSystemButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/virtusizeDp16"
+        android:layout_margin="@dimen/virtusize_16dp"
         android:text="@string/virtusize_design_system"/>
 
 </LinearLayout>
