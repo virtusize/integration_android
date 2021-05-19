@@ -522,23 +522,23 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             binding.inpageErrorText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + additionalSize)
             binding.privacyPolicyText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + additionalSize)
         } else {
-            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_normal_textSize)
+            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_normal_text_size)
                 ?.let {
                     binding.inpageTopText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
                 }
 
-            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_bold_textSize)
+            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_bold_text_size)
                 ?.let {
                     binding.inpageLoadingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
                     binding.inpageBottomText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
                 }
 
-            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_default_textSize)
+            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_default_text_size)
                 ?.let {
                     binding.inpageErrorText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
                 }
 
-            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_privacy_policy_textSize)
+            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_privacy_policy_text_size)
                 ?.let {
                     binding.privacyPolicyText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
                 }
@@ -549,7 +549,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             binding.inpageButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
             binding.inpageButton.rightDrawable(R.drawable.ic_arrow_right_black, 0.8f * size / 2, 0.8f * size)
         } else {
-            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_default_textSize)
+            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_default_text_size)
                 ?.let {
                     binding.inpageButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
                 }

@@ -214,7 +214,7 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
             binding.inpageMiniLoadingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + additionalSize)
             binding.inpageMiniText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + additionalSize)
         } else {
-            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_mini_message_textSize)
+            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_mini_message_text_size)
                 ?.let {
                     binding.inpageMiniLoadingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
                     binding.inpageMiniText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
@@ -225,7 +225,7 @@ class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPa
             binding.inpageMiniButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
             binding.inpageMiniButton.rightDrawable(R.drawable.ic_arrow_right_black, 0.8f * size / 2, 0.8f * size)
         } else {
-            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_default_textSize)
+            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_default_text_size)
                 ?.let {
                     binding.inpageMiniButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
                 }

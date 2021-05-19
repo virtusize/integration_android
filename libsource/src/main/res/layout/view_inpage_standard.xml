@@ -116,7 +116,7 @@
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
                     android:textColor="@color/vs_gray_900"
-                    android:textSize="@dimen/virtusize_inpage_standard_normal_textSize"
+                    android:textSize="@dimen/virtusize_inpage_standard_normal_text_size"
                     tools:text="This item is" />
 
                 <TextView
@@ -126,7 +126,7 @@
                     android:includeFontPadding="false"
                     android:lineSpacingExtra="@dimen/virtusize_inpage_standard_top_text_marginBottom"
                     android:textColor="@color/vs_gray_900"
-                    android:textSize="@dimen/virtusize_inpage_standard_bold_textSize"
+                    android:textSize="@dimen/virtusize_inpage_standard_bold_text_size"
                     tools:text="true to size" />
 
                 <com.virtusize.libsource.ui.DotsLoadingTextView
@@ -135,7 +135,7 @@
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
                     android:textColor="@color/vs_gray_900"
-                    android:textSize="@dimen/virtusize_inpage_standard_bold_textSize"
+                    android:textSize="@dimen/virtusize_inpage_standard_bold_text_size"
                     tools:text="@string/inpage_loading_text" />
 
             </LinearLayout>
@@ -158,7 +158,7 @@
                 android:minHeight="0dp"
                 android:textAllCaps="false"
                 android:textColor="@color/vs_white"
-                android:textSize="@dimen/virtusize_inpage_default_textSize"
+                android:textSize="@dimen/virtusize_inpage_default_text_size"
                 app:drawableTint="@color/vs_white" />
 
         </RelativeLayout>
@@ -192,7 +192,7 @@
             android:includeFontPadding="false"
             android:text="@string/virtusize_privacy_policy"
             android:textColor="@color/vs_gray_900"
-            android:textSize="@dimen/virtusize_inpage_standard_privacy_policy_textSize" />
+            android:textSize="@dimen/virtusize_inpage_standard_privacy_policy_text_size" />
 
     </RelativeLayout>
 

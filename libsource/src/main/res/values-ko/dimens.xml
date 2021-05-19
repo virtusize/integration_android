@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="virtusize_button_textSize">12sp</dimen>
-    <dimen name="virtusize_inpage_mini_message_textSize">12sp</dimen>
-    <dimen name="virtusize_inpage_default_textSize">10sp</dimen>
-    <dimen name="virtusize_inpage_standard_normal_textSize">12sp</dimen>
-    <dimen name="virtusize_inpage_standard_bold_textSize">16sp</dimen>
-    <dimen name="virtusize_inpage_standard_privacy_policy_textSize">10sp</dimen>
+    <dimen name="virtusize_button_text_size">12sp</dimen>
+    <dimen name="virtusize_inpage_mini_message_text_size">12sp</dimen>
+    <dimen name="virtusize_inpage_default_text_size">10sp</dimen>
+    <dimen name="virtusize_inpage_standard_normal_text_size">12sp</dimen>
+    <dimen name="virtusize_inpage_standard_bold_text_size">16sp</dimen>
+    <dimen name="virtusize_inpage_standard_privacy_policy_text_size">10sp</dimen>
 
     <dimen name="virtusize_inpage_standard_top_text_marginBottom">0dp</dimen>
 </resources>
