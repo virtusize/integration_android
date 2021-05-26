@@ -1,17 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:padding="13dp"
-    tools:background="@color/vs_gray_900"
-    android:gravity="center">
+    tools:background="@color/vs_gray_900">
 
     <TextView
         android:id="@+id/tooltipTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="26dp"
+        android:maxWidth="210dp"
         android:textColor="@color/vs_white"
-        tools:text="@string/vs_similar_items"/>
+        android:textSize="@dimen/vs_xsmall_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/vs_similar_items" />
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/closeImageView"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:padding="2dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_gravity="end"
+        app:srcCompat="@drawable/ic_close"
+        app:tint="@color/vs_white" />
+
+</FrameLayout>

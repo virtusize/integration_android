@@ -49,13 +49,6 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
         tooltipView = VirtusizeTooltipView(context, builder)
         tooltipView!!.visibility = View.INVISIBLE
         tooltipView!!.containerView.post {
-            // Adjust the padding because the drawing takes up the original space of containerView
-            if (builder.position == Position.BOTTOM) {
-                tooltipView?.setPadding(0, VirtusizeTooltipView.arrowHeight.toInt(), 0, 0)
-            } else if (builder.position == Position.RIGHT) {
-                tooltipView?.setPadding(VirtusizeTooltipView.arrowHeight.toInt(), 0, 0, 0)
-            }
-
             val margin = 5.dp
             // Basic Position
             var tooltipViewXPosition = anchorViewLocation[0].toFloat() + builder.anchorView.width / 2
