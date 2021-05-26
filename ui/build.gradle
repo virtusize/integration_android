@@ -29,6 +29,10 @@ android {
             res.srcDirs = ['src/main/res', 'src/main/java/com/virtusize/ui/button/res', 'src/main/java/com/virtusize/ui/tooltip/res']
         }
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {

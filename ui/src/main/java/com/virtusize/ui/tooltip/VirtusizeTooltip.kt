@@ -3,19 +3,31 @@ package com.virtusize.ui.tooltip
 import android.content.Context
 import android.graphics.PixelFormat
 import android.os.IBinder
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.WindowManager
+import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
+import com.virtusize.ui.utils.dp
 
 class VirtusizeTooltip(private val context: Context, private val builder: Builder) {
 
     private val windowManager: WindowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-    private var currentDisplayView: View? = null
+    private var overlayView: FrameLayout? = null
+    private var tooltipView: VirtusizeTooltipView? = null
 
     private fun createWindowParams(token: IBinder): WindowManager.LayoutParams {
         val p = WindowManager.LayoutParams()
+        p.gravity = Gravity.TOP or Gravity.START
         p.width = WindowManager.LayoutParams.MATCH_PARENT
         p.height = WindowManager.LayoutParams.MATCH_PARENT
+        p.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM or
+                WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH or
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
+                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
         p.format = PixelFormat.TRANSLUCENT
         p.type = WindowManager.LayoutParams.TYPE_APPLICATION_PANEL
         p.token = token
@@ -23,17 +35,52 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
     }
 
     fun show() {
-        currentDisplayView = VirtusizeTooltipView(context, builder)
-        currentDisplayView?.setOnClickListener {
+        overlayView = FrameLayout(context)
+        overlayView?.fitsSystemWindows = true
+        overlayView?.setOnClickListener {
             hide()
         }
-        val params = createWindowParams(builder.anchorView!!.windowToken)
-        windowManager.addView(currentDisplayView, params)
+
+        val anchorViewLocation = IntArray(2)
+        builder.anchorView.getLocationInWindow(anchorViewLocation)
+
+        windowManager.addView(overlayView, createWindowParams(builder.anchorView.windowToken))
+
+        tooltipView = VirtusizeTooltipView(context, builder)
+        tooltipView?.visibility = View.INVISIBLE
+        tooltipView?.containerView?.post {
+            val margin = 5.dp
+            // Basic Position
+            val tooltipViewXPosition =
+                anchorViewLocation[0].toFloat() + builder.anchorView.width / 2 - (tooltipView?.containerView?.width
+                    ?: 0) / 2
+            var tooltipViewYPosition =
+                anchorViewLocation[1].toFloat() + builder.anchorView.height / 2 - (tooltipView?.containerView?.height
+                    ?: 0) / 2
+
+            // Move based on the position setting
+            tooltipView?.containerView?.height?.toFloat()?.apply {
+                if (builder.position == Position.TOP) {
+                    tooltipViewYPosition -= this
+                    tooltipViewYPosition -= margin
+                } else if (builder.position == Position.BOTTOM) {
+                    tooltipViewYPosition += this
+                    tooltipViewYPosition += margin
+                }
+            }
+
+            tooltipView?.x = tooltipViewXPosition
+            tooltipView?.y = tooltipViewYPosition
+
+            tooltipView?.visibility = View.VISIBLE
+        }
+
+        overlayView?.addView(tooltipView, FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT))
     }
 
     fun hide() {
-        windowManager.removeView(currentDisplayView)
-        currentDisplayView = null
+        windowManager.removeView(overlayView)
+        overlayView = null
     }
 
     enum class Position {
@@ -41,14 +88,14 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
     }
 
     class Builder(private val context: Context) {
-        internal var anchorView: View? = null
-        private var text: CharSequence? = null
-        private var position: Position = Position.BOTTOM
-        private var hideCloseButton = false
-        private var inverse = false
-        private var hideArrow = false
-        private var showOverlay = false
-        private var noBorder = false
+        internal lateinit var anchorView: View
+        internal var text: CharSequence? = null
+        internal var position: Position = Position.BOTTOM
+        internal var hideCloseButton = false
+        internal var inverse = false
+        internal var hideArrow = false
+        internal var showOverlay = false
+        internal var noBorder = false
         @LayoutRes
         internal var layoutId: Int? = null
 
