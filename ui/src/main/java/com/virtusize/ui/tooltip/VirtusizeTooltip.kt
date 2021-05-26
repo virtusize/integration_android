@@ -62,18 +62,23 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
             var tooltipViewYPosition = anchorViewLocation[1].toFloat() + builder.anchorView.height / 2
 
             // Move based on the position setting
-            if (builder.position == Position.TOP) {
-                tooltipViewXPosition -= tooltipView!!.containerView.width / 2
-                tooltipViewYPosition -= (builder.anchorView.height / 2 + tooltipView!!.containerView.height + VirtusizeTooltipView.arrowHeight + margin)
-            } else if (builder.position == Position.BOTTOM) {
-                tooltipViewXPosition -= tooltipView!!.containerView.width / 2
-                tooltipViewYPosition += (builder.anchorView.height / 2 + margin)
-            } else if (builder.position == Position.LEFT) {
-                tooltipViewXPosition -= (builder.anchorView.width / 2 + tooltipView!!.containerView.width + VirtusizeTooltipView.arrowHeight + margin)
-                tooltipViewYPosition -= tooltipView!!.containerView.height / 2
-            } else if (builder.position == Position.RIGHT) {
-                tooltipViewXPosition += (builder.anchorView.width / 2 + margin)
-                tooltipViewYPosition -= tooltipView!!.containerView.height / 2
+            when (builder.position) {
+                Position.TOP -> {
+                    tooltipViewXPosition -= tooltipView!!.containerView.width / 2
+                    tooltipViewYPosition -= (builder.anchorView.height / 2 + tooltipView!!.containerView.height + VirtusizeTooltipView.arrowHeight + margin)
+                }
+                Position.BOTTOM -> {
+                    tooltipViewXPosition -= tooltipView!!.containerView.width / 2
+                    tooltipViewYPosition += (builder.anchorView.height / 2 + margin)
+                }
+                Position.LEFT -> {
+                    tooltipViewXPosition -= (builder.anchorView.width / 2 + tooltipView!!.containerView.width + VirtusizeTooltipView.arrowHeight + margin)
+                    tooltipViewYPosition -= tooltipView!!.containerView.height / 2
+                }
+                Position.RIGHT -> {
+                    tooltipViewXPosition += (builder.anchorView.width / 2 + margin)
+                    tooltipViewYPosition -= tooltipView!!.containerView.height / 2
+                }
             }
 
             tooltipView?.x = tooltipViewXPosition
