@@ -42,7 +42,7 @@ class VirtusizeTooltipView @JvmOverloads constructor(
         } else {
             binding = VirtusizeTooltipBinding.inflate(inflater, this, true)
             containerView = binding!!.root
-            binding!!.tooltipTextView.text = builder.text ?: "You can also set \"showOverlay\" prop to show a dark overlay, and \"noBorder\" to remove the border around the carrot"
+            binding!!.tooltipTextView.text = builder.text ?: resources.getString(R.string.vs_similar_items)
             if (builder.hideCloseButton) {
                 binding!!.closeImageView.visibility = GONE
                 binding!!.tooltipTextView.setPadding(8.dp.toInt(), 10.dp.toInt(), 8.dp.toInt(), 10.dp.toInt())
@@ -52,9 +52,7 @@ class VirtusizeTooltipView @JvmOverloads constructor(
         }
 
         // Adjust the padding because the drawing takes up the original space of containerView
-        if (builder.position == VirtusizeTooltip.Position.TOP) {
-
-        } else if (builder.position == VirtusizeTooltip.Position.BOTTOM) {
+        if (builder.position == VirtusizeTooltip.Position.BOTTOM) {
             setPadding(0, arrowHeight.toInt(), 0, 0)
         } else if (builder.position == VirtusizeTooltip.Position.RIGHT) {
             setPadding(arrowHeight.toInt(), 0, 0, 0)
