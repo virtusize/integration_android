@@ -47,26 +47,33 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
         windowManager.addView(overlayView, createWindowParams(builder.anchorView.windowToken))
 
         tooltipView = VirtusizeTooltipView(context, builder)
-        tooltipView?.visibility = View.INVISIBLE
-        tooltipView?.containerView?.post {
+        tooltipView!!.visibility = View.INVISIBLE
+        tooltipView!!.containerView.post {
+            // Adjust the padding because the drawing takes up the original space of containerView
+            if (builder.position == Position.BOTTOM) {
+                tooltipView?.setPadding(0, VirtusizeTooltipView.arrowHeight.toInt(), 0, 0)
+            } else if (builder.position == Position.RIGHT) {
+                tooltipView?.setPadding(VirtusizeTooltipView.arrowHeight.toInt(), 0, 0, 0)
+            }
+
             val margin = 5.dp
             // Basic Position
-            val tooltipViewXPosition =
-                anchorViewLocation[0].toFloat() + builder.anchorView.width / 2 - (tooltipView?.containerView?.width
-                    ?: 0) / 2
-            var tooltipViewYPosition =
-                anchorViewLocation[1].toFloat() + builder.anchorView.height / 2 - (tooltipView?.containerView?.height
-                    ?: 0) / 2
+            var tooltipViewXPosition = anchorViewLocation[0].toFloat() + builder.anchorView.width / 2
+            var tooltipViewYPosition = anchorViewLocation[1].toFloat() + builder.anchorView.height / 2
 
             // Move based on the position setting
-            tooltipView?.containerView?.height?.toFloat()?.apply {
-                if (builder.position == Position.TOP) {
-                    tooltipViewYPosition -= this
-                    tooltipViewYPosition -= margin
-                } else if (builder.position == Position.BOTTOM) {
-                    tooltipViewYPosition += this
-                    tooltipViewYPosition += margin
-                }
+            if (builder.position == Position.TOP) {
+                tooltipViewXPosition -= tooltipView!!.containerView.width / 2
+                tooltipViewYPosition -= (builder.anchorView.height / 2 + tooltipView!!.containerView.height + VirtusizeTooltipView.arrowHeight + margin)
+            } else if (builder.position == Position.BOTTOM) {
+                tooltipViewXPosition -= tooltipView!!.containerView.width / 2
+                tooltipViewYPosition += (builder.anchorView.height / 2 + margin)
+            } else if (builder.position == Position.LEFT) {
+                tooltipViewXPosition -= (builder.anchorView.width / 2 + tooltipView!!.containerView.width + VirtusizeTooltipView.arrowHeight + margin)
+                tooltipViewYPosition -= tooltipView!!.containerView.height / 2
+            } else if (builder.position == Position.RIGHT) {
+                tooltipViewXPosition += (builder.anchorView.width / 2 + margin)
+                tooltipViewYPosition -= tooltipView!!.containerView.height / 2
             }
 
             tooltipView?.x = tooltipViewXPosition
