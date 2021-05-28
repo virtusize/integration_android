@@ -14,7 +14,6 @@
         android:paddingBottom="10dp"
         android:paddingStart="12dp"
         android:paddingEnd="26dp"
-        android:maxWidth="210dp"
         android:textColor="@color/vs_white"
         android:textSize="@dimen/vs_xsmall_text_size"
         app:layout_constraintEnd_toEndOf="parent"

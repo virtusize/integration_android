@@ -52,11 +52,12 @@ class VirtusizeTooltipView @JvmOverloads constructor(
         }
 
         // Adjust the padding because the drawing takes up the original space of containerView
-        if (builder.position == VirtusizeTooltip.Position.BOTTOM) {
-            setPadding(0, arrowHeight.toInt(), 0, 0)
-        } else if (builder.position == VirtusizeTooltip.Position.RIGHT) {
-            setPadding(arrowHeight.toInt(), 0, 0, 0)
-        }
+        setPadding(
+            if (builder.position == VirtusizeTooltip.Position.RIGHT) arrowHeight.toInt() else 0,
+            if (builder.position == VirtusizeTooltip.Position.BOTTOM) arrowHeight.toInt() else 0,
+            if (builder.position == VirtusizeTooltip.Position.LEFT) arrowHeight.toInt() else 0,
+            if (builder.position == VirtusizeTooltip.Position.TOP) arrowHeight.toInt() else 0
+        )
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -73,7 +74,7 @@ class VirtusizeTooltipView @JvmOverloads constructor(
             // Draw the body
             addRoundRect(containerRectF, cornerRadius, cornerRadius, Path.Direction.CW)
 
-            val arrowMiddlePoint = PointF(containerRectF.width() / 2, containerRectF.height() / 2)
+            val arrowMiddlePoint = getArrowMidPoint(this@VirtusizeTooltipView, containerRectF)
 
             // Draw the triangle (arrow)
             if (!builder.hideArrow) {
@@ -108,5 +109,18 @@ class VirtusizeTooltipView @JvmOverloads constructor(
 
         canvas.drawPath(tooltipPath, tooltipPaint)
         super.onDraw(canvas)
+    }
+
+    private fun getArrowMidPoint(tooltipView: VirtusizeTooltipView, rectF: RectF): PointF {
+        var middleX = rectF.width() / 2
+        val middleY = rectF.height() / 2
+        val anchoredView = builder.anchorView
+        if (middleX != anchoredView.x + anchoredView.width / 2) {
+            middleX += (anchoredView.x
+                    + (anchoredView.width / 2)
+                    - (tooltipView.x)
+                    - (rectF.width() / 2))
+        }
+        return PointF(middleX, middleY)
     }
 }
