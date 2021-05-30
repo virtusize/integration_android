@@ -23,7 +23,7 @@ class VirtusizeTooltipView @JvmOverloads constructor(
         private val arrowWidth = 13.dp
         private val halfTriangleWidth = arrowWidth / 2
         private val cornerRadius = 6.dp
-        private var borderWidth = 1.dp
+        private var borderWidth = 5.dp
     }
 
     private var binding: VirtusizeTooltipBinding? = null
@@ -124,7 +124,7 @@ class VirtusizeTooltipView @JvmOverloads constructor(
                         drawTriangleForHorizontalPosition(
                             path = this,
                             moveXTo = containerView.width.toFloat() + arrowHeight,
-                            moveYTo = arrowMiddlePoint.y,
+                            moveYTo = arrowMiddlePoint.y + (if (!builder.noBorder) borderWidth else 0f),
                             containerEdge = containerRectF.right
                         )
                     }
@@ -132,7 +132,7 @@ class VirtusizeTooltipView @JvmOverloads constructor(
                         drawTriangleForHorizontalPosition(
                             path = this,
                             moveXTo = 0f,
-                            moveYTo = arrowMiddlePoint.y,
+                            moveYTo = arrowMiddlePoint.y + (if (!builder.noBorder) borderWidth else 0f),
                             containerEdge = containerRectF.left
                         )
                     }
@@ -180,7 +180,7 @@ class VirtusizeTooltipView @JvmOverloads constructor(
                         drawTriangleForHorizontalPosition(
                             path = this,
                             moveXTo = containerView.width.toFloat() + arrowHeight,
-                            moveYTo = arrowMiddlePoint.y,
+                            moveYTo = arrowMiddlePoint.y + (if (!builder.noBorder) borderWidth else 0f),
                             containerEdge = containerRectF.right,
                             xOffset = -borderWidth
                         )
@@ -189,7 +189,7 @@ class VirtusizeTooltipView @JvmOverloads constructor(
                         drawTriangleForHorizontalPosition(
                             path = this,
                             moveXTo = 0f,
-                            moveYTo = arrowMiddlePoint.y,
+                            moveYTo = arrowMiddlePoint.y + (if (!builder.noBorder) borderWidth else 0f),
                             containerEdge = containerRectF.left,
                             xOffset = borderWidth
                         )
@@ -217,9 +217,9 @@ class VirtusizeTooltipView @JvmOverloads constructor(
     }
 
     private fun getArrowMidPoint(tooltipView: VirtusizeTooltipView, rectF: RectF): PointF {
+        val anchoredView = builder.anchorView
         var middleX = rectF.width() / 2
         val middleY = rectF.height() / 2
-        val anchoredView = builder.anchorView
         if (middleX != anchoredView.x + anchoredView.width / 2) {
             middleX += (anchoredView.x
                     + (anchoredView.width / 2)
