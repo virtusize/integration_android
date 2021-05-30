@@ -81,6 +81,12 @@ class VirtusizeTooltipView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         val containerRectF = RectF(0F, 0F, containerView.width.toFloat(), containerView.height.toFloat())
+        if (!builder.noBorder) {
+            containerRectF.left += borderWidth
+            containerRectF.top += borderWidth
+            containerRectF.right -= borderWidth
+            containerRectF.bottom -= borderWidth
+        }
         val arrowMiddlePoint = getArrowMidPoint(this@VirtusizeTooltipView, containerRectF)
 
         if (builder.position == VirtusizeTooltip.Position.BOTTOM) {
