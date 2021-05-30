@@ -57,17 +57,20 @@ class VirtusizeTooltipView @JvmOverloads constructor(
                 binding!!.tooltipTextView.setTextColor(ContextCompat.getColor(context, R.color.vs_white))
                 binding!!.closeImageView.setColorFilter(ContextCompat.getColor(context, R.color.vs_white))
             }
-            if (!builder.noBorder) {
-                borderPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-                if (builder.inverse) {
-                    borderPaint!!.color = ContextCompat.getColor(context, R.color.vs_gray_900)
-                } else {
-                    borderPaint!!.color = ContextCompat.getColor(context, R.color.vs_white)
-                }
-                borderPaint!!.style = Paint.Style.STROKE
-                borderPaint!!.strokeWidth = borderWidth
-                borderPaint!!.isAntiAlias = true
+        }
+
+        if (!builder.noBorder) {
+            borderPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+            if (builder.inverse) {
+                borderPaint!!.color = ContextCompat.getColor(context, R.color.vs_gray_900)
+            } else {
+                borderPaint!!.color = ContextCompat.getColor(context, R.color.vs_white)
             }
+            borderPaint!!.style = Paint.Style.STROKE
+            borderPaint!!.strokeWidth = borderWidth
+            borderPaint!!.isAntiAlias = true
+        } else {
+            borderPaint = null
         }
 
         // Adjust the padding because the drawing takes up the original space of containerView
@@ -142,7 +145,7 @@ class VirtusizeTooltipView @JvmOverloads constructor(
             close()
         }
 
-        if (builder.inverse) {
+        if (builder.inverse || builder.layoutId != null) {
             tooltipPaint.color = ContextCompat.getColor(context, R.color.vs_white)
         } else {
             tooltipPaint.color = ContextCompat.getColor(context, R.color.vs_gray_900)
@@ -196,7 +199,14 @@ class VirtusizeTooltipView @JvmOverloads constructor(
                     }
                 }
 
-                tooltipPaint.color = ContextCompat.getColor(context, R.color.vs_white)
+                if (builder.layoutId == null) {
+                    if (builder.inverse) {
+                        tooltipPaint.color = ContextCompat.getColor(context, R.color.vs_white)
+                    } else {
+                        tooltipPaint.color = ContextCompat.getColor(context, R.color.vs_gray_900)
+                    }
+                }
+
                 canvas.drawPath(this, tooltipPaint)
             }
         }
