@@ -23,12 +23,13 @@ class VirtusizeTooltipView @JvmOverloads constructor(
         private val arrowWidth = 13.dp
         private val halfTriangleWidth = arrowWidth / 2
         private val cornerRadius = 6.dp
+        private var borderWidth = 1.dp
     }
 
     private var binding: VirtusizeTooltipBinding? = null
     internal var containerView: View
 
-
+    private var borderPaint: Paint? = null
     private val tooltipPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var tooltipPath: Path = Path()
 
@@ -44,10 +45,28 @@ class VirtusizeTooltipView @JvmOverloads constructor(
             containerView = binding!!.root
             binding!!.tooltipTextView.text = builder.text ?: resources.getString(R.string.vs_similar_items)
             if (builder.hideCloseButton) {
-                binding!!.closeImageView.visibility = GONE
                 binding!!.tooltipTextView.setPadding(8.dp.toInt(), 10.dp.toInt(), 8.dp.toInt(), 10.dp.toInt())
+                binding!!.closeImageView.visibility = GONE
             } else {
                 binding!!.tooltipTextView.setPadding(12.dp.toInt(), 10.dp.toInt(), 26.dp.toInt(), 10.dp.toInt())
+            }
+            if (builder.inverse) {
+                binding!!.tooltipTextView.setTextColor(ContextCompat.getColor(context, R.color.vs_gray_900))
+                binding!!.closeImageView.setColorFilter(ContextCompat.getColor(context, R.color.vs_gray_900))
+            } else {
+                binding!!.tooltipTextView.setTextColor(ContextCompat.getColor(context, R.color.vs_white))
+                binding!!.closeImageView.setColorFilter(ContextCompat.getColor(context, R.color.vs_white))
+            }
+            if (!builder.noBorder) {
+                borderPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+                if (builder.inverse) {
+                    borderPaint!!.color = ContextCompat.getColor(context, R.color.vs_gray_900)
+                } else {
+                    borderPaint!!.color = ContextCompat.getColor(context, R.color.vs_white)
+                }
+                borderPaint!!.style = Paint.Style.STROKE
+                borderPaint!!.strokeWidth = borderWidth
+                borderPaint!!.isAntiAlias = true
             }
         }
 
@@ -62,6 +81,8 @@ class VirtusizeTooltipView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         val containerRectF = RectF(0F, 0F, containerView.width.toFloat(), containerView.height.toFloat())
+        val arrowMiddlePoint = getArrowMidPoint(this@VirtusizeTooltipView, containerRectF)
+
         if (builder.position == VirtusizeTooltip.Position.BOTTOM) {
             containerRectF.top += arrowHeight
             containerRectF.bottom += arrowHeight
@@ -74,30 +95,40 @@ class VirtusizeTooltipView @JvmOverloads constructor(
             // Draw the body
             addRoundRect(containerRectF, cornerRadius, cornerRadius, Path.Direction.CW)
 
-            val arrowMiddlePoint = getArrowMidPoint(this@VirtusizeTooltipView, containerRectF)
-
             // Draw the triangle (arrow)
             if (!builder.hideArrow) {
                 when (builder.position) {
                     VirtusizeTooltip.Position.TOP -> {
-                        moveTo(arrowMiddlePoint.x, containerView.height.toFloat() + arrowHeight)
-                        lineTo(arrowMiddlePoint.x - halfTriangleWidth, containerRectF.bottom)
-                        lineTo(arrowMiddlePoint.x + halfTriangleWidth, containerRectF.bottom)
+                        drawTriangleForVerticalPosition(
+                            path = this,
+                            moveXTo = arrowMiddlePoint.x,
+                            moveYTo = containerView.height.toFloat() + arrowHeight,
+                            containerEdge = containerRectF.bottom
+                        )
                     }
                     VirtusizeTooltip.Position.BOTTOM -> {
-                        moveTo(arrowMiddlePoint.x, 0f)
-                        lineTo(arrowMiddlePoint.x - halfTriangleWidth, containerRectF.top)
-                        lineTo(arrowMiddlePoint.x + halfTriangleWidth, containerRectF.top)
+                        drawTriangleForVerticalPosition(
+                            path = this,
+                            moveXTo = arrowMiddlePoint.x,
+                            moveYTo = 0f,
+                            containerEdge = containerRectF.top
+                        )
                     }
                     VirtusizeTooltip.Position.LEFT -> {
-                        moveTo(containerView.width.toFloat() + arrowHeight, arrowMiddlePoint.y)
-                        lineTo(containerRectF.right, arrowMiddlePoint.y - halfTriangleWidth)
-                        lineTo(containerRectF.right, arrowMiddlePoint.y + halfTriangleWidth)
+                        drawTriangleForHorizontalPosition(
+                            path = this,
+                            moveXTo = containerView.width.toFloat() + arrowHeight,
+                            moveYTo = arrowMiddlePoint.y,
+                            containerEdge = containerRectF.right
+                        )
                     }
                     VirtusizeTooltip.Position.RIGHT -> {
-                        moveTo(0f, arrowMiddlePoint.y)
-                        lineTo(containerRectF.left, arrowMiddlePoint.y - halfTriangleWidth)
-                        lineTo(containerRectF.left, arrowMiddlePoint.y + halfTriangleWidth)
+                        drawTriangleForHorizontalPosition(
+                            path = this,
+                            moveXTo = 0f,
+                            moveYTo = arrowMiddlePoint.y,
+                            containerEdge = containerRectF.left
+                        )
                     }
                 }
             }
@@ -105,10 +136,78 @@ class VirtusizeTooltipView @JvmOverloads constructor(
             close()
         }
 
-        tooltipPaint.color = ContextCompat.getColor(context, R.color.vs_gray_900)
+        if (builder.inverse) {
+            tooltipPaint.color = ContextCompat.getColor(context, R.color.vs_white)
+        } else {
+            tooltipPaint.color = ContextCompat.getColor(context, R.color.vs_gray_900)
+        }
 
         canvas.drawPath(tooltipPath, tooltipPaint)
+
+        if (!builder.noBorder) {
+            canvas.drawPath(tooltipPath, borderPaint!!)
+
+            // Draw another triangle with 1dp offset to remove the line between the rectangle and the triangle
+            with(tooltipPath) {
+                reset()
+                tooltipPath.reset()
+                when (builder.position) {
+                    VirtusizeTooltip.Position.TOP -> {
+                        drawTriangleForVerticalPosition(
+                            path = this,
+                            moveXTo = arrowMiddlePoint.x,
+                            moveYTo = containerView.height.toFloat() + arrowHeight,
+                            containerEdge = containerRectF.bottom,
+                            yOffset = -borderWidth
+                        )
+                    }
+                    VirtusizeTooltip.Position.BOTTOM -> {
+                        drawTriangleForVerticalPosition(
+                            path = this,
+                            moveXTo = arrowMiddlePoint.x,
+                            moveYTo = 0f,
+                            containerEdge = containerRectF.top,
+                            yOffset = borderWidth
+                        )
+                    }
+                    VirtusizeTooltip.Position.LEFT -> {
+                        drawTriangleForHorizontalPosition(
+                            path = this,
+                            moveXTo = containerView.width.toFloat() + arrowHeight,
+                            moveYTo = arrowMiddlePoint.y,
+                            containerEdge = containerRectF.right,
+                            xOffset = -borderWidth
+                        )
+                    }
+                    VirtusizeTooltip.Position.RIGHT -> {
+                        drawTriangleForHorizontalPosition(
+                            path = this,
+                            moveXTo = 0f,
+                            moveYTo = arrowMiddlePoint.y,
+                            containerEdge = containerRectF.left,
+                            xOffset = borderWidth
+                        )
+                    }
+                }
+
+                tooltipPaint.color = ContextCompat.getColor(context, R.color.vs_white)
+                canvas.drawPath(this, tooltipPaint)
+            }
+        }
+
         super.onDraw(canvas)
+    }
+
+    private fun drawTriangleForVerticalPosition(path: Path, moveXTo: Float, moveYTo: Float, containerEdge: Float, yOffset: Float = 0f) {
+        path.moveTo(moveXTo, moveYTo + yOffset)
+        path.lineTo(moveXTo - halfTriangleWidth, containerEdge + yOffset)
+        path.lineTo(moveXTo + halfTriangleWidth, containerEdge + yOffset)
+    }
+
+    private fun drawTriangleForHorizontalPosition(path: Path, moveXTo: Float, moveYTo: Float, containerEdge: Float, xOffset: Float = 0f) {
+        path.moveTo(moveXTo + xOffset, moveYTo)
+        path.lineTo(containerEdge + xOffset, moveYTo - halfTriangleWidth)
+        path.lineTo(containerEdge + xOffset, moveYTo + halfTriangleWidth)
     }
 
     private fun getArrowMidPoint(tooltipView: VirtusizeTooltipView, rectF: RectF): PointF {
