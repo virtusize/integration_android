@@ -14,6 +14,8 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
+import androidx.core.content.ContextCompat
+import com.virtusize.ui.R
 import com.virtusize.ui.utils.dp
 
 class VirtusizeTooltip(private val context: Context, private val builder: Builder) {
@@ -47,6 +49,10 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
         overlayView?.fitsSystemWindows = true
         overlayView?.setOnClickListener {
             hide()
+        }
+
+        if (builder.showOverlay) {
+            overlayView?.setBackgroundColor(ContextCompat.getColor(context, R.color.vs_black_overlay))
         }
 
         val anchorViewLocation = IntArray(2)

@@ -23,7 +23,7 @@ class VirtusizeTooltipView @JvmOverloads constructor(
         private val arrowWidth = 13.dp
         private val halfTriangleWidth = arrowWidth / 2
         private val cornerRadius = 6.dp
-        private var borderWidth = 5.dp
+        private var borderWidth = 1.dp
     }
 
     private var binding: VirtusizeTooltipBinding? = null
