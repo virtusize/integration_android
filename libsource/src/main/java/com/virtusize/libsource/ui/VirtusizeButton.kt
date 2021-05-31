@@ -128,7 +128,7 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, Ap
         val configuredContext = VirtusizeUtils.getConfiguredContext(context, virtusizeParams?.language)
         if(text.isNullOrEmpty()) {
             text = configuredContext?.getText(R.string.virtusize_button_text)
-            configuredContext?.resources?.getDimension(R.dimen.virtusize_button_textSize)?.let {
+            configuredContext?.resources?.getDimension(R.dimen.virtusize_button_text_size)?.let {
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
             }
         }

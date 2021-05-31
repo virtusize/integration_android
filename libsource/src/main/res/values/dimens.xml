@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="virtusizeDp8">8dp</dimen>
-    <dimen name="virtusizeDp14">14dp</dimen>
-    <dimen name="virtusizeDp16">16dp</dimen>
-
-    <dimen name="virtusize_button_textSize">14sp</dimen>
-    <dimen name="virtusize_inpage_mini_message_textSize">14sp</dimen>
-    <dimen name="virtusize_inpage_default_textSize">12sp</dimen>
-    <dimen name="virtusize_inpage_standard_normal_textSize">14sp</dimen>
-    <dimen name="virtusize_inpage_standard_bold_textSize">18sp</dimen>
-    <dimen name="virtusize_inpage_standard_privacy_policy_textSize">12sp</dimen>
+    <dimen name="virtusize_button_text_size">14sp</dimen>
+    <dimen name="virtusize_inpage_mini_message_text_size">14sp</dimen>
+    <dimen name="virtusize_inpage_default_text_size">12sp</dimen>
+    <dimen name="virtusize_inpage_standard_normal_text_size">14sp</dimen>
+    <dimen name="virtusize_inpage_standard_bold_text_size">18sp</dimen>
+    <dimen name="virtusize_inpage_standard_privacy_policy_text_size">12sp</dimen>
 
     <dimen name="virtusize_button_corner_radius">32dp</dimen>
     <dimen name="virtusize_button_vertical_padding">10dp</dimen>

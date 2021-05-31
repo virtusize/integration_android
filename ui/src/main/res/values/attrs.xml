@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="VirtusizeButton">
+        <attr name="uiButtonStyle">
+            <enum name="virtusize_default" value="0" />
+            <enum name="inverted" value="1" />
+            <enum name="flat" value="2" />
+            <enum name="round" value="3" />
+            <enum name="round_inverted" value="4" />
+            <enum name="square" value="5" />
+        </attr>
+        <attr name="virtusizeBackgroundColor" format="color"/>
+        <attr name="virtusizeButtonSize">
+            <enum name="standard" value="0" />
+            <enum name="small" value="1" />
+        </attr>
+        <attr name="virtusizeButtonTextSize">
+            <enum name="virtusize_default" value="0" />
+            <enum name="smaller" value="1" />
+            <enum name="normal" value="2" />
+            <enum name="large" value="3" />
+            <enum name="larger" value="4" />
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="VirtusizeRoundImageButton">
+        <attr name="roundImageButtonStyle">
+            <enum name="virtusize_default" value="0" />
+            <enum name="inverted" value="1" />
+            <enum name="color" value="2" />
+        </attr>
+        <attr name="roundImageButtonSize">
+            <enum name="standard" value="0" />
+            <enum name="small" value="1" />
+        </attr>
+    </declare-styleable>
+</resources>

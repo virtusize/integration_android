@@ -20,7 +20,7 @@ class App: Application() {
             // By default, the Virtusize environment will be set to GLOBAL
             .setEnv(VirtusizeEnvironment.STAGING)
             // By default, the initial language will be set based on the Virtusize environment
-            .setLanguage(VirtusizeLanguage.EN)
+            .setLanguage(VirtusizeLanguage.JP)
             // By default, ShowSGI is false
             .setShowSGI(true)
             // By default, Virtusize allows all the possible languages

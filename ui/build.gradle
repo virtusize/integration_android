@@ -4,7 +4,7 @@ plugins {
     id 'com.github.dcendents.android-maven'
 }
 
-group='com.github.virtusize.integration_android'
+group = 'com.github.virtusize.integration_android'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -21,6 +21,12 @@ android {
 
         release {
             consumerProguardFiles 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            res.srcDirs = ['src/main/res', 'src/main/java/com/virtusize/ui/button/res']
         }
     }
 }

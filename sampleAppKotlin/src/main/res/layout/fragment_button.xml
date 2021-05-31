@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".designsystem.ButtonFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/virtusize_16dp">
+
+        <TextView
+            android:id="@+id/styleTextView"
+            style="@style/TextAppearance.Virtusize.Headline3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/virtusize_16dp"
+            android:text="@string/style_button_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.virtusize.ui.button.VirtusizeButton
+            android:id="@+id/defaultButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/default_button"
+            app:uiButtonStyle="virtusize_default" />
+
+        <com.virtusize.ui.button.VirtusizeButton
+            android:id="@+id/flatButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/flat_button"
+            app:uiButtonStyle="flat" />
+
+        <com.virtusize.ui.button.VirtusizeButton
+            android:id="@+id/invertedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/inverted_button"
+            app:uiButtonStyle="inverted" />
+
+        <com.virtusize.ui.button.VirtusizeButton
+            android:id="@+id/disabledButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="@string/disabled_button"
+            app:uiButtonStyle="virtusize_default" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/styleButtonFlow"
+            style="@style/VirtusizeDesignSystemFlow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="defaultButton,flatButton,invertedButton,disabledButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/styleTextView" />
+
+        <TextView
+            android:id="@+id/colorTextView"
+            style="@style/TextAppearance.Virtusize.Headline3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/color_button_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/styleButtonFlow" />
+
+        <com.virtusize.ui.button.VirtusizeButton
+            android:id="@+id/color1Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/virtusize_button"
+            android:textColor="@color/vs_white"
+            app:uiButtonStyle="virtusize_default"
+            app:virtusizeBackgroundColor="@color/vs_teal" />
+
+        <com.virtusize.ui.button.VirtusizeButton
+            android:id="@+id/color2Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/virtusize_button"
+            android:textColor="@color/vs_white"
+            app:uiButtonStyle="virtusize_default"
+            app:virtusizeBackgroundColor="@color/ocean_blue" />
+
+        <com.virtusize.ui.button.VirtusizeButton
+            android:id="@+id/color3Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/virtusize_button"
+            app:uiButtonStyle="virtusize_default"
+            app:virtusizeBackgroundColor="@color/vs_red" />
+
+        <com.virtusize.ui.button.VirtusizeButton
+            android:id="@+id/color4Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/virtusize_button"
+            android:textColor="#07689F"
+            app:uiButtonStyle="virtusize_default"
+            app:virtusizeBackgroundColor="#FFC93C" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/colorButtonFlow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/VirtusizeDesignSystemFlow"
+            app:constraint_referenced_ids="color1Button,color2Button,color3Button,color4Button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/colorTextView" />
+
+        <TextView
+            android:id="@+id/sizeTextView"
+            style="@style/TextAppearance.Virtusize.Headline3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/size_button_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/colorButtonFlow" />
+
+        <com.virtusize.ui.button.VirtusizeButton
+            android:id="@+id/defaultSizeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/default_size_button"
+            app:uiButtonStyle="virtusize_default"
+            app:virtusizeButtonSize="standard" />
+
+        <com.virtusize.ui.button.VirtusizeButton
+            android:id="@+id/smallSizeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/small_size_button"
+            app:uiButtonStyle="virtusize_default"
+            app:virtusizeButtonSize="small" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/sizeButtonFlow"
+            style="@style/VirtusizeDesignSystemFlow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="defaultSizeButton,smallSizeButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sizeTextView" />
+
+        <TextView
+            android:id="@+id/textSizeTextView"
+            style="@style/TextAppearance.Virtusize.Headline3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/text_size_button_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sizeButtonFlow" />
+
+        <com.virtusize.ui.button.VirtusizeButton
+            android:id="@+id/defaultTextSizeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/default_size_button"
+            app:uiButtonStyle="virtusize_default"
+            app:virtusizeButtonTextSize="virtusize_default" />
+
+        <com.virtusize.ui.button.VirtusizeButton
+            android:id="@+id/smallerTextSizeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/smaller_text_size_button"
+            app:uiButtonStyle="virtusize_default"
+            app:virtusizeButtonTextSize="smaller" />
+
+        <com.virtusize.ui.button.VirtusizeButton
+            android:id="@+id/normalTextSizeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/normal_text_size_button"
+            app:uiButtonStyle="virtusize_default"
+            app:virtusizeButtonTextSize="normal" />
+
+        <com.virtusize.ui.button.VirtusizeButton
+            android:id="@+id/largeTextSizeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/large_text_size_button"
+            app:uiButtonStyle="virtusize_default"
+            app:virtusizeButtonTextSize="large" />
+
+        <com.virtusize.ui.button.VirtusizeButton
+            android:id="@+id/largerTextSizeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/larger_text_size_button"
+            app:uiButtonStyle="virtusize_default"
+            app:virtusizeButtonTextSize="larger" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/textSizeButtonFlow"
+            style="@style/VirtusizeDesignSystemFlow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="defaultTextSizeButton,smallerTextSizeButton,normalTextSizeButton,largeTextSizeButton,largerTextSizeButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textSizeTextView" />
+
+        <TextView
+            android:id="@+id/iconTextView"
+            style="@style/TextAppearance.Virtusize.Headline3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/icon_button_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textSizeButtonFlow" />
+
+        <com.virtusize.ui.button.VirtusizeButton
+            android:id="@+id/icon1Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_heart_solid"
+            android:drawablePadding="@dimen/virtusize_button_icon_padding"
+            android:text="@string/like"
+            app:uiButtonStyle="virtusize_default"
+            app:virtusizeButtonTextSize="virtusize_default" />
+
+        <com.virtusize.ui.button.VirtusizeButton
+            android:id="@+id/icon2Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_angle_right"
+            android:drawablePadding="@dimen/virtusize_button_icon_padding"
+            android:text="@string/get_started"
+            app:uiButtonStyle="virtusize_default"
+            app:virtusizeButtonTextSize="virtusize_default" />
+
+        <com.virtusize.ui.button.VirtusizeButton
+            android:id="@+id/icon3Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_fb"
+            android:drawableEnd="@drawable/ic_angle_right"
+            android:drawablePadding="@dimen/virtusize_button_icon_padding"
+            android:drawableTint="@color/vs_white"
+            android:text="@string/redirect_fb"
+            app:virtusizeButtonSize="small"
+            app:uiButtonStyle="inverted"
+            app:virtusizeButtonTextSize="virtusize_default"
+            tools:targetApi="m" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/iconButtonFlow"
+            style="@style/VirtusizeDesignSystemFlow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="icon1Button,icon2Button,icon3Button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iconTextView" />
+
+        <TextView
+            android:id="@+id/roundTextView"
+            style="@style/TextAppearance.Virtusize.Headline3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/round_button_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iconButtonFlow" />
+
+        <com.virtusize.ui.button.VirtusizeRoundImageButton
+            android:id="@+id/round1Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_heart_solid"
+            app:roundImageButtonStyle="color"
+            android:tint="@color/vs_red"/>
+
+        <com.virtusize.ui.button.VirtusizeRoundImageButton
+            android:id="@+id/round2Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_help"
+            app:roundImageButtonStyle="color"
+            app:roundImageButtonSize="small"
+            android:tint="@color/ocean_blue"/>
+
+        <com.virtusize.ui.button.VirtusizeButton
+            android:id="@+id/round3Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:uiButtonStyle="round"
+            android:text="@string/cm" />
+
+        <com.virtusize.ui.button.VirtusizeRoundImageButton
+            android:id="@+id/round4Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_lock"
+            app:roundImageButtonStyle="inverted" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/roundButtonFlow"
+            style="@style/VirtusizeDesignSystemFlow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="round1Button,round2Button,round3Button,round4Button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/roundTextView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

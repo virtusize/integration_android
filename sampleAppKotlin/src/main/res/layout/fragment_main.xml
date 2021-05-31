@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/vs_white"
+    tools:context=".MainFragment"
+    android:gravity="center">
+
+    <!-- VirtusizeButton is custom button layout that can be put in xml file and set up programmatically -->
+    <com.virtusize.libsource.ui.VirtusizeButton
+        android:id="@+id/exampleVirtusizeButton"
+        app:virtusizeButtonStyle="virtusize_black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.virtusize.libsource.ui.VirtusizeInPageStandard
+        android:id="@+id/exampleVirtusizeInPageStandard"
+        android:layout_marginTop="@dimen/virtusize_16dp"
+        app:inPageStandardHorizontalMargin="@dimen/virtusize_16dp"
+        app:virtusizeInPageStandardStyle="virtusize_teal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <com.virtusize.libsource.ui.VirtusizeInPageMini
+        android:id="@+id/exampleVirtusizeInPageMini"
+        android:layout_margin="@dimen/virtusize_16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:virtusizeInPageMiniStyle="virtusize_black"
+        app:inPageMiniBackgroundColor="@color/ocean_blue"/>
+
+    <com.virtusize.ui.button.VirtusizeButton
+        android:id="@+id/designSystemButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/virtusize_16dp"
+        android:text="@string/virtusize_design_system"/>
+
+</LinearLayout>

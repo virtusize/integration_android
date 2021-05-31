@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <solid android:color="@color/vs_gray_300" />
+
+            <corners android:radius="@dimen/virtusize_button_corner_radius" />
+        </shape>
+    </item>
+</selector>

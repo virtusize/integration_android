@@ -22,7 +22,7 @@
     <!-- Virtusize Button Default TextAppearance -->
     <style name="VirtusizeButtonTextAppearance">
         <item name="android:textColor">@color/vs_white</item>
-        <item name="android:textSize">@dimen/virtusize_button_textSize</item>
+        <item name="android:textSize">@dimen/virtusize_button_text_size</item>
     </style>
 
     <style name="VirtusizeInPageButtonStyle" parent="Widget.AppCompat.Button.Borderless">
@@ -45,7 +45,7 @@
         <item name="android:layout_centerVertical">true</item>
         <item name="android:includeFontPadding">false</item>
         <item name="android:lineSpacingExtra">@dimen/virtusize_inpage_mini_text_line_spacing</item>
-        <item name="android:textSize">@dimen/virtusize_inpage_mini_message_textSize</item>
+        <item name="android:textSize">@dimen/virtusize_inpage_mini_message_text_size</item>
     </style>
 
 </resources>
