@@ -61,6 +61,7 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
         if (tooltipView == null || builder.layoutId == null) {
             tooltipView = VirtusizeTooltipView(context, builder)
         }
+
         tooltipView!!.visibility = View.INVISIBLE
 
         tooltipView!!.containerView.post {
@@ -69,11 +70,6 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
             var tooltipContainerWidth = tooltipView!!.containerView.width
             builder.width?.let { width ->
                 tooltipContainerWidth = width.toInt()
-            }
-
-            var tooltipContainerHeight = tooltipView!!.containerView.height
-            builder.height?.let { height ->
-                tooltipContainerHeight = height.toInt()
             }
 
             // Basic Position - the center of the anchor view
@@ -144,7 +140,9 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
                 tooltipView!!.containerView.layoutParams = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
             }
             tooltipView!!.containerView.layoutParams.width = tooltipContainerWidth
-            tooltipView!!.containerView.layoutParams.height = tooltipContainerHeight
+            builder.height?.let { height ->
+                tooltipView!!.containerView.layoutParams.height = height.toInt()
+            }
             tooltipView!!.containerView.layoutParams = tooltipView!!.containerView.layoutParams
 
             tooltipView!!.x = tooltipViewXPosition
