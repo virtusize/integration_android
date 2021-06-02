@@ -11,6 +11,7 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import com.virtusize.ui.R
 import com.virtusize.ui.utils.dp
@@ -61,8 +62,19 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
             tooltipView = VirtusizeTooltipView(context, builder)
         }
         tooltipView!!.visibility = View.INVISIBLE
+
         tooltipView!!.containerView.post {
             var shouldShow = true
+
+            var tooltipContainerWidth = tooltipView!!.containerView.width
+            builder.width?.let { width ->
+                tooltipContainerWidth = width.toInt()
+            }
+
+            var tooltipContainerHeight = tooltipView!!.containerView.height
+            builder.height?.let { height ->
+                tooltipContainerHeight = height.toInt()
+            }
 
             // Basic Position - the center of the anchor view
             var tooltipViewXPosition = anchorViewLocation[0].toFloat() + builder.anchorView.width / 2
@@ -70,26 +82,26 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
 
             val anchorViewEndX = anchorViewLocation[0] + builder.anchorView.width
             val anchorViewEndSpace = windowWidth - anchorViewEndX
-            val minimumTooltipSpace = windowEdgeToTooltipMargin / 2 + tooltipView!!.containerView.width / 2
+            val minimumTooltipSpace = windowEdgeToTooltipMargin / 2 + tooltipContainerWidth / 2
             val minTooltipWidth = 48.dp + anchorViewToTooltipMargin + VirtusizeTooltipView.arrowHeight +  windowEdgeToTooltipMargin
+
             when (builder.position) {
                 Position.TOP, Position.BOTTOM -> {
                     val maxTooltipWidth = windowWidth - windowEdgeToTooltipMargin * 2
                     val anchorViewCenterToRightEdgeWidth = windowWidth - tooltipViewXPosition - builder.anchorView.width / 2
                     when {
-                        tooltipView!!.containerView.width > maxTooltipWidth -> {
-                            tooltipView!!.layoutParams?.width = (windowWidth - windowEdgeToTooltipMargin * 2).toInt()
-                            tooltipView!!.layoutParams = tooltipView!!.layoutParams
+                        tooltipContainerWidth > maxTooltipWidth -> {
+                            tooltipContainerWidth = (windowWidth - windowEdgeToTooltipMargin * 2).toInt()
                             tooltipViewXPosition = windowEdgeToTooltipMargin
                         }
                         tooltipViewXPosition < minimumTooltipSpace -> {
                             tooltipViewXPosition = windowEdgeToTooltipMargin / 2
                         }
-                        builder.anchorView.width < tooltipView!!.containerView.width && anchorViewCenterToRightEdgeWidth < minimumTooltipSpace -> {
-                            tooltipViewXPosition = windowWidth - tooltipView!!.containerView.width - windowEdgeToTooltipMargin / 2
+                        builder.anchorView.width < tooltipContainerWidth && anchorViewCenterToRightEdgeWidth < minimumTooltipSpace -> {
+                            tooltipViewXPosition = windowWidth - tooltipContainerWidth - windowEdgeToTooltipMargin / 2
                         }
                         else -> {
-                            tooltipViewXPosition -= tooltipView!!.containerView.width / 2
+                            tooltipViewXPosition -= tooltipContainerWidth / 2
                         }
                     }
                     if(builder.position == Position.TOP) {
@@ -103,13 +115,12 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
                         anchorViewLocation[0] < minTooltipWidth -> {
                             shouldShow = false
                         }
-                        tooltipView!!.containerView.width > getMaxLeftTooltipWidth(anchorViewLocation[0]) -> {
-                            tooltipView!!.layoutParams?.width = getMaxLeftTooltipWidth(anchorViewLocation[0]).toInt()
-                            tooltipView!!.layoutParams = tooltipView!!.layoutParams
+                        tooltipContainerWidth > getMaxLeftTooltipWidth(anchorViewLocation[0]) -> {
+                            tooltipContainerWidth = getMaxLeftTooltipWidth(anchorViewLocation[0]).toInt()
                             tooltipViewXPosition = windowEdgeToTooltipMargin
                         }
                         else -> {
-                            tooltipViewXPosition -= (builder.anchorView.width / 2 + tooltipView!!.containerView.width + VirtusizeTooltipView.arrowHeight + anchorViewToTooltipMargin)
+                            tooltipViewXPosition -= (builder.anchorView.width / 2 + tooltipContainerWidth + VirtusizeTooltipView.arrowHeight + anchorViewToTooltipMargin)
                         }
                     }
                 }
@@ -118,9 +129,8 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
                         anchorViewEndSpace < minTooltipWidth -> {
                             shouldShow = false
                         }
-                        tooltipView!!.containerView.width > getMaxRightTooltipWidth(anchorViewEndSpace) -> {
-                            tooltipView!!.layoutParams?.width = getMaxRightTooltipWidth(anchorViewEndSpace).toInt()
-                            tooltipView!!.layoutParams = tooltipView!!.layoutParams
+                        tooltipContainerWidth > getMaxRightTooltipWidth(anchorViewEndSpace) -> {
+                            tooltipContainerWidth = getMaxRightTooltipWidth(anchorViewEndSpace).toInt()
                             tooltipViewXPosition = anchorViewEndX + anchorViewToTooltipMargin
                         }
                         else -> {
@@ -129,6 +139,13 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
                     }
                 }
             }
+
+            if (tooltipView!!.containerView.layoutParams == null) {
+                tooltipView!!.containerView.layoutParams = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+            }
+            tooltipView!!.containerView.layoutParams.width = tooltipContainerWidth
+            tooltipView!!.containerView.layoutParams.height = tooltipContainerHeight
+            tooltipView!!.containerView.layoutParams = tooltipView!!.containerView.layoutParams
 
             tooltipView!!.x = tooltipViewXPosition
             tooltipView!!.y = tooltipViewYPosition
@@ -167,7 +184,9 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
         if(builder.layoutId == null) {
             throw IllegalStateException("Please assign the layout ID for your custom view.")
         }
-        tooltipView = VirtusizeTooltipView(context, builder)
+        if(tooltipView == null) {
+            tooltipView = VirtusizeTooltipView(context, builder)
+        }
         return tooltipView!!.containerView
     }
 
@@ -196,6 +215,8 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
         internal lateinit var anchorView: View
         internal var text: CharSequence? = null
         internal var position: Position = Position.BOTTOM
+        internal var width: Float? = null
+        internal var height: Float? = null
         internal var hideCloseButton = false
         internal var inverse = false
         internal var hideArrow = false
@@ -214,8 +235,19 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
             return this
         }
 
+        fun text(@StringRes id: Int): Builder {
+            this.text = context.resources.getString(id)
+            return this
+        }
+
         fun position(pos: Position): Builder {
             this.position = pos
+            return this
+        }
+
+        fun size(width: Float? = null, height: Float? = null): Builder {
+            this.width = width
+            this.height = height
             return this
         }
 

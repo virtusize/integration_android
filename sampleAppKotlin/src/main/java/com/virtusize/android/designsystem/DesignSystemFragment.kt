@@ -22,7 +22,13 @@ class DesignSystemFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val adapter = DesignSystemAdapter(requireContext(), arrayOf(requireContext().getString(R.string.virtusize_button)))
+        val adapter = DesignSystemAdapter(
+            requireContext(),
+            arrayOf(
+                requireContext().getString(R.string.virtusize_button),
+                requireContext().getString(R.string.virtusize_tooltip)
+            )
+        )
         binding.recyclerView.adapter = adapter
     }
 
