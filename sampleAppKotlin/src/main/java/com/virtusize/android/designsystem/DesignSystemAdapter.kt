@@ -11,6 +11,12 @@ import com.virtusize.android.databinding.DesignSystemRowItemBinding
 
 class DesignSystemAdapter(private val context: Context, private val dataSet: Array<String>) :
     RecyclerView.Adapter<DesignSystemAdapter.ViewHolder>() {
+
+    private val onClickMap: Map<String, Int> = mutableMapOf(
+        context.getString(R.string.virtusize_button) to R.id.action_designSystemFragment_to_buttonFragment,
+        context.getString(R.string.virtusize_tooltip) to R.id.action_designSystemFragment_to_tooltipFragment
+    )
+
     class ViewHolder(binding: DesignSystemRowItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val textView: TextView = binding.textView
     }
@@ -23,8 +29,8 @@ class DesignSystemAdapter(private val context: Context, private val dataSet: Arr
         viewHolder.textView.text = dataSet[position]
 
         viewHolder.itemView.setOnClickListener { view ->
-            if (dataSet[position] == context?.getString(R.string.virtusize_button)) {
-                view.findNavController().navigate(R.id.action_designSystemFragment_to_buttonFragment)
+            onClickMap[dataSet[position]]?.let {
+                view.findNavController().navigate(it)
             }
         }
     }

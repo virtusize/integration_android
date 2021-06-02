@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="vs_black">#000000</color>
+    <color name="vs_black_overlay">#99000000</color>
     <color name="vs_gray_900">#191919</color>
     <color name="vs_gray_900_pressed">#323232</color>
     <color name="vs_gray_800">#7F8382</color>

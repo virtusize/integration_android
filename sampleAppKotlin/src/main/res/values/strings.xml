@@ -3,6 +3,7 @@
     <string name="virtusize_design_system" translatable="false">Virtusize Design System</string>
 
     <string name="virtusize_button" translatable="false">Button</string>
+    <string name="virtusize_tooltip" translatable="false">Tooltip</string>
 
     <string name="style_button_title" translatable="false">Default, Inverted, and Disabled Buttons</string>
     <string name="color_button_title" translatable="false">Color</string>
@@ -25,4 +26,13 @@
     <string name="get_started" translatable="false">Get Started</string>
     <string name="redirect_fb" translatable="false">Redirect to Facebook</string>
     <string name="cm" translatable="false">cm</string>
+
+    <string name="default_tooltip_title" translatable="false">Default Tooltip Buttons</string>
+    <string name="custom_tooltip_button" translatable="false">Custom Tooltip Button</string>
+    <string name="fitting_tooltip_button" translatable="false">FittingRoom Tooltip Button</string>
+    <string name="show_tooltip" translatable="false">Show Tooltip</string>
+    <string name="vs_tooltip1_text" translatable="false">A tooltip appears adjacent to the element. Clicking \"Close\" will dismiss the tooltip.</string>
+    <string name="vs_tooltip2_text" translatable="false">You can set an \"inverseStyle\" prop to change the color. or \"position\" prop to change the position relative to the anchor</string>
+    <string name="vs_tooltip3_text" translatable="false">You can also set \"hideArrow\" and \"hideCloseButton\" to not show each of these</string>
+    <string name="vs_custom_tooltip_text" translatable="false">You can set \"customView\" prop for the custom Tooltip layout and access its views by the method \"getCustomView\"</string>
 </resources>
