@@ -88,7 +88,7 @@ class VirtusizeWebView @JvmOverloads constructor(
      */
     private fun isExternalLinkFromVirtusize(url: String?): Boolean {
         return (url?.contains("virtusize") == true && url.contains("privacy")) ||
-                (url?.contains("surveymonkey") == true && url.contains("survey"))
+                url?.contains("surveymonkey") == true
     }
 
     /**
