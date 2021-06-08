@@ -40,11 +40,12 @@ class VirtusizeWebView @JvmOverloads constructor(
                 userGesture: Boolean,
                 resultMsg: Message
             ): Boolean {
-                val href = view.handler.obtainMessage()
-                view.requestFocusNodeHref(href)
-                val url = href.data.getString("url")
-                val title = href.data.getString("title")
-                Log.d(TAG, "onCreateWindow ${href.data}")
+                // Obtain the popup window link or link title
+                val message = view.handler.obtainMessage()
+                view.requestFocusNodeHref(message)
+                val url = message.data.getString("url")
+                val title = message.data.getString("title")
+                Log.d(TAG, "onCreateWindow ${message.data}")
                 if (resultMsg.obj != null && resultMsg.obj is WebView.WebViewTransport && isVirtusizeLink(url, title)) {
                     Log.d(TAG, "Add the popup to the current web view")
                     val popupWebView = WebView(view.context)
@@ -79,10 +80,13 @@ class VirtusizeWebView @JvmOverloads constructor(
         })
     }
 
+
     private fun isVirtusizeLink(url: String?, title: String?): Boolean {
         return (url?.contains("virtusize") == true && url.contains("privacy")) ||
                 (url?.contains("surveymonkey") == true && url.contains("survey")) ||
+                // Facebook Auth link title
                 title?.contains("Facebook") == true ||
+                // Google Auth link title
                 title?.contains("Google") == true
     }
 }
