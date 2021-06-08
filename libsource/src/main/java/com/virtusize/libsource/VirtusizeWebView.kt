@@ -46,7 +46,7 @@ class VirtusizeWebView @JvmOverloads constructor(
                 val url = message.data.getString("url")
                 val title = message.data.getString("title")
                 Log.d(TAG, "onCreateWindow ${message.data}")
-                if (resultMsg.obj != null && resultMsg.obj is WebView.WebViewTransport && isVirtusizeLink(url, title)) {
+                if (resultMsg.obj != null && resultMsg.obj is WebView.WebViewTransport && isLinkFromVirtusize(url, title)) {
                     Log.d(TAG, "Add the popup to the current web view")
                     val popupWebView = WebView(view.context)
                     popupWebView.settings.javaScriptEnabled = true
@@ -56,12 +56,15 @@ class VirtusizeWebView @JvmOverloads constructor(
                     popupWebView.settings.userAgentString = System.getProperty("http.agent")
                     popupWebView.webViewClient = object : WebViewClient() {
                         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                            try {
-                                view.context?.startActivity(intent)
-                            } finally {
-                                return true
+                            if (isExternalLinkFromVirtusize(url)) {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                try {
+                                    context.startActivity(intent)
+                                } finally {
+                                    return true
+                                }
                             }
+                            return false
                         }
                     }
                     popupWebView.webChromeClient = object : WebChromeClient(){
@@ -80,13 +83,20 @@ class VirtusizeWebView @JvmOverloads constructor(
         })
     }
 
-
-    private fun isVirtusizeLink(url: String?, title: String?): Boolean {
+    /**
+     * Checks if the URL is a Virtusize external link to be opened with a browser app
+     */
+    private fun isExternalLinkFromVirtusize(url: String?): Boolean {
         return (url?.contains("virtusize") == true && url.contains("privacy")) ||
-                (url?.contains("surveymonkey") == true && url.contains("survey")) ||
-                // Facebook Auth link title
-                title?.contains("Facebook") == true ||
-                // Google Auth link title
-                title?.contains("Google") == true
+                (url?.contains("surveymonkey") == true && url.contains("survey"))
+    }
+
+    /**
+     * Checks if the URL or the link title is from Virtusize
+     */
+    private fun isLinkFromVirtusize(url: String?, title: String?): Boolean {
+        return isExternalLinkFromVirtusize(url) ||
+                /* Facebook Auth link title */ title?.contains("Facebook") == true ||
+                /* Google Auth link title */ title?.contains("Google") == true
     }
 }
