@@ -38,7 +38,8 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 - [Virtusize Views](#virtusize-views)
   - [Virtusize Button](#1-virtusize-button)
   - [Virtusize InPage](#2-virtusize-inpage)
-  - [Virtusize InPage Mini](#3-virtusize-inpage-mini)
+    - [InPage Standard](#2-inpage-standard)
+    - [InPage Mini](#3-inpage-mini)
 - [The Order API](#the-order-api)
   - [Initialization](#1-initialization)
   - [Create a *VirtusizeOrder* object for order data](#2-create-a-virtusizeorder-object-for-order-data)
@@ -497,7 +498,7 @@ There are two types of InPage in our Virtusize SDK.
 
 
 
-### (3) Virtusize InPage Mini
+#### (3) InPage Mini
 
 This is a mini version of InPage you can place in your application. The discreet design is suitable for layouts where customers are browsing product images and size tables.
 
