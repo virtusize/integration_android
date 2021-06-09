@@ -54,7 +54,7 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 
 - [Fix SNS Login in Virtusize for native Webview apps](#fix-sns-login-in-virtusize-for-native-webview-apps)
 
-- [Examples](#3-send-an-order)
+- [Examples](#examples)
 
 - [License](#license)
 
