@@ -17,36 +17,48 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 
 
 
+## Table of Contents
+
+- [Requirements](#requirements)
+
+- [Getting Started](#getting-started)
+
+  - [Installation](#1-installation)
+  - [Proguard Rules](#2-proguard-rules)
+
+- [Setup](#setup)
+
+  - [Initialize Virtusize](#1-initialize-virtusize)
+  - [Set Up Product Details](#2-set-up-product-details)
+  - [Register Virtusize Message Handler (Optional)](#3-register-virtusize-message-handler-optional)
+  - [Unregister Virtusize Message Handler (Optional)](#4-unregister-virtusize-message-handler-optional)
+
+- [Virtusize Views](#virtusize-views)
+
+  - [Virtusize Button](#1-virtusize-button)
+  - [Virtusize InPage](#2-virtusize-inpage)
+    - [InPage Standard](#2-inpage-standard)
+    - [InPage Mini](#3-inpage-mini)
+
+- [The Order API](#the-order-api)
+
+  - [Initialization](#1-initialization)
+  - [Create a *VirtusizeOrder* object for order data](#2-create-a-virtusizeorder-object-for-order-data)
+  - [Send an Order](#3-send-an-order) 
+
+- [Fix SNS Login in Virtusize for native Webview apps](#fix-sns-login-in-virtusize-for-native-webview-apps)
+
+- [Examples](#examples)
+
+- [License](#license)
+
+  
+
 ## Requirements
 
 - minSdkVersion >= 21
 - compileSdkVersion >= 30
 - Setup in AppCompatActivity
-
-
-
-## Table of contents
-
-- [Getting Started](#getting-started)
-  - [Installation](#1-installation)
-  - [Proguard Rules](#2-proguard-rules)
-- [Setup](#setup)
-  - [Initialize Virtusize](#1-initialize-virtusize)
-  - [Set Up Product Details](#2-set-up-product-details)
-  - [Register Virtusize Message Handler (Optional)](#3-register-virtusize-message-handler-optional)
-  - [Unregister Virtusize Message Handler (Optional)](#4-unregister-virtusize-message-handler-optional)
-- [Virtusize Views](#virtusize-views)
-  - [Virtusize Button](#1-virtusize-button)
-  - [Virtusize InPage](#2-virtusize-inpage)
-    - [InPage Standard](#2-inpage-standard)
-    - [InPage Mini](#3-inpage-mini)
-- [The Order API](#the-order-api)
-  - [Initialization](#1-initialization)
-  - [Create a *VirtusizeOrder* object for order data](#2-create-a-virtusizeorder-object-for-order-data)
-  - [Send an Order](#3-send-an-order) 
-- [Fix SNS Login in Virtusize for native Webview apps](#fix-sns-login-in-virtusize-for-native-webview-apps)
-- [Examples](#examples)
-- [License](#3-send-an-order)
 
 
 

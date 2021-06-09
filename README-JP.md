@@ -17,22 +17,16 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 
 
 
-## 対応バージョン
+## Table of Contents
 
-- minSdkVersion >= 21
-- compileSdkVersion >= 30
-- Setup in AppCompatActivity
-
-
-
-## Table of contents
+- [対応バージョン](#対応バージョン)
 
 - [はじめに](#はじめに)
 
   - [Virtusize SDKを実装する](#1-virtusize-sdkを実装する)
   - [Proguardの設定](#2-proguardの設定)
 
-- [セットアップ](#1-はじめに)
+- [セットアップ](#セットアップ)
 
   - [はじめに](#1-はじめに)
   - [商品詳細をセットする](#2-商品詳細をセットする)
@@ -59,6 +53,14 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 - [License](#license)
 
   
+
+## 対応バージョン
+
+- minSdkVersion >= 21
+- compileSdkVersion >= 30
+- Setup in AppCompatActivity
+
+
 
 ## はじめに
 
