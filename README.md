@@ -800,7 +800,7 @@ Call the `Virtusize.sendOrder` method in your activity or fragment when the user
 
 ## Fix SNS Login in Virtusize for native Webview apps
 
-The built-in webview blocks any popup windows by default. To let users to sign up or log in with the web version of Virtusize integration in your webview, please replace your `WebView` with **`VirtusizeWebview`** in your Kotlin or Java file and XML file to fix SNS login in Virtusize.
+The built-in WebView blocks any popup windows by default. To let users to sign up or log in with the web version of Virtusize integration in your webview, please replace your `WebView` with **`VirtusizeWebView`** in your Kotlin or Java file and XML file to fix SNS login in Virtusize.
 
 - Kotlin/Java
 
