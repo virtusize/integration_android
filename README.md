@@ -25,6 +25,30 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 
 
 
+## Table of contents
+
+- [Getting Started](#getting-started)
+  - [Installation](#1-installation)
+  - [Proguard Rules](#2-proguard-rules)
+- [Setup](#setup)
+  - [Initialize Virtusize](#1-initialize-virtusize)
+  - [Set Up Product Details](#2-set-up-product-details)
+  - [Register Virtusize Message Handler (Optional)](#3-register-virtusize-message-handler-optional)
+  - [Unregister Virtusize Message Handler (Optional)](#4-unregister-virtusize-message-handler-optional)
+- [Virtusize Views](#virtusize-views)
+  - [Virtusize Button](#1-virtusize-button)
+  - [Virtusize InPage](#2-virtusize-inpage)
+  - [Virtusize InPage Mini](#3-virtusize-inpage-mini)
+- [The Order API](#the-order-api)
+  - [Initialization](#1-initialization)
+  - [Create a *VirtusizeOrder* object for order data](#2-create-a-virtusizeorder-object-for-order-data)
+  - [Send an Order](#3-send-an-order) 
+- [Fix SNS Login in Virtusize for native Webview apps](#fix-sns-login-in-virtusize-for-native-webview-apps)
+- [Examples](#3-send-an-order)
+- [License](#3-send-an-order)
+
+
+
 ## Getting Started
 
 If you'd like to continue using the old Version 1.x.x, refer to the branch [v1](https://github.com/virtusize/integration_android/tree/v1).
@@ -473,7 +497,7 @@ There are two types of InPage in our Virtusize SDK.
 
 
 
-### (3) InPage Mini
+### (3) Virtusize InPage Mini
 
 This is a mini version of InPage you can place in your application. The discreet design is suitable for layouts where customers are browsing product images and size tables.
 
@@ -758,6 +782,38 @@ Call the `Virtusize.sendOrder` method in your activity or fragment when the user
             }
     );
     ~~~~
+
+
+
+## Fix SNS Login in Virtusize for native Webview apps
+
+The built-in webview blocks any popup windows by default. To let users to sign up or log in with the web version of Virtusize integration in your webview, please replace your `WebView` with **`VirtusizeWebview`** in your Kotlin or Java file and XML file to fix SNS login in Virtusize.
+
+- Kotlin
+
+  ```kotlin
+  - var webView: WebView
+  + var webView: VirtusizeWebView
+  ```
+
+or
+
+- Java
+
+  ```java
+  - WebView webView;
+  + VirtusizeWebView webView;
+  ```
+
+- XML
+
+  ```xml
+  - <WebView
+  + <com.virtusize.libsource.VirtusizeWebView
+      android:id="@+id/webView"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+  ```
 
 
 
