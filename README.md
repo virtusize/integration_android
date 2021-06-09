@@ -792,7 +792,7 @@ The built-in webview blocks any popup windows by default. To let users to sign u
 
 - Kotlin/Java
 
-  ```java
+  ```diff
   // Kotlin
   - var webView: WebView
   + var webView: VirtusizeWebView
@@ -806,7 +806,7 @@ and
 
 - XML
 
-  ```xml
+  ```diff
   - <WebView
   + <com.virtusize.libsource.VirtusizeWebView
       android:id="@+id/webView"
