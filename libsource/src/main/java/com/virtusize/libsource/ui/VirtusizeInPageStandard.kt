@@ -50,7 +50,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
     /**
      * @see VirtusizeView.virtusizeDialogFragment
      */
-    override var virtusizeDialogFragment = VirtusizeWebView()
+    override var virtusizeDialogFragment = VirtusizeWebViewFragment()
         private set
 
     // If the width of the InPage is small than 411dp, the value is true
