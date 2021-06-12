@@ -12,7 +12,7 @@ import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.util.VirtusizeUtils
 
-class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, AppCompatButton(context, attrs) {
+class VirtusizeButton(context: Context, attrs: AttributeSet? = null) : VirtusizeView, AppCompatButton(context, attrs) {
 
     /**
      * @see VirtusizeView.virtusizeParams
