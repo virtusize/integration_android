@@ -29,7 +29,7 @@ class VirtusizeButton(context: Context, attrs: AttributeSet) : VirtusizeView, Ap
     /**
      * @see VirtusizeView.virtusizeDialogFragment
      */
-    override var virtusizeDialogFragment = VirtusizeWebView()
+    override var virtusizeDialogFragment = VirtusizeWebViewFragment()
         private set
 
     // The VirtusizeViewStyle that clients can choose to use for this Button

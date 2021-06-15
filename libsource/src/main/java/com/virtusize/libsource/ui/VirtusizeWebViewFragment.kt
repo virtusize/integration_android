@@ -16,7 +16,7 @@ import com.virtusize.libsource.databinding.WebActivityBinding
 import com.virtusize.libsource.util.Constants
 import org.json.JSONObject
 
-class VirtusizeWebView: DialogFragment() {
+class VirtusizeWebViewFragment: DialogFragment() {
 
     private var virtusizeWebAppUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-webview.html"
     private var vsParamsFromSDKScript = ""
