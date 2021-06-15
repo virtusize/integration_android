@@ -144,8 +144,4 @@ class VirtusizeButton @JvmOverloads constructor(context: Context, attrs: Attribu
             }
         }
     }
-
-    fun getSize() {
-
-    }
 }
