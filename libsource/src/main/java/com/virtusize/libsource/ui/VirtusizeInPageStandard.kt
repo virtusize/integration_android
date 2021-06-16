@@ -325,6 +325,17 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
             }
         }
 
+        val virtusizeWhiteColor = ContextCompat.getColor(
+            context,
+            R.color.virtusizeWhite
+        )
+
+        // Set the background color of the inpage card view
+        inpageCardView.setCardBackgroundColor(virtusizeWhiteColor)
+
+        // Set the arrow color of the button
+        DrawableCompat.setTint(inpageButton.compoundDrawables[0], virtusizeWhiteColor)
+
         // Set horizontal margins
         val inPageStandardFooterTopMargin =
             if (horizontalMargin >= 2.dpInPx) 10.dpInPx - horizontalMargin else horizontalMargin + 8.dpInPx
