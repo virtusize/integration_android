@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.VirtusizeOrder
+import com.virtusize.libsource.util.Constants
 import com.virtusize.libsource.util.dpInPx
 import com.virtusize.libsource.util.spToPx
 import kotlinx.android.synthetic.main.activity_main.*
@@ -87,6 +88,16 @@ class MainActivity : AppCompatActivity() {
          * exampleVirtusizeInPageStandard.dismissVirtusizeView()
          * exampleVirtusizeInPageMini.dismissVirtusizeView()
          */
+
+        snsTestButton.setOnClickListener {
+            val fragmentTransaction = supportFragmentManager.beginTransaction()
+            val previousFragment = supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
+            previousFragment?.let {fragment ->
+                fragmentTransaction.remove(fragment)
+            }
+            fragmentTransaction.addToBackStack(null)
+            SampleWebViewFragment().show(fragmentTransaction, Constants.FRAG_TAG)
+        }
 
         /*
          * The sample function to send an order to the Virtusize server

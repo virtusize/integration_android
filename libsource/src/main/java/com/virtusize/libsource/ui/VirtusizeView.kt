@@ -17,7 +17,7 @@ interface VirtusizeView {
     // Receives Virtusize messages
     val virtusizeMessageHandler: VirtusizeMessageHandler
     // The Virtusize view that opens when the view is clicked
-    val virtusizeDialogFragment: VirtusizeWebView
+    val virtusizeDialogFragment: VirtusizeWebViewFragment
 
     /**
      * Sets up the VirtusizeView with the corresponding VirtusizeParams

@@ -17,6 +17,43 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 
 
 
+## Table of Contents
+
+- [対応バージョン](#対応バージョン)
+
+- [はじめに](#はじめに)
+
+  - [Virtusize SDKを実装する](#1-virtusize-sdkを実装する)
+  - [Proguardの設定](#2-proguardの設定)
+
+- [セットアップ](#セットアップ)
+
+  - [はじめに](#1-はじめに)
+  - [商品詳細をセットする](#2-商品詳細をセットする)
+  - [Virtusize Message Handlerの登録（オプション）](#3--virtusize-message-handlerの登録オプション)
+  - [Virtusize Message Handler登録解除（オプション）](#4-virtusize-message-handler登録解除オプション)
+
+- [Virtusize Views](#virtusize-views)
+
+  - [バーチャサイズボタン（Virtusize Button）](#1-バーチャサイズボタンvirtusize-button)
+  - [バーチャサイズ・インページ（Virtusize InPage）](#2-バーチャサイズインページvirtusize-inpage)
+    - [InPage Standard](#2-inpage-standard)
+    - [InPage Mini](#3-inpage-mini)
+
+- [Order APIについて](#order-apiについて)
+
+  - [初期化](#1-初期化)
+  - [注文データ向けに*VirtusizeOrder* オブジェクトを作成](#2-注文データ向けにvirtusizeorder-オブジェクトを作成)
+  - [注文情報の送信](#3-注文情報の送信) 
+
+- [Fix SNS Login in Virtusize for native Webview apps](#fix-sns-login-in-virtusize-for-native-webview-apps)
+
+- [Examples](#examples)
+
+- [License](#license)
+
+  
+
 ## 対応バージョン
 
 - minSdkVersion >= 21
@@ -46,7 +83,7 @@ In your appの`build.gradle`ファイルに下記のdependencyを追加
 
 ```groovy
 dependencies {
-  implementation 'com.github.virtusize:integration_android:2.1.4'
+  implementation 'com.github.virtusize:integration_android:2.2'
 }
 ```
 
@@ -758,6 +795,36 @@ app.Virtusize.sendOrder(order,
         }
 );
 ~~~~
+
+
+
+## Fix SNS Login in Virtusize for native Webview apps
+
+The built-in WebView blocks any popup windows by default. To let users to sign up or log in with the web version of Virtusize integration in your webview, please replace your `WebView` with **`VirtusizeWebView`** in your Kotlin or Java file and XML file to fix SNS login in Virtusize.
+
+- Kotlin/Java
+
+  ```diff
+  // Kotlin
+  - var webView: WebView
+  + var webView: VirtusizeWebView
+  
+  // Java
+  - WebView webView;
+  + VirtusizeWebView webView;
+  ```
+
+and
+
+- XML
+
+  ```diff
+  - <WebView
+  + <com.virtusize.libsource.VirtusizeWebView
+      android:id="@+id/webView"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+  ```
 
 
 

@@ -30,7 +30,7 @@ class VirtusizeButton @JvmOverloads constructor(context: Context, attrs: Attribu
     /**
      * @see VirtusizeView.virtusizeDialogFragment
      */
-    override var virtusizeDialogFragment = VirtusizeWebView()
+    override var virtusizeDialogFragment = VirtusizeWebViewFragment()
         private set
 
     // The VirtusizeViewStyle that clients can choose to use for this Button
