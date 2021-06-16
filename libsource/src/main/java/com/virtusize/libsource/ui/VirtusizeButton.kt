@@ -12,8 +12,11 @@ import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.util.VirtusizeUtils
 
-class VirtusizeButton @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-    VirtusizeView, AppCompatButton(context, attrs, defStyleAttr) {
+class VirtusizeButton @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : VirtusizeView, AppCompatButton(context, attrs, defStyleAttr) {
 
     /**
      * @see VirtusizeView.virtusizeParams

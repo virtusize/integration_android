@@ -30,10 +30,11 @@ import com.virtusize.libsource.util.VirtusizeUtils
 import kotlinx.android.synthetic.main.view_inpage_standard.view.*
 
 
-class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : VirtusizeInPageView(
-    context,
-    attrs
-) {
+class VirtusizeInPageStandard @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : VirtusizeInPageView(context, attrs, defStyleAttr) {
 
     /**
      * @see VirtusizeView.virtusizeParams
