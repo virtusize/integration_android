@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
+import android.util.Size
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -64,6 +65,8 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
     private var crossFadeHandler: Handler = Handler(Looper.getMainLooper())
 
     private var userBestFitProduct: Product? = null
+
+    var onSizeChanged: ((Size) -> Unit)? = null
 
     // The VirtusizeViewStyle that clients can choose to use for this InPage Standard view
     var virtusizeViewStyle = VirtusizeViewStyle.NONE
@@ -365,6 +368,11 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
                 return true
             }
         })
+    }
+
+    override fun onSizeChanged(newWidth: Int, newHeight: Int, oldWidth: Int, oldHeight: Int) {
+        super.onSizeChanged(newWidth, newHeight, oldWidth, oldHeight)
+        onSizeChanged?.invoke(Size(newWidth, newHeight))
     }
 
     /**
