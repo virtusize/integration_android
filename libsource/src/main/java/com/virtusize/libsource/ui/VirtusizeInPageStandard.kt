@@ -325,16 +325,11 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
             }
         }
 
-        val virtusizeWhiteColor = ContextCompat.getColor(
+        // Set the background color of the inpage card view
+        inpageCardView.setBackgroundColor(ContextCompat.getColor(
             context,
             R.color.virtusizeWhite
-        )
-
-        // Set the background color of the inpage card view
-        inpageCardView.setCardBackgroundColor(virtusizeWhiteColor)
-
-        // Set the arrow color of the button
-        DrawableCompat.setTint(inpageButton.compoundDrawables[0], virtusizeWhiteColor)
+        ))
 
         // Set horizontal margins
         val inPageStandardFooterTopMargin =
@@ -558,7 +553,7 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
         if (buttonTextSize != -1f) {
             val size = buttonTextSize + additionalSize
             inpageButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
-            inpageButton.rightDrawable(R.drawable.ic_arrow_right_black, 0.8f * size / 2, 0.8f * size)
+            inpageButton.rightDrawable(R.drawable.ic_arrow_right_white, 0.8f * size / 2, 0.8f * size)
         } else {
             configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_default_textSize)
                 ?.let {

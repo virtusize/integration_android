@@ -26,8 +26,6 @@
     </style>
 
     <style name="VirtusizeInPageButtonStyle" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:drawableEnd">@drawable/ic_arrow_right_black</item>
-        <item name="android:drawableRight">@drawable/ic_arrow_right_black</item>
         <item name="android:drawablePadding">@dimen/virtusize_inpage_button_horizontal_padding</item>
         <item name="android:paddingStart">@dimen/virtusize_inpage_button_horizontal_padding</item>
         <item name="android:paddingLeft">@dimen/virtusize_inpage_button_horizontal_padding</item>
