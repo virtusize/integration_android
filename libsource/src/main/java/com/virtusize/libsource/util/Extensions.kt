@@ -86,8 +86,14 @@ val Int.dpInPx: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
 /**
- * Float extension function to convert sp to px
+ * Float extension function to convert dp to px
  */
+val Float.dpInPx: Int
+    get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+
+/**
+ * Float extension function to convert sp to px
+*/
 val Float.spToPx: Float
     get() = TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_SP,
