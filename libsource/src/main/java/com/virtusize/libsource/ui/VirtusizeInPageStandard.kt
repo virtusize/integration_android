@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewTreeObserver.OnPreDrawListener
 import android.widget.LinearLayout
 import androidx.annotation.ColorInt
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.ViewCompat
@@ -25,8 +26,6 @@ import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.Product
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.util.*
-import com.virtusize.libsource.util.FontUtils
-import com.virtusize.libsource.util.VirtusizeUtils
 import kotlinx.android.synthetic.main.view_inpage_standard.view.*
 
 
@@ -261,6 +260,10 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
         setStyle()
     }
 
+    fun getCardView(): CardView {
+        return inpageCardView
+    }
+
     /**
      * Sets the product images with the info of the store product and the best fit user product
      * @param storeProduct the store product
@@ -362,7 +365,6 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
                 return true
             }
         })
-
     }
 
     /**
