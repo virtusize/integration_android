@@ -75,7 +75,7 @@ inline fun <reified T : Enum<T>> valueOf(type: String): T? {
 /**
  * The View extension function to get the latest size info when the view size gets changed
  */
-internal inline fun View?.onSizeChanged(crossinline runnable: (Int, Int) -> Unit) = this?.apply {
+internal inline fun View.onSizeChanged(crossinline runnable: (Int, Int) -> Unit) = this.apply {
     addOnLayoutChangeListener { _, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
         val rect = Rect(left, top, right, bottom)
         val oldRect = Rect(oldLeft, oldTop, oldRight, oldBottom)

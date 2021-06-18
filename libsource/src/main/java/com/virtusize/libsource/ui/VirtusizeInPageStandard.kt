@@ -12,10 +12,8 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import androidx.annotation.ColorInt
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.ViewCompat
@@ -120,6 +118,13 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
         buttonTextSize = attrsArray.getDimension(R.styleable.VirtusizeInPageStandard_inPageStandardButtonTextSize, -1f)
 
         attrsArray.recycle()
+
+        inpageCardView.onSizeChanged { width, height ->
+            if (width < 411.dpInPx) {
+                smallInPageWidth = true
+            }
+            onInPageCardViewSizeChanged?.invoke(width, height)
+        }
 
         setStyle()
     }
@@ -354,13 +359,6 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
             horizontalMargin + 2.dpInPx,
             0
         )
-        
-        inpageCardView.onSizeChanged { width, height ->
-            if (width < 411.dpInPx) {
-                smallInPageWidth = true
-            }
-            onInPageCardViewSizeChanged?.invoke(width, height)
-        }
     }
 
     /**
