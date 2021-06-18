@@ -9,11 +9,10 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
-import android.util.Size
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewTreeObserver.OnPreDrawListener
+import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import androidx.annotation.ColorInt
 import androidx.cardview.widget.CardView
@@ -359,15 +358,14 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
             0
         )
 
-        viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
-            override fun onPreDraw(): Boolean {
+        viewTreeObserver.addOnGlobalLayoutListener (object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
                 if (viewTreeObserver.isAlive) {
-                    viewTreeObserver.removeOnPreDrawListener(this)
+                    viewTreeObserver.removeOnGlobalLayoutListener(this)
                 }
                 if (width < 411.dpInPx) {
                     smallInPageWidth = true
                 }
-                return true
             }
         })
     }
