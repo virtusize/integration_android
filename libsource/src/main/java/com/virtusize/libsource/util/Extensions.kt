@@ -2,9 +2,11 @@ package com.virtusize.libsource.util
 
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.Rect
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.util.TypedValue
+import android.view.View
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
@@ -71,6 +73,19 @@ inline fun <reified T : Enum<T>> valueOf(type: String): T? {
 }
 
 /**
+ * The View extension function to get the latest size info when the view size gets changed
+ */
+inline fun View?.onSizeChanged(crossinline runnable: (Int, Int) -> Unit) = this?.apply {
+    addOnLayoutChangeListener { _, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+        val rect = Rect(left, top, right, bottom)
+        val oldRect = Rect(oldLeft, oldTop, oldRight, oldBottom)
+        if (rect.width() != oldRect.width() || rect.height() != oldRect.height()) {
+            runnable(rect.width(), rect.height())
+        }
+    }
+}
+
+/**
  * The TextView extension function to set the width and height for the right drawable of a Button
  */
 internal fun TextView.rightDrawable(@DrawableRes id: Int = 0, width: Float, height: Float) {
@@ -84,6 +99,12 @@ internal fun TextView.rightDrawable(@DrawableRes id: Int = 0, width: Float, heig
  */
 val Int.dpInPx: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+
+/**
+ * Integer extension function to convert px to dp
+ */
+val Int.pxInDp: Int
+    get() = (this / Resources.getSystem().displayMetrics.density).toInt()
 
 /**
  * Float extension function to convert dp to px

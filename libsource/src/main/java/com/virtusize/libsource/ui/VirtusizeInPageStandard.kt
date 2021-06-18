@@ -66,7 +66,6 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
 
     private var userBestFitProduct: Product? = null
 
-    var onSizeChanged: ((Size) -> Unit)? = null
     var onFinishLoading: (() -> Unit)? = null
 
     // The VirtusizeViewStyle that clients can choose to use for this InPage Standard view
@@ -371,11 +370,6 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
                 return true
             }
         })
-    }
-
-    override fun onSizeChanged(newWidth: Int, newHeight: Int, oldWidth: Int, oldHeight: Int) {
-        super.onSizeChanged(newWidth, newHeight, oldWidth, oldHeight)
-        onSizeChanged?.invoke(Size(newWidth, newHeight))
     }
 
     /**
