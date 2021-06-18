@@ -65,6 +65,7 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
 
     private var userBestFitProduct: Product? = null
 
+    var onInPageCardViewSizeChanged: ((Int, Int) -> Unit)? = null
     var onFinishLoading: (() -> Unit)? = null
 
     // The VirtusizeViewStyle that clients can choose to use for this InPage Standard view
@@ -264,10 +265,6 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
         setStyle()
     }
 
-    fun getCardView(): CardView {
-        return inpageCardView
-    }
-
     /**
      * Sets the product images with the info of the store product and the best fit user product
      * @param storeProduct the store product
@@ -357,17 +354,13 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
             horizontalMargin + 2.dpInPx,
             0
         )
-
-        viewTreeObserver.addOnGlobalLayoutListener (object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                if (viewTreeObserver.isAlive) {
-                    viewTreeObserver.removeOnGlobalLayoutListener(this)
-                }
-                if (width < 411.dpInPx) {
-                    smallInPageWidth = true
-                }
+        
+        inpageCardView.onSizeChanged { width, height ->
+            if (width < 411.dpInPx) {
+                smallInPageWidth = true
             }
-        })
+            onInPageCardViewSizeChanged?.invoke(width, height)
+        }
     }
 
     /**
