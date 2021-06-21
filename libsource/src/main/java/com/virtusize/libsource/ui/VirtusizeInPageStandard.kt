@@ -371,7 +371,7 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
         // Add left padding to the store image to math the position of the user image
         addLeftPaddingToStoreProductImageView(false)
         // Remove any margins to the user product image
-        setupMargins(inpageUserProductImageView, 0, 0, 0, 0)
+        setupMargins(inpageUserProductImageView, 8.dpInPx, 0, 0, 0)
         if (crossFadeRunnable == null) {
             crossFadeRunnable = Runnable {
                 if (inpageUserProductImageView.visibility == View.VISIBLE) {
