@@ -22,8 +22,7 @@ class VirtusizeWebViewFragment: DialogFragment() {
     private var vsParamsFromSDKScript = ""
     private var backButtonClickEventFromSDKScript = "javascript:vsEventFromSDK({ name: 'sdk-back-button-tapped'})"
 
-    private lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
-    private lateinit var virtusizeView: VirtusizeView
+    private var virtusizeMessageHandler: VirtusizeMessageHandler? = null
 
     private lateinit var sharedPreferencesHelper: SharedPreferencesHelper
 
@@ -159,12 +158,8 @@ class VirtusizeWebViewFragment: DialogFragment() {
     /**
      * Sets up a Virtusize message handler
      */
-    internal fun setupMessageHandler(
-        messageHandler: VirtusizeMessageHandler,
-        virtusizeView: VirtusizeView
-    ) {
+    internal fun setupMessageHandler(messageHandler: VirtusizeMessageHandler) {
         virtusizeMessageHandler = messageHandler
-        this.virtusizeView = virtusizeView
     }
 
     /**
@@ -204,7 +199,7 @@ class VirtusizeWebViewFragment: DialogFragment() {
         @JavascriptInterface
         fun eventHandler(eventInfo: String) {
             val event = VirtusizeEventJsonParser().parse(JSONObject(eventInfo))
-            event?.let { virtusizeMessageHandler.onEvent(it) }
+            event?.let { virtusizeMessageHandler?.onEvent(it) }
             if (event?.name =="user-closed-widget") {
                 dismiss()
             }

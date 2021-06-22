@@ -26,7 +26,7 @@ interface VirtusizeView {
      * @see VirtusizeParams
      */
     fun setup(params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
-        virtusizeDialogFragment.setupMessageHandler(messageHandler, this)
+        virtusizeDialogFragment.setupMessageHandler(messageHandler)
     }
 
     /**
