@@ -7,5 +7,6 @@ package com.virtusize.libsource.data.remote
 data class ProductCheck(
 	val data: Data?,
 	val productId: String,
-	val name: String
+	val name: String,
+	val jsonString: String?
 )
