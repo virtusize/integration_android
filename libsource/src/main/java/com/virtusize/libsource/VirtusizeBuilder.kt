@@ -42,10 +42,7 @@ class VirtusizeBuilder {
      * @param id the id that is an unique user ID from the client system
      * @return VirtusizeBuilder
      */
-    fun setUserId(id: String?): VirtusizeBuilder {
-        if (id == null) {
-            return this
-        }
+    fun setUserId(id: String): VirtusizeBuilder {
         this.userId = id
         return this
     }
@@ -56,10 +53,7 @@ class VirtusizeBuilder {
      * @param key the API Key
      * @return VirtusizeBuilder
      */
-    fun setApiKey(key: String?): VirtusizeBuilder {
-        if (key == null) {
-            return this
-        }
+    fun setApiKey(key: String): VirtusizeBuilder {
         this.apiKey = key
         return this
     }
@@ -70,10 +64,7 @@ class VirtusizeBuilder {
      * @param environment VirtusizeEnvironment
      * @return VirtusizeBuilder
      */
-    fun setEnv(environment: VirtusizeEnvironment?): VirtusizeBuilder {
-        if (environment == null) {
-            return this
-        }
+    fun setEnv(environment: VirtusizeEnvironment): VirtusizeBuilder {
         this.env = environment
         this.region = environment.virtusizeRegion()
         return this
@@ -85,10 +76,7 @@ class VirtusizeBuilder {
      * @param language [VirtusizeLanguage]
      * @return VirtusizeBuilder
      */
-    fun setLanguage(language: VirtusizeLanguage?) : VirtusizeBuilder {
-        if (language == null) {
-            return this
-        }
+    fun setLanguage(language: VirtusizeLanguage) : VirtusizeBuilder {
         this.language = language
         return this
     }
@@ -99,10 +87,7 @@ class VirtusizeBuilder {
      * @param allowedLanguages the list of [VirtusizeLanguage]
      * @return VirtusizeBuilder
      */
-    fun setAllowedLanguages(allowedLanguages: MutableList<VirtusizeLanguage>?) : VirtusizeBuilder {
-        if (allowedLanguages == null) {
-            return this
-        }
+    fun setAllowedLanguages(allowedLanguages: MutableList<VirtusizeLanguage>) : VirtusizeBuilder {
         this.allowedLanguages = allowedLanguages
         return this
     }
@@ -113,10 +98,7 @@ class VirtusizeBuilder {
      * @param showSGI the Boolean value
      * @return VirtusizeBuilder
      */
-    fun setShowSGI(showSGI: Boolean?) : VirtusizeBuilder {
-        if (showSGI == null) {
-            return this
-        }
+    fun setShowSGI(showSGI: Boolean) : VirtusizeBuilder {
         this.showSGI = showSGI
         return this
     }
@@ -127,10 +109,7 @@ class VirtusizeBuilder {
      * @param detailsPanelCards the list of [VirtusizeInfoCategory]
      * @return VirtusizeBuilder
      */
-    fun setDetailsPanelCards(detailsPanelCards: MutableList<VirtusizeInfoCategory>?) : VirtusizeBuilder {
-        if (detailsPanelCards == null) {
-            return this
-        }
+    fun setDetailsPanelCards(detailsPanelCards: MutableList<VirtusizeInfoCategory>) : VirtusizeBuilder {
         this.detailsPanelCards = detailsPanelCards
         return this
     }
