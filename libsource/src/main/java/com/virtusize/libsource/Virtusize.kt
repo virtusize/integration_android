@@ -26,6 +26,10 @@ class Virtusize(
     private val context: Context,
     internal val params: VirtusizeParams
 ) {
+
+    val displayLanguage: VirtusizeLanguage?
+        get() = params.language
+
     // Registered message handlers
     private val messageHandlers = mutableListOf<VirtusizeMessageHandler>()
 
