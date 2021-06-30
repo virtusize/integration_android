@@ -3,6 +3,7 @@ package com.virtusize.libsource
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
+import com.virtusize.libsource.data.local.VirtusizeMessageHandler
 import com.virtusize.libsource.data.local.VirtusizeProduct
 import com.virtusize.libsource.data.remote.*
 import com.virtusize.libsource.network.VirtusizeApi
@@ -13,7 +14,12 @@ import com.virtusize.libsource.util.VirtusizeUtils
 class VirtusizeFlutterHelper(private val context: Context) {
     private var virtusizeDialogFragment: VirtusizeWebViewFragment = VirtusizeWebViewFragment()
 
-    fun openVirtusizeView(virtusize: Virtusize?, product: VirtusizeProduct, productDataCheck: ProductCheck) {
+    fun openVirtusizeView(
+        virtusize: Virtusize?,
+        product: VirtusizeProduct,
+        productDataCheck: ProductCheck,
+        messageHandler: VirtusizeMessageHandler
+    ) {
         val fragmentTransaction = (context as FragmentActivity).supportFragmentManager.beginTransaction()
         val previousFragment = context.supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
         previousFragment?.let {fragment ->
@@ -28,6 +34,7 @@ class VirtusizeFlutterHelper(private val context: Context) {
             args.putString(Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY, "javascript:vsParamsFromSDK(${params.vsParamsString()})")
         }
         virtusizeDialogFragment.arguments = args
+        virtusizeDialogFragment.setupMessageHandler(messageHandler)
         virtusizeDialogFragment.show(fragmentTransaction, Constants.FRAG_TAG)
     }
 

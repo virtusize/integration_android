@@ -1,18 +1,67 @@
 package com.virtusize.libsource
 
 import android.content.Context
-import com.virtusize.libsource.data.local.VirtusizeLanguage
-import com.virtusize.libsource.data.local.VirtusizeProduct
+import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.Product
+import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.data.remote.ProductType
 import com.virtusize.libsource.data.remote.UserBodyProfile
 import com.virtusize.libsource.network.VirtusizeAPIService
+import com.virtusize.libsource.network.VirtusizeApiResponse
 
-class VirtusizeFlutterRepository(context: Context) {
-    private val apiService: VirtusizeAPIService = VirtusizeAPIService.getInstance(context, null)
+class VirtusizeFlutterRepository(context: Context, private val messageHandler: VirtusizeMessageHandler) {
+    private val apiService: VirtusizeAPIService = VirtusizeAPIService.getInstance(context, messageHandler)
     private val sharedPreferencesHelper: SharedPreferencesHelper = SharedPreferencesHelper.getInstance(context)
 
-    suspend fun productDataCheck(product: VirtusizeProduct) = apiService.productDataCheck(product).successData
+    suspend fun productDataCheck(product: VirtusizeProduct): ProductCheck? {
+        val productCheckResponse = apiService.productDataCheck(product)
+        sendEventsAndProductImage(product, productCheckResponse)
+        return productCheckResponse.successData
+    }
+
+    private suspend fun sendEventsAndProductImage(
+        product: VirtusizeProduct,
+        pdcResponse: VirtusizeApiResponse<ProductCheck>
+    ) {
+        if (pdcResponse.isSuccessful) {
+            sendEvent(
+                VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()),
+                pdcResponse.successData
+            )
+            val productCheck = pdcResponse.successData
+            productCheck?.data?.apply {
+                if (validProduct) {
+                    if (fetchMetaData) {
+                        if (product.imageUrl != null) {
+                            // If image URL is valid, send image URL to server
+                            val sendProductImageResponse =
+                                apiService.sendProductImageToBackend(product = product)
+                            if (!sendProductImageResponse.isSuccessful) {
+                                sendProductImageResponse.failureData?.let { messageHandler.onError(it) }
+                            }
+                        } else {
+                            VirtusizeErrorType.ImageUrlNotValid.throwError()
+                        }
+                    }
+
+                    sendEvent(
+                        VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName()),
+                        pdcResponse.successData
+                    )
+                }
+            }
+        }
+    }
+
+    private suspend fun sendEvent(vsEvent: VirtusizeEvent, productCheck: ProductCheck?) {
+        val sendEventResponse = apiService.sendEvent(
+            event = vsEvent,
+            withDataProduct = productCheck
+        )
+        if (sendEventResponse.isSuccessful) {
+            messageHandler.onEvent(vsEvent)
+        }
+    }
 
     suspend fun getStoreProduct(productId: Int) = apiService.getStoreProduct(productId).successData
 
