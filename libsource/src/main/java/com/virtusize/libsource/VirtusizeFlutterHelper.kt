@@ -3,6 +3,8 @@ package com.virtusize.libsource
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
+import com.virtusize.libsource.data.local.SizeComparisonRecommendedSize
+import com.virtusize.libsource.data.local.SizeRecommendationType
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler
 import com.virtusize.libsource.data.local.VirtusizeProduct
 import com.virtusize.libsource.data.remote.*
@@ -39,19 +41,27 @@ class VirtusizeFlutterHelper(private val context: Context) {
     }
 
     fun getRecommendationText(
-        userProducts: List<Product>,
+        selectedRecommendedType: SizeRecommendationType? = null,
+        userProducts: List<Product>?,
         storeProduct: Product,
         productTypes: List<ProductType>,
         bodyProfileRecommendedSize: BodyProfileRecommendedSize?,
         i18nLocalization: I18nLocalization
     ): String {
-        val userProductRecommendedSize = VirtusizeUtils.findBestFitProductSize(
-            userProducts = userProducts,
-            storeProduct = storeProduct,
-            productTypes = productTypes
-        )
+        var userProductRecommendedSize: SizeComparisonRecommendedSize? = null
+        var userBodyRecommendedSize: String? = null
 
-        val userBodyRecommendedSize = bodyProfileRecommendedSize?.sizeName
+        if(selectedRecommendedType != SizeRecommendationType.body) {
+            userProductRecommendedSize = VirtusizeUtils.findBestFitProductSize(
+                userProducts = userProducts,
+                storeProduct = storeProduct,
+                productTypes = productTypes
+            )
+        }
+
+        if(selectedRecommendedType != SizeRecommendationType.compareProduct) {
+            userBodyRecommendedSize = bodyProfileRecommendedSize?.sizeName
+        }
 
         return storeProduct.getRecommendationText(
             i18nLocalization,

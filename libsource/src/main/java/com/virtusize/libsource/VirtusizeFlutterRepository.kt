@@ -2,12 +2,16 @@ package com.virtusize.libsource
 
 import android.content.Context
 import com.virtusize.libsource.data.local.*
+import com.virtusize.libsource.data.parsers.UserAuthDataJsonParser
 import com.virtusize.libsource.data.remote.Product
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.data.remote.ProductType
 import com.virtusize.libsource.data.remote.UserBodyProfile
 import com.virtusize.libsource.network.VirtusizeAPIService
 import com.virtusize.libsource.network.VirtusizeApiResponse
+import org.json.JSONException
+import org.json.JSONObject
+import java.net.HttpURLConnection
 
 class VirtusizeFlutterRepository(context: Context, private val messageHandler: VirtusizeMessageHandler) {
     private val apiService: VirtusizeAPIService = VirtusizeAPIService.getInstance(context, messageHandler)
@@ -81,7 +85,25 @@ class VirtusizeFlutterRepository(context: Context, private val messageHandler: V
         return userSessionInfo?.userSessionResponse
     }
 
-    suspend fun getUserProducts() = apiService.getUserProducts().successData
+    fun updateUserAuthData(eventJsonObject: JSONObject) {
+        try {
+            val userAutoData = UserAuthDataJsonParser().parse(eventJsonObject)
+            sharedPreferencesHelper.storeBrowserId(userAutoData?.bid)
+            sharedPreferencesHelper.storeAuthToken(userAutoData?.auth)
+        } catch (e: JSONException) {
+            messageHandler.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(extraMessage = e.localizedMessage))
+        }
+    }
+
+    suspend fun getUserProducts(): List<Product>? {
+        val userProductsResponse = apiService.getUserProducts()
+        if(userProductsResponse.isSuccessful) {
+            return userProductsResponse.successData
+        } else if (userProductsResponse.failureData?.code == HttpURLConnection.HTTP_NOT_FOUND) {
+            return mutableListOf()
+        }
+        return null
+    }
 
     suspend fun getUserBodyProfile() = apiService.getUserBodyProfile().successData
 
@@ -95,5 +117,11 @@ class VirtusizeFlutterRepository(context: Context, private val messageHandler: V
         userBodyProfile
     ).successData
 
-    suspend fun deleteUser() = apiService.deleteUser().successData
+    suspend fun deleteUser(): Any? {
+        val response = apiService.deleteUser()
+        if(response.isSuccessful) {
+            sharedPreferencesHelper.storeAuthToken("")
+        }
+        return response.successData
+    }
 }
