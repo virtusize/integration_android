@@ -5,11 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.net.http.SslError
+import android.os.Build
 import android.os.Message
 import android.util.AttributeSet
-import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import android.webkit.*
+import androidx.annotation.RequiresApi
 
 @SuppressLint("SetJavaScriptEnabled")
 class VirtusizeWebView @JvmOverloads constructor(
@@ -23,9 +26,14 @@ class VirtusizeWebView @JvmOverloads constructor(
     }
 
     private var _webChromeClient: WebChromeClient? = null
+    private var _webViewClient: WebViewClient? = null
 
     override fun setWebChromeClient(client: WebChromeClient?) {
         _webChromeClient = client
+    }
+
+    override fun setWebViewClient(client: WebViewClient) {
+        _webViewClient = client
     }
 
     init {
@@ -34,6 +42,151 @@ class VirtusizeWebView @JvmOverloads constructor(
         settings.databaseEnabled = true
         settings.setSupportMultipleWindows(true)
         settings.javaScriptCanOpenWindowsAutomatically = true
+
+        super.setWebViewClient(object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                return _webViewClient?.shouldOverrideUrlLoading(view, url) ?: false
+            }
+
+            @RequiresApi(Build.VERSION_CODES.N)
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): Boolean {
+                return _webViewClient?.shouldOverrideUrlLoading(view, request) ?: false
+            }
+
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                _webViewClient?.onPageStarted(view, url, favicon)
+            }
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                view?.evaluateJavascript("javascript:window.virtusizeSNSEnabled = true;", null)
+                _webViewClient?.onPageFinished(view, url)
+            }
+
+            override fun onLoadResource(view: WebView?, url: String?) {
+                _webViewClient?.onLoadResource(view, url)
+            }
+
+            @RequiresApi(Build.VERSION_CODES.M)
+            override fun onPageCommitVisible(view: WebView?, url: String?) {
+                _webViewClient?.onPageCommitVisible(view, url)
+            }
+
+            override fun shouldInterceptRequest(
+                view: WebView?,
+                url: String?
+            ): WebResourceResponse? {
+                return _webViewClient?.shouldInterceptRequest(view, url)
+            }
+
+            override fun shouldInterceptRequest(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): WebResourceResponse? {
+                return _webViewClient?.shouldInterceptRequest(view, request)
+            }
+
+            override fun onReceivedError(
+                view: WebView?,
+                errorCode: Int,
+                description: String?,
+                failingUrl: String?
+            ) {
+                _webViewClient?.onReceivedError(view, errorCode, description, failingUrl)
+            }
+
+            @RequiresApi(Build.VERSION_CODES.M)
+            override fun onReceivedError(
+                view: WebView?,
+                request: WebResourceRequest?,
+                error: WebResourceError?
+            ) {
+                _webViewClient?.onReceivedError(view, request, error)
+            }
+
+            @RequiresApi(Build.VERSION_CODES.M)
+            override fun onReceivedHttpError(
+                view: WebView?,
+                request: WebResourceRequest?,
+                errorResponse: WebResourceResponse?
+            ) {
+                _webViewClient?.onReceivedHttpError(view, request, errorResponse)
+            }
+
+            override fun onFormResubmission(
+                view: WebView?,
+                dontResend: Message?,
+                resend: Message?
+            ) {
+                _webViewClient?.onFormResubmission(view, dontResend, resend)
+            }
+
+            override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
+                _webViewClient?.doUpdateVisitedHistory(view, url, isReload)
+            }
+
+            override fun onReceivedSslError(
+                view: WebView?,
+                handler: SslErrorHandler?,
+                error: SslError?
+            ) {
+                _webViewClient?.onReceivedSslError(view, handler, error)
+            }
+
+            override fun onReceivedClientCertRequest(view: WebView?, request: ClientCertRequest?) {
+                _webViewClient?.onReceivedClientCertRequest(view, request)
+            }
+
+            override fun onReceivedHttpAuthRequest(
+                view: WebView?,
+                handler: HttpAuthHandler?,
+                host: String?,
+                realm: String?
+            ) {
+                _webViewClient?.onReceivedHttpAuthRequest(view, handler, host, realm)
+            }
+
+            override fun shouldOverrideKeyEvent(view: WebView?, event: KeyEvent?): Boolean {
+                return _webViewClient?.shouldOverrideKeyEvent(view, event) ?: false
+            }
+
+            override fun onUnhandledKeyEvent(view: WebView?, event: KeyEvent?) {
+                _webViewClient?.onUnhandledKeyEvent(view, event)
+            }
+
+            override fun onScaleChanged(view: WebView?, oldScale: Float, newScale: Float) {
+                _webViewClient?.onScaleChanged(view, oldScale, newScale)
+            }
+
+            override fun onReceivedLoginRequest(
+                view: WebView?,
+                realm: String?,
+                account: String?,
+                args: String?
+            ) {
+                _webViewClient?.onReceivedLoginRequest(view, realm, account, args)
+            }
+
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onRenderProcessGone(
+                view: WebView?,
+                detail: RenderProcessGoneDetail?
+            ): Boolean {
+                return _webViewClient?.onRenderProcessGone(view, detail) ?: false
+            }
+
+            @RequiresApi(Build.VERSION_CODES.O_MR1)
+            override fun onSafeBrowsingHit(
+                view: WebView?,
+                request: WebResourceRequest?,
+                threatType: Int,
+                callback: SafeBrowsingResponse?
+            ) {
+                _webViewClient?.onSafeBrowsingHit(view, request, threatType, callback)
+            }
+        })
 
         super.setWebChromeClient(object : WebChromeClient() {
             override fun onCreateWindow(
@@ -47,9 +200,7 @@ class VirtusizeWebView @JvmOverloads constructor(
                 view.requestFocusNodeHref(message)
                 val url = message.data.getString("url")
                 val title = message.data.getString("title")
-                Log.d(TAG, "onCreateWindow ${message.data}")
                 if (resultMsg.obj != null && resultMsg.obj is WebView.WebViewTransport && isLinkFromVirtusize(url, title)) {
-                    Log.d(TAG, "Add the popup to the current web view")
                     val popupWebView = WebView(view.context)
                     popupWebView.settings.javaScriptEnabled = true
                     popupWebView.settings.javaScriptCanOpenWindowsAutomatically = true
@@ -157,32 +308,6 @@ class VirtusizeWebView @JvmOverloads constructor(
                 return _webChromeClient?.onJsBeforeUnload(view, url, message, result) ?: false
             }
 
-            override fun onExceededDatabaseQuota(
-                url: String?,
-                databaseIdentifier: String?,
-                quota: Long,
-                estimatedDatabaseSize: Long,
-                totalQuota: Long,
-                quotaUpdater: WebStorage.QuotaUpdater?
-            ) {
-                _webChromeClient?.onExceededDatabaseQuota(
-                    url,
-                    databaseIdentifier,
-                    quota,
-                    estimatedDatabaseSize,
-                    totalQuota,
-                    quotaUpdater
-                )
-            }
-
-            override fun onReachedMaxAppCacheSize(
-                requiredStorage: Long,
-                quota: Long,
-                quotaUpdater: WebStorage.QuotaUpdater?
-            ) {
-                _webChromeClient?.onReachedMaxAppCacheSize(requiredStorage, quota, quotaUpdater)
-            }
-
             override fun onGeolocationPermissionsShowPrompt(
                 origin: String?,
                 callback: GeolocationPermissions.Callback?
@@ -206,14 +331,6 @@ class VirtusizeWebView @JvmOverloads constructor(
                 return _webChromeClient?.onConsoleMessage(consoleMessage) ?: false
             }
 
-            override fun onJsTimeout(): Boolean {
-                return _webChromeClient?.onJsTimeout() ?: true
-            }
-
-            override fun onConsoleMessage(message: String?, lineNumber: Int, sourceID: String?) {
-                _webChromeClient?.onConsoleMessage(message, lineNumber, sourceID)
-            }
-
             override fun onShowFileChooser(
                 webView: WebView?,
                 filePathCallback: ValueCallback<Array<Uri>>?,
@@ -224,14 +341,6 @@ class VirtusizeWebView @JvmOverloads constructor(
                     filePathCallback,
                     fileChooserParams
                 ) ?: false
-            }
-
-            override fun onShowCustomView(
-                view: View?,
-                requestedOrientation: Int,
-                callback: CustomViewCallback?
-            ) {
-                _webChromeClient?.onShowCustomView(view, requestedOrientation, callback)
             }
 
             override fun getDefaultVideoPoster(): Bitmap? {

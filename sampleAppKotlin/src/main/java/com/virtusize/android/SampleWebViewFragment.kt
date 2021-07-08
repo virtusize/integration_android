@@ -39,14 +39,12 @@ class SampleWebViewFragment: DialogFragment() {
 
         webView = view.findViewById(R.id.webView)
         webView.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(
-                view: WebView?,
-                request: WebResourceRequest?
-            ): Boolean {
-                Log.d(TAG, "shouldOverrideUrlLoading ${view?.url}")
-                return super.shouldOverrideUrlLoading(view, request)
+            override fun onPageFinished(view: WebView?, url: String?) {
+                Log.d(TAG, "onPageFinished ${view?.url}")
+                super.onPageFinished(view, url)
             }
         }
+
         webView.webChromeClient = object : WebChromeClient() {
             override fun onCreateWindow(
                 view: WebView?,
