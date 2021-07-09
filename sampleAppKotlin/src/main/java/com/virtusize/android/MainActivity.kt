@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
                 fragmentTransaction.remove(fragment)
             }
             fragmentTransaction.addToBackStack(null)
-            SampleWebViewFragment().show(fragmentTransaction, Constants.FRAG_TAG)
+            WebViewFragment().show(fragmentTransaction, Constants.FRAG_TAG)
         }
 
         /*
