@@ -46,7 +46,7 @@ You need a unique API key and an Admin account, only available to Virtusize cust
   - [注文データ向けに*VirtusizeOrder* オブジェクトを作成](#2-注文データ向けにvirtusizeorder-オブジェクトを作成)
   - [注文情報の送信](#3-注文情報の送信) 
 
-- [Fix SNS Login in Virtusize for native Webview apps](#fix-sns-login-in-virtusize-for-native-webview-apps)
+- [Enable SNS Login in Virtusize for native Webview apps](#enable-sns-login-in-virtusize-for-native-webview-apps)
 
 - [Examples](#examples)
 

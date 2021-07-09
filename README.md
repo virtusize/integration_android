@@ -46,7 +46,7 @@ You need a unique API key and an Admin account, only available to Virtusize cust
   - [Create a *VirtusizeOrder* object for order data](#2-create-a-virtusizeorder-object-for-order-data)
   - [Send an Order](#3-send-an-order) 
 
-- [Fix SNS Login in Virtusize for native Webview apps](#fix-sns-login-in-virtusize-for-native-webview-apps)
+- [Enable SNS Login in Virtusize for native Webview apps](#enable-sns-login-in-virtusize-for-native-webview-apps)
 
 - [Examples](#examples)
 
