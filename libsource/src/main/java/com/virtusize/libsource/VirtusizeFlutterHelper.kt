@@ -5,11 +5,13 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.SizeComparisonRecommendedSize
+import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser
 import com.virtusize.libsource.data.remote.*
 import com.virtusize.libsource.network.VirtusizeApi
 import com.virtusize.libsource.ui.VirtusizeWebViewFragment
 import com.virtusize.libsource.util.Constants
 import com.virtusize.libsource.util.VirtusizeUtils
+import com.virtusize.libsource.util.trimI18nText
 
 class VirtusizeFlutterHelper(private val context: Context) {
     private var virtusizeDialogFragment: VirtusizeWebViewFragment = VirtusizeWebViewFragment()
@@ -72,7 +74,7 @@ class VirtusizeFlutterHelper(private val context: Context) {
             i18nLocalization,
             userProductRecommendedSize,
             userBodyRecommendedSize
-        )
+        ).trimI18nText(I18nLocalizationJsonParser.TrimType.MULTIPLELINES)
     }
 
     fun getPrivacyPolicyLink(language: VirtusizeLanguage?): String? {
