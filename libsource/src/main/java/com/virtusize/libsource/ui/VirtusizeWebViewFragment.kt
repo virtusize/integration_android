@@ -67,6 +67,7 @@ class VirtusizeWebViewFragment: DialogFragment() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 if(url != null && url.contains(virtusizeWebAppUrl)) {
                     binding.webView.evaluateJavascript(vsParamsFromSDKScript, null)
+                    binding.webView.evaluateJavascript("javascript:window.virtusizeSNSEnabled = true;", null)
                     getBrowserIDFromCookies()?.let { bid ->
                         if(bid != sharedPreferencesHelper.getBrowserId()) {
                             sharedPreferencesHelper.storeBrowserId(bid)
