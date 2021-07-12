@@ -12,7 +12,7 @@ import com.virtusize.libsource.data.remote.ProductSize
  * @see ProductSize
  * @see Product
  */
-internal data class SizeComparisonRecommendedSize(
+data class SizeComparisonRecommendedSize(
     var bestFitScore: Float = 0f,
     var bestStoreProductSize: ProductSize? = null,
     var bestUserProduct: Product? = null,
