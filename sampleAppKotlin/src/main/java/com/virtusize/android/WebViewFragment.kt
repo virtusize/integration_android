@@ -8,10 +8,10 @@ import android.webkit.*
 import androidx.fragment.app.DialogFragment
 import com.virtusize.libsource.VirtusizeWebView
 
-class SampleWebViewFragment: DialogFragment() {
+class WebViewFragment: DialogFragment() {
 
     companion object {
-        private val TAG = SampleWebViewFragment::class.simpleName
+        private val TAG = WebViewFragment::class.simpleName
     }
 
     private lateinit var webView: VirtusizeWebView
@@ -39,14 +39,16 @@ class SampleWebViewFragment: DialogFragment() {
 
         webView = view.findViewById(R.id.webView)
         webView.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(
-                view: WebView?,
-                request: WebResourceRequest?
-            ): Boolean {
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String): Boolean {
                 Log.d(TAG, "shouldOverrideUrlLoading ${view?.url}")
-                return super.shouldOverrideUrlLoading(view, request)
+                return false
+            }
+            override fun onPageFinished(view: WebView?, url: String?) {
+                Log.d(TAG, "onPageFinished ${view?.url}")
+                super.onPageFinished(view, url)
             }
         }
+
         webView.webChromeClient = object : WebChromeClient() {
             override fun onCreateWindow(
                 view: WebView?,
@@ -54,7 +56,7 @@ class SampleWebViewFragment: DialogFragment() {
                 isUserGesture: Boolean,
                 resultMsg: Message?
             ): Boolean {
-                Log.d(TAG, "onCreateWindow")
+                Log.d(TAG, "onCreateWindow ${view?.url}")
                 return super.onCreateWindow(view, isDialog, isUserGesture, resultMsg)
             }
 

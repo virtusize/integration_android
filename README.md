@@ -46,7 +46,7 @@ You need a unique API key and an Admin account, only available to Virtusize cust
   - [Create a *VirtusizeOrder* object for order data](#2-create-a-virtusizeorder-object-for-order-data)
   - [Send an Order](#3-send-an-order) 
 
-- [Fix SNS Login in Virtusize for native Webview apps](#fix-sns-login-in-virtusize-for-native-webview-apps)
+- [Enable SNS Login in Virtusize for native Webview apps](#enable-sns-login-in-virtusize-for-native-webview-apps)
 
 - [Examples](#examples)
 
@@ -83,7 +83,7 @@ In your app `build.gradle` file, add the following dependencies:
 
 ```groovy
 dependencies {
-  implementation 'com.github.virtusize:integration_android:2.2'
+  implementation 'com.github.virtusize:integration_android:2.2.1'
 }
 ```
 
@@ -798,9 +798,9 @@ Call the `Virtusize.sendOrder` method in your activity or fragment when the user
 
 
 
-## Fix SNS Login in Virtusize for native Webview apps
+## Enable SNS Login in Virtusize for native Webview apps
 
-The built-in WebView blocks any popup windows by default. To let users to sign up or log in with the web version of Virtusize integration in your webview, please replace your `WebView` with **`VirtusizeWebView`** in your Kotlin or Java file and XML file to fix SNS login in Virtusize.
+The built-in WebView blocks any popup windows by default. To let users to sign up or log in with the web version of Virtusize integration in your webview, please replace your `WebView` with **`VirtusizeWebView`** in your Kotlin or Java file and XML file to fix and enable SNS login in Virtusize.
 
 - Kotlin/Java
 

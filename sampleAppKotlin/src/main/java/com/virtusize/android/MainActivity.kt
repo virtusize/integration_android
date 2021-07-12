@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.virtusize.libsource.data.local.*
-import com.virtusize.libsource.data.local.VirtusizeOrder
 import com.virtusize.libsource.util.Constants
 import com.virtusize.libsource.util.dpInPx
 import com.virtusize.libsource.util.spToPx
@@ -96,7 +95,7 @@ class MainActivity : AppCompatActivity() {
                 fragmentTransaction.remove(fragment)
             }
             fragmentTransaction.addToBackStack(null)
-            SampleWebViewFragment().show(fragmentTransaction, Constants.FRAG_TAG)
+            WebViewFragment().show(fragmentTransaction, Constants.FRAG_TAG)
         }
 
         /*
