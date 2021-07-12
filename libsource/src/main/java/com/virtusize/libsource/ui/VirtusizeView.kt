@@ -2,7 +2,7 @@ package com.virtusize.libsource.ui
 
 import android.content.Context
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.network.VirtusizeApi
@@ -26,7 +26,7 @@ interface VirtusizeView {
      * @see VirtusizeParams
      */
     fun setup(params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
-        virtusizeDialogFragment.setupMessageHandler(messageHandler, this)
+        virtusizeDialogFragment.setupMessageHandler(messageHandler)
     }
 
     /**
@@ -50,7 +50,7 @@ interface VirtusizeView {
      */
     fun openVirtusizeWebView(context: Context) {
         virtusizeMessageHandler.onEvent(VirtusizeEvent(VirtusizeEvents.UserOpenedWidget.getEventName()))
-        val fragmentTransaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
+        val fragmentTransaction = (context as FragmentActivity).supportFragmentManager.beginTransaction()
         val previousFragment = context.supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
         previousFragment?.let {fragment ->
             fragmentTransaction.remove(fragment)

@@ -13,7 +13,7 @@ internal class ProductCheckJsonParser: VirtusizeJsonParser<ProductCheck> {
         }
         val productId = JsonUtils.optString(json, FIELD_PRODUCT_ID)
         val name = JsonUtils.optString(json, FIELD_NAME)
-        return ProductCheck(data, productId, name)
+        return ProductCheck(data, productId, name, json.toString())
     }
 
     companion object {

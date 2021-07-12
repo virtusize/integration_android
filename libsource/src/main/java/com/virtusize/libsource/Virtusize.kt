@@ -24,8 +24,12 @@ import kotlinx.coroutines.launch
  */
 class Virtusize(
     private val context: Context,
-    private val params: VirtusizeParams
+    internal val params: VirtusizeParams
 ) {
+
+    val displayLanguage: VirtusizeLanguage?
+        get() = params.language
+
     // Registered message handlers
     private val messageHandlers = mutableListOf<VirtusizeMessageHandler>()
 

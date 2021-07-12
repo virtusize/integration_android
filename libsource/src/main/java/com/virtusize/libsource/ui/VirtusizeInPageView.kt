@@ -7,7 +7,11 @@ import android.widget.RelativeLayout
 /**
  * An abstract class representing the VirtusizeView that is a RelativeLayout
  */
-abstract class VirtusizeInPageView(context: Context, attrs: AttributeSet): VirtusizeView, RelativeLayout(context, attrs) {
+abstract class VirtusizeInPageView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+): VirtusizeView, RelativeLayout(context, attrs, defStyleAttr) {
     // The text size of the message to be set
     var messageTextSize: Float = -1f
         set(value) {
