@@ -69,7 +69,7 @@ data class VirtusizeOrderItem @JvmOverloads constructor(
             )
     }
 
-    private companion object {
+    companion object {
         private const val PARAM_PRODUCT_ID = "externalProductId"
         private const val PARAM_SIZE = "size"
         private const val PARAM_SIZE_ALIAS = "sizeAlias"
@@ -81,5 +81,21 @@ data class VirtusizeOrderItem @JvmOverloads constructor(
         private const val PARAM_CURRENCY = "currency"
         private const val PARAM_QUANTITY = "quantity"
         private const val PARAM_URL = "url"
+
+        internal fun parseMap(orderItemMap: Map<String, Any?>): VirtusizeOrderItem {
+            return VirtusizeOrderItem(
+                productId = orderItemMap[PARAM_PRODUCT_ID] as String,
+                size = orderItemMap[PARAM_SIZE] as String,
+                sizeAlias = orderItemMap[PARAM_SIZE_ALIAS] as? String,
+                variantId = orderItemMap[PARAM_VARIANT_ID] as? String,
+                imageUrl = orderItemMap[PARAM_IMAGE_URL] as String,
+                color = orderItemMap[PARAM_COLOR] as? String,
+                gender = orderItemMap[PARAM_GENDER] as? String,
+                unitPrice = orderItemMap[PARAM_UNIT_PRICE] as Double,
+                currency = orderItemMap[PARAM_CURRENCY] as String,
+                quantity = orderItemMap[PARAM_QUANTITY] as Int,
+                url = orderItemMap[PARAM_URL] as? String
+            )
+        }
     }
 }

@@ -124,4 +124,27 @@ class VirtusizeFlutterRepository(context: Context, private val messageHandler: V
         }
         return response.successData
     }
+
+    suspend fun sendOrder(
+        virtusize: Virtusize?,
+        orderMap: Map<String, Any?>,
+        onSuccess: ((Any?) -> Unit)?,
+        onError: ((VirtusizeError) -> Unit)?
+    ) {
+        if (virtusize?.params?.externalUserId.isNullOrEmpty()) {
+            VirtusizeErrorType.UserIdNullOrEmpty.throwError()
+        }
+        val storeInfoResponse = apiService.getStoreInfo()
+        if (storeInfoResponse.isSuccessful) {
+            val sendOrderResponse =
+                apiService.sendOrder(storeInfoResponse.successData?.region, VirtusizeOrder.parseMap(orderMap))
+            if (sendOrderResponse.isSuccessful) {
+                onSuccess?.invoke(sendOrderResponse.successData)
+            } else {
+                sendOrderResponse.failureData?.let { onError?.invoke(it) }
+            }
+        } else {
+            storeInfoResponse.failureData?.let { onError?.invoke(it) }
+        }
+    }
 }

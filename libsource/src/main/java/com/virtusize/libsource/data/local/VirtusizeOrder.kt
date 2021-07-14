@@ -48,11 +48,22 @@ data class VirtusizeOrder @JvmOverloads constructor(
         this.region = region
     }
 
-    private companion object {
+    companion object {
         private const val PARAM_API_KEY = "apiKey"
         private const val PARAM_EXTERNAL_ORDER_ID = "externalOrderId"
         private const val PARAM_EXTERNAL_USER_ID = "externalUserId"
         private const val PARAM_REGION = "region"
         private const val PARAM_ITEMS = "items"
+
+        fun parseMap(orderMap: Map<String, Any?>): VirtusizeOrder {
+            return VirtusizeOrder(
+                externalOrderId = orderMap[PARAM_EXTERNAL_ORDER_ID] as String,
+                items = (orderMap[PARAM_ITEMS] as List<Map<String, Any?>>).map { orderItemMap ->
+                    VirtusizeOrderItem.parseMap(
+                        orderItemMap
+                    )
+                }.toMutableList()
+            )
+        }
     }
 }
