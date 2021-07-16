@@ -21,7 +21,7 @@ class VirtusizeBuilder {
     private var env = VirtusizeEnvironment.GLOBAL
     private var context: Context? = null
     private var region: VirtusizeRegion = VirtusizeRegion.JP
-    private var language: VirtusizeLanguage? = region.defaultLanguage()
+    private var language: VirtusizeLanguage? = null
     private var allowedLanguages: MutableList<VirtusizeLanguage> = VirtusizeLanguage.values().asList().toMutableList()
     private var showSGI: Boolean = false
     private var detailsPanelCards: MutableList<VirtusizeInfoCategory> = VirtusizeInfoCategory.values().asList().toMutableList()
@@ -131,7 +131,7 @@ class VirtusizeBuilder {
             apiKey = apiKey,
             environment = env,
             region = region,
-            language = language,
+            language = language ?: region.defaultLanguage(),
             allowedLanguages = allowedLanguages,
             virtusizeProduct = null,
             externalUserId = userId,
