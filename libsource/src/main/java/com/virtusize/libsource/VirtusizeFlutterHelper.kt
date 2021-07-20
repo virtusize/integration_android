@@ -19,7 +19,6 @@ class VirtusizeFlutterHelper(private val context: Context) {
     fun openVirtusizeView(
         virtusize: Virtusize?,
         product: VirtusizeProduct,
-        productDataCheck: ProductCheck,
         messageHandler: VirtusizeMessageHandler
     ) {
         val fragmentTransaction = (context as FragmentActivity).supportFragmentManager.beginTransaction()
@@ -32,7 +31,7 @@ class VirtusizeFlutterHelper(private val context: Context) {
         args.putString(Constants.URL_KEY, VirtusizeApi.virtusizeWebViewURL())
         virtusize?.params?.let { params ->
             params.virtusizeProduct = product
-            params.virtusizeProduct?.productCheckData = productDataCheck
+            params.virtusizeProduct?.productCheckData = product.productCheckData
             args.putString(Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY, "javascript:vsParamsFromSDK(${params.vsParamsString()})")
         }
         virtusizeDialogFragment.arguments = args
