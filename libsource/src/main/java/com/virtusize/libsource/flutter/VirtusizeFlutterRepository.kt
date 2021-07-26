@@ -1,6 +1,8 @@
-package com.virtusize.libsource
+package com.virtusize.libsource.flutter
 
 import android.content.Context
+import com.virtusize.libsource.SharedPreferencesHelper
+import com.virtusize.libsource.Virtusize
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.parsers.UserAuthDataJsonParser
 import com.virtusize.libsource.data.remote.Product
@@ -15,7 +17,8 @@ import java.net.HttpURLConnection
 
 class VirtusizeFlutterRepository(context: Context, private val messageHandler: VirtusizeMessageHandler) {
     private val apiService: VirtusizeAPIService = VirtusizeAPIService.getInstance(context, messageHandler)
-    private val sharedPreferencesHelper: SharedPreferencesHelper = SharedPreferencesHelper.getInstance(context)
+    private val sharedPreferencesHelper: SharedPreferencesHelper =
+        SharedPreferencesHelper.getInstance(context)
 
     suspend fun productDataCheck(product: VirtusizeProduct): ProductCheck? {
         val productCheckResponse = apiService.productDataCheck(product)

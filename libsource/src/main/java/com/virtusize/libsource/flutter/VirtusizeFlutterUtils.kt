@@ -1,42 +1,32 @@
-package com.virtusize.libsource
+package com.virtusize.libsource.flutter
 
+import android.app.Activity
 import android.content.Context
-import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
+import com.virtusize.libsource.R
+import com.virtusize.libsource.Virtusize
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.SizeComparisonRecommendedSize
 import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser
 import com.virtusize.libsource.data.remote.*
-import com.virtusize.libsource.network.VirtusizeApi
 import com.virtusize.libsource.ui.VirtusizeWebViewFragment
-import com.virtusize.libsource.util.Constants
 import com.virtusize.libsource.util.VirtusizeUtils
 import com.virtusize.libsource.util.trimI18nText
 
-class VirtusizeFlutterHelper(private val context: Context) {
-    private var virtusizeDialogFragment: VirtusizeWebViewFragment = VirtusizeWebViewFragment()
+object VirtusizeFlutterUtils {
 
     fun openVirtusizeView(
+        activity: Activity,
         virtusize: Virtusize?,
         product: VirtusizeProduct,
         messageHandler: VirtusizeMessageHandler
     ) {
-        val fragmentTransaction = (context as FragmentActivity).supportFragmentManager.beginTransaction()
-        val previousFragment = context.supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
-        previousFragment?.let {fragment ->
-            fragmentTransaction.remove(fragment)
-        }
-        fragmentTransaction.addToBackStack(null)
-        val args = Bundle()
-        args.putString(Constants.URL_KEY, VirtusizeApi.virtusizeWebViewURL())
-        virtusize?.params?.let { params ->
-            params.virtusizeProduct = product
-            params.virtusizeProduct?.productCheckData = product.productCheckData
-            args.putString(Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY, "javascript:vsParamsFromSDK(${params.vsParamsString()})")
-        }
-        virtusizeDialogFragment.arguments = args
-        virtusizeDialogFragment.setupMessageHandler(messageHandler)
-        virtusizeDialogFragment.show(fragmentTransaction, Constants.FRAG_TAG)
+        VirtusizeUtils.openVirtusizeWebView(
+            activity,
+            virtusize?.params,
+            VirtusizeWebViewFragment(),
+            product,
+            messageHandler
+        )
     }
 
     fun getUserProductRecommendedSize(
@@ -76,7 +66,7 @@ class VirtusizeFlutterHelper(private val context: Context) {
         ).trimI18nText(I18nLocalizationJsonParser.TrimType.MULTIPLELINES)
     }
 
-    fun getPrivacyPolicyLink(language: VirtusizeLanguage?): String? {
+    fun getPrivacyPolicyLink(context: Context, language: VirtusizeLanguage?): String? {
         val configuredContext = VirtusizeUtils.getConfiguredContext(
             context,
             language

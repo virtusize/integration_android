@@ -27,7 +27,8 @@ class Virtusize(
     internal val params: VirtusizeParams
 ) {
 
-    val displayLanguage: VirtusizeLanguage?
+    // The getter of the display language
+    val displayLanguage: VirtusizeLanguage
         get() = params.language
 
     // Registered message handlers
@@ -317,6 +318,9 @@ class Virtusize(
         }
     }
 
+    /**
+     * Returns a boolean value to tell whether the VirtusizeView array contains at least one VirtusizeInPageView
+     */
     private fun virtusizeViewsContainInPage(): Boolean {
         for(virtusizeView in virtusizeViews) {
             if(virtusizeView is VirtusizeInPageView) {

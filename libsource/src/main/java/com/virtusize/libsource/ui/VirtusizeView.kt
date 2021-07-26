@@ -1,12 +1,9 @@
 package com.virtusize.libsource.ui
 
 import android.content.Context
-import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.ProductCheck
-import com.virtusize.libsource.network.VirtusizeApi
-import com.virtusize.libsource.util.Constants
+import com.virtusize.libsource.util.VirtusizeUtils
 
 /**
  * An interface for the Virtusize specific views such as VirtusizeButton and VirtusizeInPageView
@@ -26,6 +23,7 @@ interface VirtusizeView {
      * @see VirtusizeParams
      */
     fun setup(params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
+        // TODO: bind the product to this VirtusizeView
         virtusizeDialogFragment.setupMessageHandler(messageHandler)
     }
 
@@ -49,19 +47,6 @@ interface VirtusizeView {
      * A clickable function to open the Virtusize WebView
      */
     fun openVirtusizeWebView(context: Context) {
-        virtusizeMessageHandler.onEvent(VirtusizeEvent(VirtusizeEvents.UserOpenedWidget.getEventName()))
-        val fragmentTransaction = (context as FragmentActivity).supportFragmentManager.beginTransaction()
-        val previousFragment = context.supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
-        previousFragment?.let {fragment ->
-            fragmentTransaction.remove(fragment)
-        }
-        fragmentTransaction.addToBackStack(null)
-        val args = Bundle()
-        args.putString(Constants.URL_KEY, VirtusizeApi.virtusizeWebViewURL())
-        virtusizeParams?.let {
-            args.putString(Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY, "javascript:vsParamsFromSDK(${it.vsParamsString()})")
-        }
-        virtusizeDialogFragment.arguments = args
-        virtusizeDialogFragment.show(fragmentTransaction, Constants.FRAG_TAG)
+        VirtusizeUtils.openVirtusizeWebView(context, virtusizeParams, virtusizeDialogFragment)
     }
 }

@@ -7,6 +7,7 @@ import com.virtusize.libsource.data.local.SizeComparisonRecommendedSize
 import com.virtusize.libsource.data.parsers.UserAuthDataJsonParser
 import com.virtusize.libsource.data.remote.I18nLocalization
 import com.virtusize.libsource.data.remote.Product
+import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.data.remote.ProductType
 import com.virtusize.libsource.network.VirtusizeAPIService
 import com.virtusize.libsource.util.VirtusizeUtils
@@ -54,13 +55,11 @@ internal class VirtusizeRepository(
             presenter?.finishedProductCheck(productCheck)
 
             // Send API Event UserSawProduct
-            val sendEventResponse = virtusizeAPIService.sendEvent(
-                event = VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()),
-                withDataProduct = productCheck
+            sendEvent(
+                VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()),
+                productCheck
             )
-            if(sendEventResponse.isSuccessful) {
-                messageHandler.onEvent(VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()))
-            }
+
             productCheck.data?.apply {
                 if (validProduct) {
                     if (fetchMetaData) {
@@ -74,14 +73,13 @@ internal class VirtusizeRepository(
                             VirtusizeErrorType.ImageUrlNotValid.throwError()
                         }
                     }
+
                     // Send API Event UserSawWidgetButton
-                    virtusizeAPIService.sendEvent(
-                        event = VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName()),
-                        withDataProduct = productCheck
+                    sendEvent(
+                        VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName()),
+                        productCheck
                     )
-                    if (sendEventResponse.isSuccessful) {
-                        messageHandler.onEvent(VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName()))
-                    }
+
                     presenter?.onValidProductId(productDataId)
                 } else {
                     presenter?.hasInPageError(VirtusizeErrorType.InvalidProduct.virtusizeError(extraMessage = virtusizeProduct.externalId))
@@ -89,6 +87,16 @@ internal class VirtusizeRepository(
             }
         } else {
             productCheckResponse.failureData?.let { messageHandler.onError(it) }
+        }
+    }
+
+    private suspend fun sendEvent(vsEvent: VirtusizeEvent, productCheck: ProductCheck?) {
+        val sendEventResponse = virtusizeAPIService.sendEvent(
+            event = vsEvent,
+            withDataProduct = productCheck
+        )
+        if (sendEventResponse.isSuccessful) {
+            messageHandler.onEvent(vsEvent)
         }
     }
 
