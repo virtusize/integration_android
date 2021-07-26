@@ -7,7 +7,7 @@ import org.json.JSONObject
 /**
  * This class parses a JSONObject to the [BodyProfileRecommendedSize] object
  */
-class BodyProfileRecommendedSizeJsonParser(private val product: Product) : VirtusizeJsonParser<BodyProfileRecommendedSize> {
+internal class BodyProfileRecommendedSizeJsonParser(private val product: Product) : VirtusizeJsonParser<BodyProfileRecommendedSize> {
 
     override fun parse(json: JSONObject): BodyProfileRecommendedSize? {
         val sizeName = json.getString(FIELD_NAME)

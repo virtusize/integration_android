@@ -7,5 +7,5 @@ package com.virtusize.libsource.data.remote
  */
 data class BodyProfileRecommendedSize(
     val product: Product,
-    val sizeName: String
+    internal val sizeName: String
 )
