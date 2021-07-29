@@ -90,6 +90,11 @@ internal class VirtusizeRepository(
         }
     }
 
+    /**
+     * Sends a Virtusize event with the product data check data to the Virtusize API
+     * @param vsEvent the [VirtusizeEvent]
+     * @param productCheck the [ProductCheck] data
+     */
     private suspend fun sendEvent(vsEvent: VirtusizeEvent, productCheck: ProductCheck?) {
         val sendEventResponse = virtusizeAPIService.sendEvent(
             event = vsEvent,

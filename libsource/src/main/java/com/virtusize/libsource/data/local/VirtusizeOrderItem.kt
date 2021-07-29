@@ -82,6 +82,9 @@ data class VirtusizeOrderItem @JvmOverloads constructor(
         private const val PARAM_QUANTITY = "quantity"
         private const val PARAM_URL = "url"
 
+        /**
+         * Parses a Map of the order item data to a [VirtusizeOrderItem] object
+         */
         internal fun parseMap(orderItemMap: Map<String, Any?>): VirtusizeOrderItem {
             return VirtusizeOrderItem(
                 productId = orderItemMap[PARAM_PRODUCT_ID] as String,

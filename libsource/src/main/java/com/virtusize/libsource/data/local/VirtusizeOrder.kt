@@ -55,6 +55,9 @@ data class VirtusizeOrder @JvmOverloads constructor(
         private const val PARAM_REGION = "region"
         private const val PARAM_ITEMS = "items"
 
+        /**
+         * Parses a Map of the order data to a [VirtusizeOrder] object
+         */
         fun parseMap(orderMap: Map<String, Any?>): VirtusizeOrder {
             return VirtusizeOrder(
                 externalOrderId = orderMap[PARAM_EXTERNAL_ORDER_ID] as String,
