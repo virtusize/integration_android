@@ -6,7 +6,7 @@ import org.json.JSONObject
 /**
  * This class parses a JSONObject to the [Product] object for a store product
  */
-class StoreProductJsonParser : ProductJsonParser() {
+internal class StoreProductJsonParser : ProductJsonParser() {
     override fun parse(json: JSONObject): Product? {
         val product = super.parse(json)
         product?.externalId = json.optString(FIELD_EXTERNAL_ID)

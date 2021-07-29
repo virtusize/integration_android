@@ -296,7 +296,7 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
             sharedPreferencesHelper,
             messageHandler
         )
-            .setJsonParser(BodyProfileRecommendedSizeJsonParser())
+            .setJsonParser(BodyProfileRecommendedSizeJsonParser(storeProduct))
             .execute(apiRequest)
     }
 
