@@ -63,9 +63,6 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
 
     private var userBestFitProduct: Product? = null
 
-    var onInPageCardViewSizeChanged: ((Int, Int) -> Unit)? = null
-    var onFinishLoading: (() -> Unit)? = null
-
     // The VirtusizeViewStyle that clients can choose to use for this InPage Standard view
     var virtusizeViewStyle = VirtusizeViewStyle.NONE
         set(value) {
@@ -123,7 +120,6 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
             if (width < 411.dpInPx) {
                 smallInPageWidth = true
             }
-            onInPageCardViewSizeChanged?.invoke(width, height)
         }
 
         setStyle()
@@ -246,7 +242,6 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
             inpageTopText.visibility = View.GONE
             inpageBottomText.text = splitTexts[0]
         }
-        onFinishLoading?.invoke()
     }
 
     /**
@@ -258,7 +253,6 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
         inpageCardView.cardElevation = 0f
         inpageCardView.setOnClickListener {}
         inpageButton.setOnClickListener {}
-        onFinishLoading?.invoke()
     }
 
     /**

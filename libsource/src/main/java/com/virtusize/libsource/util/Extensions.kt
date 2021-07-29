@@ -101,18 +101,6 @@ val Int.dpInPx: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
 /**
- * Integer extension function to convert px to dp
- */
-val Int.pxInDp: Int
-    get() = (this / Resources.getSystem().displayMetrics.density).toInt()
-
-/**
- * Float extension function to convert dp to px
- */
-val Float.dpInPx: Int
-    get() = (this * Resources.getSystem().displayMetrics.density).toInt()
-
-/**
  * Float extension function to convert sp to px
 */
 val Float.spToPx: Float
