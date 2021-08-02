@@ -185,7 +185,7 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
        .Virtusize
        .setupVirtusizeProduct(
            VirtusizeProduct(
-               externalId = "694",
+               externalId = "vs_dress",
                imageUrl = "http://www.image.com/goods/12345.jpg"
            )
        )
@@ -196,7 +196,7 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
    ```java
    app.Virtusize.setupVirtusizeProduct(
            new VirtusizeProduct(
-                   "694",
+                   "vs_dress",
                    "http://www.image.com/goods/12345.jpg"
            )
    );

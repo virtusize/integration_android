@@ -186,7 +186,7 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
        .Virtusize
        .setupVirtusizeProduct(
            VirtusizeProduct(
-               externalId = "694",
+               externalId = "vs_dress",
                imageUrl = "http://www.image.com/goods/12345.jpg"
            )
        )
@@ -197,7 +197,7 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
    ```java
    app.Virtusize.setupVirtusizeProduct(
            new VirtusizeProduct(
-                   "694",
+                   "vs_dress",
                    "http://www.image.com/goods/12345.jpg"
            )
    );
