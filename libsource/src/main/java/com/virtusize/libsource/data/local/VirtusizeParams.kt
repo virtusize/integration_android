@@ -21,7 +21,7 @@ data class VirtusizeParams(
     internal var apiKey: String?,
     internal var environment: VirtusizeEnvironment,
     private var region: VirtusizeRegion,
-    internal val language: VirtusizeLanguage?,
+    internal val language: VirtusizeLanguage,
     private val allowedLanguages: MutableList<VirtusizeLanguage>,
     internal var virtusizeProduct: VirtusizeProduct?,
     internal var externalUserId: String?,
@@ -40,7 +40,7 @@ data class VirtusizeParams(
                 (if (sessionData != null) "$PARAM_SESSION_DATA: $sessionData, " else "") +
                 "$PARAM_STORE_PRODUCT_ID: '${virtusizeProduct?.productCheckData?.productId}', " +
                 (if (externalUserId != null) "$PARAM_EXTERNAL_USER_ID: '$externalUserId', " else "") +
-                "$PARAM_LANGUAGE: '${language?.value}', " +
+                "$PARAM_LANGUAGE: '${language.value}', " +
                 "$PARAM_SHOW_SGI: $showSGI, " +
                 "$PARAM_ALLOW_LANGUAGES: ${allowedLanguages.map { "{label: \"${it.label}\", value: \"${it.value}\"}" }}, " +
                     "$PARAM_DETAILS_PANEL_CARDS: ${detailsPanelCards.map { "\"${it.value}\"" }}, " +

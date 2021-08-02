@@ -7,7 +7,7 @@ import org.json.JSONObject
 /**
  * This class parses a JSONObject to the [Product] object
  */
-open class ProductJsonParser: VirtusizeJsonParser<Product> {
+internal open class ProductJsonParser: VirtusizeJsonParser<Product> {
 
     override fun parse(json: JSONObject): Product? {
         val id = json.optInt(FIELD_ID)

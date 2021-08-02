@@ -46,6 +46,7 @@
     <Button
         android:id="@+id/inpageMiniButton"
         style="@style/VirtusizeInPageButtonStyle"
+        android:drawableEnd="@drawable/ic_arrow_right_black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -60,5 +61,4 @@
         android:textAllCaps="false"
         android:textSize="@dimen/virtusize_inpage_default_textSize"
         app:backgroundTint="@color/virtusizeWhite" />
-
 </RelativeLayout>

@@ -12,7 +12,6 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewTreeObserver.OnPreDrawListener
 import android.widget.LinearLayout
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
@@ -25,15 +24,14 @@ import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.Product
 import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.util.*
-import com.virtusize.libsource.util.FontUtils
-import com.virtusize.libsource.util.VirtusizeUtils
 import kotlinx.android.synthetic.main.view_inpage_standard.view.*
 
 
-class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : VirtusizeInPageView(
-    context,
-    attrs
-) {
+class VirtusizeInPageStandard @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : VirtusizeInPageView(context, attrs, defStyleAttr) {
 
     /**
      * @see VirtusizeView.virtusizeParams
@@ -117,6 +115,12 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         buttonTextSize = attrsArray.getDimension(R.styleable.VirtusizeInPageStandard_inPageStandardButtonTextSize, -1f)
 
         attrsArray.recycle()
+
+        inpageCardView.onSizeChanged { width, height ->
+            if (width < 411.dpInPx) {
+                smallInPageWidth = true
+            }
+        }
 
         setStyle()
     }
@@ -324,6 +328,12 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             }
         }
 
+        // Set the background color of the inpage card view
+        inpageCardView.setBackgroundColor(ContextCompat.getColor(
+            context,
+            R.color.virtusizeWhite
+        ))
+
         // Set horizontal margins
         val inPageStandardFooterTopMargin =
             if (horizontalMargin >= 2.dpInPx) 10.dpInPx - horizontalMargin else horizontalMargin + 8.dpInPx
@@ -343,19 +353,6 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             horizontalMargin + 2.dpInPx,
             0
         )
-
-        viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
-            override fun onPreDraw(): Boolean {
-                if (viewTreeObserver.isAlive) {
-                    viewTreeObserver.removeOnPreDrawListener(this)
-                }
-                if (width < 411.dpInPx) {
-                    smallInPageWidth = true
-                }
-                return true
-            }
-        })
-
     }
 
     /**
@@ -368,7 +365,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         // Add left padding to the store image to math the position of the user image
         addLeftPaddingToStoreProductImageView(false)
         // Remove any margins to the user product image
-        setupMargins(inpageUserProductImageView, 0, 0, 0, 0)
+        setupMargins(inpageUserProductImageView, 8.dpInPx, 0, 0, 0)
         if (crossFadeRunnable == null) {
             crossFadeRunnable = Runnable {
                 if (inpageUserProductImageView.visibility == View.VISIBLE) {
@@ -546,7 +543,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         if (buttonTextSize != -1f) {
             val size = buttonTextSize + additionalSize
             inpageButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
-            inpageButton.rightDrawable(R.drawable.ic_arrow_right_black, 0.8f * size / 2, 0.8f * size)
+            inpageButton.rightDrawable(R.drawable.ic_arrow_right_white, 0.8f * size / 2, 0.8f * size)
         } else {
             configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_default_textSize)
                 ?.let {

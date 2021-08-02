@@ -3,7 +3,7 @@
     <string name="virtusize_name">버츄사이즈</string>
     <string name="virtusize_button_text">사이즈 확인</string>
     <string name="virtusize_privacy_policy">개인정보 처리방침</string>
-    <string name="virtusize_privacy_policy_link">http://www.virtusize.kr/privacy-policy</string>
+    <string name="virtusize_privacy_policy_link">https://www.virtusize.kr/privacy-policy</string>
     <string name="inpage_default_accessory_text">상품이 어울리는지 확인해보세요.</string>
     <string name="inpage_has_product_top_text">사이즈 차이 보기</string>
     <string name="inpage_has_product_bottom_text">당신의 상품</string>

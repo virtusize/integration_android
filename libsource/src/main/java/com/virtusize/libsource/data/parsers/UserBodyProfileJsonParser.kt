@@ -4,7 +4,7 @@ import com.virtusize.libsource.data.remote.Measurement
 import com.virtusize.libsource.data.remote.UserBodyProfile
 import org.json.JSONObject
 
-class UserBodyProfileJsonParser: VirtusizeJsonParser<UserBodyProfile> {
+internal class UserBodyProfileJsonParser: VirtusizeJsonParser<UserBodyProfile> {
     override fun parse(json: JSONObject): UserBodyProfile? {
         val gender = JsonUtils.optString(json, FIELD_GENDER)
         val age = json.optInt(FIELD_AGE)

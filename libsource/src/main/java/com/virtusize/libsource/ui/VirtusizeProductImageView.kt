@@ -3,13 +3,12 @@ package com.virtusize.libsource.ui
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import com.virtusize.libsource.R
+import com.virtusize.libsource.util.dpInPx
 import com.virtusize.libsource.util.getDrawableResourceByName
 import kotlinx.android.synthetic.main.view_product_image.view.*
 
@@ -70,6 +69,7 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet):
             inpageProductCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.color_gray_200))
         }
         inpageProductImageView.setImageDrawable(getProductPlaceholderImage(productType, style))
+        inpageProductImageView.setPadding(6.dpInPx, 6.dpInPx, 6.dpInPx, 6.dpInPx)
     }
 
     /**
