@@ -83,7 +83,7 @@ In your appの`build.gradle`ファイルに下記のdependencyを追加
 
 ```groovy
 dependencies {
-  implementation 'com.github.virtusize:integration_android:2.2.1'
+  implementation 'com.github.virtusize:integration_android:2.2.2'
 }
 ```
 
@@ -186,7 +186,7 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
        .Virtusize
        .setupVirtusizeProduct(
            VirtusizeProduct(
-               externalId = "694",
+               externalId = "vs_dress",
                imageUrl = "http://www.image.com/goods/12345.jpg"
            )
        )
@@ -197,7 +197,7 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
    ```java
    app.Virtusize.setupVirtusizeProduct(
            new VirtusizeProduct(
-                   "694",
+                   "vs_dress",
                    "http://www.image.com/goods/12345.jpg"
            )
    );

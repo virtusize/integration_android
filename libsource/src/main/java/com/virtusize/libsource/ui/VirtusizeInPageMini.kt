@@ -18,7 +18,11 @@ import com.virtusize.libsource.util.FontUtils
 import com.virtusize.libsource.util.VirtusizeUtils
 import com.virtusize.ui.utils.Font
 
-class VirtusizeInPageMini(context: Context, attrs: AttributeSet) : VirtusizeInPageView(context, attrs) {
+class VirtusizeInPageMini @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : VirtusizeInPageView(context, attrs, defStyleAttr) {
 
     /**
      * @see VirtusizeView.virtusizeParams

@@ -3,7 +3,7 @@
     <string name="virtusize_name">バーチャサイズ</string>
     <string name="virtusize_button_text">サイズチェック</string>
     <string name="virtusize_privacy_policy">プライバシーポリシー</string>
-    <string name="virtusize_privacy_policy_link">http://www.virtusize.jp/privacy-policy</string>
+    <string name="virtusize_privacy_policy_link">https://www.virtusize.jp/privacy-policy</string>
     <string name="inpage_default_accessory_text">日用品と比較する</string>
     <string name="inpage_has_product_top_text">あなたのアイテムと</string>
     <string name="inpage_has_product_bottom_text">大きさを比較</string>

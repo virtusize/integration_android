@@ -3,14 +3,14 @@ package com.virtusize.libsource.util
 import android.content.Context
 import android.content.ContextWrapper
 import android.os.Build
+import android.os.Bundle
 import android.os.LocaleList
+import androidx.fragment.app.FragmentActivity
+import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.ProductComparisonFitInfo
-import com.virtusize.libsource.data.local.SizeComparisonRecommendedSize
-import com.virtusize.libsource.data.local.VirtusizeLanguage
-import com.virtusize.libsource.data.remote.Product
-import com.virtusize.libsource.data.remote.ProductSize
-import com.virtusize.libsource.data.remote.ProductType
-import com.virtusize.libsource.data.remote.Weight
+import com.virtusize.libsource.data.remote.*
+import com.virtusize.libsource.network.VirtusizeApi
+import com.virtusize.libsource.ui.VirtusizeWebViewFragment
 import java.util.*
 import kotlin.math.abs
 
@@ -123,5 +123,39 @@ internal object VirtusizeUtils {
         val fitScore = (100 - adjustScore).coerceAtLeast(20f)
 
         return ProductComparisonFitInfo(fitScore, isSmaller)
+    }
+
+    /**
+     * A function to open the Virtusize WebView
+     */
+    fun openVirtusizeWebView(
+        context: Context,
+        virtusizeParams: VirtusizeParams?,
+        virtusizeDialogFragment: VirtusizeWebViewFragment,
+        product: VirtusizeProduct? = null,
+        messageHandler: VirtusizeMessageHandler? = null
+    ) {
+        val fragmentTransaction = (context as FragmentActivity).supportFragmentManager.beginTransaction()
+        val previousFragment = context.supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
+        previousFragment?.let {fragment ->
+            fragmentTransaction.remove(fragment)
+        }
+        fragmentTransaction.addToBackStack(null)
+        val args = Bundle()
+        args.putString(Constants.URL_KEY, VirtusizeApi.virtusizeWebViewURL())
+        virtusizeParams?.let { params ->
+            // For Flutter
+            product?.let { product ->
+                params.virtusizeProduct = product
+                params.virtusizeProduct?.productCheckData = product.productCheckData
+            }
+            args.putString(Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY, "javascript:vsParamsFromSDK(${params.vsParamsString()})")
+        }
+        virtusizeDialogFragment.arguments = args
+        // For Flutter
+        messageHandler?.let { messageHandler ->
+            virtusizeDialogFragment.setupMessageHandler(messageHandler)
+        }
+        virtusizeDialogFragment.show(fragmentTransaction, Constants.FRAG_TAG)
     }
 }

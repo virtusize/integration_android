@@ -47,7 +47,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-//    implementation 'com.github.virtusize:integration_android:2.2'
+//    implementation 'com.github.virtusize:integration_android:2.2.2'
     implementation project(":libsource")
     implementation project(":ui")
 

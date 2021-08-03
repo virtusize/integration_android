@@ -41,7 +41,7 @@ class MainFragment : Fragment() {
          */
         (activity?.application as App).Virtusize.setupVirtusizeProduct(
             VirtusizeProduct(
-                externalId = "694",
+                externalId = "vs_dress",
                 imageUrl = "http://www.image.com/goods/12345.jpg"
             )
         )

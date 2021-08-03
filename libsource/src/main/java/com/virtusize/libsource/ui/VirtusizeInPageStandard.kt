@@ -12,7 +12,6 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewTreeObserver.OnPreDrawListener
 import android.widget.LinearLayout
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
@@ -31,10 +30,11 @@ import com.virtusize.libsource.util.VirtusizeUtils
 import com.virtusize.ui.utils.Font
 
 
-class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : VirtusizeInPageView(
-    context,
-    attrs
-) {
+class VirtusizeInPageStandard @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : VirtusizeInPageView(context, attrs, defStyleAttr) {
 
     /**
      * @see VirtusizeView.virtusizeParams
@@ -118,6 +118,12 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         buttonTextSize = attrsArray.getDimension(R.styleable.VirtusizeInPageStandard_inPageStandardButtonTextSize, -1f)
 
         attrsArray.recycle()
+
+        binding.inpageCardView.onSizeChanged { width, height ->
+            if (width < 411.dpInPx) {
+                smallInPageWidth = true
+            }
+        }
 
         setStyle()
     }
@@ -325,6 +331,12 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             }
         }
 
+        // Set the background color of the inpage card view
+        binding.inpageCardView.setBackgroundColor(ContextCompat.getColor(
+            context,
+            R.color.vs_white
+        ))
+
         // Set horizontal margins
         val inPageStandardFooterTopMargin =
             if (horizontalMargin >= 2.dpInPx) 10.dpInPx - horizontalMargin else horizontalMargin + 8.dpInPx
@@ -344,19 +356,6 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
             horizontalMargin + 2.dpInPx,
             0
         )
-
-        viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
-            override fun onPreDraw(): Boolean {
-                if (viewTreeObserver.isAlive) {
-                    viewTreeObserver.removeOnPreDrawListener(this)
-                }
-                if (width < 411.dpInPx) {
-                    smallInPageWidth = true
-                }
-                return true
-            }
-        })
-
     }
 
     /**
@@ -369,7 +368,7 @@ class VirtusizeInPageStandard(context: Context, attrs: AttributeSet) : Virtusize
         // Add left padding to the store image to math the position of the user image
         addLeftPaddingToStoreProductImageView(false)
         // Remove any margins to the user product image
-        setupMargins(binding.inpageUserProductImageView, 0, 0, 0, 0)
+        setupMargins(binding.inpageUserProductImageView, 8.dpInPx, 0, 0, 0)
         if (crossFadeRunnable == null) {
             crossFadeRunnable = Runnable {
                 if (binding.inpageUserProductImageView.visibility == View.VISIBLE) {

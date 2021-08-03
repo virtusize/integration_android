@@ -34,7 +34,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
 
-    // implementation 'com.github.virtusize:integration_android:2.2.1'
+    // implementation 'com.github.virtusize:integration_android:2.2.2'
     implementation project(":libsource")
     implementation project(":ui")
 

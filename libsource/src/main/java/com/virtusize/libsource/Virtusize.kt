@@ -24,8 +24,13 @@ import kotlinx.coroutines.launch
  */
 class Virtusize(
     private val context: Context,
-    private val params: VirtusizeParams
+    internal val params: VirtusizeParams
 ) {
+
+    // The getter of the display language
+    val displayLanguage: VirtusizeLanguage
+        get() = params.language
+
     // Registered message handlers
     private val messageHandlers = mutableListOf<VirtusizeMessageHandler>()
 
@@ -313,6 +318,9 @@ class Virtusize(
         }
     }
 
+    /**
+     * Returns a boolean value to tell whether the VirtusizeView array contains at least one VirtusizeInPageView
+     */
     private fun virtusizeViewsContainInPage(): Boolean {
         for(virtusizeView in virtusizeViews) {
             if(virtusizeView is VirtusizeInPageView) {
