@@ -77,6 +77,13 @@ class Virtusize(
                         virtusizeRepository.switchInPageRecommendation(SizeRecommendationType.compareProduct)
                     }
                 }
+                VirtusizeEvents.UserDeletedProduct.getEventName() -> {
+                    CoroutineScope(Main).launch {
+                        virtusizeRepository.fetchDataForInPageRecommendation(
+                            shouldUpdateUserProducts = true
+                        )
+                    }
+                }
                 VirtusizeEvents.UserChangedRecommendationType.getEventName() -> {
                     // Switches the view for InPage based on user selected size recommendation type
                     var recommendationType: SizeRecommendationType? = null
