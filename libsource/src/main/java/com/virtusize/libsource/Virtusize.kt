@@ -14,6 +14,7 @@ import com.virtusize.libsource.util.trimI18nText
 import com.virtusize.libsource.util.valueOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -79,6 +80,8 @@ class Virtusize(
                 }
                 VirtusizeEvents.UserDeletedProduct.getEventName() -> {
                     CoroutineScope(Main).launch {
+                        // Delay for 0.5 second because the deletion happens after the event is fired
+                        delay(500L)
                         virtusizeRepository.fetchDataForInPageRecommendation(
                             shouldUpdateUserProducts = true
                         )
