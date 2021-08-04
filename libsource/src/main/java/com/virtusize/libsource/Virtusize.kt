@@ -46,7 +46,8 @@ class Virtusize(
                 VirtusizeEvents.UserOpenedWidget.getEventName() -> {
                     CoroutineScope(Main).launch {
                         virtusizeRepository.fetchDataForInPageRecommendation(
-                            shouldUpdateUserProducts = false
+                            shouldUpdateUserProducts = false,
+                            shouldUpdateBodyProfile = false
                         )
                     }
                 }
@@ -60,8 +61,9 @@ class Virtusize(
                     val userProductId = event.data?.optInt("userProductId")
                     CoroutineScope(Main).launch {
                         virtusizeRepository.fetchDataForInPageRecommendation(
+                            selectedUserProductId = userProductId,
                             shouldUpdateUserProducts = false,
-                            selectedUserProductId = userProductId
+                            shouldUpdateBodyProfile = false
                         )
                         virtusizeRepository.switchInPageRecommendation(SizeRecommendationType.compareProduct)
                     }
@@ -72,19 +74,23 @@ class Virtusize(
                     val userProductId = event.data?.optInt("userProductId")
                     CoroutineScope(Main).launch {
                         virtusizeRepository.fetchDataForInPageRecommendation(
+                            selectedUserProductId = userProductId,
                             shouldUpdateUserProducts = true,
-                            selectedUserProductId = userProductId
+                            shouldUpdateBodyProfile = false
                         )
                         virtusizeRepository.switchInPageRecommendation(SizeRecommendationType.compareProduct)
                     }
                 }
                 VirtusizeEvents.UserDeletedProduct.getEventName() -> {
+                    event.data?.optInt("userProductId")?.let { userProductId ->
+                        virtusizeRepository.deleteUserProduct(userProductId)
+                    }
                     CoroutineScope(Main).launch {
-                        // Delay for 0.5 second because the deletion happens after the event is fired
-                        delay(500L)
                         virtusizeRepository.fetchDataForInPageRecommendation(
-                            shouldUpdateUserProducts = true
+                            shouldUpdateUserProducts = false,
+                            shouldUpdateBodyProfile = false
                         )
+                        virtusizeRepository.switchInPageRecommendation()
                     }
                 }
                 VirtusizeEvents.UserChangedRecommendationType.getEventName() -> {
@@ -120,7 +126,8 @@ class Virtusize(
                         virtusizeRepository.clearUserData()
                         virtusizeRepository.updateUserSession()
                         virtusizeRepository.fetchDataForInPageRecommendation(
-                            shouldUpdateUserProducts = false
+                            shouldUpdateUserProducts = false,
+                            shouldUpdateBodyProfile = false
                         )
                         virtusizeRepository.switchInPageRecommendation()
                     }
