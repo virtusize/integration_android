@@ -45,8 +45,10 @@ class Virtusize(
                 VirtusizeEvents.UserOpenedWidget.getEventName() -> {
                     CoroutineScope(Main).launch {
                         virtusizeRepository.fetchDataForInPageRecommendation(
-                            shouldUpdateUserProducts = false
+                            shouldUpdateUserProducts = false,
+                            shouldUpdateBodyProfile = false
                         )
+                        virtusizeRepository.updateInPageRecommendation()
                     }
                 }
                 VirtusizeEvents.UserAuthData.getEventName() -> {
@@ -59,10 +61,11 @@ class Virtusize(
                     val userProductId = event.data?.optInt("userProductId")
                     CoroutineScope(Main).launch {
                         virtusizeRepository.fetchDataForInPageRecommendation(
+                            selectedUserProductId = userProductId,
                             shouldUpdateUserProducts = false,
-                            selectedUserProductId = userProductId
+                            shouldUpdateBodyProfile = false
                         )
-                        virtusizeRepository.switchInPageRecommendation(SizeRecommendationType.compareProduct)
+                        virtusizeRepository.updateInPageRecommendation(type = SizeRecommendationType.compareProduct)
                     }
                 }
                 VirtusizeEvents.UserAddedProduct.getEventName() -> {
@@ -71,10 +74,23 @@ class Virtusize(
                     val userProductId = event.data?.optInt("userProductId")
                     CoroutineScope(Main).launch {
                         virtusizeRepository.fetchDataForInPageRecommendation(
+                            selectedUserProductId = userProductId,
                             shouldUpdateUserProducts = true,
-                            selectedUserProductId = userProductId
+                            shouldUpdateBodyProfile = false
                         )
-                        virtusizeRepository.switchInPageRecommendation(SizeRecommendationType.compareProduct)
+                        virtusizeRepository.updateInPageRecommendation(type = SizeRecommendationType.compareProduct)
+                    }
+                }
+                VirtusizeEvents.UserDeletedProduct.getEventName() -> {
+                    event.data?.optInt("userProductId")?.let { userProductId ->
+                        virtusizeRepository.deleteUserProduct(userProductId)
+                    }
+                    CoroutineScope(Main).launch {
+                        virtusizeRepository.fetchDataForInPageRecommendation(
+                            shouldUpdateUserProducts = false,
+                            shouldUpdateBodyProfile = false
+                        )
+                        virtusizeRepository.updateInPageRecommendation()
                     }
                 }
                 VirtusizeEvents.UserChangedRecommendationType.getEventName() -> {
@@ -84,7 +100,7 @@ class Virtusize(
                         recommendationType = valueOf<SizeRecommendationType>(it)
                     }
                     CoroutineScope(Main).launch {
-                        virtusizeRepository.switchInPageRecommendation(recommendationType)
+                        virtusizeRepository.updateInPageRecommendation(type = recommendationType)
                     }
                 }
                 VirtusizeEvents.UserUpdatedBodyMeasurements.getEventName() -> {
@@ -92,7 +108,7 @@ class Virtusize(
                     val sizeRecName = event.data?.optString("sizeRecName")
                     CoroutineScope(Main).launch {
                         virtusizeRepository.updateUserBodyRecommendedSize(sizeRecName)
-                        virtusizeRepository.switchInPageRecommendation(SizeRecommendationType.body)
+                        virtusizeRepository.updateInPageRecommendation(type = SizeRecommendationType.body)
                     }
                 }
                 VirtusizeEvents.UserLoggedIn.getEventName() -> {
@@ -100,7 +116,7 @@ class Virtusize(
                     CoroutineScope(Main).launch {
                         virtusizeRepository.updateUserSession()
                         virtusizeRepository.fetchDataForInPageRecommendation()
-                        virtusizeRepository.switchInPageRecommendation()
+                        virtusizeRepository.updateInPageRecommendation()
                     }
                 }
                 VirtusizeEvents.UserLoggedOut.getEventName(), VirtusizeEvents.UserDeletedData.getEventName() -> {
@@ -110,9 +126,10 @@ class Virtusize(
                         virtusizeRepository.clearUserData()
                         virtusizeRepository.updateUserSession()
                         virtusizeRepository.fetchDataForInPageRecommendation(
-                            shouldUpdateUserProducts = false
+                            shouldUpdateUserProducts = false,
+                            shouldUpdateBodyProfile = false
                         )
-                        virtusizeRepository.switchInPageRecommendation()
+                        virtusizeRepository.updateInPageRecommendation()
                     }
                 }
             }
@@ -142,7 +159,7 @@ class Virtusize(
                     virtusizeRepository.fetchInitialData(params.language, productId)
                     virtusizeRepository.updateUserSession()
                     virtusizeRepository.fetchDataForInPageRecommendation()
-                    virtusizeRepository.switchInPageRecommendation()
+                    virtusizeRepository.updateInPageRecommendation()
                 }
             }
         }
