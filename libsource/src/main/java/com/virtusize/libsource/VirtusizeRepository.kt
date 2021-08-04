@@ -154,7 +154,11 @@ internal class VirtusizeRepository(
      * Fetches data for InPage recommendation
      * @param selectedUserProductId the selected product Id from the web view to decide a specific user product to compare with the store product
      */
-    internal suspend fun fetchDataForInPageRecommendation(shouldUpdateUserProducts: Boolean = true, selectedUserProductId: Int? = null) {
+    internal suspend fun fetchDataForInPageRecommendation(
+        selectedUserProductId: Int? = null,
+        shouldUpdateUserProducts: Boolean = true,
+        shouldUpdateBodyProfile: Boolean = true
+    ) {
         if(shouldUpdateUserProducts) {
             val userProductsResponse = virtusizeAPIService.getUserProducts()
             if (userProductsResponse.isSuccessful) {
@@ -165,7 +169,7 @@ internal class VirtusizeRepository(
             }
         }
 
-        if(selectedUserProductId == null) {
+        if(shouldUpdateBodyProfile) {
             userBodyRecommendedSize = getUserBodyRecommendedSize(storeProduct, productTypes)
         }
 
@@ -185,13 +189,21 @@ internal class VirtusizeRepository(
     }
 
     /**
-     * Switch the recommendation for InPage based on the recommendation type
-     * @param selectedRecommendedType the selected recommendation compare view type
+     * Removes the deleted user product by the product ID from the user product list
+     * @param userProductID the user product ID
      */
-    internal fun switchInPageRecommendation(
-        selectedRecommendedType: SizeRecommendationType? = null
+    internal fun deleteUserProduct(userProductID: Int) {
+        userProducts = userProducts?.filter { userProduct -> userProduct.id != userProductID }
+    }
+
+    /**
+     * Updates the recommendation for InPage based on the recommendation type
+     * @param type the selected recommendation compare view type
+     */
+    internal fun updateInPageRecommendation(
+        type: SizeRecommendationType? = null
     ) {
-        when (selectedRecommendedType) {
+        when (type) {
             SizeRecommendationType.compareProduct -> {
                 presenter?.gotSizeRecommendations(userProductRecommendedSize, null)
             }

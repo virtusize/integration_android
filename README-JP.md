@@ -83,7 +83,7 @@ In your appの`build.gradle`ファイルに下記のdependencyを追加
 
 ```groovy
 dependencies {
-  implementation 'com.github.virtusize:integration_android:2.2.2'
+  implementation 'com.github.virtusize:integration_android:2.2.3'
 }
 ```
 
