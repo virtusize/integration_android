@@ -48,6 +48,7 @@ class Virtusize(
                             shouldUpdateUserProducts = false,
                             shouldUpdateBodyProfile = false
                         )
+                        virtusizeRepository.updateInPageRecommendation()
                     }
                 }
                 VirtusizeEvents.UserAuthData.getEventName() -> {
