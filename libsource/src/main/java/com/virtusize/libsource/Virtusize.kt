@@ -57,7 +57,6 @@ class Virtusize(
                     }
                 }
                 VirtusizeEvents.UserSelectedProduct.getEventName() -> {
-                    // Filters userProducts by the selected product ID to get userProductRecommendedSize
                     val userProductId = event.data?.optInt("userProductId")
                     CoroutineScope(Main).launch {
                         virtusizeRepository.fetchDataForInPageRecommendation(
@@ -69,12 +68,8 @@ class Virtusize(
                     }
                 }
                 VirtusizeEvents.UserAddedProduct.getEventName() -> {
-                    // Gets updated user products from the server,
-                    // and then filters userProducts by the selected product ID to get userProductRecommendedSize
-                    val userProductId = event.data?.optInt("userProductId")
                     CoroutineScope(Main).launch {
                         virtusizeRepository.fetchDataForInPageRecommendation(
-                            selectedUserProductId = userProductId,
                             shouldUpdateUserProducts = true,
                             shouldUpdateBodyProfile = false
                         )
@@ -112,7 +107,7 @@ class Virtusize(
                     }
                 }
                 VirtusizeEvents.UserLoggedIn.getEventName() -> {
-                    // Updates the user session and fetches updated user prodcuts and body profile from the server
+                    // Updates the user session and fetches updated user products and body profile from the server
                     CoroutineScope(Main).launch {
                         virtusizeRepository.updateUserSession()
                         virtusizeRepository.fetchDataForInPageRecommendation()
