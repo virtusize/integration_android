@@ -197,13 +197,13 @@ internal class VirtusizeRepository(
     }
 
     /**
-     * Switch the recommendation for InPage based on the recommendation type
-     * @param selectedRecommendedType the selected recommendation compare view type
+     * Updates the recommendation for InPage based on the recommendation type
+     * @param type the selected recommendation compare view type
      */
-    internal fun switchInPageRecommendation(
-        selectedRecommendedType: SizeRecommendationType? = null
+    internal fun updateInPageRecommendation(
+        type: SizeRecommendationType? = null
     ) {
-        when (selectedRecommendedType) {
+        when (type) {
             SizeRecommendationType.compareProduct -> {
                 presenter?.gotSizeRecommendations(userProductRecommendedSize, null)
             }

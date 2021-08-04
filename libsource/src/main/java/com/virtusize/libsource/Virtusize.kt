@@ -14,7 +14,6 @@ import com.virtusize.libsource.util.trimI18nText
 import com.virtusize.libsource.util.valueOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -65,7 +64,7 @@ class Virtusize(
                             shouldUpdateUserProducts = false,
                             shouldUpdateBodyProfile = false
                         )
-                        virtusizeRepository.switchInPageRecommendation(SizeRecommendationType.compareProduct)
+                        virtusizeRepository.updateInPageRecommendation(type = SizeRecommendationType.compareProduct)
                     }
                 }
                 VirtusizeEvents.UserAddedProduct.getEventName() -> {
@@ -78,7 +77,7 @@ class Virtusize(
                             shouldUpdateUserProducts = true,
                             shouldUpdateBodyProfile = false
                         )
-                        virtusizeRepository.switchInPageRecommendation(SizeRecommendationType.compareProduct)
+                        virtusizeRepository.updateInPageRecommendation(type = SizeRecommendationType.compareProduct)
                     }
                 }
                 VirtusizeEvents.UserDeletedProduct.getEventName() -> {
@@ -90,7 +89,7 @@ class Virtusize(
                             shouldUpdateUserProducts = false,
                             shouldUpdateBodyProfile = false
                         )
-                        virtusizeRepository.switchInPageRecommendation()
+                        virtusizeRepository.updateInPageRecommendation()
                     }
                 }
                 VirtusizeEvents.UserChangedRecommendationType.getEventName() -> {
@@ -100,7 +99,7 @@ class Virtusize(
                         recommendationType = valueOf<SizeRecommendationType>(it)
                     }
                     CoroutineScope(Main).launch {
-                        virtusizeRepository.switchInPageRecommendation(recommendationType)
+                        virtusizeRepository.updateInPageRecommendation(type = recommendationType)
                     }
                 }
                 VirtusizeEvents.UserUpdatedBodyMeasurements.getEventName() -> {
@@ -108,7 +107,7 @@ class Virtusize(
                     val sizeRecName = event.data?.optString("sizeRecName")
                     CoroutineScope(Main).launch {
                         virtusizeRepository.updateUserBodyRecommendedSize(sizeRecName)
-                        virtusizeRepository.switchInPageRecommendation(SizeRecommendationType.body)
+                        virtusizeRepository.updateInPageRecommendation(type = SizeRecommendationType.body)
                     }
                 }
                 VirtusizeEvents.UserLoggedIn.getEventName() -> {
@@ -116,7 +115,7 @@ class Virtusize(
                     CoroutineScope(Main).launch {
                         virtusizeRepository.updateUserSession()
                         virtusizeRepository.fetchDataForInPageRecommendation()
-                        virtusizeRepository.switchInPageRecommendation()
+                        virtusizeRepository.updateInPageRecommendation()
                     }
                 }
                 VirtusizeEvents.UserLoggedOut.getEventName(), VirtusizeEvents.UserDeletedData.getEventName() -> {
@@ -129,7 +128,7 @@ class Virtusize(
                             shouldUpdateUserProducts = false,
                             shouldUpdateBodyProfile = false
                         )
-                        virtusizeRepository.switchInPageRecommendation()
+                        virtusizeRepository.updateInPageRecommendation()
                     }
                 }
             }
@@ -159,7 +158,7 @@ class Virtusize(
                     virtusizeRepository.fetchInitialData(params.language, productId)
                     virtusizeRepository.updateUserSession()
                     virtusizeRepository.fetchDataForInPageRecommendation()
-                    virtusizeRepository.switchInPageRecommendation()
+                    virtusizeRepository.updateInPageRecommendation()
                 }
             }
         }
