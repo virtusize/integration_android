@@ -23,9 +23,17 @@ internal class VirtusizeInPageStandardViewModel(
             for (map in productMap.entries) {
                 val productImageView = map.key
                 val product = map.value
-                val imageBitmap = virtusizeRepository.loadImage(product.getProductImageURL())
+                var imageBitmap: Bitmap? = null
+                virtusizeRepository.loadImage(product.clientProductImageURL)?.let {
+                    imageBitmap = it
+                } ?: run {
+                    virtusizeRepository.loadImage(product.getCloudinaryProductImageURL())?.let {
+                        imageBitmap = it
+                    }
+                }
+
                 if (imageBitmap != null) {
-                    productImageBitmapLiveData.value = Pair(productImageView, imageBitmap)
+                    productImageBitmapLiveData.value = Pair(productImageView, imageBitmap!!)
                 } else {
                     productLiveData.value = Pair(productImageView, product)
                 }
