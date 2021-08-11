@@ -36,20 +36,22 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
     /**
      * @see VirtusizeView.virtusizeParams
      */
-    override var virtusizeParams: VirtusizeParams? = null
-        private set
+    override lateinit var virtusizeParams: VirtusizeParams
 
     /**
      * @see VirtusizeView.virtusizeMessageHandler
      */
     override lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
-        private set
 
     /**
      * @see VirtusizeView.virtusizeDialogFragment
      */
-    override var virtusizeDialogFragment = VirtusizeWebViewFragment()
-        private set
+    override lateinit var virtusizeDialogFragment: VirtusizeWebViewFragment
+
+    /**
+     * @see VirtusizeView.clientProduct
+     */
+    override lateinit var clientProduct: VirtusizeProduct
 
     // If the width of the InPage is small than 411dp, the value is true
     private var smallInPageWidth = false
@@ -126,12 +128,10 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
     }
 
     /**
-     * @see VirtusizeView.setup
+     * @see VirtusizeView.initialSetup
      */
-    override fun setup(params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
-        super.setup(params, messageHandler)
-        virtusizeParams = params
-        virtusizeMessageHandler = messageHandler
+    override fun initialSetup(params: VirtusizeParams, product: VirtusizeProduct, messageHandler: VirtusizeMessageHandler) {
+        super.initialSetup(product, params, messageHandler)
 
         val viewModelFactory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {

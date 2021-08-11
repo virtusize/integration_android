@@ -21,20 +21,22 @@ class VirtusizeButton @JvmOverloads constructor(
     /**
      * @see VirtusizeView.virtusizeParams
      */
-    override var virtusizeParams: VirtusizeParams? = null
-        private set
+    override lateinit var virtusizeParams: VirtusizeParams
 
     /**
      * @see VirtusizeView.virtusizeMessageHandler
      */
     override lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
-        private set
 
     /**
      * @see VirtusizeView.virtusizeDialogFragment
      */
-    override var virtusizeDialogFragment = VirtusizeWebViewFragment()
-        private set
+    override lateinit var virtusizeDialogFragment: VirtusizeWebViewFragment
+
+    /**
+     * @see VirtusizeView.clientProduct
+     */
+    override lateinit var clientProduct: VirtusizeProduct
 
     // The VirtusizeViewStyle that clients can choose to use for this Button
     var virtusizeViewStyle: VirtusizeViewStyle = VirtusizeViewStyle.NONE
@@ -58,15 +60,6 @@ class VirtusizeButton @JvmOverloads constructor(
             ?: VirtusizeViewStyle.NONE
         attrsArray.recycle()
         setupButtonStyle()
-    }
-
-    /**
-     * @see VirtusizeView.setup
-     */
-    override fun setup(params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
-        super.setup(params, messageHandler)
-        virtusizeParams = params
-        virtusizeMessageHandler = messageHandler
     }
 
     /**
@@ -139,7 +132,7 @@ class VirtusizeButton @JvmOverloads constructor(
      */
     private fun setupButtonTextConfiguredLocalization() {
         val configuredContext =
-            VirtusizeUtils.getConfiguredContext(context, virtusizeParams?.language)
+            VirtusizeUtils.getConfiguredContext(context, virtusizeParams.language)
         if (text.isNullOrEmpty()) {
             text = configuredContext?.getText(R.string.virtusize_button_text)
             configuredContext?.resources?.getDimension(R.dimen.virtusize_button_textSize)?.let {

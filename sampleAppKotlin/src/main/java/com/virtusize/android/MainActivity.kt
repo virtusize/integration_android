@@ -1,5 +1,6 @@
 package com.virtusize.android
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -27,18 +28,20 @@ class MainActivity : AppCompatActivity() {
         /*
          * Set up Virtusize product for all the Virtusize views
          */
-        (application as App).Virtusize.setupVirtusizeProduct(
-                VirtusizeProduct(
-                    externalId = "vs_dress",
-                    imageUrl = "http://www.image.com/goods/12345.jpg"
-                )
-            )
+        val product = VirtusizeProduct(
+            externalId = "vs_dress",
+            imageUrl = "http://www.image.com/goods/12345.jpg"
+        )
+        (application as App).Virtusize.load(product)
 
         /*
          * Set up Virtusize button
          */
         // Virtusize opens automatically when button is clicked
-        (application as App).Virtusize.setupVirtusizeView(exampleVirtusizeButton)
+        (application as App).Virtusize.setupVirtusizeView(
+            virtusizeView = exampleVirtusizeButton,
+            product = product
+        )
         // Set up the Virtusize view style programmatically
         exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.TEAL
 
@@ -47,7 +50,8 @@ class MainActivity : AppCompatActivity() {
          */
         (application as App).Virtusize
             .setupVirtusizeView(
-                virtusizeView = exampleVirtusizeInPageStandard
+                virtusizeView = exampleVirtusizeInPageStandard,
+                product = product
             )
         exampleVirtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
         // If you like, you can set up the horizontal margins between the edges of the app screen and the InPage Standard view
@@ -67,7 +71,10 @@ class MainActivity : AppCompatActivity() {
         /*
          * Set up Virtusize InPage Mini
          */
-        (application as App).Virtusize.setupVirtusizeView(virtusizeView = exampleVirtusizeInPageMini)
+        (application as App).Virtusize.setupVirtusizeView(
+            virtusizeView = exampleVirtusizeInPageMini,
+            product = product
+        )
         exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.TEAL
 
         /*
@@ -96,6 +103,10 @@ class MainActivity : AppCompatActivity() {
             }
             fragmentTransaction.addToBackStack(null)
             WebViewFragment().show(fragmentTransaction, Constants.FRAG_TAG)
+        }
+
+        nextProductButton.setOnClickListener {
+            startActivity(Intent(this, ProductActivity::class.java))
         }
 
         /*

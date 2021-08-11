@@ -9,22 +9,28 @@ import com.virtusize.libsource.util.VirtusizeUtils
  * An interface for the Virtusize specific views such as VirtusizeButton and VirtusizeInPageView
  */
 interface VirtusizeView {
+    // The product which is bounded with this Virtusize
+    var clientProduct: VirtusizeProduct
     // The parameter object to be passed to the Virtusize web app
-    val virtusizeParams: VirtusizeParams?
+    var virtusizeParams: VirtusizeParams
     // Receives Virtusize messages
-    val virtusizeMessageHandler: VirtusizeMessageHandler
+    var virtusizeMessageHandler: VirtusizeMessageHandler
     // The Virtusize view that opens when the view is clicked
-    val virtusizeDialogFragment: VirtusizeWebViewFragment
+    var virtusizeDialogFragment: VirtusizeWebViewFragment
 
     /**
      * Sets up the VirtusizeView with the corresponding VirtusizeParams
+     * @param product // TODO
      * @param params the VirtusizeParams that is set for this VirtusizeView
      * @param messageHandler pass VirtusizeMessageHandler to listen to any Virtusize-related messages
      * @see VirtusizeParams
      */
-    fun setup(params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
-        // TODO: bind the product to this VirtusizeView
-        virtusizeDialogFragment.setupMessageHandler(messageHandler)
+    fun initialSetup(product: VirtusizeProduct, params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
+        clientProduct = product
+        virtusizeParams = params
+        virtusizeMessageHandler = messageHandler
+        virtusizeDialogFragment = VirtusizeWebViewFragment()
+        virtusizeDialogFragment.setupMessageHandler(virtusizeMessageHandler)
     }
 
     /**

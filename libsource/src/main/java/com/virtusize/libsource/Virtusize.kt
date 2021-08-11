@@ -143,7 +143,6 @@ class Virtusize(
     private val virtusizePresenter = object: VirtusizePresenter {
         override fun finishedProductCheck(productCheck: ProductCheck) {
             for(virtusizeView in virtusizeViews) {
-                virtusizeView.setup(params = params, messageHandler = messageHandler)
                 virtusizeView.setupProductCheckResponseData(productCheck)
             }
         }
@@ -244,16 +243,7 @@ class Virtusize(
      *
      * @param virtusizeProduct VirtusizeProduct that is being set to the VirtusizeView
      */
-    fun setupVirtusizeProduct(virtusizeProduct: VirtusizeProduct?) {
-        // Throws NullProduct error if the product is null
-        if (virtusizeProduct == null) {
-            VirtusizeErrorType.NullProduct.throwError()
-            return
-        }
-
-        params.virtusizeProduct = virtusizeProduct
-        virtusizeRepository.virtusizeProduct = virtusizeProduct
-
+    fun load(virtusizeProduct: VirtusizeProduct) {
         CoroutineScope(Main).launch {
             virtusizeRepository.productDataCheck(virtusizeProduct)
         }
@@ -264,18 +254,14 @@ class Virtusize(
      * @param virtusizeView VirtusizeView that is being set up
      * @throws IllegalArgumentException throws an error if VirtusizeButton is null or the image URL of VirtusizeProduct is invalid
      */
-    fun setupVirtusizeView(virtusizeView: VirtusizeView?) {
-        // Throws NullProduct error if the product is not set yet
-        if (virtusizeRepository.virtusizeProduct == null) {
-            VirtusizeErrorType.NullProduct.throwError()
-            return
-        }
-
+    fun setupVirtusizeView(virtusizeView: VirtusizeView?, product: VirtusizeProduct) {
         // Throws VirtusizeError.NullVirtusizeButtonError error if button is null
         if (virtusizeView == null) {
             VirtusizeErrorType.NullVirtusizeViewError.throwError()
             return
         }
+
+        virtusizeView.initialSetup(product= product, params = params, messageHandler = messageHandler)
 
         (virtusizeView as? View)?.addOnAttachStateChangeListener(object: View.OnAttachStateChangeListener{
             override fun onViewAttachedToWindow(v: View?) {}

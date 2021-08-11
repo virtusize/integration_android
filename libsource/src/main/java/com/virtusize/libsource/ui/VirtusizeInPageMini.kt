@@ -26,20 +26,22 @@ class VirtusizeInPageMini @JvmOverloads constructor(
     /**
      * @see VirtusizeView.virtusizeParams
      */
-    override var virtusizeParams: VirtusizeParams? = null
-        private set
+    override lateinit var virtusizeParams: VirtusizeParams
 
     /**
      * @see VirtusizeView.virtusizeMessageHandler
      */
     override lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
-        private set
 
     /**
      * @see VirtusizeView.virtusizeDialogFragment
      */
-    override var virtusizeDialogFragment = VirtusizeWebViewFragment()
-        private set
+    override lateinit var virtusizeDialogFragment: VirtusizeWebViewFragment
+
+    /**
+     * @see VirtusizeView.clientProduct
+     */
+    override lateinit var clientProduct: VirtusizeProduct
 
     // The VirtusizeViewStyle that clients can choose to use for this InPage Mini view
     var virtusizeViewStyle: VirtusizeViewStyle = VirtusizeViewStyle.NONE
@@ -70,15 +72,6 @@ class VirtusizeInPageMini @JvmOverloads constructor(
         buttonTextSize = attrsArray.getDimension(R.styleable.VirtusizeInPageMini_inPageMiniButtonTextSize, -1f)
         attrsArray.recycle()
         setStyle()
-    }
-
-    /**
-     * @see VirtusizeView.setup
-     */
-    override fun setup(params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
-        super.setup(params, messageHandler)
-        virtusizeParams = params
-        virtusizeMessageHandler = messageHandler
     }
 
     /**
