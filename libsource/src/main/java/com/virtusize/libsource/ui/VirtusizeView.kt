@@ -10,7 +10,7 @@ import com.virtusize.libsource.util.VirtusizeUtils
  */
 interface VirtusizeView {
     // The product which is bounded with this Virtusize
-    var clientProduct: VirtusizeProduct
+    var clientProduct: VirtusizeProduct?
     // The parameter object to be passed to the Virtusize web app
     var virtusizeParams: VirtusizeParams
     // Receives Virtusize messages
@@ -25,12 +25,15 @@ interface VirtusizeView {
      * @param messageHandler pass VirtusizeMessageHandler to listen to any Virtusize-related messages
      * @see VirtusizeParams
      */
-    fun initialSetup(product: VirtusizeProduct, params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
+    fun initialSetup(
+        product: VirtusizeProduct,
+        params: VirtusizeParams,
+        messageHandler: VirtusizeMessageHandler
+    ) {
         clientProduct = product
         virtusizeParams = params
         virtusizeMessageHandler = messageHandler
         virtusizeDialogFragment = VirtusizeWebViewFragment()
-        virtusizeDialogFragment.setupMessageHandler(virtusizeMessageHandler)
     }
 
     /**
@@ -38,7 +41,12 @@ interface VirtusizeView {
      * @param productCheck ProductCheckResponse received from Virtusize API
      * @see ProductCheck
      */
-    fun setupProductCheckResponseData(productCheck: ProductCheck)
+    fun setupProductCheckResponseData(productWithProductCheck: VirtusizeProduct) {
+        if (clientProduct == null) {
+            virtusizeMessageHandler.onError(VirtusizeErrorType.NullProduct.virtusizeError())
+            VirtusizeErrorType.NullProduct.throwError()
+        }
+    }
 
     /**
      * Dismisses/closes the Virtusize Window
@@ -52,7 +60,13 @@ interface VirtusizeView {
     /**
      * A clickable function to open the Virtusize WebView
      */
-    fun openVirtusizeWebView(context: Context) {
-        VirtusizeUtils.openVirtusizeWebView(context, virtusizeParams, virtusizeDialogFragment)
+    fun openVirtusizeWebView(context: Context, product: VirtusizeProduct) {
+        VirtusizeUtils.openVirtusizeWebView(
+            context,
+            virtusizeParams,
+            virtusizeDialogFragment,
+            product,
+            virtusizeMessageHandler
+        )
     }
 }

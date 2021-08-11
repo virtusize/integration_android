@@ -50,8 +50,8 @@ data class Product(
     /**
      * Gets the Cloudinary image URL for the product
      */
-    fun getProductImageURL(): String {
-        return clientProductImageURL ?: "https://res.cloudinary.com/virtusize/image/upload/w_${36.dpInPx},h_${36.dpInPx}/q_auto,f_auto,dpr_auto/$cloudinaryPublicId.jpg"
+    fun getCloudinaryProductImageURL(): String {
+        return "https://res.cloudinary.com/virtusize/image/upload/w_${36.dpInPx},h_${36.dpInPx}/q_auto,f_auto,dpr_auto/$cloudinaryPublicId.jpg"
     }
 
     /**

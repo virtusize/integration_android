@@ -36,13 +36,14 @@ class Virtusize(
 
     // The Virtusize message handler passes received errors and events to registered message handlers
     private val messageHandler = object : VirtusizeMessageHandler {
-        override fun onEvent(event: VirtusizeEvent) {
+        override fun onEvent(product: VirtusizeProduct, event: VirtusizeEvent) {
             messageHandlers.forEach { messageHandler ->
-                messageHandler.onEvent(event)
+                messageHandler.onEvent(product, event)
             }
             // Handle different user events from the web view
             when (event.name) {
                 VirtusizeEvents.UserOpenedWidget.getEventName() -> {
+                    virtusizeRepository.setLastProductOnVirtusizeWebView(product.externalId)
                     CoroutineScope(Main).launch {
                         virtusizeRepository.fetchDataForInPageRecommendation(
                             shouldUpdateUserProducts = false,
@@ -140,52 +141,54 @@ class Virtusize(
     /**
      * The VirtusizePresenter handles the data passed from the actions of VirtusizeRepository
      */
-    private val virtusizePresenter = object: VirtusizePresenter {
-        override fun finishedProductCheck(productCheck: ProductCheck) {
-            for(virtusizeView in virtusizeViews) {
-                virtusizeView.setupProductCheckResponseData(productCheck)
+    private val virtusizePresenter = object : VirtusizePresenter {
+        override fun onValidProductDataCheck(productWithPDCData: VirtusizeProduct) {
+            for (virtusizeView in virtusizeViews) {
+                virtusizeView.setupProductCheckResponseData(productWithPDCData)
             }
-        }
-
-        override fun onValidProductId(productId: Int) {
-            if(virtusizeViewsContainInPage()) {
+            if (virtusizeViewsContainInPage()) {
                 CoroutineScope(Main).launch {
-                    virtusizeRepository.fetchInitialData(params.language, productId)
-                    virtusizeRepository.updateUserSession()
-                    virtusizeRepository.fetchDataForInPageRecommendation()
-                    virtusizeRepository.updateInPageRecommendation()
+                    virtusizeRepository.fetchInitialData(params.language, productWithPDCData)
+                    virtusizeRepository.updateUserSession(productWithPDCData.externalId)
+                    virtusizeRepository.fetchDataForInPageRecommendation(productWithPDCData.externalId)
+                    virtusizeRepository.updateInPageRecommendation(productWithPDCData.externalId)
                 }
             }
         }
 
-        override fun hasInPageError(error: VirtusizeError?) {
+        override fun hasInPageError(externalProductId: String?, error: VirtusizeError?) {
             error?.let { messageHandler.onError(it) }
-            for(virtusizeView in virtusizeViews) {
+            for (virtusizeView in virtusizeViews) {
                 if (virtusizeView is VirtusizeInPageView) {
-                    virtusizeView.showErrorScreen()
+                    virtusizeView.showErrorScreen(externalProductId)
                 }
             }
         }
 
         override fun gotSizeRecommendations(
+            externalProductId: String,
             userProductRecommendedSize: SizeComparisonRecommendedSize?,
             userBodyRecommendedSize: String?
         ) {
-            for(virtusizeView in virtusizeViews) {
-                if(virtusizeView is VirtusizeInPageView) {
-                    virtusizeRepository.storeProduct?.apply {
+            val storeProduct = virtusizeRepository.getProductBy(externalProductId)
+            for (virtusizeView in virtusizeViews) {
+                if (virtusizeView is VirtusizeInPageView) {
+                    storeProduct?.apply {
                         virtusizeRepository.i18nLocalization?.let { i18nLocalization ->
-                            val trimType = if (virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
+                            val trimType =
+                                if (virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
                             val recommendationText = getRecommendationText(
                                 i18nLocalization,
                                 userProductRecommendedSize,
                                 userBodyRecommendedSize
                             ).trimI18nText(trimType)
-                            virtusizeView.setupRecommendationText(recommendationText)
+                            virtusizeView.setupRecommendationText(externalProductId, recommendationText)
                         }
                         if (virtusizeView is VirtusizeInPageStandard) {
-                            clientProductImageURL = params.virtusizeProduct?.imageUrl
-                            virtusizeView.setProductImages(this, userProductRecommendedSize?.bestUserProduct)
+                            virtusizeView.setProductImages(
+                                this,
+                                userProductRecommendedSize?.bestUserProduct
+                            )
                         }
                     }
                 }
@@ -193,7 +196,8 @@ class Virtusize(
         }
     }
 
-    private var virtusizeRepository: VirtusizeRepository = VirtusizeRepository(context, messageHandler, virtusizePresenter)
+    private var virtusizeRepository: VirtusizeRepository =
+        VirtusizeRepository(context, messageHandler, virtusizePresenter)
 
     // This variable holds the Virtusize view that clients use on their application
     private var virtusizeViews = mutableSetOf<VirtusizeView>()
@@ -261,9 +265,14 @@ class Virtusize(
             return
         }
 
-        virtusizeView.initialSetup(product= product, params = params, messageHandler = messageHandler)
+        virtusizeView.initialSetup(
+            product = product,
+            params = params,
+            messageHandler = messageHandler
+        )
 
-        (virtusizeView as? View)?.addOnAttachStateChangeListener(object: View.OnAttachStateChangeListener{
+        (virtusizeView as? View)?.addOnAttachStateChangeListener(object :
+            View.OnAttachStateChangeListener {
             override fun onViewAttachedToWindow(v: View?) {}
 
             override fun onViewDetachedFromWindow(v: View?) {
@@ -320,8 +329,8 @@ class Virtusize(
      * Returns a boolean value to tell whether the VirtusizeView array contains at least one VirtusizeInPageView
      */
     private fun virtusizeViewsContainInPage(): Boolean {
-        for(virtusizeView in virtusizeViews) {
-            if(virtusizeView is VirtusizeInPageView) {
+        for (virtusizeView in virtusizeViews) {
+            if (virtusizeView is VirtusizeInPageView) {
                 return true
             }
         }

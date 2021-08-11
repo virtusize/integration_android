@@ -7,6 +7,7 @@ object Constants {
     const val FRAG_TAG = "FRAG_TAG"
     const val URL_KEY = "URL_KEY"
     const val VIRTUSIZE_PARAMS_SCRIPT_KEY = "VIRTUSIZE_PARAMS_SCRIPT_KEY"
+    const val VIRTUSIZE_PRODUCT_KEY = "VIRTUSIZE_PRODUCT_KEY"
     const val JSBridgeName = "VirtusizeAndroid"
 }
 

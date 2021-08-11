@@ -19,6 +19,11 @@ class VirtusizeButton @JvmOverloads constructor(
 ) : VirtusizeView, AppCompatButton(context, attrs, defStyleAttr) {
 
     /**
+     * @see VirtusizeView.clientProduct
+     */
+    override var clientProduct: VirtusizeProduct? = null
+
+    /**
      * @see VirtusizeView.virtusizeParams
      */
     override lateinit var virtusizeParams: VirtusizeParams
@@ -32,11 +37,6 @@ class VirtusizeButton @JvmOverloads constructor(
      * @see VirtusizeView.virtusizeDialogFragment
      */
     override lateinit var virtusizeDialogFragment: VirtusizeWebViewFragment
-
-    /**
-     * @see VirtusizeView.clientProduct
-     */
-    override lateinit var clientProduct: VirtusizeProduct
 
     // The VirtusizeViewStyle that clients can choose to use for this Button
     var virtusizeViewStyle: VirtusizeViewStyle = VirtusizeViewStyle.NONE
@@ -110,20 +110,15 @@ class VirtusizeButton @JvmOverloads constructor(
      * @see VirtusizeView.setupProductCheckResponseData
      * @throws VirtusizeErrorType.NullProduct error
      */
-    override fun setupProductCheckResponseData(productCheck: ProductCheck) {
-        if (virtusizeParams?.virtusizeProduct != null) {
-            virtusizeParams?.virtusizeProduct!!.productCheckData = productCheck
-            productCheck.data?.let { productCheckResponseData ->
-                if (productCheckResponseData.validProduct) {
-                    visibility = View.VISIBLE
-                    setupButtonTextConfiguredLocalization()
-                    setOnClickListener {
-                        openVirtusizeWebView(context)
-                    }
-                }
+    override fun setupProductCheckResponseData(productWithProductCheck: VirtusizeProduct) {
+        super.setupProductCheckResponseData(productWithProductCheck)
+        if (clientProduct!!.externalId == productWithProductCheck.externalId) {
+            clientProduct!!.productCheckData = productWithProductCheck.productCheckData
+            visibility = View.VISIBLE
+            setupButtonTextConfiguredLocalization()
+            setOnClickListener {
+                openVirtusizeWebView(context, clientProduct!!)
             }
-        } else {
-            VirtusizeErrorType.NullProduct.throwError()
         }
     }
 

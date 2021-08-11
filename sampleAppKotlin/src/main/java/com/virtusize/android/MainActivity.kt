@@ -161,7 +161,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val activityMessageHandler = object : VirtusizeMessageHandler {
-        override fun onEvent(event: VirtusizeEvent) {
+        override fun onEvent(product: VirtusizeProduct, event: VirtusizeEvent) {
             Log.i(TAG, event.name)
         }
 

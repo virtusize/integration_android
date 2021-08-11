@@ -24,6 +24,11 @@ class VirtusizeInPageMini @JvmOverloads constructor(
 ) : VirtusizeInPageView(context, attrs, defStyleAttr) {
 
     /**
+     * @see VirtusizeView.clientProduct
+     */
+    override var clientProduct: VirtusizeProduct? = null
+
+    /**
      * @see VirtusizeView.virtusizeParams
      */
     override lateinit var virtusizeParams: VirtusizeParams
@@ -37,11 +42,6 @@ class VirtusizeInPageMini @JvmOverloads constructor(
      * @see VirtusizeView.virtusizeDialogFragment
      */
     override lateinit var virtusizeDialogFragment: VirtusizeWebViewFragment
-
-    /**
-     * @see VirtusizeView.clientProduct
-     */
-    override lateinit var clientProduct: VirtusizeProduct
 
     // The VirtusizeViewStyle that clients can choose to use for this InPage Mini view
     var virtusizeViewStyle: VirtusizeViewStyle = VirtusizeViewStyle.NONE
@@ -78,31 +78,29 @@ class VirtusizeInPageMini @JvmOverloads constructor(
      * @see VirtusizeView.setupProductCheckResponseData
      * @throws VirtusizeErrorType.NullProduct error
      */
-    override fun setupProductCheckResponseData(productCheck: ProductCheck) {
-        if (virtusizeParams?.virtusizeProduct != null) {
-            virtusizeParams?.virtusizeProduct!!.productCheckData = productCheck
-            productCheck.data?.let { productCheckResponseData ->
-                if (productCheckResponseData.validProduct) {
-                    visibility = View.VISIBLE
-                    setupConfiguredLocalization()
-                    setLoadingScreen(true)
-                    setOnClickListener {
-                        openVirtusizeWebView(context)
-                    }
-                    inpageMiniButton.setOnClickListener {
-                        openVirtusizeWebView(context)
-                    }
-                }
+    override fun setupProductCheckResponseData(productWithProductCheck: VirtusizeProduct) {
+        super.setupProductCheckResponseData(productWithProductCheck)
+        if (clientProduct!!.externalId == productWithProductCheck.externalId) {
+            clientProduct!!.productCheckData = productWithProductCheck.productCheckData
+            visibility = View.VISIBLE
+            setupConfiguredLocalization()
+            setLoadingScreen(true)
+            setOnClickListener {
+                openVirtusizeWebView(context, clientProduct!!)
             }
-        } else {
-            VirtusizeErrorType.NullProduct.throwError()
+            inpageMiniButton.setOnClickListener {
+                openVirtusizeWebView(context, clientProduct!!)
+            }
         }
     }
 
     /**
      * @see VirtusizeInPageView.setupRecommendationText
      */
-    override fun setupRecommendationText(text: String) {
+    override fun setupRecommendationText(externalProductId: String, text: String) {
+        if (clientProduct!!.externalId != externalProductId) {
+            return
+        }
         inpageMiniText.text = text
         setLoadingScreen(false)
     }
@@ -110,7 +108,10 @@ class VirtusizeInPageMini @JvmOverloads constructor(
     /**
      * @see VirtusizeInPageView.showErrorScreen
      */
-    override fun showErrorScreen() {
+    override fun showErrorScreen(externalProductId: String?) {
+        if (clientProduct!!.externalId != externalProductId) {
+            return
+        }
         inpageMiniLoadingText.visibility = View.GONE
         inpageMiniText.visibility = View.VISIBLE
         inpageMiniText.text = configuredContext?.getText(R.string.inpage_short_error_text)
@@ -143,7 +144,7 @@ class VirtusizeInPageMini @JvmOverloads constructor(
         FontUtils.setTypeFace(
             context,
             inpageMiniLoadingText,
-            virtusizeParams?.language,
+            virtusizeParams.language,
             if (loading) FontUtils.FontType.BOLD else FontUtils.FontType.REGULAR
         )
         inpageMiniImageView.visibility = if(loading) View.VISIBLE else View.GONE
@@ -188,14 +189,14 @@ class VirtusizeInPageMini @JvmOverloads constructor(
             mutableListOf(
                 inpageMiniText,
                 inpageMiniButton
-            ), virtusizeParams?.language, FontUtils.FontType.REGULAR
+            ), virtusizeParams.language, FontUtils.FontType.REGULAR
         )
-        configuredContext = VirtusizeUtils.getConfiguredContext(context, virtusizeParams?.language)
+        configuredContext = VirtusizeUtils.getConfiguredContext(context, virtusizeParams.language)
         inpageMiniButton.text = configuredContext?.getText(R.string.virtusize_button_text)
         inpageMiniLoadingText.text = configuredContext?.getText(R.string.inpage_loading_text)
         setConfiguredDimensions()
 
-        if(virtusizeParams?.language == VirtusizeLanguage.JP) {
+        if(virtusizeParams.language == VirtusizeLanguage.JP) {
             inpageMiniText.includeFontPadding = true
         }
     }
@@ -204,7 +205,7 @@ class VirtusizeInPageMini @JvmOverloads constructor(
      * Sets up text sizes based on the configured context
      */
     private fun setConfiguredDimensions() {
-        val additionalSize = if(virtusizeParams?.language == VirtusizeLanguage.EN) 2f.spToPx else 0f
+        val additionalSize = if(virtusizeParams.language == VirtusizeLanguage.EN) 2f.spToPx else 0f
         if(messageTextSize != -1f) {
             inpageMiniLoadingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + additionalSize)
             inpageMiniText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + additionalSize)

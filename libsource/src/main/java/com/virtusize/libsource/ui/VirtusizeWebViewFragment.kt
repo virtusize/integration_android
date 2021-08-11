@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment
 import com.virtusize.libsource.R
 import com.virtusize.libsource.SharedPreferencesHelper
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler
+import com.virtusize.libsource.data.local.VirtusizeProduct
 import com.virtusize.libsource.data.parsers.VirtusizeEventJsonParser
 import com.virtusize.libsource.util.Constants
 import kotlinx.android.synthetic.main.web_activity.*
@@ -23,6 +24,7 @@ class VirtusizeWebViewFragment: DialogFragment() {
     private var backButtonClickEventFromSDKScript = "javascript:vsEventFromSDK({ name: 'sdk-back-button-tapped'})"
 
     private var virtusizeMessageHandler: VirtusizeMessageHandler? = null
+    private lateinit var clientProduct: VirtusizeProduct
 
     private lateinit var sharedPreferencesHelper: SharedPreferencesHelper
 
@@ -137,12 +139,20 @@ class VirtusizeWebViewFragment: DialogFragment() {
         // Get the Virtusize URL passed in fragment arguments
         arguments?.getString(Constants.URL_KEY)?.let {
             virtusizeWebAppUrl = it
+        } ?: run {
+            dismiss()
         }
 
         // Get the Virtusize params script passed in fragment arguments.
         // If the script is not passed, we dismiss this dialog fragment.
         arguments?.getString(Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY)?.let {
             vsParamsFromSDKScript = it
+        } ?: run {
+            dismiss()
+        }
+
+        arguments?.getParcelable<VirtusizeProduct>(Constants.VIRTUSIZE_PRODUCT_KEY)?.let {
+            clientProduct = it
         } ?: run {
             dismiss()
         }
@@ -200,7 +210,7 @@ class VirtusizeWebViewFragment: DialogFragment() {
         @JavascriptInterface
         fun eventHandler(eventInfo: String) {
             val event = VirtusizeEventJsonParser().parse(JSONObject(eventInfo))
-            event?.let { virtusizeMessageHandler?.onEvent(it) }
+            event?.let { virtusizeMessageHandler?.onEvent(clientProduct, it) }
             if (event?.name =="user-closed-widget") {
                 dismiss()
             }

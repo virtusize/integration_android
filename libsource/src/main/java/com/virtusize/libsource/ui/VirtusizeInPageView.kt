@@ -31,9 +31,9 @@ abstract class VirtusizeInPageView @JvmOverloads constructor(
     /**
      * An abstract function to set up the recommendation text
      */
-    internal abstract fun setupRecommendationText(text: String)
+    internal abstract fun setupRecommendationText(externalProductId: String, text: String)
     /**
      * An abstract function to show the error screen
      */
-    internal abstract fun showErrorScreen()
+    internal abstract fun showErrorScreen(externalProductId: String?)
 }
