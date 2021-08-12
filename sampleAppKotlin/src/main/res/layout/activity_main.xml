@@ -31,16 +31,4 @@
         app:virtusizeInPageMiniStyle="virtusize_black"
         app:inPageMiniBackgroundColor="@color/ocean_blue"/>
 
-    <Button
-        android:id="@+id/snsTestButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SNS Auth Test"/>
-
-    <Button
-        android:id="@+id/nextProductButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Next Product"/>
-
 </LinearLayout>

@@ -4,7 +4,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.virtusize.libsource.data.local.VirtusizeProduct
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.exampleVirtusizeButton
+import kotlinx.android.synthetic.main.activity_main.exampleVirtusizeInPageMini
+import kotlinx.android.synthetic.main.activity_main.exampleVirtusizeInPageStandard
+import kotlinx.android.synthetic.main.activity_product.*
 
 class ProductActivity : AppCompatActivity() {
     companion object {

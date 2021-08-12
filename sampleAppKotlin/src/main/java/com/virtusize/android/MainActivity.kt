@@ -95,20 +95,6 @@ class MainActivity : AppCompatActivity() {
          * exampleVirtusizeInPageMini.dismissVirtusizeView()
          */
 
-        snsTestButton.setOnClickListener {
-            val fragmentTransaction = supportFragmentManager.beginTransaction()
-            val previousFragment = supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
-            previousFragment?.let {fragment ->
-                fragmentTransaction.remove(fragment)
-            }
-            fragmentTransaction.addToBackStack(null)
-            WebViewFragment().show(fragmentTransaction, Constants.FRAG_TAG)
-        }
-
-        nextProductButton.setOnClickListener {
-            startActivity(Intent(this, ProductActivity::class.java))
-        }
-
         /*
          * The sample function to send an order to the Virtusize server
          */
