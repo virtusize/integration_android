@@ -7,7 +7,6 @@ import com.virtusize.libsource.data.local.SizeComparisonRecommendedSize
 import com.virtusize.libsource.data.parsers.UserAuthDataJsonParser
 import com.virtusize.libsource.data.remote.I18nLocalization
 import com.virtusize.libsource.data.remote.Product
-import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.data.remote.ProductType
 import com.virtusize.libsource.network.VirtusizeAPIService
 import com.virtusize.libsource.util.VirtusizeUtils
@@ -37,10 +36,10 @@ internal class VirtusizeRepository(
     private var productTypes: List<ProductType>? = null
 
     // A set to cache the product data check data of all the visited products
-    internal val virtusizeProductSet = mutableSetOf<VirtusizeProduct>()
+    private val virtusizeProductSet = mutableSetOf<VirtusizeProduct>()
 
     // A set to cache the store product information of all the visited products
-    internal val storeProductSet = mutableSetOf<Product>()
+    private val storeProductSet = mutableSetOf<Product>()
 
     // This variable holds the i18n localization texts
     internal var i18nLocalization: I18nLocalization? = null
@@ -52,7 +51,11 @@ internal class VirtusizeRepository(
         lastProductOnVirtusizeWebView = getProductBy(externalProductId)
     }
 
-    internal fun getProductBy(externalProductId: String) : Product? {
+    /**
+     * Get the [Product] data by an external product ID
+     * @param externalProductId the external product ID set by a client
+     */
+    internal fun getProductBy(externalProductId: String): Product? {
         return storeProductSet.firstOrNull { product ->
             product.externalId == externalProductId
         }
@@ -117,8 +120,8 @@ internal class VirtusizeRepository(
 
     /**
      * Sends a Virtusize event with the product data check data to the Virtusize API
+     * @param product the [VirtusizeProduct] data wit the product check data
      * @param vsEvent the [VirtusizeEvent]
-     * @param productCheck the [ProductCheck] data
      */
     private suspend fun sendEvent(product: VirtusizeProduct, vsEvent: VirtusizeEvent) {
         val sendEventResponse = virtusizeAPIService.sendEvent(
@@ -132,12 +135,15 @@ internal class VirtusizeRepository(
 
     /**
      * Fetches the initial data such as store product info, product type lists and i18 localization
-     * @param language the display language set by the client
-     * @param productId the product ID provided by the client
+     * @param language the display language set by a client
+     * @param product the [VirtusizeProduct] data set by a client
      */
-    internal suspend fun fetchInitialData(language: VirtusizeLanguage?, virtusizeProduct: VirtusizeProduct) {
-        val productId = virtusizeProduct.productCheckData!!.data!!.productDataId
-        val externalProductId = virtusizeProduct.externalId
+    internal suspend fun fetchInitialData(
+        language: VirtusizeLanguage?,
+        product: VirtusizeProduct
+    ) {
+        val productId = product.productCheckData!!.data!!.productDataId
+        val externalProductId = product.externalId
         val storeProductResponse = virtusizeAPIService.getStoreProduct(productId)
         if (storeProductResponse.successData == null) {
             presenter?.hasInPageError(externalProductId, storeProductResponse.failureData)
@@ -145,7 +151,7 @@ internal class VirtusizeRepository(
         }
 
         val storeProduct = storeProductResponse.successData!!
-        storeProduct.clientProductImageURL = virtusizeProduct.imageUrl
+        storeProduct.clientProductImageURL = product.imageUrl
         storeProductSet.add(storeProduct)
 
         val productTypesResponse = virtusizeAPIService.getProductTypes()
@@ -166,6 +172,7 @@ internal class VirtusizeRepository(
 
     /**
      * Updates the user session by calling the session API
+     * @param externalProductId the external product ID set by a client
      */
     internal suspend fun updateUserSession(externalProductId: String? = lastProductOnVirtusizeWebView?.externalId) {
         val userSessionInfoResponse = virtusizeAPIService.getUserSessionInfo()
@@ -182,7 +189,10 @@ internal class VirtusizeRepository(
 
     /**
      * Fetches data for InPage recommendation
+     * @param externalProductId the external product ID set by a client
      * @param selectedUserProductId the selected product Id from the web view to decide a specific user product to compare with the store product
+     * @param shouldUpdateUserProducts determines whether to update user products from the Virtusize API
+     * @param shouldUpdateBodyProfile determines whether to update a user's body profile from the Virtusize API
      */
     internal suspend fun fetchDataForInPageRecommendation(
         externalProductId: String? = null,
@@ -201,7 +211,10 @@ internal class VirtusizeRepository(
             if (userProductsResponse.isSuccessful) {
                 userProducts = userProductsResponse.successData
             } else if (userProductsResponse.failureData?.code != HttpURLConnection.HTTP_NOT_FOUND) {
-                presenter?.hasInPageError(storeProduct?.externalId, userProductsResponse.failureData)
+                presenter?.hasInPageError(
+                    storeProduct?.externalId,
+                    userProductsResponse.failureData
+                )
                 return
             }
         }
@@ -235,6 +248,7 @@ internal class VirtusizeRepository(
 
     /**
      * Updates the recommendation for InPage based on the recommendation type
+     * @param externalProductId the external product ID set by a client
      * @param type the selected recommendation compare view type
      */
     internal fun updateInPageRecommendation(
