@@ -183,30 +183,30 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
   - An `exernalId` that will be used to reference the product in the Virtusize server
      - An `imageURL` for the product image
    
-   - Pass the `VirtusizeProduct` object to the `Virtusize.load` function
-   
+      - Pass the `VirtusizeProduct` object to the `Virtusize.load` function
+
    Kotlin
-   
+
    ```kotlin
-   val product = VirtusizeProduct(
-       externalId = "vs_dress",
-       imageUrl = "http://www.image.com/goods/12345.jpg"
+val product = VirtusizeProduct(
+    externalId = "vs_dress",
+    imageUrl = "http://www.image.com/goods/12345.jpg"
 )
    
 (application as App)
        .Virtusize
        .load(product)
    ```
-   
+
    Java
-   
+
    ```java
-   VirtusizeProduct product = new VirtusizeProduct(
-           "vs_dress",
-           "http://www.image.com/goods/12345.jpg"
-   );
+VirtusizeProduct product = new VirtusizeProduct(
+    "vs_dress",
+    "http://www.image.com/goods/12345.jpg"
+);
    
-   app.Virtusize.load(product);
+app.Virtusize.load(product);
    ```
 
 
