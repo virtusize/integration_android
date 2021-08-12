@@ -58,7 +58,7 @@ class VirtusizeWebViewFragment: DialogFragment() {
         webView.settings.setSupportMultipleWindows(true)
         webView.settings.javaScriptCanOpenWindowsAutomatically = true
         // Add the Javascript interface to interface the web app with the web view
-        webView.addJavascriptInterface(WebAppInterface(), Constants.JSBridgeName)
+        webView.addJavascriptInterface(WebAppInterface(), Constants.JS_BRIDGE_NAME)
         // Set up the web view client that adds JavaScript scripts for the interaction between the SDK and the web
         webView.webViewClient = object: WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
