@@ -1,3 +1,11 @@
+## 2.3.0
+
+* Change the get-size endpoint from `get-size-new` to `get-size`
+* Prevent from updating the selected user product ID when the event `user-added-product` is fired
+* Remove the `Proxima Nova` font and use the `Roboto` font for English texts
+* Add the MIT license
+* Improve the integration by binding each Virtusize widget with a `VirtusizeProduct` object using the `Virtusize.setVirtusizeView` function
+
 ## 2.2.3
 
 * Handle the user-deleted-product event from the Virtusize webview
