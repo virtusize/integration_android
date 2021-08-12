@@ -11,7 +11,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.virtusize.libsource.R
 import com.virtusize.libsource.data.local.*
-import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.util.*
 import com.virtusize.libsource.util.FontUtils
 import com.virtusize.libsource.util.VirtusizeUtils
@@ -75,13 +74,13 @@ class VirtusizeInPageMini @JvmOverloads constructor(
     }
 
     /**
-     * @see VirtusizeView.setupProductCheckResponseData
+     * @see VirtusizeView.setProductWithProductDataCheck
      * @throws VirtusizeErrorType.NullProduct error
      */
-    override fun setupProductCheckResponseData(productWithProductCheck: VirtusizeProduct) {
-        super.setupProductCheckResponseData(productWithProductCheck)
-        if (clientProduct!!.externalId == productWithProductCheck.externalId) {
-            clientProduct!!.productCheckData = productWithProductCheck.productCheckData
+    override fun setProductWithProductDataCheck(productWithPDC: VirtusizeProduct) {
+        super.setProductWithProductDataCheck(productWithPDC)
+        if (clientProduct!!.externalId == productWithPDC.externalId) {
+            clientProduct!!.productCheckData = productWithPDC.productCheckData
             visibility = View.VISIBLE
             setupConfiguredLocalization()
             setLoadingScreen(true)
@@ -95,9 +94,9 @@ class VirtusizeInPageMini @JvmOverloads constructor(
     }
 
     /**
-     * @see VirtusizeInPageView.setupRecommendationText
+     * @see VirtusizeInPageView.setRecommendationText
      */
-    override fun setupRecommendationText(externalProductId: String, text: String) {
+    override fun setRecommendationText(externalProductId: String, text: String) {
         if (clientProduct!!.externalId != externalProductId) {
             return
         }
@@ -106,9 +105,9 @@ class VirtusizeInPageMini @JvmOverloads constructor(
     }
 
     /**
-     * @see VirtusizeInPageView.showErrorScreen
+     * @see VirtusizeInPageView.showInPageError
      */
-    override fun showErrorScreen(externalProductId: String?) {
+    override fun showInPageError(externalProductId: String?) {
         if (clientProduct!!.externalId != externalProductId) {
             return
         }

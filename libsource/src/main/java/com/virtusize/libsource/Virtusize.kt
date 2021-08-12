@@ -142,16 +142,16 @@ class Virtusize(
      * The VirtusizePresenter handles the data passed from the actions of VirtusizeRepository
      */
     private val virtusizePresenter = object : VirtusizePresenter {
-        override fun onValidProductDataCheck(productWithPDCData: VirtusizeProduct) {
+        override fun onValidProductDataCheck(productWithPDC: VirtusizeProduct) {
             for (virtusizeView in virtusizeViews) {
-                virtusizeView.setupProductCheckResponseData(productWithPDCData)
+                virtusizeView.setProductWithProductDataCheck(productWithPDC)
             }
             if (virtusizeViewsContainInPage()) {
                 CoroutineScope(Main).launch {
-                    virtusizeRepository.fetchInitialData(params.language, productWithPDCData)
-                    virtusizeRepository.updateUserSession(productWithPDCData.externalId)
-                    virtusizeRepository.fetchDataForInPageRecommendation(productWithPDCData.externalId)
-                    virtusizeRepository.updateInPageRecommendation(productWithPDCData.externalId)
+                    virtusizeRepository.fetchInitialData(params.language, productWithPDC)
+                    virtusizeRepository.updateUserSession(productWithPDC.externalId)
+                    virtusizeRepository.fetchDataForInPageRecommendation(productWithPDC.externalId)
+                    virtusizeRepository.updateInPageRecommendation(productWithPDC.externalId)
                 }
             }
         }
@@ -160,7 +160,7 @@ class Virtusize(
             error?.let { messageHandler.onError(it) }
             for (virtusizeView in virtusizeViews) {
                 if (virtusizeView is VirtusizeInPageView) {
-                    virtusizeView.showErrorScreen(externalProductId)
+                    virtusizeView.showInPageError(externalProductId)
                 }
             }
         }
@@ -182,7 +182,7 @@ class Virtusize(
                                 userProductRecommendedSize,
                                 userBodyRecommendedSize
                             ).trimI18nText(trimType)
-                            virtusizeView.setupRecommendationText(externalProductId, recommendationText)
+                            virtusizeView.setRecommendationText(externalProductId, recommendationText)
                         }
                         if (virtusizeView is VirtusizeInPageStandard) {
                             virtusizeView.setProductImages(
@@ -246,7 +246,7 @@ class Virtusize(
     /**
      * Sets up the product for the product detail page
      *
-     * @param virtusizeProduct VirtusizeProduct that is being set to the VirtusizeView
+     * @param virtusizeProduct VirtusizeProduct that is being loaded with the Virtusize API
      */
     fun load(virtusizeProduct: VirtusizeProduct) {
         CoroutineScope(Main).launch {
@@ -255,8 +255,9 @@ class Virtusize(
     }
 
     /**
-     * Sets up the Virtusize view by passing the VirtusizeView
+     * Sets up the Virtusize view by passing the VirtusizeView along with the bound VirtusizeProduct
      * @param virtusizeView VirtusizeView that is being set up
+     * @param product the [VirtusizeProduct] set by a client
      * @throws IllegalArgumentException throws an error if VirtusizeButton is null or the image URL of VirtusizeProduct is invalid
      */
     fun setupVirtusizeView(virtusizeView: VirtusizeView?, product: VirtusizeProduct) {

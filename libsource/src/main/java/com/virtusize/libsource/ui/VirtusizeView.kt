@@ -2,7 +2,6 @@ package com.virtusize.libsource.ui
 
 import android.content.Context
 import com.virtusize.libsource.data.local.*
-import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.util.VirtusizeUtils
 
 /**
@@ -19,11 +18,10 @@ interface VirtusizeView {
     var virtusizeDialogFragment: VirtusizeWebViewFragment
 
     /**
-     * Sets up the VirtusizeView with the corresponding VirtusizeParams
-     * @param product // TODO
-     * @param params the VirtusizeParams that is set for this VirtusizeView
-     * @param messageHandler pass VirtusizeMessageHandler to listen to any Virtusize-related messages
-     * @see VirtusizeParams
+     * Initial setup for this VirtusizeView
+     * @param product the [VirtusizeProduct] set by a client
+     * @param params the [VirtusizeParams] that is set for this VirtusizeView
+     * @param messageHandler pass [VirtusizeMessageHandler] to listen to any Virtusize-related messages
      */
     fun initialSetup(
         product: VirtusizeProduct,
@@ -37,11 +35,10 @@ interface VirtusizeView {
     }
 
     /**
-     * Sets up the product check data received from Virtusize API to VirtusizeProduct
-     * @param productCheck ProductCheckResponse received from Virtusize API
-     * @see ProductCheck
+     * Sets the product with the product data check response to this Virtusize view
+     * @param productWithPDC the [VirtusizeProduct] with the product data check response received from Virtusize API
      */
-    fun setupProductCheckResponseData(productWithProductCheck: VirtusizeProduct) {
+    fun setProductWithProductDataCheck(productWithPDC: VirtusizeProduct) {
         if (clientProduct == null) {
             virtusizeMessageHandler.onError(VirtusizeErrorType.NullProduct.virtusizeError())
             VirtusizeErrorType.NullProduct.throwError()

@@ -12,17 +12,20 @@ internal class VirtusizeInPageStandardViewModel(
     private val virtusizeRepository: VirtusizeRepository
 ): ViewModel() {
 
-    val productImageBitmapLiveData = MutableLiveData<Pair<VirtusizeProductImageView, Bitmap>>()
+    val productNetworkImageLiveData = MutableLiveData<Pair<VirtusizeProductImageView, Bitmap>>()
 
-    val productLiveData = MutableLiveData<Pair<VirtusizeProductImageView, Product>>()
+    val productPlaceholderImageLiveData = MutableLiveData<Pair<VirtusizeProductImageView, Product>>()
 
-    val finishLoadingProductImage = MutableLiveData<Boolean>()
+    val finishLoadingProductImages = MutableLiveData<Boolean>()
 
-    fun loadProductImages(productMap: MutableMap<VirtusizeProductImageView, Product>) {
+    /**
+     * Loads the product images based on a map of keys [VirtusizeProductImageView] and their values [Product]
+     */
+    fun loadProductImages(productImageMap: MutableMap<VirtusizeProductImageView, Product>) {
         viewModelScope.launch {
-            for (map in productMap.entries) {
-                val productImageView = map.key
-                val product = map.value
+            for (productImageMapEntry in productImageMap.entries) {
+                val productImageView = productImageMapEntry.key
+                val product = productImageMapEntry.value
                 var imageBitmap: Bitmap? = null
                 virtusizeRepository.loadImage(product.clientProductImageURL)?.let {
                     imageBitmap = it
@@ -33,12 +36,12 @@ internal class VirtusizeInPageStandardViewModel(
                 }
 
                 if (imageBitmap != null) {
-                    productImageBitmapLiveData.value = Pair(productImageView, imageBitmap!!)
+                    productNetworkImageLiveData.value = Pair(productImageView, imageBitmap!!)
                 } else {
-                    productLiveData.value = Pair(productImageView, product)
+                    productPlaceholderImageLiveData.value = Pair(productImageView, product)
                 }
             }
-            finishLoadingProductImage.value = true
+            finishLoadingProductImages.value = true
         }
     }
 }

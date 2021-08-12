@@ -9,7 +9,6 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import com.virtusize.libsource.R
 import com.virtusize.libsource.data.local.*
-import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.util.VirtusizeUtils
 
 class VirtusizeButton @JvmOverloads constructor(
@@ -107,13 +106,13 @@ class VirtusizeButton @JvmOverloads constructor(
     }
 
     /**
-     * @see VirtusizeView.setupProductCheckResponseData
+     * @see VirtusizeView.setProductWithProductDataCheck
      * @throws VirtusizeErrorType.NullProduct error
      */
-    override fun setupProductCheckResponseData(productWithProductCheck: VirtusizeProduct) {
-        super.setupProductCheckResponseData(productWithProductCheck)
-        if (clientProduct!!.externalId == productWithProductCheck.externalId) {
-            clientProduct!!.productCheckData = productWithProductCheck.productCheckData
+    override fun setProductWithProductDataCheck(productWithPDC: VirtusizeProduct) {
+        super.setProductWithProductDataCheck(productWithPDC)
+        if (clientProduct!!.externalId == productWithPDC.externalId) {
+            clientProduct!!.productCheckData = productWithPDC.productCheckData
             visibility = View.VISIBLE
             setupButtonTextConfiguredLocalization()
             setOnClickListener {

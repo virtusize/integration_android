@@ -22,7 +22,6 @@ import com.virtusize.libsource.R
 import com.virtusize.libsource.VirtusizeRepository
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.Product
-import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.util.*
 import kotlinx.android.synthetic.main.view_inpage_standard.view.*
 
@@ -151,18 +150,18 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
         viewModel = viewModelFactory.create(VirtusizeInPageStandardViewModel::class.java)
 
         (context as? LifecycleOwner)?.apply {
-            viewModel?.productImageBitmapLiveData?.observe(this, { productImageViewBitMapPair ->
+            viewModel?.productNetworkImageLiveData?.observe(this, { productImageViewBitMapPair ->
                 productImageViewBitMapPair.first.setProductImage(productImageViewBitMapPair.second)
             })
 
-            viewModel?.productLiveData?.observe(this, { productImageViewDataPair ->
+            viewModel?.productPlaceholderImageLiveData?.observe(this, { productImageViewDataPair ->
                 productImageViewDataPair.first.setProductPlaceHolderImage(
                     productImageViewDataPair.second.productType,
                     productImageViewDataPair.second.storeProductMeta?.additionalInfo?.style
                 )
             })
 
-            viewModel?.finishLoadingProductImage?.observe(this, { finishLoading ->
+            viewModel?.finishLoadingProductImages?.observe(this, { finishLoading ->
                 if (finishLoading) {
                     setLoadingScreen(false, userBestFitProduct)
                 }
@@ -171,13 +170,13 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
     }
 
     /**
-     * @see VirtusizeView.setupProductCheckResponseData
+     * @see VirtusizeView.setProductWithProductDataCheck
      * @throws VirtusizeErrorType.NullProduct error
      */
-    override fun setupProductCheckResponseData(productWithProductCheck: VirtusizeProduct) {
-        super.setupProductCheckResponseData(productWithProductCheck)
-        if (clientProduct!!.externalId == productWithProductCheck.externalId) {
-            clientProduct!!.productCheckData = productWithProductCheck.productCheckData
+    override fun setProductWithProductDataCheck(productWithPDC: VirtusizeProduct) {
+        super.setProductWithProductDataCheck(productWithPDC)
+        if (clientProduct!!.externalId == productWithPDC.externalId) {
+            clientProduct!!.productCheckData = productWithPDC.productCheckData
             visibility = View.VISIBLE
             setupConfiguredLocalization()
             setLoadingScreen(true)
@@ -228,9 +227,9 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
     }
 
     /**
-     * @see VirtusizeInPageView.setupRecommendationText
+     * @see VirtusizeInPageView.setRecommendationText
      */
-    override fun setupRecommendationText(externalProductId: String, text: String) {
+    override fun setRecommendationText(externalProductId: String, text: String) {
         if (clientProduct!!.externalId != externalProductId) {
             return
         }
@@ -246,9 +245,9 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
     }
 
     /**
-     * @see VirtusizeInPageView.showErrorScreen
+     * @see VirtusizeInPageView.showInPageError
      */
-    override fun showErrorScreen(externalProductId: String?) {
+    override fun showInPageError(externalProductId: String?) {
         if (clientProduct!!.externalId != externalProductId) {
             return
         }
