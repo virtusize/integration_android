@@ -196,8 +196,7 @@ class Virtusize(
         }
     }
 
-    private var virtusizeRepository: VirtusizeRepository =
-        VirtusizeRepository(context, messageHandler, virtusizePresenter)
+    private var virtusizeRepository: VirtusizeRepository = VirtusizeRepository(context, messageHandler, virtusizePresenter)
 
     // This variable holds the Virtusize view that clients use on their application
     private var virtusizeViews = mutableSetOf<VirtusizeView>()
@@ -217,7 +216,9 @@ class Virtusize(
      */
     fun setUserId(userId: String) {
         VirtusizeApi.updateUserId(userId)
-        params.externalUserId = userId
+        for (virtusizeView in virtusizeViews) {
+            virtusizeView.virtusizeParams.externalUserId = userId
+        }
     }
 
     /**
@@ -273,7 +274,9 @@ class Virtusize(
 
         (virtusizeView as? View)?.addOnAttachStateChangeListener(object :
             View.OnAttachStateChangeListener {
-            override fun onViewAttachedToWindow(v: View?) {}
+            override fun onViewAttachedToWindow(v: View?) {
+                virtusizeViews.add(virtusizeView)
+            }
 
             override fun onViewDetachedFromWindow(v: View?) {
                 val detachedVirtusizeView = v as? VirtusizeView
@@ -281,8 +284,6 @@ class Virtusize(
                     virtusizeViews.remove(detachedVirtusizeView)
             }
         })
-
-        virtusizeViews.add(virtusizeView)
     }
 
     /**
