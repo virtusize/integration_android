@@ -24,24 +24,32 @@ import kotlinx.coroutines.launch
  */
 class Virtusize(
     private val context: Context,
-    private val params: VirtusizeParams
+    internal val params: VirtusizeParams
 ) {
+
+    // The getter of the display language
+    val displayLanguage: VirtusizeLanguage
+        get() = params.language
+
     // Registered message handlers
     private val messageHandlers = mutableListOf<VirtusizeMessageHandler>()
 
     // The Virtusize message handler passes received errors and events to registered message handlers
     private val messageHandler = object : VirtusizeMessageHandler {
-        override fun onEvent(event: VirtusizeEvent) {
+        override fun onEvent(product: VirtusizeProduct, event: VirtusizeEvent) {
             messageHandlers.forEach { messageHandler ->
-                messageHandler.onEvent(event)
+                messageHandler.onEvent(product, event)
             }
             // Handle different user events from the web view
             when (event.name) {
                 VirtusizeEvents.UserOpenedWidget.getEventName() -> {
+                    virtusizeRepository.setLastProductOnVirtusizeWebView(product.externalId)
                     CoroutineScope(Main).launch {
                         virtusizeRepository.fetchDataForInPageRecommendation(
-                            shouldUpdateUserProducts = false
+                            shouldUpdateUserProducts = false,
+                            shouldUpdateBodyProfile = false
                         )
+                        virtusizeRepository.updateInPageRecommendation()
                     }
                 }
                 VirtusizeEvents.UserAuthData.getEventName() -> {
@@ -50,26 +58,35 @@ class Virtusize(
                     }
                 }
                 VirtusizeEvents.UserSelectedProduct.getEventName() -> {
-                    // Filters userProducts by the selected product ID to get userProductRecommendedSize
                     val userProductId = event.data?.optInt("userProductId")
                     CoroutineScope(Main).launch {
                         virtusizeRepository.fetchDataForInPageRecommendation(
+                            selectedUserProductId = userProductId,
                             shouldUpdateUserProducts = false,
-                            selectedUserProductId = userProductId
+                            shouldUpdateBodyProfile = false
                         )
-                        virtusizeRepository.switchInPageRecommendation(SizeRecommendationType.compareProduct)
+                        virtusizeRepository.updateInPageRecommendation(type = SizeRecommendationType.compareProduct)
                     }
                 }
                 VirtusizeEvents.UserAddedProduct.getEventName() -> {
-                    // Gets updated user products from the server,
-                    // and then filters userProducts by the selected product ID to get userProductRecommendedSize
-                    val userProductId = event.data?.optInt("userProductId")
                     CoroutineScope(Main).launch {
                         virtusizeRepository.fetchDataForInPageRecommendation(
                             shouldUpdateUserProducts = true,
-                            selectedUserProductId = userProductId
+                            shouldUpdateBodyProfile = false
                         )
-                        virtusizeRepository.switchInPageRecommendation(SizeRecommendationType.compareProduct)
+                        virtusizeRepository.updateInPageRecommendation(type = SizeRecommendationType.compareProduct)
+                    }
+                }
+                VirtusizeEvents.UserDeletedProduct.getEventName() -> {
+                    event.data?.optInt("userProductId")?.let { userProductId ->
+                        virtusizeRepository.deleteUserProduct(userProductId)
+                    }
+                    CoroutineScope(Main).launch {
+                        virtusizeRepository.fetchDataForInPageRecommendation(
+                            shouldUpdateUserProducts = false,
+                            shouldUpdateBodyProfile = false
+                        )
+                        virtusizeRepository.updateInPageRecommendation()
                     }
                 }
                 VirtusizeEvents.UserChangedRecommendationType.getEventName() -> {
@@ -79,7 +96,7 @@ class Virtusize(
                         recommendationType = valueOf<SizeRecommendationType>(it)
                     }
                     CoroutineScope(Main).launch {
-                        virtusizeRepository.switchInPageRecommendation(recommendationType)
+                        virtusizeRepository.updateInPageRecommendation(type = recommendationType)
                     }
                 }
                 VirtusizeEvents.UserUpdatedBodyMeasurements.getEventName() -> {
@@ -87,15 +104,15 @@ class Virtusize(
                     val sizeRecName = event.data?.optString("sizeRecName")
                     CoroutineScope(Main).launch {
                         virtusizeRepository.updateUserBodyRecommendedSize(sizeRecName)
-                        virtusizeRepository.switchInPageRecommendation(SizeRecommendationType.body)
+                        virtusizeRepository.updateInPageRecommendation(type = SizeRecommendationType.body)
                     }
                 }
                 VirtusizeEvents.UserLoggedIn.getEventName() -> {
-                    // Updates the user session and fetches updated user prodcuts and body profile from the server
+                    // Updates the user session and fetches updated user products and body profile from the server
                     CoroutineScope(Main).launch {
                         virtusizeRepository.updateUserSession()
                         virtusizeRepository.fetchDataForInPageRecommendation()
-                        virtusizeRepository.switchInPageRecommendation()
+                        virtusizeRepository.updateInPageRecommendation()
                     }
                 }
                 VirtusizeEvents.UserLoggedOut.getEventName(), VirtusizeEvents.UserDeletedData.getEventName() -> {
@@ -105,9 +122,10 @@ class Virtusize(
                         virtusizeRepository.clearUserData()
                         virtusizeRepository.updateUserSession()
                         virtusizeRepository.fetchDataForInPageRecommendation(
-                            shouldUpdateUserProducts = false
+                            shouldUpdateUserProducts = false,
+                            shouldUpdateBodyProfile = false
                         )
-                        virtusizeRepository.switchInPageRecommendation()
+                        virtusizeRepository.updateInPageRecommendation()
                     }
                 }
             }
@@ -123,53 +141,54 @@ class Virtusize(
     /**
      * The VirtusizePresenter handles the data passed from the actions of VirtusizeRepository
      */
-    private val virtusizePresenter = object: VirtusizePresenter {
-        override fun finishedProductCheck(productCheck: ProductCheck) {
-            for(virtusizeView in virtusizeViews) {
-                virtusizeView.setup(params = params, messageHandler = messageHandler)
-                virtusizeView.setupProductCheckResponseData(productCheck)
+    private val virtusizePresenter = object : VirtusizePresenter {
+        override fun onValidProductDataCheck(productWithPDC: VirtusizeProduct) {
+            for (virtusizeView in virtusizeViews) {
+                virtusizeView.setProductWithProductDataCheck(productWithPDC)
             }
-        }
-
-        override fun onValidProductId(productId: Int) {
-            if(virtusizeViewsContainInPage()) {
+            if (virtusizeViewsContainInPage()) {
                 CoroutineScope(Main).launch {
-                    virtusizeRepository.fetchInitialData(params.language, productId)
-                    virtusizeRepository.updateUserSession()
-                    virtusizeRepository.fetchDataForInPageRecommendation()
-                    virtusizeRepository.switchInPageRecommendation()
+                    virtusizeRepository.fetchInitialData(params.language, productWithPDC)
+                    virtusizeRepository.updateUserSession(productWithPDC.externalId)
+                    virtusizeRepository.fetchDataForInPageRecommendation(productWithPDC.externalId)
+                    virtusizeRepository.updateInPageRecommendation(productWithPDC.externalId)
                 }
             }
         }
 
-        override fun hasInPageError(error: VirtusizeError?) {
+        override fun hasInPageError(externalProductId: String?, error: VirtusizeError?) {
             error?.let { messageHandler.onError(it) }
-            for(virtusizeView in virtusizeViews) {
+            for (virtusizeView in virtusizeViews) {
                 if (virtusizeView is VirtusizeInPageView) {
-                    virtusizeView.showErrorScreen()
+                    virtusizeView.showInPageError(externalProductId)
                 }
             }
         }
 
         override fun gotSizeRecommendations(
+            externalProductId: String,
             userProductRecommendedSize: SizeComparisonRecommendedSize?,
             userBodyRecommendedSize: String?
         ) {
-            for(virtusizeView in virtusizeViews) {
-                if(virtusizeView is VirtusizeInPageView) {
-                    virtusizeRepository.storeProduct?.apply {
+            val storeProduct = virtusizeRepository.getProductBy(externalProductId)
+            for (virtusizeView in virtusizeViews) {
+                if (virtusizeView is VirtusizeInPageView) {
+                    storeProduct?.apply {
                         virtusizeRepository.i18nLocalization?.let { i18nLocalization ->
-                            val trimType = if (virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
+                            val trimType =
+                                if (virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
                             val recommendationText = getRecommendationText(
                                 i18nLocalization,
                                 userProductRecommendedSize,
                                 userBodyRecommendedSize
                             ).trimI18nText(trimType)
-                            virtusizeView.setupRecommendationText(recommendationText)
+                            virtusizeView.setRecommendationText(externalProductId, recommendationText)
                         }
                         if (virtusizeView is VirtusizeInPageStandard) {
-                            clientProductImageURL = params.virtusizeProduct?.imageUrl
-                            virtusizeView.setProductImages(this, userProductRecommendedSize?.bestUserProduct)
+                            virtusizeView.setProductImages(
+                                this,
+                                userProductRecommendedSize?.bestUserProduct
+                            )
                         }
                     }
                 }
@@ -197,7 +216,9 @@ class Virtusize(
      */
     fun setUserId(userId: String) {
         VirtusizeApi.updateUserId(userId)
-        params.externalUserId = userId
+        for (virtusizeView in virtusizeViews) {
+            virtusizeView.virtusizeParams.externalUserId = userId
+        }
     }
 
     /**
@@ -225,43 +246,38 @@ class Virtusize(
     /**
      * Sets up the product for the product detail page
      *
-     * @param virtusizeProduct VirtusizeProduct that is being set to the VirtusizeView
+     * @param virtusizeProduct VirtusizeProduct that is being loaded with the Virtusize API
      */
-    fun setupVirtusizeProduct(virtusizeProduct: VirtusizeProduct?) {
-        // Throws NullProduct error if the product is null
-        if (virtusizeProduct == null) {
-            VirtusizeErrorType.NullProduct.throwError()
-            return
-        }
-
-        params.virtusizeProduct = virtusizeProduct
-        virtusizeRepository.virtusizeProduct = virtusizeProduct
-
+    fun load(virtusizeProduct: VirtusizeProduct) {
         CoroutineScope(Main).launch {
             virtusizeRepository.productDataCheck(virtusizeProduct)
         }
     }
 
     /**
-     * Sets up the Virtusize view by passing the VirtusizeView
+     * Sets up the Virtusize view by passing the VirtusizeView along with the bound VirtusizeProduct
      * @param virtusizeView VirtusizeView that is being set up
+     * @param product the [VirtusizeProduct] set by a client
      * @throws IllegalArgumentException throws an error if VirtusizeButton is null or the image URL of VirtusizeProduct is invalid
      */
-    fun setupVirtusizeView(virtusizeView: VirtusizeView?) {
-        // Throws NullProduct error if the product is not set yet
-        if (virtusizeRepository.virtusizeProduct == null) {
-            VirtusizeErrorType.NullProduct.throwError()
-            return
-        }
-
+    fun setupVirtusizeView(virtusizeView: VirtusizeView?, product: VirtusizeProduct) {
         // Throws VirtusizeError.NullVirtusizeButtonError error if button is null
         if (virtusizeView == null) {
             VirtusizeErrorType.NullVirtusizeViewError.throwError()
             return
         }
 
-        (virtusizeView as? View)?.addOnAttachStateChangeListener(object: View.OnAttachStateChangeListener{
-            override fun onViewAttachedToWindow(v: View?) {}
+        virtusizeView.initialSetup(
+            product = product,
+            params = params,
+            messageHandler = messageHandler
+        )
+
+        (virtusizeView as? View)?.addOnAttachStateChangeListener(object :
+            View.OnAttachStateChangeListener {
+            override fun onViewAttachedToWindow(v: View?) {
+                virtusizeViews.add(virtusizeView)
+            }
 
             override fun onViewDetachedFromWindow(v: View?) {
                 val detachedVirtusizeView = v as? VirtusizeView
@@ -269,8 +285,6 @@ class Virtusize(
                     virtusizeViews.remove(detachedVirtusizeView)
             }
         })
-
-        virtusizeViews.add(virtusizeView)
     }
 
     /**
@@ -313,9 +327,12 @@ class Virtusize(
         }
     }
 
+    /**
+     * Returns a boolean value to tell whether the VirtusizeView array contains at least one VirtusizeInPageView
+     */
     private fun virtusizeViewsContainInPage(): Boolean {
-        for(virtusizeView in virtusizeViews) {
-            if(virtusizeView is VirtusizeInPageView) {
+        for (virtusizeView in virtusizeViews) {
+            if (virtusizeView is VirtusizeInPageView) {
                 return true
             }
         }

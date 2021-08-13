@@ -11,19 +11,20 @@ import androidx.fragment.app.DialogFragment
 import com.virtusize.libsource.R
 import com.virtusize.libsource.SharedPreferencesHelper
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler
+import com.virtusize.libsource.data.local.VirtusizeProduct
 import com.virtusize.libsource.data.parsers.VirtusizeEventJsonParser
 import com.virtusize.libsource.databinding.WebActivityBinding
 import com.virtusize.libsource.util.Constants
 import org.json.JSONObject
 
-class VirtusizeWebView: DialogFragment() {
+class VirtusizeWebViewFragment: DialogFragment() {
 
     private var virtusizeWebAppUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-webview.html"
     private var vsParamsFromSDKScript = ""
     private var backButtonClickEventFromSDKScript = "javascript:vsEventFromSDK({ name: 'sdk-back-button-tapped'})"
 
-    private lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
-    private lateinit var virtusizeView: VirtusizeView
+    private var virtusizeMessageHandler: VirtusizeMessageHandler? = null
+    private lateinit var clientProduct: VirtusizeProduct
 
     private lateinit var sharedPreferencesHelper: SharedPreferencesHelper
 
@@ -61,12 +62,13 @@ class VirtusizeWebView: DialogFragment() {
         binding.webView.settings.setSupportMultipleWindows(true)
         binding.webView.settings.javaScriptCanOpenWindowsAutomatically = true
         // Add the Javascript interface to interface the web app with the web view
-        binding.webView.addJavascriptInterface(WebAppInterface(), Constants.JSBridgeName)
+        binding.webView.addJavascriptInterface(WebAppInterface(), Constants.JS_BRIDGE_NAME)
         // Set up the web view client that adds JavaScript scripts for the interaction between the SDK and the web
         binding.webView.webViewClient = object: WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 if(url != null && url.contains(virtusizeWebAppUrl)) {
                     binding.webView.evaluateJavascript(vsParamsFromSDKScript, null)
+                    binding.webView?.evaluateJavascript("javascript:window.virtusizeSNSEnabled = true;", null)
                     getBrowserIDFromCookies()?.let { bid ->
                         if(bid != sharedPreferencesHelper.getBrowserId()) {
                             sharedPreferencesHelper.storeBrowserId(bid)
@@ -141,12 +143,20 @@ class VirtusizeWebView: DialogFragment() {
         // Get the Virtusize URL passed in fragment arguments
         arguments?.getString(Constants.URL_KEY)?.let {
             virtusizeWebAppUrl = it
+        } ?: run {
+            dismiss()
         }
 
         // Get the Virtusize params script passed in fragment arguments.
         // If the script is not passed, we dismiss this dialog fragment.
         arguments?.getString(Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY)?.let {
             vsParamsFromSDKScript = it
+        } ?: run {
+            dismiss()
+        }
+
+        arguments?.getParcelable<VirtusizeProduct>(Constants.VIRTUSIZE_PRODUCT_KEY)?.let {
+            clientProduct = it
         } ?: run {
             dismiss()
         }
@@ -163,12 +173,8 @@ class VirtusizeWebView: DialogFragment() {
     /**
      * Sets up a Virtusize message handler
      */
-    internal fun setupMessageHandler(
-        messageHandler: VirtusizeMessageHandler,
-        virtusizeView: VirtusizeView
-    ) {
+    internal fun setupMessageHandler(messageHandler: VirtusizeMessageHandler) {
         virtusizeMessageHandler = messageHandler
-        this.virtusizeView = virtusizeView
     }
 
     /**
@@ -208,7 +214,7 @@ class VirtusizeWebView: DialogFragment() {
         @JavascriptInterface
         fun eventHandler(eventInfo: String) {
             val event = VirtusizeEventJsonParser().parse(JSONObject(eventInfo))
-            event?.let { virtusizeMessageHandler.onEvent(it) }
+            event?.let { virtusizeMessageHandler?.onEvent(clientProduct, it) }
             if (event?.name =="user-closed-widget") {
                 dismiss()
             }

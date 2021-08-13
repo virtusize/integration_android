@@ -4,7 +4,7 @@
     <string name="portrait" translatable="false">portrait</string>
     <string name="virtusize_button_text">Check size</string>
     <string name="virtusize_privacy_policy">Privacy Policy</string>
-    <string name="virtusize_privacy_policy_link">http://www.virtusize.com/site/privacy-policy</string>
+    <string name="virtusize_privacy_policy_link">https://www.virtusize.com/site/privacy-policy</string>
     <string name="inpage_default_accessory_text">See how everyday items fit</string>
     <string name="inpage_has_product_top_text">See the size difference from</string>
     <string name="inpage_has_product_bottom_text">your own item</string>

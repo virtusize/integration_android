@@ -1,6 +1,8 @@
 package com.virtusize.libsource.data.local
 
+import android.os.Parcelable
 import com.virtusize.libsource.data.remote.ProductCheck
+import kotlinx.android.parcel.Parcelize
 
 /**
  * This class represents a VirtusizeProduct object.
@@ -9,8 +11,9 @@ import com.virtusize.libsource.data.remote.ProductCheck
  * @param imageUrl the image URL of this product, in order to populate the comparison view
  * @param productCheckData the product check response from Virtusize API
  */
+@Parcelize
 data class VirtusizeProduct @JvmOverloads constructor(
     val externalId: String,
     var imageUrl: String? = null,
     var productCheckData: ProductCheck? = null
-)
+): Parcelable

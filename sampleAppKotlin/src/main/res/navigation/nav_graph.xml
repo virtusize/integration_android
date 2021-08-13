@@ -36,4 +36,13 @@
         android:name="com.virtusize.android.designsystem.TooltipFragment"
         android:label="@string/virtusize_tooltip"
         tools:layout="@layout/fragment_tooltip"/>
+    <fragment
+        android:id="@+id/productFragment"
+        android:name="com.virtusize.android.ProductFragment"
+        android:label="Virtusize Product"
+        tools:layout="@layout/fragment_product" >
+        <action
+            android:id="@+id/action_productFragment_to_self"
+            app:destination="@id/productFragment" />
+    </fragment>
 </navigation>

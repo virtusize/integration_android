@@ -25,7 +25,8 @@ class ProductCheckJsonParserTest {
         val expectedProductCheck = ProductCheck(
             expectedData,
             "694",
-            "backend-checked-product"
+            "backend-checked-product",
+            TestFixtures.PRODUCT_DATA_CHECK.toString()
         )
 
         assertThat(actualProductCheck).isEqualTo(expectedProductCheck)

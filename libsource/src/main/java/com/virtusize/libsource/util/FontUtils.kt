@@ -21,7 +21,7 @@ internal object FontUtils {
     fun setTypeFaces(context: Context, textViews: List<TextView>, language: VirtusizeLanguage?, fontType: Font.FontType) {
         when(language) {
             VirtusizeLanguage.EN -> {
-                Font.setTypeFace(context, textViews, Font.FontName.PROXIMA_NOVA, fontType)
+                Font.setTypeFace(context, textViews, Font.FontName.ROBOTO, fontType)
             }
             VirtusizeLanguage.JP -> {
                 Font.setTypeFace(

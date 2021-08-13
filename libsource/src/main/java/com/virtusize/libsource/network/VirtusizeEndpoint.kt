@@ -31,7 +31,7 @@ internal fun VirtusizeEndpoint.getPath(env: VirtusizeEnvironment? = null): Strin
              "/product/check"
          }
          VirtusizeEndpoint.GetSize -> {
-             "/ds-functions/size-rec/get-size-new"
+             "/ds-functions/size-rec/get-size"
          }
          VirtusizeEndpoint.VirtusizeWebView -> {
              "/a/aoyama/${if(env == VirtusizeEnvironment.STAGING) "staging" else "latest"}/sdk-webview.html"

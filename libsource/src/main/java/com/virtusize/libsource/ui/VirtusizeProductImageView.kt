@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.virtusize.libsource.R
 import com.virtusize.libsource.databinding.ViewProductImageBinding
+import com.virtusize.libsource.util.dpInPx
 import com.virtusize.libsource.util.getDrawableResourceByName
 
 /**
@@ -69,6 +70,7 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet):
             binding.inpageProductCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.vs_gray_200))
         }
         binding.inpageProductImageView.setImageDrawable(getProductPlaceholderImage(productType, style))
+        binding.inpageProductImageView.setPadding(6.dpInPx, 6.dpInPx, 6.dpInPx, 6.dpInPx)
     }
 
     /**

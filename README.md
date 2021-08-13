@@ -17,6 +17,43 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 
 
 
+## Table of Contents
+
+- [Requirements](#requirements)
+
+- [Getting Started](#getting-started)
+
+  - [Installation](#1-installation)
+  - [Proguard Rules](#2-proguard-rules)
+
+- [Setup](#setup)
+
+  - [Initialize Virtusize](#1-initialize-virtusize)
+  - [Load Product with Virtusize SDK](#2-load-product-with-virtusize-sdk)
+  - [Register Virtusize Message Handler (Optional)](#3-register-virtusize-message-handler-optional)
+  - [Unregister Virtusize Message Handler (Optional)](#4-unregister-virtusize-message-handler-optional)
+
+- [Virtusize Views](#virtusize-views)
+
+  - [Virtusize Button](#1-virtusize-button)
+  - [Virtusize InPage](#2-virtusize-inpage)
+    - [InPage Standard](#2-inpage-standard)
+    - [InPage Mini](#3-inpage-mini)
+
+- [The Order API](#the-order-api)
+
+  - [Initialization](#1-initialization)
+  - [Create a *VirtusizeOrder* object for order data](#2-create-a-virtusizeorder-object-for-order-data)
+  - [Send an Order](#3-send-an-order) 
+
+- [Enable SNS Login in Virtusize for native Webview apps](#enable-sns-login-in-virtusize-for-native-webview-apps)
+
+- [Examples](#examples)
+
+- [License](#license)
+
+  
+
 ## Requirements
 
 - minSdkVersion >= 21
@@ -46,7 +83,7 @@ In your app `build.gradle` file, add the following dependencies:
 
 ```groovy
 dependencies {
-  implementation 'com.github.virtusize:integration_android:2.1.4'
+  implementation 'com.github.virtusize:integration_android:2.3.0'
 }
 ```
 
@@ -137,32 +174,39 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
 
 
 
-### 2. Set Up Product Details
+### 2. Load Product with Virtusize SDK
 
-1. Inside your activity, set up the product details by passing an `imageUrl` for the product in order to populate the comparison view, and an `externalId` that will be used to reference that product in our API.
+1. Inside your activity, 
 
+   - Create a `VirtusizeProduct` object with:
+  - An `exernalId` that will be used to reference the product in the Virtusize server
+     - An `imageURL` for the product image
+   - Pass the `VirtusizeProduct` object to the `Virtusize.load` function
+   
    Kotlin
-
+   
    ```kotlin
+   val product = VirtusizeProduct(
+       // Set the product's external ID
+       externalId = "vs_dress",
+       // Set the product image URL
+    imageUrl = "http://www.image.com/goods/12345.jpg"
+   )
+
    (application as App)
        .Virtusize
-       .setupVirtusizeProduct(
-           VirtusizeProduct(
-               externalId = "694",
-               imageUrl = "http://www.image.com/goods/12345.jpg"
-           )
-       )
+       .load(product)
    ```
-
+   
    Java
-
+   
    ```java
-   app.Virtusize.setupVirtusizeProduct(
-           new VirtusizeProduct(
-                   "694",
-                   "http://www.image.com/goods/12345.jpg"
-           )
+   VirtusizeProduct product = new VirtusizeProduct(
+           "vs_dress",
+           "http://www.image.com/goods/12345.jpg"
    );
+   
+   app.Virtusize.load(product);
    ```
 
 
@@ -175,7 +219,7 @@ Please do not forget to unregister message handler in activity or fragment's lif
 
   ```kotlin
   private val activityMessageHandler = object : VirtusizeMessageHandler {
-      override fun onEvent(event: VirtusizeEvent) {
+      override fun onEvent(product: VirtusizeProduct, event: VirtusizeEvent) {
           Log.i(TAG, event.name)
       }
 
@@ -203,7 +247,7 @@ Please do not forget to unregister message handler in activity or fragment's lif
 
       virtusizeMessageHandler = new VirtusizeMessageHandler() {
           @Override
-          public void onEvent(@NotNull VirtusizeEvent event) {
+          public void onEvent(@NotNull VirtusizeProduct product, @NotNull VirtusizeEvent event) {
               Log.i(TAG, event.getName());
           }
 
@@ -314,18 +358,18 @@ In order to use our default button styles, set `app:virtusizeButtonStyle="virtus
     android:text="@string/virtusize_button_text" />
 ```
 
-**C. Connect the Virtusize button to the Virtusize API by using the** `setupVirtusizeView` **function in your activity.**
+**C. Connect the Virtusize button, along with the** `VirtusizeProduct` **object (which you have passed to ** `Virtusize.load`) **into the Virtusize API by using the** `Virtusize.setupVirtusizeView` **function in your activity.**
 
 - Kotlin
 
   ```kotlin
-  (application as App).Virtusize.setupVirtusizeView(exampleVirtusizeButton)
+  (application as App).Virtusize.setupVirtusizeView(exampleVirtusizeButton, product)
   ```
 
 - Java
 
   ```java
-  app.Virtusize.setupVirtusizeView(virtusizeButton);
+  app.Virtusize.setupVirtusizeView(virtusizeButton, product);
   ```
 
 
@@ -353,49 +397,7 @@ There are two types of InPage in our Virtusize SDK.
 
 #### (2) InPage Standard
 
-##### A. Design Guidelines
-
-- ##### Default Designs
-
-  There are two default design variations.
-
-  |                          Teal Theme                          |                         Black Theme                          |
-  | :----------------------------------------------------------: | :----------------------------------------------------------: |
-  | ![InPageStandardTeal](https://user-images.githubusercontent.com/7802052/92672035-b9e6cd00-f352-11ea-9e9e-5385a19e96da.png) | ![InPageStandardBlack](https://user-images.githubusercontent.com/7802052/92672031-b81d0980-f352-11ea-8b7a-564dd6c2a7f1.png) |
-
-- ##### Layout Variations
-
-  Here are some possible layouts
-
-  |               1 thumbnail + 2 lines of message               |              2 thumbnails + 2 lines of message               |
-  | :----------------------------------------------------------: | :----------------------------------------------------------: |
-  | ![1 thumbnail + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399368-5e879300-1930-11eb-8b77-b49e06813550.png) | ![2 thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399370-5f202980-1930-11eb-9a2d-7b71714aa7b4.png) |
-  |             **1 thumbnail + 1 line of message**              |        **2 animated thumbnails + 2 lines of message**        |
-  | ![1 thumbnail + 1 line of message](https://user-images.githubusercontent.com/7802052/97399373-5f202980-1930-11eb-81fe-9946b656eb4c.png) | ![2 animated thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399355-59c2df00-1930-11eb-8a52-292956b8762d.gif) |
-
-- ##### Recommended Placement
-
-  - Near the size table
-
-  - In the size info section
-
-  <img src="https://user-images.githubusercontent.com/7802052/92672185-15b15600-f353-11ea-921d-397f207cf616.png" style="zoom:50%;" />
-
-- ##### UI customization
-
-  - **You can:**
-    - change the background color of the CTA button as long as it passes **[WebAIM contrast test](https://webaim.org/resources/contrastchecker/)**.
-    - change the width of InPage so it fits your application width.
-
-  - **You cannot:**
-    - change interface components such as shapes and spacing.
-    - change the font.
-    - change the CTA button shape.
-    - change messages.
-    - change or hide the box shadow.
-    - hide the footer that contains VIRTUSIZE logo and Privacy Policy text link.
-
-##### B. Usage
+##### A. Usage
 
 - **Add a VirtusizeInPageStand in your activity's XML layout file.**
 
@@ -455,67 +457,73 @@ There are two types of InPage in our Virtusize SDK.
     virtusizeInPageStandard.setButtonTextSize(ExtensionsKt.getSpToPx(10));
     ```
 
-- **Connect the InPage Standard to the Virtusize API by using the** `setupVirtusizeView` **function in your activity.**
+- **Connect the InPage Standard, along with the** `VirtusizeProduct` **object (which you have passed to ** `Virtusize.load`) **into the Virtusize API by using the** `Virtusize.setupVirtusizeView` **function in your activity.**
 
   - Kotlin
 
     ```kotlin
     (application as App)
         .Virtusize
-        .setupVirtusizeView(exampleVirtusizeInPageStandard)
+        .setupVirtusizeView(exampleVirtusizeInPageStandard, product)
     ```
 
   - Java
 
     ```java
-    app.Virtusize.setupVirtusizeView(virtusizeInPageStandard);
+    app.Virtusize.setupVirtusizeView(virtusizeInPageStandard, product);
     ```
 
 
 
-### (3) InPage Mini
+##### B. Design Guidelines
 
-This is a mini version of InPage you can place in your application. The discreet design is suitable for layouts where customers are browsing product images and size tables.
-
-#### A. Design Guidelines
-
-- ##### Default designs
+- ##### Default Designs
 
   There are two default design variations.
 
   |                          Teal Theme                          |                         Black Theme                          |
   | :----------------------------------------------------------: | :----------------------------------------------------------: |
-  | ![InPageMiniTeal](https://user-images.githubusercontent.com/7802052/92672234-2d88da00-f353-11ea-99d9-b9e9b6aa5620.png) | ![InPageMiniBlack](https://user-images.githubusercontent.com/7802052/92672232-2c57ad00-f353-11ea-80f6-55a9c72fb0b5.png) |
+  | ![InPageStandardTeal](https://user-images.githubusercontent.com/7802052/92672035-b9e6cd00-f352-11ea-9e9e-5385a19e96da.png) | ![InPageStandardBlack](https://user-images.githubusercontent.com/7802052/92672031-b81d0980-f352-11ea-8b7a-564dd6c2a7f1.png) |
 
-- ##### Recommended Placements
+- ##### Layout Variations
 
-  |                 Underneath the product image                 |              Underneath or near the size table               |
+  Here are some possible layouts
+
+  |               1 thumbnail + 2 lines of message               |              2 thumbnails + 2 lines of message               |
   | :----------------------------------------------------------: | :----------------------------------------------------------: |
-  | <img src="https://user-images.githubusercontent.com/7802052/92672261-3c6f8c80-f353-11ea-995c-ede56e0aacc3.png" /> | <img src="https://user-images.githubusercontent.com/7802052/92672266-40031380-f353-11ea-8f63-a67c9cf46c68.png" /> |
+  | ![1 thumbnail + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399368-5e879300-1930-11eb-8b77-b49e06813550.png) | ![2 thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399370-5f202980-1930-11eb-9a2d-7b71714aa7b4.png) |
+  |             **1 thumbnail + 1 line of message**              |        **2 animated thumbnails + 2 lines of message**        |
+  | ![1 thumbnail + 1 line of message](https://user-images.githubusercontent.com/7802052/97399373-5f202980-1930-11eb-81fe-9946b656eb4c.png) | ![2 animated thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399355-59c2df00-1930-11eb-8a52-292956b8762d.gif) |
 
-- ##### Default Fonts
-  - Japanese
-    - Noto Sans CJK JP
-    - 12sp (Message)
-    - 10sp (Button)
-  - Korean
-    - Noto Sans CJK KR
-    - 12sp (Message)
-    - 10sp (Button)
-  - English
-    - Proxima Nova
-    - 14sp (Message)
-    - 12sp (Button)
+- ##### Recommended Placement
+
+  - Near the size table
+
+  - In the size info section
+
+  <img src="https://user-images.githubusercontent.com/7802052/92672185-15b15600-f353-11ea-921d-397f207cf616.png" style="zoom:50%;" />
 
 - ##### UI customization
+
   - **You can:**
-    - change the background color of the bar as long as it passes **[WebAIM contrast test](https://webaim.org/resources/contrastchecker/)**.
+    - change the background color of the CTA button as long as it passes **[WebAIM contrast test](https://webaim.org/resources/contrastchecker/)**.
+    - change the width of InPage so it fits your application width.
+
   - **You cannot:**
+    - change interface components such as shapes and spacing.
     - change the font.
     - change the CTA button shape.
     - change messages.
+    - change or hide the box shadow.
+    - hide the footer that contains VIRTUSIZE logo and Privacy Policy text link.
 
-#### B. Usage
+
+
+#### (3) InPage Mini
+
+This is a mini version of InPage you can place in your application. The discreet design is suitable for layouts where customers are browsing product images and size tables.
+
+##### A. Usage
 
 - **Add a VirtusizeInPageMini in your activity's XML layout file.**
 
@@ -568,21 +576,63 @@ This is a mini version of InPage you can place in your application. The discreet
     virtusizeInPageMini.setButtonTextSize(ExtensionsKt.getSpToPx(10));
     ```
 
-- **Connect the InPage Mini to the Virtusize API by using the** `setupVirtusizeView` **function in your activity.**
+- **Connect the InPage Mini, along with the** `VirtusizeProduct` **object (which you have passed to ** `Virtusize.load`) **into the Virtusize API by using the** `Virtusize.setupVirtusizeView` **function in your activity.**
 
   - Kotlin
 
     ```kotlin
     (application as App)
         .Virtusize
-        .setupVirtusizeView(exampleVirtusizeInPageMini)
+        .setupVirtusizeView(exampleVirtusizeInPageMini, product)
     ```
 
   - Java
 
     ```java
-    app.Virtusize.setupVirtusizeView(virtusizeInPageMini);
+    app.Virtusize.setupVirtusizeView(virtusizeInPageMini, product);
     ```
+
+
+
+##### B. Design Guidelines
+
+- ##### Default designs
+
+  There are two default design variations.
+
+  |                          Teal Theme                          |                         Black Theme                          |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | ![InPageMiniTeal](https://user-images.githubusercontent.com/7802052/92672234-2d88da00-f353-11ea-99d9-b9e9b6aa5620.png) | ![InPageMiniBlack](https://user-images.githubusercontent.com/7802052/92672232-2c57ad00-f353-11ea-80f6-55a9c72fb0b5.png) |
+
+- ##### Recommended Placements
+
+  |                 Underneath the product image                 |              Underneath or near the size table               |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | <img src="https://user-images.githubusercontent.com/7802052/92672261-3c6f8c80-f353-11ea-995c-ede56e0aacc3.png" /> | <img src="https://user-images.githubusercontent.com/7802052/92672266-40031380-f353-11ea-8f63-a67c9cf46c68.png" /> |
+
+- ##### Default Fonts
+
+  - Japanese
+    - Noto Sans CJK JP
+    - 12sp (Message)
+    - 10sp (Button)
+  - Korean
+    - Noto Sans CJK KR
+    - 12sp (Message)
+    - 10sp (Button)
+  - English
+    - Roboto
+    - 14sp (Message)
+    - 12sp (Button)
+
+- ##### UI customization
+
+  - **You can:**
+    - change the background color of the bar as long as it passes **[WebAIM contrast test](https://webaim.org/resources/contrastchecker/)**.
+  - **You cannot:**
+    - change the font.
+    - change the CTA button shape.
+    - change messages.
 
 
 
@@ -758,6 +808,36 @@ Call the `Virtusize.sendOrder` method in your activity or fragment when the user
             }
     );
     ~~~~
+
+
+
+## Enable SNS Login in Virtusize for native Webview apps
+
+The built-in WebView blocks any popup windows by default. To let users to sign up or log in with the web version of Virtusize integration in your webview, please replace your `WebView` with **`VirtusizeWebView`** in your Kotlin or Java file and XML file to fix and enable SNS login in Virtusize.
+
+- Kotlin/Java
+
+  ```diff
+  // Kotlin
+  - var webView: WebView
+  + var webView: VirtusizeWebView
+  
+  // Java
+  - WebView webView;
+  + VirtusizeWebView webView;
+  ```
+
+and
+
+- XML
+
+  ```diff
+  - <WebView
+  + <com.virtusize.libsource.VirtusizeWebView
+      android:id="@+id/webView"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+  ```
 
 
 

@@ -10,7 +10,7 @@ object Font {
      * This enum contains all available font names used in this SDK
      */
     enum class FontName(val value: String){
-        PROXIMA_NOVA("proxima_nova"),
+        ROBOTO("roboto"),
         NOTO_SANS_CJK_JP("noto_sans_cjk_jp"),
         NOTO_SANS_CJK_KR("noto_sans_cjk_kr")
     }
