@@ -3,6 +3,7 @@ package com.virtusize.libsource.data.parsers
 import com.virtusize.libsource.data.remote.Measurement
 import org.json.JSONArray
 import org.json.JSONObject
+import java.math.BigDecimal
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -54,7 +55,13 @@ internal object JsonUtils {
                     is JSONArray -> jsonArrayToList(
                         value
                     )
-                    else -> value
+                    else -> {
+                        if (value is BigDecimal) {
+                            value.toDouble()
+                        } else {
+                            value
+                        }
+                    }
                 }
             }
         }
@@ -99,6 +106,9 @@ internal object JsonUtils {
                     jsonObjectToMap(
                         value
                     )
+            }
+            if (value is BigDecimal) {
+                value = value.toDouble()
             }
             list.add(value)
         }

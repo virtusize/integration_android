@@ -13,9 +13,6 @@
         <action
             android:id="@+id/action_mainFragment_to_designSystemFragment"
             app:destination="@id/designSystemFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_webViewFragment"
-            app:destination="@id/webViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/designSystemFragment"
@@ -29,10 +26,15 @@
     <fragment
         android:id="@+id/buttonFragment"
         android:name="com.virtusize.android.designsystem.ButtonFragment"
-        android:label="Button"
+        android:label="@string/virtusize_button"
         tools:layout="@layout/fragment_button"/>
-    <dialog
-        android:id="@+id/webViewFragment"
-        android:name="com.virtusize.android.WebViewFragment"
-        android:label="WebViewFragment" />
+    <fragment
+        android:id="@+id/productFragment"
+        android:name="com.virtusize.android.ProductFragment"
+        android:label="Virtusize Product"
+        tools:layout="@layout/fragment_product" >
+        <action
+            android:id="@+id/action_productFragment_to_self"
+            app:destination="@id/productFragment" />
+    </fragment>
 </navigation>

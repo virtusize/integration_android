@@ -18,14 +18,13 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.mock
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.net.HttpURLConnection
 import java.net.URL
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.P])
+@Config(sdk = [Build.VERSION_CODES.Q])
 @ExperimentalCoroutinesApi
 class VirtusizeAPIServiceTest {
 
@@ -38,7 +37,7 @@ class VirtusizeAPIServiceTest {
 
     private var virtusizeAPIService = VirtusizeAPIService.getInstance(context, null)
 
-    private var mockURL: URL = mock(URL::class.java)
+    private var mockURL: URL = URL("https://www.mockurl.com/")
 
     @Before
     fun setup() {

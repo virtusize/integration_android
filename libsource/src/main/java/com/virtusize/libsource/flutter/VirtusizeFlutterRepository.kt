@@ -31,9 +31,10 @@ class VirtusizeFlutterRepository(context: Context, private val messageHandler: V
         pdcResponse: VirtusizeApiResponse<ProductCheck>
     ) {
         if (pdcResponse.isSuccessful) {
+            product.productCheckData = pdcResponse.successData
             sendEvent(
-                VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()),
-                pdcResponse.successData
+                product,
+                VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName())
             )
             val productCheck = pdcResponse.successData
             productCheck?.data?.apply {
@@ -52,21 +53,21 @@ class VirtusizeFlutterRepository(context: Context, private val messageHandler: V
                     }
 
                     sendEvent(
-                        VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName()),
-                        pdcResponse.successData
+                        product,
+                        VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName())
                     )
                 }
             }
         }
     }
 
-    private suspend fun sendEvent(vsEvent: VirtusizeEvent, productCheck: ProductCheck?) {
+    private suspend fun sendEvent(product: VirtusizeProduct, vsEvent: VirtusizeEvent) {
         val sendEventResponse = apiService.sendEvent(
             event = vsEvent,
-            withDataProduct = productCheck
+            withDataProduct = product.productCheckData
         )
         if (sendEventResponse.isSuccessful) {
-            messageHandler.onEvent(vsEvent)
+            messageHandler.onEvent(product, vsEvent)
         }
     }
 

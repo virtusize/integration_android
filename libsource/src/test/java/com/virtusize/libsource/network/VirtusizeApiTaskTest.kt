@@ -9,6 +9,7 @@ import com.virtusize.libsource.data.parsers.*
 import com.virtusize.libsource.data.remote.*
 import com.virtusize.libsource.fixtures.ProductFixtures
 import com.virtusize.libsource.fixtures.TestFixtures
+import org.json.JSONObject
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -16,7 +17,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.P])
+@Config(sdk = [Build.VERSION_CODES.Q])
 class VirtusizeApiTaskTest {
     private val context: Context = ApplicationProvider.getApplicationContext()
     private lateinit var virtusizeApiTask: VirtusizeApiTask
@@ -104,9 +105,7 @@ class VirtusizeApiTaskTest {
             .find { it.name == "parseErrorStreamStringToObject" }
         parseErrorStreamStringToObjectMethod?.let { method ->
             method.isAccessible = true
-            val returnValue = method.invoke(
-                virtusizeApiTask,
-                """
+            val pdcJsonString = """
                     {
                         "data": {
                             "productDataId": null, 
@@ -119,8 +118,10 @@ class VirtusizeApiTaskTest {
                         "name": "backend-checked-product", 
                         "productId": "123"
                     }
-                """
-                    .trimIndent()
+                """.trimIndent()
+            val returnValue = method.invoke(
+                virtusizeApiTask,
+                pdcJsonString
             )
             val expectedProductCheck = ProductCheck(
                 Data(
@@ -134,7 +135,8 @@ class VirtusizeApiTaskTest {
                     productTypeId = 0
                 ),
                 productId = "123",
-                name = "backend-checked-product"
+                name = "backend-checked-product",
+                JSONObject(pdcJsonString).toString()
             )
             assertThat(returnValue).isEqualTo(expectedProductCheck)
         }

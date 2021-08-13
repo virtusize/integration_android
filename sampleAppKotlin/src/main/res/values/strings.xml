@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name" translatable="false">Sample App Kotlin</string>
+    
+    <string name="next_product" translatable="false">Next product</string>
+    
     <string name="virtusize_design_system" translatable="false">Virtusize Design System</string>
 
     <string name="virtusize_button" translatable="false">Button</string>

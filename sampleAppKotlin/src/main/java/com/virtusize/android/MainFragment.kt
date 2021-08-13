@@ -21,45 +21,26 @@ class MainFragment : Fragment() {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
+    private lateinit var product: VirtusizeProduct
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        /*
-         * Register message handler to listen to events from Virtusize
-         */
-        (activity?.application as App).Virtusize.registerMessageHandler(activityMessageHandler)
-
-        /*
-         * Set up Virtusize product for all the Virtusize views
-         */
-        (activity?.application as App).Virtusize.setupVirtusizeProduct(
-            VirtusizeProduct(
-                externalId = "vs_dress",
-                imageUrl = "http://www.image.com/goods/12345.jpg"
-            )
+        product = VirtusizeProduct(
+            externalId = "vs_dress",
+            imageUrl = "http://www.image.com/goods/12345.jpg"
         )
-
-        /*
-         * Set up Virtusize button
-         */
-        // Virtusize opens automatically when button is clicked
-        (activity?.application as App).Virtusize.setupVirtusizeView(binding.exampleVirtusizeButton)
-        // Set up the Virtusize view style programmatically
-        binding.exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.TEAL
 
         /*
          * Set up Virtusize InPage Standard
          */
         (activity?.application as App).Virtusize
             .setupVirtusizeView(
-                virtusizeView = binding.exampleVirtusizeInPageStandard
+                virtusizeView = binding.exampleVirtusizeInPageStandard,
+                product = product
             )
         binding.exampleVirtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
         // If you like, you can set up the horizontal margins between the edges of the app screen and the InPage Standard view
@@ -80,7 +61,10 @@ class MainFragment : Fragment() {
          * Set up Virtusize InPage Mini
          */
 
-        (activity?.application as App).Virtusize.setupVirtusizeView(virtusizeView = binding.exampleVirtusizeInPageMini)
+        (activity?.application as App).Virtusize.setupVirtusizeView(
+            virtusizeView = binding.exampleVirtusizeInPageMini,
+            product = product
+        )
         binding.exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.TEAL
 
         /*
@@ -92,6 +76,31 @@ class MainFragment : Fragment() {
         // If you like, you can change the text sizes of the InPage message and the Check Size button
         binding.exampleVirtusizeInPageMini.messageTextSize = 12f.spToPx
         binding.exampleVirtusizeInPageMini.buttonTextSize = 10f.spToPx
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        /*
+         * Register message handler to listen to events from Virtusize
+         */
+        (activity?.application as App).Virtusize.registerMessageHandler(activityMessageHandler)
+
+        /*
+         * Load the product for all the Virtusize views
+         */
+        (activity?.application as App).Virtusize.load(product)
+
+        /*
+        * Set up Virtusize button
+        */
+        // Virtusize opens automatically when button is clicked
+        (activity?.application as App).Virtusize.setupVirtusizeView(
+            binding.exampleVirtusizeButton,
+            product = product
+        )
+        // Set up the Virtusize view style programmatically
+        binding.exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.TEAL
 
         /*
          * To close the Virtusize page
@@ -110,11 +119,6 @@ class MainFragment : Fragment() {
         binding.designSystemButton.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
         binding.designSystemButton.setOnClickListener {
             val action = MainFragmentDirections.actionMainFragmentToDesignSystemFragment()
-            findNavController().navigate(action)
-        }
-
-        binding.snsTestButton.setOnClickListener {
-            val action = MainFragmentDirections.actionMainFragmentToWebViewFragment()
             findNavController().navigate(action)
         }
     }
@@ -170,7 +174,7 @@ class MainFragment : Fragment() {
     }
 
     private val activityMessageHandler = object : VirtusizeMessageHandler {
-        override fun onEvent(event: VirtusizeEvent) {
+        override fun onEvent(product: VirtusizeProduct, event: VirtusizeEvent) {
             Log.i(TAG, event.name)
         }
 

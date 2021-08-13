@@ -23,7 +23,6 @@ data class VirtusizeParams(
     private var region: VirtusizeRegion,
     internal val language: VirtusizeLanguage,
     private val allowedLanguages: MutableList<VirtusizeLanguage>,
-    internal var virtusizeProduct: VirtusizeProduct?,
     internal var externalUserId: String?,
     private val showSGI: Boolean,
     private val detailsPanelCards: MutableList<VirtusizeInfoCategory>
@@ -32,13 +31,13 @@ data class VirtusizeParams(
     /**
      * Returns the virtusize parameter string to be passed to the JavaScript function vsParamsFromSDK
      */
-    internal fun vsParamsString(): String {
+    internal fun vsParamsString(product: VirtusizeProduct): String {
         val sessionData = SharedPreferencesHelper.getInstance(context).getSessionData()
         val bid = SharedPreferencesHelper.getInstance(context).getBrowserId()
         return "{$PARAM_API_KEY: '$apiKey', " +
                 "$PARAM_BID: '$bid', " +
                 (if (sessionData != null) "$PARAM_SESSION_DATA: $sessionData, " else "") +
-                "$PARAM_STORE_PRODUCT_ID: '${virtusizeProduct?.productCheckData?.productId}', " +
+                "$PARAM_STORE_PRODUCT_ID: '${product.productCheckData?.productId}', " +
                 (if (externalUserId != null) "$PARAM_EXTERNAL_USER_ID: '$externalUserId', " else "") +
                 "$PARAM_LANGUAGE: '${language.value}', " +
                 "$PARAM_SHOW_SGI: $showSGI, " +
