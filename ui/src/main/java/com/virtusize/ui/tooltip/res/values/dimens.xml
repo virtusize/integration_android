@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="vs_tooltip_text_view_default_padding">10dp</dimen>
+    <dimen name="vs_tooltip_text_view_start_padding">12dp</dimen>
+    <dimen name="vs_tooltip_text_view_end_padding">26dp</dimen>
+</resources>

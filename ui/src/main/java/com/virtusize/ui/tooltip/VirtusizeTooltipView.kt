@@ -39,17 +39,33 @@ class VirtusizeTooltipView @JvmOverloads constructor(
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
         val layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        // Use a custom layout
         if (builder.layoutId != null) {
             containerView = inflater.inflate(builder.layoutId!!, this, true)
+        // Use the default layout
         } else {
             binding = VirtusizeTooltipBinding.inflate(inflater, this, true)
             containerView = binding!!.root
             binding!!.tooltipTextView.text = builder.text ?: resources.getString(R.string.vs_similar_items)
+            val tooltipTextViewDefaultPadding =
+                resources.getDimension(R.dimen.vs_tooltip_text_view_default_padding).toInt()
+            val tooltipTextViewLeftPadding = resources.getDimension(R.dimen.vs_tooltip_text_view_start_padding).toInt()
+            val tooltipTextViewRightPadding = resources.getDimension(R.dimen.vs_tooltip_text_view_end_padding).toInt()
             if (builder.hideCloseButton) {
                 binding!!.closeImageView.visibility = GONE
-                binding!!.tooltipTextView.setPadding(10.dp.toInt(), 10.dp.toInt(), 10.dp.toInt(), 10.dp.toInt())
+                binding!!.tooltipTextView.setPadding(
+                    tooltipTextViewDefaultPadding,
+                    tooltipTextViewDefaultPadding,
+                    tooltipTextViewDefaultPadding,
+                    tooltipTextViewDefaultPadding
+                )
             } else {
-                binding!!.tooltipTextView.setPadding(12.dp.toInt(), 10.dp.toInt(), 26.dp.toInt(), 10.dp.toInt())
+                binding!!.tooltipTextView.setPadding(
+                    tooltipTextViewLeftPadding,
+                    tooltipTextViewDefaultPadding,
+                    tooltipTextViewRightPadding,
+                    tooltipTextViewDefaultPadding
+                )
             }
             if (builder.inverse) {
                 binding!!.tooltipTextView.setTextColor(ContextCompat.getColor(context, R.color.vs_gray_900))
