@@ -61,5 +61,4 @@
         android:textAllCaps="false"
         android:textSize="@dimen/virtusize_inpage_default_text_size"
         app:backgroundTint="@color/vs_white" />
-
 </RelativeLayout>

@@ -82,7 +82,6 @@ class VirtusizeInPageMini @JvmOverloads constructor(
     override fun setProductWithProductDataCheck(productWithPDC: VirtusizeProduct) {
         super.setProductWithProductDataCheck(productWithPDC)
         if (clientProduct!!.externalId == productWithPDC.externalId) {
-            clientProduct!!.productCheckData = productWithPDC.productCheckData
             visibility = View.VISIBLE
             setupConfiguredLocalization()
             setLoadingScreen(true)

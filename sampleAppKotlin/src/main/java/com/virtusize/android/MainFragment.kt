@@ -21,25 +21,15 @@ class MainFragment : Fragment() {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
+    private lateinit var product: VirtusizeProduct
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        /*
-         * Register message handler to listen to events from Virtusize
-         */
-        (activity?.application as App).Virtusize.registerMessageHandler(activityMessageHandler)
-
-        /*
-         * Set up Virtusize product for all the Virtusize views
-         */
-        val product = VirtusizeProduct(
+        product = VirtusizeProduct(
             externalId = "vs_dress",
             imageUrl = "http://www.image.com/goods/12345.jpg"
         )
@@ -98,6 +88,20 @@ class MainFragment : Fragment() {
         // If you like, you can change the text sizes of the InPage message and the Check Size button
         binding.exampleVirtusizeInPageMini.messageTextSize = 12f.spToPx
         binding.exampleVirtusizeInPageMini.buttonTextSize = 10f.spToPx
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        /*
+         * Register message handler to listen to events from Virtusize
+         */
+        (activity?.application as App).Virtusize.registerMessageHandler(activityMessageHandler)
+
+        /*
+         * Load the product for all the Virtusize views
+         */
+        (activity?.application as App).Virtusize.load(product)
 
         /*
          * To close the Virtusize page
