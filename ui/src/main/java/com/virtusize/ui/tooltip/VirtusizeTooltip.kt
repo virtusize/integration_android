@@ -25,6 +25,9 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
     private val windowEdgeToTooltipMargin = 16.dp
     private val windowWidth = getScreenWidth()
 
+    val isShowing: Boolean
+        get() = overlayView != null
+
     private fun createWindowParams(token: IBinder): WindowManager.LayoutParams {
         val p = WindowManager.LayoutParams()
         p.gravity = Gravity.TOP or Gravity.START
@@ -170,9 +173,11 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
     }
 
     fun hide() {
-        overlayView?.removeView(tooltipView)
-        windowManager.removeView(overlayView)
-        overlayView = null
+        if(overlayView != null) {
+            overlayView?.removeView(tooltipView)
+            windowManager.removeView(overlayView)
+            overlayView = null
+        }
     }
 
     fun getCustomView(): View {

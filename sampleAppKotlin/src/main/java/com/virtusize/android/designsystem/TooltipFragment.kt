@@ -17,6 +17,13 @@ class TooltipFragment: Fragment() {
     private var _binding: FragmentTooltipBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var tooltip1: VirtusizeTooltip
+    private lateinit var tooltip2: VirtusizeTooltip
+    private lateinit var tooltip3: VirtusizeTooltip
+    private lateinit var tooltip4: VirtusizeTooltip
+    private lateinit var customTooltip: VirtusizeTooltip
+    private lateinit var fittingRoomTooltip: VirtusizeTooltip
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -28,7 +35,7 @@ class TooltipFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val tooltip1 = VirtusizeTooltip.Builder(requireContext())
+        tooltip1 = VirtusizeTooltip.Builder(requireContext())
             .anchor(binding.tooltip1Button)
             .position(VirtusizeTooltip.Position.BOTTOM)
             .text(R.string.vs_tooltip1_text)
@@ -39,7 +46,7 @@ class TooltipFragment: Fragment() {
             tooltip1.show()
         }
 
-        val tooltip2 = VirtusizeTooltip.Builder(requireContext())
+        tooltip2 = VirtusizeTooltip.Builder(requireContext())
             .anchor(binding.tooltip2Button)
             .position(VirtusizeTooltip.Position.TOP)
             .text(R.string.vs_tooltip2_text)
@@ -51,7 +58,7 @@ class TooltipFragment: Fragment() {
             tooltip2.show()
         }
 
-        val tooltip3 = VirtusizeTooltip.Builder(requireContext())
+        tooltip3 = VirtusizeTooltip.Builder(requireContext())
             .anchor(binding.tooltip3Button)
             .position(VirtusizeTooltip.Position.RIGHT)
             .text(R.string.vs_tooltip3_text)
@@ -63,7 +70,7 @@ class TooltipFragment: Fragment() {
             tooltip3.show()
         }
 
-        val tooltip4 = VirtusizeTooltip.Builder(requireContext())
+        tooltip4 = VirtusizeTooltip.Builder(requireContext())
             .anchor(binding.tooltip4Button)
             .position(VirtusizeTooltip.Position.BOTTOM)
             .text("You can also set \"showOverlay\" prop to show a dark overlay, and \"noBorder\" to remove the border around the carrot")
@@ -76,7 +83,7 @@ class TooltipFragment: Fragment() {
             tooltip4.show()
         }
 
-        val customTooltip = VirtusizeTooltip.Builder(requireContext())
+        customTooltip = VirtusizeTooltip.Builder(requireContext())
             .anchor(binding.customTooltipButton)
             .position(VirtusizeTooltip.Position.BOTTOM)
             .customView(R.layout.custom_tooltip_view)
@@ -93,7 +100,7 @@ class TooltipFragment: Fragment() {
             customTooltip.show()
         }
 
-        val fittingRoomTooltip = VirtusizeTooltip.Builder(requireContext())
+        fittingRoomTooltip = VirtusizeTooltip.Builder(requireContext())
             .anchor(binding.fittingRoomEntryButton)
             .position(VirtusizeTooltip.Position.LEFT)
             .text(R.string.vs_similar_items)
@@ -103,5 +110,27 @@ class TooltipFragment: Fragment() {
         binding.fittingRoomEntryButton.setOnClickListener {
             fittingRoomTooltip.show()
         }
+    }
+
+    override fun onDestroy() {
+        if (tooltip1.isShowing) {
+            tooltip1.hide()
+        }
+        if (tooltip2.isShowing) {
+            tooltip2.hide()
+        }
+        if (tooltip3.isShowing) {
+            tooltip3.hide()
+        }
+        if (tooltip4.isShowing) {
+            tooltip4.hide()
+        }
+        if (customTooltip.isShowing) {
+            customTooltip.hide()
+        }
+        if (fittingRoomTooltip.isShowing) {
+            fittingRoomTooltip.hide()
+        }
+        super.onDestroy()
     }
 }
