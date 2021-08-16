@@ -7,11 +7,15 @@ import androidx.core.content.ContextCompat
 import com.virtusize.ui.R
 import com.virtusize.ui.utils.dp
 
-class VirtusizeRoundImageButton @JvmOverloads constructor(
+open class VirtusizeRoundImageButton @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = androidx.appcompat.R.attr.buttonStyle
 ) : androidx.appcompat.widget.AppCompatImageButton(context, attrs, defStyleAttr) {
+
+    companion object {
+        private const val DEFAULT_BUTTON_SIZE = 44
+    }
 
     var roundImageButtonStyle = VirtusizeRoundImageButtonStyle.DEFAULT
         set(value) {
@@ -37,8 +41,8 @@ class VirtusizeRoundImageButton @JvmOverloads constructor(
         attrsArray.recycle()
 
         adjustViewBounds = true
-        minimumWidth = 42.dp.toInt()
-        minimumHeight = 42.dp.toInt()
+        minimumWidth = DEFAULT_BUTTON_SIZE.dp.toInt()
+        minimumHeight = DEFAULT_BUTTON_SIZE.dp.toInt()
 
         viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
             override fun onGlobalLayout() {
@@ -48,8 +52,8 @@ class VirtusizeRoundImageButton @JvmOverloads constructor(
                 } else {
                     height
                 }
-                if(size < 42.dp.toInt()) {
-                    size = 42.dp.toInt()
+                if(size < DEFAULT_BUTTON_SIZE.dp.toInt()) {
+                    size = DEFAULT_BUTTON_SIZE.dp.toInt()
                 }
                 minimumWidth = size
                 minimumHeight = size

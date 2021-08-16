@@ -22,12 +22,20 @@
         <action
             android:id="@+id/action_designSystemFragment_to_buttonFragment"
             app:destination="@id/buttonFragment" />
+        <action
+            android:id="@+id/action_designSystemFragment_to_tooltipFragment"
+            app:destination="@id/tooltipFragment" />
     </fragment>
     <fragment
         android:id="@+id/buttonFragment"
         android:name="com.virtusize.android.designsystem.ButtonFragment"
         android:label="@string/virtusize_button"
         tools:layout="@layout/fragment_button"/>
+    <fragment
+        android:id="@+id/tooltipFragment"
+        android:name="com.virtusize.android.designsystem.TooltipFragment"
+        android:label="@string/virtusize_tooltip"
+        tools:layout="@layout/fragment_tooltip"/>
     <fragment
         android:id="@+id/productFragment"
         android:name="com.virtusize.android.ProductFragment"

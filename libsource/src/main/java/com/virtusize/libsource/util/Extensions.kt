@@ -3,14 +3,12 @@ package com.virtusize.libsource.util
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Rect
-import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser
 
 /**

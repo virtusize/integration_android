@@ -33,6 +33,18 @@ class MainFragment : Fragment() {
             externalId = "vs_dress",
             imageUrl = "http://www.image.com/goods/12345.jpg"
         )
+        (activity?.application as App).Virtusize.load(product)
+
+        /*
+         * Set up Virtusize button
+         */
+        // Virtusize opens automatically when button is clicked
+        (activity?.application as App).Virtusize.setupVirtusizeView(
+            binding.exampleVirtusizeButton,
+            product = product
+        )
+        // Set up the Virtusize view style programmatically
+        binding.exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.TEAL
 
         /*
          * Set up Virtusize InPage Standard
@@ -90,17 +102,6 @@ class MainFragment : Fragment() {
          * Load the product for all the Virtusize views
          */
         (activity?.application as App).Virtusize.load(product)
-
-        /*
-        * Set up Virtusize button
-        */
-        // Virtusize opens automatically when button is clicked
-        (activity?.application as App).Virtusize.setupVirtusizeView(
-            binding.exampleVirtusizeButton,
-            product = product
-        )
-        // Set up the Virtusize view style programmatically
-        binding.exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.TEAL
 
         /*
          * To close the Virtusize page

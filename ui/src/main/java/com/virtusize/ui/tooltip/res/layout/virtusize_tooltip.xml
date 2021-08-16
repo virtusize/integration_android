@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:background="@color/vs_gray_900">
+
+    <TextView
+        android:id="@+id/tooltipTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/vs_tooltip_text_view_default_padding"
+        android:paddingBottom="@dimen/vs_tooltip_text_view_default_padding"
+        android:paddingStart="@dimen/vs_tooltip_text_view_start_padding"
+        android:paddingEnd="@dimen/vs_tooltip_text_view_end_padding"
+        android:textColor="@color/vs_white"
+        android:textSize="@dimen/vs_xsmall_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/vs_similar_items" />
+
+    <ImageView
+        android:id="@+id/closeImageView"
+        android:layout_width="@dimen/virtusize_16dp"
+        android:layout_height="@dimen/virtusize_16dp"
+        android:padding="2dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_gravity="end"
+        app:srcCompat="@drawable/ic_close"
+        app:tint="@color/vs_white" />
+
+</FrameLayout>

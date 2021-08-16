@@ -28,9 +28,7 @@ interface VirtusizeView {
         params: VirtusizeParams,
         messageHandler: VirtusizeMessageHandler
     ) {
-        if (clientProduct == null) {
-            clientProduct = product
-        }
+        clientProduct = product
         virtusizeParams = params
         virtusizeMessageHandler = messageHandler
         virtusizeDialogFragment = VirtusizeWebViewFragment()
