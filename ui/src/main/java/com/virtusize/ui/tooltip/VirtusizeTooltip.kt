@@ -74,7 +74,7 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
 
             // Basic Position - the center of the anchor view
             var tooltipViewXPosition = anchorViewLocation[0].toFloat() + builder.anchorView.width / 2
-            var tooltipViewYPosition = anchorViewLocation[1].toFloat() + builder.anchorView.height / 2
+            var tooltipViewYPosition = anchorViewLocation[1].toFloat() - builder.anchorView.height / 2
 
             val anchorViewEndX = anchorViewLocation[0] + builder.anchorView.width
             val anchorViewEndSpace = windowWidth - anchorViewEndX
@@ -101,9 +101,9 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
                         }
                     }
                     if(builder.position == Position.TOP) {
-                        tooltipViewYPosition -= (builder.anchorView.height / 2 + anchorViewToTooltipMargin + VirtusizeTooltipView.arrowHeight)
+                        tooltipViewYPosition -= (builder.anchorView.height + anchorViewToTooltipMargin + VirtusizeTooltipView.arrowHeight)
                     } else {
-                        tooltipViewYPosition += (builder.anchorView.height / 2 + anchorViewToTooltipMargin)
+                        tooltipViewYPosition += VirtusizeTooltipView.arrowHeight + anchorViewToTooltipMargin
                     }
                 }
                 Position.LEFT -> {
@@ -145,20 +145,17 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
             }
             tooltipView!!.containerView.layoutParams = tooltipView!!.containerView.layoutParams
 
-            tooltipView!!.x = tooltipViewXPosition
-            tooltipView!!.y = tooltipViewYPosition
-
             tooltipView!!.viewTreeObserver
                 .addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
                     override fun onGlobalLayout() {
-                        tooltipView?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
+                        tooltipView!!.viewTreeObserver?.removeOnGlobalLayoutListener(this)
                         if (builder.position == Position.LEFT || builder.position == Position.RIGHT) {
-                            tooltipViewYPosition -= tooltipView?.containerView?.height?.div(2) ?: 0
-                            tooltipView?.y = tooltipViewYPosition
+                            tooltipViewYPosition -= tooltipView!!.containerView.height
                         } else if (builder.position == Position.TOP) {
-                            tooltipViewYPosition -= tooltipView?.containerView?.height ?: 0
-                            tooltipView?.y = tooltipViewYPosition
+                            tooltipViewYPosition -= tooltipView!!.containerView.height
                         }
+                        tooltipView!!.x = tooltipViewXPosition
+                        tooltipView!!.y = tooltipViewYPosition
                     }
                 })
 
