@@ -198,6 +198,7 @@ class Virtusize(
 
     private var virtusizeRepository: VirtusizeRepository = VirtusizeRepository(context, messageHandler, virtusizePresenter)
 
+    // TODO: Remove the array and find a way to have callbacks inside the VirtusizeView
     // This variable holds the Virtusize view that clients use on their application
     private var virtusizeViews = mutableSetOf<VirtusizeView>()
 
@@ -273,18 +274,7 @@ class Virtusize(
             messageHandler = messageHandler
         )
 
-        (virtusizeView as? View)?.addOnAttachStateChangeListener(object :
-            View.OnAttachStateChangeListener {
-            override fun onViewAttachedToWindow(v: View?) {
-                virtusizeViews.add(virtusizeView)
-            }
-
-            override fun onViewDetachedFromWindow(v: View?) {
-                val detachedVirtusizeView = v as? VirtusizeView
-                if (virtusizeViews.contains(detachedVirtusizeView))
-                    virtusizeViews.remove(detachedVirtusizeView)
-            }
-        })
+        virtusizeViews.add(virtusizeView)
     }
 
     /**
