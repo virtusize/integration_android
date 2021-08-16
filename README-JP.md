@@ -175,14 +175,14 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
 
 
 
-### 2. 商品詳細をセットする
+### 2. Load Product with Virtusize SDK
 
 1. アクティビティ内では、
 
    - Create a `VirtusizeProduct` object with:
   - An `exernalId` that will be used to reference the product in the Virtusize server
      - An `imageURL` for the product image
-   
+     
       - Pass the `VirtusizeProduct` object to the `Virtusize.load` function
 
    Kotlin
@@ -356,7 +356,7 @@ SDKのVirtusizeボタンには2つのデフォルトスタイルがあります�
     android:text="@string/virtusize_button_text" />
 ```
 
-**C. Connect the Virtusize button, along with the** `VirtusizeProduct` **object (which you have passed to ** `Virtusize.load`) **into the Virtusize API by using the** `Virtusize.setupVirtusizeView` **function in your activity.**
+**C. Connect the Virtusize button, along with the** `VirtusizeProduct` **object (which you have passed to** `Virtusize.load`) **into the Virtusize API by using the** `Virtusize.setupVirtusizeView` **function in your activity.**
 
 - Kotlin
 
@@ -456,7 +456,7 @@ Virtusize SDKには2種類のInPageがあります。
     virtusizeInPageStandard.setButtonTextSize(ExtensionsKt.getSpToPx(10));
     ```
 
-- **Connect the InPage Standard, along with the** `VirtusizeProduct` **object (which you have passed to ** `Virtusize.load`) **into the Virtusize API by using the** `Virtusize.setupVirtusizeView` **function in your activity.**
+- **Connect the InPage Standard, along with the** `VirtusizeProduct` **object (which you have passed to** `Virtusize.load`) **into the Virtusize API by using the** `Virtusize.setupVirtusizeView` **function in your activity.**
 
   - Kotlin
 
@@ -575,7 +575,7 @@ Virtusize SDKには2種類のInPageがあります。
     virtusizeInPageMini.setButtonTextSize(ExtensionsKt.getSpToPx(10));
     ```
 
-- **Connect the InPage Mini, along with the** `VirtusizeProduct` **object (which you have passed to ** `Virtusize.load`) **into the Virtusize API by using the** `Virtusize.setupVirtusizeView` **function in your activity.**
+- **Connect the InPage Mini, along with the** `VirtusizeProduct` **object (which you have passed to** `Virtusize.load`) **into the Virtusize API by using the** `Virtusize.setupVirtusizeView` **function in your activity.**
 
   - Kotlin
 
