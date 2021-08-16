@@ -103,7 +103,7 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
                     if(builder.position == Position.TOP) {
                         tooltipViewYPosition -= (builder.anchorView.height + anchorViewToTooltipMargin + VirtusizeTooltipView.arrowHeight)
                     } else {
-                        tooltipViewYPosition += VirtusizeTooltipView.arrowHeight + anchorViewToTooltipMargin
+                        tooltipViewYPosition += anchorViewToTooltipMargin + VirtusizeTooltipView.arrowHeight
                     }
                 }
                 Position.LEFT -> {
@@ -150,7 +150,7 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
                     override fun onGlobalLayout() {
                         tooltipView!!.viewTreeObserver?.removeOnGlobalLayoutListener(this)
                         if (builder.position == Position.LEFT || builder.position == Position.RIGHT) {
-                            tooltipViewYPosition -= tooltipView!!.containerView.height
+                            tooltipViewYPosition -= builder.anchorView.height
                         } else if (builder.position == Position.TOP) {
                             tooltipViewYPosition -= tooltipView!!.containerView.height
                         }
