@@ -175,7 +175,7 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
 
 
 
-### 2. 商品詳細をセットする
+### 2. Load Product with Virtusize SDK
 
 1. アクティビティ内では、
 
