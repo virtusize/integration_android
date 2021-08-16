@@ -132,8 +132,8 @@ internal object VirtusizeUtils {
         context: Context,
         virtusizeParams: VirtusizeParams?,
         virtusizeDialogFragment: VirtusizeWebViewFragment,
-        product: VirtusizeProduct? = null,
-        messageHandler: VirtusizeMessageHandler? = null
+        product: VirtusizeProduct,
+        messageHandler: VirtusizeMessageHandler
     ) {
         val fragmentTransaction = (context as FragmentActivity).supportFragmentManager.beginTransaction()
         val previousFragment = context.supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
@@ -144,18 +144,11 @@ internal object VirtusizeUtils {
         val args = Bundle()
         args.putString(Constants.URL_KEY, VirtusizeApi.virtusizeWebViewURL())
         virtusizeParams?.let { params ->
-            // For Flutter
-            product?.let { product ->
-                params.virtusizeProduct = product
-                params.virtusizeProduct?.productCheckData = product.productCheckData
-            }
-            args.putString(Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY, "javascript:vsParamsFromSDK(${params.vsParamsString()})")
+            args.putString(Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY, "javascript:vsParamsFromSDK(${params.vsParamsString(product)})")
         }
+        args.putParcelable(Constants.VIRTUSIZE_PRODUCT_KEY, product)
         virtusizeDialogFragment.arguments = args
-        // For Flutter
-        messageHandler?.let { messageHandler ->
-            virtusizeDialogFragment.setupMessageHandler(messageHandler)
-        }
+        virtusizeDialogFragment.setupMessageHandler(messageHandler)
         virtusizeDialogFragment.show(fragmentTransaction, Constants.FRAG_TAG)
     }
 }

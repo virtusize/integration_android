@@ -29,7 +29,7 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 - [セットアップ](#セットアップ)
 
   - [はじめに](#1-はじめに)
-  - [商品詳細をセットする](#2-商品詳細をセットする)
+  - [Load Product with Virtusize SDK](#2-load-product-with-virtusize-sdk)
   - [Virtusize Message Handlerの登録（オプション）](#3--virtusize-message-handlerの登録オプション)
   - [Virtusize Message Handler登録解除（オプション）](#4-virtusize-message-handler登録解除オプション)
 
@@ -83,7 +83,7 @@ In your appの`build.gradle`ファイルに下記のdependencyを追加
 
 ```groovy
 dependencies {
-  implementation 'com.github.virtusize:integration_android:2.2.3'
+  implementation 'com.github.virtusize:integration_android:2.3.0'
 }
 ```
 
@@ -177,30 +177,36 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
 
 ### 2. 商品詳細をセットする
 
-1. アクティビティ内では、比較ビューに反映させるために商品の `imageUrl` と、API で商品を参照するために使用する `externalId` を渡して、商品の詳細を設定します。
+1. アクティビティ内では、
+
+   - Create a `VirtusizeProduct` object with:
+  - An `exernalId` that will be used to reference the product in the Virtusize server
+     - An `imageURL` for the product image
+   
+      - Pass the `VirtusizeProduct` object to the `Virtusize.load` function
 
    Kotlin
 
    ```kotlin
-   (application as App)
+val product = VirtusizeProduct(
+    externalId = "vs_dress",
+    imageUrl = "http://www.image.com/goods/12345.jpg"
+)
+   
+(application as App)
        .Virtusize
-       .setupVirtusizeProduct(
-           VirtusizeProduct(
-               externalId = "vs_dress",
-               imageUrl = "http://www.image.com/goods/12345.jpg"
-           )
-       )
+       .load(product)
    ```
 
    Java
 
    ```java
-   app.Virtusize.setupVirtusizeProduct(
-           new VirtusizeProduct(
-                   "vs_dress",
-                   "http://www.image.com/goods/12345.jpg"
-           )
-   );
+VirtusizeProduct product = new VirtusizeProduct(
+    "vs_dress",
+    "http://www.image.com/goods/12345.jpg"
+);
+   
+app.Virtusize.load(product);
    ```
 
 
@@ -213,7 +219,7 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
 
   ```kotlin
   private val activityMessageHandler = object : VirtusizeMessageHandler {
-      override fun onEvent(event: VirtusizeEvent) {
+      override fun onEvent(product: VirtusizeProduct, event: VirtusizeEvent) {
           Log.i(TAG, event.name)
       }
   
@@ -241,7 +247,7 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
   
       virtusizeMessageHandler = new VirtusizeMessageHandler() {
           @Override
-          public void onEvent(@NotNull VirtusizeEvent event) {
+          public void onEvent(@NotNull VirtusizeProduct product, @NotNull VirtusizeEvent event) {
               Log.i(TAG, event.getName());
           }
   
@@ -350,18 +356,18 @@ SDKのVirtusizeボタンには2つのデフォルトスタイルがあります�
     android:text="@string/virtusize_button_text" />
 ```
 
-**C. アクティビティの**`setupVirtusizeView`**関数を使用して、VirtusizeボタンをVirtusize APIに接続します。**
+**C. Connect the Virtusize button, along with the** `VirtusizeProduct` **object (which you have passed to ** `Virtusize.load`) **into the Virtusize API by using the** `Virtusize.setupVirtusizeView` **function in your activity.**
 
 - Kotlin
 
   ```kotlin
-  (application as App).Virtusize.setupVirtusizeView(exampleVirtusizeButton)
+  (application as App).Virtusize.setupVirtusizeView(exampleVirtusizeButton, product)
   ```
 
 - Java
 
   ```java
-  app.Virtusize.setupVirtusizeView(virtusizeButton);
+  app.Virtusize.setupVirtusizeView(virtusizeButton, product);
   ```
 
 
@@ -390,49 +396,7 @@ Virtusize SDKには2種類のInPageがあります。
 
 #### (2) InPage Standard
 
-##### A. デザインガイドライン
-
-- ##### デフォルトデザイン
-
-  デフォルトデザインは2種類あります。
-
-  |                          Teal Theme                          |                         Black Theme                          |
-  | :----------------------------------------------------------: | :----------------------------------------------------------: |
-  | ![InPageStandardTeal](https://user-images.githubusercontent.com/7802052/92672035-b9e6cd00-f352-11ea-9e9e-5385a19e96da.png) | ![InPageStandardBlack](https://user-images.githubusercontent.com/7802052/92672031-b81d0980-f352-11ea-8b7a-564dd6c2a7f1.png) |
-
-- ##### レイアウトのバリエーション
-
-  設定可能なレイアウト例
-
-  |               1 thumbnail + 2 lines of message               |              2 thumbnails + 2 lines of message               |
-  | :----------------------------------------------------------: | :----------------------------------------------------------: |
-  | ![1 thumbnail + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399368-5e879300-1930-11eb-8b77-b49e06813550.png) | ![2 thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399370-5f202980-1930-11eb-9a2d-7b71714aa7b4.png) |
-  |             **1 thumbnail + 1 line of message**              |        **2 animated thumbnails + 2 lines of message**        |
-  | ![1 thumbnail + 1 line of message](https://user-images.githubusercontent.com/7802052/97399373-5f202980-1930-11eb-81fe-9946b656eb4c.png) | ![2 animated thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399355-59c2df00-1930-11eb-8a52-292956b8762d.gif) |
-
-- ##### 推奨設定箇所
-
-  - サイズテーブルの近く
-
-  - サイズ情報掲載箇所
-
-  <img src="https://user-images.githubusercontent.com/7802052/92672185-15b15600-f353-11ea-921d-397f207cf616.png" style="zoom:50%;" />
-
-- ##### UI カスタマイゼーション
-
-  - **変更可:**
-    - CTAボタンの背景色（[WebAIM contrast test](https://webaim.org/resources/contrastchecker/)で問題がなければ）
-    - Inpageの横幅（アプリの横幅に合わせて変更可）
-
-  - **変更不可**:
-    - 形状やスペースなどのインターフェイスコンポーネント
-    - フォント
-    - CTA ボタンの形状
-    - テキスト文言
-    - ボタンシャドウ（削除も不可）
-    - VIRTUSIZE ロゴと プライバシーポリシーのテキストが入ったフッター（削除も不可）
-
-##### B.  使用方法
+##### A.  使用方法
 
 - **アクティビティのXMLレイアウトファイルにVirtusizeInPageStandを追加します。**
 
@@ -492,69 +456,73 @@ Virtusize SDKには2種類のInPageがあります。
     virtusizeInPageStandard.setButtonTextSize(ExtensionsKt.getSpToPx(10));
     ```
 
-- **アクティビティで**`setupVirtusizeView`**関数を使用して、InPage StandardとVirtusize APIを接続します。**
+- **Connect the InPage Standard, along with the** `VirtusizeProduct` **object (which you have passed to ** `Virtusize.load`) **into the Virtusize API by using the** `Virtusize.setupVirtusizeView` **function in your activity.**
 
   - Kotlin
 
     ```kotlin
     (application as App)
         .Virtusize
-        .setupVirtusizeView(exampleVirtusizeInPageStandard)
+        .setupVirtusizeView(exampleVirtusizeInPageStandard, product)
     ```
 
   - Java
 
     ```java
-    app.Virtusize.setupVirtusizeView(virtusizeInPageStandard);
+    app.Virtusize.setupVirtusizeView(virtusizeInPageStandard, product);
     ```
 
 
+
+##### B. デザインガイドライン
+
+- ##### デフォルトデザイン
+
+  デフォルトデザインは2種類あります。
+
+  |                          Teal Theme                          |                         Black Theme                          |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | ![InPageStandardTeal](https://user-images.githubusercontent.com/7802052/92672035-b9e6cd00-f352-11ea-9e9e-5385a19e96da.png) | ![InPageStandardBlack](https://user-images.githubusercontent.com/7802052/92672031-b81d0980-f352-11ea-8b7a-564dd6c2a7f1.png) |
+
+- ##### レイアウトのバリエーション
+
+  設定可能なレイアウト例
+
+  |               1 thumbnail + 2 lines of message               |              2 thumbnails + 2 lines of message               |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | ![1 thumbnail + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399368-5e879300-1930-11eb-8b77-b49e06813550.png) | ![2 thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399370-5f202980-1930-11eb-9a2d-7b71714aa7b4.png) |
+  |             **1 thumbnail + 1 line of message**              |        **2 animated thumbnails + 2 lines of message**        |
+  | ![1 thumbnail + 1 line of message](https://user-images.githubusercontent.com/7802052/97399373-5f202980-1930-11eb-81fe-9946b656eb4c.png) | ![2 animated thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399355-59c2df00-1930-11eb-8a52-292956b8762d.gif) |
+
+- ##### 推奨設定箇所
+
+  - サイズテーブルの近く
+
+  - サイズ情報掲載箇所
+
+  <img src="https://user-images.githubusercontent.com/7802052/92672185-15b15600-f353-11ea-921d-397f207cf616.png" style="zoom:50%;" />
+
+- ##### UI カスタマイゼーション
+
+  - **変更可:**
+    - CTAボタンの背景色（[WebAIM contrast test](https://webaim.org/resources/contrastchecker/)で問題がなければ）
+    - Inpageの横幅（アプリの横幅に合わせて変更可）
+
+  - **変更不可**:
+    - 形状やスペースなどのインターフェイスコンポーネント
+    - フォント
+    - CTA ボタンの形状
+    - テキスト文言
+    - ボタンシャドウ（削除も不可）
+    - VIRTUSIZE ロゴと プライバシーポリシーのテキストが入ったフッター（削除も不可）
+
+##### 
 
 #### (3) InPage Mini
 
 こちらは、InPageのミニバージョンで、アプリに配置することができます。目立たないデザインなので、お客様が商品画像やサイズ表を閲覧するようなレイアウトに適しています。
 
-##### A. デザインガイドライン
-
-- ##### デフォルト デザイン
-
-  ２種類のでフォルトデザインを用意しています。
-
-  |                          Teal Theme                          |                         Black Theme                          |
-  | :----------------------------------------------------------: | :----------------------------------------------------------: |
-  | ![InPageMiniTeal](https://user-images.githubusercontent.com/7802052/92672234-2d88da00-f353-11ea-99d9-b9e9b6aa5620.png) | ![InPageMiniBlack](https://user-images.githubusercontent.com/7802052/92672232-2c57ad00-f353-11ea-80f6-55a9c72fb0b5.png) |
-
-- ##### 推奨設置箇所
-
-  |                 Underneath the product image                 |              Underneath or near the size table               |
-  | :----------------------------------------------------------: | :----------------------------------------------------------: |
-  | <img src="https://user-images.githubusercontent.com/7802052/92672261-3c6f8c80-f353-11ea-995c-ede56e0aacc3.png" /> | <img src="https://user-images.githubusercontent.com/7802052/92672266-40031380-f353-11ea-8f63-a67c9cf46c68.png" /> |
-
-- ##### デフォルトのフォント
-
-  - **Japanese**
-    - Noto Sans CJK JP
-    - 12sp (メッセージ文言)
-    - 10sp (ボタン内テキスト)
-  - **Noto Sans CJK JP**
-    - Noto Sans CJK KR
-    - 12sp (メッセージ文言)
-    - 10sp (ボタン内テキスト)
-  - **Noto Sans CJK JP**
-    - Proxima Nova
-    - 14sp (メッセージ文言)
-    - 12sp (ボタン内テキスト)
-
-- ##### UI カスタマイゼーション
-
-  - **変更可**
-    - CTAボタンの背景色（[WebAIM contrast test](https://webaim.org/resources/contrastchecker/)で問題がなければ）
-  - **変更不可:**
-    - フォント
-    - CTA ボタンの形状
-    - テキスト文言
-
-##### B. 使用方法
+##### A. 使用方法
 
 - **アクティビティのXMLレイアウトファイルにVirtusizeInPageMiniを追加します。**
 
@@ -607,21 +575,63 @@ Virtusize SDKには2種類のInPageがあります。
     virtusizeInPageMini.setButtonTextSize(ExtensionsKt.getSpToPx(10));
     ```
 
-- **アクティビティで**`setupVirtusizeView`**関数を使用して、InPage MiniをVirtusize APIに接続します。**
+- **Connect the InPage Mini, along with the** `VirtusizeProduct` **object (which you have passed to ** `Virtusize.load`) **into the Virtusize API by using the** `Virtusize.setupVirtusizeView` **function in your activity.**
 
   - Kotlin
 
     ```kotlin
     (application as App)
         .Virtusize
-        .setupVirtusizeView(exampleVirtusizeInPageMini)
+        .setupVirtusizeView(exampleVirtusizeInPageMini, product)
     ```
 
   - Java
 
     ```java
-    app.Virtusize.setupVirtusizeView(virtusizeInPageMini);
+    app.Virtusize.setupVirtusizeView(virtusizeInPageMini, product);
     ```
+
+
+
+##### B. デザインガイドライン
+
+- ##### デフォルト デザイン
+
+  ２種類のでフォルトデザインを用意しています。
+
+  |                          Teal Theme                          |                         Black Theme                          |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | ![InPageMiniTeal](https://user-images.githubusercontent.com/7802052/92672234-2d88da00-f353-11ea-99d9-b9e9b6aa5620.png) | ![InPageMiniBlack](https://user-images.githubusercontent.com/7802052/92672232-2c57ad00-f353-11ea-80f6-55a9c72fb0b5.png) |
+
+- ##### 推奨設置箇所
+
+  |                 Underneath the product image                 |              Underneath or near the size table               |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | <img src="https://user-images.githubusercontent.com/7802052/92672261-3c6f8c80-f353-11ea-995c-ede56e0aacc3.png" /> | <img src="https://user-images.githubusercontent.com/7802052/92672266-40031380-f353-11ea-8f63-a67c9cf46c68.png" /> |
+
+- ##### デフォルトのフォント
+
+  - **Japanese**
+    - Noto Sans CJK JP
+    - 12sp (メッセージ文言)
+    - 10sp (ボタン内テキスト)
+  - **Noto Sans CJK JP**
+    - Noto Sans CJK KR
+    - 12sp (メッセージ文言)
+    - 10sp (ボタン内テキスト)
+  - **Noto Sans CJK JP**
+    - Roboto
+    - 14sp (メッセージ文言)
+    - 12sp (ボタン内テキスト)
+
+- ##### UI カスタマイゼーション
+
+  - **変更可**
+    - CTAボタンの背景色（[WebAIM contrast test](https://webaim.org/resources/contrastchecker/)で問題がなければ）
+  - **変更不可:**
+    - フォント
+    - CTA ボタンの形状
+    - テキスト文言
 
 
 

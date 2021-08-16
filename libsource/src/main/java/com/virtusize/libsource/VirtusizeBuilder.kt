@@ -133,7 +133,6 @@ class VirtusizeBuilder {
             region = region,
             language = language ?: region.defaultLanguage(),
             allowedLanguages = allowedLanguages,
-            virtusizeProduct = null,
             externalUserId = userId,
             showSGI = showSGI,
             detailsPanelCards = detailsPanelCards

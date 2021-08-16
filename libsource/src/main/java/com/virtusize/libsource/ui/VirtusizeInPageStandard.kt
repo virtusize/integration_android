@@ -22,7 +22,6 @@ import com.virtusize.libsource.R
 import com.virtusize.libsource.VirtusizeRepository
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.remote.Product
-import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.util.*
 import kotlinx.android.synthetic.main.view_inpage_standard.view.*
 
@@ -34,22 +33,24 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
 ) : VirtusizeInPageView(context, attrs, defStyleAttr) {
 
     /**
+     * @see VirtusizeView.clientProduct
+     */
+    override var clientProduct: VirtusizeProduct? = null
+
+    /**
      * @see VirtusizeView.virtusizeParams
      */
-    override var virtusizeParams: VirtusizeParams? = null
-        private set
+    override lateinit var virtusizeParams: VirtusizeParams
 
     /**
      * @see VirtusizeView.virtusizeMessageHandler
      */
     override lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
-        private set
 
     /**
      * @see VirtusizeView.virtusizeDialogFragment
      */
-    override var virtusizeDialogFragment = VirtusizeWebViewFragment()
-        private set
+    override lateinit var virtusizeDialogFragment: VirtusizeWebViewFragment
 
     // If the width of the InPage is small than 411dp, the value is true
     private var smallInPageWidth = false
@@ -126,12 +127,14 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
     }
 
     /**
-     * @see VirtusizeView.setup
+     * @see VirtusizeView.initialSetup
      */
-    override fun setup(params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
-        super.setup(params, messageHandler)
-        virtusizeParams = params
-        virtusizeMessageHandler = messageHandler
+    override fun initialSetup(
+        product: VirtusizeProduct,
+        params: VirtusizeParams,
+        messageHandler: VirtusizeMessageHandler
+    ) {
+        super.initialSetup(product, params, messageHandler)
 
         val viewModelFactory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -147,18 +150,18 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
         viewModel = viewModelFactory.create(VirtusizeInPageStandardViewModel::class.java)
 
         (context as? LifecycleOwner)?.apply {
-            viewModel?.productImageBitmapLiveData?.observe(this, { productImageViewBitMapPair ->
+            viewModel?.productNetworkImageLiveData?.observe(this, { productImageViewBitMapPair ->
                 productImageViewBitMapPair.first.setProductImage(productImageViewBitMapPair.second)
             })
 
-            viewModel?.productLiveData?.observe(this, { productImageViewDataPair ->
+            viewModel?.productPlaceholderImageLiveData?.observe(this, { productImageViewDataPair ->
                 productImageViewDataPair.first.setProductPlaceHolderImage(
                     productImageViewDataPair.second.productType,
                     productImageViewDataPair.second.storeProductMeta?.additionalInfo?.style
                 )
             })
 
-            viewModel?.finishLoadingProductImage?.observe(this, { finishLoading ->
+            viewModel?.finishLoadingProductImages?.observe(this, { finishLoading ->
                 if (finishLoading) {
                     setLoadingScreen(false, userBestFitProduct)
                 }
@@ -167,28 +170,22 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
     }
 
     /**
-     * @see VirtusizeView.setupProductCheckResponseData
+     * @see VirtusizeView.setProductWithProductDataCheck
      * @throws VirtusizeErrorType.NullProduct error
      */
-    override fun setupProductCheckResponseData(productCheck: ProductCheck) {
-        if (virtusizeParams?.virtusizeProduct != null) {
-            virtusizeParams?.virtusizeProduct!!.productCheckData = productCheck
-            productCheck.data?.let { productCheckResponseData ->
-                if (productCheckResponseData.validProduct) {
-                    visibility = View.VISIBLE
-                    setupConfiguredLocalization()
-                    setLoadingScreen(true)
-                    inpageCardView.setOnClickListener {
-                        openVirtusizeWebView(context)
-                    }
-                    inpageButton.setOnClickListener {
-                        openVirtusizeWebView(context)
-                    }
-                }
+    override fun setProductWithProductDataCheck(productWithPDC: VirtusizeProduct) {
+        super.setProductWithProductDataCheck(productWithPDC)
+        if (clientProduct!!.externalId == productWithPDC.externalId) {
+            clientProduct!!.productCheckData = productWithPDC.productCheckData
+            visibility = View.VISIBLE
+            setupConfiguredLocalization()
+            setLoadingScreen(true)
+            inpageCardView.setOnClickListener {
+                openVirtusizeWebView(context, clientProduct!!)
             }
-        } else {
-            virtusizeMessageHandler.onError(VirtusizeErrorType.NullProduct.virtusizeError())
-            VirtusizeErrorType.NullProduct.throwError()
+            inpageButton.setOnClickListener {
+                openVirtusizeWebView(context, clientProduct!!)
+            }
         }
     }
 
@@ -230,9 +227,12 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
     }
 
     /**
-     * @see VirtusizeInPageView.setupRecommendationText
+     * @see VirtusizeInPageView.setRecommendationText
      */
-    override fun setupRecommendationText(text: String) {
+    override fun setRecommendationText(externalProductId: String, text: String) {
+        if (clientProduct!!.externalId != externalProductId) {
+            return
+        }
         val splitTexts = text.split("<br>")
         if (splitTexts.size == 2) {
             inpageTopText.text = splitTexts[0]
@@ -245,9 +245,12 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
     }
 
     /**
-     * @see VirtusizeInPageView.showErrorScreen
+     * @see VirtusizeInPageView.showInPageError
      */
-    override fun showErrorScreen() {
+    override fun showInPageError(externalProductId: String?) {
+        if (clientProduct!!.externalId != externalProductId) {
+            return
+        }
         inpageErrorScreenLayout.visibility = View.VISIBLE
         inpageLayout.visibility = View.GONE
         inpageCardView.cardElevation = 0f
@@ -270,6 +273,9 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
      * @param userBestFitProduct the best fit user product. If it's not available, it will be null
      */
     internal fun setProductImages(storeProduct: Product, userBestFitProduct: Product?) {
+        if (clientProduct!!.externalId != storeProduct.externalId) {
+            return
+        }
         this.userBestFitProduct = userBestFitProduct
         val productMap = mutableMapOf<VirtusizeProductImageView, Product>()
         productMap[inpageStoreProductImageView] = storeProduct
@@ -460,7 +466,7 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
                 inpageButton,
                 privacyPolicyText
             ),
-            virtusizeParams?.language,
+            virtusizeParams.language,
             FontUtils.FontType.REGULAR
         )
         FontUtils.setTypeFaces(
@@ -469,13 +475,13 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
                 inpageLoadingText,
                 inpageBottomText
             ),
-            virtusizeParams?.language,
+            virtusizeParams.language,
             FontUtils.FontType.BOLD
         )
 
         val configuredContext = VirtusizeUtils.getConfiguredContext(
             context,
-            virtusizeParams?.language
+            virtusizeParams.language
         )
         inpageButton.text = configuredContext?.getText(R.string.virtusize_button_text)
         privacyPolicyText.text = configuredContext?.getText(R.string.virtusize_privacy_policy)
@@ -484,7 +490,7 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
 
         setConfiguredDimensions(configuredContext)
 
-        if (virtusizeParams?.language == VirtusizeLanguage.JP) {
+        if (virtusizeParams.language == VirtusizeLanguage.JP) {
             inpageBottomText.includeFontPadding = true
         }
 
@@ -509,7 +515,7 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
      * Sets up the text sizes and UI dimensions based on the configured context
      */
     private fun setConfiguredDimensions(configuredContext: ContextWrapper?) {
-        val additionalSize = if(virtusizeParams?.language == VirtusizeLanguage.EN) 2f.spToPx else 0f
+        val additionalSize = if(virtusizeParams.language == VirtusizeLanguage.EN) 2f.spToPx else 0f
 
         if (messageTextSize != -1f) {
             inpageTopText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + 2f.spToPx + additionalSize)

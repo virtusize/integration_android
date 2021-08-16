@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:gravity="center">
+    android:gravity="center"
+    tools:context=".ProductActivity">
 
-    <!-- VirtusizeButton is custom button layout that can be put in xml file and set up programmatically -->
     <com.virtusize.libsource.ui.VirtusizeButton
         android:id="@+id/exampleVirtusizeButton"
         app:virtusizeButtonStyle="virtusize_black"
@@ -30,5 +29,11 @@
         android:layout_height="wrap_content"
         app:virtusizeInPageMiniStyle="virtusize_black"
         app:inPageMiniBackgroundColor="@color/ocean_blue"/>
+
+    <Button
+        android:id="@+id/nextProductButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/next_product"/>
 
 </LinearLayout>

@@ -11,7 +11,7 @@ internal object FontUtils {
      * This enum contains all available font names used in this SDK
      */
     enum class FontName(val value: String){
-        PROXIMA_NOVA("proxima_nova"),
+        ROBOTO("roboto"),
         NOTO_SANS_CJK_JP("noto_sans_cjk_jp"),
         NOTO_SANS_CJK_KR("noto_sans_cjk_kr")
     }
@@ -37,7 +37,7 @@ internal object FontUtils {
     fun setTypeFaces(context: Context, textViews: List<TextView>, language: VirtusizeLanguage?, fontType: FontType) {
         when(language) {
             VirtusizeLanguage.EN -> {
-                setTypeFace(context, textViews, FontName.PROXIMA_NOVA, fontType)
+                setTypeFace(context, textViews, FontName.ROBOTO, fontType)
             }
             VirtusizeLanguage.JP -> {
                 setTypeFace(context, textViews, FontName.NOTO_SANS_CJK_JP, fontType)

@@ -10,7 +10,7 @@ buildscript {
         appcompat_version = '1.2.0'
         build_version = '28.0.0'
         constraint_layout_version = '2.0.4'
-        coroutine_version = '1.4.1'
+        coroutine_version = '1.5.1-native-mt'
         gradle_version = '4.1.2'
         junit_version = '4.13.2'
         kotlin_version = '1.4.32'

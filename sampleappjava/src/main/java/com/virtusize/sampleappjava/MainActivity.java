@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         virtusizeMessageHandler = new VirtusizeMessageHandler() {
             @Override
-            public void onEvent(@NotNull VirtusizeEvent event) {
+            public void onEvent(@NotNull VirtusizeProduct product, @NotNull VirtusizeEvent event) {
                 Log.i(TAG, event.getName());
             }
 
@@ -57,20 +57,19 @@ public class MainActivity extends AppCompatActivity {
         };
         app.Virtusize.registerMessageHandler(virtusizeMessageHandler);
 
-        app.Virtusize.setupVirtusizeProduct(
-                new VirtusizeProduct(
-                        "694",
-                        "http://www.image.com/goods/12345.jpg"
-                )
+        VirtusizeProduct product = new VirtusizeProduct(
+                "694",
+                "http://www.image.com/goods/12345.jpg"
         );
+        app.Virtusize.load(product);
 
-        app.Virtusize.setupVirtusizeView(virtusizeButton);
+        app.Virtusize.setupVirtusizeView(virtusizeButton, product);
         /*
          * To set up the button style programmatically
          * virtusizeButton.setVirtusizeViewStyle(VirtusizeViewStyle.BLACK);
          */
 
-        app.Virtusize.setupVirtusizeView(virtusizeInPageStandard);
+        app.Virtusize.setupVirtusizeView(virtusizeInPageStandard, product);
         // Set up the InPage Standard style programmatically
         virtusizeInPageStandard.setVirtusizeViewStyle(VirtusizeViewStyle.TEAL);
         /*
@@ -90,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         virtusizeInPageStandard.setButtonTextSize(ExtensionsKt.getSpToPx(10));
 
 
-        app.Virtusize.setupVirtusizeView(virtusizeInPageMini);
+        app.Virtusize.setupVirtusizeView(virtusizeInPageMini, product);
         virtusizeInPageMini.setVirtusizeViewStyle(VirtusizeViewStyle.TEAL);
         /*
          * If you like, you can set up the background of InPage Mini view as long as it passes WebAIM contrast test.

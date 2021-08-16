@@ -17,7 +17,7 @@ import org.robolectric.annotation.Config
 
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.P])
+@Config(sdk = [Build.VERSION_CODES.Q])
 class VirtusizeApiTest {
 
     private val context: Context = ApplicationProvider.getApplicationContext()
@@ -265,7 +265,7 @@ class VirtusizeApiTest {
             TestFixtures.userBodyProfile
         )
 
-        val expectedUrl = "https://services.virtusize.jp/stg/ds-functions/size-rec/get-size-new"
+        val expectedUrl = "https://services.virtusize.jp/stg/ds-functions/size-rec/get-size"
 
         assertThat(actualApiRequest.url).isEqualTo(expectedUrl)
         assertThat(actualApiRequest.method).isEqualTo(HttpMethod.POST)

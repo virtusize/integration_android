@@ -9,7 +9,6 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import com.virtusize.libsource.R
 import com.virtusize.libsource.data.local.*
-import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.util.VirtusizeUtils
 
 class VirtusizeButton @JvmOverloads constructor(
@@ -19,22 +18,24 @@ class VirtusizeButton @JvmOverloads constructor(
 ) : VirtusizeView, AppCompatButton(context, attrs, defStyleAttr) {
 
     /**
+     * @see VirtusizeView.clientProduct
+     */
+    override var clientProduct: VirtusizeProduct? = null
+
+    /**
      * @see VirtusizeView.virtusizeParams
      */
-    override var virtusizeParams: VirtusizeParams? = null
-        private set
+    override lateinit var virtusizeParams: VirtusizeParams
 
     /**
      * @see VirtusizeView.virtusizeMessageHandler
      */
     override lateinit var virtusizeMessageHandler: VirtusizeMessageHandler
-        private set
 
     /**
      * @see VirtusizeView.virtusizeDialogFragment
      */
-    override var virtusizeDialogFragment = VirtusizeWebViewFragment()
-        private set
+    override lateinit var virtusizeDialogFragment: VirtusizeWebViewFragment
 
     // The VirtusizeViewStyle that clients can choose to use for this Button
     var virtusizeViewStyle: VirtusizeViewStyle = VirtusizeViewStyle.NONE
@@ -58,15 +59,6 @@ class VirtusizeButton @JvmOverloads constructor(
             ?: VirtusizeViewStyle.NONE
         attrsArray.recycle()
         setupButtonStyle()
-    }
-
-    /**
-     * @see VirtusizeView.setup
-     */
-    override fun setup(params: VirtusizeParams, messageHandler: VirtusizeMessageHandler) {
-        super.setup(params, messageHandler)
-        virtusizeParams = params
-        virtusizeMessageHandler = messageHandler
     }
 
     /**
@@ -114,23 +106,18 @@ class VirtusizeButton @JvmOverloads constructor(
     }
 
     /**
-     * @see VirtusizeView.setupProductCheckResponseData
+     * @see VirtusizeView.setProductWithProductDataCheck
      * @throws VirtusizeErrorType.NullProduct error
      */
-    override fun setupProductCheckResponseData(productCheck: ProductCheck) {
-        if (virtusizeParams?.virtusizeProduct != null) {
-            virtusizeParams?.virtusizeProduct!!.productCheckData = productCheck
-            productCheck.data?.let { productCheckResponseData ->
-                if (productCheckResponseData.validProduct) {
-                    visibility = View.VISIBLE
-                    setupButtonTextConfiguredLocalization()
-                    setOnClickListener {
-                        openVirtusizeWebView(context)
-                    }
-                }
+    override fun setProductWithProductDataCheck(productWithPDC: VirtusizeProduct) {
+        super.setProductWithProductDataCheck(productWithPDC)
+        if (clientProduct!!.externalId == productWithPDC.externalId) {
+            clientProduct!!.productCheckData = productWithPDC.productCheckData
+            visibility = View.VISIBLE
+            setupButtonTextConfiguredLocalization()
+            setOnClickListener {
+                openVirtusizeWebView(context, clientProduct!!)
             }
-        } else {
-            VirtusizeErrorType.NullProduct.throwError()
         }
     }
 
@@ -139,7 +126,7 @@ class VirtusizeButton @JvmOverloads constructor(
      */
     private fun setupButtonTextConfiguredLocalization() {
         val configuredContext =
-            VirtusizeUtils.getConfiguredContext(context, virtusizeParams?.language)
+            VirtusizeUtils.getConfiguredContext(context, virtusizeParams.language)
         if (text.isNullOrEmpty()) {
             text = configuredContext?.getText(R.string.virtusize_button_text)
             configuredContext?.resources?.getDimension(R.dimen.virtusize_button_textSize)?.let {
