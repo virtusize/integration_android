@@ -1,14 +1,17 @@
 package com.virtusize.libsource.util
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.res.Resources
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.util.TypedValue
 import android.view.View
+import android.webkit.WebResourceRequest
 import android.widget.TextView
 import androidx.annotation.DrawableRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser
@@ -109,3 +112,26 @@ val Float.spToPx: Float
         this,
         Resources.getSystem().displayMetrics
     )
+
+/*
+ * For the Fit Illustrator web view
+ */
+val String.isFitIllustratorURL: Boolean
+    get() = this.contains("virtusize") && this.contains("fit-illustrator") && !this.contains("#") && !this.contains("oauth")
+
+val WebResourceRequest.isFitIllustratorURL: Boolean
+    get() = this.url.toString().isFitIllustratorURL
+
+val WebResourceRequest.urlString: String
+    get() = "${this.url}"
+
+internal fun Context.getActivity(): AppCompatActivity? {
+    var currentContext = this
+    while (currentContext is ContextWrapper) {
+        if (currentContext is AppCompatActivity) {
+            return currentContext
+        }
+        currentContext = currentContext.baseContext
+    }
+    return null
+}
