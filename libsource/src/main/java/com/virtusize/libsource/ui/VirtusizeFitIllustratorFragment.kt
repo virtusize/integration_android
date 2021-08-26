@@ -2,6 +2,7 @@ package com.virtusize.libsource.ui
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.virtusize.libsource.R
 import com.virtusize.libsource.util.Constants
+import com.virtusize.libsource.util.getActivity
 import kotlinx.android.synthetic.main.webview_fit_illustrator.*
 
 class VirtusizeFitIllustratorFragment : DialogFragment() {
@@ -45,6 +47,10 @@ class VirtusizeFitIllustratorFragment : DialogFragment() {
             } ?: run {
                 Log.e(TAG, "Failed to open the VirtusizeFitIllustratorFragment, URL: $url")
             }
+        }
+
+        fun launch(context: Context, url: String) {
+            launch(context.getActivity(), url)
         }
     }
 

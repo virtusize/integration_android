@@ -15,7 +15,6 @@ import android.view.ViewGroup
 import android.webkit.*
 import androidx.annotation.RequiresApi
 import com.virtusize.libsource.ui.VirtusizeFitIllustratorFragment
-import com.virtusize.libsource.util.getActivity
 import com.virtusize.libsource.util.isFitIllustratorURL
 import com.virtusize.libsource.util.urlString
 
@@ -57,7 +56,7 @@ class VirtusizeFitIllustratorWebView @JvmOverloads constructor(
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 url?.let {
                     if (!isMultipleWindowsSupported && url.isFitIllustratorURL) {
-                        VirtusizeFitIllustratorFragment.launch(context.getActivity(), url)
+                        VirtusizeFitIllustratorFragment.launch(context, url)
                         return true
                     }
                 }
@@ -71,7 +70,7 @@ class VirtusizeFitIllustratorWebView @JvmOverloads constructor(
             ): Boolean {
                 request?.let {
                     if (!isMultipleWindowsSupported && request.isFitIllustratorURL) {
-                        VirtusizeFitIllustratorFragment.launch(context.getActivity(), request.urlString)
+                        VirtusizeFitIllustratorFragment.launch(context, request.urlString)
                         return true
                     }
                 }
