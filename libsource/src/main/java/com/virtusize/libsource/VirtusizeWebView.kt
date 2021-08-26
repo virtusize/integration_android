@@ -206,8 +206,6 @@ class VirtusizeWebView @JvmOverloads constructor(
                 if (resultMsg.obj != null && resultMsg.obj is WebView.WebViewTransport && isLinkFromVirtusize(url, title)) {
                     val popupWebView = WebView(view.context)
                     popupWebView.settings.javaScriptEnabled = true
-                    popupWebView.settings.javaScriptCanOpenWindowsAutomatically = true
-                    popupWebView.settings.setSupportMultipleWindows(true)
                     // For the 403 error with Google Sign-In
                     popupWebView.settings.userAgentString = System.getProperty("http.agent")
                     popupWebView.webViewClient = object : WebViewClient() {
@@ -225,7 +223,7 @@ class VirtusizeWebView @JvmOverloads constructor(
                     }
                     popupWebView.webChromeClient = object : WebChromeClient() {
                         override fun onCloseWindow(window: WebView) {
-                            window.removeAllViews()
+                            removeAllViews()
                         }
                     }
                     val transport = resultMsg.obj as WebView.WebViewTransport

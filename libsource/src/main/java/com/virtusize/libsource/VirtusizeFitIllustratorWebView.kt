@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Message
 import android.util.AttributeSet
 import android.view.KeyEvent
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.*
@@ -36,8 +37,8 @@ class VirtusizeFitIllustratorWebView @JvmOverloads constructor(
         _webViewClient = client
     }
 
-    internal val isWindowsSettingsEnabled: Boolean
-        get() = settings.supportMultipleWindows() ||settings.javaScriptCanOpenWindowsAutomatically
+    internal val isMultipleWindowsSupported: Boolean
+        get() = settings.supportMultipleWindows()
 
     internal fun enableWindowsSettings() {
         settings.setSupportMultipleWindows(true)
@@ -55,7 +56,7 @@ class VirtusizeFitIllustratorWebView @JvmOverloads constructor(
         super.setWebViewClient(object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 url?.let {
-                    if (!isWindowsSettingsEnabled && url.isFitIllustratorURL) {
+                    if (!isMultipleWindowsSupported && url.isFitIllustratorURL) {
                         VirtusizeFitIllustratorFragment.launch(context.getActivity(), url)
                         return true
                     }
@@ -69,7 +70,7 @@ class VirtusizeFitIllustratorWebView @JvmOverloads constructor(
                 request: WebResourceRequest?
             ): Boolean {
                 request?.let {
-                    if (!isWindowsSettingsEnabled && request.isFitIllustratorURL) {
+                    if (!isMultipleWindowsSupported && request.isFitIllustratorURL) {
                         VirtusizeFitIllustratorFragment.launch(context.getActivity(), request.urlString)
                         return true
                     }
@@ -83,7 +84,7 @@ class VirtusizeFitIllustratorWebView @JvmOverloads constructor(
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 // This is to close any subviews when a user is successfully logged into Facebook
-                if (isWindowsSettingsEnabled && url?.contains("virtusize") == true && url.contains("#compare")) {
+                if (isMultipleWindowsSupported && url?.contains("virtusize") == true && url.contains("#compare")) {
                     view?.removeAllViews()
                 }
                 _webViewClient?.onPageFinished(view, url)
@@ -227,17 +228,24 @@ class VirtusizeFitIllustratorWebView @JvmOverloads constructor(
                         override fun onPageFinished(view: WebView?, url: String?) {
                             // This is to scroll the webview to top when the fit illustrator is open
                             url?.let {
-                                if (url.isFitIllustratorURL) {
-                                    scrollTo(0, 0)
-                                }
+                                scrollTo(0, 0)
                             }
                         }
                     }
 
                     popupWebView.webChromeClient = object : WebChromeClient() {
                         override fun onCloseWindow(window: WebView) {
-                            window.removeAllViews()
+                            removeAllViews()
                         }
+                    }
+                    popupWebView.setOnKeyListener { v, keyCode, event ->
+                        if (keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP
+                            && popupWebView.canGoBack()
+                        ) {
+                            popupWebView.goBack()
+                            return@setOnKeyListener true
+                        }
+                        false
                     }
                     addView(popupWebView)
                     val transport = resultMsg.obj as WebView.WebViewTransport
