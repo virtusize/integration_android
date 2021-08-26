@@ -2,7 +2,6 @@ package com.virtusize.libsource
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.net.http.SslError
@@ -10,20 +9,21 @@ import android.os.Build
 import android.os.Message
 import android.util.AttributeSet
 import android.view.KeyEvent
+import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.webkit.*
 import androidx.annotation.RequiresApi
+import com.virtusize.libsource.ui.VirtusizeFitIllustratorFragment
+import com.virtusize.libsource.util.isFitIllustratorURL
+import com.virtusize.libsource.util.urlString
 
 @SuppressLint("SetJavaScriptEnabled")
-class VirtusizeWebView @JvmOverloads constructor(
+class VirtusizeFitIllustratorWebView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : WebView(context, attrs, defStyleAttr) {
-
-    companion object {
-        private val TAG = VirtusizeWebView::class.simpleName
-    }
 
     private var _webChromeClient: WebChromeClient? = null
     private var _webViewClient: WebViewClient? = null
@@ -36,6 +36,14 @@ class VirtusizeWebView @JvmOverloads constructor(
         _webViewClient = client
     }
 
+    internal val isMultipleWindowsSupported: Boolean
+        get() = settings.supportMultipleWindows()
+
+    internal fun enableWindowsSettings() {
+        settings.setSupportMultipleWindows(true)
+        settings.javaScriptCanOpenWindowsAutomatically = true
+    }
+
     init {
         isFocusable = true
         isFocusableInTouchMode = true
@@ -43,11 +51,15 @@ class VirtusizeWebView @JvmOverloads constructor(
         settings.javaScriptEnabled = true
         settings.domStorageEnabled = true
         settings.databaseEnabled = true
-        settings.setSupportMultipleWindows(true)
-        settings.javaScriptCanOpenWindowsAutomatically = true
 
         super.setWebViewClient(object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                url?.let {
+                    if (!isMultipleWindowsSupported && url.isFitIllustratorURL) {
+                        VirtusizeFitIllustratorFragment.launch(context, url)
+                        return true
+                    }
+                }
                 return _webViewClient?.shouldOverrideUrlLoading(view, url) ?: false
             }
 
@@ -56,6 +68,12 @@ class VirtusizeWebView @JvmOverloads constructor(
                 view: WebView?,
                 request: WebResourceRequest?
             ): Boolean {
+                request?.let {
+                    if (!isMultipleWindowsSupported && request.isFitIllustratorURL) {
+                        VirtusizeFitIllustratorFragment.launch(context, request.urlString)
+                        return true
+                    }
+                }
                 return _webViewClient?.shouldOverrideUrlLoading(view, request) ?: false
             }
 
@@ -64,7 +82,10 @@ class VirtusizeWebView @JvmOverloads constructor(
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
-                view?.evaluateJavascript("javascript:window.virtusizeSNSEnabled = true;", null)
+                // This is to close any subviews when a user is successfully logged into Facebook
+                if (isMultipleWindowsSupported && url?.contains("virtusize") == true && url.contains("#compare")) {
+                    view?.removeAllViews()
+                }
                 _webViewClient?.onPageFinished(view, url)
             }
 
@@ -198,36 +219,35 @@ class VirtusizeWebView @JvmOverloads constructor(
                 userGesture: Boolean,
                 resultMsg: Message
             ): Boolean {
-                // Obtain the popup window link or link title
-                val message = view.handler.obtainMessage()
-                view.requestFocusNodeHref(message)
-                val url = message.data.getString("url")
-                val title = message.data.getString("title")
-                if (resultMsg.obj != null && resultMsg.obj is WebView.WebViewTransport && isLinkFromVirtusize(url, title)) {
-                    val popupWebView = WebView(view.context)
-                    popupWebView.settings.javaScriptEnabled = true
-                    // For the 403 error with Google Sign-In
-                    popupWebView.settings.userAgentString = System.getProperty("http.agent")
+                if (resultMsg.obj != null && resultMsg.obj is WebView.WebViewTransport) {
+                    val popupWebView = VirtusizeFitIllustratorWebView(view.context)
+                    popupWebView.enableWindowsSettings()
+                    popupWebView.layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                     popupWebView.webViewClient = object : WebViewClient() {
-                        override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                            if (isExternalLinkFromVirtusize(url)) {
-                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                                try {
-                                    context.startActivity(intent)
-                                } finally {
-                                    return true
-                                }
+                        override fun onPageFinished(view: WebView?, url: String?) {
+                            // This is to scroll the webview to top when the fit illustrator is open
+                            url?.let {
+                                scrollTo(0, 0)
                             }
-                            return false
                         }
                     }
+
                     popupWebView.webChromeClient = object : WebChromeClient() {
                         override fun onCloseWindow(window: WebView) {
                             removeAllViews()
                         }
                     }
+                    popupWebView.setOnKeyListener { v, keyCode, event ->
+                        if (keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP
+                            && popupWebView.canGoBack()
+                        ) {
+                            popupWebView.goBack()
+                            return@setOnKeyListener true
+                        }
+                        false
+                    }
+                    addView(popupWebView)
                     val transport = resultMsg.obj as WebView.WebViewTransport
-                    view.addView(popupWebView)
                     transport.webView = popupWebView
                     resultMsg.sendToTarget()
                     return true
@@ -268,6 +288,7 @@ class VirtusizeWebView @JvmOverloads constructor(
             }
 
             override fun onCloseWindow(window: WebView?) {
+                window?.removeAllViews()
                 _webChromeClient?.onCloseWindow(window)
             }
 
@@ -356,22 +377,5 @@ class VirtusizeWebView @JvmOverloads constructor(
                 _webChromeClient?.getVisitedHistory(callback)
             }
         })
-    }
-
-    /**
-     * Checks if the URL is a Virtusize external link to be opened with a browser app
-     */
-    private fun isExternalLinkFromVirtusize(url: String?): Boolean {
-        return (url?.contains("virtusize") == true && url.contains("privacy")) ||
-                url?.contains("surveymonkey") == true
-    }
-
-    /**
-     * Checks if the URL or the link title is from Virtusize
-     */
-    private fun isLinkFromVirtusize(url: String?, title: String?): Boolean {
-        return isExternalLinkFromVirtusize(url) ||
-                /* Facebook Auth link title */ title?.contains("Facebook") == true ||
-                /* Google Auth link title */ title?.contains("Google") == true
     }
 }

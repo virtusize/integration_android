@@ -5,8 +5,8 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <com.virtusize.libsource.VirtusizeWebView
-        android:id="@+id/webView"
+    <com.virtusize.libsource.VirtusizeFitIllustratorWebView
+        android:id="@+id/fitIllustratorWebView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
