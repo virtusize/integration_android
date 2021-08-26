@@ -813,7 +813,7 @@ app.Virtusize.sendOrder(order,
 The built-in WebView blocks any popup windows by default. To let users to sign up or log in with the web version of Virtusize integration in your webview, please replace your `WebView` with **`VirtusizeWebView`** in your Kotlin or Java file and XML file to fix and enable SNS login in Virtusize.
 
 #### Note
-If you load Virtusize Fit Illustrator in your WebView app, replace your `WebView` with **`VirtusizeFitWebView`** instead.
+If you load Virtusize Fit Illustrator in your WebView app, replace your `WebView` with **`VirtusizeFitIllustratorWebView`** instead.
 
 - Kotlin/Java
 
