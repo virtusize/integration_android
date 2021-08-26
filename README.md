@@ -83,7 +83,7 @@ In your app `build.gradle` file, add the following dependencies:
 
 ```groovy
 dependencies {
-  implementation 'com.github.virtusize:integration_android:2.3.0'
+  implementation 'com.github.virtusize:integration_android:2.3.1'
 }
 ```
 
@@ -811,9 +811,12 @@ Call the `Virtusize.sendOrder` method in your activity or fragment when the user
 
 
 
-## Enable SNS Login in Virtusize for native Webview apps
+## Enable SNS Login in Virtusize for native WebView apps
 
 The built-in WebView blocks any popup windows by default. To let users to sign up or log in with the web version of Virtusize integration in your webview, please replace your `WebView` with **`VirtusizeWebView`** in your Kotlin or Java file and XML file to fix and enable SNS login in Virtusize.
+
+#### Note
+If you load Virtusize Fit Illustrator in your WebView app, replace your `WebView` with **`VirtusizeFitWebView`** instead.
 
 - Kotlin/Java
 
@@ -821,10 +824,14 @@ The built-in WebView blocks any popup windows by default. To let users to sign u
   // Kotlin
   - var webView: WebView
   + var webView: VirtusizeWebView
+  or
+  + var webView: VirtusizeFitIllustratorWebView
   
   // Java
   - WebView webView;
   + VirtusizeWebView webView;
+    or
+  + VirtusizeFitIllustratorWebView webView;
   ```
 
 and
@@ -834,6 +841,8 @@ and
   ```diff
   - <WebView
   + <com.virtusize.libsource.VirtusizeWebView
+      or
+  + <com.virtusize.libsource.VirtusizeFitIllustratorWebView
       android:id="@+id/webView"
       android:layout_width="match_parent"
       android:layout_height="match_parent" />
