@@ -48,6 +48,3 @@ dependencies {
     testImplementation 'androidx.test:core:1.4.0'
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_version"
 }
-repositories {
-    mavenCentral()
-}
