@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.view_product_image.view.*
 /**
  * A custom class for a product image view
  */
-internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet): LinearLayout(context, attrs) {
+internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
 
     // The product type to determine the UI style
     private var productImageType: ProductImageType = ProductImageType.STORE
@@ -36,12 +36,14 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet):
             0
         )
 
-        productImageType = ProductImageType.values()[typedArray.getInt(
-            R.styleable.VirtusizeProductImageView_productImageType,
-            0
-        )]
+        productImageType = ProductImageType.values()[
+            typedArray.getInt(
+                R.styleable.VirtusizeProductImageView_productImageType,
+                0
+            )
+        ]
 
-        if(productImageType == ProductImageType.USER) {
+        if (productImageType == ProductImageType.USER) {
             inpageBorderImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_image_border_green_dash))
         } else {
             inpageBorderImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_image_border_gray))
@@ -85,7 +87,7 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet):
         val productTypeImageWithStyle = context.getDrawableResourceByName(
             "ic_product_type_${productType}_$style"
         )
-        if(productTypeImageWithStyle != null) {
+        if (productTypeImageWithStyle != null) {
             productPlaceholderImage = productTypeImageWithStyle
         }
         if (productImageType == ProductImageType.USER) {

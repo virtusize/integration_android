@@ -15,14 +15,15 @@ class StoreProductMetaJsonParserTest {
         assertThat(actualStoreProductMeta?.brand).isEqualTo("Virtusize")
         assertThat(actualStoreProductMeta?.additionalInfo?.brand).isEqualTo("Virtusize")
         assertThat(actualStoreProductMeta?.additionalInfo?.sizes?.toMutableSet()).isEqualTo(
-            mutableSetOf(ProductSize(
-                "38",
-                mutableSetOf(
-                    Measurement("height", 760),
-                    Measurement("bust", 660),
-                    Measurement("sleeve", 845)
-                )
-            ),
+            mutableSetOf(
+                ProductSize(
+                    "38",
+                    mutableSetOf(
+                        Measurement("height", 760),
+                        Measurement("bust", 660),
+                        Measurement("sleeve", 845)
+                    )
+                ),
                 ProductSize(
                     "36",
                     mutableSetOf(
@@ -30,7 +31,9 @@ class StoreProductMetaJsonParserTest {
                         Measurement("bust", 645),
                         Measurement("sleeve", 825)
                     )
-                )))
+                )
+            )
+        )
         assertThat(actualStoreProductMeta?.additionalInfo?.modelInfo).isEqualTo(
             mutableMapOf(
                 "hip" to 85,

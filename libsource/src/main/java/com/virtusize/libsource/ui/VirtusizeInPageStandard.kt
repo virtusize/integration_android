@@ -25,7 +25,6 @@ import com.virtusize.libsource.data.remote.Product
 import com.virtusize.libsource.util.*
 import kotlinx.android.synthetic.main.view_inpage_standard.view.*
 
-
 class VirtusizeInPageStandard @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -335,10 +334,12 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
         }
 
         // Set the background color of the inpage card view
-        inpageCardView.setBackgroundColor(ContextCompat.getColor(
-            context,
-            R.color.virtusizeWhite
-        ))
+        inpageCardView.setBackgroundColor(
+            ContextCompat.getColor(
+                context,
+                R.color.virtusizeWhite
+            )
+        )
 
         // Set horizontal margins
         val inPageStandardFooterTopMargin =
@@ -387,7 +388,6 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
             crossFadeHandler.postDelayed(crossFadeRunnable!!, 2500)
         }
     }
-
 
     /**
      * Stops the cross fade animation
@@ -515,7 +515,7 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
      * Sets up the text sizes and UI dimensions based on the configured context
      */
     private fun setConfiguredDimensions(configuredContext: ContextWrapper?) {
-        val additionalSize = if(virtusizeParams.language == VirtusizeLanguage.EN) 2f.spToPx else 0f
+        val additionalSize = if (virtusizeParams.language == VirtusizeLanguage.EN) 2f.spToPx else 0f
 
         if (messageTextSize != -1f) {
             inpageTopText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + 2f.spToPx + additionalSize)

@@ -1,7 +1,5 @@
 package com.virtusize.libsource.data.remote
 
-import com.virtusize.libsource.util.I18nConstants
-
 /**
  * This class represents the additional info of a store product
  * @param brand the brand name

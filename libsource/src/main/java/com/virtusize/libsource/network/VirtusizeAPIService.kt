@@ -170,7 +170,6 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
             .execute(apiRequest)
     }
 
-
     /**
      * Gets the API response for retrieving the store product info
      * @param productId the ID of the store product
@@ -179,7 +178,7 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
     internal suspend fun getStoreProduct(productId: Int): VirtusizeApiResponse<Product> = withContext(
         Dispatchers.IO
     ) {
-        if(productId == 0) {
+        if (productId == 0) {
             return@withContext VirtusizeApiResponse.Error(VirtusizeErrorType.NullProduct.virtusizeError())
         }
         val apiRequest = VirtusizeApi.getStoreProductInfo(productId.toString())

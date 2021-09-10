@@ -1,9 +1,9 @@
 package com.virtusize.libsource.data.parsers
 
 import com.google.common.truth.Truth.assertThat
-import com.virtusize.libsource.fixtures.TestFixtures
 import com.virtusize.libsource.data.remote.Data
 import com.virtusize.libsource.data.remote.ProductCheck
+import com.virtusize.libsource.fixtures.TestFixtures
 import org.junit.Test
 
 class ProductCheckJsonParserTest {

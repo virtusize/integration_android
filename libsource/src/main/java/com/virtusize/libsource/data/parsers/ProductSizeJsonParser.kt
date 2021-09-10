@@ -14,7 +14,7 @@ internal class ProductSizeJsonParser : VirtusizeJsonParser<ProductSize> {
         json.optJSONObject(FIELD_MEASUREMENTS)?.let { measurementsJsonObject ->
             measurements = JsonUtils.jsonObjectToMeasurements(measurementsJsonObject)
         }
-        if(name.isEmpty() && measurements.isEmpty()) {
+        if (name.isEmpty() && measurements.isEmpty()) {
             return null
         }
         return ProductSize(name, measurements)

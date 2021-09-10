@@ -36,7 +36,7 @@ object VirtusizeFlutterUtils {
         productTypes: List<ProductType>
     ): SizeComparisonRecommendedSize? {
         var userProductRecommendedSize: SizeComparisonRecommendedSize? = null
-        if(selectedRecommendedType != SizeRecommendationType.body) {
+        if (selectedRecommendedType != SizeRecommendationType.body) {
             userProductRecommendedSize = VirtusizeUtils.findBestFitProductSize(
                 userProducts = userProducts,
                 storeProduct = storeProduct,
@@ -55,7 +55,7 @@ object VirtusizeFlutterUtils {
     ): String {
         var userBodyRecommendedSize: String? = null
 
-        if(selectedRecommendedType != SizeRecommendationType.compareProduct) {
+        if (selectedRecommendedType != SizeRecommendationType.compareProduct) {
             userBodyRecommendedSize = bodyProfileRecommendedSize?.sizeName
         }
 

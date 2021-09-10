@@ -6,7 +6,7 @@ import org.json.JSONObject
 /**
  * This class parses a JSONObject to the [ProductMetaDataHints] object
  */
-internal class ProductMetaDataHintsJsonParser: VirtusizeJsonParser<ProductMetaDataHints> {
+internal class ProductMetaDataHintsJsonParser : VirtusizeJsonParser<ProductMetaDataHints> {
     override fun parse(json: JSONObject): ProductMetaDataHints? {
         val apiKey = JsonUtils.optString(json, FIELD_API_KEY)
         val imageUrl = JsonUtils.optString(json, FIELD_IMAGE_URL)

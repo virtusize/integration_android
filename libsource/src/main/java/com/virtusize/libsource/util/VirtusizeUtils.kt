@@ -48,7 +48,7 @@ internal object VirtusizeUtils {
      * Gets configured context base on the language that clients set up with the Virtusize Builder in the application
      */
     fun getConfiguredContext(context: Context, language: VirtusizeLanguage?): ContextWrapper? {
-        return when(language) {
+        return when (language) {
             VirtusizeLanguage.EN -> configureLocale(context, Locale.ENGLISH)
             VirtusizeLanguage.JP -> configureLocale(context, Locale.JAPAN)
             VirtusizeLanguage.KR -> configureLocale(context, Locale.KOREA)
@@ -64,7 +64,7 @@ internal object VirtusizeUtils {
      * @return [SizeComparisonRecommendedSize]
      */
     fun findBestFitProductSize(userProducts: List<Product>?, storeProduct: Product?, productTypes: List<ProductType>?): SizeComparisonRecommendedSize? {
-        if(userProducts == null || storeProduct == null || productTypes == null) {
+        if (userProducts == null || storeProduct == null || productTypes == null) {
             return null
         }
         val storeProductType = productTypes.find { it.id == storeProduct.productType } ?: return null
@@ -137,7 +137,7 @@ internal object VirtusizeUtils {
     ) {
         val fragmentTransaction = (context as FragmentActivity).supportFragmentManager.beginTransaction()
         val previousFragment = context.supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
-        previousFragment?.let {fragment ->
+        previousFragment?.let { fragment ->
             fragmentTransaction.remove(fragment)
         }
         fragmentTransaction.addToBackStack(null)

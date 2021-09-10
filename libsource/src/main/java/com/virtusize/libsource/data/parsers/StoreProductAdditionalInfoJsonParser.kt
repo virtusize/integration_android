@@ -18,14 +18,15 @@ internal class StoreProductAdditionalInfoJsonParser : VirtusizeJsonParser<StoreP
             sizes = JsonUtils.jsonObjectToMap(jsonObject)
                 .map { filteredSizeHashMap ->
                     ProductSize(
-                        filteredSizeHashMap.key, (filteredSizeHashMap.value as MutableMap<String, Int>)
+                        filteredSizeHashMap.key,
+                        (filteredSizeHashMap.value as MutableMap<String, Int>)
                             .map {
                                 Measurement(it.key, it.value)
                             }.toMutableSet()
                     )
                 }.toMutableSet()
         }
-        var modelInfo =  mutableMapOf<String, Any>()
+        var modelInfo = mutableMapOf<String, Any>()
         json.optJSONObject(FIELD_MODEL_INFO)?.let {
             modelInfo = JsonUtils.jsonObjectToMap(it)
         }
@@ -35,7 +36,7 @@ internal class StoreProductAdditionalInfoJsonParser : VirtusizeJsonParser<StoreP
         json.optJSONObject(FIELD_BRAND_SIZING)?.let {
             brandSizing = BrandSizingJsonParser().parse(it)
         }
-        if(fit.isBlank() && brandSizing == null) {
+        if (fit.isBlank() && brandSizing == null) {
             return null
         }
         return StoreProductAdditionalInfo(brand, gender, sizes, modelInfo, fit, style, brandSizing)

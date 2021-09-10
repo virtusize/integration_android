@@ -28,7 +28,7 @@ internal data class BodyProfileRecommendedSizeParams constructor(
     fun paramsToMap(): Map<String, Any> {
         return emptyMap<String, Any>()
             .plus(
-                mapOf(PARAM_ADDITIONAL_INFO to createAdditionalInfoParams() )
+                mapOf(PARAM_ADDITIONAL_INFO to createAdditionalInfoParams())
             )
             .plus(
                 mapOf(PARAM_BODY_DATA to createBodyDataParams())
@@ -46,7 +46,7 @@ internal data class BodyProfileRecommendedSizeParams constructor(
                 mapOf(PARAM_USER_HEIGHT to userBodyProfile.height)
             )
             .plus(
-                userBodyProfile.weight.toFloatOrNull()?.let { mapOf(PARAM_USER_WEIGHT to it)}.orEmpty()
+                userBodyProfile.weight.toFloatOrNull()?.let { mapOf(PARAM_USER_WEIGHT to it) }.orEmpty()
             )
             .plus(
                 mapOf(PARAM_EXTERNAL_PRODUCT_ID to (storeProduct.externalId ?: ""))
@@ -90,14 +90,14 @@ internal data class BodyProfileRecommendedSizeParams constructor(
         return emptyMap<String, Any?>()
             .plus(
                 userBodyProfile.bodyData.map {
-                    if(it.name == PARAM_BODY_BUST) {
+                    if (it.name == PARAM_BODY_BUST) {
                         chestValue = it.millimeter
                     }
                     it.name to mutableMapOf(PARAM_BODY_MEASUREMENT_VALUE to it.millimeter, PARAM_BODY_MEASUREMENT_PREDICTED to true)
                 }
             )
             .plus(
-                chestValue?.let { mapOf(PARAM_BODY_CHEST to mutableMapOf(PARAM_BODY_MEASUREMENT_VALUE to it, PARAM_BODY_MEASUREMENT_PREDICTED to true))}.orEmpty()
+                chestValue?.let { mapOf(PARAM_BODY_CHEST to mutableMapOf(PARAM_BODY_MEASUREMENT_VALUE to it, PARAM_BODY_MEASUREMENT_PREDICTED to true)) }.orEmpty()
             )
     }
 

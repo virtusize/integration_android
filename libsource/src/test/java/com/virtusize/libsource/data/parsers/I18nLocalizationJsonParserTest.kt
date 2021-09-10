@@ -5,11 +5,11 @@ import android.content.res.Configuration
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
-import com.virtusize.libsource.TestUtils
 import com.virtusize.libsource.R
-import com.virtusize.libsource.fixtures.TestFixtures
+import com.virtusize.libsource.TestUtils
 import com.virtusize.libsource.data.local.VirtusizeLanguage
 import com.virtusize.libsource.data.remote.I18nLocalization
+import com.virtusize.libsource.fixtures.TestFixtures
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -25,7 +25,8 @@ class I18nLocalizationJsonParserTest {
     @Test
     fun parseI18N_englishLocalization_shouldReturnExpectedObject() {
         val actualI18nLocalization = I18nLocalizationJsonParser(context, VirtusizeLanguage.EN).parse(
-            TestUtils.readFileFromAssets("/i18n_en.json"))
+            TestUtils.readFileFromAssets("/i18n_en.json")
+        )
 
         val expectedI18nLocalization = getExpectedI18nLocalization(context)
 
@@ -35,7 +36,8 @@ class I18nLocalizationJsonParserTest {
     @Test
     fun parseI18N_emptyJsonData_shouldReturnExpectedObject() {
         val actualI18nLocalization = I18nLocalizationJsonParser(context, VirtusizeLanguage.EN).parse(
-            TestFixtures.EMPTY_JSON_DATA)
+            TestFixtures.EMPTY_JSON_DATA
+        )
 
         val expectedI18nLocalization = I18nLocalization(
             "",

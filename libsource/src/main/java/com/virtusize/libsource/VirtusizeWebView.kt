@@ -363,7 +363,7 @@ class VirtusizeWebView @JvmOverloads constructor(
      */
     private fun isExternalLinkFromVirtusize(url: String?): Boolean {
         return (url?.contains("virtusize") == true && url.contains("privacy")) ||
-                url?.contains("surveymonkey") == true
+            url?.contains("surveymonkey") == true
     }
 
     /**
@@ -371,7 +371,7 @@ class VirtusizeWebView @JvmOverloads constructor(
      */
     private fun isLinkFromVirtusize(url: String?, title: String?): Boolean {
         return isExternalLinkFromVirtusize(url) ||
-                /* Facebook Auth link title */ title?.contains("Facebook") == true ||
-                /* Google Auth link title */ title?.contains("Google") == true
+            /* Facebook Auth link title */ title?.contains("Facebook") == true ||
+            /* Google Auth link title */ title?.contains("Google") == true
     }
 }

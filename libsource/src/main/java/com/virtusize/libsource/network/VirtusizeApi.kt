@@ -8,7 +8,6 @@ import com.virtusize.libsource.data.remote.ProductCheck
 import com.virtusize.libsource.data.remote.ProductType
 import com.virtusize.libsource.data.remote.UserBodyProfile
 
-
 /**
  * This enum contains supported HTTP request methods
  */
@@ -49,8 +48,11 @@ internal object VirtusizeApi {
      * @param key the API key that is unique for every Virtusize client
      * @param userId the user ID that is unique from the client system
      */
-    fun init(env: VirtusizeEnvironment,
-             key: String, userId: String) {
+    fun init(
+        env: VirtusizeEnvironment,
+        key: String,
+        userId: String
+    ) {
         environment = env
         apiKey = key
         this.userId = userId
@@ -193,7 +195,7 @@ internal object VirtusizeApi {
             virtusizeEvent.data?.optJSONObject("data")?.let {
                 JsonUtils.jsonObjectToMap(it)
             }?.let {
-                for ((k,v) in it.iterator()) params[k] = v
+                for ((k, v) in it.iterator()) params[k] = v
             }
         }
         return params
@@ -217,7 +219,7 @@ internal object VirtusizeApi {
      * @param order [VirtusizeOrder]
      * @see ApiRequest
      */
-    fun getStoreInfo() : ApiRequest {
+    fun getStoreInfo(): ApiRequest {
         val url = Uri.parse(environment.defaultApiUrl() + VirtusizeEndpoint.StoreViewApiKey.getPath() + apiKey)
             .buildUpon()
             .appendQueryParameter("format", "json")
@@ -231,7 +233,7 @@ internal object VirtusizeApi {
      * @param productId the ID of a product
      * @see ApiRequest
      */
-    fun getStoreProductInfo(productId: String) : ApiRequest {
+    fun getStoreProductInfo(productId: String): ApiRequest {
         val url = Uri.parse(environment.defaultApiUrl() + VirtusizeEndpoint.StoreProducts.getPath() + productId)
             .buildUpon()
             .appendQueryParameter("format", "json")
@@ -244,7 +246,7 @@ internal object VirtusizeApi {
      * Gets a API request for retrieving the info of all the product types
      * @see ApiRequest
      */
-    fun getProductTypes() : ApiRequest {
+    fun getProductTypes(): ApiRequest {
         val url = Uri.parse(environment.defaultApiUrl() + VirtusizeEndpoint.ProductType.getPath())
             .buildUpon()
             .build()
@@ -256,7 +258,7 @@ internal object VirtusizeApi {
      * Gets a API request for retrieving i18n localization texts
      * @see ApiRequest
      */
-    fun getI18n(language: VirtusizeLanguage) : ApiRequest {
+    fun getI18n(language: VirtusizeLanguage): ApiRequest {
         val url = Uri.parse(I18N_URL + VirtusizeEndpoint.I18N.getPath() + language.value)
             .buildUpon()
             .build()

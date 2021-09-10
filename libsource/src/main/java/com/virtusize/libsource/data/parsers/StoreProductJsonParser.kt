@@ -13,7 +13,7 @@ internal class StoreProductJsonParser : ProductJsonParser() {
         json.optJSONObject(FIELD_STORE_PRODUCT_META)?.let {
             product?.storeProductMeta = StoreProductMetaJsonParser().parse(it)
         }
-        if(product?.externalId == "") {
+        if (product?.externalId == "") {
             return null
         }
         return product

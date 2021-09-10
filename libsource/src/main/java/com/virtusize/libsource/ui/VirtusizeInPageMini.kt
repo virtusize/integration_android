@@ -133,7 +133,7 @@ class VirtusizeInPageMini @JvmOverloads constructor(
      * @param loading pass true when it's loading, and pass false when finishing loading
      */
     private fun setLoadingScreen(loading: Boolean) {
-        if(loading) {
+        if (loading) {
             inpageMiniLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.virtusizeWhite))
             inpageMiniLoadingText.startAnimation()
         } else {
@@ -146,21 +146,21 @@ class VirtusizeInPageMini @JvmOverloads constructor(
             virtusizeParams.language,
             if (loading) FontUtils.FontType.BOLD else FontUtils.FontType.REGULAR
         )
-        inpageMiniImageView.visibility = if(loading) View.VISIBLE else View.GONE
-        inpageMiniText.visibility = if(loading) View.GONE else View.VISIBLE
-        inpageMiniLoadingText.visibility = if(loading) View.VISIBLE else View.GONE
-        inpageMiniButton.visibility = if(loading) View.GONE else View.VISIBLE
+        inpageMiniImageView.visibility = if (loading) View.VISIBLE else View.GONE
+        inpageMiniText.visibility = if (loading) View.GONE else View.VISIBLE
+        inpageMiniLoadingText.visibility = if (loading) View.VISIBLE else View.GONE
+        inpageMiniButton.visibility = if (loading) View.GONE else View.VISIBLE
     }
 
     /**
      * Sets the InPage Mini style corresponding to [VirtusizeViewStyle]
      */
     override fun setStyle() {
-        if(virtusizeBackgroundColor != 0) {
+        if (virtusizeBackgroundColor != 0) {
             inpageMiniLayout.setBackgroundColor(virtusizeBackgroundColor)
             inpageMiniButton.setTextColor(virtusizeBackgroundColor)
             setButtonRightArrowColor(virtusizeBackgroundColor)
-        } else if(virtusizeViewStyle == VirtusizeViewStyle.TEAL) {
+        } else if (virtusizeViewStyle == VirtusizeViewStyle.TEAL) {
             inpageMiniLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.virtusizeTeal))
             inpageMiniButton.setTextColor(ContextCompat.getColor(context, R.color.virtusizeTeal))
             setButtonRightArrowColor(ContextCompat.getColor(context, R.color.virtusizeTeal))
@@ -188,14 +188,15 @@ class VirtusizeInPageMini @JvmOverloads constructor(
             mutableListOf(
                 inpageMiniText,
                 inpageMiniButton
-            ), virtusizeParams.language, FontUtils.FontType.REGULAR
+            ),
+            virtusizeParams.language, FontUtils.FontType.REGULAR
         )
         configuredContext = VirtusizeUtils.getConfiguredContext(context, virtusizeParams.language)
         inpageMiniButton.text = configuredContext?.getText(R.string.virtusize_button_text)
         inpageMiniLoadingText.text = configuredContext?.getText(R.string.inpage_loading_text)
         setConfiguredDimensions()
 
-        if(virtusizeParams.language == VirtusizeLanguage.JP) {
+        if (virtusizeParams.language == VirtusizeLanguage.JP) {
             inpageMiniText.includeFontPadding = true
         }
     }
@@ -204,8 +205,8 @@ class VirtusizeInPageMini @JvmOverloads constructor(
      * Sets up text sizes based on the configured context
      */
     private fun setConfiguredDimensions() {
-        val additionalSize = if(virtusizeParams.language == VirtusizeLanguage.EN) 2f.spToPx else 0f
-        if(messageTextSize != -1f) {
+        val additionalSize = if (virtusizeParams.language == VirtusizeLanguage.EN) 2f.spToPx else 0f
+        if (messageTextSize != -1f) {
             inpageMiniLoadingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + additionalSize)
             inpageMiniText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + additionalSize)
         } else {
@@ -215,7 +216,7 @@ class VirtusizeInPageMini @JvmOverloads constructor(
                     inpageMiniText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
                 }
         }
-        if(buttonTextSize != -1f) {
+        if (buttonTextSize != -1f) {
             val size = buttonTextSize + additionalSize
             inpageMiniButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
             inpageMiniButton.rightDrawable(R.drawable.ic_arrow_right_black, 0.8f * size / 2, 0.8f * size)

@@ -35,16 +35,16 @@ data class VirtusizeParams(
         val sessionData = SharedPreferencesHelper.getInstance(context).getSessionData()
         val bid = SharedPreferencesHelper.getInstance(context).getBrowserId()
         return "{$PARAM_API_KEY: '$apiKey', " +
-                "$PARAM_BID: '$bid', " +
-                (if (sessionData != null) "$PARAM_SESSION_DATA: $sessionData, " else "") +
-                "$PARAM_STORE_PRODUCT_ID: '${product.productCheckData?.productId}', " +
-                (if (externalUserId != null) "$PARAM_EXTERNAL_USER_ID: '$externalUserId', " else "") +
-                "$PARAM_LANGUAGE: '${language.value}', " +
-                "$PARAM_SHOW_SGI: $showSGI, " +
-                "$PARAM_ALLOW_LANGUAGES: ${allowedLanguages.map { "{label: \"${it.label}\", value: \"${it.value}\"}" }}, " +
-                    "$PARAM_DETAILS_PANEL_CARDS: ${detailsPanelCards.map { "\"${it.value}\"" }}, " +
-                "$PARAM_REGION: '${region.value}', " +
-                "$PARAM_ENVIRONMENT: '${environment.virtusizeWebViewEnv()}'}"
+            "$PARAM_BID: '$bid', " +
+            (if (sessionData != null) "$PARAM_SESSION_DATA: $sessionData, " else "") +
+            "$PARAM_STORE_PRODUCT_ID: '${product.productCheckData?.productId}', " +
+            (if (externalUserId != null) "$PARAM_EXTERNAL_USER_ID: '$externalUserId', " else "") +
+            "$PARAM_LANGUAGE: '${language.value}', " +
+            "$PARAM_SHOW_SGI: $showSGI, " +
+            "$PARAM_ALLOW_LANGUAGES: ${allowedLanguages.map { "{label: \"${it.label}\", value: \"${it.value}\"}" }}, " +
+            "$PARAM_DETAILS_PANEL_CARDS: ${detailsPanelCards.map { "\"${it.value}\"" }}, " +
+            "$PARAM_REGION: '${region.value}', " +
+            "$PARAM_ENVIRONMENT: '${environment.virtusizeWebViewEnv()}'}"
     }
 
     private companion object {

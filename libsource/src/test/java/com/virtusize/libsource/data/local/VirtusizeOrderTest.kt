@@ -3,7 +3,6 @@ package com.virtusize.libsource.data.local
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
-
 class VirtusizeOrderTest {
 
     @Test
@@ -58,5 +57,4 @@ class VirtusizeOrderTest {
 
         assertThat(actualMap).isEqualTo(expectedMap)
     }
-
 }

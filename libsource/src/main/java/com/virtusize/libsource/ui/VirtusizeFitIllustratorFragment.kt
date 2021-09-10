@@ -79,9 +79,9 @@ class VirtusizeFitIllustratorFragment : DialogFragment() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 view?.loadUrl(
                     "javascript:(function() { " +
-                            "var element = document.getElementsByClassName('global-close')[0];"
-                            + "element.onclick = function() { ${Constants.JS_BRIDGE_NAME}.userClosedWidget(); };" +
-                            "})()"
+                        "var element = document.getElementsByClassName('global-close')[0];" +
+                        "element.onclick = function() { ${Constants.JS_BRIDGE_NAME}.userClosedWidget(); };" +
+                        "})()"
                 )
             }
         }

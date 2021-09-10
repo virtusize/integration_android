@@ -313,7 +313,7 @@ internal object ProductFixtures {
                 "orderItem": null,
                 "store": null
             }
-      """.trimIndent()
+        """.trimIndent()
 
     private val USER_PRODUCT_TWO_JSON_STRING =
         """
@@ -345,9 +345,9 @@ internal object ProductFixtures {
                 "orderItem": null,
                 "store": 2
             }
-      """.trimIndent()
+        """.trimIndent()
 
-    val USER_PRODUCT_ONE_JSON_OBJECT  = JSONObject(USER_PRODUCT_ONE_JSON_STRING)
+    val USER_PRODUCT_ONE_JSON_OBJECT = JSONObject(USER_PRODUCT_ONE_JSON_STRING)
 
     val USER_PRODUCT_JSON_ARRAY = JSONArray(
         """

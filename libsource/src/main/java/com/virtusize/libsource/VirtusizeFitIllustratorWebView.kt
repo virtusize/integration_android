@@ -238,8 +238,8 @@ class VirtusizeFitIllustratorWebView @JvmOverloads constructor(
                         }
                     }
                     popupWebView.setOnKeyListener { v, keyCode, event ->
-                        if (keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP
-                            && popupWebView.canGoBack()
+                        if (keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP &&
+                            popupWebView.canGoBack()
                         ) {
                             popupWebView.goBack()
                             return@setOnKeyListener true

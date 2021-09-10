@@ -79,10 +79,10 @@ class VirtusizeFlutterRepository(context: Context, private val messageHandler: V
 
     suspend fun getUserSessionResponse(): String? {
         val userSessionInfo = apiService.getUserSessionInfo().successData
-        if(userSessionInfo != null) {
+        if (userSessionInfo != null) {
             sharedPreferencesHelper.storeSessionData(userSessionInfo.userSessionResponse)
             sharedPreferencesHelper.storeAccessToken(userSessionInfo.accessToken)
-            if(userSessionInfo.authToken.isNotBlank()) {
+            if (userSessionInfo.authToken.isNotBlank()) {
                 sharedPreferencesHelper.storeAuthToken(userSessionInfo.authToken)
             }
         }
@@ -101,7 +101,7 @@ class VirtusizeFlutterRepository(context: Context, private val messageHandler: V
 
     suspend fun getUserProducts(): List<Product>? {
         val userProductsResponse = apiService.getUserProducts()
-        if(userProductsResponse.isSuccessful) {
+        if (userProductsResponse.isSuccessful) {
             return userProductsResponse.successData
         } else if (userProductsResponse.failureData?.code == HttpURLConnection.HTTP_NOT_FOUND) {
             return mutableListOf()
@@ -123,7 +123,7 @@ class VirtusizeFlutterRepository(context: Context, private val messageHandler: V
 
     suspend fun deleteUser(): Any? {
         val response = apiService.deleteUser()
-        if(response.isSuccessful) {
+        if (response.isSuccessful) {
             sharedPreferencesHelper.storeAuthToken("")
         }
         return response.successData

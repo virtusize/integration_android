@@ -16,4 +16,4 @@ data class VirtusizeProduct @JvmOverloads constructor(
     val externalId: String,
     var imageUrl: String? = null,
     var productCheckData: ProductCheck? = null
-): Parcelable
+) : Parcelable

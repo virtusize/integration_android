@@ -3,8 +3,6 @@ package com.virtusize.libsource
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import com.virtusize.libsource.data.local.VirtusizeError
-import com.virtusize.libsource.data.remote.ProductCheck
-
 
 /**
  * This interface can be implemented for passing the result of the successful response of an API request

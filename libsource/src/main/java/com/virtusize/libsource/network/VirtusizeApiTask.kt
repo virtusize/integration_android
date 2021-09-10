@@ -257,8 +257,8 @@ internal class VirtusizeApiTask(
      * @return the boolean value to tell whether the response of the apiRequestUrl is a JSON array.
      */
     private fun responseIsJsonArray(apiRequestUrl: String): Boolean {
-        return apiRequestUrl.contains(VirtusizeEndpoint.ProductType.getPath())
-                || apiRequestUrl.contains(VirtusizeEndpoint.UserProducts.getPath())
+        return apiRequestUrl.contains(VirtusizeEndpoint.ProductType.getPath()) ||
+            apiRequestUrl.contains(VirtusizeEndpoint.UserProducts.getPath())
     }
 
     /**

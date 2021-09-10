@@ -17,7 +17,7 @@ enum class VirtusizeEnvironment {
  * @return A String value of the default API URL
  */
 fun VirtusizeEnvironment.defaultApiUrl(): String {
-    return when(this) {
+    return when (this) {
         STAGING -> "https://staging.virtusize.jp"
         GLOBAL -> "https://api.virtusize.com"
         JAPAN -> "https://api.virtusize.jp"
@@ -30,7 +30,7 @@ fun VirtusizeEnvironment.defaultApiUrl(): String {
  * @return A String value of the event API URL
  */
 fun VirtusizeEnvironment.eventApiUrl(): String {
-    return when(this) {
+    return when (this) {
         STAGING -> "https://events.staging.virtusize.jp"
         JAPAN -> "https://events.virtusize.jp"
         GLOBAL -> "https://events.virtusize.com"
@@ -43,7 +43,7 @@ fun VirtusizeEnvironment.eventApiUrl(): String {
  * @return A String value of the services API URL
  */
 fun VirtusizeEnvironment.servicesApiUrl(): String {
-    return when(this) {
+    return when (this) {
         STAGING -> "https://services.virtusize.jp/stg"
         GLOBAL -> "https://services.virtusize.com"
         JAPAN -> "https://services.virtusize.jp"
@@ -56,7 +56,7 @@ fun VirtusizeEnvironment.servicesApiUrl(): String {
  * @return A String value of the Virtusize URL
  */
 fun VirtusizeEnvironment.virtusizeUrl(): String {
-    return when(this) {
+    return when (this) {
         STAGING, JAPAN -> "https://static.api.virtusize.jp"
         GLOBAL -> "https://static.api.virtusize.com"
         KOREA -> "https://static.api.virtusize.kr"
@@ -70,7 +70,7 @@ fun VirtusizeEnvironment.virtusizeUrl(): String {
  * @return A [VirtusizeRegion] value of the region parameter
  */
 fun VirtusizeEnvironment.virtusizeRegion(): VirtusizeRegion {
-    return when(this) {
+    return when (this) {
         STAGING, JAPAN -> VirtusizeRegion.JP
         GLOBAL -> VirtusizeRegion.COM
         KOREA -> VirtusizeRegion.KR
@@ -82,7 +82,7 @@ fun VirtusizeEnvironment.virtusizeRegion(): VirtusizeRegion {
  * @return A String value of the web view environment
  */
 fun VirtusizeEnvironment.virtusizeWebViewEnv(): String {
-    return when(this) {
+    return when (this) {
         STAGING -> "staging"
         else -> "production"
     }

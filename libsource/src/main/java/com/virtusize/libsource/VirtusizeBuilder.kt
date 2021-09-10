@@ -76,7 +76,7 @@ class VirtusizeBuilder {
      * @param language [VirtusizeLanguage]
      * @return VirtusizeBuilder
      */
-    fun setLanguage(language: VirtusizeLanguage) : VirtusizeBuilder {
+    fun setLanguage(language: VirtusizeLanguage): VirtusizeBuilder {
         this.language = language
         return this
     }
@@ -87,7 +87,7 @@ class VirtusizeBuilder {
      * @param allowedLanguages the list of [VirtusizeLanguage]
      * @return VirtusizeBuilder
      */
-    fun setAllowedLanguages(allowedLanguages: MutableList<VirtusizeLanguage>) : VirtusizeBuilder {
+    fun setAllowedLanguages(allowedLanguages: MutableList<VirtusizeLanguage>): VirtusizeBuilder {
         this.allowedLanguages = allowedLanguages
         return this
     }
@@ -98,7 +98,7 @@ class VirtusizeBuilder {
      * @param showSGI the Boolean value
      * @return VirtusizeBuilder
      */
-    fun setShowSGI(showSGI: Boolean) : VirtusizeBuilder {
+    fun setShowSGI(showSGI: Boolean): VirtusizeBuilder {
         this.showSGI = showSGI
         return this
     }
@@ -109,7 +109,7 @@ class VirtusizeBuilder {
      * @param detailsPanelCards the list of [VirtusizeInfoCategory]
      * @return VirtusizeBuilder
      */
-    fun setDetailsPanelCards(detailsPanelCards: MutableList<VirtusizeInfoCategory>) : VirtusizeBuilder {
+    fun setDetailsPanelCards(detailsPanelCards: MutableList<VirtusizeInfoCategory>): VirtusizeBuilder {
         this.detailsPanelCards = detailsPanelCards
         return this
     }

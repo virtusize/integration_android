@@ -6,7 +6,7 @@ import org.json.JSONObject
 /**
  * This class parses a JSONObject to the [VirtusizeEvent] object
  */
-internal class VirtusizeEventJsonParser: VirtusizeJsonParser<VirtusizeEvent> {
+internal class VirtusizeEventJsonParser : VirtusizeJsonParser<VirtusizeEvent> {
     override fun parse(json: JSONObject): VirtusizeEvent? {
         val name = JsonUtils.optString(json, FIELD_NAME)
         return VirtusizeEvent(name, json)

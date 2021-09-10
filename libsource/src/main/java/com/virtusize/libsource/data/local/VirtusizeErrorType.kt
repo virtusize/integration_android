@@ -26,7 +26,7 @@ enum class VirtusizeErrorType {
  * @return the error code for the VirtusizeErrorType
  */
 fun VirtusizeErrorType.code(): Int? {
-    return when(this) {
+    return when (this) {
         VirtusizeErrorType.ApiKeyNullOrInvalid -> HttpURLConnection.HTTP_FORBIDDEN
         VirtusizeErrorType.InvalidProduct, VirtusizeErrorType.UnParsedProduct, VirtusizeErrorType.WardrobeNotFound -> HttpURLConnection.HTTP_NOT_FOUND
         else -> null
@@ -38,7 +38,7 @@ fun VirtusizeErrorType.code(): Int? {
  * @return the error message for the VirtusizeErrorType
  */
 fun VirtusizeErrorType.message(extraMessage: String? = null): String {
-    return when(this) {
+    return when (this) {
         VirtusizeErrorType.NullVirtusizeViewError -> "The Virtusize view in the layout is null."
         VirtusizeErrorType.ApiKeyNullOrInvalid -> "The Virtusize API key is not set or invalid."
         VirtusizeErrorType.UserIdNullOrEmpty -> "The unique user ID from the client system is not set up or empty."

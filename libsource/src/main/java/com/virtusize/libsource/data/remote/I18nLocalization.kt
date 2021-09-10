@@ -47,7 +47,6 @@ data class I18nLocalization(
         return "$sizeComparisonMultiSizeText ${I18nConstants.BOLD_START_PLACEHOLDER}$sizeComparisonRecommendedSizeName${I18nConstants.BOLD_END_PLACEHOLDER}"
     }
 
-
     /**
      * Gets the recommendation text for a multi-size product based on a user body profile
      */

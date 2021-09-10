@@ -91,7 +91,8 @@ class VirtusizeApiTaskTest {
             val returnValue = method.invoke(
                 virtusizeApiTask,
                 "",
-                "{\"gender\":\"\",\"age\":null,\"height\":null,\"weight\":null,\"braSize\":null,\"concernAreas\":null,\"bodyData\":null}")
+                "{\"gender\":\"\",\"age\":null,\"height\":null,\"weight\":null,\"braSize\":null,\"concernAreas\":null,\"bodyData\":null}"
+            )
             assertThat(returnValue).isNull()
         }
     }
@@ -118,7 +119,7 @@ class VirtusizeApiTaskTest {
                         "name": "backend-checked-product", 
                         "productId": "123"
                     }
-                """.trimIndent()
+            """.trimIndent()
             val returnValue = method.invoke(
                 virtusizeApiTask,
                 pdcJsonString
@@ -203,7 +204,7 @@ class VirtusizeApiTaskTest {
                         },
                         "x-vs-auth":""
                     }
-                """.trimIndent().replace("\\s+|[\\n]+".toRegex(), "")
+            """.trimIndent().replace("\\s+|[\\n]+".toRegex(), "")
 
             val returnValue = method.invoke(
                 virtusizeApiTask,
@@ -220,8 +221,6 @@ class VirtusizeApiTaskTest {
             assertThat(returnValue).isEqualTo(expectedUserSessionInfo)
         }
     }
-
-
 
     @Test
     fun testParseStringToObjectByUserBodyProfileJsonParser_return_null() {

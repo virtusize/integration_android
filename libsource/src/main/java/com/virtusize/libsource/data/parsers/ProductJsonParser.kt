@@ -1,13 +1,13 @@
 package com.virtusize.libsource.data.parsers
 
-import com.virtusize.libsource.data.remote.ProductSize
 import com.virtusize.libsource.data.remote.Product
+import com.virtusize.libsource.data.remote.ProductSize
 import org.json.JSONObject
 
 /**
  * This class parses a JSONObject to the [Product] object
  */
-internal open class ProductJsonParser: VirtusizeJsonParser<Product> {
+internal open class ProductJsonParser : VirtusizeJsonParser<Product> {
 
     override fun parse(json: JSONObject): Product? {
         val id = json.optInt(FIELD_ID)
@@ -25,7 +25,7 @@ internal open class ProductJsonParser: VirtusizeJsonParser<Product> {
             return null
         }
         return Product(
-            id= id,
+            id = id,
             sizes = sizes,
             productType = productType,
             name = name,

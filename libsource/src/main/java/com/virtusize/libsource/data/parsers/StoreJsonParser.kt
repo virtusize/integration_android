@@ -6,7 +6,7 @@ import org.json.JSONObject
 /**
  * This class parses a JSONObject to the [Store] object
  */
-internal class StoreJsonParser: VirtusizeJsonParser<Store> {
+internal class StoreJsonParser : VirtusizeJsonParser<Store> {
     override fun parse(json: JSONObject): Store? {
         val id = json.optInt(FIELD_ID)
         val surveyLink = JsonUtils.optString(json, FIELD_SURVEY_LINK)
@@ -19,7 +19,7 @@ internal class StoreJsonParser: VirtusizeJsonParser<Store> {
         val disabled = JsonUtils.optString(json, FIELD_DISABLED)
         val typeMapperEnabled = json.optBoolean(FIELD_TYPE_MAPPER_ENABLED)
         val parsedRegion = JsonUtils.optString(json, FIELD_REGION)
-        val region = if(parsedRegion.isEmpty()) "JP" else parsedRegion
+        val region = if (parsedRegion.isEmpty()) "JP" else parsedRegion
         return Store(id, surveyLink, name, shortName, lengthUnitId, apiKey, created, updated, disabled, typeMapperEnabled, region)
     }
 

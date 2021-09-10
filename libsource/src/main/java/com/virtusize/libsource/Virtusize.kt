@@ -1,7 +1,6 @@
 package com.virtusize.libsource
 
 import android.content.Context
-import android.view.View
 import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser.TrimType
 import com.virtusize.libsource.data.remote.*

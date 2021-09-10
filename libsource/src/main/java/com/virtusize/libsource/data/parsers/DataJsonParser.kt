@@ -6,7 +6,7 @@ import org.json.JSONObject
 /**
  * This class parses a JSONObject to the [Data] object
  */
-internal class DataJsonParser: VirtusizeJsonParser<Data> {
+internal class DataJsonParser : VirtusizeJsonParser<Data> {
     override fun parse(json: JSONObject): Data? {
         val validProduct = json.optBoolean(FIELD_VALID_PRODUCT)
         val fetchMetaData = json.optBoolean(FIELD_FETCH_META_DATA)

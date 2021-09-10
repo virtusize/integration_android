@@ -17,7 +17,7 @@ import com.virtusize.libsource.util.Constants
 import kotlinx.android.synthetic.main.web_activity.*
 import org.json.JSONObject
 
-class VirtusizeWebViewFragment: DialogFragment() {
+class VirtusizeWebViewFragment : DialogFragment() {
 
     private var virtusizeWebAppUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-webview.html"
     private var vsParamsFromSDKScript = ""
@@ -60,13 +60,13 @@ class VirtusizeWebViewFragment: DialogFragment() {
         // Add the Javascript interface to interface the web app with the web view
         webView.addJavascriptInterface(WebAppInterface(), Constants.JS_BRIDGE_NAME)
         // Set up the web view client that adds JavaScript scripts for the interaction between the SDK and the web
-        webView.webViewClient = object: WebViewClient() {
+        webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
-                if(url != null && url.contains(virtusizeWebAppUrl)) {
+                if (url != null && url.contains(virtusizeWebAppUrl)) {
                     webView?.evaluateJavascript(vsParamsFromSDKScript, null)
                     webView?.evaluateJavascript("javascript:window.virtusizeSNSEnabled = true;", null)
                     getBrowserIDFromCookies()?.let { bid ->
-                        if(bid != sharedPreferencesHelper.getBrowserId()) {
+                        if (bid != sharedPreferencesHelper.getBrowserId()) {
                             sharedPreferencesHelper.storeBrowserId(bid)
                         }
                     }
@@ -76,7 +76,7 @@ class VirtusizeWebViewFragment: DialogFragment() {
             override fun onLoadResource(view: WebView?, url: String?) {
                 super.onLoadResource(view, url)
                 // To prevent multiple views in the WebView when a user selects a different display language
-                if(url != null && url.contains("i18n")) {
+                if (url != null && url.contains("i18n")) {
                     webView.removeAllViews()
                 }
             }
@@ -108,7 +108,7 @@ class VirtusizeWebViewFragment: DialogFragment() {
                             return false
                         }
                     }
-                    popupWebView.webChromeClient = object : WebChromeClient(){
+                    popupWebView.webChromeClient = object : WebChromeClient() {
                         override fun onCloseWindow(window: WebView) {
                             webView.removeAllViews()
                         }
@@ -122,7 +122,7 @@ class VirtusizeWebViewFragment: DialogFragment() {
             }
         }
 
-        webView.setOnKeyListener{ v, keyCode, event ->
+        webView.setOnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP) {
                 when {
                     webView.canGoBack() -> webView.goBack()
@@ -211,10 +211,10 @@ class VirtusizeWebViewFragment: DialogFragment() {
         fun eventHandler(eventInfo: String) {
             val event = VirtusizeEventJsonParser().parse(JSONObject(eventInfo))
             event?.let { virtusizeMessageHandler?.onEvent(clientProduct, it) }
-            if (event?.name =="user-closed-widget") {
+            if (event?.name == "user-closed-widget") {
                 dismiss()
             }
-            if(event?.name == "user-clicked-start") {
+            if (event?.name == "user-clicked-start") {
                 userAcceptedPrivacyPolicy()
             }
         }

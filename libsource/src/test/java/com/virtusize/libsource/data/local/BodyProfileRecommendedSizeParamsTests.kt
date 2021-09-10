@@ -1,7 +1,6 @@
 package com.virtusize.libsource.data.local
 
 import com.google.common.truth.Truth.assertThat
-import com.virtusize.libsource.data.parsers.ProductTypeJsonParser
 import com.virtusize.libsource.data.remote.ProductType
 import com.virtusize.libsource.fixtures.ProductFixtures
 import com.virtusize.libsource.fixtures.TestFixtures

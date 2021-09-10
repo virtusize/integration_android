@@ -44,7 +44,7 @@ internal class VirtusizeRepository(
     // This variable holds the i18n localization texts
     internal var i18nLocalization: I18nLocalization? = null
 
-    /// The last visited store product on the Virtusize web view
+    // / The last visited store product on the Virtusize web view
     private var lastProductOnVirtusizeWebView: Product? = null
 
     /**

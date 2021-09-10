@@ -21,7 +21,7 @@ import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser
  */
 internal fun Context.getStringResourceByName(stringName: String): String? {
     val resId = resources.getIdentifier(stringName, "string", packageName)
-    if(resId == 0) {
+    if (resId == 0) {
         return null
     }
     return getString(resId)
@@ -32,7 +32,7 @@ internal fun Context.getStringResourceByName(stringName: String): String? {
  */
 internal fun Context.getDrawableResourceByName(drawableName: String): Drawable? {
     val resId = resources.getIdentifier(drawableName, "drawable", packageName)
-    if(resId == 0) {
+    if (resId == 0) {
         return null
     }
     return ContextCompat.getDrawable(this, resId)
@@ -43,7 +43,7 @@ internal fun Context.getDrawableResourceByName(drawableName: String): Drawable? 
  */
 internal fun Context.getTypefaceByName(fontFileName: String): Typeface? {
     val resId = resources.getIdentifier(fontFileName, "font", packageName)
-    if(resId == 0) {
+    if (resId == 0) {
         return null
     }
     return ResourcesCompat.getFont(this, resId)

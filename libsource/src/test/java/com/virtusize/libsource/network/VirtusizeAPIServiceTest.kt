@@ -52,10 +52,12 @@ class VirtusizeAPIServiceTest {
 
     @Test
     fun testProductDataCheck_isValidProduct_hasExpectedData() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
-            mockURL,
-            MockedResponse(200, TestFixtures.PRODUCT_DATA_CHECK.toString().byteInputStream())
-        ))
+        virtusizeAPIService.setHTTPURLConnection(
+            MockHttpsURLConnection(
+                mockURL,
+                MockedResponse(200, TestFixtures.PRODUCT_DATA_CHECK.toString().byteInputStream())
+            )
+        )
 
         val actualProductCheck = virtusizeAPIService.productDataCheck(TestFixtures.VIRTUSIZE_PRODUCT).successData
 
@@ -73,10 +75,12 @@ class VirtusizeAPIServiceTest {
 
     @Test
     fun testProductDataCheck_isInvalidProduct() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
-            mockURL,
-            MockedResponse(200, TestFixtures.INVALID_PRODUCT_DATA_CHECK.toString().byteInputStream())
-        ))
+        virtusizeAPIService.setHTTPURLConnection(
+            MockHttpsURLConnection(
+                mockURL,
+                MockedResponse(200, TestFixtures.INVALID_PRODUCT_DATA_CHECK.toString().byteInputStream())
+            )
+        )
         val actualProductCheck = virtusizeAPIService.productDataCheck(TestFixtures.VIRTUSIZE_PRODUCT).successData
 
         assertThat(actualProductCheck?.name).isEqualTo("backend-checked-product")
@@ -86,10 +90,12 @@ class VirtusizeAPIServiceTest {
 
     @Test
     fun testProductDataCheck_provideWrongAPIKey_hasNetworkError() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
-            mockURL,
-            MockedResponse(HttpURLConnection.HTTP_FORBIDDEN, "{ \"Code\": \"ForbiddenError\", \"Message\": \"ForbiddenError: \" }".byteInputStream())
-        ))
+        virtusizeAPIService.setHTTPURLConnection(
+            MockHttpsURLConnection(
+                mockURL,
+                MockedResponse(HttpURLConnection.HTTP_FORBIDDEN, "{ \"Code\": \"ForbiddenError\", \"Message\": \"ForbiddenError: \" }".byteInputStream())
+            )
+        )
 
         val actualError = virtusizeAPIService.productDataCheck(TestFixtures.VIRTUSIZE_PRODUCT).failureData
 
@@ -100,10 +106,12 @@ class VirtusizeAPIServiceTest {
 
     @Test
     fun testSendProductImageToBackend_whenSuccessful_hasExpectedProductMetaDataHints() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
-            mockURL,
-            MockedResponse(200, TestFixtures.PRODUCT_META_DATA_HINTS.toString().byteInputStream())
-        ))
+        virtusizeAPIService.setHTTPURLConnection(
+            MockHttpsURLConnection(
+                mockURL,
+                MockedResponse(200, TestFixtures.PRODUCT_META_DATA_HINTS.toString().byteInputStream())
+            )
+        )
 
         val actualProductMetaDataHints = virtusizeAPIService.sendProductImageToBackend(TestFixtures.VIRTUSIZE_PRODUCT).successData
 
@@ -115,10 +123,11 @@ class VirtusizeAPIServiceTest {
 
     @Test
     fun testSendProductImageToBackend_whenFailed_hasExpectedErrorInfo() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
-            mockURL,
-            MockedResponse(500, INTERNAL_SERVER_ERROR_RESPONSE.byteInputStream(), null)
-        )
+        virtusizeAPIService.setHTTPURLConnection(
+            MockHttpsURLConnection(
+                mockURL,
+                MockedResponse(500, INTERNAL_SERVER_ERROR_RESPONSE.byteInputStream(), null)
+            )
         )
         val actualError = virtusizeAPIService.sendProductImageToBackend(TestFixtures.VIRTUSIZE_PRODUCT).failureData
 
@@ -129,11 +138,15 @@ class VirtusizeAPIServiceTest {
 
     @Test
     fun testSendUserSawProductEvent_whenSuccessful_onSuccessShouldBeCalled() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
-            mockURL,
-            MockedResponse(201,
-                TestFixtures.USER_SAW_PRODUCT_EVENT_RESPONSE.toString().byteInputStream())
-        ))
+        virtusizeAPIService.setHTTPURLConnection(
+            MockHttpsURLConnection(
+                mockURL,
+                MockedResponse(
+                    201,
+                    TestFixtures.USER_SAW_PRODUCT_EVENT_RESPONSE.toString().byteInputStream()
+                )
+            )
+        )
 
         val sendEventResponse = virtusizeAPIService.sendEvent(VirtusizeEvent("user-saw-product", null))
 
@@ -142,11 +155,15 @@ class VirtusizeAPIServiceTest {
 
     @Test
     fun testRetrieveStoreInfo_getsFullStoreInfoResponse_hasExpectedStore() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
-            mockURL,
-            MockedResponse(200,
-                TestFixtures.STORE_WITH_FULL_INFO.toString().byteInputStream())
-        ))
+        virtusizeAPIService.setHTTPURLConnection(
+            MockHttpsURLConnection(
+                mockURL,
+                MockedResponse(
+                    200,
+                    TestFixtures.STORE_WITH_FULL_INFO.toString().byteInputStream()
+                )
+            )
+        )
 
         val actualStore = virtusizeAPIService.getStoreInfo().successData
 
@@ -165,11 +182,15 @@ class VirtusizeAPIServiceTest {
 
     @Test
     fun testRetrieveStoreInfo_getsSomeNullValuesForStoreInfo_hasExpectedStore() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
-            mockURL,
-            MockedResponse(200,
-                TestFixtures.STORE_WITH_NULL_VALUES.toString().byteInputStream())
-        ))
+        virtusizeAPIService.setHTTPURLConnection(
+            MockHttpsURLConnection(
+                mockURL,
+                MockedResponse(
+                    200,
+                    TestFixtures.STORE_WITH_NULL_VALUES.toString().byteInputStream()
+                )
+            )
+        )
 
         val actualStore = virtusizeAPIService.getStoreInfo().successData
 
@@ -188,10 +209,12 @@ class VirtusizeAPIServiceTest {
 
     @Test
     fun testSendOrder_whenSuccessful_onSuccessShouldBeCalled() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
-            mockURL,
-            MockedResponse(204, "".byteInputStream())
-        ))
+        virtusizeAPIService.setHTTPURLConnection(
+            MockHttpsURLConnection(
+                mockURL,
+                MockedResponse(204, "".byteInputStream())
+            )
+        )
 
         val sendOrderResponse = virtusizeAPIService.sendOrder("", TestFixtures.VIRTUSIZE_ORDER)
 
@@ -200,10 +223,12 @@ class VirtusizeAPIServiceTest {
 
     @Test
     fun testGetStoreProductInfo_whenSuccessful_onSuccessShouldReturnExpectedStoreProduct() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
-            mockURL,
-            MockedResponse(200, ProductFixtures.STORE_PRODUCT_INFO_JSON_DATA.toString().byteInputStream())
-        ))
+        virtusizeAPIService.setHTTPURLConnection(
+            MockHttpsURLConnection(
+                mockURL,
+                MockedResponse(200, ProductFixtures.STORE_PRODUCT_INFO_JSON_DATA.toString().byteInputStream())
+            )
+        )
 
         val actualProduct = virtusizeAPIService.getStoreProduct(TestFixtures.PRODUCT_ID).successData
 
@@ -252,10 +277,12 @@ class VirtusizeAPIServiceTest {
 
     @Test
     fun testGetProductTypesResponse_whenSuccessful_onSuccessShouldReturnExpectedProductTypeList() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
-            mockURL,
-            MockedResponse(200, ProductFixtures.PRODUCT_TYPE_JSON_ARRAY.toString().byteInputStream())
-        ))
+        virtusizeAPIService.setHTTPURLConnection(
+            MockHttpsURLConnection(
+                mockURL,
+                MockedResponse(200, ProductFixtures.PRODUCT_TYPE_JSON_ARRAY.toString().byteInputStream())
+            )
+        )
 
         val actualProductTypeList = virtusizeAPIService.getProductTypes().successData
 
@@ -288,11 +315,13 @@ class VirtusizeAPIServiceTest {
 
     @Test
     fun testGetDeleteUserResponse() = runBlocking {
-        val expectedDeleteUserJsonResponse= "{\"wardrobe(s) deleted from DB\":1,\"user product(s) deleted from DB\":1,\"duration\":0.04}"
-        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
-            mockURL,
-            MockedResponse(200, expectedDeleteUserJsonResponse.byteInputStream())
-        ))
+        val expectedDeleteUserJsonResponse = "{\"wardrobe(s) deleted from DB\":1,\"user product(s) deleted from DB\":1,\"duration\":0.04}"
+        virtusizeAPIService.setHTTPURLConnection(
+            MockHttpsURLConnection(
+                mockURL,
+                MockedResponse(200, expectedDeleteUserJsonResponse.byteInputStream())
+            )
+        )
 
         val actualSuccessfulResponse = virtusizeAPIService.deleteUser().successData
         assertThat(actualSuccessfulResponse).isNull()
@@ -300,10 +329,12 @@ class VirtusizeAPIServiceTest {
 
     @Test
     fun testGetUserProductsResponse_userHasItemsInTheWardrobe_shouldReturnExpectedUserProducts() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
-            mockURL,
-            MockedResponse(200, ProductFixtures.USER_PRODUCT_JSON_ARRAY.toString().byteInputStream())
-        ))
+        virtusizeAPIService.setHTTPURLConnection(
+            MockHttpsURLConnection(
+                mockURL,
+                MockedResponse(200, ProductFixtures.USER_PRODUCT_JSON_ARRAY.toString().byteInputStream())
+            )
+        )
 
         val actualUserProductList = virtusizeAPIService.getUserProducts().successData
 
@@ -318,7 +349,8 @@ class VirtusizeAPIServiceTest {
                 Measurement("height", 820),
                 Measurement("bust", 520),
                 Measurement("sleeve", 930)
-            ))
+            )
+        )
         assertThat(actualUserProductList?.get(1)?.productType).isEqualTo(2)
         assertThat(actualUserProductList?.get(1)?.name).isEqualTo("test2")
         assertThat(actualUserProductList?.get(1)?.cloudinaryPublicId).isEqualTo("")
@@ -327,10 +359,12 @@ class VirtusizeAPIServiceTest {
 
     @Test
     fun testGetUserProductsResponse_userHasEmptyWardrobe_shouldReturnEmptyUserProductList() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
-            mockURL,
-            MockedResponse(200, ProductFixtures.EMPTY_PRODUCT_JSON_ARRAY.toString().byteInputStream())
-        ))
+        virtusizeAPIService.setHTTPURLConnection(
+            MockHttpsURLConnection(
+                mockURL,
+                MockedResponse(200, ProductFixtures.EMPTY_PRODUCT_JSON_ARRAY.toString().byteInputStream())
+            )
+        )
 
         val actualUserProductList = virtusizeAPIService.getUserProducts().successData
 
@@ -339,10 +373,12 @@ class VirtusizeAPIServiceTest {
 
     @Test
     fun testGetUserProductsResponse_wardrobeDoesNotExist_shouldReturn404Error() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
-            mockURL,
-            MockedResponse(404, ProductFixtures.WARDROBE_NOT_FOUND_ERROR_JSONObject.toString().byteInputStream())
-        ))
+        virtusizeAPIService.setHTTPURLConnection(
+            MockHttpsURLConnection(
+                mockURL,
+                MockedResponse(404, ProductFixtures.WARDROBE_NOT_FOUND_ERROR_JSONObject.toString().byteInputStream())
+            )
+        )
 
         val actualError = virtusizeAPIService.getUserProducts().failureData
 
@@ -353,10 +389,12 @@ class VirtusizeAPIServiceTest {
 
     @Test
     fun testGetUserBodyProfileResponse_userHasValidBodyProfile_shouldReturnExpectedBodyProfile() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
-            mockURL,
-            MockedResponse(200, TestFixtures.USER_BODY_JSONObject.toString().byteInputStream())
-        ))
+        virtusizeAPIService.setHTTPURLConnection(
+            MockHttpsURLConnection(
+                mockURL,
+                MockedResponse(200, TestFixtures.USER_BODY_JSONObject.toString().byteInputStream())
+            )
+        )
 
         val actualUserBodyProfile = virtusizeAPIService.getUserBodyProfile().successData
 
@@ -394,10 +432,12 @@ class VirtusizeAPIServiceTest {
 
     @Test
     fun testGetUserBodyProfileResponse_userHasEmptyBodyProfile_shouldExpectNull() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
-            mockURL,
-            MockedResponse(200, TestFixtures.NULL_USER_BODY_PROFILE.toString().byteInputStream())
-        ))
+        virtusizeAPIService.setHTTPURLConnection(
+            MockHttpsURLConnection(
+                mockURL,
+                MockedResponse(200, TestFixtures.NULL_USER_BODY_PROFILE.toString().byteInputStream())
+            )
+        )
 
         val actualUserBodyProfile = virtusizeAPIService.getUserBodyProfile().successData
 
@@ -406,10 +446,12 @@ class VirtusizeAPIServiceTest {
 
     @Test
     fun testGetUserBodyProfileResponse_wardrobeDoesNotExist_shouldReturn404Error() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
-            mockURL,
-            MockedResponse(404, ProductFixtures.WARDROBE_NOT_FOUND_ERROR_JSONObject.toString().byteInputStream())
-        ))
+        virtusizeAPIService.setHTTPURLConnection(
+            MockHttpsURLConnection(
+                mockURL,
+                MockedResponse(404, ProductFixtures.WARDROBE_NOT_FOUND_ERROR_JSONObject.toString().byteInputStream())
+            )
+        )
 
         val actualError = virtusizeAPIService.getUserBodyProfile().failureData
         assertThat(actualError?.code).isEqualTo(HttpURLConnection.HTTP_NOT_FOUND)
@@ -419,10 +461,12 @@ class VirtusizeAPIServiceTest {
 
     @Test
     fun testI18nResponse_whenSuccessful_shouldReturnExpectedI18Localization() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
-            mockURL,
-            MockedResponse(200, TestUtils.readFileFromAssets("/i18n_en.json").toString().byteInputStream())
-        ))
+        virtusizeAPIService.setHTTPURLConnection(
+            MockHttpsURLConnection(
+                mockURL,
+                MockedResponse(200, TestUtils.readFileFromAssets("/i18n_en.json").toString().byteInputStream())
+            )
+        )
 
         val actualI18nLocalization = virtusizeAPIService.getI18n(VirtusizeLanguage.EN).successData
 
@@ -432,10 +476,12 @@ class VirtusizeAPIServiceTest {
 
     @Test
     fun testBodyRecommendedSize_whenSuccessful_shouldReturnExpectedBodyProfileRecommendedSize() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
-            mockURL,
-            MockedResponse(200, "{\"sizeName\": \"29/33\"}".byteInputStream())
-        ))
+        virtusizeAPIService.setHTTPURLConnection(
+            MockHttpsURLConnection(
+                mockURL,
+                MockedResponse(200, "{\"sizeName\": \"29/33\"}".byteInputStream())
+            )
+        )
 
         val actualBodyProfileRecommendedSize = virtusizeAPIService.getBodyProfileRecommendedSize(
             ProductFixtures.productTypes(),
@@ -448,10 +494,12 @@ class VirtusizeAPIServiceTest {
 
     @Test
     fun testBodyRecommendedSize_whenStoreProductIsAnAccessory_shouldReturn400Error() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(MockHttpsURLConnection(
-            URL("https://services.virtusize.com/stg/ds-functions/size-rec/get-size"),
-            MockedResponse(400, "{\"Code\": \"BadRequestError\", \"Message\": \"BadRequestError: \"}".byteInputStream())
-        ))
+        virtusizeAPIService.setHTTPURLConnection(
+            MockHttpsURLConnection(
+                URL("https://services.virtusize.com/stg/ds-functions/size-rec/get-size"),
+                MockedResponse(400, "{\"Code\": \"BadRequestError\", \"Message\": \"BadRequestError: \"}".byteInputStream())
+            )
+        )
 
         val actualApiResponse = virtusizeAPIService.getBodyProfileRecommendedSize(
             ProductFixtures.productTypes(),
@@ -468,8 +516,8 @@ class VirtusizeAPIServiceTest {
 
     companion object {
         private const val INTERNAL_SERVER_ERROR_RESPONSE = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n<title>500 Internal Server Error</title>\n" +
-        "<h1>Internal Server Error</h1>\n" +
-        "<p>The server encountered an internal error and was unable to complete your request.  " +
-        "Either the server is overloaded or there is an error in the application.</p>"
+            "<h1>Internal Server Error</h1>\n" +
+            "<p>The server encountered an internal error and was unable to complete your request.  " +
+            "Either the server is overloaded or there is an error in the application.</p>"
     }
 }

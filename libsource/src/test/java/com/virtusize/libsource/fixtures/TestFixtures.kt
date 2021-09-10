@@ -5,7 +5,6 @@ import com.virtusize.libsource.data.local.VirtusizeOrderItem
 import com.virtusize.libsource.data.local.VirtusizeProduct
 import com.virtusize.libsource.data.parsers.ProductCheckJsonParser
 import com.virtusize.libsource.data.remote.*
-import org.json.JSONArray
 import org.json.JSONObject
 
 internal object TestFixtures {
@@ -137,7 +136,7 @@ internal object TestFixtures {
                 "typemapperEnabled": false,
                 "region": "KR"
             }
-      """.trimIndent()
+        """.trimIndent()
     )
 
     val STORE_WITH_NULL_VALUES = JSONObject(
@@ -155,22 +154,27 @@ internal object TestFixtures {
                 "typemapperEnabled": false,
                 "region": null
             }
-      """.trimIndent()
+        """.trimIndent()
     )
 
-    val VIRTUSIZE_ORDER = VirtusizeOrder("888400111032", mutableListOf(VirtusizeOrderItem(
-        "P001",
-        "L",
-        "Large",
-        "P001_SIZEL_RED",
-        "http://images.example.com/products/P001/red/image1xl.jpg",
-        "Red",
-        "W",
-        5100.00,
-        "JPY",
-        1,
-        "http://example.com/products/P001"
-    )))
+    val VIRTUSIZE_ORDER = VirtusizeOrder(
+        "888400111032",
+        mutableListOf(
+            VirtusizeOrderItem(
+                "P001",
+                "L",
+                "Large",
+                "P001_SIZEL_RED",
+                "http://images.example.com/products/P001/red/image1xl.jpg",
+                "Red",
+                "W",
+                5100.00,
+                "JPY",
+                1,
+                "http://example.com/products/P001"
+            )
+        )
+    )
 
     val USER_BODY_JSONObject = JSONObject(
         """
@@ -206,7 +210,7 @@ internal object TestFixtures {
                     "shoulderHeight": 1240
                   }
                 }
-            """.trimIndent()
+        """.trimIndent()
     )
 
     val NULL_USER_BODY_PROFILE = JSONObject(
@@ -220,7 +224,7 @@ internal object TestFixtures {
                     "concernAreas": null,
                     "bodyData": null
                 }
-            """.trimIndent()
+        """.trimIndent()
     )
 
     val userBodyProfile = UserBodyProfile(
@@ -254,4 +258,3 @@ internal object TestFixtures {
         )
     )
 }
-
