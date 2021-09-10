@@ -44,4 +44,4 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-apply from: rootProject.file('install-git-hooks.gradle')
+apply from: rootProject.file('githooks.gradle')
