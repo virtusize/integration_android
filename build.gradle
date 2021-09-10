@@ -15,6 +15,7 @@ buildscript {
         gradle_version = '4.1.2'
         junit_version = '4.13.2'
         kotlin_version = '1.4.32'
+        ktlint_version = '0.42.1'
         lifecycle_version = '2.3.1'
     }
 
@@ -42,3 +43,5 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+apply from: rootProject.file('install-git-hooks.gradle')

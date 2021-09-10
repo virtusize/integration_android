@@ -1,0 +1,7 @@
+task installGitHooks(type: Copy) {
+    from new File(rootProject.rootDir, '.githooks/pre-push')
+    into { new File(rootProject.rootDir, '.git/hooks') }
+    fileMode 0775
+}
+
+tasks.getByPath(':libsource:preBuild').dependsOn installGitHooks
