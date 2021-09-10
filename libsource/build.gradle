@@ -8,6 +8,7 @@ plugins {
 group='com.github.virtusize.integration_android'
 
 android {
+    buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
