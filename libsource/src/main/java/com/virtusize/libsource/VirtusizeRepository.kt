@@ -2,8 +2,20 @@ package com.virtusize.libsource
 
 import android.content.Context
 import android.graphics.Bitmap
-import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.SizeComparisonRecommendedSize
+import com.virtusize.libsource.data.local.SizeRecommendationType
+import com.virtusize.libsource.data.local.VirtusizeError
+import com.virtusize.libsource.data.local.VirtusizeErrorType
+import com.virtusize.libsource.data.local.VirtusizeEvent
+import com.virtusize.libsource.data.local.VirtusizeEvents
+import com.virtusize.libsource.data.local.VirtusizeLanguage
+import com.virtusize.libsource.data.local.VirtusizeMessageHandler
+import com.virtusize.libsource.data.local.VirtusizeOrder
+import com.virtusize.libsource.data.local.VirtusizeParams
+import com.virtusize.libsource.data.local.VirtusizeProduct
+import com.virtusize.libsource.data.local.getEventName
+import com.virtusize.libsource.data.local.throwError
+import com.virtusize.libsource.data.local.virtusizeError
 import com.virtusize.libsource.data.parsers.UserAuthDataJsonParser
 import com.virtusize.libsource.data.remote.I18nLocalization
 import com.virtusize.libsource.data.remote.Product

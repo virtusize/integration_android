@@ -1,7 +1,5 @@
 package com.virtusize.libsource.data.local
 
-import com.virtusize.libsource.data.local.VirtusizeEnvironment.*
-
 /**
  * This enum contains all available Virtusize environments
  */
@@ -18,10 +16,10 @@ enum class VirtusizeEnvironment {
  */
 fun VirtusizeEnvironment.defaultApiUrl(): String {
     return when (this) {
-        STAGING -> "https://staging.virtusize.jp"
-        GLOBAL -> "https://api.virtusize.com"
-        JAPAN -> "https://api.virtusize.jp"
-        KOREA -> "https://api.virtusize.kr"
+        VirtusizeEnvironment.STAGING -> "https://staging.virtusize.jp"
+        VirtusizeEnvironment.GLOBAL -> "https://api.virtusize.com"
+        VirtusizeEnvironment.JAPAN -> "https://api.virtusize.jp"
+        VirtusizeEnvironment.KOREA -> "https://api.virtusize.kr"
     }
 }
 
@@ -31,10 +29,10 @@ fun VirtusizeEnvironment.defaultApiUrl(): String {
  */
 fun VirtusizeEnvironment.eventApiUrl(): String {
     return when (this) {
-        STAGING -> "https://events.staging.virtusize.jp"
-        JAPAN -> "https://events.virtusize.jp"
-        GLOBAL -> "https://events.virtusize.com"
-        KOREA -> "https://events.virtusize.kr"
+        VirtusizeEnvironment.STAGING -> "https://events.staging.virtusize.jp"
+        VirtusizeEnvironment.JAPAN -> "https://events.virtusize.jp"
+        VirtusizeEnvironment.GLOBAL -> "https://events.virtusize.com"
+        VirtusizeEnvironment.KOREA -> "https://events.virtusize.kr"
     }
 }
 
@@ -44,10 +42,10 @@ fun VirtusizeEnvironment.eventApiUrl(): String {
  */
 fun VirtusizeEnvironment.servicesApiUrl(): String {
     return when (this) {
-        STAGING -> "https://services.virtusize.jp/stg"
-        GLOBAL -> "https://services.virtusize.com"
-        JAPAN -> "https://services.virtusize.jp"
-        KOREA -> "https://services.virtusize.kr"
+        VirtusizeEnvironment.STAGING -> "https://services.virtusize.jp/stg"
+        VirtusizeEnvironment.GLOBAL -> "https://services.virtusize.com"
+        VirtusizeEnvironment.JAPAN -> "https://services.virtusize.jp"
+        VirtusizeEnvironment.KOREA -> "https://services.virtusize.kr"
     }
 }
 
@@ -57,9 +55,9 @@ fun VirtusizeEnvironment.servicesApiUrl(): String {
  */
 fun VirtusizeEnvironment.virtusizeUrl(): String {
     return when (this) {
-        STAGING, JAPAN -> "https://static.api.virtusize.jp"
-        GLOBAL -> "https://static.api.virtusize.com"
-        KOREA -> "https://static.api.virtusize.kr"
+        VirtusizeEnvironment.STAGING, VirtusizeEnvironment.JAPAN -> "https://static.api.virtusize.jp"
+        VirtusizeEnvironment.GLOBAL -> "https://static.api.virtusize.com"
+        VirtusizeEnvironment.KOREA -> "https://static.api.virtusize.kr"
     }
 }
 
@@ -71,9 +69,9 @@ fun VirtusizeEnvironment.virtusizeUrl(): String {
  */
 fun VirtusizeEnvironment.virtusizeRegion(): VirtusizeRegion {
     return when (this) {
-        STAGING, JAPAN -> VirtusizeRegion.JP
-        GLOBAL -> VirtusizeRegion.COM
-        KOREA -> VirtusizeRegion.KR
+        VirtusizeEnvironment.STAGING, VirtusizeEnvironment.JAPAN -> VirtusizeRegion.JP
+        VirtusizeEnvironment.GLOBAL -> VirtusizeRegion.COM
+        VirtusizeEnvironment.KOREA -> VirtusizeRegion.KR
     }
 }
 
@@ -83,7 +81,7 @@ fun VirtusizeEnvironment.virtusizeRegion(): VirtusizeRegion {
  */
 fun VirtusizeEnvironment.virtusizeWebViewEnv(): String {
     return when (this) {
-        STAGING -> "staging"
+        VirtusizeEnvironment.STAGING -> "staging"
         else -> "production"
     }
 }

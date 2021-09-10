@@ -1,11 +1,15 @@
 package com.virtusize.android
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.virtusize.libsource.data.local.*
-import com.virtusize.libsource.util.Constants
+import com.virtusize.libsource.data.local.VirtusizeError
+import com.virtusize.libsource.data.local.VirtusizeEvent
+import com.virtusize.libsource.data.local.VirtusizeMessageHandler
+import com.virtusize.libsource.data.local.VirtusizeOrder
+import com.virtusize.libsource.data.local.VirtusizeOrderItem
+import com.virtusize.libsource.data.local.VirtusizeProduct
+import com.virtusize.libsource.data.local.VirtusizeViewStyle
 import com.virtusize.libsource.util.dpInPx
 import com.virtusize.libsource.util.spToPx
 import kotlinx.android.synthetic.main.activity_main.*

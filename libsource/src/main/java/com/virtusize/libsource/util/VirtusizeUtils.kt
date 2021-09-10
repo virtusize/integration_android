@@ -6,12 +6,19 @@ import android.os.Build
 import android.os.Bundle
 import android.os.LocaleList
 import androidx.fragment.app.FragmentActivity
-import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.ProductComparisonFitInfo
-import com.virtusize.libsource.data.remote.*
+import com.virtusize.libsource.data.local.SizeComparisonRecommendedSize
+import com.virtusize.libsource.data.local.VirtusizeLanguage
+import com.virtusize.libsource.data.local.VirtusizeMessageHandler
+import com.virtusize.libsource.data.local.VirtusizeParams
+import com.virtusize.libsource.data.local.VirtusizeProduct
+import com.virtusize.libsource.data.remote.Product
+import com.virtusize.libsource.data.remote.ProductSize
+import com.virtusize.libsource.data.remote.ProductType
+import com.virtusize.libsource.data.remote.Weight
 import com.virtusize.libsource.network.VirtusizeApi
 import com.virtusize.libsource.ui.VirtusizeWebViewFragment
-import java.util.*
+import java.util.Locale
 import kotlin.math.abs
 
 // The object that wraps Virtusize utility functions

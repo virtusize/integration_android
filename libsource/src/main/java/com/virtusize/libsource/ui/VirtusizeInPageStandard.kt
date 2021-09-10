@@ -17,12 +17,25 @@ import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.ViewCompat
-import androidx.lifecycle.*
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.virtusize.libsource.R
 import com.virtusize.libsource.VirtusizeRepository
-import com.virtusize.libsource.data.local.*
+import com.virtusize.libsource.data.local.VirtusizeErrorType
+import com.virtusize.libsource.data.local.VirtusizeLanguage
+import com.virtusize.libsource.data.local.VirtusizeMessageHandler
+import com.virtusize.libsource.data.local.VirtusizeParams
+import com.virtusize.libsource.data.local.VirtusizeProduct
+import com.virtusize.libsource.data.local.VirtusizeViewStyle
+import com.virtusize.libsource.data.local.virtusizeError
 import com.virtusize.libsource.data.remote.Product
-import com.virtusize.libsource.util.*
+import com.virtusize.libsource.util.FontUtils
+import com.virtusize.libsource.util.VirtusizeUtils
+import com.virtusize.libsource.util.dpInPx
+import com.virtusize.libsource.util.onSizeChanged
+import com.virtusize.libsource.util.rightDrawable
+import com.virtusize.libsource.util.spToPx
 import kotlinx.android.synthetic.main.view_inpage_standard.view.*
 
 class VirtusizeInPageStandard @JvmOverloads constructor(

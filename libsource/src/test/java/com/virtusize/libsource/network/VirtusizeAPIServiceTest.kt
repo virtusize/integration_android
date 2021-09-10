@@ -7,8 +7,6 @@ import com.google.common.truth.Truth.assertThat
 import com.virtusize.libsource.MainCoroutineRule
 import com.virtusize.libsource.TestUtils
 import com.virtusize.libsource.VirtusizeBuilder
-import com.virtusize.libsource.data.local.*
-import com.virtusize.libsource.data.remote.*
 import com.virtusize.libsource.fixtures.ProductFixtures
 import com.virtusize.libsource.fixtures.TestFixtures
 import kotlinx.coroutines.ExperimentalCoroutinesApi

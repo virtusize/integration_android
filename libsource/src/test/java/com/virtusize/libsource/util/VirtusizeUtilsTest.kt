@@ -1,7 +1,10 @@
 package com.virtusize.libsource.util
 
 import com.google.common.truth.Truth.assertThat
-import com.virtusize.libsource.data.remote.*
+import com.virtusize.libsource.data.remote.Measurement
+import com.virtusize.libsource.data.remote.Product
+import com.virtusize.libsource.data.remote.ProductSize
+import com.virtusize.libsource.data.remote.Weight
 import com.virtusize.libsource.fixtures.ProductFixtures
 import org.junit.Test
 

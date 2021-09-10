@@ -11,7 +11,23 @@ import android.os.Message
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.View
-import android.webkit.*
+import android.webkit.ClientCertRequest
+import android.webkit.ConsoleMessage
+import android.webkit.GeolocationPermissions
+import android.webkit.HttpAuthHandler
+import android.webkit.JsPromptResult
+import android.webkit.JsResult
+import android.webkit.PermissionRequest
+import android.webkit.RenderProcessGoneDetail
+import android.webkit.SafeBrowsingResponse
+import android.webkit.SslErrorHandler
+import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.annotation.RequiresApi
 
 @SuppressLint("SetJavaScriptEnabled")

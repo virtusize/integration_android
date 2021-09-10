@@ -1,7 +1,14 @@
 package com.virtusize.libsource
 
 import android.content.Context
-import com.virtusize.libsource.data.local.*
+import com.virtusize.libsource.data.local.VirtusizeEnvironment
+import com.virtusize.libsource.data.local.VirtusizeErrorType
+import com.virtusize.libsource.data.local.VirtusizeInfoCategory
+import com.virtusize.libsource.data.local.VirtusizeLanguage
+import com.virtusize.libsource.data.local.VirtusizeParams
+import com.virtusize.libsource.data.local.VirtusizeRegion
+import com.virtusize.libsource.data.local.throwError
+import com.virtusize.libsource.data.local.virtusizeRegion
 
 /**
  * This class utilizes the builder pattern to build and return a Virtusize object

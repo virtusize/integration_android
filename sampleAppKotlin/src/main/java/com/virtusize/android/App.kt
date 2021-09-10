@@ -3,7 +3,9 @@ package com.virtusize.android
 import android.app.Application
 import com.virtusize.libsource.Virtusize
 import com.virtusize.libsource.VirtusizeBuilder
-import com.virtusize.libsource.data.local.*
+import com.virtusize.libsource.data.local.VirtusizeEnvironment
+import com.virtusize.libsource.data.local.VirtusizeInfoCategory
+import com.virtusize.libsource.data.local.VirtusizeLanguage
 
 class App: Application() {
     lateinit var Virtusize: Virtusize

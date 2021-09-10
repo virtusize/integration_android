@@ -10,10 +10,15 @@ import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.virtusize.libsource.R
-import com.virtusize.libsource.data.local.*
-import com.virtusize.libsource.util.*
+import com.virtusize.libsource.data.local.VirtusizeLanguage
+import com.virtusize.libsource.data.local.VirtusizeMessageHandler
+import com.virtusize.libsource.data.local.VirtusizeParams
+import com.virtusize.libsource.data.local.VirtusizeProduct
+import com.virtusize.libsource.data.local.VirtusizeViewStyle
 import com.virtusize.libsource.util.FontUtils
 import com.virtusize.libsource.util.VirtusizeUtils
+import com.virtusize.libsource.util.rightDrawable
+import com.virtusize.libsource.util.spToPx
 import kotlinx.android.synthetic.main.view_inpage_mini.view.*
 
 class VirtusizeInPageMini @JvmOverloads constructor(

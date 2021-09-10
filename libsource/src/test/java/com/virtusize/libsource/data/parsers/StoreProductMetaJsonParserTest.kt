@@ -1,7 +1,9 @@
 package com.virtusize.libsource.data.parsers
 
 import com.google.common.truth.Truth.assertThat
-import com.virtusize.libsource.data.remote.*
+import com.virtusize.libsource.data.remote.BrandSizing
+import com.virtusize.libsource.data.remote.Measurement
+import com.virtusize.libsource.data.remote.ProductSize
 import com.virtusize.libsource.fixtures.TestFixtures
 import org.json.JSONObject
 import org.junit.Test

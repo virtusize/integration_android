@@ -1,7 +1,17 @@
 package com.virtusize.libsource.network
 
 import android.net.Uri
-import com.virtusize.libsource.data.local.*
+import com.virtusize.libsource.data.local.BodyProfileRecommendedSizeParams
+import com.virtusize.libsource.data.local.I18N_URL
+import com.virtusize.libsource.data.local.VirtusizeEnvironment
+import com.virtusize.libsource.data.local.VirtusizeEvent
+import com.virtusize.libsource.data.local.VirtusizeLanguage
+import com.virtusize.libsource.data.local.VirtusizeOrder
+import com.virtusize.libsource.data.local.VirtusizeProduct
+import com.virtusize.libsource.data.local.defaultApiUrl
+import com.virtusize.libsource.data.local.eventApiUrl
+import com.virtusize.libsource.data.local.servicesApiUrl
+import com.virtusize.libsource.data.local.virtusizeUrl
 import com.virtusize.libsource.data.parsers.JsonUtils
 import com.virtusize.libsource.data.remote.Product
 import com.virtusize.libsource.data.remote.ProductCheck

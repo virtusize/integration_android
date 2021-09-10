@@ -8,7 +8,10 @@ import android.view.View
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import com.virtusize.libsource.R
-import com.virtusize.libsource.data.local.*
+import com.virtusize.libsource.data.local.VirtusizeMessageHandler
+import com.virtusize.libsource.data.local.VirtusizeParams
+import com.virtusize.libsource.data.local.VirtusizeProduct
+import com.virtusize.libsource.data.local.VirtusizeViewStyle
 import com.virtusize.libsource.util.VirtusizeUtils
 
 class VirtusizeButton @JvmOverloads constructor(

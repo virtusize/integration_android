@@ -1,7 +1,6 @@
 package com.virtusize.libsource.fixtures
 
 import com.virtusize.libsource.data.parsers.ProductTypeJsonParser
-import com.virtusize.libsource.data.remote.*
 import org.json.JSONArray
 import org.json.JSONObject
 
