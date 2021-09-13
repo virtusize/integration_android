@@ -84,9 +84,9 @@ internal object VirtusizeUtils {
             userProducts.filter { it.productType in storeProductType.compatibleTypes }
         val sizeComparisonRecommendedSize = SizeComparisonRecommendedSize()
 
-        compatibleUserProducts.forEach { userProduct ->
+        compatibleUserProducts.iterator().forEach { userProduct ->
             val userProductSize = userProduct.sizes[0]
-            storeProduct.sizes.forEach { storeProductSize ->
+            storeProduct.sizes.iterator().forEach { storeProductSize ->
                 val productComparisonFitInfo = getProductComparisonFitInfo(
                     userProductSize,
                     storeProductSize,
