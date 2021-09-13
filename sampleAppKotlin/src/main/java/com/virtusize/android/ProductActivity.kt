@@ -3,11 +3,8 @@ package com.virtusize.android
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.virtusize.android.databinding.ActivityProductBinding
 import com.virtusize.libsource.data.local.VirtusizeProduct
-import kotlinx.android.synthetic.main.activity_main.exampleVirtusizeButton
-import kotlinx.android.synthetic.main.activity_main.exampleVirtusizeInPageMini
-import kotlinx.android.synthetic.main.activity_main.exampleVirtusizeInPageStandard
-import kotlinx.android.synthetic.main.activity_product.*
 
 class ProductActivity : AppCompatActivity() {
     companion object {
@@ -22,8 +19,12 @@ class ProductActivity : AppCompatActivity() {
             "vs_pants"
         )
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val binding = ActivityProductBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setContentView(R.layout.activity_product)
 
         val product =  VirtusizeProduct(
@@ -34,22 +35,22 @@ class ProductActivity : AppCompatActivity() {
         (application as App).Virtusize.load(product)
 
         (application as App).Virtusize.setupVirtusizeView(
-            virtusizeView = exampleVirtusizeButton,
+            virtusizeView = binding.exampleVirtusizeButton,
             product = product
         )
 
         (application as App).Virtusize
             .setupVirtusizeView(
-                virtusizeView = exampleVirtusizeInPageStandard,
+                virtusizeView = binding.exampleVirtusizeInPageStandard,
                 product = product
             )
 
         (application as App).Virtusize.setupVirtusizeView(
-            virtusizeView = exampleVirtusizeInPageMini,
+            virtusizeView = binding.exampleVirtusizeInPageMini,
             product = product
         )
 
-        nextProductButton.setOnClickListener {
+        binding.nextProductButton.setOnClickListener {
             startActivity(Intent(this, ProductActivity::class.java))
         }
     }
