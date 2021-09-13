@@ -11,7 +11,8 @@ class ProductTypeJsonParserTest {
 
     @Test
     fun parse_validJsonData_shouldReturnExpectedObject() {
-        val actualProductType = ProductTypeJsonParser().parse(ProductFixtures.PRODUCT_TYPE_JSON_OBJECT)
+        val actualProductType =
+            ProductTypeJsonParser().parse(ProductFixtures.PRODUCT_TYPE_JSON_OBJECT)
 
         val expectedProductType = ProductType(
             1,

@@ -111,7 +111,10 @@ internal class VirtusizeApiTask(
                     inputStream = urlConnection.inputStream
                     return try {
                         val inputStreamString = readInputStreamAsString(inputStream)
-                        val response = parseInputStreamStringToObject(apiRequest.url, inputStreamString)
+                        val response = parseInputStreamStringToObject(
+                            apiRequest.url,
+                            inputStreamString
+                        )
                         VirtusizeApiResponse.Success(response) as VirtusizeApiResponse<T>
                     } catch (e: JSONException) {
                         VirtusizeApiResponse.Error(
@@ -201,7 +204,11 @@ internal class VirtusizeApiTask(
             try {
                 result = parseStringToObject(apiRequestUrl, inputStreamString)
             } catch (e: JSONException) {
-                messageHandler?.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(extraMessage = e.localizedMessage))
+                messageHandler?.onError(
+                    VirtusizeErrorType.JsonParsingError.virtusizeError(
+                        extraMessage = e.localizedMessage
+                    )
+                )
             }
         }
         return result

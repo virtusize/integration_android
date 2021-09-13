@@ -99,7 +99,11 @@ class VirtusizeFitIllustratorWebView @JvmOverloads constructor(
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 // This is to close any subviews when a user is successfully logged into Facebook
-                if (isMultipleWindowsSupported && url?.contains("virtusize") == true && url.contains("#compare")) {
+                if (
+                    isMultipleWindowsSupported &&
+                    url?.contains("virtusize") == true &&
+                    url.contains("#compare")
+                ) {
                     view?.removeAllViews()
                 }
                 _webViewClient?.onPageFinished(view, url)
@@ -238,7 +242,10 @@ class VirtusizeFitIllustratorWebView @JvmOverloads constructor(
                 if (resultMsg.obj != null && resultMsg.obj is WebView.WebViewTransport) {
                     val popupWebView = VirtusizeFitIllustratorWebView(view.context)
                     popupWebView.enableWindowsSettings()
-                    popupWebView.layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                    popupWebView.layoutParams = LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                    )
                     popupWebView.webViewClient = object : WebViewClient() {
                         override fun onPageFinished(view: WebView?, url: String?) {
                             // This is to scroll the webview to top when the fit illustrator is open
@@ -254,7 +261,8 @@ class VirtusizeFitIllustratorWebView @JvmOverloads constructor(
                         }
                     }
                     popupWebView.setOnKeyListener { v, keyCode, event ->
-                        if (keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP &&
+                        if (keyCode == KeyEvent.KEYCODE_BACK &&
+                            event.action == MotionEvent.ACTION_UP &&
                             popupWebView.canGoBack()
                         ) {
                             popupWebView.goBack()
@@ -268,7 +276,8 @@ class VirtusizeFitIllustratorWebView @JvmOverloads constructor(
                     resultMsg.sendToTarget()
                     return true
                 }
-                return _webChromeClient?.onCreateWindow(view, dialog, userGesture, resultMsg) ?: false
+                return _webChromeClient?.onCreateWindow(view, dialog, userGesture, resultMsg)
+                    ?: false
             }
 
             override fun onProgressChanged(view: WebView?, newProgress: Int) {

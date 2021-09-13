@@ -12,7 +12,8 @@ class UserProductsJsonParserTest {
 
     @Test
     fun parse_validUserProduct_returnExpectedUserProduct() {
-        val actualUserProduct = UserProductJsonParser().parse(ProductFixtures.USER_PRODUCT_ONE_JSON_OBJECT)
+        val actualUserProduct =
+            UserProductJsonParser().parse(ProductFixtures.USER_PRODUCT_ONE_JSON_OBJECT)
 
         val expectedUserProduct = Product(
             123456,

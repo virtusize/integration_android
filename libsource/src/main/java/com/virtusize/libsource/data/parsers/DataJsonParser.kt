@@ -10,13 +10,24 @@ internal class DataJsonParser : VirtusizeJsonParser<Data> {
     override fun parse(json: JSONObject): Data? {
         val validProduct = json.optBoolean(FIELD_VALID_PRODUCT)
         val fetchMetaData = json.optBoolean(FIELD_FETCH_META_DATA)
-        val shouldSeePhTooltip = json.optJSONObject(FIELD_USER_DATA)?.optBoolean(FIELD_SHOULD_SEE_PH_TOOLTIP) ?: false
+        val shouldSeePhTooltip = json.optJSONObject(FIELD_USER_DATA)
+            ?.optBoolean(FIELD_SHOULD_SEE_PH_TOOLTIP)
+            ?: false
         val productDataId = json.optInt(FIELD_PRODUCT_DATA_ID)
         val productTypeName = JsonUtils.optString(json, FIELD_PRODUCT_TYPE_NAME)
         val storeName = JsonUtils.optString(json, FIELD_STORE_NAME)
         val storeId = json.optInt(FIELD_STORE_ID)
         val productTypeId = json.optInt(FIELD_PRODUCT_TYPE_ID)
-        return Data(validProduct, fetchMetaData, shouldSeePhTooltip, productDataId, productTypeName, storeName, storeId, productTypeId)
+        return Data(
+            validProduct,
+            fetchMetaData,
+            shouldSeePhTooltip,
+            productDataId,
+            productTypeName,
+            storeName,
+            storeId,
+            productTypeId
+        )
     }
 
     companion object {

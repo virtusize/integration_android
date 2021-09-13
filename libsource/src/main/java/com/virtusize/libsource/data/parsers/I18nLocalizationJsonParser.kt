@@ -20,7 +20,9 @@ internal class I18nLocalizationJsonParser(
     }
 
     override fun parse(json: JSONObject): I18nLocalization? {
-        val aoyamaJSONObject = json.optJSONObject(FIELD_KEYS)?.optJSONObject(FIELD_APPS)?.optJSONObject(FIELD_AOYAMA)
+        val aoyamaJSONObject = json.optJSONObject(FIELD_KEYS)
+            ?.optJSONObject(FIELD_APPS)
+            ?.optJSONObject(FIELD_AOYAMA)
         val inpageJSONObject = aoyamaJSONObject?.optJSONObject(FIELD_INPAGE)
         val oneSizeJSONObject = inpageJSONObject?.optJSONObject(FIELD_ONE_SIZE)
         val multiSizeJSONObject = inpageJSONObject?.optJSONObject(FIELD_MULTI_SIZE)

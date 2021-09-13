@@ -12,7 +12,8 @@ class StoreProductMetaJsonParserTest {
 
     @Test
     fun parse_validJsonData_shouldReturnExpectedStoreProductMeta() {
-        val actualStoreProductMeta = StoreProductMetaJsonParser().parse(STORE_PRODUCT_META_JSON_DATA)
+        val actualStoreProductMeta =
+            StoreProductMetaJsonParser().parse(STORE_PRODUCT_META_JSON_DATA)
         assertThat(actualStoreProductMeta?.id).isEqualTo(123)
         assertThat(actualStoreProductMeta?.brand).isEqualTo("Virtusize")
         assertThat(actualStoreProductMeta?.additionalInfo?.brand).isEqualTo("Virtusize")
@@ -47,12 +48,18 @@ class StoreProductMetaJsonParserTest {
         )
         assertThat(actualStoreProductMeta?.additionalInfo?.fit).isEqualTo("loose")
         assertThat(actualStoreProductMeta?.additionalInfo?.style).isEqualTo("fashionable")
-        assertThat(actualStoreProductMeta?.additionalInfo?.brandSizing).isEqualTo(BrandSizing("small", true))
+        assertThat(actualStoreProductMeta?.additionalInfo?.brandSizing).isEqualTo(
+            BrandSizing(
+                "small",
+                true
+            )
+        )
     }
 
     @Test
     fun parse_emptyStoreProductData_shouldReturnNull() {
-        val actualStoreProductMeta = StoreProductMetaJsonParser().parse(TestFixtures.EMPTY_JSON_DATA)
+        val actualStoreProductMeta =
+            StoreProductMetaJsonParser().parse(TestFixtures.EMPTY_JSON_DATA)
 
         assertThat(actualStoreProductMeta).isNull()
     }

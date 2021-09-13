@@ -20,7 +20,19 @@ internal class StoreJsonParser : VirtusizeJsonParser<Store> {
         val typeMapperEnabled = json.optBoolean(FIELD_TYPE_MAPPER_ENABLED)
         val parsedRegion = JsonUtils.optString(json, FIELD_REGION)
         val region = if (parsedRegion.isEmpty()) "JP" else parsedRegion
-        return Store(id, surveyLink, name, shortName, lengthUnitId, apiKey, created, updated, disabled, typeMapperEnabled, region)
+        return Store(
+            id,
+            surveyLink,
+            name,
+            shortName,
+            lengthUnitId,
+            apiKey,
+            created,
+            updated,
+            disabled,
+            typeMapperEnabled,
+            region
+        )
     }
 
     companion object {

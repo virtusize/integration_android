@@ -8,13 +8,15 @@ class UserBodyProfileJsonParserTest {
 
     @Test
     fun test_parseValidUserBodyResponse_returnExpectedUserBodyProfile() {
-        val actualUserBodyProfile = UserBodyProfileJsonParser().parse(TestFixtures.USER_BODY_JSONObject)
+        val actualUserBodyProfile =
+            UserBodyProfileJsonParser().parse(TestFixtures.USER_BODY_JSONObject)
         assertThat(actualUserBodyProfile).isEqualTo(TestFixtures.userBodyProfile)
     }
 
     @Test
     fun test_parseNullUserProfileResponse() {
-        val actualUserBodyProfile = UserBodyProfileJsonParser().parse(TestFixtures.NULL_USER_BODY_PROFILE)
+        val actualUserBodyProfile =
+            UserBodyProfileJsonParser().parse(TestFixtures.NULL_USER_BODY_PROFILE)
 
         assertThat(actualUserBodyProfile).isNull()
     }

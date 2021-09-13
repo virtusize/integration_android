@@ -45,7 +45,10 @@ import javax.net.ssl.HttpsURLConnection
  * @param context the application context
  * @param messageHandler pass VirtusizeMessageHandler to listen to any Virtusize-related messages
  */
-internal class VirtusizeAPIService(private var context: Context, private var messageHandler: VirtusizeMessageHandler?) {
+internal class VirtusizeAPIService(
+    private var context: Context,
+    private var messageHandler: VirtusizeMessageHandler?
+) {
 
     companion object {
         private var INSTANCE: VirtusizeAPIService? = null
@@ -53,7 +56,10 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
         /**
          * Gets the instance of [VirtusizeAPIService]
          */
-        fun getInstance(context: Context, messageHandler: VirtusizeMessageHandler?): VirtusizeAPIService {
+        fun getInstance(
+            context: Context,
+            messageHandler: VirtusizeMessageHandler?
+        ): VirtusizeAPIService {
             if (INSTANCE == null) {
                 synchronized(VirtusizeAPIService::javaClass) {
                     INSTANCE = VirtusizeAPIService(context, messageHandler)
@@ -64,7 +70,8 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
     }
 
     // The helper to store data locally using Shared Preferences
-    private var sharedPreferencesHelper: SharedPreferencesHelper = SharedPreferencesHelper.getInstance(context)
+    private var sharedPreferencesHelper: SharedPreferencesHelper =
+        SharedPreferencesHelper.getInstance(context)
 
     // Device screen resolution
     private lateinit var resolution: String
@@ -96,32 +103,38 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
      * @param product [VirtusizeProduct]
      * @return the [VirtusizeApiResponse] with the data class [ProductCheck]
      */
-    internal suspend fun productDataCheck(product: VirtusizeProduct): VirtusizeApiResponse<ProductCheck> = withContext(Dispatchers.IO) {
-        val apiRequest = VirtusizeApi.productCheck(product)
-        VirtusizeApiTask(
-            httpURLConnection,
-            sharedPreferencesHelper,
-            messageHandler
-        )
-            .setJsonParser(ProductCheckJsonParser())
-            .execute(apiRequest)
-    }
+    internal suspend fun productDataCheck(
+        product: VirtusizeProduct
+    ): VirtusizeApiResponse<ProductCheck> =
+        withContext(Dispatchers.IO) {
+            val apiRequest = VirtusizeApi.productCheck(product)
+            VirtusizeApiTask(
+                httpURLConnection,
+                sharedPreferencesHelper,
+                messageHandler
+            )
+                .setJsonParser(ProductCheckJsonParser())
+                .execute(apiRequest)
+        }
 
     /**
      * Sends an image URL of VirtusizeProduct to the Virtusize server
      * @param product [VirtusizeProduct]
      * @return the [VirtusizeApiResponse] with the data class [ProductMetaDataHints]
      */
-    internal suspend fun sendProductImageToBackend(product: VirtusizeProduct): VirtusizeApiResponse<ProductMetaDataHints> = withContext(Dispatchers.IO) {
-        val apiRequest = VirtusizeApi.sendProductImageToBackend(product = product)
-        VirtusizeApiTask(
-            httpURLConnection,
-            sharedPreferencesHelper,
-            messageHandler
-        )
-            .setJsonParser(ProductMetaDataHintsJsonParser())
-            .execute(apiRequest)
-    }
+    internal suspend fun sendProductImageToBackend(
+        product: VirtusizeProduct
+    ): VirtusizeApiResponse<ProductMetaDataHints> =
+        withContext(Dispatchers.IO) {
+            val apiRequest = VirtusizeApi.sendProductImageToBackend(product = product)
+            VirtusizeApiTask(
+                httpURLConnection,
+                sharedPreferencesHelper,
+                messageHandler
+            )
+                .setJsonParser(ProductMetaDataHintsJsonParser())
+                .execute(apiRequest)
+        }
 
     /**
      * Sends an event to the Virtusize server
@@ -140,10 +153,11 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
         val apiRequest = VirtusizeApi.sendEventToAPI(
             virtusizeEvent = event,
             productCheck = withDataProduct,
-            deviceOrientation = if (context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) context.getString(
-                R.string.landscape
-            )
-            else context.getString(R.string.portrait),
+            deviceOrientation =
+            if (context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
+                context.getString(R.string.landscape)
+            else
+                context.getString(R.string.portrait),
             screenResolution = resolution,
             versionCode = context.packageManager
                 .getPackageInfo(context.packageName, 0).versionCode
@@ -195,21 +209,24 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
      * @param productId the ID of the store product
      * @return the [VirtusizeApiResponse] with the data class [Product]
      */
-    internal suspend fun getStoreProduct(productId: Int): VirtusizeApiResponse<Product> = withContext(
-        Dispatchers.IO
-    ) {
-        if (productId == 0) {
-            return@withContext VirtusizeApiResponse.Error(VirtusizeErrorType.NullProduct.virtusizeError())
+    internal suspend fun getStoreProduct(productId: Int): VirtusizeApiResponse<Product> =
+        withContext(
+            Dispatchers.IO
+        ) {
+            if (productId == 0) {
+                return@withContext VirtusizeApiResponse.Error(
+                    VirtusizeErrorType.NullProduct.virtusizeError()
+                )
+            }
+            val apiRequest = VirtusizeApi.getStoreProductInfo(productId.toString())
+            VirtusizeApiTask(
+                httpURLConnection,
+                sharedPreferencesHelper,
+                messageHandler
+            )
+                .setJsonParser(StoreProductJsonParser())
+                .execute(apiRequest)
         }
-        val apiRequest = VirtusizeApi.getStoreProductInfo(productId.toString())
-        VirtusizeApiTask(
-            httpURLConnection,
-            sharedPreferencesHelper,
-            messageHandler
-        )
-            .setJsonParser(StoreProductJsonParser())
-            .execute(apiRequest)
-    }
 
     /**
      * Gets the API response for retrieving the list of the product types
@@ -306,9 +323,7 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
         productTypes: List<ProductType>,
         storeProduct: Product,
         userBodyProfile: UserBodyProfile
-    ): VirtusizeApiResponse<BodyProfileRecommendedSize?> = withContext(
-        Dispatchers.IO
-    ) {
+    ): VirtusizeApiResponse<BodyProfileRecommendedSize?> = withContext(Dispatchers.IO) {
         val apiRequest = VirtusizeApi.getSize(productTypes, storeProduct, userBodyProfile)
         VirtusizeApiTask(
             httpURLConnection,
@@ -324,10 +339,14 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
      * @param params [VirtusizeParams] to get the language that is set by a client
      * @return the [VirtusizeApiResponse] with the data class [I18nLocalization]
      */
-    internal suspend fun getI18n(language: VirtusizeLanguage?): VirtusizeApiResponse<I18nLocalization> = withContext(
-        Dispatchers.IO
-    ) {
-        val apiRequest = VirtusizeApi.getI18n(language ?: (VirtusizeLanguage.values().find { it.value == Locale.getDefault().language } ?: VirtusizeLanguage.EN))
+    internal suspend fun getI18n(language: VirtusizeLanguage?):
+        VirtusizeApiResponse<I18nLocalization> = withContext(Dispatchers.IO) {
+        val apiRequest = VirtusizeApi.getI18n(
+            language ?: (
+                VirtusizeLanguage.values()
+                    .find { it.value == Locale.getDefault().language } ?: VirtusizeLanguage.EN
+                )
+        )
         VirtusizeApiTask(
             httpURLConnection,
             sharedPreferencesHelper,

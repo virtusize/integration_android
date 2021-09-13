@@ -17,7 +17,9 @@ internal class ProductTypeJsonParser : VirtusizeJsonParser<ProductType> {
                 Weight(it.key, it.value.toString().toFloatOrNull() ?: 0f)
             }.toSet()
         }
-        val compatibleTypes = JsonUtils.jsonArrayToList(json.optJSONArray(FIELD_COMPATIBLE_WITH)) as? List<Int> ?: mutableListOf()
+        val compatibleTypes =
+            JsonUtils.jsonArrayToList(json.optJSONArray(FIELD_COMPATIBLE_WITH)) as? List<Int>
+                ?: mutableListOf()
         if (id == 0 && weights.isEmpty()) {
             return null
         }

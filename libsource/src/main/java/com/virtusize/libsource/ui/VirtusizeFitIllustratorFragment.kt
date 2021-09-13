@@ -80,7 +80,9 @@ class VirtusizeFitIllustratorFragment : DialogFragment() {
                 view?.loadUrl(
                     "javascript:(function() { " +
                         "var element = document.getElementsByClassName('global-close')[0];" +
-                        "element.onclick = function() { ${Constants.JS_BRIDGE_NAME}.userClosedWidget(); };" +
+                        "element.onclick = function() { " +
+                        "${Constants.JS_BRIDGE_NAME}.userClosedWidget();" +
+                        " };" +
                         "})()"
                 )
             }

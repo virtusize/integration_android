@@ -70,12 +70,18 @@ internal object VirtusizeUtils {
      * @param productTypes the list of available product types
      * @return [SizeComparisonRecommendedSize]
      */
-    fun findBestFitProductSize(userProducts: List<Product>?, storeProduct: Product?, productTypes: List<ProductType>?): SizeComparisonRecommendedSize? {
+    fun findBestFitProductSize(
+        userProducts: List<Product>?,
+        storeProduct: Product?,
+        productTypes: List<ProductType>?
+    ): SizeComparisonRecommendedSize? {
         if (userProducts == null || storeProduct == null || productTypes == null) {
             return null
         }
-        val storeProductType = productTypes.find { it.id == storeProduct.productType } ?: return null
-        val compatibleUserProducts = userProducts.filter { it.productType in storeProductType.compatibleTypes }
+        val storeProductType =
+            productTypes.find { it.id == storeProduct.productType } ?: return null
+        val compatibleUserProducts =
+            userProducts.filter { it.productType in storeProductType.compatibleTypes }
         val sizeComparisonRecommendedSize = SizeComparisonRecommendedSize()
 
         compatibleUserProducts.forEach { userProduct ->
@@ -86,7 +92,9 @@ internal object VirtusizeUtils {
                     storeProductSize,
                     storeProductType.weights
                 )
-                if (productComparisonFitInfo.fitScore > sizeComparisonRecommendedSize.bestFitScore) {
+                if (
+                    productComparisonFitInfo.fitScore > sizeComparisonRecommendedSize.bestFitScore
+                ) {
                     sizeComparisonRecommendedSize.apply {
                         productComparisonFitInfo.apply {
                             bestFitScore = fitScore
@@ -116,13 +124,20 @@ internal object VirtusizeUtils {
         var rawScore = 0f
         var isSmaller: Boolean? = null
 
-        val sortedStoreProductTypeScoreWeights = storeProductTypeScoreWeights.sortedByDescending { it.value }
+        val sortedStoreProductTypeScoreWeights =
+            storeProductTypeScoreWeights.sortedByDescending { it.value }
         sortedStoreProductTypeScoreWeights.forEach { weight ->
-            val userProductSizeMeasurement = userProductSize.measurements.find { it.name == weight.factor }?.millimeter
-            val storeProductSizeMeasurement = storeProductSize.measurements.find { it.name == weight.factor }?.millimeter
+            val userProductSizeMeasurement =
+                userProductSize.measurements.find { it.name == weight.factor }?.millimeter
+            val storeProductSizeMeasurement =
+                storeProductSize.measurements.find { it.name == weight.factor }?.millimeter
             if (userProductSizeMeasurement != null && storeProductSizeMeasurement != null) {
-                rawScore += abs(weight.value * (userProductSizeMeasurement - storeProductSizeMeasurement))
-                isSmaller = isSmaller ?: (userProductSizeMeasurement - storeProductSizeMeasurement > 0)
+                rawScore +=
+                    abs(
+                        weight.value * (userProductSizeMeasurement - storeProductSizeMeasurement)
+                    )
+                isSmaller =
+                    isSmaller ?: (userProductSizeMeasurement - storeProductSizeMeasurement > 0)
             }
         }
 
@@ -142,7 +157,8 @@ internal object VirtusizeUtils {
         product: VirtusizeProduct,
         messageHandler: VirtusizeMessageHandler
     ) {
-        val fragmentTransaction = (context as FragmentActivity).supportFragmentManager.beginTransaction()
+        val fragmentTransaction =
+            (context as FragmentActivity).supportFragmentManager.beginTransaction()
         val previousFragment = context.supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
         previousFragment?.let { fragment ->
             fragmentTransaction.remove(fragment)
@@ -151,7 +167,10 @@ internal object VirtusizeUtils {
         val args = Bundle()
         args.putString(Constants.URL_KEY, VirtusizeApi.virtusizeWebViewURL())
         virtusizeParams?.let { params ->
-            args.putString(Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY, "javascript:vsParamsFromSDK(${params.vsParamsString(product)})")
+            args.putString(
+                Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY,
+                "javascript:vsParamsFromSDK(${params.vsParamsString(product)})"
+            )
         }
         args.putParcelable(Constants.VIRTUSIZE_PRODUCT_KEY, product)
         virtusizeDialogFragment.arguments = args

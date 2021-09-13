@@ -37,7 +37,10 @@ internal data class BodyProfileRecommendedSizeParams constructor(
                 mapOf(PARAM_ITEM_SIZES to createItemSizesParams())
             )
             .plus(
-                mapOf(PARAM_PRODUCT_TYPE to (productTypes.find { it.id == storeProduct.productType }?.name ?: ""))
+                mapOf(
+                    PARAM_PRODUCT_TYPE to
+                        (productTypes.find { it.id == storeProduct.productType }?.name ?: "")
+                )
             )
             .plus(
                 mapOf(PARAM_USER_GENDER to userBodyProfile.gender)
@@ -46,7 +49,8 @@ internal data class BodyProfileRecommendedSizeParams constructor(
                 mapOf(PARAM_USER_HEIGHT to userBodyProfile.height)
             )
             .plus(
-                userBodyProfile.weight.toFloatOrNull()?.let { mapOf(PARAM_USER_WEIGHT to it) }.orEmpty()
+                userBodyProfile.weight.toFloatOrNull()?.let { mapOf(PARAM_USER_WEIGHT to it) }
+                    .orEmpty()
             )
             .plus(
                 mapOf(PARAM_EXTERNAL_PRODUCT_ID to (storeProduct.externalId ?: ""))
@@ -57,25 +61,32 @@ internal data class BodyProfileRecommendedSizeParams constructor(
      * Creates the map that represents the store product additional info
      */
     fun createAdditionalInfoParams(): Map<String, Any?> {
-        val brand = storeProduct.storeProductMeta?.additionalInfo?.brand ?: storeProduct.storeProductMeta?.brand
+        val brand = storeProduct.storeProductMeta?.additionalInfo?.brand
+            ?: storeProduct.storeProductMeta?.brand
         val sizeHashMap = storeProduct.storeProductMeta?.additionalInfo?.sizes?.map {
             it.name to it.measurements.map { measurement ->
                 measurement.name to measurement.millimeter
             }.toMap()
         }?.toMap()
-        val gender = storeProduct.storeProductMeta?.additionalInfo?.gender ?: storeProduct.storeProductMeta?.gender
+        val gender = storeProduct.storeProductMeta?.additionalInfo?.gender
+            ?: storeProduct.storeProductMeta?.gender
         return emptyMap<String, Any?>()
             .plus(
                 mapOf(PARAM_BRAND to (brand ?: ""))
             )
             .plus(
-                mapOf(PARAM_FIT to (storeProduct.storeProductMeta?.additionalInfo?.fit ?: "regular"))
+                mapOf(
+                    PARAM_FIT to (storeProduct.storeProductMeta?.additionalInfo?.fit ?: "regular")
+                )
             )
             .plus(
                 mapOf(PARAM_SIZES to (sizeHashMap ?: mutableMapOf()))
             )
             .plus(
-                mapOf(PARAM_MODEL_INFO to (storeProduct.storeProductMeta?.additionalInfo?.modelInfo ?: mutableMapOf()))
+                mapOf(
+                    PARAM_MODEL_INFO to
+                        (storeProduct.storeProductMeta?.additionalInfo?.modelInfo ?: mutableMapOf())
+                )
             )
             .plus(
                 mapOf(PARAM_GENDER to (gender ?: JSONObject.NULL))
@@ -93,11 +104,21 @@ internal data class BodyProfileRecommendedSizeParams constructor(
                     if (it.name == PARAM_BODY_BUST) {
                         chestValue = it.millimeter
                     }
-                    it.name to mutableMapOf(PARAM_BODY_MEASUREMENT_VALUE to it.millimeter, PARAM_BODY_MEASUREMENT_PREDICTED to true)
+                    it.name to mutableMapOf(
+                        PARAM_BODY_MEASUREMENT_VALUE to it.millimeter,
+                        PARAM_BODY_MEASUREMENT_PREDICTED to true
+                    )
                 }
             )
             .plus(
-                chestValue?.let { mapOf(PARAM_BODY_CHEST to mutableMapOf(PARAM_BODY_MEASUREMENT_VALUE to it, PARAM_BODY_MEASUREMENT_PREDICTED to true)) }.orEmpty()
+                chestValue?.let {
+                    mapOf(
+                        PARAM_BODY_CHEST to mutableMapOf(
+                            PARAM_BODY_MEASUREMENT_VALUE to it,
+                            PARAM_BODY_MEASUREMENT_PREDICTED to true
+                        )
+                    )
+                }.orEmpty()
             )
     }
 

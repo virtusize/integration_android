@@ -100,7 +100,9 @@ internal class VirtusizeRepository(
                         if (virtusizeProduct.imageUrl != null) {
                             // If image URL is valid, send image URL to server
                             val sendProductImageResponse =
-                                virtusizeAPIService.sendProductImageToBackend(product = virtusizeProduct)
+                                virtusizeAPIService.sendProductImageToBackend(
+                                    product = virtusizeProduct
+                                )
                             if (!sendProductImageResponse.isSuccessful) {
                                 sendProductImageResponse.failureData?.let {
                                     messageHandler.onError(
@@ -190,13 +192,21 @@ internal class VirtusizeRepository(
      * Updates the user session by calling the session API
      * @param externalProductId the external product ID set by a client
      */
-    internal suspend fun updateUserSession(externalProductId: String? = lastProductOnVirtusizeWebView?.externalId) {
+    internal suspend fun updateUserSession(
+        externalProductId: String? = lastProductOnVirtusizeWebView?.externalId
+    ) {
         val userSessionInfoResponse = virtusizeAPIService.getUserSessionInfo()
         if (userSessionInfoResponse.isSuccessful) {
-            sharedPreferencesHelper.storeSessionData(userSessionInfoResponse.successData!!.userSessionResponse)
-            sharedPreferencesHelper.storeAccessToken(userSessionInfoResponse.successData!!.accessToken)
+            sharedPreferencesHelper.storeSessionData(
+                userSessionInfoResponse.successData!!.userSessionResponse
+            )
+            sharedPreferencesHelper.storeAccessToken(
+                userSessionInfoResponse.successData!!.accessToken
+            )
             if (userSessionInfoResponse.successData!!.authToken.isNotBlank()) {
-                sharedPreferencesHelper.storeAuthToken(userSessionInfoResponse.successData!!.authToken)
+                sharedPreferencesHelper.storeAuthToken(
+                    userSessionInfoResponse.successData!!.authToken
+                )
             }
         } else {
             presenter?.hasInPageError(externalProductId, userSessionInfoResponse.failureData)
@@ -240,7 +250,11 @@ internal class VirtusizeRepository(
         }
 
         userProductRecommendedSize = VirtusizeUtils.findBestFitProductSize(
-            userProducts = if (selectedUserProductId != null) userProducts?.filter { it.id == selectedUserProductId } else userProducts,
+            userProducts =
+            if (selectedUserProductId != null)
+                userProducts?.filter { it.id == selectedUserProductId }
+            else
+                userProducts,
             storeProduct = storeProduct,
             productTypes = productTypes
         )
@@ -389,7 +403,11 @@ internal class VirtusizeRepository(
             sharedPreferencesHelper.storeBrowserId(userAutoData?.bid)
             sharedPreferencesHelper.storeAuthToken(userAutoData?.auth)
         } catch (e: JSONException) {
-            messageHandler.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(extraMessage = e.localizedMessage))
+            messageHandler.onError(
+                VirtusizeErrorType.JsonParsingError.virtusizeError(
+                    extraMessage = e.localizedMessage
+                )
+            )
         }
     }
 }

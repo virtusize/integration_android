@@ -41,7 +41,8 @@ data class VirtusizeParams(
             (if (externalUserId != null) "$PARAM_EXTERNAL_USER_ID: '$externalUserId', " else "") +
             "$PARAM_LANGUAGE: '${language.value}', " +
             "$PARAM_SHOW_SGI: $showSGI, " +
-            "$PARAM_ALLOW_LANGUAGES: ${allowedLanguages.map { "{label: \"${it.label}\", value: \"${it.value}\"}" }}, " +
+            "$PARAM_ALLOW_LANGUAGES: " +
+            "${allowedLanguages.map { "{label: \"${it.label}\", value: \"${it.value}\"}" }}, " +
             "$PARAM_DETAILS_PANEL_CARDS: ${detailsPanelCards.map { "\"${it.value}\"" }}, " +
             "$PARAM_REGION: '${region.value}', " +
             "$PARAM_ENVIRONMENT: '${environment.virtusizeWebViewEnv()}'}"

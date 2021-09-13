@@ -24,9 +24,10 @@ class I18nLocalizationJsonParserTest {
 
     @Test
     fun parseI18N_englishLocalization_shouldReturnExpectedObject() {
-        val actualI18nLocalization = I18nLocalizationJsonParser(context, VirtusizeLanguage.EN).parse(
-            TestUtils.readFileFromAssets("/i18n_en.json")
-        )
+        val actualI18nLocalization =
+            I18nLocalizationJsonParser(context, VirtusizeLanguage.EN).parse(
+                TestUtils.readFileFromAssets("/i18n_en.json")
+            )
 
         val expectedI18nLocalization = getExpectedI18nLocalization(context)
 
@@ -35,9 +36,10 @@ class I18nLocalizationJsonParserTest {
 
     @Test
     fun parseI18N_emptyJsonData_shouldReturnExpectedObject() {
-        val actualI18nLocalization = I18nLocalizationJsonParser(context, VirtusizeLanguage.EN).parse(
-            TestFixtures.EMPTY_JSON_DATA
-        )
+        val actualI18nLocalization =
+            I18nLocalizationJsonParser(context, VirtusizeLanguage.EN).parse(
+                TestFixtures.EMPTY_JSON_DATA
+            )
 
         val expectedI18nLocalization = I18nLocalization(
             "",
@@ -60,7 +62,10 @@ class I18nLocalizationJsonParserTest {
 
     @Test
     fun parseI18NJP_japaneseLocalization_shouldReturnExpectedObject() {
-        val actualI18nLocalization = I18nLocalizationJsonParser(context, VirtusizeLanguage.JP).parse(TestUtils.readFileFromAssets("/i18n_jp.json"))
+        val actualI18nLocalization = I18nLocalizationJsonParser(
+            context,
+            VirtusizeLanguage.JP
+        ).parse(TestUtils.readFileFromAssets("/i18n_jp.json"))
 
         var conf: Configuration = context.resources.configuration
         conf = Configuration(conf)
@@ -73,7 +78,10 @@ class I18nLocalizationJsonParserTest {
 
     @Test
     fun parseI18NKO_koreanLocalization_shouldReturnExpectedObject() {
-        val actualI18nLocalization = I18nLocalizationJsonParser(context, VirtusizeLanguage.KR).parse(TestUtils.readFileFromAssets("/i18n_ko.json"))
+        val actualI18nLocalization = I18nLocalizationJsonParser(
+            context,
+            VirtusizeLanguage.KR
+        ).parse(TestUtils.readFileFromAssets("/i18n_ko.json"))
 
         var conf: Configuration = context.resources.configuration
         conf = Configuration(conf)

@@ -55,7 +55,8 @@ fun VirtusizeEnvironment.servicesApiUrl(): String {
  */
 fun VirtusizeEnvironment.virtusizeUrl(): String {
     return when (this) {
-        VirtusizeEnvironment.STAGING, VirtusizeEnvironment.JAPAN -> "https://static.api.virtusize.jp"
+        VirtusizeEnvironment.STAGING,
+        VirtusizeEnvironment.JAPAN -> "https://static.api.virtusize.jp"
         VirtusizeEnvironment.GLOBAL -> "https://static.api.virtusize.com"
         VirtusizeEnvironment.KOREA -> "https://static.api.virtusize.kr"
     }

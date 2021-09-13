@@ -9,7 +9,8 @@ import org.json.JSONObject
 /**
  * This class parses a JSONObject to the [StoreProductAdditionalInfo] object
  */
-internal class StoreProductAdditionalInfoJsonParser : VirtusizeJsonParser<StoreProductAdditionalInfo> {
+internal class StoreProductAdditionalInfoJsonParser :
+    VirtusizeJsonParser<StoreProductAdditionalInfo> {
     override fun parse(json: JSONObject): StoreProductAdditionalInfo? {
         val brand = JsonUtils.optString(json, FIELD_BRAND)
         val gender = JsonUtils.optNullableString(json, FIELD_GENDER)

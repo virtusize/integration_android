@@ -69,8 +69,10 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
 
     // The duration of how long the cross fade animation for product images should be
     private val crossFadeAnimationDuration = 750
+
     // The cross fade animation Runnable
     private var crossFadeRunnable: Runnable? = null
+
     // The cross fade animation Handler
     private var crossFadeHandler: Handler = Handler(Looper.getMainLooper())
 
@@ -124,8 +126,14 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
             R.styleable.VirtusizeInPageStandard_inPageStandardHorizontalMargin,
             -1f
         ).toInt()
-        messageTextSize = attrsArray.getDimension(R.styleable.VirtusizeInPageStandard_inPageStandardMessageTextSize, -1f)
-        buttonTextSize = attrsArray.getDimension(R.styleable.VirtusizeInPageStandard_inPageStandardButtonTextSize, -1f)
+        messageTextSize = attrsArray.getDimension(
+            R.styleable.VirtusizeInPageStandard_inPageStandardMessageTextSize,
+            -1f
+        )
+        buttonTextSize = attrsArray.getDimension(
+            R.styleable.VirtusizeInPageStandard_inPageStandardButtonTextSize,
+            -1f
+        )
 
         attrsArray.recycle()
 
@@ -307,7 +315,9 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
         val productImageOverlapMargin =
             resources.getDimension(R.dimen.virtusize_inpage_standard_product_image_overlap_margin)
         val productImageHorizontalMargin =
-            resources.getDimension(R.dimen.virtusize_inpage_standard_product_image_horizontal_margin)
+            resources.getDimension(
+                R.dimen.virtusize_inpage_standard_product_image_horizontal_margin
+            )
         var addedPadding = productImageHorizontalMargin.toInt()
         if (addExtraPadding) {
             addedPadding -= productImageOverlapMargin.toInt()
@@ -356,7 +366,8 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
 
         // Set horizontal margins
         val inPageStandardFooterTopMargin =
-            if (horizontalMargin >= 2.dpInPx) 10.dpInPx - horizontalMargin else horizontalMargin + 8.dpInPx
+            if (horizontalMargin >= 2.dpInPx) 10.dpInPx - horizontalMargin
+            else horizontalMargin + 8.dpInPx
         if (horizontalMargin < 0) {
             return
         }
@@ -531,38 +542,61 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
         val additionalSize = if (virtusizeParams.language == VirtusizeLanguage.EN) 2f.spToPx else 0f
 
         if (messageTextSize != -1f) {
-            inpageTopText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + 2f.spToPx + additionalSize)
-            inpageLoadingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + 6f.spToPx + additionalSize)
-            inpageBottomText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + 6f.spToPx + additionalSize)
-            inpageErrorText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + additionalSize)
-            privacyPolicyText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + additionalSize)
+            inpageTopText.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX,
+                messageTextSize + 2f.spToPx + additionalSize
+            )
+            inpageLoadingText.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX,
+                messageTextSize + 6f.spToPx + additionalSize
+            )
+            inpageBottomText.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX,
+                messageTextSize + 6f.spToPx + additionalSize
+            )
+            inpageErrorText.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX,
+                messageTextSize + additionalSize
+            )
+            privacyPolicyText.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX,
+                messageTextSize + additionalSize
+            )
         } else {
-            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_normal_textSize)
-                ?.let {
-                    inpageTopText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
-                }
+            configuredContext?.resources?.getDimension(
+                R.dimen.virtusize_inpage_standard_normal_textSize
+            )?.let {
+                inpageTopText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+            }
 
-            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_bold_textSize)
-                ?.let {
-                    inpageLoadingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
-                    inpageBottomText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
-                }
+            configuredContext?.resources?.getDimension(
+                R.dimen.virtusize_inpage_standard_bold_textSize
+            )?.let {
+                inpageLoadingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+                inpageBottomText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+            }
 
-            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_default_textSize)
-                ?.let {
-                    inpageErrorText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
-                }
+            configuredContext?.resources?.getDimension(
+                R.dimen.virtusize_inpage_default_textSize
+            )?.let {
+                inpageErrorText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+            }
 
-            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_privacy_policy_textSize)
-                ?.let {
-                    privacyPolicyText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
-                }
+            configuredContext?.resources?.getDimension(
+                R.dimen.virtusize_inpage_standard_privacy_policy_textSize
+            )?.let {
+                privacyPolicyText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+            }
         }
 
         if (buttonTextSize != -1f) {
             val size = buttonTextSize + additionalSize
             inpageButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
-            inpageButton.rightDrawable(R.drawable.ic_arrow_right_white, 0.8f * size / 2, 0.8f * size)
+            inpageButton.rightDrawable(
+                R.drawable.ic_arrow_right_white,
+                0.8f * size / 2,
+                0.8f * size
+            )
         } else {
             configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_default_textSize)
                 ?.let {
@@ -570,12 +604,13 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
                 }
         }
 
-        configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_standard_top_text_marginBottom)
-            ?.let {
-                setupMargins(inpageTopText, 0, 0, 0, it.toInt())
-                inpageTopText.setLineSpacing(it, 1f)
-                inpageBottomText.setLineSpacing(it, 1f)
-            }
+        configuredContext?.resources?.getDimension(
+            R.dimen.virtusize_inpage_standard_top_text_marginBottom
+        )?.let {
+            setupMargins(inpageTopText, 0, 0, 0, it.toInt())
+            inpageTopText.setLineSpacing(it, 1f)
+            inpageBottomText.setLineSpacing(it, 1f)
+        }
     }
 
     /**

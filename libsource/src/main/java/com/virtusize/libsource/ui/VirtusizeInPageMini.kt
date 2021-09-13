@@ -68,12 +68,20 @@ class VirtusizeInPageMini @JvmOverloads constructor(
         } else {
             View.INVISIBLE
         }
-        val attrsArray = context.obtainStyledAttributes(attrs, R.styleable.VirtusizeInPageMini, 0, 0)
-        val buttonStyle = attrsArray.getInt(R.styleable.VirtusizeInPageMini_virtusizeInPageMiniStyle, VirtusizeViewStyle.NONE.value)
-        virtusizeViewStyle = VirtusizeViewStyle.values().firstOrNull { it.value == buttonStyle } ?: VirtusizeViewStyle.NONE
-        virtusizeBackgroundColor = attrsArray.getColor(R.styleable.VirtusizeInPageMini_inPageMiniBackgroundColor, 0)
-        messageTextSize = attrsArray.getDimension(R.styleable.VirtusizeInPageMini_inPageMiniMessageTextSize, -1f)
-        buttonTextSize = attrsArray.getDimension(R.styleable.VirtusizeInPageMini_inPageMiniButtonTextSize, -1f)
+        val attrsArray =
+            context.obtainStyledAttributes(attrs, R.styleable.VirtusizeInPageMini, 0, 0)
+        val buttonStyle = attrsArray.getInt(
+            R.styleable.VirtusizeInPageMini_virtusizeInPageMiniStyle,
+            VirtusizeViewStyle.NONE.value
+        )
+        virtusizeViewStyle = VirtusizeViewStyle.values().firstOrNull { it.value == buttonStyle }
+            ?: VirtusizeViewStyle.NONE
+        virtusizeBackgroundColor =
+            attrsArray.getColor(R.styleable.VirtusizeInPageMini_inPageMiniBackgroundColor, 0)
+        messageTextSize =
+            attrsArray.getDimension(R.styleable.VirtusizeInPageMini_inPageMiniMessageTextSize, -1f)
+        buttonTextSize =
+            attrsArray.getDimension(R.styleable.VirtusizeInPageMini_inPageMiniButtonTextSize, -1f)
         attrsArray.recycle()
         setStyle()
     }
@@ -120,7 +128,12 @@ class VirtusizeInPageMini @JvmOverloads constructor(
         inpageMiniText.visibility = View.VISIBLE
         inpageMiniText.text = configuredContext?.getText(R.string.inpage_short_error_text)
         inpageMiniText.setTextColor(ContextCompat.getColor(context, R.color.color_gray_700))
-        inpageMiniImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_error_hanger))
+        inpageMiniImageView.setImageDrawable(
+            ContextCompat.getDrawable(
+                context,
+                R.drawable.ic_error_hanger
+            )
+        )
         setOnClickListener {}
     }
 
@@ -139,7 +152,12 @@ class VirtusizeInPageMini @JvmOverloads constructor(
      */
     private fun setLoadingScreen(loading: Boolean) {
         if (loading) {
-            inpageMiniLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.virtusizeWhite))
+            inpageMiniLayout.setBackgroundColor(
+                ContextCompat.getColor(
+                    context,
+                    R.color.virtusizeWhite
+                )
+            )
             inpageMiniLoadingText.startAnimation()
         } else {
             inpageMiniLayout.setBackgroundColor(virtusizeBackgroundColor)
@@ -166,7 +184,12 @@ class VirtusizeInPageMini @JvmOverloads constructor(
             inpageMiniButton.setTextColor(virtusizeBackgroundColor)
             setButtonRightArrowColor(virtusizeBackgroundColor)
         } else if (virtusizeViewStyle == VirtusizeViewStyle.TEAL) {
-            inpageMiniLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.virtusizeTeal))
+            inpageMiniLayout.setBackgroundColor(
+                ContextCompat.getColor(
+                    context,
+                    R.color.virtusizeTeal
+                )
+            )
             inpageMiniButton.setTextColor(ContextCompat.getColor(context, R.color.virtusizeTeal))
             setButtonRightArrowColor(ContextCompat.getColor(context, R.color.virtusizeTeal))
         }
@@ -212,19 +235,30 @@ class VirtusizeInPageMini @JvmOverloads constructor(
     private fun setConfiguredDimensions() {
         val additionalSize = if (virtusizeParams.language == VirtusizeLanguage.EN) 2f.spToPx else 0f
         if (messageTextSize != -1f) {
-            inpageMiniLoadingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + additionalSize)
-            inpageMiniText.setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize + additionalSize)
+            inpageMiniLoadingText.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX,
+                messageTextSize + additionalSize
+            )
+            inpageMiniText.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX,
+                messageTextSize + additionalSize
+            )
         } else {
-            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_mini_message_textSize)
-                ?.let {
-                    inpageMiniLoadingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
-                    inpageMiniText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
-                }
+            configuredContext?.resources?.getDimension(
+                R.dimen.virtusize_inpage_mini_message_textSize
+            )?.let {
+                inpageMiniLoadingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+                inpageMiniText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+            }
         }
         if (buttonTextSize != -1f) {
             val size = buttonTextSize + additionalSize
             inpageMiniButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
-            inpageMiniButton.rightDrawable(R.drawable.ic_arrow_right_black, 0.8f * size / 2, 0.8f * size)
+            inpageMiniButton.rightDrawable(
+                R.drawable.ic_arrow_right_black,
+                0.8f * size / 2,
+                0.8f * size
+            )
         } else {
             configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_default_textSize)
                 ?.let {

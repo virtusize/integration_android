@@ -4,6 +4,8 @@ import com.virtusize.libsource.data.local.VirtusizeOrder
 import com.virtusize.libsource.data.local.VirtusizeOrderItem
 import com.virtusize.libsource.data.local.VirtusizeProduct
 import com.virtusize.libsource.data.parsers.ProductCheckJsonParser
+import com.virtusize.libsource.data.remote.Measurement
+import com.virtusize.libsource.data.remote.UserBodyProfile
 import org.json.JSONObject
 
 internal object TestFixtures {

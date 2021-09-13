@@ -9,7 +9,8 @@ class ProductMetaDataHintsJsonParserTest {
 
     @Test
     fun parse_shouldReturnExpectedObject() {
-        val actualProductMetaDataHints = ProductMetaDataHintsJsonParser().parse(TestFixtures.PRODUCT_META_DATA_HINTS)
+        val actualProductMetaDataHints =
+            ProductMetaDataHintsJsonParser().parse(TestFixtures.PRODUCT_META_DATA_HINTS)
 
         val expectedProductMetaDataHints = ProductMetaDataHints(
             "test_apiKey",

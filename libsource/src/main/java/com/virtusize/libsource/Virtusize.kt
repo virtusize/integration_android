@@ -75,7 +75,9 @@ class Virtusize(
                             shouldUpdateUserProducts = false,
                             shouldUpdateBodyProfile = false
                         )
-                        virtusizeRepository.updateInPageRecommendation(type = SizeRecommendationType.compareProduct)
+                        virtusizeRepository.updateInPageRecommendation(
+                            type = SizeRecommendationType.compareProduct
+                        )
                     }
                 }
                 VirtusizeEvents.UserAddedProduct.getEventName() -> {
@@ -84,7 +86,9 @@ class Virtusize(
                             shouldUpdateUserProducts = true,
                             shouldUpdateBodyProfile = false
                         )
-                        virtusizeRepository.updateInPageRecommendation(type = SizeRecommendationType.compareProduct)
+                        virtusizeRepository.updateInPageRecommendation(
+                            type = SizeRecommendationType.compareProduct
+                        )
                     }
                 }
                 VirtusizeEvents.UserDeletedProduct.getEventName() -> {
@@ -114,7 +118,9 @@ class Virtusize(
                     val sizeRecName = event.data?.optString("sizeRecName")
                     CoroutineScope(Main).launch {
                         virtusizeRepository.updateUserBodyRecommendedSize(sizeRecName)
-                        virtusizeRepository.updateInPageRecommendation(type = SizeRecommendationType.body)
+                        virtusizeRepository.updateInPageRecommendation(
+                            type = SizeRecommendationType.body
+                        )
                     }
                 }
                 VirtusizeEvents.UserLoggedIn.getEventName() -> {
@@ -125,7 +131,8 @@ class Virtusize(
                         virtusizeRepository.updateInPageRecommendation()
                     }
                 }
-                VirtusizeEvents.UserLoggedOut.getEventName(), VirtusizeEvents.UserDeletedData.getEventName() -> {
+                VirtusizeEvents.UserLoggedOut.getEventName(),
+                VirtusizeEvents.UserDeletedData.getEventName() -> {
                     // Clears user related data and updates the session,
                     // and then re-fetches user products and body profile from the server
                     CoroutineScope(Main).launch {
@@ -186,13 +193,19 @@ class Virtusize(
                     storeProduct?.apply {
                         virtusizeRepository.i18nLocalization?.let { i18nLocalization ->
                             val trimType =
-                                if (virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
+                                if (virtusizeView is VirtusizeInPageStandard)
+                                    TrimType.MULTIPLELINES
+                                else
+                                    TrimType.ONELINE
                             val recommendationText = getRecommendationText(
                                 i18nLocalization,
                                 userProductRecommendedSize,
                                 userBodyRecommendedSize
                             ).trimI18nText(trimType)
-                            virtusizeView.setRecommendationText(externalProductId, recommendationText)
+                            virtusizeView.setRecommendationText(
+                                externalProductId,
+                                recommendationText
+                            )
                         }
                         if (virtusizeView is VirtusizeInPageStandard) {
                             virtusizeView.setProductImages(
@@ -206,7 +219,8 @@ class Virtusize(
         }
     }
 
-    private var virtusizeRepository: VirtusizeRepository = VirtusizeRepository(context, messageHandler, virtusizePresenter)
+    private var virtusizeRepository: VirtusizeRepository =
+        VirtusizeRepository(context, messageHandler, virtusizePresenter)
 
     // TODO: Remove the array and find a way to have callbacks inside the VirtusizeView
     // This variable holds the Virtusize view that clients use on their application

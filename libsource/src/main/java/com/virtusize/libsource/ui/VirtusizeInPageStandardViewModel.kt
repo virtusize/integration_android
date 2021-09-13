@@ -14,7 +14,8 @@ internal class VirtusizeInPageStandardViewModel(
 
     val productNetworkImageLiveData = MutableLiveData<Pair<VirtusizeProductImageView, Bitmap>>()
 
-    val productPlaceholderImageLiveData = MutableLiveData<Pair<VirtusizeProductImageView, Product>>()
+    val productPlaceholderImageLiveData =
+        MutableLiveData<Pair<VirtusizeProductImageView, Product>>()
 
     val finishLoadingProductImages = MutableLiveData<Boolean>()
 

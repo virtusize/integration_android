@@ -219,7 +219,10 @@ class VirtusizeWebView @JvmOverloads constructor(
                 view.requestFocusNodeHref(message)
                 val url = message.data.getString("url")
                 val title = message.data.getString("title")
-                if (resultMsg.obj != null && resultMsg.obj is WebView.WebViewTransport && isLinkFromVirtusize(url, title)) {
+                if (resultMsg.obj != null &&
+                    resultMsg.obj is WebView.WebViewTransport &&
+                    isLinkFromVirtusize(url, title)
+                ) {
                     val popupWebView = WebView(view.context)
                     popupWebView.settings.javaScriptEnabled = true
                     // For the 403 error with Google Sign-In
@@ -248,7 +251,9 @@ class VirtusizeWebView @JvmOverloads constructor(
                     resultMsg.sendToTarget()
                     return true
                 }
-                return _webChromeClient?.onCreateWindow(view, dialog, userGesture, resultMsg) ?: false
+                return _webChromeClient?.onCreateWindow(
+                    view, dialog, userGesture, resultMsg
+                ) ?: false
             }
 
             override fun onProgressChanged(view: WebView?, newProgress: Int) {

@@ -100,7 +100,8 @@ class VirtusizeApiTaskTest {
             val returnValue = method.invoke(
                 virtusizeApiTask,
                 "",
-                "{\"gender\":\"\",\"age\":null,\"height\":null,\"weight\":null,\"braSize\":null,\"concernAreas\":null,\"bodyData\":null}"
+                "{\"gender\":\"\",\"age\":null,\"height\":null,\"weight\":null,\"braSize\":null," +
+                    "\"concernAreas\":null,\"bodyData\":null}"
             )
             assertThat(returnValue).isNull()
         }

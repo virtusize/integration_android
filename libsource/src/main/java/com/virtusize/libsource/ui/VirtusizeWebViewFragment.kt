@@ -27,9 +27,11 @@ import org.json.JSONObject
 
 class VirtusizeWebViewFragment : DialogFragment() {
 
-    private var virtusizeWebAppUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-webview.html"
+    private var virtusizeWebAppUrl =
+        "https://static.api.virtusize.jp/a/aoyama/latest/sdk-webview.html"
     private var vsParamsFromSDKScript = ""
-    private var backButtonClickEventFromSDKScript = "javascript:vsEventFromSDK({ name: 'sdk-back-button-tapped'})"
+    private var backButtonClickEventFromSDKScript =
+        "javascript:vsEventFromSDK({ name: 'sdk-back-button-tapped'})"
 
     private var virtusizeMessageHandler: VirtusizeMessageHandler? = null
     private lateinit var clientProduct: VirtusizeProduct
@@ -72,7 +74,10 @@ class VirtusizeWebViewFragment : DialogFragment() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 if (url != null && url.contains(virtusizeWebAppUrl)) {
                     webView?.evaluateJavascript(vsParamsFromSDKScript, null)
-                    webView?.evaluateJavascript("javascript:window.virtusizeSNSEnabled = true;", null)
+                    webView?.evaluateJavascript(
+                        "javascript:window.virtusizeSNSEnabled = true;",
+                        null
+                    )
                     getBrowserIDFromCookies()?.let { bid ->
                         if (bid != sharedPreferencesHelper.getBrowserId()) {
                             sharedPreferencesHelper.storeBrowserId(bid)
@@ -230,7 +235,10 @@ class VirtusizeWebViewFragment : DialogFragment() {
 
     private fun userAcceptedPrivacyPolicy() {
         webView.post {
-            webView.evaluateJavascript("localStorage.setItem('acceptedPrivacyPolicy','true');", null)
+            webView.evaluateJavascript(
+                "localStorage.setItem('acceptedPrivacyPolicy','true');",
+                null
+            )
         }
     }
 }

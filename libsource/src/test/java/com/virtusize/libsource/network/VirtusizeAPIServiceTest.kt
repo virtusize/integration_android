@@ -7,6 +7,17 @@ import com.google.common.truth.Truth.assertThat
 import com.virtusize.libsource.MainCoroutineRule
 import com.virtusize.libsource.TestUtils
 import com.virtusize.libsource.VirtusizeBuilder
+import com.virtusize.libsource.data.local.VirtusizeEnvironment
+import com.virtusize.libsource.data.local.VirtusizeErrorType
+import com.virtusize.libsource.data.local.VirtusizeEvent
+import com.virtusize.libsource.data.local.VirtusizeLanguage
+import com.virtusize.libsource.data.local.message
+import com.virtusize.libsource.data.remote.BrandSizing
+import com.virtusize.libsource.data.remote.Measurement
+import com.virtusize.libsource.data.remote.ProductSize
+import com.virtusize.libsource.data.remote.ProductType
+import com.virtusize.libsource.data.remote.StoreProductAdditionalInfo
+import com.virtusize.libsource.data.remote.Weight
 import com.virtusize.libsource.fixtures.ProductFixtures
 import com.virtusize.libsource.fixtures.TestFixtures
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -57,7 +68,8 @@ class VirtusizeAPIServiceTest {
             )
         )
 
-        val actualProductCheck = virtusizeAPIService.productDataCheck(TestFixtures.VIRTUSIZE_PRODUCT).successData
+        val actualProductCheck =
+            virtusizeAPIService.productDataCheck(TestFixtures.VIRTUSIZE_PRODUCT).successData
 
         assertThat(actualProductCheck?.name).isEqualTo("backend-checked-product")
         assertThat(actualProductCheck?.data?.productTypeName).isEqualTo("pants")
@@ -76,10 +88,14 @@ class VirtusizeAPIServiceTest {
         virtusizeAPIService.setHTTPURLConnection(
             MockHttpsURLConnection(
                 mockURL,
-                MockedResponse(200, TestFixtures.INVALID_PRODUCT_DATA_CHECK.toString().byteInputStream())
+                MockedResponse(
+                    200,
+                    TestFixtures.INVALID_PRODUCT_DATA_CHECK.toString().byteInputStream()
+                )
             )
         )
-        val actualProductCheck = virtusizeAPIService.productDataCheck(TestFixtures.VIRTUSIZE_PRODUCT).successData
+        val actualProductCheck =
+            virtusizeAPIService.productDataCheck(TestFixtures.VIRTUSIZE_PRODUCT).successData
 
         assertThat(actualProductCheck?.name).isEqualTo("backend-checked-product")
         assertThat(actualProductCheck?.data?.validProduct).isFalse()
@@ -91,11 +107,16 @@ class VirtusizeAPIServiceTest {
         virtusizeAPIService.setHTTPURLConnection(
             MockHttpsURLConnection(
                 mockURL,
-                MockedResponse(HttpURLConnection.HTTP_FORBIDDEN, "{ \"Code\": \"ForbiddenError\", \"Message\": \"ForbiddenError: \" }".byteInputStream())
+                MockedResponse(
+                    HttpURLConnection.HTTP_FORBIDDEN,
+                    "{ \"Code\": \"ForbiddenError\", \"Message\": \"ForbiddenError: \" }"
+                        .byteInputStream()
+                )
             )
         )
 
-        val actualError = virtusizeAPIService.productDataCheck(TestFixtures.VIRTUSIZE_PRODUCT).failureData
+        val actualError =
+            virtusizeAPIService.productDataCheck(TestFixtures.VIRTUSIZE_PRODUCT).failureData
 
         assertThat(actualError?.code).isEqualTo(HttpURLConnection.HTTP_FORBIDDEN)
         assertThat(actualError?.message).isEqualTo(VirtusizeErrorType.ApiKeyNullOrInvalid.message())
@@ -103,31 +124,53 @@ class VirtusizeAPIServiceTest {
     }
 
     @Test
-    fun testSendProductImageToBackend_whenSuccessful_hasExpectedProductMetaDataHints() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(
-            MockHttpsURLConnection(
-                mockURL,
-                MockedResponse(200, TestFixtures.PRODUCT_META_DATA_HINTS.toString().byteInputStream())
+    fun testSendProductImageToBackend_whenSuccessful_hasExpectedProductMetaDataHints() =
+        runBlocking {
+            virtusizeAPIService.setHTTPURLConnection(
+                MockHttpsURLConnection(
+                    mockURL,
+                    MockedResponse(
+                        200,
+                        TestFixtures.PRODUCT_META_DATA_HINTS.toString().byteInputStream()
+                    )
+                )
             )
-        )
 
-        val actualProductMetaDataHints = virtusizeAPIService.sendProductImageToBackend(TestFixtures.VIRTUSIZE_PRODUCT).successData
+            val actualProductMetaDataHints =
+                virtusizeAPIService.sendProductImageToBackend(
+                    TestFixtures.VIRTUSIZE_PRODUCT
+                ).successData
 
-        assertThat(actualProductMetaDataHints?.apiKey).isEqualTo(TestFixtures.API_KEY)
-        assertThat(actualProductMetaDataHints?.imageUrl).isEqualTo("http://www.test.com/goods/31/12/11/71/1234_COL_COL02_570.jpg")
-        assertThat(actualProductMetaDataHints?.cloudinaryPublicId).isEqualTo("test_cloudinaryPublicId")
-        assertThat(actualProductMetaDataHints?.externalProductId).isEqualTo("694")
-    }
+            assertThat(actualProductMetaDataHints?.apiKey).isEqualTo(TestFixtures.API_KEY)
+            assertThat(
+                actualProductMetaDataHints?.imageUrl
+            ).isEqualTo(
+                "http://www.test.com/goods/31/12/11/71/1234_COL_COL02_570.jpg"
+            )
+            assertThat(
+                actualProductMetaDataHints?.cloudinaryPublicId
+            ).isEqualTo(
+                "test_cloudinaryPublicId"
+            )
+            assertThat(actualProductMetaDataHints?.externalProductId).isEqualTo("694")
+        }
 
     @Test
     fun testSendProductImageToBackend_whenFailed_hasExpectedErrorInfo() = runBlocking {
         virtusizeAPIService.setHTTPURLConnection(
             MockHttpsURLConnection(
                 mockURL,
-                MockedResponse(500, INTERNAL_SERVER_ERROR_RESPONSE.byteInputStream(), null)
+                MockedResponse(
+                    500,
+                    INTERNAL_SERVER_ERROR_RESPONSE.byteInputStream(),
+                    null
+                )
             )
         )
-        val actualError = virtusizeAPIService.sendProductImageToBackend(TestFixtures.VIRTUSIZE_PRODUCT).failureData
+        val actualError =
+            virtusizeAPIService.sendProductImageToBackend(
+                TestFixtures.VIRTUSIZE_PRODUCT
+            ).failureData
 
         assertThat(actualError?.code).isEqualTo(500)
         assertThat(actualError?.message).contains(INTERNAL_SERVER_ERROR_RESPONSE)
@@ -146,7 +189,8 @@ class VirtusizeAPIServiceTest {
             )
         )
 
-        val sendEventResponse = virtusizeAPIService.sendEvent(VirtusizeEvent("user-saw-product", null))
+        val sendEventResponse =
+            virtusizeAPIService.sendEvent(VirtusizeEvent("user-saw-product", null))
 
         assertThat(sendEventResponse.isSuccessful).isTrue()
     }
@@ -214,106 +258,123 @@ class VirtusizeAPIServiceTest {
             )
         )
 
-        val sendOrderResponse = virtusizeAPIService.sendOrder("", TestFixtures.VIRTUSIZE_ORDER)
+        val sendOrderResponse = virtusizeAPIService.sendOrder(
+            "",
+            TestFixtures.VIRTUSIZE_ORDER
+        )
 
         assertThat(sendOrderResponse.isSuccessful).isTrue()
     }
 
     @Test
-    fun testGetStoreProductInfo_whenSuccessful_onSuccessShouldReturnExpectedStoreProduct() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(
-            MockHttpsURLConnection(
-                mockURL,
-                MockedResponse(200, ProductFixtures.STORE_PRODUCT_INFO_JSON_DATA.toString().byteInputStream())
-            )
-        )
-
-        val actualProduct = virtusizeAPIService.getStoreProduct(TestFixtures.PRODUCT_ID).successData
-
-        assertThat(actualProduct?.id).isEqualTo(TestFixtures.PRODUCT_ID)
-        assertThat(actualProduct?.sizes?.size).isEqualTo(2)
-        assertThat(actualProduct?.externalId).isEqualTo(TestFixtures.EXTERNAL_ID)
-        assertThat(actualProduct?.productType).isEqualTo(8)
-        assertThat(actualProduct?.name).isEqualTo(TestFixtures.PRODUCT_NAME)
-        assertThat(actualProduct?.storeId).isEqualTo(TestFixtures.STORE_ID)
-        assertThat(actualProduct?.storeProductMeta?.id).isEqualTo(1)
-        assertThat(actualProduct?.storeProductMeta?.id).isEqualTo(1)
-        val expectedAdditionalInfo = StoreProductAdditionalInfo(
-            "Virtusize",
-            "female",
-            mutableSetOf(
-                ProductSize(
-                    "38",
-                    mutableSetOf(
-                        Measurement("height", 760),
-                        Measurement("bust", 660),
-                        Measurement("sleeve", 845)
-                    )
-                ),
-                ProductSize(
-                    "36",
-                    mutableSetOf(
-                        Measurement("height", 750),
-                        Measurement("bust", 645),
-                        Measurement("sleeve", 825)
+    fun testGetStoreProductInfo_whenSuccessful_onSuccessShouldReturnExpectedStoreProduct() =
+        runBlocking {
+            virtusizeAPIService.setHTTPURLConnection(
+                MockHttpsURLConnection(
+                    mockURL,
+                    MockedResponse(
+                        200,
+                        ProductFixtures.STORE_PRODUCT_INFO_JSON_DATA.toString().byteInputStream()
                     )
                 )
-            ),
-            mutableMapOf(
-                "hip" to 85,
-                "size" to "38",
-                "waist" to 56,
-                "bust" to 78,
-                "height" to 165
-            ),
-            "regular",
-            "fashionable",
-            BrandSizing("large", false)
-        )
-        assertThat(actualProduct?.storeProductMeta?.additionalInfo).isEqualTo(expectedAdditionalInfo)
-    }
+            )
+
+            val actualProduct =
+                virtusizeAPIService.getStoreProduct(TestFixtures.PRODUCT_ID).successData
+
+            assertThat(actualProduct?.id).isEqualTo(TestFixtures.PRODUCT_ID)
+            assertThat(actualProduct?.sizes?.size).isEqualTo(2)
+            assertThat(actualProduct?.externalId).isEqualTo(TestFixtures.EXTERNAL_ID)
+            assertThat(actualProduct?.productType).isEqualTo(8)
+            assertThat(actualProduct?.name).isEqualTo(TestFixtures.PRODUCT_NAME)
+            assertThat(actualProduct?.storeId).isEqualTo(TestFixtures.STORE_ID)
+            assertThat(actualProduct?.storeProductMeta?.id).isEqualTo(1)
+            assertThat(actualProduct?.storeProductMeta?.id).isEqualTo(1)
+            val expectedAdditionalInfo = StoreProductAdditionalInfo(
+                "Virtusize",
+                "female",
+                mutableSetOf(
+                    ProductSize(
+                        "38",
+                        mutableSetOf(
+                            Measurement("height", 760),
+                            Measurement("bust", 660),
+                            Measurement("sleeve", 845)
+                        )
+                    ),
+                    ProductSize(
+                        "36",
+                        mutableSetOf(
+                            Measurement("height", 750),
+                            Measurement("bust", 645),
+                            Measurement("sleeve", 825)
+                        )
+                    )
+                ),
+                mutableMapOf(
+                    "hip" to 85,
+                    "size" to "38",
+                    "waist" to 56,
+                    "bust" to 78,
+                    "height" to 165
+                ),
+                "regular",
+                "fashionable",
+                BrandSizing("large", false)
+            )
+            assertThat(actualProduct?.storeProductMeta?.additionalInfo).isEqualTo(
+                expectedAdditionalInfo
+            )
+        }
 
     @Test
-    fun testGetProductTypesResponse_whenSuccessful_onSuccessShouldReturnExpectedProductTypeList() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(
-            MockHttpsURLConnection(
-                mockURL,
-                MockedResponse(200, ProductFixtures.PRODUCT_TYPE_JSON_ARRAY.toString().byteInputStream())
+    fun testGetProductTypesResponse_whenSuccessful_onSuccessShouldReturnExpectedProductTypeList() =
+        runBlocking {
+            virtusizeAPIService.setHTTPURLConnection(
+                MockHttpsURLConnection(
+                    mockURL,
+                    MockedResponse(
+                        200,
+                        ProductFixtures.PRODUCT_TYPE_JSON_ARRAY.toString().byteInputStream()
+                    )
+                )
             )
-        )
 
-        val actualProductTypeList = virtusizeAPIService.getProductTypes().successData
+            val actualProductTypeList = virtusizeAPIService.getProductTypes().successData
 
-        assertThat(actualProductTypeList?.size).isEqualTo(4)
-        assertThat(actualProductTypeList?.get(0)).isEqualTo(
-            ProductType(
-                1,
-                "dress",
-                mutableSetOf(
-                    Weight("bust", 1f),
-                    Weight("waist", 1f),
-                    Weight("height", 0.25f)
-                ),
-                mutableListOf(1, 16)
+            assertThat(actualProductTypeList?.size).isEqualTo(4)
+            assertThat(actualProductTypeList?.get(0)).isEqualTo(
+                ProductType(
+                    1,
+                    "dress",
+                    mutableSetOf(
+                        Weight("bust", 1f),
+                        Weight("waist", 1f),
+                        Weight("height", 0.25f)
+                    ),
+                    mutableListOf(1, 16)
+                )
             )
-        )
-        assertThat(actualProductTypeList?.get(3)).isEqualTo(
-            ProductType(
-                18,
-                "bag",
-                mutableSetOf(
-                    Weight("depth", 1f),
-                    Weight("width", 2f),
-                    Weight("height", 1f)
-                ),
-                mutableListOf(18, 19, 25, 26)
+            assertThat(actualProductTypeList?.get(3)).isEqualTo(
+                ProductType(
+                    18,
+                    "bag",
+                    mutableSetOf(
+                        Weight("depth", 1f),
+                        Weight("width", 2f),
+                        Weight("height", 1f)
+                    ),
+                    mutableListOf(18, 19, 25, 26)
+                )
             )
-        )
-    }
+        }
 
     @Test
     fun testGetDeleteUserResponse() = runBlocking {
-        val expectedDeleteUserJsonResponse = "{\"wardrobe(s) deleted from DB\":1,\"user product(s) deleted from DB\":1,\"duration\":0.04}"
+        val expectedDeleteUserJsonResponse = "{" +
+            "\"wardrobe(s) deleted from DB\":1," +
+            "\"user product(s) deleted from DB\":1,\"duration\":0.04" +
+            "}"
         virtusizeAPIService.setHTTPURLConnection(
             MockHttpsURLConnection(
                 mockURL,
@@ -326,55 +387,66 @@ class VirtusizeAPIServiceTest {
     }
 
     @Test
-    fun testGetUserProductsResponse_userHasItemsInTheWardrobe_shouldReturnExpectedUserProducts() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(
-            MockHttpsURLConnection(
-                mockURL,
-                MockedResponse(200, ProductFixtures.USER_PRODUCT_JSON_ARRAY.toString().byteInputStream())
+    fun testGetUserProductsResponse_userHasItemsInTheWardrobe_shouldReturnExpectedUserProducts() =
+        runBlocking {
+            virtusizeAPIService.setHTTPURLConnection(
+                MockHttpsURLConnection(
+                    mockURL,
+                    MockedResponse(
+                        200,
+                        ProductFixtures.USER_PRODUCT_JSON_ARRAY.toString().byteInputStream()
+                    )
+                )
             )
-        )
 
-        val actualUserProductList = virtusizeAPIService.getUserProducts().successData
+            val actualUserProductList = virtusizeAPIService.getUserProducts().successData
 
-        assertThat(actualUserProductList?.size).isEqualTo(2)
-        assertThat(actualUserProductList?.get(0)?.id).isEqualTo(123456)
-        assertThat(actualUserProductList?.get(0)?.sizes?.size).isEqualTo(1)
-        assertThat(actualUserProductList?.get(0)?.sizes?.get(0)?.name).isEqualTo("S")
-        assertThat(actualUserProductList?.get(1)?.id).isEqualTo(654321)
-        assertThat(actualUserProductList?.get(1)?.sizes?.get(0)?.name).isEqualTo("")
-        assertThat(actualUserProductList?.get(1)?.sizes?.get(0)?.measurements).isEqualTo(
-            mutableSetOf(
-                Measurement("height", 820),
-                Measurement("bust", 520),
-                Measurement("sleeve", 930)
+            assertThat(actualUserProductList?.size).isEqualTo(2)
+            assertThat(actualUserProductList?.get(0)?.id).isEqualTo(123456)
+            assertThat(actualUserProductList?.get(0)?.sizes?.size).isEqualTo(1)
+            assertThat(actualUserProductList?.get(0)?.sizes?.get(0)?.name).isEqualTo("S")
+            assertThat(actualUserProductList?.get(1)?.id).isEqualTo(654321)
+            assertThat(actualUserProductList?.get(1)?.sizes?.get(0)?.name).isEqualTo("")
+            assertThat(actualUserProductList?.get(1)?.sizes?.get(0)?.measurements).isEqualTo(
+                mutableSetOf(
+                    Measurement("height", 820),
+                    Measurement("bust", 520),
+                    Measurement("sleeve", 930)
+                )
             )
-        )
-        assertThat(actualUserProductList?.get(1)?.productType).isEqualTo(2)
-        assertThat(actualUserProductList?.get(1)?.name).isEqualTo("test2")
-        assertThat(actualUserProductList?.get(1)?.cloudinaryPublicId).isEqualTo("")
-        assertThat(actualUserProductList?.get(1)?.isFavorite).isEqualTo(true)
-    }
+            assertThat(actualUserProductList?.get(1)?.productType).isEqualTo(2)
+            assertThat(actualUserProductList?.get(1)?.name).isEqualTo("test2")
+            assertThat(actualUserProductList?.get(1)?.cloudinaryPublicId).isEqualTo("")
+            assertThat(actualUserProductList?.get(1)?.isFavorite).isEqualTo(true)
+        }
 
     @Test
-    fun testGetUserProductsResponse_userHasEmptyWardrobe_shouldReturnEmptyUserProductList() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(
-            MockHttpsURLConnection(
-                mockURL,
-                MockedResponse(200, ProductFixtures.EMPTY_PRODUCT_JSON_ARRAY.toString().byteInputStream())
+    fun testGetUserProductsResponse_userHasEmptyWardrobe_shouldReturnEmptyUserProductList() =
+        runBlocking {
+            virtusizeAPIService.setHTTPURLConnection(
+                MockHttpsURLConnection(
+                    mockURL,
+                    MockedResponse(
+                        200,
+                        ProductFixtures.EMPTY_PRODUCT_JSON_ARRAY.toString().byteInputStream()
+                    )
+                )
             )
-        )
 
-        val actualUserProductList = virtusizeAPIService.getUserProducts().successData
+            val actualUserProductList = virtusizeAPIService.getUserProducts().successData
 
-        assertThat(actualUserProductList?.size).isEqualTo(0)
-    }
+            assertThat(actualUserProductList?.size).isEqualTo(0)
+        }
 
     @Test
     fun testGetUserProductsResponse_wardrobeDoesNotExist_shouldReturn404Error() = runBlocking {
         virtusizeAPIService.setHTTPURLConnection(
             MockHttpsURLConnection(
                 mockURL,
-                MockedResponse(404, ProductFixtures.WARDROBE_NOT_FOUND_ERROR_JSONObject.toString().byteInputStream())
+                MockedResponse(
+                    404,
+                    ProductFixtures.WARDROBE_NOT_FOUND_ERROR_JSONObject.toString().byteInputStream()
+                )
             )
         )
 
@@ -386,54 +458,61 @@ class VirtusizeAPIServiceTest {
     }
 
     @Test
-    fun testGetUserBodyProfileResponse_userHasValidBodyProfile_shouldReturnExpectedBodyProfile() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(
-            MockHttpsURLConnection(
-                mockURL,
-                MockedResponse(200, TestFixtures.USER_BODY_JSONObject.toString().byteInputStream())
+    fun testGetUserBodyProfileResponse_userHasValidBodyProfile_shouldReturnExpectedBodyProfile() =
+        runBlocking {
+            virtusizeAPIService.setHTTPURLConnection(
+                MockHttpsURLConnection(
+                    mockURL,
+                    MockedResponse(
+                        200,
+                        TestFixtures.USER_BODY_JSONObject.toString().byteInputStream()
+                    )
+                )
             )
-        )
 
-        val actualUserBodyProfile = virtusizeAPIService.getUserBodyProfile().successData
+            val actualUserBodyProfile = virtusizeAPIService.getUserBodyProfile().successData
 
-        assertThat(actualUserBodyProfile?.age).isEqualTo(32)
-        assertThat(actualUserBodyProfile?.gender).isEqualTo("female")
-        assertThat(actualUserBodyProfile?.height).isEqualTo(1630)
-        assertThat(actualUserBodyProfile?.weight).isEqualTo("50.00")
-        assertThat(actualUserBodyProfile?.bodyData).isEqualTo(
-            mutableSetOf(
-                Measurement("hip", 830),
-                Measurement("hip", 830),
-                Measurement("bust", 755),
-                Measurement("neck", 300),
-                Measurement("rise", 215),
-                Measurement("bicep", 220),
-                Measurement("thigh", 480),
-                Measurement("waist", 630),
-                Measurement("inseam", 700),
-                Measurement("sleeve", 720),
-                Measurement("shoulder", 370),
-                Measurement("hipWidth", 300),
-                Measurement("bustWidth", 245),
-                Measurement("hipHeight", 750),
-                Measurement("headHeight", 215),
-                Measurement("kneeHeight", 395),
-                Measurement("waistWidth", 225),
-                Measurement("waistHeight", 920),
-                Measurement("armpitHeight", 1130),
-                Measurement("sleeveLength", 520),
-                Measurement("shoulderWidth", 340),
-                Measurement("shoulderHeight", 1240)
+            assertThat(actualUserBodyProfile?.age).isEqualTo(32)
+            assertThat(actualUserBodyProfile?.gender).isEqualTo("female")
+            assertThat(actualUserBodyProfile?.height).isEqualTo(1630)
+            assertThat(actualUserBodyProfile?.weight).isEqualTo("50.00")
+            assertThat(actualUserBodyProfile?.bodyData).isEqualTo(
+                mutableSetOf(
+                    Measurement("hip", 830),
+                    Measurement("hip", 830),
+                    Measurement("bust", 755),
+                    Measurement("neck", 300),
+                    Measurement("rise", 215),
+                    Measurement("bicep", 220),
+                    Measurement("thigh", 480),
+                    Measurement("waist", 630),
+                    Measurement("inseam", 700),
+                    Measurement("sleeve", 720),
+                    Measurement("shoulder", 370),
+                    Measurement("hipWidth", 300),
+                    Measurement("bustWidth", 245),
+                    Measurement("hipHeight", 750),
+                    Measurement("headHeight", 215),
+                    Measurement("kneeHeight", 395),
+                    Measurement("waistWidth", 225),
+                    Measurement("waistHeight", 920),
+                    Measurement("armpitHeight", 1130),
+                    Measurement("sleeveLength", 520),
+                    Measurement("shoulderWidth", 340),
+                    Measurement("shoulderHeight", 1240)
+                )
             )
-        )
-    }
+        }
 
     @Test
     fun testGetUserBodyProfileResponse_userHasEmptyBodyProfile_shouldExpectNull() = runBlocking {
         virtusizeAPIService.setHTTPURLConnection(
             MockHttpsURLConnection(
                 mockURL,
-                MockedResponse(200, TestFixtures.NULL_USER_BODY_PROFILE.toString().byteInputStream())
+                MockedResponse(
+                    200,
+                    TestFixtures.NULL_USER_BODY_PROFILE.toString().byteInputStream()
+                )
             )
         )
 
@@ -447,7 +526,10 @@ class VirtusizeAPIServiceTest {
         virtusizeAPIService.setHTTPURLConnection(
             MockHttpsURLConnection(
                 mockURL,
-                MockedResponse(404, ProductFixtures.WARDROBE_NOT_FOUND_ERROR_JSONObject.toString().byteInputStream())
+                MockedResponse(
+                    404,
+                    ProductFixtures.WARDROBE_NOT_FOUND_ERROR_JSONObject.toString().byteInputStream()
+                )
             )
         )
 
@@ -462,40 +544,57 @@ class VirtusizeAPIServiceTest {
         virtusizeAPIService.setHTTPURLConnection(
             MockHttpsURLConnection(
                 mockURL,
-                MockedResponse(200, TestUtils.readFileFromAssets("/i18n_en.json").toString().byteInputStream())
+                MockedResponse(
+                    200,
+                    TestUtils.readFileFromAssets("/i18n_en.json").toString().byteInputStream()
+                )
             )
         )
 
         val actualI18nLocalization = virtusizeAPIService.getI18n(VirtusizeLanguage.EN).successData
 
-        assertThat(actualI18nLocalization?.defaultNoDataText).isEqualTo("Find the right size before purchasing")
-        assertThat(actualI18nLocalization?.defaultAccessoryText).isEqualTo("See how everyday items fit")
+        assertThat(
+            actualI18nLocalization?.defaultNoDataText
+        ).isEqualTo(
+            "Find the right size before purchasing"
+        )
+        assertThat(
+            actualI18nLocalization?.defaultAccessoryText
+        ).isEqualTo(
+            "See how everyday items fit"
+        )
     }
 
     @Test
-    fun testBodyRecommendedSize_whenSuccessful_shouldReturnExpectedBodyProfileRecommendedSize() = runBlocking {
-        virtusizeAPIService.setHTTPURLConnection(
-            MockHttpsURLConnection(
-                mockURL,
-                MockedResponse(200, "{\"sizeName\": \"29/33\"}".byteInputStream())
+    fun testBodyRecommendedSize_whenSuccessful_shouldReturnExpectedBodyProfileRecommendedSize() =
+        runBlocking {
+            virtusizeAPIService.setHTTPURLConnection(
+                MockHttpsURLConnection(
+                    mockURL,
+                    MockedResponse(200, "{\"sizeName\": \"29/33\"}".byteInputStream())
+                )
             )
-        )
 
-        val actualBodyProfileRecommendedSize = virtusizeAPIService.getBodyProfileRecommendedSize(
-            ProductFixtures.productTypes(),
-            ProductFixtures.storeProduct(),
-            TestFixtures.userBodyProfile
-        ).successData
+            val actualBodyProfileRecommendedSize =
+                virtusizeAPIService.getBodyProfileRecommendedSize(
+                    ProductFixtures.productTypes(),
+                    ProductFixtures.storeProduct(),
+                    TestFixtures.userBodyProfile
+                ).successData
 
-        assertThat(actualBodyProfileRecommendedSize?.sizeName).isEqualTo("29/33")
-    }
+            assertThat(actualBodyProfileRecommendedSize?.sizeName).isEqualTo("29/33")
+        }
 
     @Test
     fun testBodyRecommendedSize_whenStoreProductIsAnAccessory_shouldReturn400Error() = runBlocking {
         virtusizeAPIService.setHTTPURLConnection(
             MockHttpsURLConnection(
                 URL("https://services.virtusize.com/stg/ds-functions/size-rec/get-size"),
-                MockedResponse(400, "{\"Code\": \"BadRequestError\", \"Message\": \"BadRequestError: \"}".byteInputStream())
+                MockedResponse(
+                    400,
+                    "{\"Code\": \"BadRequestError\", \"Message\": \"BadRequestError: \"}"
+                        .byteInputStream()
+                )
             )
         )
 
@@ -508,14 +607,22 @@ class VirtusizeAPIServiceTest {
         val actualError = (actualApiResponse as? VirtusizeApiResponse.Error)?.error
 
         assertThat(actualError?.code).isEqualTo(HttpURLConnection.HTTP_BAD_REQUEST)
-        assertThat(actualError?.message).contains("/stg/ds-functions/size-rec/get-size - {\"Code\": \"BadRequestError\", \"Message\": \"BadRequestError: \"}")
+        assertThat(
+            actualError?.message
+        ).contains(
+            "/stg/ds-functions/size-rec/get-size" +
+                " - {\"Code\": \"BadRequestError\", \"Message\": \"BadRequestError: \"}"
+        )
         assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.APIError)
     }
 
     companion object {
-        private const val INTERNAL_SERVER_ERROR_RESPONSE = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n<title>500 Internal Server Error</title>\n" +
-            "<h1>Internal Server Error</h1>\n" +
-            "<p>The server encountered an internal error and was unable to complete your request.  " +
-            "Either the server is overloaded or there is an error in the application.</p>"
+        private const val INTERNAL_SERVER_ERROR_RESPONSE =
+            "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n" +
+                "<title>500 Internal Server Error</title>\n" +
+                "<h1>Internal Server Error</h1>\n" +
+                "<p>The server encountered an internal error" +
+                " and was unable to complete your request." +
+                "Either the server is overloaded or there is an error in the application.</p>"
     }
 }

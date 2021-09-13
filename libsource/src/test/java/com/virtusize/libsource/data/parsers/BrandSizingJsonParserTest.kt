@@ -22,7 +22,8 @@ class BrandSizingJsonParserTest {
 
     @Test
     fun parse_emptyJsonData_shouldReturnExpectedObject() {
-        val actualAdditionalInfo = StoreProductAdditionalInfoJsonParser().parse(TestFixtures.EMPTY_JSON_DATA)
+        val actualAdditionalInfo =
+            StoreProductAdditionalInfoJsonParser().parse(TestFixtures.EMPTY_JSON_DATA)
 
         Truth.assertThat(actualAdditionalInfo).isNull()
     }

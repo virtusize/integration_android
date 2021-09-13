@@ -15,7 +15,8 @@ import kotlinx.android.synthetic.main.view_product_image.view.*
 /**
  * A custom class for a product image view
  */
-internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
+internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet) :
+    LinearLayout(context, attrs) {
 
     // The product type to determine the UI style
     private var productImageType: ProductImageType = ProductImageType.STORE
@@ -44,9 +45,19 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet) 
         ]
 
         if (productImageType == ProductImageType.USER) {
-            inpageBorderImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_image_border_green_dash))
+            inpageBorderImageView.setImageDrawable(
+                ContextCompat.getDrawable(
+                    context,
+                    R.drawable.ic_image_border_green_dash
+                )
+            )
         } else {
-            inpageBorderImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_image_border_gray))
+            inpageBorderImageView.setImageDrawable(
+                ContextCompat.getDrawable(
+                    context,
+                    R.drawable.ic_image_border_gray
+                )
+            )
         }
 
         typedArray.recycle()
@@ -68,7 +79,12 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet) 
      */
     fun setProductPlaceHolderImage(productType: Int?, style: String?) {
         if (productImageType == ProductImageType.STORE) {
-            inpageProductCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.color_gray_200))
+            inpageProductCardView.setCardBackgroundColor(
+                ContextCompat.getColor(
+                    context,
+                    R.color.color_gray_200
+                )
+            )
         }
         inpageProductImageView.setImageDrawable(getProductPlaceholderImage(productType, style))
         inpageProductImageView.setPadding(6.dpInPx, 6.dpInPx, 6.dpInPx, 6.dpInPx)
@@ -93,7 +109,12 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet) 
         if (productImageType == ProductImageType.USER) {
             productPlaceholderImage?.setTint(ContextCompat.getColor(context, R.color.virtusizeTeal))
         } else {
-            productPlaceholderImage?.setTint(ContextCompat.getColor(context, R.color.virtusizeBlack))
+            productPlaceholderImage?.setTint(
+                ContextCompat.getColor(
+                    context,
+                    R.color.virtusizeBlack
+                )
+            )
         }
         return productPlaceholderImage
     }

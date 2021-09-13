@@ -25,8 +25,12 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.net.HttpURLConnection
 
-class VirtusizeFlutterRepository(context: Context, private val messageHandler: VirtusizeMessageHandler) {
-    private val apiService: VirtusizeAPIService = VirtusizeAPIService.getInstance(context, messageHandler)
+class VirtusizeFlutterRepository(
+    context: Context,
+    private val messageHandler: VirtusizeMessageHandler
+) {
+    private val apiService: VirtusizeAPIService =
+        VirtusizeAPIService.getInstance(context, messageHandler)
     private val sharedPreferencesHelper: SharedPreferencesHelper =
         SharedPreferencesHelper.getInstance(context)
 
@@ -55,7 +59,11 @@ class VirtusizeFlutterRepository(context: Context, private val messageHandler: V
                             val sendProductImageResponse =
                                 apiService.sendProductImageToBackend(product = product)
                             if (!sendProductImageResponse.isSuccessful) {
-                                sendProductImageResponse.failureData?.let { messageHandler.onError(it) }
+                                sendProductImageResponse.failureData?.let {
+                                    messageHandler.onError(
+                                        it
+                                    )
+                                }
                             }
                         } else {
                             VirtusizeErrorType.ImageUrlNotValid.throwError()
@@ -85,7 +93,8 @@ class VirtusizeFlutterRepository(context: Context, private val messageHandler: V
 
     suspend fun getProductTypes() = apiService.getProductTypes().successData
 
-    suspend fun getI18nLocalization(language: VirtusizeLanguage?) = apiService.getI18n(language).successData
+    suspend fun getI18nLocalization(language: VirtusizeLanguage?) =
+        apiService.getI18n(language).successData
 
     suspend fun getUserSessionResponse(): String? {
         val userSessionInfo = apiService.getUserSessionInfo().successData
@@ -105,7 +114,11 @@ class VirtusizeFlutterRepository(context: Context, private val messageHandler: V
             sharedPreferencesHelper.storeBrowserId(userAutoData?.bid)
             sharedPreferencesHelper.storeAuthToken(userAutoData?.auth)
         } catch (e: JSONException) {
-            messageHandler.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(extraMessage = e.localizedMessage))
+            messageHandler.onError(
+                VirtusizeErrorType.JsonParsingError.virtusizeError(
+                    extraMessage = e.localizedMessage
+                )
+            )
         }
     }
 
@@ -151,7 +164,10 @@ class VirtusizeFlutterRepository(context: Context, private val messageHandler: V
         val storeInfoResponse = apiService.getStoreInfo()
         if (storeInfoResponse.isSuccessful) {
             val sendOrderResponse =
-                apiService.sendOrder(storeInfoResponse.successData?.region, VirtusizeOrder.parseMap(orderMap))
+                apiService.sendOrder(
+                    storeInfoResponse.successData?.region,
+                    VirtusizeOrder.parseMap(orderMap)
+                )
             if (sendOrderResponse.isSuccessful) {
                 onSuccess?.invoke(sendOrderResponse.successData)
             } else {

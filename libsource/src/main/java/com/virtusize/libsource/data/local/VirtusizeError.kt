@@ -7,4 +7,8 @@ package com.virtusize.libsource.data.local
  * @param code Any error code that is wanted to passed
  * @param message Any error message that is wanted to be passed
  */
-data class VirtusizeError(val type: VirtusizeErrorType? = null, val code: Int? = null, val message: String)
+data class VirtusizeError(
+    val type: VirtusizeErrorType? = null,
+    val code: Int? = null,
+    val message: String
+)

@@ -26,31 +26,41 @@ data class I18nLocalization(
      * Gets the text for an accessory where the recommendation for product comparison is provided
      */
     internal fun getHasProductAccessoryText(): String {
-        return "$hasProductAccessoryTopText ${I18nConstants.BOLD_START_PLACEHOLDER}$hasProductAccessoryBottomText${I18nConstants.BOLD_END_PLACEHOLDER}"
+        return "$hasProductAccessoryTopText ${I18nConstants.BOLD_START_PLACEHOLDER}" +
+            "$hasProductAccessoryBottomText${I18nConstants.BOLD_END_PLACEHOLDER}"
     }
 
     /**
      * Gets the product comparison text for a one-size product
      */
-    internal fun getOneSizeProductComparisonText(sizeComparisonRecommendedSize: SizeComparisonRecommendedSize): String {
+    internal fun getOneSizeProductComparisonText(
+        sizeComparisonRecommendedSize: SizeComparisonRecommendedSize
+    ): String {
         if (sizeComparisonRecommendedSize.bestFitScore > 84)
-            return "$oneSizeCloseTopText ${I18nConstants.BOLD_START_PLACEHOLDER}$oneSizeCloseBottomText${I18nConstants.BOLD_END_PLACEHOLDER}"
+            return "$oneSizeCloseTopText ${I18nConstants.BOLD_START_PLACEHOLDER}" +
+                "$oneSizeCloseBottomText${I18nConstants.BOLD_END_PLACEHOLDER}"
         if (sizeComparisonRecommendedSize.isStoreProductSmaller == true)
-            return "$oneSizeSmallerTopText ${I18nConstants.BOLD_START_PLACEHOLDER}$oneSizeSmallerBottomText${I18nConstants.BOLD_END_PLACEHOLDER}"
-        return "$oneSizeLargerTopText ${I18nConstants.BOLD_START_PLACEHOLDER}$oneSizeLargerBottomText${I18nConstants.BOLD_END_PLACEHOLDER}"
+            return "$oneSizeSmallerTopText ${I18nConstants.BOLD_START_PLACEHOLDER}" +
+                "$oneSizeSmallerBottomText${I18nConstants.BOLD_END_PLACEHOLDER}"
+        return "$oneSizeLargerTopText ${I18nConstants.BOLD_START_PLACEHOLDER}" +
+            "$oneSizeLargerBottomText${I18nConstants.BOLD_END_PLACEHOLDER}"
     }
 
     /**
      * Gets the product comparison text for a multi-size product
      */
-    internal fun getMultiSizeProductComparisonText(sizeComparisonRecommendedSizeName: String): String {
-        return "$sizeComparisonMultiSizeText ${I18nConstants.BOLD_START_PLACEHOLDER}$sizeComparisonRecommendedSizeName${I18nConstants.BOLD_END_PLACEHOLDER}"
+    internal fun getMultiSizeProductComparisonText(
+        sizeComparisonRecommendedSizeName: String
+    ): String {
+        return "$sizeComparisonMultiSizeText ${I18nConstants.BOLD_START_PLACEHOLDER}" +
+            "$sizeComparisonRecommendedSizeName${I18nConstants.BOLD_END_PLACEHOLDER}"
     }
 
     /**
      * Gets the recommendation text for a multi-size product based on a user body profile
      */
     internal fun getMultiSizeBodyProfileText(bodyProfileRecommendedSizeName: String): String {
-        return "$bodyProfileMultiSizeText ${I18nConstants.BOLD_START_PLACEHOLDER}$bodyProfileRecommendedSizeName${I18nConstants.BOLD_END_PLACEHOLDER}"
+        return "$bodyProfileMultiSizeText ${I18nConstants.BOLD_START_PLACEHOLDER}" +
+            "$bodyProfileRecommendedSizeName${I18nConstants.BOLD_END_PLACEHOLDER}"
     }
 }

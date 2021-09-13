@@ -61,7 +61,11 @@ class VirtusizeUtilsTest {
     @Test
     fun getFindBestMatch_shouldReturnExpectedRecommendedSize() {
 
-        val userProductRecommendedSize = VirtusizeUtils.findBestFitProductSize(userShirts, storeShirt, ProductFixtures.productTypes())
+        val userProductRecommendedSize = VirtusizeUtils.findBestFitProductSize(
+            userShirts,
+            storeShirt,
+            ProductFixtures.productTypes()
+        )
 
         assertThat(userProductRecommendedSize?.bestFitScore).isEqualTo(96.25f)
         assertThat(userProductRecommendedSize?.bestUserProduct).isEqualTo(userShirts[2])

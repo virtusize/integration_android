@@ -5,6 +5,13 @@ import android.os.Build
 import android.view.WindowManager
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
+import com.virtusize.libsource.data.local.VirtusizeEnvironment
+import com.virtusize.libsource.data.local.VirtusizeEvent
+import com.virtusize.libsource.data.local.VirtusizeEvents
+import com.virtusize.libsource.data.local.VirtusizeLanguage
+import com.virtusize.libsource.data.local.VirtusizeOrder
+import com.virtusize.libsource.data.local.VirtusizeOrderItem
+import com.virtusize.libsource.data.local.getEventName
 import com.virtusize.libsource.data.parsers.JsonUtils
 import com.virtusize.libsource.fixtures.ProductFixtures
 import com.virtusize.libsource.fixtures.TestFixtures
@@ -19,9 +26,11 @@ import org.robolectric.annotation.Config
 class VirtusizeApiTest {
 
     private val context: Context = ApplicationProvider.getApplicationContext()
-    private val defaultDisplay = (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
+    private val defaultDisplay =
+        (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
     private val resolution = "${defaultDisplay.height}x${defaultDisplay.width}"
-    private val versionCode = context.packageManager.getPackageInfo(context.packageName, 0).versionCode
+    private val versionCode =
+        context.packageManager.getPackageInfo(context.packageName, 0).versionCode
 
     @Before
     fun initVirtusizeApi() {
@@ -71,7 +80,8 @@ class VirtusizeApiTest {
 
     @Test
     fun sendProductImageToBackend_shouldReturnExpectedApiRequest() {
-        val actualApiRequest = VirtusizeApi.sendProductImageToBackend(TestFixtures.VIRTUSIZE_PRODUCT)
+        val actualApiRequest =
+            VirtusizeApi.sendProductImageToBackend(TestFixtures.VIRTUSIZE_PRODUCT)
 
         val expectedUrl = "https://staging.virtusize.jp/rest-api/v1/product-meta-data-hints"
 

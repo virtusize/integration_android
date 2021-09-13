@@ -1,6 +1,13 @@
 package com.virtusize.libsource.fixtures
 
 import com.virtusize.libsource.data.parsers.ProductTypeJsonParser
+import com.virtusize.libsource.data.remote.BrandSizing
+import com.virtusize.libsource.data.remote.Measurement
+import com.virtusize.libsource.data.remote.Product
+import com.virtusize.libsource.data.remote.ProductSize
+import com.virtusize.libsource.data.remote.ProductType
+import com.virtusize.libsource.data.remote.StoreProductAdditionalInfo
+import com.virtusize.libsource.data.remote.StoreProductMeta
 import org.json.JSONArray
 import org.json.JSONObject
 
