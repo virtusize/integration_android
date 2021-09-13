@@ -4,4 +4,5 @@ task installGitHooks(type: Copy) {
     fileMode 0775
 }
 
-tasks.getByPath(':libsource:preBuild').dependsOn installGitHooks
+/* Uncomment the following line if you want the installGitHooks task to be run automatically */
+//tasks.getByPath(':libsource:preBuild').dependsOn installGitHooks
