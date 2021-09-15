@@ -94,7 +94,7 @@ dependencies {
 Proguardをお使いの場合、Proguardのルールファイルに下記のルールを追加
 
 ```
--keep class com.virtusize.libsource.**
+-keep class com.virtusize.android.**
 ```
 
 
@@ -324,7 +324,7 @@ SDKのVirtusizeボタンには2つのデフォルトスタイルがあります�
 - XML
 
   ```xml
-  <com.virtusize.libsource.ui.VirtusizeButton
+  <com.virtusize.android.ui.VirtusizeButton
       android:id="@+id/exampleVirtusizeButton"
       app:virtusizeButtonStyle="virtusize_black"
       android:layout_width="wrap_content"
@@ -348,7 +348,7 @@ SDKのVirtusizeボタンには2つのデフォルトスタイルがあります�
 **B. また、他のボタンスタイルを使用したり、ボタンの属性（テキスト、高さ、幅など）を定義することもできます。**
 
 ```xml
-<com.virtusize.libsource.ui.VirtusizeButton
+<com.virtusize.android.ui.VirtusizeButton
     android:id="@+id/exampleVirtusizeButton"
     style="@style/Widget.AppCompat.Button.Colored"
     android:layout_width="wrap_content"
@@ -411,7 +411,7 @@ Virtusize SDKには2種類のInPageがあります。
   - XML
 
     ```xml
-    <com.virtusize.libsource.ui.VirtusizeInPageStandard
+    <com.virtusize.android.ui.VirtusizeInPageStandard
         android:id="@+id/exampleVirtusizeInPageStandard"
         app:virtusizeInPageStandardStyle="virtusize_black"
         app:inPageStandardHorizontalMargin="16dp"
@@ -422,7 +422,7 @@ Virtusize SDKには2種類のInPageがあります。
     ```
 
     ```xml
-    <com.virtusize.libsource.ui.VirtusizeInPageStandard
+    <com.virtusize.android.ui.VirtusizeInPageStandard
         android:id="@+id/exampleVirtusizeInPageStandard"
         app:inPageStandardButtonBackgroundColor="#123456"
         android:layout_width="300dp"
@@ -535,7 +535,7 @@ Virtusize SDKには2種類のInPageがあります。
   - XML
 
     ```xml
-    <com.virtusize.libsource.ui.VirtusizeInPageMini
+    <com.virtusize.android.ui.VirtusizeInPageMini
         android:id="@+id/exampleVirtusizeInPageMini"
         app:virtusizeInPageMiniStyle="virtusize_teal"                                                         
         app:inPageMiniMessageTextSize="12sp"
@@ -545,7 +545,7 @@ Virtusize SDKには2種類のInPageがあります。
     ```
 
     ```xml
-    <com.virtusize.libsource.ui.VirtusizeInPageMini
+    <com.virtusize.android.ui.VirtusizeInPageMini
         android:id="@+id/exampleVirtusizeInPageMini"
         app:inPageMiniBackgroundColor="#123456"
         android:layout_width="300dp"
@@ -837,9 +837,9 @@ and
 
   ```diff
   - <WebView
-  + <com.virtusize.libsource.VirtusizeWebView
+  + <com.virtusize.android.VirtusizeWebView
       or
-  + <com.virtusize.libsource.VirtusizeFitIllustratorWebView
+  + <com.virtusize.android.VirtusizeFitIllustratorWebView
       android:id="@+id/webView"
       android:layout_width="match_parent"
       android:layout_height="match_parent" />

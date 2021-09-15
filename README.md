@@ -93,7 +93,7 @@ dependencies {
 If you are using Proguard, add following rules to your proguard rules file:
 
 ```
--keep class com.virtusize.libsource.**
+-keep class com.virtusize.android.**
 ```
 
 
@@ -326,7 +326,7 @@ In order to use our default button styles, set `app:virtusizeButtonStyle="virtus
 - XML
 
   ```xml
-  <com.virtusize.libsource.ui.VirtusizeButton
+  <com.virtusize.android.ui.VirtusizeButton
       android:id="@+id/exampleVirtusizeButton"
       app:virtusizeButtonStyle="virtusize_black"
       android:layout_width="wrap_content"
@@ -350,7 +350,7 @@ In order to use our default button styles, set `app:virtusizeButtonStyle="virtus
 **B. You can also use any other button styles and/or define the button's attributes like text, height, width, etc.**
 
 ```xml
-<com.virtusize.libsource.ui.VirtusizeButton
+<com.virtusize.android.ui.VirtusizeButton
     android:id="@+id/exampleVirtusizeButton"
     style="@style/Widget.AppCompat.Button.Colored"
     android:layout_width="wrap_content"
@@ -412,7 +412,7 @@ There are two types of InPage in our Virtusize SDK.
   - XML
 
     ```xml
-    <com.virtusize.libsource.ui.VirtusizeInPageStandard
+    <com.virtusize.android.ui.VirtusizeInPageStandard
         android:id="@+id/exampleVirtusizeInPageStandard"
         app:virtusizeInPageStandardStyle="virtusize_black"
         app:inPageStandardHorizontalMargin="16dp"
@@ -423,7 +423,7 @@ There are two types of InPage in our Virtusize SDK.
     ```
 
     ```xml
-    <com.virtusize.libsource.ui.VirtusizeInPageStandard
+    <com.virtusize.android.ui.VirtusizeInPageStandard
         android:id="@+id/exampleVirtusizeInPageStandard"
         app:inPageStandardButtonBackgroundColor="#123456"
         android:layout_width="300dp"
@@ -536,7 +536,7 @@ This is a mini version of InPage you can place in your application. The discreet
   - XML
 
     ```xml
-    <com.virtusize.libsource.ui.VirtusizeInPageMini
+    <com.virtusize.android.ui.VirtusizeInPageMini
         android:id="@+id/exampleVirtusizeInPageMini"
         app:virtusizeInPageMiniStyle="virtusize_teal"                                                         
         app:inPageMiniMessageTextSize="12sp"
@@ -546,7 +546,7 @@ This is a mini version of InPage you can place in your application. The discreet
     ```
 
     ```xml
-    <com.virtusize.libsource.ui.VirtusizeInPageMini
+    <com.virtusize.android.ui.VirtusizeInPageMini
         android:id="@+id/exampleVirtusizeInPageMini"
         app:inPageMiniBackgroundColor="#123456"
         android:layout_width="300dp"
@@ -840,9 +840,9 @@ and
 
   ```diff
   - <WebView
-  + <com.virtusize.libsource.VirtusizeWebView
+  + <com.virtusize.android.VirtusizeWebView
       or
-  + <com.virtusize.libsource.VirtusizeFitIllustratorWebView
+  + <com.virtusize.android.VirtusizeFitIllustratorWebView
       android:id="@+id/webView"
       android:layout_width="match_parent"
       android:layout_height="match_parent" />

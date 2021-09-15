@@ -7,19 +7,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.virtusize.libsource.ErrorResponseHandler;
-import com.virtusize.libsource.SuccessResponseHandler;
-import com.virtusize.libsource.data.local.VirtusizeError;
-import com.virtusize.libsource.data.local.VirtusizeEvent;
-import com.virtusize.libsource.data.local.VirtusizeMessageHandler;
-import com.virtusize.libsource.data.local.VirtusizeOrder;
-import com.virtusize.libsource.data.local.VirtusizeOrderItem;
-import com.virtusize.libsource.data.local.VirtusizeProduct;
-import com.virtusize.libsource.data.local.VirtusizeViewStyle;
-import com.virtusize.libsource.ui.VirtusizeButton;
-import com.virtusize.libsource.ui.VirtusizeInPageMini;
-import com.virtusize.libsource.ui.VirtusizeInPageStandard;
-import com.virtusize.libsource.util.ExtensionsKt;
+import com.virtusize.android.ErrorResponseHandler;
+import com.virtusize.android.SuccessResponseHandler;
+import com.virtusize.android.data.local.VirtusizeError;
+import com.virtusize.android.data.local.VirtusizeEvent;
+import com.virtusize.android.data.local.VirtusizeMessageHandler;
+import com.virtusize.android.data.local.VirtusizeOrder;
+import com.virtusize.android.data.local.VirtusizeOrderItem;
+import com.virtusize.android.data.local.VirtusizeProduct;
+import com.virtusize.android.data.local.VirtusizeViewStyle;
+import com.virtusize.android.ui.VirtusizeButton;
+import com.virtusize.android.ui.VirtusizeInPageMini;
+import com.virtusize.android.ui.VirtusizeInPageStandard;
+import com.virtusize.android.util.ExtensionsKt;
 
 import org.jetbrains.annotations.NotNull;
 
