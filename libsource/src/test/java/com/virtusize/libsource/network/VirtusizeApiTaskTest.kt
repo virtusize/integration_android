@@ -5,8 +5,17 @@ import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.virtusize.libsource.SharedPreferencesHelper
-import com.virtusize.libsource.data.parsers.*
-import com.virtusize.libsource.data.remote.*
+import com.virtusize.libsource.data.parsers.ProductCheckJsonParser
+import com.virtusize.libsource.data.parsers.ProductTypeJsonParser
+import com.virtusize.libsource.data.parsers.UserBodyProfileJsonParser
+import com.virtusize.libsource.data.parsers.UserProductJsonParser
+import com.virtusize.libsource.data.parsers.UserSessionInfoJsonParser
+import com.virtusize.libsource.data.remote.Data
+import com.virtusize.libsource.data.remote.Measurement
+import com.virtusize.libsource.data.remote.ProductCheck
+import com.virtusize.libsource.data.remote.ProductType
+import com.virtusize.libsource.data.remote.UserBodyProfile
+import com.virtusize.libsource.data.remote.UserSessionInfo
 import com.virtusize.libsource.fixtures.ProductFixtures
 import com.virtusize.libsource.fixtures.TestFixtures
 import org.json.JSONObject
@@ -91,7 +100,9 @@ class VirtusizeApiTaskTest {
             val returnValue = method.invoke(
                 virtusizeApiTask,
                 "",
-                "{\"gender\":\"\",\"age\":null,\"height\":null,\"weight\":null,\"braSize\":null,\"concernAreas\":null,\"bodyData\":null}")
+                "{\"gender\":\"\",\"age\":null,\"height\":null,\"weight\":null,\"braSize\":null," +
+                    "\"concernAreas\":null,\"bodyData\":null}"
+            )
             assertThat(returnValue).isNull()
         }
     }
@@ -118,7 +129,7 @@ class VirtusizeApiTaskTest {
                         "name": "backend-checked-product", 
                         "productId": "123"
                     }
-                """.trimIndent()
+            """.trimIndent()
             val returnValue = method.invoke(
                 virtusizeApiTask,
                 pdcJsonString
@@ -203,7 +214,7 @@ class VirtusizeApiTaskTest {
                         },
                         "x-vs-auth":""
                     }
-                """.trimIndent().replace("\\s+|[\\n]+".toRegex(), "")
+            """.trimIndent().replace("\\s+|[\\n]+".toRegex(), "")
 
             val returnValue = method.invoke(
                 virtusizeApiTask,
@@ -220,8 +231,6 @@ class VirtusizeApiTaskTest {
             assertThat(returnValue).isEqualTo(expectedUserSessionInfo)
         }
     }
-
-
 
     @Test
     fun testParseStringToObjectByUserBodyProfileJsonParser_return_null() {

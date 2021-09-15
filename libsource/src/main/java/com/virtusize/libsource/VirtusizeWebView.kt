@@ -11,7 +11,23 @@ import android.os.Message
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.View
-import android.webkit.*
+import android.webkit.ClientCertRequest
+import android.webkit.ConsoleMessage
+import android.webkit.GeolocationPermissions
+import android.webkit.HttpAuthHandler
+import android.webkit.JsPromptResult
+import android.webkit.JsResult
+import android.webkit.PermissionRequest
+import android.webkit.RenderProcessGoneDetail
+import android.webkit.SafeBrowsingResponse
+import android.webkit.SslErrorHandler
+import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.annotation.RequiresApi
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -203,7 +219,10 @@ class VirtusizeWebView @JvmOverloads constructor(
                 view.requestFocusNodeHref(message)
                 val url = message.data.getString("url")
                 val title = message.data.getString("title")
-                if (resultMsg.obj != null && resultMsg.obj is WebView.WebViewTransport && isLinkFromVirtusize(url, title)) {
+                if (resultMsg.obj != null &&
+                    resultMsg.obj is WebView.WebViewTransport &&
+                    isLinkFromVirtusize(url, title)
+                ) {
                     val popupWebView = WebView(view.context)
                     popupWebView.settings.javaScriptEnabled = true
                     // For the 403 error with Google Sign-In
@@ -232,7 +251,9 @@ class VirtusizeWebView @JvmOverloads constructor(
                     resultMsg.sendToTarget()
                     return true
                 }
-                return _webChromeClient?.onCreateWindow(view, dialog, userGesture, resultMsg) ?: false
+                return _webChromeClient?.onCreateWindow(
+                    view, dialog, userGesture, resultMsg
+                ) ?: false
             }
 
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
@@ -363,7 +384,7 @@ class VirtusizeWebView @JvmOverloads constructor(
      */
     private fun isExternalLinkFromVirtusize(url: String?): Boolean {
         return (url?.contains("virtusize") == true && url.contains("privacy")) ||
-                url?.contains("surveymonkey") == true
+            url?.contains("surveymonkey") == true
     }
 
     /**
@@ -371,7 +392,7 @@ class VirtusizeWebView @JvmOverloads constructor(
      */
     private fun isLinkFromVirtusize(url: String?, title: String?): Boolean {
         return isExternalLinkFromVirtusize(url) ||
-                /* Facebook Auth link title */ title?.contains("Facebook") == true ||
-                /* Google Auth link title */ title?.contains("Google") == true
+            /* Facebook Auth link title */ title?.contains("Facebook") == true ||
+            /* Google Auth link title */ title?.contains("Google") == true
     }
 }

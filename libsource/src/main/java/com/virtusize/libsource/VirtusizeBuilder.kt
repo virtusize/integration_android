@@ -1,7 +1,14 @@
 package com.virtusize.libsource
 
 import android.content.Context
-import com.virtusize.libsource.data.local.*
+import com.virtusize.libsource.data.local.VirtusizeEnvironment
+import com.virtusize.libsource.data.local.VirtusizeErrorType
+import com.virtusize.libsource.data.local.VirtusizeInfoCategory
+import com.virtusize.libsource.data.local.VirtusizeLanguage
+import com.virtusize.libsource.data.local.VirtusizeParams
+import com.virtusize.libsource.data.local.VirtusizeRegion
+import com.virtusize.libsource.data.local.throwError
+import com.virtusize.libsource.data.local.virtusizeRegion
 
 /**
  * This class utilizes the builder pattern to build and return a Virtusize object
@@ -22,9 +29,11 @@ class VirtusizeBuilder {
     private var context: Context? = null
     private var region: VirtusizeRegion = VirtusizeRegion.JP
     private var language: VirtusizeLanguage? = null
-    private var allowedLanguages: MutableList<VirtusizeLanguage> = VirtusizeLanguage.values().asList().toMutableList()
+    private var allowedLanguages: MutableList<VirtusizeLanguage> =
+        VirtusizeLanguage.values().asList().toMutableList()
     private var showSGI: Boolean = false
-    private var detailsPanelCards: MutableList<VirtusizeInfoCategory> = VirtusizeInfoCategory.values().asList().toMutableList()
+    private var detailsPanelCards: MutableList<VirtusizeInfoCategory> =
+        VirtusizeInfoCategory.values().asList().toMutableList()
 
     /**
      * This method is used to add the application context to the Virtusize builder
@@ -76,7 +85,7 @@ class VirtusizeBuilder {
      * @param language [VirtusizeLanguage]
      * @return VirtusizeBuilder
      */
-    fun setLanguage(language: VirtusizeLanguage) : VirtusizeBuilder {
+    fun setLanguage(language: VirtusizeLanguage): VirtusizeBuilder {
         this.language = language
         return this
     }
@@ -87,7 +96,7 @@ class VirtusizeBuilder {
      * @param allowedLanguages the list of [VirtusizeLanguage]
      * @return VirtusizeBuilder
      */
-    fun setAllowedLanguages(allowedLanguages: MutableList<VirtusizeLanguage>) : VirtusizeBuilder {
+    fun setAllowedLanguages(allowedLanguages: MutableList<VirtusizeLanguage>): VirtusizeBuilder {
         this.allowedLanguages = allowedLanguages
         return this
     }
@@ -98,7 +107,7 @@ class VirtusizeBuilder {
      * @param showSGI the Boolean value
      * @return VirtusizeBuilder
      */
-    fun setShowSGI(showSGI: Boolean) : VirtusizeBuilder {
+    fun setShowSGI(showSGI: Boolean): VirtusizeBuilder {
         this.showSGI = showSGI
         return this
     }
@@ -109,7 +118,9 @@ class VirtusizeBuilder {
      * @param detailsPanelCards the list of [VirtusizeInfoCategory]
      * @return VirtusizeBuilder
      */
-    fun setDetailsPanelCards(detailsPanelCards: MutableList<VirtusizeInfoCategory>) : VirtusizeBuilder {
+    fun setDetailsPanelCards(
+        detailsPanelCards: MutableList<VirtusizeInfoCategory>
+    ): VirtusizeBuilder {
         this.detailsPanelCards = detailsPanelCards
         return this
     }

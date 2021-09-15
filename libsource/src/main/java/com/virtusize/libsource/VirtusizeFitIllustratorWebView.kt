@@ -12,7 +12,23 @@ import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.*
+import android.webkit.ClientCertRequest
+import android.webkit.ConsoleMessage
+import android.webkit.GeolocationPermissions
+import android.webkit.HttpAuthHandler
+import android.webkit.JsPromptResult
+import android.webkit.JsResult
+import android.webkit.PermissionRequest
+import android.webkit.RenderProcessGoneDetail
+import android.webkit.SafeBrowsingResponse
+import android.webkit.SslErrorHandler
+import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.annotation.RequiresApi
 import com.virtusize.libsource.ui.VirtusizeFitIllustratorFragment
 import com.virtusize.libsource.util.isFitIllustratorURL
@@ -83,7 +99,11 @@ class VirtusizeFitIllustratorWebView @JvmOverloads constructor(
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 // This is to close any subviews when a user is successfully logged into Facebook
-                if (isMultipleWindowsSupported && url?.contains("virtusize") == true && url.contains("#compare")) {
+                if (
+                    isMultipleWindowsSupported &&
+                    url?.contains("virtusize") == true &&
+                    url.contains("#compare")
+                ) {
                     view?.removeAllViews()
                 }
                 _webViewClient?.onPageFinished(view, url)
@@ -222,7 +242,10 @@ class VirtusizeFitIllustratorWebView @JvmOverloads constructor(
                 if (resultMsg.obj != null && resultMsg.obj is WebView.WebViewTransport) {
                     val popupWebView = VirtusizeFitIllustratorWebView(view.context)
                     popupWebView.enableWindowsSettings()
-                    popupWebView.layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                    popupWebView.layoutParams = LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                    )
                     popupWebView.webViewClient = object : WebViewClient() {
                         override fun onPageFinished(view: WebView?, url: String?) {
                             // This is to scroll the webview to top when the fit illustrator is open
@@ -238,8 +261,9 @@ class VirtusizeFitIllustratorWebView @JvmOverloads constructor(
                         }
                     }
                     popupWebView.setOnKeyListener { v, keyCode, event ->
-                        if (keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP
-                            && popupWebView.canGoBack()
+                        if (keyCode == KeyEvent.KEYCODE_BACK &&
+                            event.action == MotionEvent.ACTION_UP &&
+                            popupWebView.canGoBack()
                         ) {
                             popupWebView.goBack()
                             return@setOnKeyListener true
@@ -252,7 +276,8 @@ class VirtusizeFitIllustratorWebView @JvmOverloads constructor(
                     resultMsg.sendToTarget()
                     return true
                 }
-                return _webChromeClient?.onCreateWindow(view, dialog, userGesture, resultMsg) ?: false
+                return _webChromeClient?.onCreateWindow(view, dialog, userGesture, resultMsg)
+                    ?: false
             }
 
             override fun onProgressChanged(view: WebView?, newProgress: Int) {

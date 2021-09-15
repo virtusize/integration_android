@@ -1,7 +1,13 @@
 package com.virtusize.libsource.fixtures
 
 import com.virtusize.libsource.data.parsers.ProductTypeJsonParser
-import com.virtusize.libsource.data.remote.*
+import com.virtusize.libsource.data.remote.BrandSizing
+import com.virtusize.libsource.data.remote.Measurement
+import com.virtusize.libsource.data.remote.Product
+import com.virtusize.libsource.data.remote.ProductSize
+import com.virtusize.libsource.data.remote.ProductType
+import com.virtusize.libsource.data.remote.StoreProductAdditionalInfo
+import com.virtusize.libsource.data.remote.StoreProductMeta
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -313,7 +319,7 @@ internal object ProductFixtures {
                 "orderItem": null,
                 "store": null
             }
-      """.trimIndent()
+        """.trimIndent()
 
     private val USER_PRODUCT_TWO_JSON_STRING =
         """
@@ -345,9 +351,9 @@ internal object ProductFixtures {
                 "orderItem": null,
                 "store": 2
             }
-      """.trimIndent()
+        """.trimIndent()
 
-    val USER_PRODUCT_ONE_JSON_OBJECT  = JSONObject(USER_PRODUCT_ONE_JSON_STRING)
+    val USER_PRODUCT_ONE_JSON_OBJECT = JSONObject(USER_PRODUCT_ONE_JSON_STRING)
 
     val USER_PRODUCT_JSON_ARRAY = JSONArray(
         """

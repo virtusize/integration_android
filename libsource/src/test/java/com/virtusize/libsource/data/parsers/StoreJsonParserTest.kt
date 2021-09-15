@@ -5,7 +5,6 @@ import com.virtusize.libsource.data.remote.Store
 import com.virtusize.libsource.fixtures.TestFixtures
 import org.junit.Test
 
-
 class StoreJsonParserTest {
 
     @Test

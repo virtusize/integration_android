@@ -9,12 +9,12 @@ import kotlinx.android.parcel.Parcelize
  */
 @Parcelize
 data class Data(
-	val validProduct: Boolean,
-	val fetchMetaData: Boolean,
-	val shouldSeePhTooltip: Boolean,
-	val productDataId: Int,
-	val productTypeName: String,
-	val storeName: String,
-	val storeId: Int,
-	val productTypeId: Int
+    val validProduct: Boolean,
+    val fetchMetaData: Boolean,
+    val shouldSeePhTooltip: Boolean,
+    val productDataId: Int,
+    val productTypeName: String,
+    val storeName: String,
+    val storeId: Int,
+    val productTypeId: Int
 ) : Parcelable

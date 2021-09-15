@@ -10,7 +10,7 @@ internal object FontUtils {
     /**
      * This enum contains all available font names used in this SDK
      */
-    enum class FontName(val value: String){
+    enum class FontName(val value: String) {
         ROBOTO("roboto"),
         NOTO_SANS_CJK_JP("noto_sans_cjk_jp"),
         NOTO_SANS_CJK_KR("noto_sans_cjk_kr")
@@ -27,15 +27,25 @@ internal object FontUtils {
     /**
      * Sets up the TypeFace for a TextView by the display language
      */
-    fun setTypeFace(context: Context, textView: TextView, language: VirtusizeLanguage?, fontType: FontType) {
+    fun setTypeFace(
+        context: Context,
+        textView: TextView,
+        language: VirtusizeLanguage?,
+        fontType: FontType
+    ) {
         setTypeFaces(context, mutableListOf(textView), language, fontType)
     }
 
     /**
      * Sets up the TypeFaces for a list of TextView by the display language
      */
-    fun setTypeFaces(context: Context, textViews: List<TextView>, language: VirtusizeLanguage?, fontType: FontType) {
-        when(language) {
+    fun setTypeFaces(
+        context: Context,
+        textViews: List<TextView>,
+        language: VirtusizeLanguage?,
+        fontType: FontType
+    ) {
+        when (language) {
             VirtusizeLanguage.EN -> {
                 setTypeFace(context, textViews, FontName.ROBOTO, fontType)
             }
@@ -51,7 +61,12 @@ internal object FontUtils {
     /**
      * Sets up the TypeFaces for a list of TextView by the font name
      */
-    private fun setTypeFace(context: Context, textViews: List<TextView>, fontName: FontName, fontType: FontType) {
+    private fun setTypeFace(
+        context: Context,
+        textViews: List<TextView>,
+        fontName: FontName,
+        fontType: FontType
+    ) {
         for (textView in textViews) {
             setTypeFace(context, textView, fontName, fontType)
         }
@@ -60,7 +75,12 @@ internal object FontUtils {
     /**
      * Sets up the TypeFaces for a TextView by the font name
      */
-    private fun setTypeFace(context: Context, textView: TextView, fontName: FontName, fontType: FontType) {
+    private fun setTypeFace(
+        context: Context,
+        textView: TextView,
+        fontName: FontName,
+        fontType: FontType
+    ) {
         textView.typeface = context.getTypefaceByName(fontName.value + fontType.value)
     }
 }

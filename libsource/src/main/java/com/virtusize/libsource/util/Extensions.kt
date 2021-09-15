@@ -21,7 +21,7 @@ import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser
  */
 internal fun Context.getStringResourceByName(stringName: String): String? {
     val resId = resources.getIdentifier(stringName, "string", packageName)
-    if(resId == 0) {
+    if (resId == 0) {
         return null
     }
     return getString(resId)
@@ -32,7 +32,7 @@ internal fun Context.getStringResourceByName(stringName: String): String? {
  */
 internal fun Context.getDrawableResourceByName(drawableName: String): Drawable? {
     val resId = resources.getIdentifier(drawableName, "drawable", packageName)
-    if(resId == 0) {
+    if (resId == 0) {
         return null
     }
     return ContextCompat.getDrawable(this, resId)
@@ -43,7 +43,7 @@ internal fun Context.getDrawableResourceByName(drawableName: String): Drawable? 
  */
 internal fun Context.getTypefaceByName(fontFileName: String): Typeface? {
     val resId = resources.getIdentifier(fontFileName, "font", packageName)
-    if(resId == 0) {
+    if (resId == 0) {
         return null
     }
     return ResourcesCompat.getFont(this, resId)
@@ -52,7 +52,9 @@ internal fun Context.getTypefaceByName(fontFileName: String): Typeface? {
 /**
  * The String extension function to trim the text from i18n localization
  */
-internal fun String.trimI18nText(trimType: I18nLocalizationJsonParser.TrimType = I18nLocalizationJsonParser.TrimType.ONELINE): String {
+internal fun String.trimI18nText(
+    trimType: I18nLocalizationJsonParser.TrimType = I18nLocalizationJsonParser.TrimType.ONELINE
+): String {
     return when (trimType) {
         I18nLocalizationJsonParser.TrimType.ONELINE ->
             replace(I18nConstants.BOLD_START_PLACEHOLDER, "")
@@ -117,7 +119,10 @@ val Float.spToPx: Float
  * For the Fit Illustrator web view
  */
 val String.isFitIllustratorURL: Boolean
-    get() = this.contains("virtusize") && this.contains("fit-illustrator") && !this.contains("#") && !this.contains("oauth")
+    get() = this.contains("virtusize") &&
+        this.contains("fit-illustrator") &&
+        !this.contains("#") &&
+        !this.contains("oauth")
 
 val WebResourceRequest.isFitIllustratorURL: Boolean
     get() = this.url.toString().isFitIllustratorURL

@@ -4,10 +4,16 @@ import android.app.Activity
 import android.content.Context
 import com.virtusize.libsource.R
 import com.virtusize.libsource.Virtusize
-import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.SizeComparisonRecommendedSize
+import com.virtusize.libsource.data.local.SizeRecommendationType
+import com.virtusize.libsource.data.local.VirtusizeLanguage
+import com.virtusize.libsource.data.local.VirtusizeMessageHandler
+import com.virtusize.libsource.data.local.VirtusizeProduct
 import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser
-import com.virtusize.libsource.data.remote.*
+import com.virtusize.libsource.data.remote.BodyProfileRecommendedSize
+import com.virtusize.libsource.data.remote.I18nLocalization
+import com.virtusize.libsource.data.remote.Product
+import com.virtusize.libsource.data.remote.ProductType
 import com.virtusize.libsource.ui.VirtusizeWebViewFragment
 import com.virtusize.libsource.util.VirtusizeUtils
 import com.virtusize.libsource.util.trimI18nText
@@ -36,7 +42,7 @@ object VirtusizeFlutterUtils {
         productTypes: List<ProductType>
     ): SizeComparisonRecommendedSize? {
         var userProductRecommendedSize: SizeComparisonRecommendedSize? = null
-        if(selectedRecommendedType != SizeRecommendationType.body) {
+        if (selectedRecommendedType != SizeRecommendationType.body) {
             userProductRecommendedSize = VirtusizeUtils.findBestFitProductSize(
                 userProducts = userProducts,
                 storeProduct = storeProduct,
@@ -55,7 +61,7 @@ object VirtusizeFlutterUtils {
     ): String {
         var userBodyRecommendedSize: String? = null
 
-        if(selectedRecommendedType != SizeRecommendationType.compareProduct) {
+        if (selectedRecommendedType != SizeRecommendationType.compareProduct) {
             userBodyRecommendedSize = bodyProfileRecommendedSize?.sizeName
         }
 

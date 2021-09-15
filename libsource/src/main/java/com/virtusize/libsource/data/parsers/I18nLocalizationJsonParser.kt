@@ -13,14 +13,16 @@ import org.json.JSONObject
 internal class I18nLocalizationJsonParser(
     val context: Context,
     private val virtusizeLanguage: VirtusizeLanguage?
-): VirtusizeJsonParser<I18nLocalization> {
+) : VirtusizeJsonParser<I18nLocalization> {
 
     enum class TrimType {
         ONELINE, MULTIPLELINES
     }
 
     override fun parse(json: JSONObject): I18nLocalization? {
-        val aoyamaJSONObject = json.optJSONObject(FIELD_KEYS)?.optJSONObject(FIELD_APPS)?.optJSONObject(FIELD_AOYAMA)
+        val aoyamaJSONObject = json.optJSONObject(FIELD_KEYS)
+            ?.optJSONObject(FIELD_APPS)
+            ?.optJSONObject(FIELD_AOYAMA)
         val inpageJSONObject = aoyamaJSONObject?.optJSONObject(FIELD_INPAGE)
         val oneSizeJSONObject = inpageJSONObject?.optJSONObject(FIELD_ONE_SIZE)
         val multiSizeJSONObject = inpageJSONObject?.optJSONObject(FIELD_MULTI_SIZE)

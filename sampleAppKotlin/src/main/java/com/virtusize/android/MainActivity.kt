@@ -1,14 +1,18 @@
 package com.virtusize.android
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.virtusize.libsource.data.local.*
-import com.virtusize.libsource.util.Constants
+import com.virtusize.android.databinding.ActivityMainBinding
+import com.virtusize.libsource.data.local.VirtusizeError
+import com.virtusize.libsource.data.local.VirtusizeEvent
+import com.virtusize.libsource.data.local.VirtusizeMessageHandler
+import com.virtusize.libsource.data.local.VirtusizeOrder
+import com.virtusize.libsource.data.local.VirtusizeOrderItem
+import com.virtusize.libsource.data.local.VirtusizeProduct
+import com.virtusize.libsource.data.local.VirtusizeViewStyle
 import com.virtusize.libsource.util.dpInPx
 import com.virtusize.libsource.util.spToPx
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,7 +22,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         /*
          * Register message handler to listen to events from Virtusize
@@ -39,24 +45,24 @@ class MainActivity : AppCompatActivity() {
          */
         // Virtusize opens automatically when button is clicked
         (application as App).Virtusize.setupVirtusizeView(
-            virtusizeView = exampleVirtusizeButton,
+            virtusizeView = binding.exampleVirtusizeButton,
             product = product
         )
         // Set up the Virtusize view style programmatically
-        exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.TEAL
+        binding.exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.TEAL
 
         /*
          * Set up Virtusize InPage Standard
          */
         (application as App).Virtusize
             .setupVirtusizeView(
-                virtusizeView = exampleVirtusizeInPageStandard,
+                virtusizeView = binding.exampleVirtusizeInPageStandard,
                 product = product
             )
-        exampleVirtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
+        binding.exampleVirtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
         // If you like, you can set up the horizontal margins between the edges of the app screen and the InPage Standard view
         // Note: Use the helper extension function `dpInPx` if you like
-        exampleVirtusizeInPageStandard.horizontalMargin = 16.dpInPx
+        binding.exampleVirtusizeInPageStandard.horizontalMargin = 16.dpInPx
         /*
          * If you like, you can set up the background color of the check size button in InPage Standard,
          * as long as it passes WebAIM contrast test.
@@ -65,17 +71,17 @@ class MainActivity : AppCompatActivity() {
          */
 
         // If you like, you can change the text sizes of the InPage message and the Check Size button
-        exampleVirtusizeInPageStandard.messageTextSize = 10f.spToPx
-        exampleVirtusizeInPageStandard.buttonTextSize = 10f.spToPx
+        binding.exampleVirtusizeInPageStandard.messageTextSize = 10f.spToPx
+        binding.exampleVirtusizeInPageStandard.buttonTextSize = 10f.spToPx
 
         /*
          * Set up Virtusize InPage Mini
          */
         (application as App).Virtusize.setupVirtusizeView(
-            virtusizeView = exampleVirtusizeInPageMini,
+            virtusizeView = binding.exampleVirtusizeInPageMini,
             product = product
         )
-        exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.TEAL
+        binding.exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.TEAL
 
         /*
          * If you like, you can set up the background of InPage Mini view as long as it passes WebAIM contrast test.
@@ -84,8 +90,8 @@ class MainActivity : AppCompatActivity() {
          */
 
         // If you like, you can change the text sizes of the InPage message and the Check Size button
-        exampleVirtusizeInPageMini.messageTextSize = 12f.spToPx
-        exampleVirtusizeInPageMini.buttonTextSize = 10f.spToPx
+        binding.exampleVirtusizeInPageMini.messageTextSize = 12f.spToPx
+        binding.exampleVirtusizeInPageMini.buttonTextSize = 10f.spToPx
 
         /*
          * To close the Virtusize page

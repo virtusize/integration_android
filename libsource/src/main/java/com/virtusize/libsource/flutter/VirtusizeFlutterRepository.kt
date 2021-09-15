@@ -3,7 +3,17 @@ package com.virtusize.libsource.flutter
 import android.content.Context
 import com.virtusize.libsource.SharedPreferencesHelper
 import com.virtusize.libsource.Virtusize
-import com.virtusize.libsource.data.local.*
+import com.virtusize.libsource.data.local.VirtusizeError
+import com.virtusize.libsource.data.local.VirtusizeErrorType
+import com.virtusize.libsource.data.local.VirtusizeEvent
+import com.virtusize.libsource.data.local.VirtusizeEvents
+import com.virtusize.libsource.data.local.VirtusizeLanguage
+import com.virtusize.libsource.data.local.VirtusizeMessageHandler
+import com.virtusize.libsource.data.local.VirtusizeOrder
+import com.virtusize.libsource.data.local.VirtusizeProduct
+import com.virtusize.libsource.data.local.getEventName
+import com.virtusize.libsource.data.local.throwError
+import com.virtusize.libsource.data.local.virtusizeError
 import com.virtusize.libsource.data.parsers.UserAuthDataJsonParser
 import com.virtusize.libsource.data.remote.Product
 import com.virtusize.libsource.data.remote.ProductCheck
@@ -15,8 +25,12 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.net.HttpURLConnection
 
-class VirtusizeFlutterRepository(context: Context, private val messageHandler: VirtusizeMessageHandler) {
-    private val apiService: VirtusizeAPIService = VirtusizeAPIService.getInstance(context, messageHandler)
+class VirtusizeFlutterRepository(
+    context: Context,
+    private val messageHandler: VirtusizeMessageHandler
+) {
+    private val apiService: VirtusizeAPIService =
+        VirtusizeAPIService.getInstance(context, messageHandler)
     private val sharedPreferencesHelper: SharedPreferencesHelper =
         SharedPreferencesHelper.getInstance(context)
 
@@ -45,7 +59,11 @@ class VirtusizeFlutterRepository(context: Context, private val messageHandler: V
                             val sendProductImageResponse =
                                 apiService.sendProductImageToBackend(product = product)
                             if (!sendProductImageResponse.isSuccessful) {
-                                sendProductImageResponse.failureData?.let { messageHandler.onError(it) }
+                                sendProductImageResponse.failureData?.let {
+                                    messageHandler.onError(
+                                        it
+                                    )
+                                }
                             }
                         } else {
                             VirtusizeErrorType.ImageUrlNotValid.throwError()
@@ -75,14 +93,15 @@ class VirtusizeFlutterRepository(context: Context, private val messageHandler: V
 
     suspend fun getProductTypes() = apiService.getProductTypes().successData
 
-    suspend fun getI18nLocalization(language: VirtusizeLanguage?) = apiService.getI18n(language).successData
+    suspend fun getI18nLocalization(language: VirtusizeLanguage?) =
+        apiService.getI18n(language).successData
 
     suspend fun getUserSessionResponse(): String? {
         val userSessionInfo = apiService.getUserSessionInfo().successData
-        if(userSessionInfo != null) {
+        if (userSessionInfo != null) {
             sharedPreferencesHelper.storeSessionData(userSessionInfo.userSessionResponse)
             sharedPreferencesHelper.storeAccessToken(userSessionInfo.accessToken)
-            if(userSessionInfo.authToken.isNotBlank()) {
+            if (userSessionInfo.authToken.isNotBlank()) {
                 sharedPreferencesHelper.storeAuthToken(userSessionInfo.authToken)
             }
         }
@@ -95,13 +114,17 @@ class VirtusizeFlutterRepository(context: Context, private val messageHandler: V
             sharedPreferencesHelper.storeBrowserId(userAutoData?.bid)
             sharedPreferencesHelper.storeAuthToken(userAutoData?.auth)
         } catch (e: JSONException) {
-            messageHandler.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(extraMessage = e.localizedMessage))
+            messageHandler.onError(
+                VirtusizeErrorType.JsonParsingError.virtusizeError(
+                    extraMessage = e.localizedMessage
+                )
+            )
         }
     }
 
     suspend fun getUserProducts(): List<Product>? {
         val userProductsResponse = apiService.getUserProducts()
-        if(userProductsResponse.isSuccessful) {
+        if (userProductsResponse.isSuccessful) {
             return userProductsResponse.successData
         } else if (userProductsResponse.failureData?.code == HttpURLConnection.HTTP_NOT_FOUND) {
             return mutableListOf()
@@ -123,7 +146,7 @@ class VirtusizeFlutterRepository(context: Context, private val messageHandler: V
 
     suspend fun deleteUser(): Any? {
         val response = apiService.deleteUser()
-        if(response.isSuccessful) {
+        if (response.isSuccessful) {
             sharedPreferencesHelper.storeAuthToken("")
         }
         return response.successData
@@ -141,7 +164,10 @@ class VirtusizeFlutterRepository(context: Context, private val messageHandler: V
         val storeInfoResponse = apiService.getStoreInfo()
         if (storeInfoResponse.isSuccessful) {
             val sendOrderResponse =
-                apiService.sendOrder(storeInfoResponse.successData?.region, VirtusizeOrder.parseMap(orderMap))
+                apiService.sendOrder(
+                    storeInfoResponse.successData?.region,
+                    VirtusizeOrder.parseMap(orderMap)
+                )
             if (sendOrderResponse.isSuccessful) {
                 onSuccess?.invoke(sendOrderResponse.successData)
             } else {

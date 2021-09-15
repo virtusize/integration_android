@@ -55,7 +55,8 @@ class JsonUtilsTest {
                     "key_one_one_number" to 123,
                     "key_one_one_string" to "hello"
                 ),
-                "key_two_one" to false),
+                "key_two_one" to false
+            ),
             "key_two" to mapOf(
                 "key_two_one" to "world",
                 "key_two_two" to emptyMap<String, Any>()

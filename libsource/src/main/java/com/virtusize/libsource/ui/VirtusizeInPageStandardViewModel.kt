@@ -10,11 +10,12 @@ import kotlinx.coroutines.launch
 
 internal class VirtusizeInPageStandardViewModel(
     private val virtusizeRepository: VirtusizeRepository
-): ViewModel() {
+) : ViewModel() {
 
     val productNetworkImageLiveData = MutableLiveData<Pair<VirtusizeProductImageView, Bitmap>>()
 
-    val productPlaceholderImageLiveData = MutableLiveData<Pair<VirtusizeProductImageView, Product>>()
+    val productPlaceholderImageLiveData =
+        MutableLiveData<Pair<VirtusizeProductImageView, Product>>()
 
     val finishLoadingProductImages = MutableLiveData<Boolean>()
 

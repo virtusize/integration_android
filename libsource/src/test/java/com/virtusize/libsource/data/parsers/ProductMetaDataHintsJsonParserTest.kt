@@ -1,15 +1,16 @@
 package com.virtusize.libsource.data.parsers
 
 import com.google.common.truth.Truth.assertThat
-import com.virtusize.libsource.fixtures.TestFixtures
 import com.virtusize.libsource.data.remote.ProductMetaDataHints
+import com.virtusize.libsource.fixtures.TestFixtures
 import org.junit.Test
 
 class ProductMetaDataHintsJsonParserTest {
 
     @Test
     fun parse_shouldReturnExpectedObject() {
-        val actualProductMetaDataHints = ProductMetaDataHintsJsonParser().parse(TestFixtures.PRODUCT_META_DATA_HINTS)
+        val actualProductMetaDataHints =
+            ProductMetaDataHintsJsonParser().parse(TestFixtures.PRODUCT_META_DATA_HINTS)
 
         val expectedProductMetaDataHints = ProductMetaDataHints(
             "test_apiKey",

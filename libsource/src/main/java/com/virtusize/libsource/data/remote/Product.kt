@@ -42,8 +42,16 @@ data class Product(
     ): String {
         return when {
             isAccessory() -> accessoryText(i18nLocalization, sizeComparisonRecommendedSize)
-            sizes.size == 1 -> oneSizeText(i18nLocalization, sizeComparisonRecommendedSize, bodyProfileRecommendedSizeName)
-            else -> multiSizeText(i18nLocalization, sizeComparisonRecommendedSize, bodyProfileRecommendedSizeName)
+            sizes.size == 1 -> oneSizeText(
+                i18nLocalization,
+                sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName
+            )
+            else -> multiSizeText(
+                i18nLocalization,
+                sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName
+            )
         }
     }
 
@@ -51,14 +59,21 @@ data class Product(
      * Gets the Cloudinary image URL for the product
      */
     fun getCloudinaryProductImageURL(): String {
-        return "https://res.cloudinary.com/virtusize/image/upload/w_${36.dpInPx},h_${36.dpInPx}/q_auto,f_auto,dpr_auto/$cloudinaryPublicId.jpg"
+        return "https://res.cloudinary.com/virtusize/image/upload/w_${36.dpInPx},h_${36.dpInPx}/" +
+            "q_auto,f_auto,dpr_auto/$cloudinaryPublicId.jpg"
     }
 
     /**
      * Gets the text for an accessory
      */
-    private fun accessoryText(i18nLocalization: I18nLocalization, sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?): String {
-        return if (sizeComparisonRecommendedSize?.bestStoreProductSize?.name != null) i18nLocalization.getHasProductAccessoryText() else i18nLocalization.defaultAccessoryText
+    private fun accessoryText(
+        i18nLocalization: I18nLocalization,
+        sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?
+    ): String {
+        return if (sizeComparisonRecommendedSize?.bestStoreProductSize?.name != null)
+            i18nLocalization.getHasProductAccessoryText()
+        else
+            i18nLocalization.defaultAccessoryText
     }
 
     /**

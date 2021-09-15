@@ -5,19 +5,39 @@ import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.WindowManager
-import com.virtusize.libsource.*
-import com.virtusize.libsource.data.local.*
+import com.virtusize.libsource.R
+import com.virtusize.libsource.SharedPreferencesHelper
+import com.virtusize.libsource.data.local.VirtusizeErrorType
+import com.virtusize.libsource.data.local.VirtusizeEvent
+import com.virtusize.libsource.data.local.VirtusizeLanguage
+import com.virtusize.libsource.data.local.VirtusizeMessageHandler
+import com.virtusize.libsource.data.local.VirtusizeOrder
+import com.virtusize.libsource.data.local.VirtusizeProduct
 import com.virtusize.libsource.data.local.virtusizeError
-import com.virtusize.libsource.data.parsers.*
+import com.virtusize.libsource.data.parsers.BodyProfileRecommendedSizeJsonParser
 import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser
+import com.virtusize.libsource.data.parsers.ProductCheckJsonParser
+import com.virtusize.libsource.data.parsers.ProductMetaDataHintsJsonParser
+import com.virtusize.libsource.data.parsers.ProductTypeJsonParser
+import com.virtusize.libsource.data.parsers.StoreJsonParser
+import com.virtusize.libsource.data.parsers.StoreProductJsonParser
+import com.virtusize.libsource.data.parsers.UserBodyProfileJsonParser
+import com.virtusize.libsource.data.parsers.UserProductJsonParser
 import com.virtusize.libsource.data.parsers.UserSessionInfoJsonParser
-import com.virtusize.libsource.data.remote.*
+import com.virtusize.libsource.data.remote.BodyProfileRecommendedSize
+import com.virtusize.libsource.data.remote.I18nLocalization
+import com.virtusize.libsource.data.remote.Product
+import com.virtusize.libsource.data.remote.ProductCheck
+import com.virtusize.libsource.data.remote.ProductMetaDataHints
+import com.virtusize.libsource.data.remote.ProductType
+import com.virtusize.libsource.data.remote.Store
+import com.virtusize.libsource.data.remote.UserBodyProfile
 import com.virtusize.libsource.data.remote.UserSessionInfo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.net.URL
-import java.util.*
+import java.util.Locale
 import javax.net.ssl.HttpsURLConnection
 
 /**
@@ -25,7 +45,10 @@ import javax.net.ssl.HttpsURLConnection
  * @param context the application context
  * @param messageHandler pass VirtusizeMessageHandler to listen to any Virtusize-related messages
  */
-internal class VirtusizeAPIService(private var context: Context, private var messageHandler: VirtusizeMessageHandler?) {
+internal class VirtusizeAPIService(
+    private var context: Context,
+    private var messageHandler: VirtusizeMessageHandler?
+) {
 
     companion object {
         private var INSTANCE: VirtusizeAPIService? = null
@@ -33,7 +56,10 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
         /**
          * Gets the instance of [VirtusizeAPIService]
          */
-        fun getInstance(context: Context, messageHandler: VirtusizeMessageHandler?): VirtusizeAPIService {
+        fun getInstance(
+            context: Context,
+            messageHandler: VirtusizeMessageHandler?
+        ): VirtusizeAPIService {
             if (INSTANCE == null) {
                 synchronized(VirtusizeAPIService::javaClass) {
                     INSTANCE = VirtusizeAPIService(context, messageHandler)
@@ -44,7 +70,8 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
     }
 
     // The helper to store data locally using Shared Preferences
-    private var sharedPreferencesHelper: SharedPreferencesHelper = SharedPreferencesHelper.getInstance(context)
+    private var sharedPreferencesHelper: SharedPreferencesHelper =
+        SharedPreferencesHelper.getInstance(context)
 
     // Device screen resolution
     private lateinit var resolution: String
@@ -76,32 +103,38 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
      * @param product [VirtusizeProduct]
      * @return the [VirtusizeApiResponse] with the data class [ProductCheck]
      */
-    internal suspend fun productDataCheck(product: VirtusizeProduct): VirtusizeApiResponse<ProductCheck> = withContext(Dispatchers.IO) {
-        val apiRequest = VirtusizeApi.productCheck(product)
-        VirtusizeApiTask(
-            httpURLConnection,
-            sharedPreferencesHelper,
-            messageHandler
-        )
-            .setJsonParser(ProductCheckJsonParser())
-            .execute(apiRequest)
-    }
+    internal suspend fun productDataCheck(
+        product: VirtusizeProduct
+    ): VirtusizeApiResponse<ProductCheck> =
+        withContext(Dispatchers.IO) {
+            val apiRequest = VirtusizeApi.productCheck(product)
+            VirtusizeApiTask(
+                httpURLConnection,
+                sharedPreferencesHelper,
+                messageHandler
+            )
+                .setJsonParser(ProductCheckJsonParser())
+                .execute(apiRequest)
+        }
 
     /**
      * Sends an image URL of VirtusizeProduct to the Virtusize server
      * @param product [VirtusizeProduct]
      * @return the [VirtusizeApiResponse] with the data class [ProductMetaDataHints]
      */
-    internal suspend fun sendProductImageToBackend(product: VirtusizeProduct): VirtusizeApiResponse<ProductMetaDataHints> = withContext(Dispatchers.IO) {
-        val apiRequest = VirtusizeApi.sendProductImageToBackend(product = product)
-        VirtusizeApiTask(
-            httpURLConnection,
-            sharedPreferencesHelper,
-            messageHandler
-        )
-            .setJsonParser(ProductMetaDataHintsJsonParser())
-            .execute(apiRequest)
-    }
+    internal suspend fun sendProductImageToBackend(
+        product: VirtusizeProduct
+    ): VirtusizeApiResponse<ProductMetaDataHints> =
+        withContext(Dispatchers.IO) {
+            val apiRequest = VirtusizeApi.sendProductImageToBackend(product = product)
+            VirtusizeApiTask(
+                httpURLConnection,
+                sharedPreferencesHelper,
+                messageHandler
+            )
+                .setJsonParser(ProductMetaDataHintsJsonParser())
+                .execute(apiRequest)
+        }
 
     /**
      * Sends an event to the Virtusize server
@@ -120,10 +153,11 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
         val apiRequest = VirtusizeApi.sendEventToAPI(
             virtusizeEvent = event,
             productCheck = withDataProduct,
-            deviceOrientation = if (context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) context.getString(
-                R.string.landscape
-            )
-            else context.getString(R.string.portrait),
+            deviceOrientation =
+            if (context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
+                context.getString(R.string.landscape)
+            else
+                context.getString(R.string.portrait),
             screenResolution = resolution,
             versionCode = context.packageManager
                 .getPackageInfo(context.packageName, 0).versionCode
@@ -170,27 +204,29 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
             .execute(apiRequest)
     }
 
-
     /**
      * Gets the API response for retrieving the store product info
      * @param productId the ID of the store product
      * @return the [VirtusizeApiResponse] with the data class [Product]
      */
-    internal suspend fun getStoreProduct(productId: Int): VirtusizeApiResponse<Product> = withContext(
-        Dispatchers.IO
-    ) {
-        if(productId == 0) {
-            return@withContext VirtusizeApiResponse.Error(VirtusizeErrorType.NullProduct.virtusizeError())
+    internal suspend fun getStoreProduct(productId: Int): VirtusizeApiResponse<Product> =
+        withContext(
+            Dispatchers.IO
+        ) {
+            if (productId == 0) {
+                return@withContext VirtusizeApiResponse.Error(
+                    VirtusizeErrorType.NullProduct.virtusizeError()
+                )
+            }
+            val apiRequest = VirtusizeApi.getStoreProductInfo(productId.toString())
+            VirtusizeApiTask(
+                httpURLConnection,
+                sharedPreferencesHelper,
+                messageHandler
+            )
+                .setJsonParser(StoreProductJsonParser())
+                .execute(apiRequest)
         }
-        val apiRequest = VirtusizeApi.getStoreProductInfo(productId.toString())
-        VirtusizeApiTask(
-            httpURLConnection,
-            sharedPreferencesHelper,
-            messageHandler
-        )
-            .setJsonParser(StoreProductJsonParser())
-            .execute(apiRequest)
-    }
 
     /**
      * Gets the API response for retrieving the list of the product types
@@ -287,9 +323,7 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
         productTypes: List<ProductType>,
         storeProduct: Product,
         userBodyProfile: UserBodyProfile
-    ): VirtusizeApiResponse<BodyProfileRecommendedSize?> = withContext(
-        Dispatchers.IO
-    ) {
+    ): VirtusizeApiResponse<BodyProfileRecommendedSize?> = withContext(Dispatchers.IO) {
         val apiRequest = VirtusizeApi.getSize(productTypes, storeProduct, userBodyProfile)
         VirtusizeApiTask(
             httpURLConnection,
@@ -305,10 +339,14 @@ internal class VirtusizeAPIService(private var context: Context, private var mes
      * @param params [VirtusizeParams] to get the language that is set by a client
      * @return the [VirtusizeApiResponse] with the data class [I18nLocalization]
      */
-    internal suspend fun getI18n(language: VirtusizeLanguage?): VirtusizeApiResponse<I18nLocalization> = withContext(
-        Dispatchers.IO
-    ) {
-        val apiRequest = VirtusizeApi.getI18n(language ?: (VirtusizeLanguage.values().find { it.value == Locale.getDefault().language } ?: VirtusizeLanguage.EN))
+    internal suspend fun getI18n(language: VirtusizeLanguage?):
+        VirtusizeApiResponse<I18nLocalization> = withContext(Dispatchers.IO) {
+        val apiRequest = VirtusizeApi.getI18n(
+            language ?: (
+                VirtusizeLanguage.values()
+                    .find { it.value == Locale.getDefault().language } ?: VirtusizeLanguage.EN
+                )
+        )
         VirtusizeApiTask(
             httpURLConnection,
             sharedPreferencesHelper,

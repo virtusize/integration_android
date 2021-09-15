@@ -1,6 +1,8 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-parcelize'
+}
 
 android {
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -27,6 +29,14 @@ android {
             returnDefaultValues = true
         }
     }
+
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+configurations {
+    ktlint
 }
 
 dependencies {
@@ -47,7 +57,23 @@ dependencies {
     testImplementation 'org.robolectric:robolectric:4.5.1'
     testImplementation 'androidx.test:core:1.4.0'
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_version"
+
+    ktlint "com.pinterest:ktlint:$ktlint_version"
 }
-repositories {
-    mavenCentral()
+
+task ktlint(type: JavaExec, group: "verification") {
+    description = "Check Kotlin code style."
+    classpath = configurations.ktlint
+    main = "com.pinterest.ktlint.Main"
+    args "src/**/*.kt",
+    // to generate report in checkstyle format prepend following args:
+            "--reporter=plain", "--reporter=html,output=${buildDir}/ktlint.html"
+}
+check.dependsOn ktlint
+
+task ktlintFormat(type: JavaExec, group: "formatting") {
+    description = "Fix Kotlin code style deviations."
+    classpath = configurations.ktlint
+    main = "com.pinterest.ktlint.Main"
+    args "-F", "src/**/*.kt"
 }

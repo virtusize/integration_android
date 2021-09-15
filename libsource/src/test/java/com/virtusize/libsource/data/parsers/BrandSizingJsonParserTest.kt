@@ -1,8 +1,8 @@
 package com.virtusize.libsource.data.parsers
 
 import com.google.common.truth.Truth
-import com.virtusize.libsource.fixtures.TestFixtures
 import com.virtusize.libsource.data.remote.BrandSizing
+import com.virtusize.libsource.fixtures.TestFixtures
 import org.json.JSONObject
 import org.junit.Test
 
@@ -22,7 +22,8 @@ class BrandSizingJsonParserTest {
 
     @Test
     fun parse_emptyJsonData_shouldReturnExpectedObject() {
-        val actualAdditionalInfo = StoreProductAdditionalInfoJsonParser().parse(TestFixtures.EMPTY_JSON_DATA)
+        val actualAdditionalInfo =
+            StoreProductAdditionalInfoJsonParser().parse(TestFixtures.EMPTY_JSON_DATA)
 
         Truth.assertThat(actualAdditionalInfo).isNull()
     }
@@ -37,5 +38,4 @@ class BrandSizingJsonParserTest {
             """.trimIndent()
         )
     }
-
 }

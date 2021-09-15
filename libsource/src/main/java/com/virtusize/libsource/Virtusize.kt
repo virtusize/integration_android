@@ -1,10 +1,20 @@
 package com.virtusize.libsource
 
 import android.content.Context
-import android.view.View
-import com.virtusize.libsource.data.local.*
+import com.virtusize.libsource.data.local.SizeComparisonRecommendedSize
+import com.virtusize.libsource.data.local.SizeRecommendationType
+import com.virtusize.libsource.data.local.VirtusizeError
+import com.virtusize.libsource.data.local.VirtusizeErrorType
+import com.virtusize.libsource.data.local.VirtusizeEvent
+import com.virtusize.libsource.data.local.VirtusizeEvents
+import com.virtusize.libsource.data.local.VirtusizeLanguage
+import com.virtusize.libsource.data.local.VirtusizeMessageHandler
+import com.virtusize.libsource.data.local.VirtusizeOrder
+import com.virtusize.libsource.data.local.VirtusizeParams
+import com.virtusize.libsource.data.local.VirtusizeProduct
+import com.virtusize.libsource.data.local.getEventName
+import com.virtusize.libsource.data.local.throwError
 import com.virtusize.libsource.data.parsers.I18nLocalizationJsonParser.TrimType
-import com.virtusize.libsource.data.remote.*
 import com.virtusize.libsource.network.VirtusizeApi
 import com.virtusize.libsource.network.VirtusizeApiTask
 import com.virtusize.libsource.ui.VirtusizeInPageStandard
@@ -65,7 +75,9 @@ class Virtusize(
                             shouldUpdateUserProducts = false,
                             shouldUpdateBodyProfile = false
                         )
-                        virtusizeRepository.updateInPageRecommendation(type = SizeRecommendationType.compareProduct)
+                        virtusizeRepository.updateInPageRecommendation(
+                            type = SizeRecommendationType.compareProduct
+                        )
                     }
                 }
                 VirtusizeEvents.UserAddedProduct.getEventName() -> {
@@ -74,7 +86,9 @@ class Virtusize(
                             shouldUpdateUserProducts = true,
                             shouldUpdateBodyProfile = false
                         )
-                        virtusizeRepository.updateInPageRecommendation(type = SizeRecommendationType.compareProduct)
+                        virtusizeRepository.updateInPageRecommendation(
+                            type = SizeRecommendationType.compareProduct
+                        )
                     }
                 }
                 VirtusizeEvents.UserDeletedProduct.getEventName() -> {
@@ -104,7 +118,9 @@ class Virtusize(
                     val sizeRecName = event.data?.optString("sizeRecName")
                     CoroutineScope(Main).launch {
                         virtusizeRepository.updateUserBodyRecommendedSize(sizeRecName)
-                        virtusizeRepository.updateInPageRecommendation(type = SizeRecommendationType.body)
+                        virtusizeRepository.updateInPageRecommendation(
+                            type = SizeRecommendationType.body
+                        )
                     }
                 }
                 VirtusizeEvents.UserLoggedIn.getEventName() -> {
@@ -115,7 +131,8 @@ class Virtusize(
                         virtusizeRepository.updateInPageRecommendation()
                     }
                 }
-                VirtusizeEvents.UserLoggedOut.getEventName(), VirtusizeEvents.UserDeletedData.getEventName() -> {
+                VirtusizeEvents.UserLoggedOut.getEventName(),
+                VirtusizeEvents.UserDeletedData.getEventName() -> {
                     // Clears user related data and updates the session,
                     // and then re-fetches user products and body profile from the server
                     CoroutineScope(Main).launch {
@@ -176,13 +193,19 @@ class Virtusize(
                     storeProduct?.apply {
                         virtusizeRepository.i18nLocalization?.let { i18nLocalization ->
                             val trimType =
-                                if (virtusizeView is VirtusizeInPageStandard) TrimType.MULTIPLELINES else TrimType.ONELINE
+                                if (virtusizeView is VirtusizeInPageStandard)
+                                    TrimType.MULTIPLELINES
+                                else
+                                    TrimType.ONELINE
                             val recommendationText = getRecommendationText(
                                 i18nLocalization,
                                 userProductRecommendedSize,
                                 userBodyRecommendedSize
                             ).trimI18nText(trimType)
-                            virtusizeView.setRecommendationText(externalProductId, recommendationText)
+                            virtusizeView.setRecommendationText(
+                                externalProductId,
+                                recommendationText
+                            )
                         }
                         if (virtusizeView is VirtusizeInPageStandard) {
                             virtusizeView.setProductImages(
@@ -196,7 +219,8 @@ class Virtusize(
         }
     }
 
-    private var virtusizeRepository: VirtusizeRepository = VirtusizeRepository(context, messageHandler, virtusizePresenter)
+    private var virtusizeRepository: VirtusizeRepository =
+        VirtusizeRepository(context, messageHandler, virtusizePresenter)
 
     // TODO: Remove the array and find a way to have callbacks inside the VirtusizeView
     // This variable holds the Virtusize view that clients use on their application

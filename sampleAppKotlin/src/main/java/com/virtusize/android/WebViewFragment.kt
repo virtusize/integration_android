@@ -3,8 +3,13 @@ package com.virtusize.android
 import android.os.Bundle
 import android.os.Message
 import android.util.Log
-import android.view.*
-import android.webkit.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.fragment.app.DialogFragment
 import com.virtusize.libsource.VirtusizeWebView
 import com.virtusize.libsource.util.urlString
@@ -39,7 +44,7 @@ class WebViewFragment: DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         webView = view.findViewById(R.id.webView)
-        webView.webViewClient = object : WebViewClient() {
+        object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String): Boolean {
                 Log.d(TAG, "shouldOverrideUrlLoading ${url}")
                 return super.shouldOverrideUrlLoading(view, url)
@@ -59,7 +64,7 @@ class WebViewFragment: DialogFragment() {
                 Log.d(TAG, "onPageFinished ${view?.url}")
                 super.onPageFinished(view, url)
             }
-        }
+        }.also { webView.webViewClient = it }
 
         webView.webChromeClient = object : WebChromeClient() {
             override fun onCreateWindow(

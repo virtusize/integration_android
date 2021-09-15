@@ -2,8 +2,20 @@ package com.virtusize.libsource
 
 import android.content.Context
 import android.graphics.Bitmap
-import com.virtusize.libsource.data.local.*
 import com.virtusize.libsource.data.local.SizeComparisonRecommendedSize
+import com.virtusize.libsource.data.local.SizeRecommendationType
+import com.virtusize.libsource.data.local.VirtusizeError
+import com.virtusize.libsource.data.local.VirtusizeErrorType
+import com.virtusize.libsource.data.local.VirtusizeEvent
+import com.virtusize.libsource.data.local.VirtusizeEvents
+import com.virtusize.libsource.data.local.VirtusizeLanguage
+import com.virtusize.libsource.data.local.VirtusizeMessageHandler
+import com.virtusize.libsource.data.local.VirtusizeOrder
+import com.virtusize.libsource.data.local.VirtusizeParams
+import com.virtusize.libsource.data.local.VirtusizeProduct
+import com.virtusize.libsource.data.local.getEventName
+import com.virtusize.libsource.data.local.throwError
+import com.virtusize.libsource.data.local.virtusizeError
 import com.virtusize.libsource.data.parsers.UserAuthDataJsonParser
 import com.virtusize.libsource.data.remote.I18nLocalization
 import com.virtusize.libsource.data.remote.Product
@@ -44,7 +56,7 @@ internal class VirtusizeRepository(
     // This variable holds the i18n localization texts
     internal var i18nLocalization: I18nLocalization? = null
 
-    /// The last visited store product on the Virtusize web view
+    // / The last visited store product on the Virtusize web view
     private var lastProductOnVirtusizeWebView: Product? = null
 
     /**
@@ -88,7 +100,9 @@ internal class VirtusizeRepository(
                         if (virtusizeProduct.imageUrl != null) {
                             // If image URL is valid, send image URL to server
                             val sendProductImageResponse =
-                                virtusizeAPIService.sendProductImageToBackend(product = virtusizeProduct)
+                                virtusizeAPIService.sendProductImageToBackend(
+                                    product = virtusizeProduct
+                                )
                             if (!sendProductImageResponse.isSuccessful) {
                                 sendProductImageResponse.failureData?.let {
                                     messageHandler.onError(
@@ -178,13 +192,21 @@ internal class VirtusizeRepository(
      * Updates the user session by calling the session API
      * @param externalProductId the external product ID set by a client
      */
-    internal suspend fun updateUserSession(externalProductId: String? = lastProductOnVirtusizeWebView?.externalId) {
+    internal suspend fun updateUserSession(
+        externalProductId: String? = lastProductOnVirtusizeWebView?.externalId
+    ) {
         val userSessionInfoResponse = virtusizeAPIService.getUserSessionInfo()
         if (userSessionInfoResponse.isSuccessful) {
-            sharedPreferencesHelper.storeSessionData(userSessionInfoResponse.successData!!.userSessionResponse)
-            sharedPreferencesHelper.storeAccessToken(userSessionInfoResponse.successData!!.accessToken)
+            sharedPreferencesHelper.storeSessionData(
+                userSessionInfoResponse.successData!!.userSessionResponse
+            )
+            sharedPreferencesHelper.storeAccessToken(
+                userSessionInfoResponse.successData!!.accessToken
+            )
             if (userSessionInfoResponse.successData!!.authToken.isNotBlank()) {
-                sharedPreferencesHelper.storeAuthToken(userSessionInfoResponse.successData!!.authToken)
+                sharedPreferencesHelper.storeAuthToken(
+                    userSessionInfoResponse.successData!!.authToken
+                )
             }
         } else {
             presenter?.hasInPageError(externalProductId, userSessionInfoResponse.failureData)
@@ -228,7 +250,11 @@ internal class VirtusizeRepository(
         }
 
         userProductRecommendedSize = VirtusizeUtils.findBestFitProductSize(
-            userProducts = if (selectedUserProductId != null) userProducts?.filter { it.id == selectedUserProductId } else userProducts,
+            userProducts =
+            if (selectedUserProductId != null)
+                userProducts?.filter { it.id == selectedUserProductId }
+            else
+                userProducts,
             storeProduct = storeProduct,
             productTypes = productTypes
         )
@@ -377,7 +403,11 @@ internal class VirtusizeRepository(
             sharedPreferencesHelper.storeBrowserId(userAutoData?.bid)
             sharedPreferencesHelper.storeAuthToken(userAutoData?.auth)
         } catch (e: JSONException) {
-            messageHandler.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(extraMessage = e.localizedMessage))
+            messageHandler.onError(
+                VirtusizeErrorType.JsonParsingError.virtusizeError(
+                    extraMessage = e.localizedMessage
+                )
+            )
         }
     }
 }

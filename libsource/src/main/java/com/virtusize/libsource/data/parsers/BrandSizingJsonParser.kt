@@ -10,7 +10,7 @@ internal class BrandSizingJsonParser : VirtusizeJsonParser<BrandSizing> {
     override fun parse(json: JSONObject): BrandSizing? {
         val compare = json.optString(FIELD_COMPARE)
         val itemBrand = json.optBoolean(FIELD_ITEM_BRAND)
-        if(compare.isBlank()) {
+        if (compare.isBlank()) {
             return null
         }
         return BrandSizing(compare, itemBrand)

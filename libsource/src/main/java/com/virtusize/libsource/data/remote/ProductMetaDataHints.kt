@@ -5,8 +5,8 @@ package com.virtusize.libsource.data.remote
  * @see VirtusizeEndpoint.ProductMetaDataHints
  */
 internal data class ProductMetaDataHints(
-	val apiKey: String,
-	val imageUrl: String,
-	val cloudinaryPublicId: String,
-	val externalProductId: String
+    val apiKey: String,
+    val imageUrl: String,
+    val cloudinaryPublicId: String,
+    val externalProductId: String
 )

@@ -14,7 +14,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.*
+import java.util.Scanner
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.HttpsURLConnection
 
@@ -111,7 +111,10 @@ internal class VirtusizeApiTask(
                     inputStream = urlConnection.inputStream
                     return try {
                         val inputStreamString = readInputStreamAsString(inputStream)
-                        val response = parseInputStreamStringToObject(apiRequest.url, inputStreamString)
+                        val response = parseInputStreamStringToObject(
+                            apiRequest.url,
+                            inputStreamString
+                        )
                         VirtusizeApiResponse.Success(response) as VirtusizeApiResponse<T>
                     } catch (e: JSONException) {
                         VirtusizeApiResponse.Error(
@@ -201,7 +204,11 @@ internal class VirtusizeApiTask(
             try {
                 result = parseStringToObject(apiRequestUrl, inputStreamString)
             } catch (e: JSONException) {
-                messageHandler?.onError(VirtusizeErrorType.JsonParsingError.virtusizeError(extraMessage = e.localizedMessage))
+                messageHandler?.onError(
+                    VirtusizeErrorType.JsonParsingError.virtusizeError(
+                        extraMessage = e.localizedMessage
+                    )
+                )
             }
         }
         return result
@@ -257,8 +264,8 @@ internal class VirtusizeApiTask(
      * @return the boolean value to tell whether the response of the apiRequestUrl is a JSON array.
      */
     private fun responseIsJsonArray(apiRequestUrl: String): Boolean {
-        return apiRequestUrl.contains(VirtusizeEndpoint.ProductType.getPath())
-                || apiRequestUrl.contains(VirtusizeEndpoint.UserProducts.getPath())
+        return apiRequestUrl.contains(VirtusizeEndpoint.ProductType.getPath()) ||
+            apiRequestUrl.contains(VirtusizeEndpoint.UserProducts.getPath())
     }
 
     /**

@@ -2,7 +2,7 @@ package com.virtusize.libsource
 
 import android.content.Context
 import android.content.SharedPreferences
-import java.util.*
+import java.util.Calendar
 import kotlin.random.Random
 
 /**
@@ -37,7 +37,7 @@ class SharedPreferencesHelper {
      * Stores the auth token for the session API
      */
     fun storeAuthToken(authToken: String?) {
-        if(authToken == null) {
+        if (authToken == null) {
             return
         }
         preferences.edit().putString(PREFS_AUTH_TOKEN_KEY, authToken).apply()
@@ -103,7 +103,7 @@ class SharedPreferencesHelper {
      * Stores a browser identifier in application level shared preferences
      */
     fun storeBrowserId(bid: String?) {
-        if(bid == null) {
+        if (bid == null) {
             return
         }
         val editor = preferences.edit()

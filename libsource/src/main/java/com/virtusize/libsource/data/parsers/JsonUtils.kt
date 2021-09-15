@@ -33,7 +33,7 @@ internal object JsonUtils {
      */
     internal fun optNullableString(jsonObject: JSONObject, name: String?): String? {
         val stringValue = jsonObject.optString(name)
-        return if(stringValue == "null") null else stringValue
+        return if (stringValue == "null") null else stringValue
     }
 
     /**
@@ -91,7 +91,7 @@ internal object JsonUtils {
      */
     internal fun jsonArrayToList(array: JSONArray?): List<Any> {
         val list: MutableList<Any> = ArrayList()
-        if(array == null) {
+        if (array == null) {
             return list
         }
         for (i in 0 until array.length()) {

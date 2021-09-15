@@ -1,7 +1,6 @@
 package com.virtusize.libsource.data.local
 
 import com.google.common.truth.Truth.assertThat
-import com.virtusize.libsource.data.parsers.ProductTypeJsonParser
 import com.virtusize.libsource.data.remote.ProductType
 import com.virtusize.libsource.fixtures.ProductFixtures
 import com.virtusize.libsource.fixtures.TestFixtures
@@ -25,7 +24,8 @@ class BodyProfileRecommendedSizeParamsTests {
             ProductFixtures.storeProduct(),
             TestFixtures.userBodyProfile
         )
-        val actualAdditionalInfoParams = bodyProfileRecommendedSizeParams.createAdditionalInfoParams()
+        val actualAdditionalInfoParams =
+            bodyProfileRecommendedSizeParams.createAdditionalInfoParams()
         assertThat(JSONObject(actualAdditionalInfoParams).toString()).isEqualTo(
             """
                 {
@@ -68,7 +68,8 @@ class BodyProfileRecommendedSizeParamsTests {
             ),
             TestFixtures.userBodyProfile
         )
-        val actualAdditionalInfoParams = bodyProfileRecommendedSizeParams.createAdditionalInfoParams()
+        val actualAdditionalInfoParams =
+            bodyProfileRecommendedSizeParams.createAdditionalInfoParams()
         assertThat(JSONObject(actualAdditionalInfoParams).toString()).isEqualTo(
             """
                 {
@@ -225,7 +226,11 @@ class BodyProfileRecommendedSizeParamsTests {
         assertThat(bodyProfileRecommendedSizeParamsMap["userHeight"]).isEqualTo(1630)
         assertThat(bodyProfileRecommendedSizeParamsMap["extProductId"]).isEqualTo("694")
         assertThat(bodyProfileRecommendedSizeParamsMap["productType"]).isEqualTo("jacket")
-        assertThat(JSONObject(bodyProfileRecommendedSizeParamsMap["itemSizesOrig"] as Map<String, Any>).toString()).isEqualTo(
+        assertThat(
+            JSONObject(
+                bodyProfileRecommendedSizeParamsMap["itemSizesOrig"] as Map<String, Any>
+            ).toString()
+        ).isEqualTo(
             """
                 {
                     "38": {
@@ -241,7 +246,11 @@ class BodyProfileRecommendedSizeParamsTests {
                 } 
             """.trimIndent().replace("\\s+|[\\n]+".toRegex(), "")
         )
-        assertThat(JSONObject(bodyProfileRecommendedSizeParamsMap["additionalInfo"] as Map<String, Any>).toString()).isEqualTo(
+        assertThat(
+            JSONObject(
+                bodyProfileRecommendedSizeParamsMap["additionalInfo"] as Map<String, Any>
+            ).toString()
+        ).isEqualTo(
             """
                 {
                     "fit": "regular",
@@ -269,7 +278,11 @@ class BodyProfileRecommendedSizeParamsTests {
                 }
             """.trimIndent().replace("\\s+|[\\n]+".toRegex(), "")
         )
-        assertThat(JSONObject(bodyProfileRecommendedSizeParamsMap["bodyData"] as Map<String, Any>).toString()).isEqualTo(
+        assertThat(
+            JSONObject(
+                bodyProfileRecommendedSizeParamsMap["bodyData"] as Map<String, Any>
+            ).toString()
+        ).isEqualTo(
             """
                 {
                     "waistWidth": {

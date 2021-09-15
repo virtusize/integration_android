@@ -1,0 +1,16 @@
+#!/bin/sh
+
+echo "Running ktlint check..."
+
+./gradlew ktlint --daemon
+
+status=$?
+
+if [ "$status" = 0 ] ; then
+    echo "ktlint check ran successfully."
+    exit 0
+else
+    echo "ktlint check failed. Formatting with ktlint..."
+    ./gradlew ktlintFormat
+    exit 1
+fi

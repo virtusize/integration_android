@@ -26,7 +26,7 @@ enum class VirtusizeEvents {
  * @return the name of the event
  */
 fun VirtusizeEvents.getEventName(): String {
-    return when(this) {
+    return when (this) {
         VirtusizeEvents.UserSawProduct -> "user-saw-product"
         VirtusizeEvents.UserSawWidgetButton -> "user-saw-widget-button"
         VirtusizeEvents.UserOpenedWidget -> "user-opened-widget"

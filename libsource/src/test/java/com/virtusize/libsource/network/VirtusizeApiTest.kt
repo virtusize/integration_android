@@ -5,7 +5,13 @@ import android.os.Build
 import android.view.WindowManager
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
-import com.virtusize.libsource.data.local.*
+import com.virtusize.libsource.data.local.VirtusizeEnvironment
+import com.virtusize.libsource.data.local.VirtusizeEvent
+import com.virtusize.libsource.data.local.VirtusizeEvents
+import com.virtusize.libsource.data.local.VirtusizeLanguage
+import com.virtusize.libsource.data.local.VirtusizeOrder
+import com.virtusize.libsource.data.local.VirtusizeOrderItem
+import com.virtusize.libsource.data.local.getEventName
 import com.virtusize.libsource.data.parsers.JsonUtils
 import com.virtusize.libsource.fixtures.ProductFixtures
 import com.virtusize.libsource.fixtures.TestFixtures
@@ -15,18 +21,19 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
-
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.Q])
 class VirtusizeApiTest {
 
     private val context: Context = ApplicationProvider.getApplicationContext()
-    private val defaultDisplay = (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
+    private val defaultDisplay =
+        (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
     private val resolution = "${defaultDisplay.height}x${defaultDisplay.width}"
-    private val versionCode = context.packageManager.getPackageInfo(context.packageName, 0).versionCode
+    private val versionCode =
+        context.packageManager.getPackageInfo(context.packageName, 0).versionCode
 
     @Before
-    fun initVirtusizeApi(){
+    fun initVirtusizeApi() {
         VirtusizeApi.init(
             env = VirtusizeEnvironment.STAGING,
             key = TestFixtures.API_KEY,
@@ -39,9 +46,9 @@ class VirtusizeApiTest {
         val actualApiRequest = VirtusizeApi.productCheck(TestFixtures.VIRTUSIZE_PRODUCT)
 
         val expectedUrl = "https://services.virtusize.jp/stg/product/check" +
-                "?apiKey=${TestFixtures.API_KEY}" +
-                "&externalId=${TestFixtures.EXTERNAL_ID}" +
-                "&version=1"
+            "?apiKey=${TestFixtures.API_KEY}" +
+            "&externalId=${TestFixtures.EXTERNAL_ID}" +
+            "&version=1"
 
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
 
@@ -73,7 +80,8 @@ class VirtusizeApiTest {
 
     @Test
     fun sendProductImageToBackend_shouldReturnExpectedApiRequest() {
-        val actualApiRequest = VirtusizeApi.sendProductImageToBackend(TestFixtures.VIRTUSIZE_PRODUCT)
+        val actualApiRequest =
+            VirtusizeApi.sendProductImageToBackend(TestFixtures.VIRTUSIZE_PRODUCT)
 
         val expectedUrl = "https://staging.virtusize.jp/rest-api/v1/product-meta-data-hints"
 
@@ -158,19 +166,21 @@ class VirtusizeApiTest {
             "apiKey" to TestFixtures.API_KEY,
             "externalOrderId" to "888400111032",
             "externalUserId" to TestFixtures.USER_ID,
-            "items" to mutableListOf<MutableMap<String, Any>>(mutableMapOf(
-                "externalProductId" to "P001",
-                "size" to "L",
-                "sizeAlias" to "Large",
-                "variantId" to "P001_SIZEL_RED",
-                "imageUrl" to "http://images.example.com/products/P001/red/image1xl.jpg",
-                "color" to "Red",
-                "gender" to "W",
-                "unitPrice" to 5100.00,
-                "currency" to "JPY",
-                "quantity" to 1,
-                "url" to "http://example.com/products/P001"
-            ))
+            "items" to mutableListOf<MutableMap<String, Any>>(
+                mutableMapOf(
+                    "externalProductId" to "P001",
+                    "size" to "L",
+                    "sizeAlias" to "Large",
+                    "variantId" to "P001_SIZEL_RED",
+                    "imageUrl" to "http://images.example.com/products/P001/red/image1xl.jpg",
+                    "color" to "Red",
+                    "gender" to "W",
+                    "unitPrice" to 5100.00,
+                    "currency" to "JPY",
+                    "quantity" to 1,
+                    "url" to "http://example.com/products/P001"
+                )
+            )
         )
 
         assertThat(actualApiRequest.url).isEqualTo("https://staging.virtusize.jp/a/api/v3/orders")
@@ -183,7 +193,7 @@ class VirtusizeApiTest {
         val actualApiRequest = VirtusizeApi.getStoreInfo()
 
         val expectedUrl = "https://staging.virtusize.jp/a/api/v3/stores/api-key/test_apiKey" +
-                "?format=json"
+            "?format=json"
 
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
 
@@ -195,7 +205,7 @@ class VirtusizeApiTest {
         val actualApiRequest = VirtusizeApi.getStoreProductInfo("16099122")
 
         val expectedUrl = "https://staging.virtusize.jp/a/api/v3/store-products/16099122" +
-                "?format=json"
+            "?format=json"
 
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
 

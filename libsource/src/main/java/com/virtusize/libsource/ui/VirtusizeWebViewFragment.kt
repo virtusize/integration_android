@@ -5,28 +5,40 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Message
-import android.view.*
-import android.webkit.*
+import android.view.KeyEvent
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import android.webkit.CookieManager
+import android.webkit.JavascriptInterface
+import android.webkit.WebChromeClient
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.fragment.app.DialogFragment
 import com.virtusize.libsource.R
 import com.virtusize.libsource.SharedPreferencesHelper
 import com.virtusize.libsource.data.local.VirtusizeMessageHandler
 import com.virtusize.libsource.data.local.VirtusizeProduct
 import com.virtusize.libsource.data.parsers.VirtusizeEventJsonParser
+import com.virtusize.libsource.databinding.WebActivityBinding
 import com.virtusize.libsource.util.Constants
-import kotlinx.android.synthetic.main.web_activity.*
 import org.json.JSONObject
 
-class VirtusizeWebViewFragment: DialogFragment() {
+class VirtusizeWebViewFragment : DialogFragment() {
 
-    private var virtusizeWebAppUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-webview.html"
+    private var virtusizeWebAppUrl =
+        "https://static.api.virtusize.jp/a/aoyama/latest/sdk-webview.html"
     private var vsParamsFromSDKScript = ""
-    private var backButtonClickEventFromSDKScript = "javascript:vsEventFromSDK({ name: 'sdk-back-button-tapped'})"
+    private var backButtonClickEventFromSDKScript =
+        "javascript:vsEventFromSDK({ name: 'sdk-back-button-tapped'})"
 
     private var virtusizeMessageHandler: VirtusizeMessageHandler? = null
     private lateinit var clientProduct: VirtusizeProduct
 
     private lateinit var sharedPreferencesHelper: SharedPreferencesHelper
+
+    private lateinit var binding: WebActivityBinding
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -44,29 +56,33 @@ class VirtusizeWebViewFragment: DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.web_activity, container, false)
+    ): View {
+        binding = WebActivityBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Enable JavaScript in the web view
-        webView.settings.javaScriptEnabled = true
-        webView.settings.domStorageEnabled = true
-        webView.settings.databaseEnabled = true
-        webView.settings.setSupportMultipleWindows(true)
-        webView.settings.javaScriptCanOpenWindowsAutomatically = true
+        binding.webView.settings.javaScriptEnabled = true
+        binding.webView.settings.domStorageEnabled = true
+        binding.webView.settings.databaseEnabled = true
+        binding.webView.settings.setSupportMultipleWindows(true)
+        binding.webView.settings.javaScriptCanOpenWindowsAutomatically = true
         // Add the Javascript interface to interface the web app with the web view
-        webView.addJavascriptInterface(WebAppInterface(), Constants.JS_BRIDGE_NAME)
+        binding.webView.addJavascriptInterface(WebAppInterface(), Constants.JS_BRIDGE_NAME)
         // Set up the web view client that adds JavaScript scripts for the interaction between the SDK and the web
-        webView.webViewClient = object: WebViewClient() {
+        binding.webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
-                if(url != null && url.contains(virtusizeWebAppUrl)) {
-                    webView?.evaluateJavascript(vsParamsFromSDKScript, null)
-                    webView?.evaluateJavascript("javascript:window.virtusizeSNSEnabled = true;", null)
+                if (url != null && url.contains(virtusizeWebAppUrl)) {
+                    binding.webView.evaluateJavascript(vsParamsFromSDKScript, null)
+                    binding.webView.evaluateJavascript(
+                        "javascript:window.virtusizeSNSEnabled = true;",
+                        null
+                    )
                     getBrowserIDFromCookies()?.let { bid ->
-                        if(bid != sharedPreferencesHelper.getBrowserId()) {
+                        if (bid != sharedPreferencesHelper.getBrowserId()) {
                             sharedPreferencesHelper.storeBrowserId(bid)
                         }
                     }
@@ -76,13 +92,13 @@ class VirtusizeWebViewFragment: DialogFragment() {
             override fun onLoadResource(view: WebView?, url: String?) {
                 super.onLoadResource(view, url)
                 // To prevent multiple views in the WebView when a user selects a different display language
-                if(url != null && url.contains("i18n")) {
-                    webView.removeAllViews()
+                if (url != null && url.contains("i18n")) {
+                    binding.webView.removeAllViews()
                 }
             }
         }
 
-        webView.webChromeClient = object : WebChromeClient() {
+        binding.webView.webChromeClient = object : WebChromeClient() {
             override fun onCreateWindow(
                 view: WebView,
                 dialog: Boolean,
@@ -108,13 +124,13 @@ class VirtusizeWebViewFragment: DialogFragment() {
                             return false
                         }
                     }
-                    popupWebView.webChromeClient = object : WebChromeClient(){
+                    popupWebView.webChromeClient = object : WebChromeClient() {
                         override fun onCloseWindow(window: WebView) {
-                            webView.removeAllViews()
+                            binding.webView.removeAllViews()
                         }
                     }
                     val transport = resultMsg.obj as WebView.WebViewTransport
-                    webView.addView(popupWebView)
+                    binding.webView.addView(popupWebView)
                     transport.webView = popupWebView
                     resultMsg.sendToTarget()
                 }
@@ -122,15 +138,17 @@ class VirtusizeWebViewFragment: DialogFragment() {
             }
         }
 
-        webView.setOnKeyListener{ v, keyCode, event ->
+        binding.webView.setOnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP) {
                 when {
-                    webView.canGoBack() -> webView.goBack()
-                    webView.childCount > 0 -> {
-                        webView.removeAllViews()
-                        webView.reload()
+                    binding.webView.canGoBack() -> binding.webView.goBack()
+                    binding.webView.childCount > 0 -> {
+                        binding.webView.removeAllViews()
+                        binding.webView.reload()
                     }
-                    else -> webView.evaluateJavascript(backButtonClickEventFromSDKScript, null)
+                    else -> binding.webView.evaluateJavascript(
+                        backButtonClickEventFromSDKScript, null
+                    )
                 }
             }
             true
@@ -157,13 +175,13 @@ class VirtusizeWebViewFragment: DialogFragment() {
             dismiss()
         }
 
-        webView.loadUrl(virtusizeWebAppUrl)
+        binding.webView.loadUrl(virtusizeWebAppUrl)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        webView.stopLoading()
-        webView.destroy()
+        binding.webView.stopLoading()
+        binding.webView.destroy()
     }
 
     /**
@@ -211,18 +229,21 @@ class VirtusizeWebViewFragment: DialogFragment() {
         fun eventHandler(eventInfo: String) {
             val event = VirtusizeEventJsonParser().parse(JSONObject(eventInfo))
             event?.let { virtusizeMessageHandler?.onEvent(clientProduct, it) }
-            if (event?.name =="user-closed-widget") {
+            if (event?.name == "user-closed-widget") {
                 dismiss()
             }
-            if(event?.name == "user-clicked-start") {
+            if (event?.name == "user-clicked-start") {
                 userAcceptedPrivacyPolicy()
             }
         }
     }
 
     private fun userAcceptedPrivacyPolicy() {
-        webView.post {
-            webView.evaluateJavascript("localStorage.setItem('acceptedPrivacyPolicy','true');", null)
+        binding.webView.post {
+            binding.webView.evaluateJavascript(
+                "localStorage.setItem('acceptedPrivacyPolicy','true');",
+                null
+            )
         }
     }
 }
