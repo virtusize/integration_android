@@ -17,20 +17,20 @@ class SharedPreferencesHelper {
         private const val PREFS_ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY_VIRTUSIZE"
         private const val PREFS_SESSION_DATA_KEY = "SESSION_DATA_KEY_VIRTUSIZE"
 
-        private var sharedPreferenceHelper: com.virtusize.android.SharedPreferencesHelper? = null
+        private var sharedPreferenceHelper: SharedPreferencesHelper? = null
         private lateinit var preferences: SharedPreferences
 
         // Gets the instance of [SharedPreferencesHelper]
-        fun getInstance(context: Context): com.virtusize.android.SharedPreferencesHelper {
-            com.virtusize.android.SharedPreferencesHelper.Companion.preferences = context.getSharedPreferences(
-                com.virtusize.android.SharedPreferencesHelper.Companion.SHARED_PREFS_NAME,
+        fun getInstance(context: Context): SharedPreferencesHelper {
+            preferences = context.getSharedPreferences(
+                SHARED_PREFS_NAME,
                 Context.MODE_PRIVATE
             )
-            if (com.virtusize.android.SharedPreferencesHelper.Companion.sharedPreferenceHelper == null) {
-                com.virtusize.android.SharedPreferencesHelper.Companion.sharedPreferenceHelper =
-                    com.virtusize.android.SharedPreferencesHelper()
+            if (sharedPreferenceHelper == null) {
+                sharedPreferenceHelper =
+                    SharedPreferencesHelper()
             }
-            return com.virtusize.android.SharedPreferencesHelper.Companion.sharedPreferenceHelper as com.virtusize.android.SharedPreferencesHelper
+            return sharedPreferenceHelper as SharedPreferencesHelper
         }
     }
 
@@ -41,7 +41,7 @@ class SharedPreferencesHelper {
         if (authToken == null) {
             return
         }
-        com.virtusize.android.SharedPreferencesHelper.Companion.preferences.edit().putString(com.virtusize.android.SharedPreferencesHelper.Companion.PREFS_AUTH_TOKEN_KEY, authToken).apply()
+        preferences.edit().putString(PREFS_AUTH_TOKEN_KEY, authToken).apply()
     }
 
     /**
@@ -49,14 +49,14 @@ class SharedPreferencesHelper {
      * @return the auth token as a string
      */
     fun getAuthToken(): String? {
-        return com.virtusize.android.SharedPreferencesHelper.Companion.preferences.getString(com.virtusize.android.SharedPreferencesHelper.Companion.PREFS_AUTH_TOKEN_KEY, null)
+        return preferences.getString(PREFS_AUTH_TOKEN_KEY, null)
     }
 
     /**
      * Stores the access token for the session API
      */
     fun storeAccessToken(authToken: String) {
-        com.virtusize.android.SharedPreferencesHelper.Companion.preferences.edit().putString(com.virtusize.android.SharedPreferencesHelper.Companion.PREFS_ACCESS_TOKEN_KEY, authToken).apply()
+        preferences.edit().putString(PREFS_ACCESS_TOKEN_KEY, authToken).apply()
     }
 
     /**
@@ -64,14 +64,14 @@ class SharedPreferencesHelper {
      * @return the access token as a string
      */
     fun getAccessToken(): String? {
-        return com.virtusize.android.SharedPreferencesHelper.Companion.preferences.getString(com.virtusize.android.SharedPreferencesHelper.Companion.PREFS_ACCESS_TOKEN_KEY, null)
+        return preferences.getString(PREFS_ACCESS_TOKEN_KEY, null)
     }
 
     /**
      * Stores the session data from the session API
      */
     fun storeSessionData(sessionData: String) {
-        com.virtusize.android.SharedPreferencesHelper.Companion.preferences.edit().putString(com.virtusize.android.SharedPreferencesHelper.Companion.PREFS_SESSION_DATA_KEY, sessionData).apply()
+        preferences.edit().putString(PREFS_SESSION_DATA_KEY, sessionData).apply()
     }
 
     /**
@@ -79,7 +79,7 @@ class SharedPreferencesHelper {
      * @return the session API response as a string
      */
     fun getSessionData(): String? {
-        return com.virtusize.android.SharedPreferencesHelper.Companion.preferences.getString(com.virtusize.android.SharedPreferencesHelper.Companion.PREFS_SESSION_DATA_KEY, null)
+        return preferences.getString(PREFS_SESSION_DATA_KEY, null)
     }
 
     /**
@@ -87,7 +87,7 @@ class SharedPreferencesHelper {
      * @return the browser identifier as String
      */
     fun getBrowserId(): String {
-        return com.virtusize.android.SharedPreferencesHelper.Companion.preferences.getString(com.virtusize.android.SharedPreferencesHelper.Companion.PREFS_BID_KEY, null) ?: generateAndStoreBrowserId()
+        return preferences.getString(PREFS_BID_KEY, null) ?: generateAndStoreBrowserId()
     }
 
     /**
@@ -107,8 +107,8 @@ class SharedPreferencesHelper {
         if (bid == null) {
             return
         }
-        val editor = com.virtusize.android.SharedPreferencesHelper.Companion.preferences.edit()
-        editor.putString(com.virtusize.android.SharedPreferencesHelper.Companion.PREFS_BID_KEY, bid)
+        val editor = preferences.edit()
+        editor.putString(PREFS_BID_KEY, bid)
         editor.apply()
     }
 

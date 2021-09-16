@@ -36,14 +36,14 @@ class VirtusizeWebViewFragment : DialogFragment() {
     private var virtusizeMessageHandler: VirtusizeMessageHandler? = null
     private lateinit var clientProduct: VirtusizeProduct
 
-    private lateinit var sharedPreferencesHelper: com.virtusize.android.SharedPreferencesHelper
+    private lateinit var sharedPreferencesHelper: SharedPreferencesHelper
 
     private lateinit var binding: WebActivityBinding
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         dialog?.window?.attributes?.windowAnimations = R.style.VirtusizeDialogFragmentAnimation
-        sharedPreferencesHelper = com.virtusize.android.SharedPreferencesHelper.getInstance(requireContext())
+        sharedPreferencesHelper = SharedPreferencesHelper.getInstance(requireContext())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

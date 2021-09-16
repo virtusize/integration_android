@@ -32,8 +32,8 @@ data class VirtusizeParams(
      * Returns the virtusize parameter string to be passed to the JavaScript function vsParamsFromSDK
      */
     internal fun vsParamsString(product: VirtusizeProduct): String {
-        val sessionData = com.virtusize.android.SharedPreferencesHelper.getInstance(context).getSessionData()
-        val bid = com.virtusize.android.SharedPreferencesHelper.getInstance(context).getBrowserId()
+        val sessionData = SharedPreferencesHelper.getInstance(context).getSessionData()
+        val bid = SharedPreferencesHelper.getInstance(context).getBrowserId()
         return "{$PARAM_API_KEY: '$apiKey', " +
             "$PARAM_BID: '$bid', " +
             (if (sessionData != null) "$PARAM_SESSION_DATA: $sessionData, " else "") +
