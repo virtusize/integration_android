@@ -1,16 +1,6 @@
 apply plugin: 'maven'
 apply plugin: 'signing'
 
-def localProperties(String key) {
-    Properties properties = new Properties()
-    try {
-        properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    } catch (Exception e) {
-        println("Loading local properties failed, msg:${e.message}")
-    }
-    return properties.getProperty(key) ?: System.getenv(key)
-}
-
 task androidSourcesJar(type: Jar) {
     archiveClassifier.set('sources')
     from android.sourceSets.main.java.srcDirs

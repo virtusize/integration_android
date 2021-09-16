@@ -52,5 +52,15 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
+def localProperties(String key) {
+    Properties properties = new Properties()
+    try {
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    } catch (Exception e) {
+        println("Loading local properties failed, msg:${e.message}")
+    }
+    return properties.getProperty(key) ?: System.getenv(key)
+}
+
 apply from: rootProject.file('gradle/githooks.gradle')
 apply from: rootProject.file('gradle/release.gradle')
