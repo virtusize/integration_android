@@ -1,6 +1,6 @@
 # Android SDK 実装ガイド
 
-[![](https://jitpack.io/v/virtusize/integration_android.svg)](https://jitpack.io/#virtusize/integration_android)
+[![](https://jitpack.io/v/virtusize/integration_android.svg)](https://jitpack.io/#virtusize/integration_android) ![Maven Central](https://img.shields.io/maven-central/v/com.virtusize.android/virtusize)
 
 [English](README.md)
 

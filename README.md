@@ -1,6 +1,6 @@
 # Virtusize Android Integration
 
-[![](https://jitpack.io/v/virtusize/integration_android.svg)](https://jitpack.io/#virtusize/integration_android)
+[![](https://jitpack.io/v/virtusize/integration_android.svg)](https://jitpack.io/#virtusize/integration_android) ![Maven Central](https://img.shields.io/maven-central/v/com.virtusize.android/virtusize)
 
 [日本語](https://github.com/virtusize/integration_android/blob/master/README-JP.md)
 
