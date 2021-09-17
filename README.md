@@ -69,21 +69,11 @@ If you'd like to continue using the old Version 1.x.x, refer to the branch [v1](
 
 ### 1. Installation
 
-In your root `build.gradle` file, add the following dependency:
-
-```groovy
-allprojects {
-  repositories {
-      maven { url 'https://jitpack.io' }
-  }
-}
-```
-
 In your app `build.gradle` file, add the following dependencies:
 
 ```groovy
 dependencies {
-  implementation 'com.github.virtusize:integration_android:2.3.1'
+  implementation 'com.virtusize.android:virtusize:2.3.1'
 }
 ```
 
@@ -182,9 +172,9 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
   - An `exernalId` that will be used to reference the product in the Virtusize server
      - An `imageURL` for the product image
    - Pass the `VirtusizeProduct` object to the `Virtusize.load` function
-   
+
    Kotlin
-   
+
    ```kotlin
    val product = VirtusizeProduct(
        // Set the product's external ID
@@ -197,9 +187,9 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
        .Virtusize
        .load(product)
    ```
-   
+
    Java
-   
+
    ```java
    VirtusizeProduct product = new VirtusizeProduct(
            "vs_dress",
@@ -244,13 +234,13 @@ Please do not forget to unregister message handler in activity or fragment's lif
   protected void onCreate(Bundle savedInstanceState) {
       //...
       App app = (App) getApplication();
-
+  
       virtusizeMessageHandler = new VirtusizeMessageHandler() {
           @Override
           public void onEvent(@NotNull VirtusizeProduct product, @NotNull VirtusizeEvent event) {
               Log.i(TAG, event.getName());
           }
-
+  
           @Override
           public void onError(@NonNull VirtusizeError error) {
               Log.e(TAG, error.getMessage());
@@ -663,7 +653,7 @@ in your activity or fragment after the app is launched
             .setEnv(VirtusizeEnvironment.STAGING)
             .build()
     }
-
+    
     // In your activity or fragment after the app is launched
     (application as App).Virtusize.setUserID("user_id")
     ```

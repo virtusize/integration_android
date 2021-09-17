@@ -69,25 +69,13 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 
 ### 1. Virtusize SDKを実装する
 
-rootの`build.gradle`ファイルに下記のdependencyを追加
-
-```groovy
-allprojects {
-  repositories {
-      maven { url 'https://jitpack.io' }
-  }
-}
-```
-
 In your appの`build.gradle`ファイルに下記のdependencyを追加
 
 ```groovy
 dependencies {
-  implementation 'com.github.virtusize:integration_android:2.3.1'
+  implementation 'com.virtusize.android:virtusize:2.3.1'
 }
 ```
-
-
 
 ### 2. Proguardの設定
 
