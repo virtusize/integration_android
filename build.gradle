@@ -54,12 +54,13 @@ task clean(type: Delete) {
 
 def localProperties(String key) {
     Properties properties = new Properties()
-    try {
-        properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    } catch (Exception e) {
-        println("Loading local properties failed, msg:${e.message}")
+    File localPropertiesFile = project.rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        properties.load(localPropertiesFile.newDataInputStream())
+        return properties.getProperty(key) ?: ""
+    } else {
+        return System.getenv(key) ?: ""
     }
-    return properties.getProperty(key) ?: System.getenv(key)
 }
 
 apply from: rootProject.file('gradle/githooks.gradle')
