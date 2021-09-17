@@ -73,7 +73,7 @@ In your appの`build.gradle`ファイルに下記のdependencyを追加
 
 ```groovy
 dependencies {
-  implementation 'com.virtusize.android:virtusize:2.3.1'
+  implementation 'com.virtusize.android:virtusize:2.4.0'
 }
 ```
 
