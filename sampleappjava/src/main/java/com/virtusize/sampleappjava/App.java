@@ -1,11 +1,11 @@
 package com.virtusize.sampleappjava;
 
 import android.app.Application;
-import com.virtusize.libsource.Virtusize;
-import com.virtusize.libsource.VirtusizeBuilder;
-import com.virtusize.libsource.data.local.VirtusizeEnvironment;
-import com.virtusize.libsource.data.local.VirtusizeInfoCategory;
-import com.virtusize.libsource.data.local.VirtusizeLanguage;
+import com.virtusize.android.Virtusize;
+import com.virtusize.android.VirtusizeBuilder;
+import com.virtusize.android.data.local.VirtusizeEnvironment;
+import com.virtusize.android.data.local.VirtusizeInfoCategory;
+import com.virtusize.android.data.local.VirtusizeLanguage;
 
 import java.util.Arrays;
 

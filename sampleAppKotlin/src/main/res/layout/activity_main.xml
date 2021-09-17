@@ -9,13 +9,13 @@
     android:gravity="center">
 
     <!-- VirtusizeButton is custom button layout that can be put in xml file and set up programmatically -->
-    <com.virtusize.libsource.ui.VirtusizeButton
+    <com.virtusize.android.ui.VirtusizeButton
         android:id="@+id/exampleVirtusizeButton"
         app:virtusizeButtonStyle="virtusize_black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <com.virtusize.libsource.ui.VirtusizeInPageStandard
+    <com.virtusize.android.ui.VirtusizeInPageStandard
         android:id="@+id/exampleVirtusizeInPageStandard"
         android:layout_marginTop="@dimen/virtusizeDp16"
         app:inPageStandardHorizontalMargin="@dimen/virtusizeDp16"
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <com.virtusize.libsource.ui.VirtusizeInPageMini
+    <com.virtusize.android.ui.VirtusizeInPageMini
         android:id="@+id/exampleVirtusizeInPageMini"
         android:layout_margin="@dimen/virtusizeDp16"
         android:layout_width="wrap_content"
