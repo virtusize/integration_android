@@ -133,7 +133,7 @@ internal object VirtusizeApi {
      * @param productCheck ProductCheckResponse as the additional payload to be sent to the server along with the event
      * @param deviceOrientation the screen orientation of the device
      * @param screenResolution the screen resolution of the device
-     * @param versionCode the SDK version code
+     * @param versionName the Virtusize SDK version
      * @return ApiRequest
      * @see VirtusizeEvent
      * @see ProductCheck
@@ -144,7 +144,7 @@ internal object VirtusizeApi {
         productCheck: ProductCheck?,
         deviceOrientation: String,
         screenResolution: String,
-        versionCode: Int
+        versionName: String
     ): ApiRequest {
         val url = Uri.parse(environment.eventApiUrl())
             .buildUpon()
@@ -156,7 +156,7 @@ internal object VirtusizeApi {
                 productCheck,
                 deviceOrientation,
                 screenResolution,
-                versionCode
+                versionName
             )
         return ApiRequest(url, HttpMethod.POST, params)
     }
@@ -167,7 +167,7 @@ internal object VirtusizeApi {
      * @param productCheck ProductCheckResponse as the additional payload to be sent to the server along with the event
      * @param orientation the screen orientation of the device
      * @param resolution the screen resolution of the device
-     * @param versionCode the SDK version code
+     * @param versionName the Virtusize SDK version
      * @return the MutableMap that holds pairs of keys and values for the payload
      * @see VirtusizeEvent
      * @see ProductCheck
@@ -178,7 +178,7 @@ internal object VirtusizeApi {
         productCheck: ProductCheck?,
         orientation: String,
         resolution: String,
-        versionCode: Int
+        versionName: String
     ): MutableMap<String, Any> {
         val params = mutableMapOf<String, Any>()
         params["name"] = virtusizeEvent.name
@@ -189,8 +189,8 @@ internal object VirtusizeApi {
         params["widgetType"] = "mobile"
         params["browserOrientation"] = orientation
         params["browserResolution"] = resolution
-        params["integrationVersion"] = "$versionCode"
-        params["snippetVersion"] = "$versionCode"
+        params["integrationVersion"] = "$versionName"
+        params["snippetVersion"] = "$versionName"
 
         if (productCheck != null) {
             productCheck.data?.storeId?.let {

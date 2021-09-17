@@ -5,8 +5,8 @@ import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.WindowManager
+import com.virtusize.android.BuildConfig
 import com.virtusize.android.R
-import com.virtusize.android.SharedPreferencesHelper
 import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeLanguage
@@ -159,8 +159,7 @@ internal class VirtusizeAPIService(
             else
                 context.getString(R.string.portrait),
             screenResolution = resolution,
-            versionCode = context.packageManager
-                .getPackageInfo(context.packageName, 0).versionCode
+            versionName = BuildConfig.VERSION_NAME
         )
         VirtusizeApiTask(
             httpURLConnection,
