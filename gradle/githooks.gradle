@@ -5,4 +5,4 @@ task installGitHooks(type: Copy) {
 }
 
 /* Uncomment the following line if you want the installGitHooks task to be run automatically */
-//tasks.getByPath(':libsource:preBuild').dependsOn installGitHooks
+// tasks.getByPath(':virtusize:preBuild').dependsOn installGitHooks
