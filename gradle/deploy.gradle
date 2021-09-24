@@ -85,13 +85,19 @@ afterEvaluate {
         }
     }
 
+    def shouldSign = !localProperties('GPG_KEY_ID').isEmpty()
+            && !localProperties('GPG_KEY').isEmpty()
+            && !localProperties('GPG_KEY_PASSWORD').isEmpty()
+
     signing {
-        required { gradle.taskGraph.hasTask("publish") }
-        useInMemoryPgpKeys(
-                localProperties('GPG_KEY_ID'),
-                localProperties('GPG_KEY'),
-                localProperties('GPG_KEY_PASSWORD')
-        )
+        required { shouldSign && gradle.taskGraph.hasTask("publish") }
+        if (shouldSign) {
+            useInMemoryPgpKeys(
+                    localProperties('GPG_KEY_ID'),
+                    localProperties('GPG_KEY'),
+                    localProperties('GPG_KEY_PASSWORD')
+            )
+        }
         sign publishing.publications.release
     }
 }
