@@ -1,6 +1,6 @@
 # Virtusize Android Integration
 
-[![](https://jitpack.io/v/virtusize/integration_android.svg)](https://jitpack.io/#virtusize/integration_android)
+[![](https://jitpack.io/v/virtusize/integration_android.svg)](https://jitpack.io/#virtusize/integration_android) ![Maven Central](https://img.shields.io/maven-central/v/com.virtusize.android/virtusize)
 
 [日本語](https://github.com/virtusize/integration_android/blob/master/README-JP.md)
 
@@ -69,21 +69,11 @@ If you'd like to continue using the old Version 1.x.x, refer to the branch [v1](
 
 ### 1. Installation
 
-In your root `build.gradle` file, add the following dependency:
-
-```groovy
-allprojects {
-  repositories {
-      maven { url 'https://jitpack.io' }
-  }
-}
-```
-
 In your app `build.gradle` file, add the following dependencies:
 
 ```groovy
 dependencies {
-  implementation 'com.github.virtusize:integration_android:2.3.1'
+  implementation 'com.virtusize.android:virtusize:2.4.0'
 }
 ```
 
@@ -93,7 +83,7 @@ dependencies {
 If you are using Proguard, add following rules to your proguard rules file:
 
 ```
--keep class com.virtusize.libsource.**
+-keep class com.virtusize.android.**
 ```
 
 
@@ -182,9 +172,9 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
   - An `exernalId` that will be used to reference the product in the Virtusize server
      - An `imageURL` for the product image
    - Pass the `VirtusizeProduct` object to the `Virtusize.load` function
-   
+
    Kotlin
-   
+
    ```kotlin
    val product = VirtusizeProduct(
        // Set the product's external ID
@@ -197,9 +187,9 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
        .Virtusize
        .load(product)
    ```
-   
+
    Java
-   
+
    ```java
    VirtusizeProduct product = new VirtusizeProduct(
            "vs_dress",
@@ -244,13 +234,13 @@ Please do not forget to unregister message handler in activity or fragment's lif
   protected void onCreate(Bundle savedInstanceState) {
       //...
       App app = (App) getApplication();
-
+  
       virtusizeMessageHandler = new VirtusizeMessageHandler() {
           @Override
           public void onEvent(@NotNull VirtusizeProduct product, @NotNull VirtusizeEvent event) {
               Log.i(TAG, event.getName());
           }
-
+  
           @Override
           public void onError(@NonNull VirtusizeError error) {
               Log.e(TAG, error.getMessage());
@@ -326,7 +316,7 @@ In order to use our default button styles, set `app:virtusizeButtonStyle="virtus
 - XML
 
   ```xml
-  <com.virtusize.libsource.ui.VirtusizeButton
+  <com.virtusize.android.ui.VirtusizeButton
       android:id="@+id/exampleVirtusizeButton"
       app:virtusizeButtonStyle="virtusize_black"
       android:layout_width="wrap_content"
@@ -350,7 +340,7 @@ In order to use our default button styles, set `app:virtusizeButtonStyle="virtus
 **B. You can also use any other button styles and/or define the button's attributes like text, height, width, etc.**
 
 ```xml
-<com.virtusize.libsource.ui.VirtusizeButton
+<com.virtusize.android.ui.VirtusizeButton
     android:id="@+id/exampleVirtusizeButton"
     style="@style/Widget.AppCompat.Button.Colored"
     android:layout_width="wrap_content"
@@ -412,7 +402,7 @@ There are two types of InPage in our Virtusize SDK.
   - XML
 
     ```xml
-    <com.virtusize.libsource.ui.VirtusizeInPageStandard
+    <com.virtusize.android.ui.VirtusizeInPageStandard
         android:id="@+id/exampleVirtusizeInPageStandard"
         app:virtusizeInPageStandardStyle="virtusize_black"
         app:inPageStandardHorizontalMargin="16dp"
@@ -423,7 +413,7 @@ There are two types of InPage in our Virtusize SDK.
     ```
 
     ```xml
-    <com.virtusize.libsource.ui.VirtusizeInPageStandard
+    <com.virtusize.android.ui.VirtusizeInPageStandard
         android:id="@+id/exampleVirtusizeInPageStandard"
         app:inPageStandardButtonBackgroundColor="#123456"
         android:layout_width="300dp"
@@ -536,7 +526,7 @@ This is a mini version of InPage you can place in your application. The discreet
   - XML
 
     ```xml
-    <com.virtusize.libsource.ui.VirtusizeInPageMini
+    <com.virtusize.android.ui.VirtusizeInPageMini
         android:id="@+id/exampleVirtusizeInPageMini"
         app:virtusizeInPageMiniStyle="virtusize_teal"                                                         
         app:inPageMiniMessageTextSize="12sp"
@@ -546,7 +536,7 @@ This is a mini version of InPage you can place in your application. The discreet
     ```
 
     ```xml
-    <com.virtusize.libsource.ui.VirtusizeInPageMini
+    <com.virtusize.android.ui.VirtusizeInPageMini
         android:id="@+id/exampleVirtusizeInPageMini"
         app:inPageMiniBackgroundColor="#123456"
         android:layout_width="300dp"
@@ -663,7 +653,7 @@ in your activity or fragment after the app is launched
             .setEnv(VirtusizeEnvironment.STAGING)
             .build()
     }
-
+    
     // In your activity or fragment after the app is launched
     (application as App).Virtusize.setUserID("user_id")
     ```
@@ -840,9 +830,9 @@ and
 
   ```diff
   - <WebView
-  + <com.virtusize.libsource.VirtusizeWebView
+  + <com.virtusize.android.VirtusizeWebView
       or
-  + <com.virtusize.libsource.VirtusizeFitIllustratorWebView
+  + <com.virtusize.android.VirtusizeFitIllustratorWebView
       android:id="@+id/webView"
       android:layout_width="match_parent"
       android:layout_height="match_parent" />
