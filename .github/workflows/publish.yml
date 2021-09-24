@@ -24,7 +24,5 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
           cache: gradle
-      - name: Deploy to OSSRH
-        run: ./gradlew publishReleasePublicationToSonatypeRepository
-      - name: Publish to MavenCentral
-        run: ./gradlew closeAndReleaseSonatypeStagingRepository
+      - name: Deploy to OSSRH and publish to MavenCentral
+        run: ./gradlew publishReleasePublicationToSonatypeRepository --max-workers 1 closeAndReleaseSonatypeStagingRepository
