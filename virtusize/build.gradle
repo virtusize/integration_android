@@ -86,9 +86,9 @@ task ktlintFormat(type: JavaExec, group: "formatting") {
 }
 
 ext {
-    name = 'virtusize'
     artifactId = "virtusize"
-    description = "Virtusize Android SDK"
+    artifactName = 'virtusize'
+    artifactDescription = "Virtusize Android SDK"
 }
 
 apply from: "${rootDir}/gradle/deploy.gradle"

@@ -33,18 +33,18 @@ afterEvaluate {
                 from components.release
 
                 // You can then customize attributes of the publication as shown below.
-                groupId = project.group
+                groupId = rootProject.group
                 artifactId = project.artifactId
-                version = project.version
+                version = rootProject.version
 
                 // Adds Javadocs and Sources as separate jars.
                 artifact androidSourcesJar
                 artifact androidJavadocsJar
 
                 pom {
-                    name = project.name
-                    packaging 'aar'
-                    description project.description
+                    name = project.artifactName
+                    packaging = 'aar'
+                    description = project.artifactDescription
                     url = POM_URL
 
                     licenses {
