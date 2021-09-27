@@ -50,4 +50,5 @@ ext {
     artifactDescription = "Virtusize UI Toolkit Android SDK"
 }
 
+apply from: "${rootDir}/gradle/ktlint.gradle"
 apply from: "${rootDir}/gradle/deploy.gradle"

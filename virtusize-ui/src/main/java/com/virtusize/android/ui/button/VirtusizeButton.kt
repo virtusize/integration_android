@@ -13,7 +13,6 @@ import androidx.core.graphics.drawable.DrawableCompat
 import com.virtusize.android.ui.R
 import com.virtusize.android.ui.utils.dp
 
-
 class VirtusizeButton @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -72,13 +71,13 @@ class VirtusizeButton @JvmOverloads constructor(
         viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 viewTreeObserver.removeOnGlobalLayoutListener(this)
-                if(isRoundButton()) {
+                if (isRoundButton()) {
                     var size = if (width > height) {
                         width
                     } else {
                         height
                     }
-                    if(size < 40.dp.toInt()){
+                    if (size < 40.dp.toInt()) {
                         size = 40.dp.toInt()
                     }
                     minimumWidth = size
@@ -89,7 +88,6 @@ class VirtusizeButton @JvmOverloads constructor(
 
         setView()
     }
-
 
     override fun setPressed(pressed: Boolean) {
         super.setPressed(pressed)
@@ -107,7 +105,7 @@ class VirtusizeButton @JvmOverloads constructor(
     }
 
     private fun setView() {
-        if(virtusizeButtonStyle == VirtusizeButtonStyle.NONE) {
+        if (virtusizeButtonStyle == VirtusizeButtonStyle.NONE) {
             return
         }
 
@@ -125,7 +123,7 @@ class VirtusizeButton @JvmOverloads constructor(
     fun setLeftIcon(left: Drawable?, width: Int? = null, height: Int? = null) {
         leftIconDrawable = left
         leftIconDrawable?.setBounds(0, 0, width ?: leftIconDrawable!!.minimumWidth, height ?: leftIconDrawable!!.minimumHeight)
-        if(isInvertedButton() && leftIconDrawable != null) {
+        if (isInvertedButton() && leftIconDrawable != null) {
             DrawableCompat.setTint(leftIconDrawable!!, ContextCompat.getColor(context, R.color.vs_white))
         }
         setIcons()
@@ -134,7 +132,7 @@ class VirtusizeButton @JvmOverloads constructor(
     fun setRightIcon(right: Drawable?, width: Int? = null, height: Int? = null) {
         rightIconDrawable = right
         rightIconDrawable?.setBounds(0, 0, width ?: rightIconDrawable!!.minimumWidth, height ?: rightIconDrawable!!.minimumHeight)
-        if(isInvertedButton() && rightIconDrawable != null) {
+        if (isInvertedButton() && rightIconDrawable != null) {
             DrawableCompat.setTint(rightIconDrawable!!, ContextCompat.getColor(context, R.color.vs_white))
         }
         setIcons()
@@ -167,7 +165,7 @@ class VirtusizeButton @JvmOverloads constructor(
                 setBackgroundResource(R.drawable.virtusize_button_square_background)
             }
         }
-        if(virtusizeBackgroundColor != 0) {
+        if (virtusizeBackgroundColor != 0) {
             DrawableCompat.setTint(background, virtusizeBackgroundColor)
         }
 
@@ -191,7 +189,7 @@ class VirtusizeButton @JvmOverloads constructor(
     }
 
     private fun setElevation() {
-        if(virtusizeButtonStyle == VirtusizeButtonStyle.NONE) {
+        if (virtusizeButtonStyle == VirtusizeButtonStyle.NONE) {
             return
         }
 
@@ -222,12 +220,11 @@ class VirtusizeButton @JvmOverloads constructor(
             setTextAppearance(context, styleId)
         }
 
-
-        if(virtusizeButtonStyle == VirtusizeButtonStyle.DEFAULT && virtusizeTextColor != 0) {
+        if (virtusizeButtonStyle == VirtusizeButtonStyle.DEFAULT && virtusizeTextColor != 0) {
             setTextColor(virtusizeTextColor)
         }
 
-        when(virtusizeButtonTextSize) {
+        when (virtusizeButtonTextSize) {
             VirtusizeButtonTextSize.DEFAULT, VirtusizeButtonTextSize.NORMAL -> {
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.vs_normal_text_size))
             }

@@ -2,7 +2,7 @@ package com.virtusize.android.ui.button
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.ViewTreeObserver.*
+import android.view.ViewTreeObserver
 import androidx.core.content.ContextCompat
 import com.virtusize.android.ui.R
 import com.virtusize.android.ui.utils.dp
@@ -44,21 +44,22 @@ open class VirtusizeRoundImageButton @JvmOverloads constructor(
         minimumWidth = DEFAULT_BUTTON_SIZE.dp.toInt()
         minimumHeight = DEFAULT_BUTTON_SIZE.dp.toInt()
 
-        viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                viewTreeObserver.removeOnGlobalLayoutListener(this)
-                var size = if (width > height) {
-                    width
-                } else {
-                    height
+        viewTreeObserver.addOnGlobalLayoutListener(object :
+                ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    var size = if (width > height) {
+                        width
+                    } else {
+                        height
+                    }
+                    if (size < DEFAULT_BUTTON_SIZE.dp.toInt()) {
+                        size = DEFAULT_BUTTON_SIZE.dp.toInt()
+                    }
+                    minimumWidth = size
+                    minimumHeight = size
                 }
-                if(size < DEFAULT_BUTTON_SIZE.dp.toInt()) {
-                    size = DEFAULT_BUTTON_SIZE.dp.toInt()
-                }
-                minimumWidth = size
-                minimumHeight = size
-            }
-        })
+            })
 
         setButtonSize()
         setButtonStyle()
@@ -74,13 +75,13 @@ open class VirtusizeRoundImageButton @JvmOverloads constructor(
     }
 
     private fun setButtonStyle() {
-        if(roundImageButtonStyle == VirtusizeRoundImageButtonStyle.DEFAULT) {
+        if (roundImageButtonStyle == VirtusizeRoundImageButtonStyle.DEFAULT) {
             setBackgroundResource(R.drawable.virtusize_button_round_background)
             setColorFilter(ContextCompat.getColor(context, R.color.vs_gray_900))
-        } else if(roundImageButtonStyle == VirtusizeRoundImageButtonStyle.INVERTED) {
+        } else if (roundImageButtonStyle == VirtusizeRoundImageButtonStyle.INVERTED) {
             setBackgroundResource(R.drawable.virtusize_button_invertd_background)
             setColorFilter(ContextCompat.getColor(context, R.color.vs_white))
-        } else if(roundImageButtonStyle == VirtusizeRoundImageButtonStyle.COLOR) {
+        } else if (roundImageButtonStyle == VirtusizeRoundImageButtonStyle.COLOR) {
             setBackgroundResource(R.drawable.virtusize_button_round_background)
         }
     }

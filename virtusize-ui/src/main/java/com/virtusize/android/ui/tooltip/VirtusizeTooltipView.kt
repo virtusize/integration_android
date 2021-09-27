@@ -1,7 +1,11 @@
 package com.virtusize.android.ui.tooltip
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.PointF
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -42,7 +46,7 @@ class VirtusizeTooltipView @JvmOverloads constructor(
         // Use a custom layout
         if (builder.layoutId != null) {
             containerView = inflater.inflate(builder.layoutId!!, this, true)
-        // Use the default layout
+            // Use the default layout
         } else {
             binding = VirtusizeTooltipBinding.inflate(inflater, this, true)
             containerView = binding!!.root
@@ -259,10 +263,12 @@ class VirtusizeTooltipView @JvmOverloads constructor(
         var middleX = rectF.width() / 2
         val middleY = rectF.height() / 2
         if (middleX != anchoredView.x + anchoredView.width / 2) {
-            middleX += (anchoredView.x
-                    + (anchoredView.width / 2)
-                    - (tooltipView.x)
-                    - (rectF.width() / 2))
+            middleX += (
+                anchoredView.x +
+                    (anchoredView.width / 2) -
+                    (tooltipView.x) -
+                    (rectF.width() / 2)
+                )
         }
         return PointF(middleX, middleY)
     }

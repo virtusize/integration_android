@@ -6,9 +6,12 @@ import android.graphics.PixelFormat
 import android.os.Build
 import android.os.IBinder
 import android.util.DisplayMetrics
-import android.view.*
+import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import android.view.WindowInsets
+import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
@@ -34,11 +37,11 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
         p.width = WindowManager.LayoutParams.MATCH_PARENT
         p.height = WindowManager.LayoutParams.MATCH_PARENT
         p.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
-                WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM or
-                WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH or
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
-                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+            WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM or
+            WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH or
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
+            WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
         p.format = PixelFormat.TRANSLUCENT
         p.type = WindowManager.LayoutParams.TYPE_APPLICATION_PANEL
         p.token = token
@@ -82,7 +85,7 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
             val anchorViewEndX = anchorViewLocation[0] + builder.anchorView.width
             val anchorViewEndSpace = windowWidth - anchorViewEndX
             val minimumTooltipSpace = windowEdgeToTooltipMargin / 2 + tooltipContainerWidth / 2
-            val minTooltipWidth = 48.dp + anchorViewToTooltipMargin + VirtusizeTooltipView.arrowHeight +  windowEdgeToTooltipMargin
+            val minTooltipWidth = 48.dp + anchorViewToTooltipMargin + VirtusizeTooltipView.arrowHeight + windowEdgeToTooltipMargin
 
             when (builder.position) {
                 Position.TOP, Position.BOTTOM -> {
@@ -103,7 +106,7 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
                             tooltipViewXPosition -= tooltipContainerWidth / 2
                         }
                     }
-                    if(builder.position == Position.TOP) {
+                    if (builder.position == Position.TOP) {
                         tooltipViewYPosition -= (builder.anchorView.height + anchorViewToTooltipMargin + VirtusizeTooltipView.arrowHeight)
                     } else {
                         tooltipViewYPosition += anchorViewToTooltipMargin + VirtusizeTooltipView.arrowHeight
@@ -173,7 +176,7 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
     }
 
     fun hide() {
-        if(overlayView != null) {
+        if (overlayView != null) {
             overlayView?.removeView(tooltipView)
             windowManager.removeView(overlayView)
             overlayView = null
@@ -181,10 +184,10 @@ class VirtusizeTooltip(private val context: Context, private val builder: Builde
     }
 
     fun getCustomView(): View {
-        if(builder.layoutId == null) {
+        if (builder.layoutId == null) {
             throw IllegalStateException("Please assign the layout ID for your custom view.")
         }
-        if(tooltipView == null) {
+        if (tooltipView == null) {
             tooltipView = VirtusizeTooltipView(context, builder)
         }
         return tooltipView!!.containerView
