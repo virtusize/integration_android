@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.virtusize.android.R
-import com.virtusize.android.databinding.DesignSystemRowItemBinding
+import com.virtusize.sampleappkotlin.R
+import com.virtusize.sampleappkotlin.databinding.DesignSystemRowItemBinding
 
 class DesignSystemAdapter(private val context: Context, private val dataSet: Array<String>) :
     RecyclerView.Adapter<DesignSystemAdapter.ViewHolder>() {

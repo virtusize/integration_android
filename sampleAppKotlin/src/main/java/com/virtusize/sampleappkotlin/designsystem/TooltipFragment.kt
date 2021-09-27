@@ -8,14 +8,13 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.virtusize.android.R
-import com.virtusize.android.databinding.FragmentTooltipBinding
-import com.virtusize.ui.tooltip.VirtusizeTooltip
-import com.virtusize.ui.utils.dp
+import com.virtusize.android.ui.tooltip.VirtusizeTooltip
+import com.virtusize.android.ui.utils.dp
+import com.virtusize.sampleappkotlin.R
+import com.virtusize.sampleappkotlin.databinding.FragmentTooltipBinding
 
 class TooltipFragment: Fragment() {
-    private var _binding: FragmentTooltipBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentTooltipBinding
 
     private lateinit var tooltip1: VirtusizeTooltip
     private lateinit var tooltip2: VirtusizeTooltip
@@ -28,7 +27,7 @@ class TooltipFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentTooltipBinding.inflate(inflater, container, false)
+        binding = FragmentTooltipBinding.inflate(inflater, container, false)
         return binding.root
     }
 

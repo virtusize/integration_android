@@ -8,7 +8,7 @@ task androidSourcesJar(type: Jar) {
 
 task androidJavadocs(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
-    excludes = ['**/*.kt'] // Exclude all kotlin files from javadoc file.
+    source = source.findAll { file -> file.name.endsWith(".java") }
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 }
 

@@ -1,4 +1,4 @@
-package com.virtusize.ui.button
+package com.virtusize.android.ui.button
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -11,7 +11,7 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.virtusize.ui.R
-import com.virtusize.ui.utils.dp
+import com.virtusize.android.ui.utils.dp
 
 
 class VirtusizeButton @JvmOverloads constructor(

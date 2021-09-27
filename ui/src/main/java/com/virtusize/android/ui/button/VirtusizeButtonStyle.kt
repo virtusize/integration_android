@@ -1,4 +1,4 @@
-package com.virtusize.ui.button
+package com.virtusize.android.ui.button
 
 /**
  * This enum contains all the styles that can be applied to the Virtusize Button

@@ -4,8 +4,6 @@ plugins {
     id 'kotlin-parcelize'
 }
 
-group = GROUP
-
 android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -40,7 +38,7 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
+        viewBinding true
     }
 }
 
@@ -49,12 +47,10 @@ configurations {
 }
 
 dependencies {
-    implementation project(":ui")
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api project(':ui')
 
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.cardview:cardview:1.0.0"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"

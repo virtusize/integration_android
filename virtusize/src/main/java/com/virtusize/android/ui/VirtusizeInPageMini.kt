@@ -16,6 +16,7 @@ import com.virtusize.android.data.local.VirtusizeParams
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.VirtusizeViewStyle
 import com.virtusize.android.databinding.ViewInpageMiniBinding
+import com.virtusize.android.ui.utils.Font
 import com.virtusize.android.util.FontUtils
 import com.virtusize.android.util.VirtusizeUtils
 import com.virtusize.android.util.rightDrawable
@@ -129,7 +130,7 @@ class VirtusizeInPageMini @JvmOverloads constructor(
         binding.inpageMiniLoadingText.visibility = View.GONE
         binding.inpageMiniText.visibility = View.VISIBLE
         binding.inpageMiniText.text = configuredContext?.getText(R.string.inpage_short_error_text)
-        binding.inpageMiniText.setTextColor(ContextCompat.getColor(context, R.color.color_gray_700))
+        binding.inpageMiniText.setTextColor(ContextCompat.getColor(context, R.color.vs_gray_700))
         binding.inpageMiniImageView.setImageDrawable(
             ContextCompat.getDrawable(
                 context,
@@ -157,7 +158,7 @@ class VirtusizeInPageMini @JvmOverloads constructor(
             binding.inpageMiniLayout.setBackgroundColor(
                 ContextCompat.getColor(
                     context,
-                    R.color.virtusizeWhite
+                    R.color.vs_white
                 )
             )
             binding.inpageMiniLoadingText.startAnimation()
@@ -169,7 +170,7 @@ class VirtusizeInPageMini @JvmOverloads constructor(
             context,
             binding.inpageMiniLoadingText,
             virtusizeParams.language,
-            if (loading) FontUtils.FontType.BOLD else FontUtils.FontType.REGULAR
+            if (loading) Font.FontType.BOLD else Font.FontType.REGULAR
         )
         binding.inpageMiniImageView.visibility = if (loading) View.VISIBLE else View.GONE
         binding.inpageMiniText.visibility = if (loading) View.GONE else View.VISIBLE
@@ -189,13 +190,13 @@ class VirtusizeInPageMini @JvmOverloads constructor(
             binding.inpageMiniLayout.setBackgroundColor(
                 ContextCompat.getColor(
                     context,
-                    R.color.virtusizeTeal
+                    R.color.vs_teal
                 )
             )
             binding.inpageMiniButton.setTextColor(
-                ContextCompat.getColor(context, R.color.virtusizeTeal)
+                ContextCompat.getColor(context, R.color.vs_teal)
             )
-            setButtonRightArrowColor(ContextCompat.getColor(context, R.color.virtusizeTeal))
+            setButtonRightArrowColor(ContextCompat.getColor(context, R.color.vs_teal))
         }
     }
 
@@ -221,7 +222,7 @@ class VirtusizeInPageMini @JvmOverloads constructor(
                 binding.inpageMiniText,
                 binding.inpageMiniButton
             ),
-            virtusizeParams.language, FontUtils.FontType.REGULAR
+            virtusizeParams.language, Font.FontType.REGULAR
         )
         configuredContext = VirtusizeUtils.getConfiguredContext(context, virtusizeParams.language)
         binding.inpageMiniButton.text = configuredContext?.getText(R.string.virtusize_button_text)
@@ -250,7 +251,7 @@ class VirtusizeInPageMini @JvmOverloads constructor(
             )
         } else {
             configuredContext?.resources?.getDimension(
-                R.dimen.virtusize_inpage_mini_message_textSize
+                R.dimen.virtusize_inpage_mini_message_text_size
             )?.let {
                 binding.inpageMiniLoadingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
                 binding.inpageMiniText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
@@ -265,7 +266,7 @@ class VirtusizeInPageMini @JvmOverloads constructor(
                 0.8f * size
             )
         } else {
-            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_default_textSize)
+            configuredContext?.resources?.getDimension(R.dimen.virtusize_inpage_default_text_size)
                 ?.let {
                     binding.inpageMiniButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
                 }

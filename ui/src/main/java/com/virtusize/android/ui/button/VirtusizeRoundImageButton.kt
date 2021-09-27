@@ -1,11 +1,11 @@
-package com.virtusize.ui.button
+package com.virtusize.android.ui.button
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewTreeObserver.*
 import androidx.core.content.ContextCompat
 import com.virtusize.ui.R
-import com.virtusize.ui.utils.dp
+import com.virtusize.android.ui.utils.dp
 
 open class VirtusizeRoundImageButton @JvmOverloads constructor(
     context: Context,

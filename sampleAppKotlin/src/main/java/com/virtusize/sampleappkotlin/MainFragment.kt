@@ -7,11 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.virtusize.android.databinding.FragmentMainBinding
-import com.virtusize.libsource.data.local.*
-import com.virtusize.libsource.util.dpInPx
-import com.virtusize.libsource.util.spToPx
-import com.virtusize.ui.button.VirtusizeButtonStyle
+import com.virtusize.android.data.local.*
+import com.virtusize.android.util.dpInPx
+import com.virtusize.android.util.spToPx
+import com.virtusize.android.ui.button.VirtusizeButtonStyle
+import com.virtusize.sampleappkotlin.App
+import com.virtusize.sampleappkotlin.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
 
@@ -19,15 +20,14 @@ class MainFragment : Fragment() {
         private const val TAG = "MainFragment"
     }
 
-    private var _binding: FragmentMainBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentMainBinding
     private lateinit var product: VirtusizeProduct
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMainBinding.inflate(inflater, container, false)
+        binding = FragmentMainBinding.inflate(inflater, container, false)
 
         product = VirtusizeProduct(
             externalId = "vs_dress",
@@ -167,11 +167,6 @@ class MainFragment : Fragment() {
         (activity?.application as App)
             .Virtusize.unregisterMessageHandler(activityMessageHandler)
         super.onPause()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private val activityMessageHandler = object : VirtusizeMessageHandler {

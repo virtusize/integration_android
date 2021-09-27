@@ -1,4 +1,4 @@
-package com.virtusize.ui.tooltip
+package com.virtusize.android.ui.tooltip
 
 import android.content.Context
 import android.graphics.*
@@ -9,7 +9,7 @@ import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import com.virtusize.ui.R
 import com.virtusize.ui.databinding.VirtusizeTooltipBinding
-import com.virtusize.ui.utils.dp
+import com.virtusize.android.ui.utils.dp
 
 class VirtusizeTooltipView @JvmOverloads constructor(
     context: Context,

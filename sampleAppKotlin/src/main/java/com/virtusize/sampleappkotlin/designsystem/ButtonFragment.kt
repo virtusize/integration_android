@@ -7,23 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.virtusize.android.R
-import com.virtusize.android.databinding.FragmentButtonBinding
-import com.virtusize.ui.button.VirtusizeButtonSize
-import com.virtusize.ui.button.VirtusizeButtonStyle
-import com.virtusize.ui.button.VirtusizeButtonTextSize
-import com.virtusize.ui.button.VirtusizeRoundImageButtonStyle
+import com.virtusize.android.ui.button.VirtusizeButtonSize
+import com.virtusize.android.ui.button.VirtusizeButtonStyle
+import com.virtusize.android.ui.button.VirtusizeButtonTextSize
+import com.virtusize.android.ui.button.VirtusizeRoundImageButtonStyle
+import com.virtusize.sampleappkotlin.R
+import com.virtusize.sampleappkotlin.databinding.FragmentButtonBinding
 
 class ButtonFragment: Fragment() {
 
-    private var _binding: FragmentButtonBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentButtonBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentButtonBinding.inflate(inflater, container, false)
+        binding = FragmentButtonBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -82,22 +81,22 @@ class ButtonFragment: Fragment() {
         binding.icon1Button.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
         binding.icon1Button.setText(R.string.like)
         binding.icon1Button.virtusizeButtonTextSize = VirtusizeButtonTextSize.DEFAULT
-        val icon1ButtonDrawable = ContextCompat.getDrawable(requireContext(), com.virtusize.libsource.R.drawable.ic_heart_solid)
+        val icon1ButtonDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_heart_solid)
         binding.icon1Button.setLeftIcon(icon1ButtonDrawable)
 
         binding.icon2Button.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT
         binding.icon2Button.setText(R.string.get_started)
         binding.icon2Button.virtusizeButtonTextSize = VirtusizeButtonTextSize.DEFAULT
-        val icon2ButtonDrawable = ContextCompat.getDrawable(requireContext(), com.virtusize.libsource.R.drawable.ic_angle_right)
+        val icon2ButtonDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_angle_right)
         binding.icon2Button.setRightIcon(icon2ButtonDrawable)
 
         binding.icon3Button.virtusizeButtonStyle = VirtusizeButtonStyle.INVERTED
         binding.icon3Button.setText(R.string.redirect_fb)
         binding.icon3Button.virtusizeButtonSize = VirtusizeButtonSize.SMALL
         binding.icon3Button.virtusizeButtonTextSize = VirtusizeButtonTextSize.DEFAULT
-        val icon3ButtonRightDrawable = ContextCompat.getDrawable(requireContext(), com.virtusize.libsource.R.drawable.ic_angle_right)
+        val icon3ButtonRightDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_angle_right)
         binding.icon3Button.setRightIcon(icon3ButtonRightDrawable)
-        val icon3ButtonLeftDrawable = ContextCompat.getDrawable(requireContext(), com.virtusize.libsource.R.drawable.ic_fb)
+        val icon3ButtonLeftDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_fb)
         binding.icon3Button.setLeftIcon(icon3ButtonLeftDrawable)
 
         binding.round1Button.roundImageButtonStyle = VirtusizeRoundImageButtonStyle.COLOR

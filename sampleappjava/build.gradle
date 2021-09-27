@@ -32,17 +32,14 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+//    implementation "com.virtusize.android:virtusize:${project.version}"
+    implementation project(":virtusize")
 
     // Add the following dependency on Kotlin standard library to support the Virtusize SDK for a Java project
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
-
-    // implementation "com.virtusize.android:virtusize:${project.version}"
-    implementation project(":virtusize")
-    implementation project(":ui")
 
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

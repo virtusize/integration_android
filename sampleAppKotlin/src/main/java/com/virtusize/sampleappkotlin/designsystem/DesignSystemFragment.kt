@@ -5,19 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.virtusize.android.R
-import com.virtusize.android.databinding.FragmentDesignSystemBinding
+import com.virtusize.sampleappkotlin.R
+import com.virtusize.sampleappkotlin.databinding.FragmentDesignSystemBinding
 
 class DesignSystemFragment : Fragment() {
 
-    private var _binding: FragmentDesignSystemBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentDesignSystemBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentDesignSystemBinding.inflate(inflater, container, false)
+        binding = FragmentDesignSystemBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -30,10 +29,5 @@ class DesignSystemFragment : Fragment() {
             )
         )
         binding.recyclerView.adapter = adapter
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

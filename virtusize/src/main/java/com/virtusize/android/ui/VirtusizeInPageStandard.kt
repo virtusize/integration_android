@@ -31,13 +31,13 @@ import com.virtusize.android.data.local.VirtusizeViewStyle
 import com.virtusize.android.data.local.virtusizeError
 import com.virtusize.android.data.remote.Product
 import com.virtusize.android.databinding.ViewInpageStandardBinding
+import com.virtusize.android.ui.utils.Font
 import com.virtusize.android.util.FontUtils
 import com.virtusize.android.util.VirtusizeUtils
 import com.virtusize.android.util.dpInPx
+import com.virtusize.android.util.spToPx
 import com.virtusize.android.util.onSizeChanged
 import com.virtusize.android.util.rightDrawable
-import com.virtusize.android.util.spToPx
-import com.virtusize.ui.utils.Font
 
 class VirtusizeInPageStandard @JvmOverloads constructor(
     context: Context,
@@ -575,26 +575,26 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
             )
         } else {
             configuredContext?.resources?.getDimension(
-                R.dimen.virtusize_inpage_standard_normal_textSize
+                R.dimen.virtusize_inpage_standard_normal_text_size
             )?.let {
                 binding.inpageTopText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
             }
 
             configuredContext?.resources?.getDimension(
-                R.dimen.virtusize_inpage_standard_bold_textSize
+                R.dimen.virtusize_inpage_standard_bold_text_size
             )?.let {
                 binding.inpageLoadingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
                 binding.inpageBottomText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
             }
 
             configuredContext?.resources?.getDimension(
-                R.dimen.virtusize_inpage_default_textSize
+                R.dimen.virtusize_inpage_default_text_size
             )?.let {
                 binding.inpageErrorText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
             }
 
             configuredContext?.resources?.getDimension(
-                R.dimen.virtusize_inpage_standard_privacy_policy_textSize
+                R.dimen.virtusize_inpage_standard_privacy_policy_text_size
             )?.let {
                 binding.privacyPolicyText.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
             }
@@ -610,7 +610,7 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
             )
         } else {
             configuredContext?.resources?.getDimension(
-                R.dimen.virtusize_inpage_default_textSize
+                R.dimen.virtusize_inpage_default_text_size
             )?.let {
                 binding.inpageButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
             }

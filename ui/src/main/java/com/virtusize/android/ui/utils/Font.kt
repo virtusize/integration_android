@@ -1,4 +1,4 @@
-package com.virtusize.ui.utils
+package com.virtusize.android.ui.utils
 
 import android.content.Context
 import android.widget.TextView

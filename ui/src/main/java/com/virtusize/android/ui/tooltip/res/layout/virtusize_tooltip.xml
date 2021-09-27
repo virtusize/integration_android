@@ -16,8 +16,6 @@
         android:paddingEnd="@dimen/vs_tooltip_text_view_end_padding"
         android:textColor="@color/vs_white"
         android:textSize="@dimen/vs_xsmall_text_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/vs_similar_items" />
 
     <ImageView

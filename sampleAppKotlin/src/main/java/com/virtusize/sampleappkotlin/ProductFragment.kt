@@ -6,8 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.virtusize.android.databinding.FragmentProductBinding
-import com.virtusize.libsource.data.local.VirtusizeProduct
+import com.virtusize.android.data.local.VirtusizeProduct
+import com.virtusize.sampleappkotlin.App
+import com.virtusize.sampleappkotlin.databinding.FragmentProductBinding
 
 class ProductFragment : Fragment() {
     companion object {
@@ -23,14 +24,13 @@ class ProductFragment : Fragment() {
         )
     }
 
-    private var _binding: FragmentProductBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentProductBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentProductBinding.inflate(inflater, container, false)
+        binding = FragmentProductBinding.inflate(inflater, container, false)
         return binding.root
     }
 

@@ -22,28 +22,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.virtusize.ui.button.VirtusizeButton
+        <com.virtusize.android.ui.button.VirtusizeButton
             android:id="@+id/defaultButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/default_button"
             app:uiButtonStyle="virtusize_default" />
 
-        <com.virtusize.ui.button.VirtusizeButton
+        <com.virtusize.android.ui.button.VirtusizeButton
             android:id="@+id/flatButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/flat_button"
             app:uiButtonStyle="flat" />
 
-        <com.virtusize.ui.button.VirtusizeButton
+        <com.virtusize.android.ui.button.VirtusizeButton
             android:id="@+id/invertedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/inverted_button"
             app:uiButtonStyle="inverted" />
 
-        <com.virtusize.ui.button.VirtusizeButton
+        <com.virtusize.android.ui.button.VirtusizeButton
             android:id="@+id/disabledButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/styleButtonFlow" />
 
-        <com.virtusize.ui.button.VirtusizeButton
+        <com.virtusize.android.ui.button.VirtusizeButton
             android:id="@+id/color1Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
             app:uiButtonStyle="virtusize_default"
             app:virtusizeBackgroundColor="@color/vs_teal" />
 
-        <com.virtusize.ui.button.VirtusizeButton
+        <com.virtusize.android.ui.button.VirtusizeButton
             android:id="@+id/color2Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
             app:uiButtonStyle="virtusize_default"
             app:virtusizeBackgroundColor="@color/ocean_blue" />
 
-        <com.virtusize.ui.button.VirtusizeButton
+        <com.virtusize.android.ui.button.VirtusizeButton
             android:id="@+id/color3Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
             app:uiButtonStyle="virtusize_default"
             app:virtusizeBackgroundColor="@color/vs_red" />
 
-        <com.virtusize.ui.button.VirtusizeButton
+        <com.virtusize.android.ui.button.VirtusizeButton
             android:id="@+id/color4Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/colorButtonFlow" />
 
-        <com.virtusize.ui.button.VirtusizeButton
+        <com.virtusize.android.ui.button.VirtusizeButton
             android:id="@+id/defaultSizeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -134,7 +134,7 @@
             app:uiButtonStyle="virtusize_default"
             app:virtusizeButtonSize="standard" />
 
-        <com.virtusize.ui.button.VirtusizeButton
+        <com.virtusize.android.ui.button.VirtusizeButton
             android:id="@+id/smallSizeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -162,7 +162,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sizeButtonFlow" />
 
-        <com.virtusize.ui.button.VirtusizeButton
+        <com.virtusize.android.ui.button.VirtusizeButton
             android:id="@+id/defaultTextSizeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -170,7 +170,7 @@
             app:uiButtonStyle="virtusize_default"
             app:virtusizeButtonTextSize="virtusize_default" />
 
-        <com.virtusize.ui.button.VirtusizeButton
+        <com.virtusize.android.ui.button.VirtusizeButton
             android:id="@+id/smallerTextSizeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -178,7 +178,7 @@
             app:uiButtonStyle="virtusize_default"
             app:virtusizeButtonTextSize="smaller" />
 
-        <com.virtusize.ui.button.VirtusizeButton
+        <com.virtusize.android.ui.button.VirtusizeButton
             android:id="@+id/normalTextSizeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -186,7 +186,7 @@
             app:uiButtonStyle="virtusize_default"
             app:virtusizeButtonTextSize="normal" />
 
-        <com.virtusize.ui.button.VirtusizeButton
+        <com.virtusize.android.ui.button.VirtusizeButton
             android:id="@+id/largeTextSizeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -194,7 +194,7 @@
             app:uiButtonStyle="virtusize_default"
             app:virtusizeButtonTextSize="large" />
 
-        <com.virtusize.ui.button.VirtusizeButton
+        <com.virtusize.android.ui.button.VirtusizeButton
             android:id="@+id/largerTextSizeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -222,7 +222,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textSizeButtonFlow" />
 
-        <com.virtusize.ui.button.VirtusizeButton
+        <com.virtusize.android.ui.button.VirtusizeButton
             android:id="@+id/icon1Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -232,7 +232,7 @@
             app:uiButtonStyle="virtusize_default"
             app:virtusizeButtonTextSize="virtusize_default" />
 
-        <com.virtusize.ui.button.VirtusizeButton
+        <com.virtusize.android.ui.button.VirtusizeButton
             android:id="@+id/icon2Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -242,7 +242,7 @@
             app:uiButtonStyle="virtusize_default"
             app:virtusizeButtonTextSize="virtusize_default" />
 
-        <com.virtusize.ui.button.VirtusizeButton
+        <com.virtusize.android.ui.button.VirtusizeButton
             android:id="@+id/icon3Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -276,7 +276,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iconButtonFlow" />
 
-        <com.virtusize.ui.button.VirtusizeRoundImageButton
+        <com.virtusize.android.ui.button.VirtusizeRoundImageButton
             android:id="@+id/round1Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -284,7 +284,7 @@
             app:roundImageButtonStyle="color"
             android:tint="@color/vs_red"/>
 
-        <com.virtusize.ui.button.VirtusizeRoundImageButton
+        <com.virtusize.android.ui.button.VirtusizeRoundImageButton
             android:id="@+id/round2Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -293,14 +293,14 @@
             app:roundImageButtonSize="small"
             android:tint="@color/ocean_blue"/>
 
-        <com.virtusize.ui.button.VirtusizeButton
+        <com.virtusize.android.ui.button.VirtusizeButton
             android:id="@+id/round3Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:uiButtonStyle="round"
             android:text="@string/cm" />
 
-        <com.virtusize.ui.button.VirtusizeRoundImageButton
+        <com.virtusize.android.ui.button.VirtusizeRoundImageButton
             android:id="@+id/round4Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

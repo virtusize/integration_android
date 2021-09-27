@@ -3,8 +3,8 @@ package com.virtusize.android.ui.fittingroom
 import android.content.Context
 import android.util.AttributeSet
 import com.virtusize.android.R
-import com.virtusize.ui.button.VirtusizeRoundImageButton
-import com.virtusize.ui.button.VirtusizeRoundImageButtonStyle
+import com.virtusize.android.ui.button.VirtusizeRoundImageButton
+import com.virtusize.android.ui.button.VirtusizeRoundImageButtonStyle
 
 class VSFittingRoomButton@JvmOverloads constructor(
     context: Context,
