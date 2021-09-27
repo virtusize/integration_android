@@ -35,9 +35,9 @@ import com.virtusize.android.ui.utils.Font
 import com.virtusize.android.util.FontUtils
 import com.virtusize.android.util.VirtusizeUtils
 import com.virtusize.android.util.dpInPx
-import com.virtusize.android.util.spToPx
 import com.virtusize.android.util.onSizeChanged
 import com.virtusize.android.util.rightDrawable
+import com.virtusize.android.util.spToPx
 
 class VirtusizeInPageStandard @JvmOverloads constructor(
     context: Context,

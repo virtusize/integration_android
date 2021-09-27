@@ -10,7 +10,7 @@ import androidx.annotation.ColorInt
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import com.virtusize.ui.R
+import com.virtusize.android.ui.R
 import com.virtusize.android.ui.utils.dp
 
 

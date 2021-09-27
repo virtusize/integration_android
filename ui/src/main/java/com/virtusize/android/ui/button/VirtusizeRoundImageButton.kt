@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewTreeObserver.*
 import androidx.core.content.ContextCompat
-import com.virtusize.ui.R
+import com.virtusize.android.ui.R
 import com.virtusize.android.ui.utils.dp
 
 open class VirtusizeRoundImageButton @JvmOverloads constructor(

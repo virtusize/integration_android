@@ -11,15 +11,25 @@ internal object FontUtils {
     /**
      * Sets up the TypeFace for a TextView by the display language
      */
-    fun setTypeFace(context: Context, textView: TextView, language: VirtusizeLanguage?, fontType: Font.FontType) {
+    fun setTypeFace(
+        context: Context,
+        textView: TextView,
+        language: VirtusizeLanguage?,
+        fontType: Font.FontType
+    ) {
         setTypeFaces(context, mutableListOf(textView), language, fontType)
     }
 
     /**
      * Sets up the TypeFaces for a list of TextView by the display language
      */
-    fun setTypeFaces(context: Context, textViews: List<TextView>, language: VirtusizeLanguage?, fontType: Font.FontType) {
-        when(language) {
+    fun setTypeFaces(
+        context: Context,
+        textViews: List<TextView>,
+        language: VirtusizeLanguage?,
+        fontType: Font.FontType
+    ) {
+        when (language) {
             VirtusizeLanguage.EN -> {
                 Font.setTypeFace(context, textViews, Font.FontName.ROBOTO, fontType)
             }

@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
-import com.virtusize.ui.R
-import com.virtusize.ui.databinding.VirtusizeTooltipBinding
+import com.virtusize.android.ui.R
+import com.virtusize.android.ui.databinding.VirtusizeTooltipBinding
 import com.virtusize.android.ui.utils.dp
 
 class VirtusizeTooltipView @JvmOverloads constructor(

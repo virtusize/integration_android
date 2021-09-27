@@ -13,7 +13,7 @@ import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
-import com.virtusize.ui.R
+import com.virtusize.android.ui.R
 import com.virtusize.android.ui.utils.dp
 
 class VirtusizeTooltip(private val context: Context, private val builder: Builder) {

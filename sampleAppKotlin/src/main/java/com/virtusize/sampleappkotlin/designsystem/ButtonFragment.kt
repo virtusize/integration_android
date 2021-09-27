@@ -101,7 +101,7 @@ class ButtonFragment: Fragment() {
 
         binding.round1Button.roundImageButtonStyle = VirtusizeRoundImageButtonStyle.COLOR
         binding.round1Button.setImageResource(R.drawable.ic_heart_solid)
-        binding.round1Button.setColorFilter(ContextCompat.getColor(requireContext(), com.virtusize.ui.R.color.vs_red))
+        binding.round1Button.setColorFilter(ContextCompat.getColor(requireContext(), R.color.vs_red))
 
         binding.round2Button.roundImageButtonStyle = VirtusizeRoundImageButtonStyle.COLOR
         binding.round2Button.virtusizeButtonSize = VirtusizeButtonSize.SMALL
