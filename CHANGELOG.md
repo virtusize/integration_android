@@ -1,3 +1,15 @@
+## 2.4.0
+
+* Add ktlint
+* Setup Github Actions for CI/CD
+* **⚠️Important⚠️**
+  The SDK has been uploaded to `MavenCentral` and the group ID has been changed to `com.virtusize.android`
+  New artifact name: `com.virtusize.android:virtusize:${virtusize_version}`
+
+## 2.3.1
+
+* Provide the solution for the WebView apps that load Virtusize Fit Illustrator
+
 ## 2.3.0
 
 * Change the get-size endpoint from `get-size-new` to `get-size`

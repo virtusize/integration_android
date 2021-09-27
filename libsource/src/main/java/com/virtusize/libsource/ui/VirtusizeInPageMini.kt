@@ -1,4 +1,4 @@
-package com.virtusize.libsource.ui
+package com.virtusize.android.ui
 
 import android.content.Context
 import android.content.ContextWrapper
@@ -9,12 +9,12 @@ import android.view.View
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import com.virtusize.libsource.R
-import com.virtusize.libsource.data.local.*
-import com.virtusize.libsource.databinding.ViewInpageMiniBinding
-import com.virtusize.libsource.util.*
-import com.virtusize.libsource.util.FontUtils
-import com.virtusize.libsource.util.VirtusizeUtils
+import com.virtusize.android.R
+import com.virtusize.android.data.local.*
+import com.virtusize.android.databinding.ViewInpageMiniBinding
+import com.virtusize.android.util.*
+import com.virtusize.android.util.FontUtils
+import com.virtusize.android.util.VirtusizeUtils
 import com.virtusize.ui.utils.Font
 
 class VirtusizeInPageMini @JvmOverloads constructor(
@@ -82,6 +82,7 @@ class VirtusizeInPageMini @JvmOverloads constructor(
     override fun setProductWithProductDataCheck(productWithPDC: VirtusizeProduct) {
         super.setProductWithProductDataCheck(productWithPDC)
         if (clientProduct!!.externalId == productWithPDC.externalId) {
+            clientProduct!!.productCheckData = productWithPDC.productCheckData
             visibility = View.VISIBLE
             setupConfiguredLocalization()
             setLoadingScreen(true)
