@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="vs_avatar_smaller_size">30dp</dimen>
+    <dimen name="vs_avatar_small_size">40dp</dimen>
+    <dimen name="vs_avatar_medium_size">52dp</dimen>
+    <dimen name="vs_avatar_large_size">96dp</dimen>
+
+    <dimen name="vs_avatar_image_smaller_size">24dp</dimen>
+    <dimen name="vs_avatar_image_small_size">34dp</dimen>
+    <dimen name="vs_avatar_image_medium_size">46dp</dimen>
+    <dimen name="vs_avatar_image_large_size">90dp</dimen>
+</resources>

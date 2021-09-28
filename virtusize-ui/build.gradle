@@ -25,6 +25,7 @@ android {
         main {
             res.srcDirs = [
                     'src/main/res',
+                    'src/main/java/com/virtusize/android/ui/avatar/res',
                     'src/main/java/com/virtusize/android/ui/button/res',
                     'src/main/java/com/virtusize/android/ui/tooltip/res'
             ]
@@ -38,6 +39,7 @@ android {
 
 dependencies {
     implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "androidx.cardview:cardview:$cardview_version"
 
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
