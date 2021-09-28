@@ -7,6 +7,7 @@
 
     <string name="virtusize_button" translatable="false">Button</string>
     <string name="virtusize_tooltip" translatable="false">Tooltip</string>
+    <string name="virtusize_avatar" translatable="false">Avatar</string>
 
     <string name="style_button_title" translatable="false">Default, Inverted, and Disabled Buttons</string>
     <string name="color_button_title" translatable="false">Color</string>

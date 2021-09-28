@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_designSystemFragment_to_tooltipFragment"
             app:destination="@id/tooltipFragment" />
+        <action
+            android:id="@+id/action_designSystemFragment_to_avatarFragment"
+            app:destination="@id/avatarFragment" />
     </fragment>
     <fragment
         android:id="@+id/buttonFragment"
@@ -45,4 +48,9 @@
             android:id="@+id/action_productFragment_to_self"
             app:destination="@id/productFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/avatarFragment"
+        android:name="com.virtusize.sampleappkotlin.designsystem.AvatarFragment"
+        android:label="@string/virtusize_avatar"
+        tools:layout="@layout/fragment_avatar" />
 </navigation>
