@@ -7,7 +7,9 @@ import android.widget.LinearLayout
 import com.virtusize.android.ui.databinding.VirtusizeAvatarBinding
 
 class VirtusizeAvatar @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     private val binding = VirtusizeAvatarBinding.inflate(LayoutInflater.from(context), this, true)
