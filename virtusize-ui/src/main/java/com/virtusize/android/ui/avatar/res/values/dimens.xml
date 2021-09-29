@@ -12,12 +12,12 @@
 
     <dimen name="vs_avatar_image_smaller_size">24dp</dimen>
     <dimen name="vs_avatar_image_small_size">34dp</dimen>
-    <dimen name="vs_avatar_image_medium_size">46dp</dimen>
-    <dimen name="vs_avatar_image_large_size">90dp</dimen>
+    <dimen name="vs_avatar_image_medium_size">44dp</dimen>
+    <dimen name="vs_avatar_image_large_size">86dp</dimen>
 
     <dimen name="vs_avatar_image_radius_smaller_size">12dp</dimen>
     <dimen name="vs_avatar_image_radius_small_size">17dp</dimen>
-    <dimen name="vs_avatar_image_radius_medium_size">23dp</dimen>
-    <dimen name="vs_avatar_image_radius_large_size">45dp</dimen>
+    <dimen name="vs_avatar_image_radius_medium_size">22dp</dimen>
+    <dimen name="vs_avatar_image_radius_large_size">43dp</dimen>
 
 </resources>

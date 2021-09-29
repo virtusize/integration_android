@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/virtusize_16dp"
-            android:src="@drawable/ic_vs_icon_black"
+            android:src="@drawable/sample_woman"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/avatar_text_view" />
 
@@ -47,36 +47,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:avatarSize="smaller"
-            android:src="@drawable/ic_vs_icon_black"
-            app:layout_constraintStart_toStartOf="parent"
-            android:padding="@dimen/virtusize_16dp" />
+            android:src="@drawable/sample_woman"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <com.virtusize.android.ui.avatar.VirtusizeAvatar
             android:id="@+id/small_avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:avatarSize="small"
-            android:src="@drawable/ic_vs_icon_black"
-            android:padding="@dimen/virtusize_16dp" />
+            android:src="@drawable/sample_woman" />
 
         <com.virtusize.android.ui.avatar.VirtusizeAvatar
             android:id="@+id/medium_avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:avatarSize="medium"
-            android:src="@drawable/ic_vs_icon_black"
-            android:padding="@dimen/virtusize_16dp" />
+            android:src="@drawable/sample_woman" />
 
         <com.virtusize.android.ui.avatar.VirtusizeAvatar
             android:id="@+id/large_avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:avatarSize="large"
-            android:src="@drawable/ic_vs_icon_black"
-            android:padding="@dimen/virtusize_16dp" />
+            android:src="@drawable/sample_woman" />
 
         <androidx.constraintlayout.helper.widget.Flow
-            android:id="@+id/styleButtonFlow"
+            android:id="@+id/size_avatar_flow"
             style="@style/VirtusizeDesignSystemFlow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
