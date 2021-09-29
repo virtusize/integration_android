@@ -56,7 +56,7 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet) 
             binding.inpageBorderImageView.setImageDrawable(
                 ContextCompat.getDrawable(
                     context,
-                    R.drawable.ic_image_border_gray
+                    R.drawable.ic_avatar_border_gray
                 )
             )
         }

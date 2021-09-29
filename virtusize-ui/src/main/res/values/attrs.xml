@@ -33,4 +33,14 @@
             <enum name="small" value="1" />
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="VirtusizeAvatar">
+        <attr name="android:src"/>
+        <attr name="avatarSize">
+            <enum name="smaller" value="0" />
+            <enum name="small" value="1" />
+            <enum name="medium" value="2" />
+            <enum name="large" value="3" />
+        </attr>
+    </declare-styleable>
 </resources>

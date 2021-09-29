@@ -1,14 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".designsystem.AvatarFragment">
 
-    <com.virtusize.android.ui.avatar.VirtusizeAvatar
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/virtusize_16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:paddingBottom="@dimen/virtusize_16dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/avatar_text_view"
+            style="@style/TextAppearance.Virtusize.Headline3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/virtusize_16dp"
+            android:text="@string/virtusize_avatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.virtusize.android.ui.avatar.VirtusizeAvatar
+            android:id="@+id/default_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/virtusize_16dp"
+            android:src="@drawable/ic_vs_icon_black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/avatar_text_view" />
+
+        <TextView
+            android:id="@+id/size_text_view"
+            style="@style/TextAppearance.Virtusize.Headline3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/virtusize_16dp"
+            android:text="@string/size_avatar_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/default_avatar" />
+
+        <com.virtusize.android.ui.avatar.VirtusizeAvatar
+            android:id="@+id/smaller_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:avatarSize="smaller"
+            android:src="@drawable/ic_vs_icon_black"
+            app:layout_constraintStart_toStartOf="parent"
+            android:padding="@dimen/virtusize_16dp" />
+
+        <com.virtusize.android.ui.avatar.VirtusizeAvatar
+            android:id="@+id/small_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:avatarSize="small"
+            android:src="@drawable/ic_vs_icon_black"
+            android:padding="@dimen/virtusize_16dp" />
+
+        <com.virtusize.android.ui.avatar.VirtusizeAvatar
+            android:id="@+id/medium_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:avatarSize="medium"
+            android:src="@drawable/ic_vs_icon_black"
+            android:padding="@dimen/virtusize_16dp" />
+
+        <com.virtusize.android.ui.avatar.VirtusizeAvatar
+            android:id="@+id/large_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:avatarSize="large"
+            android:src="@drawable/ic_vs_icon_black"
+            android:padding="@dimen/virtusize_16dp" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/styleButtonFlow"
+            style="@style/VirtusizeDesignSystemFlow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="smaller_avatar,small_avatar, medium_avatar, large_avatar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/size_text_view" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
