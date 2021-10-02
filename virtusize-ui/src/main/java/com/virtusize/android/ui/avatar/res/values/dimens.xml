@@ -4,20 +4,4 @@
     <dimen name="vs_avatar_small_size">40dp</dimen>
     <dimen name="vs_avatar_medium_size">52dp</dimen>
     <dimen name="vs_avatar_large_size">96dp</dimen>
-
-    <dimen name="vs_avatar_radius_smaller_size">15dp</dimen>
-    <dimen name="vs_avatar_radius_small_size">20dp</dimen>
-    <dimen name="vs_avatar_radius_medium_size">26dp</dimen>
-    <dimen name="vs_avatar_radius_large_size">48dp</dimen>
-
-    <dimen name="vs_avatar_image_smaller_size">24dp</dimen>
-    <dimen name="vs_avatar_image_small_size">34dp</dimen>
-    <dimen name="vs_avatar_image_medium_size">44dp</dimen>
-    <dimen name="vs_avatar_image_large_size">86dp</dimen>
-
-    <dimen name="vs_avatar_image_radius_smaller_size">12dp</dimen>
-    <dimen name="vs_avatar_image_radius_small_size">17dp</dimen>
-    <dimen name="vs_avatar_image_radius_medium_size">22dp</dimen>
-    <dimen name="vs_avatar_image_radius_large_size">43dp</dimen>
-
 </resources>
