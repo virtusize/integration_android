@@ -181,7 +181,7 @@ class VirtusizeAvatar @JvmOverloads constructor(
             val avatarImageSize = vsAvatarSize.getAvatarSize(context).toInt()
             val ratio = avatarImageSize / min(imageBitmap.width, imageBitmap.height)
             val resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, imageBitmap.width * ratio, imageBitmap.height * ratio, false)
-            srcImageBitmap = Bitmap.createBitmap(resizedBitmap, resizedBitmap.width / 2 ,resizedBitmap.height / 2 , avatarImageSize, avatarImageSize)
+            srcImageBitmap = Bitmap.createBitmap(resizedBitmap, resizedBitmap.width / 2, resizedBitmap.height / 2, avatarImageSize, avatarImageSize)
             dstBitmapSize = avatarImageSize + avatarGapWidth.toInt() * 2
             dstBitmap = Bitmap.createBitmap(dstBitmapSize, dstBitmapSize, Bitmap.Config.ARGB_8888)
             dstBitmap?.let { dstBitmap ->
