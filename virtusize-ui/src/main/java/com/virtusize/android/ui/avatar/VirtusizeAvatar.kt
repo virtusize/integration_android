@@ -3,21 +3,20 @@ package com.virtusize.android.ui.avatar
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.DashPathEffect
+import android.graphics.Paint
 import android.util.AttributeSet
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.annotation.DrawableRes
-import com.virtusize.android.ui.R
-import com.virtusize.android.ui.databinding.VirtusizeAvatarBinding
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import com.virtusize.android.ui.R
+import com.virtusize.android.ui.databinding.VirtusizeAvatarBinding
 import com.virtusize.android.ui.utils.dp
 import kotlin.math.min
-
 
 class VirtusizeAvatar @JvmOverloads constructor(
     context: Context,
@@ -26,13 +25,13 @@ class VirtusizeAvatar @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     companion object {
-        private val avatarGapWidth = 16.dp
+        private val avatarGapWidth = 6.dp
     }
 
     var vsAvatarSize = VirtusizeAvatarSize.SMALL
         set(value) {
             field = value
-            setAvatarSize()
+            invalidate()
         }
 
     var vsAvatarBorderStyle = VirtusizeAvatarBorderStyle.SOLID
@@ -112,8 +111,8 @@ class VirtusizeAvatar @JvmOverloads constructor(
         super.onDraw(canvas)
 
         srcImageBitmap?.let { srcImageBitmap ->
-            avatarImageViewCanvas.drawColor(Color.WHITE)
-            
+            setAvatarBitmaps()
+
             // Draw the avatar image bitmap
             avatarImageViewCanvas.drawBitmap(
                 srcImageBitmap,
@@ -139,12 +138,13 @@ class VirtusizeAvatar @JvmOverloads constructor(
 
             borderPaint.style = Paint.Style.STROKE
             borderPaint.color = vsAvatarBorderColor
-            val avatarBorderWidth = if (vsAvatarBorderWidth == VirtusizeAvatarBorderWidth.THICK) { 16.dp } else { 8.dp }
+            val avatarBorderWidth = if (vsAvatarBorderWidth == VirtusizeAvatarBorderWidth.THICK) { 4.dp } else { 2.dp }
             borderPaint.strokeWidth = avatarBorderWidth
 
             if (vsAvatarBorderStyle == VirtusizeAvatarBorderStyle.DASHED) {
-                borderPaint.pathEffect = vsAvatarBorderWidth.getDashPathEffect()
+                borderPaint.pathEffect = DashPathEffect(floatArrayOf(avatarBorderWidth, avatarBorderWidth), 0f)
             } else if (vsAvatarBorderStyle == VirtusizeAvatarBorderStyle.NONE) {
+                borderPaint.color = Color.WHITE
                 borderPaint.strokeWidth = 0f
             }
 
@@ -157,7 +157,6 @@ class VirtusizeAvatar @JvmOverloads constructor(
             )
 
             val roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(resources, dstBitmap)
-
             roundedBitmapDrawable.isCircular = true
             roundedBitmapDrawable.setAntiAlias(true)
 
@@ -167,30 +166,27 @@ class VirtusizeAvatar @JvmOverloads constructor(
 
     fun setAvatarImage(@DrawableRes resId: Int) {
         if (resId != -1) {
-            setAvatarImageBitmap(BitmapFactory.decodeResource(resources, resId))
+            srcImageBitmap = BitmapFactory.decodeResource(resources, resId)
             invalidate()
         }
     }
 
     fun setAvatarImage(imageBitmap: Bitmap) {
-        setAvatarImageBitmap(imageBitmap)
+        srcImageBitmap = imageBitmap
         invalidate()
     }
 
-    private fun setAvatarImageBitmap(imageBitmap: Bitmap) {
-        srcImageBitmap = imageBitmap
-        dstBitmapSize = min(imageBitmap.width, imageBitmap.height) + avatarGapWidth.toInt() * 2
-        dstBitmap = Bitmap.createBitmap(dstBitmapSize, dstBitmapSize, Bitmap.Config.ARGB_8888)
-        dstBitmap?.let { dstBitmap ->
-            avatarImageViewCanvas = Canvas(dstBitmap)
+    private fun setAvatarBitmaps() {
+        srcImageBitmap?.let { imageBitmap ->
+            val avatarImageSize = vsAvatarSize.getAvatarSize(context).toInt()
+            val ratio = avatarImageSize / min(imageBitmap.width, imageBitmap.height)
+            val resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, imageBitmap.width * ratio, imageBitmap.height * ratio, false)
+            srcImageBitmap = Bitmap.createBitmap(resizedBitmap, resizedBitmap.width / 2 ,resizedBitmap.height / 2 , avatarImageSize, avatarImageSize)
+            dstBitmapSize = avatarImageSize + avatarGapWidth.toInt() * 2
+            dstBitmap = Bitmap.createBitmap(dstBitmapSize, dstBitmapSize, Bitmap.Config.ARGB_8888)
+            dstBitmap?.let { dstBitmap ->
+                avatarImageViewCanvas = Canvas(dstBitmap)
+            }
         }
-    }
-
-    private fun setAvatarSize() {
-        val avatarImageSize = vsAvatarSize.getAvatarSize(context).toInt()
-        val avatarImageLayoutParams = LayoutParams(avatarImageSize, avatarImageSize)
-        avatarImageLayoutParams.gravity = Gravity.CENTER
-        binding.avatarImageCardView.layoutParams = avatarImageLayoutParams
-        binding.avatarImageCardView.radius = vsAvatarSize.getAvatarRadiusSize(context)
     }
 }
