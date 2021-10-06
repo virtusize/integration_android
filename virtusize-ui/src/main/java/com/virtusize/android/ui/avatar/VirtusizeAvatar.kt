@@ -8,7 +8,6 @@ import android.graphics.Color
 import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.annotation.DrawableRes
@@ -53,7 +52,7 @@ class VirtusizeAvatar @JvmOverloads constructor(
             invalidate()
         }
 
-    var enabledGap: Boolean = true
+    var vsAvatarGapEnabled: Boolean = true
         set(value) {
             field = value
             invalidate()
@@ -109,7 +108,12 @@ class VirtusizeAvatar @JvmOverloads constructor(
             vsAvatarBorderWidth = borderWidth
         }
 
-        vsAvatarBorderColor = attrsArray.getColor(R.styleable.VirtusizeAvatar_avatarBorderColor, ContextCompat.getColor(context, R.color.vs_gray_800))
+        vsAvatarBorderColor = attrsArray.getColor(
+            R.styleable.VirtusizeAvatar_avatarBorderColor,
+            ContextCompat.getColor(context, R.color.vs_gray_800)
+        )
+        vsAvatarGapEnabled =
+            attrsArray.getBoolean(R.styleable.VirtusizeAvatar_avatarGapEnabled, true)
 
         attrsArray.recycle()
     }
@@ -128,28 +132,35 @@ class VirtusizeAvatar @JvmOverloads constructor(
                 null
             )
 
-            gapPaint.style = Paint.Style.STROKE
-            gapPaint.strokeWidth = if (enabledGap) avatarGapWidth * 2 else 0f
-            gapPaint.color = Color.WHITE
-
             val dstBitmapWidthRadius = (dstBitmap?.width ?: 0) / 2
             val dstBitmapHeightRadius = (dstBitmap?.height ?: 0) / 2
 
-            // Draw the rounded gap
-            avatarImageViewCanvas.drawCircle(
-                dstBitmapWidthRadius.toFloat(),
-                dstBitmapHeightRadius.toFloat(),
-                dstBitmapWidthRadius.toFloat(),
-                gapPaint
-            )
+            if (vsAvatarGapEnabled) {
+                gapPaint.style = Paint.Style.STROKE
+                gapPaint.strokeWidth = avatarGapWidth * 2
+                gapPaint.color = Color.WHITE
+
+                // Draw the rounded gap
+                avatarImageViewCanvas.drawCircle(
+                    dstBitmapWidthRadius.toFloat(),
+                    dstBitmapHeightRadius.toFloat(),
+                    dstBitmapWidthRadius.toFloat(),
+                    gapPaint
+                )
+            }
 
             borderPaint.style = Paint.Style.STROKE
             borderPaint.color = vsAvatarBorderColor
-            val avatarBorderWidth = if (vsAvatarBorderWidth == VirtusizeAvatarBorderWidth.THICK) { 4.dp } else { 2.dp }
+            val avatarBorderWidth = if (vsAvatarBorderWidth == VirtusizeAvatarBorderWidth.THICK) {
+                4.dp
+            } else {
+                2.dp
+            }
             borderPaint.strokeWidth = avatarBorderWidth
 
             if (vsAvatarBorderStyle == VirtusizeAvatarBorderStyle.DASHED) {
-                borderPaint.pathEffect = DashPathEffect(floatArrayOf(avatarBorderWidth, avatarBorderWidth), 0f)
+                borderPaint.pathEffect =
+                    DashPathEffect(floatArrayOf(avatarBorderWidth, avatarBorderWidth), 0f)
             } else if (vsAvatarBorderStyle == VirtusizeAvatarBorderStyle.NONE) {
                 borderPaint.color = Color.WHITE
                 borderPaint.strokeWidth = 0f
@@ -187,9 +198,24 @@ class VirtusizeAvatar @JvmOverloads constructor(
         srcImageBitmap?.let { imageBitmap ->
             val avatarImageSize = vsAvatarSize.getAvatarSize(context).toInt()
             val ratio = avatarImageSize.toFloat() / min(imageBitmap.width, imageBitmap.height)
-            val resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, (imageBitmap.width * ratio).toInt(), (imageBitmap.height * ratio).toInt(), false)
-            srcImageBitmap = Bitmap.createBitmap(resizedBitmap, 0, 0, avatarImageSize, avatarImageSize)
             dstBitmapSize = avatarImageSize + avatarGapWidth.toInt() * 2
+            srcImageBitmap = if (vsAvatarGapEnabled) {
+                val resizedBitmap = Bitmap.createScaledBitmap(
+                    imageBitmap,
+                    (imageBitmap.width * ratio).toInt(),
+                    (imageBitmap.height * ratio).toInt(),
+                    false
+                )
+                Bitmap.createBitmap(resizedBitmap, 0, 0, avatarImageSize, avatarImageSize)
+            } else {
+                val resizedBitmap = Bitmap.createScaledBitmap(
+                    imageBitmap,
+                    (imageBitmap.width * ratio).toInt() + avatarGapWidth.toInt() * 2,
+                    (imageBitmap.height * ratio).toInt() + avatarGapWidth.toInt() * 2,
+                    false
+                )
+                Bitmap.createBitmap(resizedBitmap, 0, 0, dstBitmapSize, dstBitmapSize)
+            }
             dstBitmap = Bitmap.createBitmap(dstBitmapSize, dstBitmapSize, Bitmap.Config.ARGB_8888)
             dstBitmap?.let { dstBitmap ->
                 avatarImageViewCanvas = Canvas(dstBitmap)

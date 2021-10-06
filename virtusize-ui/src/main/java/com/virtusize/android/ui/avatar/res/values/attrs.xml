@@ -18,5 +18,6 @@
             <enum name="thick" value="1" />
         </attr>
         <attr name="avatarBorderColor" format="color"/>
+        <attr name="avatarGapEnabled" format="boolean"/>
     </declare-styleable>
 </resources>
