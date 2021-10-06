@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="VirtusizeAvatar">
-        <attr name="android:src"/>
+        <attr name="avatarImageSrc" format="reference"/>
         <attr name="avatarSize">
             <enum name="smaller" value="0" />
             <enum name="small" value="1" />

@@ -73,7 +73,7 @@ open class VirtusizeAvatar @JvmOverloads constructor(
         val attrsArray = context.obtainStyledAttributes(attrs, R.styleable.VirtusizeAvatar, 0, 0)
 
         val avatarImageResId = attrsArray.getResourceId(
-            R.styleable.AppCompatImageView_android_src,
+            R.styleable.VirtusizeAvatar_avatarImageSrc,
             -1
         )
         setAvatarImage(avatarImageResId)
@@ -151,10 +151,10 @@ open class VirtusizeAvatar @JvmOverloads constructor(
 
             borderPaint.style = Paint.Style.STROKE
             borderPaint.color = vsAvatarBorderColor
-            val avatarBorderWidth = if (vsAvatarBorderWidth == VirtusizeAvatarBorderWidth.THICK) {
-                4.dp
-            } else {
-                2.dp
+            val avatarBorderWidth = when {
+                vsAvatarSize == VirtusizeAvatarSize.FITTING_ROOM -> 3.dp
+                vsAvatarBorderWidth == VirtusizeAvatarBorderWidth.THICK -> 4.dp
+                else -> 2.dp
             }
             borderPaint.strokeWidth = avatarBorderWidth
 

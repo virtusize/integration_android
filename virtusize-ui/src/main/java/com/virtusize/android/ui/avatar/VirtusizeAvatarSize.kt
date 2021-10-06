@@ -39,6 +39,15 @@ enum class VirtusizeAvatarSize {
         override fun getAvatarRadiusSize(context: Context): Float {
             return context.resources.getDimension(R.dimen.vs_avatar_large_size) / 2
         }
+    },
+    FITTING_ROOM {
+        override fun getAvatarSize(context: Context): Float {
+            return context.resources.getDimension(R.dimen.vs_avatar_fitting_room_size)
+        }
+
+        override fun getAvatarRadiusSize(context: Context): Float {
+            return context.resources.getDimension(R.dimen.vs_avatar_fitting_room_size) / 2
+        }
     };
 
     abstract fun getAvatarSize(context: Context): Float
