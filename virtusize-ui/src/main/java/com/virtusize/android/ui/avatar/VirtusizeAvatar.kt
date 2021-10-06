@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.annotation.DrawableRes
@@ -47,6 +48,12 @@ class VirtusizeAvatar @JvmOverloads constructor(
         }
 
     var vsAvatarBorderColor: Int = R.color.vs_gray_800
+        set(value) {
+            field = value
+            invalidate()
+        }
+
+    var enabledGap: Boolean = true
         set(value) {
             field = value
             invalidate()
@@ -122,7 +129,7 @@ class VirtusizeAvatar @JvmOverloads constructor(
             )
 
             gapPaint.style = Paint.Style.STROKE
-            gapPaint.strokeWidth = avatarGapWidth * 2
+            gapPaint.strokeWidth = if (enabledGap) avatarGapWidth * 2 else 0f
             gapPaint.color = Color.WHITE
 
             val dstBitmapWidthRadius = (dstBitmap?.width ?: 0) / 2
@@ -179,9 +186,9 @@ class VirtusizeAvatar @JvmOverloads constructor(
     private fun setAvatarBitmaps() {
         srcImageBitmap?.let { imageBitmap ->
             val avatarImageSize = vsAvatarSize.getAvatarSize(context).toInt()
-            val ratio = avatarImageSize / min(imageBitmap.width, imageBitmap.height)
-            val resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, imageBitmap.width * ratio, imageBitmap.height * ratio, false)
-            srcImageBitmap = Bitmap.createBitmap(resizedBitmap, resizedBitmap.width / 2, resizedBitmap.height / 2, avatarImageSize, avatarImageSize)
+            val ratio = avatarImageSize.toFloat() / min(imageBitmap.width, imageBitmap.height)
+            val resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, (imageBitmap.width * ratio).toInt(), (imageBitmap.height * ratio).toInt(), false)
+            srcImageBitmap = Bitmap.createBitmap(resizedBitmap, 0, 0, avatarImageSize, avatarImageSize)
             dstBitmapSize = avatarImageSize + avatarGapWidth.toInt() * 2
             dstBitmap = Bitmap.createBitmap(dstBitmapSize, dstBitmapSize, Bitmap.Config.ARGB_8888)
             dstBitmap?.let { dstBitmap ->

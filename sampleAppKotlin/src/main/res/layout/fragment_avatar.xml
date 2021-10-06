@@ -76,7 +76,7 @@
             style="@style/VirtusizeDesignSystemFlow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="smaller_avatar,small_avatar, medium_avatar, large_avatar"
+            app:constraint_referenced_ids="smaller_avatar,small_avatar,medium_avatar,large_avatar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/size_text_view" />
