@@ -17,6 +17,7 @@
     <string name="round_button_title" translatable="false">Round Buttons</string>
     <string name="size_avatar_title" translatable="false">Size</string>
     <string name="border_style_title" translatable="false">Border Style, Color, and Width</string>
+    <string name="fitting_room_avatar_title" translatable="false">Fitting Room Avatars</string>
 
     <string name="default_button" translatable="false">Default Button</string>
     <string name="flat_button" translatable="false">Flat Button</string>

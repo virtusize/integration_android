@@ -158,6 +158,34 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/style_text_view" />
 
+            <TextView
+                android:id="@+id/fitting_room_text_view"
+                style="@style/TextAppearance.Virtusize.Headline3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/virtusize_16dp"
+                android:text="@string/fitting_room_avatar_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/style_avatar_flow" />
+
+            <com.virtusize.android.ui.fittingroom.VirtusizeCurationAvatar
+                android:id="@+id/fitting_room_item_avatar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:avatarBorderColor="@color/vs_black"
+                android:src="@drawable/ic_sample_woman"/>
+
+            <androidx.constraintlayout.helper.widget.Flow
+                android:id="@+id/fitting_room_avatar_flow"
+                style="@style/VirtusizeDesignSystemFlow"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="fitting_room_item_avatar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fitting_room_text_view" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>

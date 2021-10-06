@@ -18,7 +18,7 @@ import com.virtusize.android.ui.databinding.VirtusizeAvatarBinding
 import com.virtusize.android.ui.utils.dp
 import kotlin.math.min
 
-class VirtusizeAvatar @JvmOverloads constructor(
+open class VirtusizeAvatar @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
