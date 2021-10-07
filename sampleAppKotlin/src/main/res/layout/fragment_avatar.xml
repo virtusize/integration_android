@@ -183,12 +183,20 @@
                 app:avatarBorderColor="@color/vs_teal"
                 app:avatarImageSrc="@drawable/ic_my_size"/>
 
+            <com.virtusize.android.ui.fittingroom.VirtusizeCurationAvatar
+                android:id="@+id/fr_my_size_selected_avatar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:avatarBorderColor="@color/vs_teal"
+                app:avatarIsSelected="true"
+                app:avatarImageSrc="@drawable/ic_my_size"/>
+
             <androidx.constraintlayout.helper.widget.Flow
                 android:id="@+id/fitting_room_avatar_flow"
                 style="@style/VirtusizeDesignSystemFlow"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:constraint_referenced_ids="fr_item_avatar,fr_my_size_avatar"
+                app:constraint_referenced_ids="fr_item_avatar,fr_my_size_avatar,fr_my_size_selected_avatar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fitting_room_text_view" />

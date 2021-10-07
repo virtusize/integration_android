@@ -19,5 +19,6 @@
         </attr>
         <attr name="avatarBorderColor" format="color"/>
         <attr name="avatarGapEnabled" format="boolean"/>
+        <attr name="avatarIsSelected" format="boolean"/>
     </declare-styleable>
 </resources>

@@ -21,6 +21,9 @@ import android.graphics.drawable.VectorDrawable
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.content.res.AppCompatResources
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
+import android.graphics.ColorFilter
 
 open class VirtusizeAvatar @JvmOverloads constructor(
     context: Context,
@@ -57,6 +60,12 @@ open class VirtusizeAvatar @JvmOverloads constructor(
         }
 
     var vsAvatarGapEnabled: Boolean = true
+        set(value) {
+            field = value
+            invalidate()
+        }
+
+    var vsAvatarIsSelected: Boolean = false
         set(value) {
             field = value
             invalidate()
@@ -117,6 +126,9 @@ open class VirtusizeAvatar @JvmOverloads constructor(
         vsAvatarGapEnabled =
             attrsArray.getBoolean(R.styleable.VirtusizeAvatar_avatarGapEnabled, true)
 
+        vsAvatarIsSelected =
+            attrsArray.getBoolean(R.styleable.VirtusizeAvatar_avatarIsSelected, false)
+
         attrsArray.recycle()
     }
 
@@ -126,7 +138,11 @@ open class VirtusizeAvatar @JvmOverloads constructor(
         srcImageBitmap?.let { srcImageBitmap ->
             val dstBitmap = getDstBitmap()
             avatarImageViewCanvas = Canvas(dstBitmap)
-            avatarImageViewCanvas.drawColor(ContextCompat.getColor(context, R.color.vs_white))
+            if (vsAvatarIsSelected) {
+                avatarImageViewCanvas.drawColor(ContextCompat.getColor(context, R.color.vs_teal))
+            } else {
+                avatarImageViewCanvas.drawColor(ContextCompat.getColor(context, R.color.vs_white))
+            }
 
             val resizedSrcImageBitmap = getResizedSrcImageBitmap(srcImageBitmap, dstBitmap.width)
             drawAvatarImage(resizedSrcImageBitmap, dstBitmap.width)
@@ -195,11 +211,20 @@ open class VirtusizeAvatar @JvmOverloads constructor(
     }
 
     private fun drawAvatarImage(srcImageBitmap: Bitmap, dstBitmapSize: Int) {
+        var paint: Paint? = null
+        if (vsAvatarIsSelected) {
+            paint = Paint()
+            val filter: ColorFilter = PorterDuffColorFilter(
+                ContextCompat.getColor(context, R.color.vs_white),
+                PorterDuff.Mode.SRC_IN
+            )
+            paint.colorFilter = filter
+        }
         avatarImageViewCanvas.drawBitmap(
             srcImageBitmap,
             ((dstBitmapSize - srcImageBitmap.width) / 2.0).toFloat(),
             ((dstBitmapSize - srcImageBitmap.height) / 2.0).toFloat(),
-            null
+            paint
         )
     }
 
@@ -234,7 +259,6 @@ open class VirtusizeAvatar @JvmOverloads constructor(
             borderPaint.strokeWidth = 0f
         }
 
-        // Draw the rounded border
         avatarImageViewCanvas.drawCircle(
             dstBitmapRadius.toFloat(),
             dstBitmapRadius.toFloat(),
