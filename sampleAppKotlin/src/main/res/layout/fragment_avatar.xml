@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/virtusize_16dp"
-                app:avatarImageSrc="@drawable/ic_sample_woman"
+                android:src="@drawable/ic_sample_woman"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/avatar_text_view" />
 
@@ -51,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:avatarSize="smaller"
-                app:avatarImageSrc="@drawable/ic_sample_woman"
+                android:src="@drawable/ic_sample_woman"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <com.virtusize.android.ui.avatar.VirtusizeAvatar
@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:avatarSize="small"
-                app:avatarImageSrc="@drawable/ic_sample_woman" />
+                android:src="@drawable/ic_sample_woman" />
 
             <com.virtusize.android.ui.avatar.VirtusizeAvatar
                 android:id="@+id/medium_avatar"
@@ -73,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:avatarSize="large"
-                app:avatarImageSrc="@drawable/ic_sample_woman" />
+                android:src="@drawable/ic_sample_woman" />
 
             <androidx.constraintlayout.helper.widget.Flow
                 android:id="@+id/size_avatar_flow"
@@ -108,7 +108,7 @@
                 android:layout_height="wrap_content"
                 app:avatarBorderStyle="dashed"
                 app:avatarBorderColor="@color/vs_teal"
-                app:avatarImageSrc="@drawable/ic_sample_woman" />
+                android:src="@drawable/ic_sample_woman" />
 
             <com.virtusize.android.ui.avatar.VirtusizeAvatar
                 android:id="@+id/thick_dashed_border_avatar"
@@ -117,28 +117,28 @@
                 app:avatarBorderWidth="thick"
                 app:avatarBorderColor="@color/vs_red"
                 app:avatarBorderStyle="dashed"
-                app:avatarImageSrc="@drawable/ic_sample_woman" />
+                android:src="@drawable/ic_sample_woman" />
 
             <com.virtusize.android.ui.avatar.VirtusizeAvatar
                 android:id="@+id/no_border_avatar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:avatarBorderStyle="none"
-                app:avatarImageSrc="@drawable/ic_sample_woman" />
+                android:src="@drawable/ic_sample_woman" />
 
             <com.virtusize.android.ui.avatar.VirtusizeAvatar
                 android:id="@+id/colored_thin_solid_border_avatar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:avatarBorderColor="@color/vs_grd_primary_dark"
-                app:avatarImageSrc="@drawable/ic_sample_woman" />
+                android:src="@drawable/ic_sample_woman" />
 
             <com.virtusize.android.ui.avatar.VirtusizeAvatar
                 android:id="@+id/thick_solid_border_avatar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:avatarBorderWidth="thick"
-                app:avatarImageSrc="@drawable/ic_sample_woman" />
+                android:src="@drawable/ic_sample_woman" />
 
             <com.virtusize.android.ui.avatar.VirtusizeAvatar
                 android:id="@+id/colored_thick_solid_border_avatar"
@@ -146,7 +146,7 @@
                 android:layout_height="wrap_content"
                 app:avatarBorderWidth="thick"
                 app:avatarBorderColor="@color/vs_red"
-                app:avatarImageSrc="@drawable/ic_sample_woman"/>
+                android:src="@drawable/ic_sample_woman"/>
 
             <androidx.constraintlayout.helper.widget.Flow
                 android:id="@+id/style_avatar_flow"
@@ -174,14 +174,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:avatarBorderColor="@color/vs_black"
-                app:avatarImageSrc="@drawable/ic_sample_woman"/>
+                android:src="@drawable/ic_sample_woman"/>
 
             <com.virtusize.android.ui.fittingroom.VirtusizeCurationAvatar
                 android:id="@+id/fr_my_size_avatar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:avatarBorderColor="@color/vs_teal"
-                app:avatarImageSrc="@drawable/ic_my_size"/>
+                android:src="@drawable/ic_my_size"/>
 
             <com.virtusize.android.ui.fittingroom.VirtusizeCurationAvatar
                 android:id="@+id/fr_my_size_selected_avatar"
@@ -189,7 +189,7 @@
                 android:layout_height="wrap_content"
                 app:avatarBorderColor="@color/vs_teal"
                 app:avatarIsSelected="true"
-                app:avatarImageSrc="@drawable/ic_my_size"/>
+                android:src="@drawable/ic_my_size"/>
 
             <androidx.constraintlayout.helper.widget.Flow
                 android:id="@+id/fitting_room_avatar_flow"

@@ -84,7 +84,7 @@ open class VirtusizeAvatar @JvmOverloads constructor(
         val attrsArray = context.obtainStyledAttributes(attrs, R.styleable.VirtusizeAvatar, 0, 0)
 
         val avatarImageResId = attrsArray.getResourceId(
-            R.styleable.VirtusizeAvatar_avatarImageSrc,
+            R.styleable.VirtusizeAvatar_android_src,
             -1
         )
         setAvatarImage(avatarImageResId)
@@ -135,31 +135,33 @@ open class VirtusizeAvatar @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        srcImageBitmap?.let { srcImageBitmap ->
-            val dstBitmap = getDstBitmap()
-            avatarImageViewCanvas = Canvas(dstBitmap)
-            if (vsAvatarIsSelected) {
-                avatarImageViewCanvas.drawColor(ContextCompat.getColor(context, R.color.vs_teal))
-            } else {
-                avatarImageViewCanvas.drawColor(ContextCompat.getColor(context, R.color.vs_white))
-            }
+        val dstBitmap = getDstBitmap()
+        avatarImageViewCanvas = Canvas(dstBitmap)
+        if (vsAvatarIsSelected) {
+            avatarImageViewCanvas.drawColor(ContextCompat.getColor(context, R.color.vs_teal))
+            binding.checkImageView.visibility = VISIBLE
+        } else {
+            avatarImageViewCanvas.drawColor(ContextCompat.getColor(context, R.color.vs_white))
+            binding.checkImageView.visibility = GONE
+        }
 
+        srcImageBitmap?.let { srcImageBitmap ->
             val resizedSrcImageBitmap = getResizedSrcImageBitmap(srcImageBitmap, dstBitmap.width)
             drawAvatarImage(resizedSrcImageBitmap, dstBitmap.width)
-
-            val dstBitmapRadius = dstBitmap.width / 2
-
-            if (vsAvatarGapEnabled) {
-                drawRoundedGap(dstBitmapRadius)
-            }
-            drawRoundedBorder(dstBitmapRadius)
-
-            val roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(resources, dstBitmap)
-            roundedBitmapDrawable.isCircular = true
-            roundedBitmapDrawable.setAntiAlias(true)
-
-            binding.avatarImageView.setImageDrawable(roundedBitmapDrawable)
         }
+
+        val dstBitmapRadius = dstBitmap.width / 2
+
+        if (vsAvatarGapEnabled) {
+            drawRoundedGap(dstBitmapRadius)
+        }
+        drawRoundedBorder(dstBitmapRadius)
+
+        val roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(resources, dstBitmap)
+        roundedBitmapDrawable.isCircular = true
+        roundedBitmapDrawable.setAntiAlias(true)
+
+        binding.avatarImageView.setImageDrawable(roundedBitmapDrawable)
     }
 
     fun setAvatarImage(@DrawableRes resId: Int) {
@@ -211,14 +213,15 @@ open class VirtusizeAvatar @JvmOverloads constructor(
     }
 
     private fun drawAvatarImage(srcImageBitmap: Bitmap, dstBitmapSize: Int) {
-        var paint: Paint? = null
+        val paint = Paint()
         if (vsAvatarIsSelected) {
-            paint = Paint()
             val filter: ColorFilter = PorterDuffColorFilter(
                 ContextCompat.getColor(context, R.color.vs_white),
                 PorterDuff.Mode.SRC_IN
             )
             paint.colorFilter = filter
+        } else {
+            paint.colorFilter = null
         }
         avatarImageViewCanvas.drawBitmap(
             srcImageBitmap,
