@@ -135,7 +135,8 @@ open class VirtusizeAvatar @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        val dstBitmap = getDstBitmap()
+        val avatarImageSize = vsAvatarSize.getAvatarSize(context).toInt()
+        val dstBitmap = getDstBitmap(avatarImageSize)
         avatarImageViewCanvas = Canvas(dstBitmap)
         if (vsAvatarIsSelected) {
             avatarImageViewCanvas.drawColor(ContextCompat.getColor(context, R.color.vs_teal))
@@ -176,39 +177,33 @@ open class VirtusizeAvatar @JvmOverloads constructor(
         invalidate()
     }
 
-    private fun getDstBitmapSize(): Int {
-        val avatarImageSize = vsAvatarSize.getAvatarSize(context).toInt()
-        return avatarImageSize + avatarGapWidth.toInt() * 2
+    private fun getDstBitmap(avatarImageSize: Int): Bitmap {
+        return Bitmap.createBitmap(avatarImageSize, avatarImageSize, Bitmap.Config.ARGB_8888)
     }
 
-    private fun getDstBitmap(): Bitmap {
-        val dstBitmapSize = getDstBitmapSize()
-        return Bitmap.createBitmap(dstBitmapSize, dstBitmapSize, Bitmap.Config.ARGB_8888)
-    }
-
-    private fun getResizedSrcImageBitmap(imageBitmap: Bitmap, dstBitmapSize: Int): Bitmap {
-        val avatarImageSize = vsAvatarSize.getAvatarSize(context).toInt()
+    private fun getResizedSrcImageBitmap(imageBitmap: Bitmap, avatarImageSize: Int): Bitmap {
         val ratio = avatarImageSize.toFloat() / min(imageBitmap.width, imageBitmap.height)
-        if (ratio >= 1) {
-            return imageBitmap
+        return if (ratio >= 1) {
+            imageBitmap
         } else {
-            return if (vsAvatarGapEnabled) {
-                val resizedBitmap = Bitmap.createScaledBitmap(
-                    imageBitmap,
-                    (imageBitmap.width * ratio).toInt(),
-                    (imageBitmap.height * ratio).toInt(),
-                    false
-                )
-                Bitmap.createBitmap(resizedBitmap, 0, 0, avatarImageSize, avatarImageSize)
+            val sizeOffset = if (vsAvatarGapEnabled) {
+                -avatarGapWidth.toInt() * 2
             } else {
-                val resizedBitmap = Bitmap.createScaledBitmap(
-                    imageBitmap,
-                    (imageBitmap.width * ratio).toInt() + avatarGapWidth.toInt() * 2,
-                    (imageBitmap.height * ratio).toInt() + avatarGapWidth.toInt() * 2,
-                    false
-                )
-                Bitmap.createBitmap(resizedBitmap, 0, 0, dstBitmapSize, dstBitmapSize)
+                0
             }
+            val resizedBitmap = Bitmap.createScaledBitmap(
+                imageBitmap,
+                (imageBitmap.width * ratio).toInt() + sizeOffset,
+                (imageBitmap.height * ratio).toInt() + sizeOffset,
+                false
+            )
+            Bitmap.createBitmap(
+                resizedBitmap,
+                0,
+                0,
+                avatarImageSize + sizeOffset,
+                avatarImageSize + sizeOffset
+            )
         }
     }
 

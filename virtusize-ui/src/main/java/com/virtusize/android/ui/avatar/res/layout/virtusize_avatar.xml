@@ -15,8 +15,8 @@
         android:id="@+id/check_image_view"
         android:visibility="gone"
         android:layout_gravity="end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/vs_avatar_check_size"
+        android:layout_height="@dimen/vs_avatar_check_size"
         app:srcCompat="@drawable/ic_check_active" />
 
 </FrameLayout>
