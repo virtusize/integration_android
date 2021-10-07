@@ -32,7 +32,7 @@ open class VirtusizeAvatar @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     companion object {
-        private val avatarGapWidth = 6.dp
+        private val avatarGapWidth = 4.dp
     }
 
     var vsAvatarSize = VirtusizeAvatarSize.SMALL
