@@ -191,18 +191,30 @@ open class VirtusizeAvatar @JvmOverloads constructor(
             } else {
                 0
             }
+            val resizedWidth = (imageBitmap.width * ratio).toInt() + sizeOffset
+            val resizedHeight = (imageBitmap.height * ratio).toInt() + sizeOffset
             val resizedBitmap = Bitmap.createScaledBitmap(
                 imageBitmap,
-                (imageBitmap.width * ratio).toInt() + sizeOffset,
-                (imageBitmap.height * ratio).toInt() + sizeOffset,
+                resizedWidth,
+                resizedHeight,
                 false
             )
-            Bitmap.createBitmap(
+            val adjustedXPos = if (resizedBitmap.width > resizedBitmap.height) {
+                (resizedWidth - resizedHeight) / 2
+            } else {
+                0
+            }
+            val adjustedYPos = if (resizedBitmap.height > resizedBitmap.width) {
+                (resizedHeight - resizedWidth) / 2
+            } else {
+                0
+            }
+            return Bitmap.createBitmap(
                 resizedBitmap,
-                0,
-                0,
-                avatarImageSize + sizeOffset,
-                avatarImageSize + sizeOffset
+                adjustedXPos,
+                adjustedYPos,
+                resizedWidth - adjustedXPos,
+                resizedHeight - adjustedYPos
             )
         }
     }
