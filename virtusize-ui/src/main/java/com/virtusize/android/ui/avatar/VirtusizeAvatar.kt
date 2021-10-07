@@ -5,25 +5,25 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.ColorFilter
 import android.graphics.DashPathEffect
 import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.VectorDrawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.annotation.DrawableRes
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.virtusize.android.ui.R
 import com.virtusize.android.ui.databinding.VirtusizeAvatarBinding
 import com.virtusize.android.ui.utils.dp
 import kotlin.math.min
-import android.graphics.drawable.VectorDrawable
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
-import android.graphics.drawable.BitmapDrawable
-import androidx.appcompat.content.res.AppCompatResources
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
-import android.graphics.ColorFilter
 
 open class VirtusizeAvatar @JvmOverloads constructor(
     context: Context,
@@ -272,7 +272,7 @@ open class VirtusizeAvatar @JvmOverloads constructor(
         // png image files
         return if (drawable is BitmapDrawable) {
             BitmapFactory.decodeResource(resources, drawableId)
-        // svg image files
+            // svg image files
         } else if (drawable is VectorDrawableCompat || drawable is VectorDrawable) {
             val bitmap = Bitmap.createBitmap(
                 drawable.intrinsicWidth,
