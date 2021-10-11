@@ -29,7 +29,8 @@ fun VirtusizeEnvironment.defaultApiUrl(): String {
  */
 fun VirtusizeEnvironment.eventApiUrl(): String {
     return when (this) {
-        VirtusizeEnvironment.STAGING, VirtusizeEnvironment.GLOBAL -> "https://events.virtusize.com"
+        VirtusizeEnvironment.STAGING -> "https://events.staging.virtusize.com"
+        VirtusizeEnvironment.GLOBAL -> "https://events.virtusize.com"
         VirtusizeEnvironment.JAPAN -> "https://events.virtusize.jp"
         VirtusizeEnvironment.KOREA -> "https://events.virtusize.kr"
     }
