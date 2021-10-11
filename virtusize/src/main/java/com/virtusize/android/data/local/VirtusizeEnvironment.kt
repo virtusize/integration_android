@@ -16,7 +16,7 @@ enum class VirtusizeEnvironment {
  */
 fun VirtusizeEnvironment.defaultApiUrl(): String {
     return when (this) {
-        VirtusizeEnvironment.STAGING -> "https://staging.virtusize.jp"
+        VirtusizeEnvironment.STAGING -> "https://staging.virtusize.com"
         VirtusizeEnvironment.GLOBAL -> "https://api.virtusize.com"
         VirtusizeEnvironment.JAPAN -> "https://api.virtusize.jp"
         VirtusizeEnvironment.KOREA -> "https://api.virtusize.kr"
@@ -42,7 +42,7 @@ fun VirtusizeEnvironment.eventApiUrl(): String {
  */
 fun VirtusizeEnvironment.servicesApiUrl(): String {
     return when (this) {
-        VirtusizeEnvironment.STAGING -> "https://services.virtusize.jp/stg"
+        VirtusizeEnvironment.STAGING -> "https://services.virtusize.com/stg"
         VirtusizeEnvironment.GLOBAL -> "https://services.virtusize.com"
         VirtusizeEnvironment.JAPAN -> "https://services.virtusize.jp"
         VirtusizeEnvironment.KOREA -> "https://services.virtusize.kr"
