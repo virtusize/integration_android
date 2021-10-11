@@ -1,3 +1,7 @@
+## 2.4.1
+
+* Use the staging API URLs for staging
+
 ## 2.4.0
 
 * Add ktlint
