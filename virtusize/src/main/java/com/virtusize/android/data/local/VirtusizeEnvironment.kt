@@ -4,6 +4,7 @@ package com.virtusize.android.data.local
  * This enum contains all available Virtusize environments
  */
 enum class VirtusizeEnvironment {
+    TESTING,
     STAGING,
     GLOBAL,
     JAPAN,
@@ -16,6 +17,7 @@ enum class VirtusizeEnvironment {
  */
 fun VirtusizeEnvironment.defaultApiUrl(): String {
     return when (this) {
+        VirtusizeEnvironment.TESTING -> "https://testing.virtusize.jp"
         VirtusizeEnvironment.STAGING -> "https://staging.virtusize.com"
         VirtusizeEnvironment.GLOBAL -> "https://api.virtusize.com"
         VirtusizeEnvironment.JAPAN -> "https://api.virtusize.jp"
@@ -29,6 +31,7 @@ fun VirtusizeEnvironment.defaultApiUrl(): String {
  */
 fun VirtusizeEnvironment.eventApiUrl(): String {
     return when (this) {
+        VirtusizeEnvironment.TESTING -> "https://events.testing.virtusize.jp"
         VirtusizeEnvironment.STAGING -> "https://events.staging.virtusize.com"
         VirtusizeEnvironment.GLOBAL -> "https://events.virtusize.com"
         VirtusizeEnvironment.JAPAN -> "https://events.virtusize.jp"
@@ -42,6 +45,7 @@ fun VirtusizeEnvironment.eventApiUrl(): String {
  */
 fun VirtusizeEnvironment.servicesApiUrl(): String {
     return when (this) {
+        VirtusizeEnvironment.TESTING -> "https://services.virtusize.jp/stg"
         VirtusizeEnvironment.STAGING -> "https://services.virtusize.com/stg"
         VirtusizeEnvironment.GLOBAL -> "https://services.virtusize.com"
         VirtusizeEnvironment.JAPAN -> "https://services.virtusize.jp"
@@ -57,6 +61,7 @@ fun VirtusizeEnvironment.virtusizeUrl(): String {
     return when (this) {
         VirtusizeEnvironment.STAGING,
         VirtusizeEnvironment.GLOBAL -> "https://static.api.virtusize.com"
+        VirtusizeEnvironment.TESTING,
         VirtusizeEnvironment.JAPAN -> "https://static.api.virtusize.jp"
         VirtusizeEnvironment.KOREA -> "https://static.api.virtusize.kr"
     }
@@ -71,7 +76,7 @@ fun VirtusizeEnvironment.virtusizeUrl(): String {
 fun VirtusizeEnvironment.virtusizeRegion(): VirtusizeRegion {
     return when (this) {
         VirtusizeEnvironment.STAGING, VirtusizeEnvironment.GLOBAL -> VirtusizeRegion.COM
-        VirtusizeEnvironment.JAPAN -> VirtusizeRegion.JP
+        VirtusizeEnvironment.TESTING, VirtusizeEnvironment.JAPAN -> VirtusizeRegion.JP
         VirtusizeEnvironment.KOREA -> VirtusizeRegion.KR
     }
 }
@@ -82,7 +87,7 @@ fun VirtusizeEnvironment.virtusizeRegion(): VirtusizeRegion {
  */
 fun VirtusizeEnvironment.virtusizeWebViewEnv(): String {
     return when (this) {
-        VirtusizeEnvironment.STAGING -> "staging"
+        VirtusizeEnvironment.TESTING, VirtusizeEnvironment.STAGING -> "staging"
         else -> "production"
     }
 }

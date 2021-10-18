@@ -1,6 +1,7 @@
 ## 2.4.1
 
 * Use the staging API URLs for staging
+* Add the `testing` env for internal use
 
 ## 2.4.0
 
