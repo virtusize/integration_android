@@ -34,7 +34,7 @@ internal fun VirtusizeEndpoint.getPath(env: VirtusizeEnvironment? = null): Strin
             "/ds-functions/size-rec/get-size"
         }
         VirtusizeEndpoint.VirtusizeWebView -> {
-            val stgPath = when(env) {
+            val stgPath = when (env) {
                 VirtusizeEnvironment.TESTING, VirtusizeEnvironment.STAGING -> "staging"
                 else -> "latest"
             }
