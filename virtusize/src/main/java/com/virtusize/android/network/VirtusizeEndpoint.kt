@@ -34,7 +34,10 @@ internal fun VirtusizeEndpoint.getPath(env: VirtusizeEnvironment? = null): Strin
             "/ds-functions/size-rec/get-size"
         }
         VirtusizeEndpoint.VirtusizeWebView -> {
-            val stgPath = if (env == VirtusizeEnvironment.STAGING) "staging" else "latest"
+            val stgPath = when (env) {
+                VirtusizeEnvironment.TESTING, VirtusizeEnvironment.STAGING -> "staging"
+                else -> "latest"
+            }
             "/a/aoyama/$stgPath/sdk-webview.html"
         }
         VirtusizeEndpoint.ProductMetaDataHints -> {
