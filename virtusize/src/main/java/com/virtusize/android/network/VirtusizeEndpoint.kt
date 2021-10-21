@@ -38,7 +38,9 @@ internal fun VirtusizeEndpoint.getPath(env: VirtusizeEnvironment? = null): Strin
                 VirtusizeEnvironment.TESTING, VirtusizeEnvironment.STAGING -> "staging"
                 else -> "latest"
             }
-            "/a/aoyama/$stgPath/sdk-webview.html"
+            // TODO: change the endpoint back once the development is done
+//            "/a/aoyama/$stgPath/sdk-webview.html"
+            "/a/aoyama/testing/sns-test/sdk-webview.html"
         }
         VirtusizeEndpoint.ProductMetaDataHints -> {
             "/rest-api/v1/product-meta-data-hints"
