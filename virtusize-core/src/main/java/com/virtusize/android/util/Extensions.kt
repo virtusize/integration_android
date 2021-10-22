@@ -14,7 +14,7 @@ import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import com.virtusize.android.data.parsers.I18nLocalizationJsonParser
+import com.virtusize.android.data.remote.I18nLocalization
 
 /**
  * The Context extension function to get the string by the string resource name
@@ -30,7 +30,7 @@ internal fun Context.getStringResourceByName(stringName: String): String? {
 /**
  * The Context extension function to get a drawable resource by name in string
  */
-internal fun Context.getDrawableResourceByName(drawableName: String): Drawable? {
+fun Context.getDrawableResourceByName(drawableName: String): Drawable? {
     val resId = resources.getIdentifier(drawableName, "drawable", packageName)
     if (resId == 0) {
         return null
@@ -41,7 +41,7 @@ internal fun Context.getDrawableResourceByName(drawableName: String): Drawable? 
 /**
  * The Context extension function to get a Typeface by the font file name
  */
-internal fun Context.getTypefaceByName(fontFileName: String): Typeface? {
+fun Context.getTypefaceByName(fontFileName: String): Typeface? {
     val resId = resources.getIdentifier(fontFileName, "font", packageName)
     if (resId == 0) {
         return null
@@ -52,15 +52,15 @@ internal fun Context.getTypefaceByName(fontFileName: String): Typeface? {
 /**
  * The String extension function to trim the text from i18n localization
  */
-internal fun String.trimI18nText(
-    trimType: I18nLocalizationJsonParser.TrimType = I18nLocalizationJsonParser.TrimType.ONELINE
+fun String.trimI18nText(
+    trimType: I18nLocalization.TrimType = I18nLocalization.TrimType.ONELINE
 ): String {
     return when (trimType) {
-        I18nLocalizationJsonParser.TrimType.ONELINE ->
+        I18nLocalization.TrimType.ONELINE ->
             replace(I18nConstants.BOLD_START_PLACEHOLDER, "")
                 .replace("<br>", "")
                 .replace(I18nConstants.BOLD_END_PLACEHOLDER, "")
-        I18nLocalizationJsonParser.TrimType.MULTIPLELINES ->
+        I18nLocalization.TrimType.MULTIPLELINES ->
             replace(I18nConstants.BOLD_START_PLACEHOLDER, "<br>")
                 .replace(I18nConstants.BOLD_END_PLACEHOLDER, "")
     }
@@ -80,7 +80,7 @@ inline fun <reified T : Enum<T>> valueOf(type: String): T? {
 /**
  * The View extension function to get the latest size info when the view size gets changed
  */
-internal inline fun View.onSizeChanged(crossinline runnable: (Int, Int) -> Unit) = this.apply {
+inline fun View.onSizeChanged(crossinline runnable: (Int, Int) -> Unit) = this.apply {
     addOnLayoutChangeListener { _, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
         val rect = Rect(left, top, right, bottom)
         val oldRect = Rect(oldLeft, oldTop, oldRight, oldBottom)
@@ -93,7 +93,7 @@ internal inline fun View.onSizeChanged(crossinline runnable: (Int, Int) -> Unit)
 /**
  * The TextView extension function to set the width and height for the right drawable of a Button
  */
-internal fun TextView.rightDrawable(@DrawableRes id: Int = 0, width: Float, height: Float) {
+fun TextView.rightDrawable(@DrawableRes id: Int = 0, width: Float, height: Float) {
     val drawable = ContextCompat.getDrawable(context, id)
     drawable?.setBounds(0, 0, width.toInt(), height.toInt())
     this.setCompoundDrawables(null, null, drawable, null)
@@ -130,7 +130,7 @@ val WebResourceRequest.isFitIllustratorURL: Boolean
 val WebResourceRequest.urlString: String
     get() = "${this.url}"
 
-internal fun Context.getActivity(): AppCompatActivity? {
+fun Context.getActivity(): AppCompatActivity? {
     var currentContext = this
     while (currentContext is ContextWrapper) {
         if (currentContext is AppCompatActivity) {

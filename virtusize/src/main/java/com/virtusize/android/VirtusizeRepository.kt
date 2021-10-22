@@ -2,18 +2,7 @@ package com.virtusize.android
 
 import android.content.Context
 import android.graphics.Bitmap
-import com.virtusize.android.data.local.SizeComparisonRecommendedSize
-import com.virtusize.android.data.local.SizeRecommendationType
-import com.virtusize.android.data.local.VirtusizeError
-import com.virtusize.android.data.local.VirtusizeErrorType
-import com.virtusize.android.data.local.VirtusizeEvent
-import com.virtusize.android.data.local.VirtusizeEvents
-import com.virtusize.android.data.local.VirtusizeLanguage
-import com.virtusize.android.data.local.VirtusizeMessageHandler
-import com.virtusize.android.data.local.VirtusizeOrder
-import com.virtusize.android.data.local.VirtusizeParams
-import com.virtusize.android.data.local.VirtusizeProduct
-import com.virtusize.android.data.local.getEventName
+import com.virtusize.android.data.local.*
 import com.virtusize.android.data.local.throwError
 import com.virtusize.android.data.local.virtusizeError
 import com.virtusize.android.data.parsers.UserAuthDataJsonParser
@@ -118,7 +107,7 @@ internal class VirtusizeRepository(
                     // Send API Event UserSawWidgetButton
                     sendEvent(
                         virtusizeProduct,
-                        VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName())
+                        VirtusizeEvent(com.virtusize.android.data.local.VirtusizeEvents.UserSawWidgetButton.getEventName())
                     )
 
                     presenter?.onValidProductDataCheck(virtusizeProduct)

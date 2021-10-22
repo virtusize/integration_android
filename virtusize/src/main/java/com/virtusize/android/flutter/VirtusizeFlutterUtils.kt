@@ -9,7 +9,6 @@ import com.virtusize.android.data.local.SizeRecommendationType
 import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeProduct
-import com.virtusize.android.data.parsers.I18nLocalizationJsonParser
 import com.virtusize.android.data.remote.BodyProfileRecommendedSize
 import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.data.remote.Product
@@ -69,7 +68,7 @@ object VirtusizeFlutterUtils {
             i18nLocalization,
             userProductRecommendedSize,
             userBodyRecommendedSize
-        ).trimI18nText(I18nLocalizationJsonParser.TrimType.MULTIPLELINES)
+        ).trimI18nText(I18nLocalization.TrimType.MULTIPLELINES)
     }
 
     fun getPrivacyPolicyLink(context: Context, language: VirtusizeLanguage?): String? {

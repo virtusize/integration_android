@@ -47,6 +47,7 @@ configurations {
 }
 
 dependencies {
+    api project(":virtusize-core")
     implementation fileTree(dir: 'libs', include: ['virtusize-auth.aar'])
 
     implementation "androidx.appcompat:appcompat:$appcompat_version"

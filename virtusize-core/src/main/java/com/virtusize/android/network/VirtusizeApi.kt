@@ -21,7 +21,7 @@ import com.virtusize.android.data.remote.UserBodyProfile
 /**
  * This enum contains supported HTTP request methods
  */
-internal enum class HttpMethod {
+enum class HttpMethod {
     GET,
     POST,
     DELETE
@@ -34,7 +34,7 @@ internal enum class HttpMethod {
  * @param params the MutableMap of query parameters to be sent to the server
  * @param authorization if it's true, it means you need the auth token to make the API request
  */
-internal data class ApiRequest(
+data class ApiRequest(
     val url: String,
     val method: HttpMethod,
     val params: Map<String, Any> = mutableMapOf(),
@@ -47,7 +47,7 @@ internal data class ApiRequest(
  * @param apiKey the API key that is unique for every Virtusize client
  * @param userId the user ID that is unique from the client system
  */
-internal object VirtusizeApi {
+object VirtusizeApi {
     private var environment = VirtusizeEnvironment.GLOBAL
     private lateinit var apiKey: String
     private lateinit var userId: String
@@ -109,7 +109,7 @@ internal object VirtusizeApi {
      * @param product the VirtusizeProduct whose image needs to be sent to the Virtusize server
      * @return ApiRequest
      */
-    fun sendProductImageToBackend(product: VirtusizeProduct): ApiRequest {
+    fun sendProductImageToBackend(product: com.virtusize.android.data.local.VirtusizeProduct): ApiRequest {
         val url = Uri.parse(
             environment.defaultApiUrl() +
                 VirtusizeEndpoint.ProductMetaDataHints.getPath()

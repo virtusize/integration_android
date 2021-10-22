@@ -22,6 +22,10 @@ data class I18nLocalization(
     val defaultNoDataText: String
 ) {
 
+    enum class TrimType {
+        ONELINE, MULTIPLELINES
+    }
+
     /**
      * Gets the text for an accessory where the recommendation for product comparison is provided
      */

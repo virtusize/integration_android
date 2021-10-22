@@ -1,6 +1,5 @@
 package com.virtusize.android.network
 
-import com.virtusize.android.SharedPreferencesHelper
 import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.virtusizeError
