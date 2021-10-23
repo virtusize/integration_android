@@ -6,7 +6,7 @@ import com.virtusize.android.data.local.VirtusizeError
  * A generic class that holds a API response from the Virtusize server
  * @param <T>
  */
-internal sealed class VirtusizeApiResponse<out R> {
+sealed class VirtusizeApiResponse<out R> {
     val isSuccessful
         get() = this is Success<*> && failureData == null
 

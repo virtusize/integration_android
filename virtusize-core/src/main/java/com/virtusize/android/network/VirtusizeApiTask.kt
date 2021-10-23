@@ -1,5 +1,6 @@
 package com.virtusize.android.network
 
+import com.virtusize.android.SharedPreferencesHelper
 import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.virtusizeError
@@ -23,9 +24,9 @@ import javax.net.ssl.HttpsURLConnection
  * @param sharedPreferencesHelper the helper to store data locally using Shared Preferences
  * @param messageHandler pass VirtusizeMessageHandler to listen to any Virtusize-related messages
  */
-internal class VirtusizeApiTask(
+class VirtusizeApiTask(
     private var urlConnection: HttpsURLConnection?,
-    private var sharedPreferencesHelper: com.virtusize.android.SharedPreferencesHelper,
+    private var sharedPreferencesHelper: SharedPreferencesHelper,
     private var messageHandler: VirtusizeMessageHandler?
 ) {
 

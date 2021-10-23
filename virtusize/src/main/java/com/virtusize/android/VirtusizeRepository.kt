@@ -26,8 +26,8 @@ internal class VirtusizeRepository(
     private var virtusizeAPIService = VirtusizeAPIService.getInstance(context, messageHandler)
 
     // The helper to store data locally using Shared Preferences
-    private var sharedPreferencesHelper: com.virtusize.android.SharedPreferencesHelper =
-        com.virtusize.android.SharedPreferencesHelper.getInstance(context)
+    private var sharedPreferencesHelper: SharedPreferencesHelper =
+        SharedPreferencesHelper.getInstance(context)
 
     private var userProducts: List<Product>? = null
     private var userProductRecommendedSize: SizeComparisonRecommendedSize? = null

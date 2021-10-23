@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.view.WindowManager
 import com.virtusize.android.BuildConfig
 import com.virtusize.android.R
+import com.virtusize.android.SharedPreferencesHelper
 import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeLanguage
@@ -70,8 +71,8 @@ internal class VirtusizeAPIService(
     }
 
     // The helper to store data locally using Shared Preferences
-    private var sharedPreferencesHelper: com.virtusize.android.SharedPreferencesHelper =
-        com.virtusize.android.SharedPreferencesHelper.getInstance(context)
+    private var sharedPreferencesHelper: SharedPreferencesHelper =
+        SharedPreferencesHelper.getInstance(context)
 
     // Device screen resolution
     private lateinit var resolution: String

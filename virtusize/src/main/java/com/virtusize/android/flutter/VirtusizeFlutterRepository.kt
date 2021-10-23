@@ -1,6 +1,7 @@
 package com.virtusize.android.flutter
 
 import android.content.Context
+import com.virtusize.android.SharedPreferencesHelper
 import com.virtusize.android.Virtusize
 import com.virtusize.android.data.local.*
 import com.virtusize.android.data.local.throwError
@@ -22,8 +23,8 @@ class VirtusizeFlutterRepository(
 ) {
     private val apiService: VirtusizeAPIService =
         VirtusizeAPIService.getInstance(context, messageHandler)
-    private val sharedPreferencesHelper: com.virtusize.android.SharedPreferencesHelper =
-        com.virtusize.android.SharedPreferencesHelper.getInstance(context)
+    private val sharedPreferencesHelper: SharedPreferencesHelper =
+        SharedPreferencesHelper.getInstance(context)
 
     suspend fun productDataCheck(product: VirtusizeProduct): ProductCheck? {
         val productCheckResponse = apiService.productDataCheck(product)

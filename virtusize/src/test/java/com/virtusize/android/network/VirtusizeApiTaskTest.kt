@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
+import com.virtusize.android.SharedPreferencesHelper
 import com.virtusize.android.data.parsers.ProductCheckJsonParser
 import com.virtusize.android.data.parsers.ProductTypeJsonParser
 import com.virtusize.android.data.parsers.UserBodyProfileJsonParser
@@ -34,7 +35,7 @@ class VirtusizeApiTaskTest {
     fun setup() {
         virtusizeApiTask = VirtusizeApiTask(
             null,
-            com.virtusize.android.SharedPreferencesHelper.getInstance(context),
+            SharedPreferencesHelper.getInstance(context),
             null
         )
     }
