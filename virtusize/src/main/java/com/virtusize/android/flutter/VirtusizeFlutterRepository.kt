@@ -3,9 +3,8 @@ package com.virtusize.android.flutter
 import android.content.Context
 import com.virtusize.android.SharedPreferencesHelper
 import com.virtusize.android.Virtusize
-
-import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeError
+import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeEvents
 import com.virtusize.android.data.local.VirtusizeLanguage
@@ -22,9 +21,9 @@ import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.data.remote.UserBodyProfile
 import com.virtusize.android.network.VirtusizeAPIService
 import com.virtusize.android.network.VirtusizeApiResponse
+import java.net.HttpURLConnection
 import org.json.JSONException
 import org.json.JSONObject
-import java.net.HttpURLConnection
 
 class VirtusizeFlutterRepository(
     context: Context,
