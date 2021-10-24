@@ -22,9 +22,9 @@ import com.virtusize.android.data.remote.Product
 import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.network.VirtusizeAPIService
 import com.virtusize.android.util.VirtusizeUtils
-import java.net.HttpURLConnection
 import org.json.JSONException
 import org.json.JSONObject
+import java.net.HttpURLConnection
 
 // This class is used to handle the logic required to access remote and local data sources
 internal class VirtusizeRepository(

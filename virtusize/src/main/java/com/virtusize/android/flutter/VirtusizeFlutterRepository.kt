@@ -21,9 +21,9 @@ import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.data.remote.UserBodyProfile
 import com.virtusize.android.network.VirtusizeAPIService
 import com.virtusize.android.network.VirtusizeApiResponse
-import java.net.HttpURLConnection
 import org.json.JSONException
 import org.json.JSONObject
+import java.net.HttpURLConnection
 
 class VirtusizeFlutterRepository(
     context: Context,
