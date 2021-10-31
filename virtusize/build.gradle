@@ -52,19 +52,17 @@ configurations {
 
 dependencies {
     api project(":virtusize-core")
-    implementation fileTree(dir: 'libs', include: ['virtusize-auth.aar'])
+    api fileTree(dir: 'libs', include: ['virtusize-auth.aar'])
 
     implementation "androidx.appcompat:appcompat:$appcompat_version"
-    implementation "androidx.cardview:cardview:1.0.0"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    // TODO: Remove this dependency if possible
     implementation 'androidx.browser:browser:1.3.0'
-
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
-
+    implementation "androidx.cardview:cardview:1.0.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
+    
     testImplementation "junit:junit:$junit_version"
     testImplementation "com.google.truth:truth:1.1.2"
     testImplementation 'org.json:json:20210307'
