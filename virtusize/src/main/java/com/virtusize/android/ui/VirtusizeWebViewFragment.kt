@@ -188,7 +188,8 @@ class VirtusizeWebViewFragment : DialogFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        VirtusizeAuth.handleVirtusizeAuthResult(binding.webView, requestCode, resultCode, data)
+        // Handle the result of the Virtusize SNS auth flow
+        VirtusizeAuth.handleVirtusizeSNSAuthResult(binding.webView, requestCode, resultCode, data)
     }
 
     override fun onDestroyView() {
