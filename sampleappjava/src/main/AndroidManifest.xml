@@ -17,15 +17,21 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <!-- SNS authentication setup:
+        Include an intent-filter and set the android:scheme on the VitrusizeAuthActivity that will be responsible for handling the deep link back into the app
+        -->
         <activity
             android:name="com.virtusize.android.auth.views.VitrusizeAuthActivity"
-            android:exported="true"
-            android:launchMode="singleTask">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
+                <!-- The URL host has to be sns-auth and the URL scheme must begin with your app's package ID (com.company.app) and end with .virtusize
+                Note: The scheme you define must use all lowercase letters.
+                -->
                 <data
                     android:host="sns-auth"
                     android:scheme="com.virtusize.sampleappjava.virtusize" />
