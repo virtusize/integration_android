@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
-import com.virtusize.android.R
+import com.virtusize.android.core.R
 import com.virtusize.android.data.local.SizeComparisonRecommendedSize
 import com.virtusize.android.fixtures.ProductFixtures
 import org.junit.Before

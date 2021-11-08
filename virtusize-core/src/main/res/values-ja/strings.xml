@@ -1,0 +1,15 @@
+<resources>
+    <string name="inpage_default_accessory_text">日用品と比較する</string>
+    <string name="inpage_has_product_top_text">あなたのアイテムと</string>
+    <string name="inpage_has_product_bottom_text">大きさを比較</string>
+    <string name="inpage_one_size_close_top_text">持っている服と</string>
+    <string name="inpage_one_size_smaller_top_text">持っている服より</string>
+    <string name="inpage_one_size_larger_top_text">持っている服より</string>
+    <string name="inpage_one_size_close_bottom_text">近いサイズ感です</string>
+    <string name="inpage_one_size_smaller_bottom_text">小さめです</string>
+    <string name="inpage_one_size_larger_bottom_text">大きめです</string>
+    <string name="inpage_one_size_body_profile_text">あなたの体で\nサイズを簡単チェック</string>
+    <string name="inpage_multi_size_comparison_text">あなたのアイテムに近いサイズ</string>
+    <string name="inpage_multi_size_body_profile_text">あなたにおすすめのサイズ</string>
+    <string name="inpage_no_data_text">購入前に簡単サイズチェック</string>
+</resources>

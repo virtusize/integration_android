@@ -6,7 +6,7 @@ import org.json.JSONObject
 /**
  * This class parses a JSONObject to the [UserSessionInfo] object
  */
-internal class UserSessionInfoJsonParser : VirtusizeJsonParser<UserSessionInfo> {
+class UserSessionInfoJsonParser : VirtusizeJsonParser<UserSessionInfo> {
 
     override fun parse(json: JSONObject): UserSessionInfo? {
         val accessToken = json.optString(FIELD_ID)

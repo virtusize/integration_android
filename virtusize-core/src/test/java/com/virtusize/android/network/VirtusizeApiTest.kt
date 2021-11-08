@@ -5,7 +5,7 @@ import android.os.Build
 import android.view.WindowManager
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
-import com.virtusize.android.BuildConfig
+import com.virtusize.android.core.BuildConfig
 import com.virtusize.android.data.local.VirtusizeEnvironment
 import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeEvents
@@ -59,7 +59,9 @@ class VirtusizeApiTest {
     fun virtusizeWebView_stagingEnv_shouldReturnExpectedUrl() {
         val actualUrl = VirtusizeApi.virtusizeWebViewURL()
 
-        val expectedUrl = "https://static.api.virtusize.com/a/aoyama/staging/sdk-webview.html"
+        // TODO: Change it back when releasing
+        val expectedUrl = "https://static.api.virtusize.com/a/aoyama/testing/sns-test/sdk-webview.html"
+//        val expectedUrl = "https://static.api.virtusize.com/a/aoyama/staging/sdk-webview.html"
 
         assertThat(actualUrl).isEqualTo(expectedUrl)
     }
@@ -73,7 +75,9 @@ class VirtusizeApiTest {
         )
         val actualUrl = VirtusizeApi.virtusizeWebViewURL()
 
-        val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-webview.html"
+        // TODO: Change it back when releasing
+        val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/testing/sns-test/sdk-webview.html"
+        // val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-webview.html"
 
         assertThat(actualUrl).isEqualTo(expectedUrl)
     }

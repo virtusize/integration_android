@@ -12,10 +12,8 @@ internal object TestFixtures {
 
     const val API_KEY = "test_apiKey"
     const val USER_ID = "123"
-    const val STORE_ID = 2
     const val EXTERNAL_ID = "694"
-    const val PRODUCT_ID = 7110384
-    const val PRODUCT_NAME = "Test Product Name"
+    const val ORIENTATION = "orientation"
 
     val EMPTY_JSON_DATA = JSONObject("{}")
 
@@ -40,22 +38,6 @@ internal object TestFixtures {
         """.trimIndent()
     )
 
-    val INVALID_PRODUCT_DATA_CHECK = JSONObject(
-        """
-            {
-                "data": {
-                    "productDataId": null,
-                    "userData": {},
-                    "storeId": 2,
-                    "storeName": "virtusize",
-                    "validProduct": false
-                },
-                "name": "backend-checked-product",
-                "productId": "63434343"
-            }
-        """.trimIndent()
-    )
-
     val PRODUCT_CHECK = ProductCheckJsonParser().parse(PRODUCT_DATA_CHECK)
 
     val VIRTUSIZE_PRODUCT = VirtusizeProduct(EXTERNAL_ID, "http://image.com/xxx.jpg", PRODUCT_CHECK)
@@ -75,105 +57,6 @@ internal object TestFixtures {
                 }
             }
         """.trimIndent()
-    )
-
-    val PRODUCT_META_DATA_HINTS = JSONObject(
-        """
-            {
-                "apiKey": "test_apiKey",
-                "imageUrl": "http://www.test.com/goods/31/12/11/71/1234_COL_COL02_570.jpg",
-                "cloudinaryPublicId": "test_cloudinaryPublicId",
-                "externalProductId": "$EXTERNAL_ID"
-            }
-        """.trimIndent()
-    )
-
-    val USER_SAW_PRODUCT_EVENT_RESPONSE = JSONObject(
-        """
-            {
-                "apiKey": "$API_KEY",
-                "name": "user-saw-product",
-                "type": "user",
-                "source": "integration-android",
-                "userCohort": "direct",
-                "widgetType": "mobile",
-                "browserOrientation": "landscape",
-                "browserResolution": "794x1080",
-                "integrationVersion": "1",
-                "snippetVersion": "1",
-                "browserIp": "testBrowserIp",
-                "browserIpCountry": "JP",
-                "browserIpCity": "Setagaya-ku",
-                "ruuid": "testRuuid",
-                "browserId": "testBrowserId",
-                "browserName": "other",
-                "browserVersion": "",
-                "browserPlatform": "other",
-                "browserDevice": "other",
-                "browserIsMobile": true,
-                "browserIsTablet": true,
-                "browserIsPc": false,
-                "browserIsBot": false,
-                "browserHasTouch": true,
-                "browserLanguage": "en",
-                "@timestamp": "2020-06-16T13:06:24.842988Z"
-            }
-        """.trimIndent()
-    )
-
-    val STORE_WITH_FULL_INFO = JSONObject(
-        """
-            {
-                "id": 2,
-                "surveyLink": "https://www.survey.com/s/xxxxxx",
-                "name": "Virtusize",
-                "shortName": "virtusize",
-                "lengthUnitId":2, 
-                "apiKey": "$API_KEY",
-                "created": "2011-01-01T00:00:00Z",
-                "updated": "2020-04-20T02:33:58Z",
-                "disabled": "2018-05-29 04:32:45",
-                "typemapperEnabled": false,
-                "region": "KR"
-            }
-        """.trimIndent()
-    )
-
-    val STORE_WITH_NULL_VALUES = JSONObject(
-        """
-            {
-                "id": 2,
-                "surveyLink": "https://www.survey.com/s/xxxxxx",
-                "name": "Virtusize",
-                "shortName": "virtusize",
-                "lengthUnitId":2, 
-                "apiKey": "test_apiKey",
-                "created": "2011-01-01T00:00:00Z",
-                "updated": "2020-04-20T02:33:58Z",
-                "disabled": null,
-                "typemapperEnabled": false,
-                "region": null
-            }
-        """.trimIndent()
-    )
-
-    val VIRTUSIZE_ORDER = VirtusizeOrder(
-        "888400111032",
-        mutableListOf(
-            VirtusizeOrderItem(
-                "P001",
-                "L",
-                "Large",
-                "P001_SIZEL_RED",
-                "http://images.example.com/products/P001/red/image1xl.jpg",
-                "Red",
-                "W",
-                5100.00,
-                "JPY",
-                1,
-                "http://example.com/products/P001"
-            )
-        )
     )
 
     val USER_BODY_JSONObject = JSONObject(
