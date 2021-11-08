@@ -109,7 +109,7 @@ object VirtusizeApi {
      * @param product the VirtusizeProduct whose image needs to be sent to the Virtusize server
      * @return ApiRequest
      */
-    fun sendProductImageToBackend(product: com.virtusize.android.data.local.VirtusizeProduct): ApiRequest {
+    fun sendProductImageToBackend(product: VirtusizeProduct): ApiRequest {
         val url = Uri.parse(
             environment.defaultApiUrl() +
                 VirtusizeEndpoint.ProductMetaDataHints.getPath()
