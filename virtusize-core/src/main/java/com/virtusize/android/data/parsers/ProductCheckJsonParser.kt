@@ -6,7 +6,7 @@ import org.json.JSONObject
 /**
  * This class parses a JSONObject to the [ProductCheck] object
  */
-internal class ProductCheckJsonParser : VirtusizeJsonParser<ProductCheck> {
+class ProductCheckJsonParser : VirtusizeJsonParser<ProductCheck> {
     override fun parse(json: JSONObject): ProductCheck {
         val data = json.optJSONObject(FIELD_DATA)?.let {
             DataJsonParser().parse(it)

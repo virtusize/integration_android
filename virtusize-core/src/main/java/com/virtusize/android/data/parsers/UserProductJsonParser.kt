@@ -6,7 +6,7 @@ import org.json.JSONObject
 /**
  * This class parses a JSONObject to the [Product] object for a user product
  */
-internal class UserProductJsonParser : ProductJsonParser() {
+class UserProductJsonParser : ProductJsonParser() {
     override fun parse(json: JSONObject): Product? {
         val product = super.parse(json)
         product?.isFavorite = json.optBoolean(FIELD_IS_FAVORITE)

@@ -82,8 +82,6 @@ internal object ProductFixtures {
             }
         """.trimIndent()
 
-    val PRODUCT_TYPE_JSON_OBJECT = JSONObject(PRODUCT_TYPE_ID_ONE_JSON_OBJECT_STRING)
-
     val PRODUCT_TYPE_JSON_ARRAY = JSONArray(
         """
             [
@@ -352,8 +350,6 @@ internal object ProductFixtures {
                 "store": 2
             }
         """.trimIndent()
-
-    val USER_PRODUCT_ONE_JSON_OBJECT = JSONObject(USER_PRODUCT_ONE_JSON_STRING)
 
     val USER_PRODUCT_JSON_ARRAY = JSONArray(
         """

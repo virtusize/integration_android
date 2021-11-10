@@ -7,9 +7,9 @@ package com.virtusize.android.data.remote
  * @param authToken the auth token
  * @param userSessionResponse the API response as a string
  */
-internal data class UserSessionInfo(
+data class UserSessionInfo(
     val accessToken: String,
-    val bid: String?,
+    internal val bid: String?,
     val authToken: String,
     val userSessionResponse: String
 )

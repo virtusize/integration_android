@@ -19,7 +19,7 @@ import com.virtusize.android.data.remote.I18nLocalization
 /**
  * The Context extension function to get the string by the string resource name
  */
-internal fun Context.getStringResourceByName(stringName: String): String? {
+fun Context.getStringResourceByName(stringName: String): String? {
     val resId = resources.getIdentifier(stringName, "string", packageName)
     if (resId == 0) {
         return null
