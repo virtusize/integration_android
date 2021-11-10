@@ -30,8 +30,9 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 
   - [はじめに](#1-はじめに)
   - [Load Product with Virtusize SDK](#2-load-product-with-virtusize-sdk)
-  - [Virtusize Message Handlerの登録（オプション）](#3--virtusize-message-handlerの登録オプション)
-  - [Virtusize Message Handler登録解除（オプション）](#4-virtusize-message-handler登録解除オプション)
+  - [Enable SNS login](#3-enable-sns-login)
+  - [Virtusize Message Handlerの登録（オプション）](#4-virtusize-message-handlerの登録オプション)
+  - [Virtusize Message Handler登録解除（オプション）](#5-virtusize-message-handler登録解除オプション)
 
 - [Virtusize Views](#virtusize-views)
 
@@ -197,9 +198,41 @@ VirtusizeProduct product = new VirtusizeProduct(
 app.Virtusize.load(product);
    ```
 
+### 3. Enable SNS authentication
+
+The SNS authentication flow requires opening a Chrome Custom Tab which will load a web page for a user to login with their SNS account.
+A custom URL scheme must be defined to return the login response to your app from a Chrome Custom Tab.
+Edit your `AndroidManifest.xml` file to include an intent filter and a `<data>` tag for the custom URL scheme.
+
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.your-company.your-app">
+  
+    <activity
+        android:name="com.virtusize.android.auth.views.VitrusizeAuthActivity"
+        android:launchMode="singleTask"
+        android:exported="true">
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+    
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+          
+            <data
+                android:host="sns-auth"
+                android:scheme="com.your-company.your-app.virtusize" />
+        </intent-filter>
+    </activity>
+
+</manifest>
+```
+
+**❗IMPORTANT**
+
+The URL host has to be `sns-auth` and the URL scheme must begin with your app's package ID (com.your-company.your-app) and **end with .virtusize**, and the scheme you define must use all **lowercase** letters.
 
 
-### 3.  Virtusize Message Handlerの登録（オプション）
+### 4. Virtusize Message Handlerの登録（オプション）
 
 アクティビティやフラグメントが終了したり削除されたりする前に、アクティビティ（activity）やフラグメント（fragment）のライフサイクル（lifecycle）・メソッドでメッセージ・ハンドラの登録を解除することを忘れないでください。方法については次のセクションを参照してください。
 
@@ -251,7 +284,7 @@ app.Virtusize.load(product);
 
 
 
-### 4. Virtusize Message Handler登録解除（オプション）
+### 5. Virtusize Message Handler登録解除（オプション）
 
 Message Handlerはアクティビティ（activity）やフラグメント（fragment）のライフサイクル（lifecycle）に結びついていますが、Virtusizeライブラリオブジェクトはアプリケーションのライフサイクルに結びついています。そのため、Message Handlerの登録解除を忘れると、アクティビティが終了したりフラグメントが削除されたりしても、イベントを聞き続けることになります。アクティビティの場合、ライフサイクルのどこでMessage Handlerを登録したかによって、superメソッドが呼ばれる前に`onPause`または`onStop`メソッドで登録を解除する必要があります。フラグメントの場合も、同様のガイドラインに従ってください。
 
