@@ -5,7 +5,7 @@ import com.virtusize.android.data.local.VirtusizeEnvironment
 /**
  * This enum represents all available Virtusize endpoints
  */
-internal enum class VirtusizeEndpoint {
+enum class VirtusizeEndpoint {
     ProductCheck,
     GetSize,
     VirtusizeWebView,
@@ -25,7 +25,7 @@ internal enum class VirtusizeEndpoint {
  * This method returns a URL corresponding to the Virtusize endpoint that it is called upon
  * @return the Virtusize Endpoint URL
  */
-internal fun VirtusizeEndpoint.getPath(env: VirtusizeEnvironment? = null): String {
+fun VirtusizeEndpoint.getPath(env: VirtusizeEnvironment? = null): String {
     return when (this) {
         VirtusizeEndpoint.ProductCheck -> {
             "/product/check"
@@ -38,7 +38,9 @@ internal fun VirtusizeEndpoint.getPath(env: VirtusizeEnvironment? = null): Strin
                 VirtusizeEnvironment.TESTING, VirtusizeEnvironment.STAGING -> "staging"
                 else -> "latest"
             }
-            "/a/aoyama/$stgPath/sdk-webview.html"
+            // TODO: change the endpoint back once the development is done
+//            "/a/aoyama/$stgPath/sdk-webview.html"
+            "/a/aoyama/testing/sns-test/sdk-webview.html"
         }
         VirtusizeEndpoint.ProductMetaDataHints -> {
             "/rest-api/v1/product-meta-data-hints"

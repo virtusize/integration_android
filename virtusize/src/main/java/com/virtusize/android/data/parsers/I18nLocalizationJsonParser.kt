@@ -15,10 +15,6 @@ internal class I18nLocalizationJsonParser(
     private val virtusizeLanguage: VirtusizeLanguage?
 ) : VirtusizeJsonParser<I18nLocalization> {
 
-    enum class TrimType {
-        ONELINE, MULTIPLELINES
-    }
-
     override fun parse(json: JSONObject): I18nLocalization? {
         val aoyamaJSONObject = json.optJSONObject(FIELD_KEYS)
             ?.optJSONObject(FIELD_APPS)

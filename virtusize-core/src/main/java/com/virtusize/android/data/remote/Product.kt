@@ -35,7 +35,7 @@ data class Product(
      * @param i18nLocalization [I18nLocalization]
      * @return the InPage text
      */
-    internal fun getRecommendationText(
+    fun getRecommendationText(
         i18nLocalization: I18nLocalization,
         sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?,
         bodyProfileRecommendedSizeName: String?
@@ -115,7 +115,7 @@ data class Product(
      *
      * Note: 18 is for bags, 19 is for clutches, 25 is for wallets and 26 is for props
      */
-    internal fun isAccessory(): Boolean {
+    fun isAccessory(): Boolean {
         return productType == 18 || productType == 19 || productType == 25 || productType == 26
     }
 }

@@ -24,17 +24,19 @@ import javax.net.ssl.HttpsURLConnection
  * @param sharedPreferencesHelper the helper to store data locally using Shared Preferences
  * @param messageHandler pass VirtusizeMessageHandler to listen to any Virtusize-related messages
  */
-internal class VirtusizeApiTask(
+class VirtusizeApiTask(
     private var urlConnection: HttpsURLConnection?,
-    private var sharedPreferencesHelper: com.virtusize.android.SharedPreferencesHelper,
+    private var sharedPreferencesHelper: SharedPreferencesHelper,
     private var messageHandler: VirtusizeMessageHandler?
 ) {
 
     companion object {
         // The read timeout to use for all the requests, which is 80 seconds
         private val READ_TIMEOUT = TimeUnit.SECONDS.toMillis(80).toInt()
+
         // The connection timeout to use for all the requests, which is 60 seconds
         private val CONNECT_TIMEOUT = TimeUnit.SECONDS.toMillis(60).toInt()
+
         // The request header keys
         private const val HEADER_BROWSER_ID = "x-vs-bid"
         private const val HEADER_AUTH = "x-vs-auth"
@@ -66,13 +68,16 @@ internal class VirtusizeApiTask(
         var errorStream: InputStream? = null
         try {
             if (urlConnection == null) {
-
-                urlConnection = (URL(apiRequest.url).openConnection() as HttpsURLConnection).apply {
+                val url = URL(apiRequest.url + getQueryString(apiRequest))
+                urlConnection = (url.openConnection() as HttpsURLConnection).apply {
                     readTimeout = READ_TIMEOUT
                     connectTimeout = CONNECT_TIMEOUT
                     requestMethod = apiRequest.method.name
 
-                    setRequestProperty(HEADER_BROWSER_ID, sharedPreferencesHelper.getBrowserId())
+                    setRequestProperty(
+                        HEADER_BROWSER_ID,
+                        sharedPreferencesHelper.getBrowserId()
+                    )
 
                     // Set the access token in the header if the request needs authentication
                     if (apiRequest.authorization) {
@@ -98,7 +103,9 @@ internal class VirtusizeApiTask(
                         // Write the byte array of the request body to the output stream
                         if (apiRequest.params.isNotEmpty()) {
                             val outStream = DataOutputStream(outputStream)
-                            outStream.write(JSONObject(apiRequest.params).toString().toByteArray())
+                            outStream.write(
+                                JSONObject(apiRequest.params).toString().toByteArray()
+                            )
                             outStream.close()
                         }
                     }
@@ -190,6 +197,23 @@ internal class VirtusizeApiTask(
     }
 
     /**
+     * Gets the url query string from the API request object
+     * @param apiRequest the API request
+     * @return a query string that will be concatenated at the end of the base API URL
+     */
+    private fun getQueryString(apiRequest: ApiRequest): String {
+        var queryString = ""
+        if (apiRequest.method == HttpMethod.GET) {
+            if (apiRequest.params.isNotEmpty()) {
+                queryString += "?" + apiRequest.params
+                    .map { paramMapEntry -> "${paramMapEntry.key}=${paramMapEntry.value}" }
+                    .joinToString("&")
+            }
+        }
+        return queryString
+    }
+
+    /**
      * Parses the string of the input stream to a data object
      * @param apiRequestUrl the API request URL
      * @param inputStreamString the string of the input stream
@@ -265,7 +289,7 @@ internal class VirtusizeApiTask(
      */
     private fun responseIsJsonArray(apiRequestUrl: String): Boolean {
         return apiRequestUrl.contains(VirtusizeEndpoint.ProductType.getPath()) ||
-            apiRequestUrl.contains(VirtusizeEndpoint.UserProducts.getPath())
+                apiRequestUrl.contains(VirtusizeEndpoint.UserProducts.getPath())
     }
 
     /**

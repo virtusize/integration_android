@@ -35,7 +35,7 @@ class VirtusizeApiTaskTest {
     fun setup() {
         virtusizeApiTask = VirtusizeApiTask(
             null,
-            com.virtusize.android.SharedPreferencesHelper.getInstance(context),
+            SharedPreferencesHelper.getInstance(context),
             null
         )
     }

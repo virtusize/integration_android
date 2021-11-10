@@ -74,7 +74,7 @@ fun VirtusizeErrorType.message(extraMessage: String? = null): String {
  * @param extraMessage an extra error message specific to this error type
  * @return the [VirtusizeError] for the VirtusizeErrorType
  */
-internal fun VirtusizeErrorType.virtusizeError(
+fun VirtusizeErrorType.virtusizeError(
     code: Int? = null,
     extraMessage: String? = null
 ): VirtusizeError {
@@ -85,6 +85,6 @@ internal fun VirtusizeErrorType.virtusizeError(
  * Throws error for the VirtusizeErrorType that it is called on
  * @throws IllegalArgumentException
  */
-internal fun VirtusizeErrorType.throwError() {
+fun VirtusizeErrorType.throwError() {
     throw IllegalArgumentException(this.message())
 }
