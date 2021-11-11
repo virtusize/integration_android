@@ -14,7 +14,7 @@ import com.virtusize.android.data.local.VirtusizeParams
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.getEventName
 import com.virtusize.android.data.local.throwError
-import com.virtusize.android.data.parsers.I18nLocalizationJsonParser.TrimType
+import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.network.VirtusizeApi
 import com.virtusize.android.network.VirtusizeApiTask
 import com.virtusize.android.ui.VirtusizeInPageStandard
@@ -194,9 +194,9 @@ class Virtusize(
                         virtusizeRepository.i18nLocalization?.let { i18nLocalization ->
                             val trimType =
                                 if (virtusizeView is VirtusizeInPageStandard)
-                                    TrimType.MULTIPLELINES
+                                    I18nLocalization.TrimType.MULTIPLELINES
                                 else
-                                    TrimType.ONELINE
+                                    I18nLocalization.TrimType.ONELINE
                             val recommendationText = getRecommendationText(
                                 i18nLocalization,
                                 userProductRecommendedSize,

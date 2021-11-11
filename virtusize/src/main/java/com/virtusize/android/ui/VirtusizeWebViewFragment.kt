@@ -1,6 +1,7 @@
 package com.virtusize.android.ui
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -40,10 +41,9 @@ class VirtusizeWebViewFragment : DialogFragment() {
 
     private lateinit var binding: WebActivityBinding
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        dialog?.window?.attributes?.windowAnimations = R.style.VirtusizeDialogFragmentAnimation
-        sharedPreferencesHelper = SharedPreferencesHelper.getInstance(requireContext())
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        sharedPreferencesHelper = SharedPreferencesHelper.getInstance(context)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,6 +64,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        dialog?.window?.attributes?.windowAnimations = R.style.VirtusizeDialogFragmentAnimation
         // Enable JavaScript in the web view
         binding.webView.settings.javaScriptEnabled = true
         binding.webView.settings.domStorageEnabled = true
@@ -176,6 +177,12 @@ class VirtusizeWebViewFragment : DialogFragment() {
         }
 
         binding.webView.loadUrl(virtusizeWebAppUrl)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // Cancel the window enter animation
+        dialog?.window?.setWindowAnimations(R.style.VirtusizeDialogFragmentAnimation_Null)
     }
 
     override fun onDestroyView() {

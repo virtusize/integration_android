@@ -1,1 +1,1 @@
-include ':sampleAppKotlin', ':virtusize', ':sampleappjava'
+include ':virtusize', ':virtusize-core', ':sampleAppKotlin', ':sampleappjava'
