@@ -14,7 +14,8 @@ class DesignSystemAdapter(private val context: Context, private val dataSet: Arr
 
     private val onClickMap: Map<String, Int> = mutableMapOf(
         context.getString(R.string.virtusize_button) to R.id.action_designSystemFragment_to_buttonFragment,
-        context.getString(R.string.virtusize_tooltip) to R.id.action_designSystemFragment_to_tooltipFragment
+        context.getString(R.string.virtusize_tooltip) to R.id.action_designSystemFragment_to_tooltipFragment,
+        context.getString(R.string.virtusize_avatar) to R.id.action_designSystemFragment_to_avatarFragment
     )
 
     class ViewHolder(binding: DesignSystemRowItemBinding) : RecyclerView.ViewHolder(binding.root) {

@@ -26,7 +26,7 @@ import javax.net.ssl.HttpsURLConnection
  */
 internal class VirtusizeApiTask(
     private var urlConnection: HttpsURLConnection?,
-    private var sharedPreferencesHelper: com.virtusize.android.SharedPreferencesHelper,
+    private var sharedPreferencesHelper: SharedPreferencesHelper,
     private var messageHandler: VirtusizeMessageHandler?
 ) {
 
