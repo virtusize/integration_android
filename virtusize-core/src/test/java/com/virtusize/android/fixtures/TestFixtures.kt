@@ -1,7 +1,5 @@
 package com.virtusize.android.fixtures
 
-import com.virtusize.android.data.local.VirtusizeOrder
-import com.virtusize.android.data.local.VirtusizeOrderItem
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.parsers.ProductCheckJsonParser
 import com.virtusize.android.data.remote.Measurement
