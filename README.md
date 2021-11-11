@@ -30,7 +30,7 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 
   - [Initialize Virtusize](#1-initialize-virtusize)
   - [Load Product with Virtusize SDK](#2-load-product-with-virtusize-sdk)
-  - [Enable SNS login](#3-enable-sns-login)
+  - [Enable SNS Authentication](#3-enable-sns-authentication)
   - [Register Virtusize Message Handler (Optional)](#4-register-virtusize-message-handler-optional)
   - [Unregister Virtusize Message Handler (Optional)](#5-unregister-virtusize-message-handler-optional)
 
@@ -201,10 +201,11 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
    ```
 
 
+
 ### 3. Enable SNS authentication
 
-The SNS authentication flow requires opening a Chrome Custom Tab which will load a web page for a user to login with their SNS account.
-A custom URL scheme must be defined to return the login response to your app from a Chrome Custom Tab.
+The SNS authentication flow requires opening a Chrome Custom Tab, which will load a web page for the user to login with their SNS account. A custom URL scheme must be defined to return the login response to your app from a Chrome Custom Tab.
+
 Edit your `AndroidManifest.xml` file to include an intent filter and a `<data>` tag for the custom URL scheme.
 
 ```xml
@@ -232,7 +233,10 @@ Edit your `AndroidManifest.xml` file to include an intent filter and a `<data>` 
 
 **❗IMPORTANT**
 
-The URL host has to be `sns-auth` and the URL scheme must begin with your app's package ID (com.your-company.your-app) and **end with .virtusize**, and the scheme you define must use all **lowercase** letters.
+1. The URL host has to be `sns-auth`
+2. The URL scheme must begin with your app's package ID (com.your-company.your-app) and **end with .virtusize**, and the scheme which you define must use all **lowercase** letters.
+
+
 
 
 ### 4. Register Virtusize Message Handler (Optional)
