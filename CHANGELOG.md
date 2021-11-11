@@ -1,6 +1,7 @@
 ## 2.4.2
 
 * Create a submodule `virtusize-core`
+* If you continue to integrate our SDK using JitPack, the new artifact name is `com.github.virtusize.integration_android:virtusize:${virtusize_version}`
 
 ## 2.4.1
 
