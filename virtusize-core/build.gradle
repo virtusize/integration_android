@@ -60,3 +60,12 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
+
+ext {
+    artifactId = "virtusize-core"
+    artifactName = "virtusize-core"
+    artifactDescription = "The core module of Virtusize Android SDK"
+}
+
+apply from: "${rootDir}/gradle/ktlint.gradle"
+apply from: "${rootDir}/gradle/deploy.gradle"
