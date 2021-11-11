@@ -1,3 +1,7 @@
+## 2.4.2
+
+* Create a submodule `virtusize-core`
+
 ## 2.4.1
 
 * Use the staging API URLs for staging
