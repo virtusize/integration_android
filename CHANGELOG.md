@@ -1,3 +1,7 @@
+## 2.5.0
+
+* Perform Virtusize SNS authentication with Chrome Custom Tabs
+
 ## 2.4.2
 
 * Create a submodule `virtusize-core`

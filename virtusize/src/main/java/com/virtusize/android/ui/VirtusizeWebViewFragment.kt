@@ -19,6 +19,7 @@ import android.webkit.WebViewClient
 import androidx.fragment.app.DialogFragment
 import com.virtusize.android.R
 import com.virtusize.android.SharedPreferencesHelper
+import com.virtusize.android.auth.VirtusizeAuth
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.parsers.VirtusizeEventJsonParser
@@ -122,7 +123,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
                                     return true
                                 }
                             }
-                            return false
+                            return VirtusizeAuth.isSNSAuthUrl(this@VirtusizeWebViewFragment, url)
                         }
                     }
                     popupWebView.webChromeClient = object : WebChromeClient() {
@@ -177,6 +178,12 @@ class VirtusizeWebViewFragment : DialogFragment() {
         }
 
         binding.webView.loadUrl(virtusizeWebAppUrl)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        // Handle the result of the Virtusize SNS auth flow
+        VirtusizeAuth.handleVirtusizeSNSAuthResult(binding.webView, requestCode, resultCode, data)
     }
 
     override fun onStop() {
