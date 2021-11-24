@@ -1,5 +1,6 @@
 package com.virtusize.sampleappkotlin
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Message
 import android.util.Log
@@ -11,7 +12,8 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.DialogFragment
-import com.virtusize.android.VirtusizeWebView
+import com.virtusize.android.auth.VirtusizeAuth
+import com.virtusize.android.auth.VirtusizeWebView
 import com.virtusize.android.util.urlString
 
 class WebViewFragment: DialogFragment() {
@@ -83,6 +85,11 @@ class WebViewFragment: DialogFragment() {
         }
 
         webView.loadUrl("https://virtusize-jp-demo.s3-ap-northeast-1.amazonaws.com/sns-auth-test/index.html")
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        VirtusizeAuth.handleVirtusizeSNSAuthResult(webView, requestCode, resultCode, data)
     }
 
     override fun onDestroyView() {
