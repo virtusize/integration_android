@@ -1,6 +1,5 @@
 package com.virtusize.sampleappkotlin
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Message
 import android.util.Log
@@ -11,6 +10,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import com.virtusize.android.auth.VirtusizeAuth
 import com.virtusize.android.auth.VirtusizeWebView
@@ -23,6 +23,13 @@ class WebViewFragment: DialogFragment() {
     }
 
     private lateinit var webView: VirtusizeWebView
+
+    // 1. Register for getting the result of the activity
+    private val virtusizeSNSAuthLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()) { result ->
+        // 3. Handle the SNS auth result by passing the webview and the result to the `VirtusizeAuth.handleVirtusizeSNSAuthResult` function
+        VirtusizeAuth.handleVirtusizeSNSAuthResult(webView, result.resultCode, result.data)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -46,6 +53,9 @@ class WebViewFragment: DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         webView = view.findViewById(R.id.webView)
+        // 2. Pass the activity launcher to the VirtusizeWebView
+        webView.setVirtusizeSNSAuthLauncher(virtusizeSNSAuthLauncher)
+
         object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String): Boolean {
                 Log.d(TAG, "shouldOverrideUrlLoading ${url}")
@@ -84,12 +94,7 @@ class WebViewFragment: DialogFragment() {
             }
         }
 
-        webView.loadUrl("https://virtusize-jp-demo.s3-ap-northeast-1.amazonaws.com/sns-auth-test/index.html")
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        VirtusizeAuth.handleVirtusizeSNSAuthResult(webView, requestCode, resultCode, data)
+        webView.loadUrl("https://demo.virtusize.com/")
     }
 
     override fun onDestroyView() {
