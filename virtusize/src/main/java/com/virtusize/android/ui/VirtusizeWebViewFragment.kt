@@ -43,9 +43,14 @@ class VirtusizeWebViewFragment : DialogFragment() {
 
     private lateinit var binding: WebActivityBinding
 
-    private val virtusizeSNSAuthLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            VirtusizeAuth.handleVirtusizeSNSAuthResult(binding.webView, result.resultCode, result.data)
-    }
+    private val virtusizeSNSAuthLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            VirtusizeAuth.handleVirtusizeSNSAuthResult(
+                binding.webView,
+                result.resultCode,
+                result.data
+            )
+        }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -128,7 +133,11 @@ class VirtusizeWebViewFragment : DialogFragment() {
                                     return true
                                 }
                             }
-                            return VirtusizeAuth.isSNSAuthUrl(requireContext(), virtusizeSNSAuthLauncher, url)
+                            return VirtusizeAuth.isSNSAuthUrl(
+                                requireContext(),
+                                virtusizeSNSAuthLauncher,
+                                url
+                            )
                         }
                     }
                     popupWebView.webChromeClient = object : WebChromeClient() {
