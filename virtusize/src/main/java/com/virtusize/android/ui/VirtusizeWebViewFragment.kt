@@ -16,6 +16,7 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import com.virtusize.android.R
 import com.virtusize.android.SharedPreferencesHelper
@@ -41,6 +42,15 @@ class VirtusizeWebViewFragment : DialogFragment() {
     private lateinit var sharedPreferencesHelper: SharedPreferencesHelper
 
     private lateinit var binding: WebActivityBinding
+
+    private val virtusizeSNSAuthLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            VirtusizeAuth.handleVirtusizeSNSAuthResult(
+                binding.webView,
+                result.resultCode,
+                result.data
+            )
+        }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -123,7 +133,11 @@ class VirtusizeWebViewFragment : DialogFragment() {
                                     return true
                                 }
                             }
-                            return VirtusizeAuth.isSNSAuthUrl(this@VirtusizeWebViewFragment, url)
+                            return VirtusizeAuth.isSNSAuthUrl(
+                                requireContext(),
+                                virtusizeSNSAuthLauncher,
+                                url
+                            )
                         }
                     }
                     popupWebView.webChromeClient = object : WebChromeClient() {
@@ -178,12 +192,6 @@ class VirtusizeWebViewFragment : DialogFragment() {
         }
 
         binding.webView.loadUrl(virtusizeWebAppUrl)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        // Handle the result of the Virtusize SNS auth flow
-        VirtusizeAuth.handleVirtusizeSNSAuthResult(binding.webView, requestCode, resultCode, data)
     }
 
     override fun onStop() {
