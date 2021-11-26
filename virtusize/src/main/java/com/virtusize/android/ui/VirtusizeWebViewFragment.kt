@@ -21,6 +21,7 @@ import androidx.fragment.app.DialogFragment
 import com.virtusize.android.R
 import com.virtusize.android.SharedPreferencesHelper
 import com.virtusize.android.auth.VirtusizeAuth
+import com.virtusize.android.auth.utils.VirtusizeURLCheck
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.parsers.VirtusizeEventJsonParser
@@ -125,7 +126,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
                     popupWebView.settings.userAgentString = System.getProperty("http.agent")
                     popupWebView.webViewClient = object : WebViewClient() {
                         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                            if (isExternalLink(url)) {
+                            if (VirtusizeURLCheck.isExternalLinkFromVirtusize(url)) {
                                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                                 try {
                                     startActivity(intent)
@@ -229,13 +230,6 @@ class VirtusizeWebViewFragment : DialogFragment() {
             }
         }
         return bidValue
-    }
-
-    /**
-     * Checks if the URL is an external link to be opened with a browser app
-     */
-    private fun isExternalLink(url: String): Boolean {
-        return url.contains("privacy") || url.contains("survey")
     }
 
     /**
