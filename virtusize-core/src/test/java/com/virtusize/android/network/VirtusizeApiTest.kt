@@ -59,9 +59,7 @@ class VirtusizeApiTest {
     fun virtusizeWebView_stagingEnv_shouldReturnExpectedUrl() {
         val actualUrl = VirtusizeApi.virtusizeWebViewURL()
 
-        // TODO: Change it back when releasing
-        val expectedUrl = "https://static.api.virtusize.com/a/aoyama/testing/sns-test/sdk-webview.html"
-//        val expectedUrl = "https://static.api.virtusize.com/a/aoyama/staging/sdk-webview.html"
+        val expectedUrl = "https://static.api.virtusize.com/a/aoyama/staging/sdk-webview.html"
 
         assertThat(actualUrl).isEqualTo(expectedUrl)
     }
@@ -74,10 +72,7 @@ class VirtusizeApiTest {
             TestFixtures.USER_ID
         )
         val actualUrl = VirtusizeApi.virtusizeWebViewURL()
-
-        // TODO: Change it back when releasing
-        val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/testing/sns-test/sdk-webview.html"
-        // val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-webview.html"
+        val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-webview.html"
 
         assertThat(actualUrl).isEqualTo(expectedUrl)
     }

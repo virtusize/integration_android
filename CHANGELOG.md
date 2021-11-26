@@ -1,3 +1,8 @@
+## 2.5.1
+
+* Handle SNS auth for web view apps
+* Change back the SDK webview URL
+
 ## 2.5.0
 
 * Perform Virtusize SNS authentication with Chrome Custom Tabs
