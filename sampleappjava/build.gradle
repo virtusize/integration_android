@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.virtusize.sampleappjava"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -26,9 +26,10 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
+    namespace 'com.virtusize.sampleappjava'
 }
 
 dependencies {
@@ -44,6 +45,6 @@ dependencies {
     implementation project(":virtusize")
 
     testImplementation "junit:junit:$junit_version"
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
