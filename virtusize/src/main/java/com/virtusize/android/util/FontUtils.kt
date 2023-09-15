@@ -55,6 +55,8 @@ internal object FontUtils {
             VirtusizeLanguage.KR -> {
                 setTypeFace(context, textViews, FontName.NOTO_SANS_CJK_KR, fontType)
             }
+
+            else -> {}
         }
     }
 
