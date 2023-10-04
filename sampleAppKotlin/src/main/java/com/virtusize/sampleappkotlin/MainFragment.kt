@@ -1,4 +1,4 @@
-package com.virtusize.android
+package com.virtusize.sampleappkotlin
 
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +11,6 @@ import com.virtusize.android.data.local.*
 import com.virtusize.android.util.dpInPx
 import com.virtusize.android.util.spToPx
 import com.virtusize.android.ui.button.VirtusizeButtonStyle
-import com.virtusize.sampleappkotlin.App
 import com.virtusize.sampleappkotlin.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
