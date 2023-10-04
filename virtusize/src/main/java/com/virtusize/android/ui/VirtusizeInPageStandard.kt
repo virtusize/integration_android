@@ -160,7 +160,7 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
         super.initialSetup(product, params, messageHandler)
 
         val viewModelFactory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return VirtusizeInPageStandardViewModel(
                     VirtusizeRepository(
                         context,

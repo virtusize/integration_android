@@ -16,7 +16,6 @@ internal object TestFixtures {
     const val EXTERNAL_ID = "694"
     const val PRODUCT_ID = 7110384
     const val PRODUCT_NAME = "Test Product Name"
-    const val ORIENTATION = "orientation"
 
     val EMPTY_JSON_DATA = JSONObject("{}")
 

@@ -30,8 +30,9 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 
   - [Initialize Virtusize](#1-initialize-virtusize)
   - [Load Product with Virtusize SDK](#2-load-product-with-virtusize-sdk)
-  - [Register Virtusize Message Handler (Optional)](#3-register-virtusize-message-handler-optional)
-  - [Unregister Virtusize Message Handler (Optional)](#4-unregister-virtusize-message-handler-optional)
+  - [Enable SNS Authentication](#3-enable-sns-authentication)
+  - [Register Virtusize Message Handler (Optional)](#4-register-virtusize-message-handler-optional)
+  - [Unregister Virtusize Message Handler (Optional)](#5-unregister-virtusize-message-handler-optional)
 
 - [Virtusize Views](#virtusize-views)
 
@@ -73,7 +74,7 @@ In your app `build.gradle` file, add the following dependencies:
 
 ```groovy
 dependencies {
-  implementation 'com.virtusize.android:virtusize:2.4.0'
+  implementation 'com.virtusize.android:virtusize:2.5.1'
 }
 ```
 
@@ -201,7 +202,44 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
 
 
 
-### 3. Register Virtusize Message Handler (Optional)
+### 3. Enable SNS authentication
+
+The SNS authentication flow requires opening a Chrome Custom Tab, which will load a web page for the user to login with their SNS account. A custom URL scheme must be defined to return the login response to your app from a Chrome Custom Tab.
+
+Edit your `AndroidManifest.xml` file to include an intent filter and a `<data>` tag for the custom URL scheme.
+
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.your-company.your-app">
+  
+    <activity
+        android:name="com.virtusize.android.auth.views.VitrusizeAuthActivity"
+        android:launchMode="singleTask"
+        android:exported="true">
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+    
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+          
+            <data
+                android:host="sns-auth"
+                android:scheme="com.your-company.your-app.virtusize" />
+        </intent-filter>
+    </activity>
+
+</manifest>
+```
+
+**❗IMPORTANT**
+
+1. The URL host has to be `sns-auth`
+2. The URL scheme must begin with your app's package ID (com.your-company.your-app) and **end with .virtusize**, and the scheme which you define must use all **lowercase** letters.
+
+
+
+
+### 4. Register Virtusize Message Handler (Optional)
 
 Please do not forget to unregister message handler in activity or fragment's lifecycle method before it dies or is removed. See the next section for a how-to.
 
@@ -253,7 +291,7 @@ Please do not forget to unregister message handler in activity or fragment's lif
 
 
 
-### 4. Unregister Virtusize Message Handler (Optional)
+### 5. Unregister Virtusize Message Handler (Optional)
 
 A message handler is tied to an activity or fragment's lifecycle, but the Virtusize library object is tied to the application's lifecycle. So if you forget to unregister message handler, then it will keep listening to events even after activity is dead or fragment has been removed. In the case of an activity; depending on where in the lifecycle you registered the message handler, you may need to unregister it in your `onPause` or `onStop` method before the super method is called. Follow the same guidelines in the case of fragment as well.
 
@@ -803,40 +841,7 @@ Call the `Virtusize.sendOrder` method in your activity or fragment when the user
 
 ## Enable SNS Login in Virtusize for native WebView apps
 
-The built-in WebView blocks any popup windows by default. To let users to sign up or log in with the web version of Virtusize integration in your webview, please replace your `WebView` with **`VirtusizeWebView`** in your Kotlin or Java file and XML file to fix and enable SNS login in Virtusize.
-
-#### Note
-If you load Virtusize Fit Illustrator in your WebView app, replace your `WebView` with **`VirtusizeFitIllustratorWebView`** instead.
-
-- Kotlin/Java
-
-  ```diff
-  // Kotlin
-  - var webView: WebView
-  + var webView: VirtusizeWebView
-  or
-  + var webView: VirtusizeFitIllustratorWebView
-  
-  // Java
-  - WebView webView;
-  + VirtusizeWebView webView;
-    or
-  + VirtusizeFitIllustratorWebView webView;
-  ```
-
-and
-
-- XML
-
-  ```diff
-  - <WebView
-  + <com.virtusize.android.VirtusizeWebView
-      or
-  + <com.virtusize.android.VirtusizeFitIllustratorWebView
-      android:id="@+id/webView"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent" />
-  ```
+Use the [Virtusize Auth SDK](https://github.com/virtusize/virtusize_auth_android)
 
 
 

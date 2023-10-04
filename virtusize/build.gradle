@@ -5,8 +5,8 @@ plugins {
 }
 
 android {
-    buildToolsVersion rootProject.ext.buildToolsVersion
-    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    compileSdk rootProject.ext.compileSdkVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
@@ -33,20 +33,30 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
     }
 
     buildFeatures {
         viewBinding true
     }
+    namespace 'com.virtusize.android'
 }
 
 dependencies {
     api project(':virtusize-ui')
+    api project(":virtusize-core")
+    api "com.virtusize.android:virtusize-auth:1.0.3"
 
     implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation 'androidx.browser:browser:1.6.0'
     implementation "androidx.cardview:cardview:1.0.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
@@ -54,18 +64,22 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 
     testImplementation "junit:junit:$junit_version"
-    testImplementation 'com.google.truth:truth:1.1.2'
+    testImplementation "com.google.truth:truth:1.1.2"
     testImplementation 'org.json:json:20210307'
-    testImplementation 'org.robolectric:robolectric:4.5.1'
-    testImplementation 'androidx.test:core:1.4.0'
+    testImplementation 'org.robolectric:robolectric:4.10.3'
+    testImplementation 'androidx.test:core:1.5.0'
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_version"
 }
 
 ext {
     artifactId = "virtusize"
-    artifactName = 'virtusize'
+    artifactName = "virtusize"
     artifactDescription = "Virtusize Android SDK"
 }
 
 apply from: "${rootDir}/gradle/ktlint.gradle"
 apply from: "${rootDir}/gradle/deploy.gradle"
+
+afterEvaluate {
+    generateMetadataFileForReleasePublication.dependsOn androidSourcesJar
+}
