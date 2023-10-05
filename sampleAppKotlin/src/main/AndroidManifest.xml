@@ -20,7 +20,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ProductActivity" />
 
         <!-- SNS authentication setup:
         Include an intent-filter and set the android:scheme on the VitrusizeAuthActivity that will be responsible for handling the deep link back into the app

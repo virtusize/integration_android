@@ -28,4 +28,7 @@
     <dimen name="virtusize_button_icon_padding">8dp</dimen>
     <dimen name="virtusize_button_round_standard_padding">8dp</dimen>
     <dimen name="virtusize_button_round_small_padding">4dp</dimen>
+
+    <!-- Block Style Button -->
+    <dimen name="virtusize_button_block_width">50dp</dimen>
 </resources>
