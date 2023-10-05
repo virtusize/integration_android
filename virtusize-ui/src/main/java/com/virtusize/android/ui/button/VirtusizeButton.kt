@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.AttributeSet
 import android.util.TypedValue
-import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
@@ -17,9 +16,7 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.virtusize.android.ui.R
-import com.virtusize.android.ui.utils.Font
 import com.virtusize.android.ui.utils.dp
-import com.virtusize.android.ui.utils.getTypefaceByName
 
 class VirtusizeButton @JvmOverloads constructor(
     context: Context,
@@ -226,11 +223,11 @@ class VirtusizeButton @JvmOverloads constructor(
         setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
     }
 
-    private fun setButtonLevel(){
-        when(virtusizeButtonLevel){
+    private fun setButtonLevel() {
+        when (virtusizeButtonLevel) {
 
             VirtusizeButtonLevel.FLUID -> {
-                //Take all the width available in the screen
+                // Take all the width available in the screen
                 val layoutParams = LayoutParams(
                     MATCH_PARENT,
                     WRAP_CONTENT
@@ -239,7 +236,7 @@ class VirtusizeButton @JvmOverloads constructor(
             }
 
             VirtusizeButtonLevel.BLOCK -> {
-                //Set Fixed Size or take width from user
+                // Set Fixed Size or take width from user
                 val layoutParams = LayoutParams(
                     resources.getDimension(R.dimen.virtusize_button_block_width).toInt(),
                     WRAP_CONTENT
@@ -250,8 +247,8 @@ class VirtusizeButton @JvmOverloads constructor(
         }
     }
 
-    private fun setButtonFontWeight(){
-        when(virtusizeButtonFontWeight){
+    private fun setButtonFontWeight() {
+        when (virtusizeButtonFontWeight){
 
             VirtusizeButtonFontWeight.BOLD -> {
                 //Take all the width available in the screen
