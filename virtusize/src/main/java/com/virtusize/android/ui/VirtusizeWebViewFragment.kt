@@ -1,6 +1,7 @@
 package com.virtusize.android.ui
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -15,9 +16,12 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import com.virtusize.android.R
 import com.virtusize.android.SharedPreferencesHelper
+import com.virtusize.android.auth.VirtusizeAuth
+import com.virtusize.android.auth.utils.VirtusizeURLCheck
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.parsers.VirtusizeEventJsonParser
@@ -40,10 +44,18 @@ class VirtusizeWebViewFragment : DialogFragment() {
 
     private lateinit var binding: WebActivityBinding
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        dialog?.window?.attributes?.windowAnimations = R.style.VirtusizeDialogFragmentAnimation
-        sharedPreferencesHelper = SharedPreferencesHelper.getInstance(requireContext())
+    private val virtusizeSNSAuthLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            VirtusizeAuth.handleVirtusizeSNSAuthResult(
+                binding.webView,
+                result.resultCode,
+                result.data
+            )
+        }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        sharedPreferencesHelper = SharedPreferencesHelper.getInstance(context)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,6 +76,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        dialog?.window?.attributes?.windowAnimations = R.style.VirtusizeDialogFragmentAnimation
         // Enable JavaScript in the web view
         binding.webView.settings.javaScriptEnabled = true
         binding.webView.settings.domStorageEnabled = true
@@ -113,7 +126,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
                     popupWebView.settings.userAgentString = System.getProperty("http.agent")
                     popupWebView.webViewClient = object : WebViewClient() {
                         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                            if (isExternalLink(url)) {
+                            if (VirtusizeURLCheck.isExternalLinkFromVirtusize(url)) {
                                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                                 try {
                                     startActivity(intent)
@@ -121,7 +134,11 @@ class VirtusizeWebViewFragment : DialogFragment() {
                                     return true
                                 }
                             }
-                            return false
+                            return VirtusizeAuth.isSNSAuthUrl(
+                                requireContext(),
+                                virtusizeSNSAuthLauncher,
+                                url
+                            )
                         }
                     }
                     popupWebView.webChromeClient = object : WebChromeClient() {
@@ -178,6 +195,12 @@ class VirtusizeWebViewFragment : DialogFragment() {
         binding.webView.loadUrl(virtusizeWebAppUrl)
     }
 
+    override fun onStop() {
+        super.onStop()
+        // Cancel the window enter animation
+        dialog?.window?.setWindowAnimations(R.style.VirtusizeDialogFragmentAnimation_Null)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         binding.webView.stopLoading()
@@ -207,13 +230,6 @@ class VirtusizeWebViewFragment : DialogFragment() {
             }
         }
         return bidValue
-    }
-
-    /**
-     * Checks if the URL is an external link to be opened with a browser app
-     */
-    private fun isExternalLink(url: String): Boolean {
-        return url.contains("privacy") || url.contains("survey")
     }
 
     /**

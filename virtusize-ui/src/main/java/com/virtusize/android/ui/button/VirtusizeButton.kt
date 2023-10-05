@@ -164,6 +164,8 @@ class VirtusizeButton @JvmOverloads constructor(
             VirtusizeButtonStyle.SQUARE -> {
                 setBackgroundResource(R.drawable.virtusize_button_square_background)
             }
+
+            else -> {}
         }
         if (virtusizeBackgroundColor != 0) {
             DrawableCompat.setTint(background, virtusizeBackgroundColor)

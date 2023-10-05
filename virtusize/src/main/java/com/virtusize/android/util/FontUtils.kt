@@ -49,6 +49,8 @@ internal object FontUtils {
                     fontType
                 )
             }
+
+            else -> {}
         }
     }
 }
