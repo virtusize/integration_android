@@ -251,12 +251,10 @@ class VirtusizeButton @JvmOverloads constructor(
         when (virtusizeButtonFontWeight){
 
             VirtusizeButtonFontWeight.BOLD -> {
-                //Take all the width available in the screen
                 setTypeface(null, Typeface.BOLD)
             }
 
             VirtusizeButtonFontWeight.REGULAR -> {
-                //Set Fixed Size or take width from user
                 setTypeface(null, Typeface.NORMAL)
             }
 
@@ -264,8 +262,8 @@ class VirtusizeButton @JvmOverloads constructor(
         }
     }
 
-    private fun setButtonBordersWithTransparency(){
-        when(virtusizeButtonBordersWithTransparency){
+    private fun setButtonBordersWithTransparency() {
+        when (virtusizeButtonBordersWithTransparency) {
 
             VirtusizeButtonBordersWithTransparency.NO_BORDER -> {
                 setBackgroundResource(R.drawable.virtusize_button_no_border_background)
