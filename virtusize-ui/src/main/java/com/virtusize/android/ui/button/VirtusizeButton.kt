@@ -248,7 +248,7 @@ class VirtusizeButton @JvmOverloads constructor(
     }
 
     private fun setButtonFontWeight() {
-        when (virtusizeButtonFontWeight){
+        when (virtusizeButtonFontWeight) {
 
             VirtusizeButtonFontWeight.BOLD -> {
                 setTypeface(null, Typeface.BOLD)
