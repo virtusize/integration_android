@@ -325,15 +325,15 @@ internal class VirtusizeAPIService(
         userBodyProfile: UserBodyProfile
     ): VirtusizeApiResponse<ArrayList<BodyProfileRecommendedSizeNew>?> =
         withContext(Dispatchers.IO) {
-        val apiRequest = VirtusizeApi.getSize(productTypes, storeProduct, userBodyProfile)
-        VirtusizeApiTask(
-            httpURLConnection,
-            sharedPreferencesHelper,
-            messageHandler
-        )
-            .setJsonParser(BodyProfileRecommendedSizeJsonParser(storeProduct))
-            .execute(apiRequest)
-    }
+            val apiRequest = VirtusizeApi.getSize(productTypes, storeProduct, userBodyProfile)
+            VirtusizeApiTask(
+                httpURLConnection,
+                sharedPreferencesHelper,
+                messageHandler
+            )
+                .setJsonParser(BodyProfileRecommendedSizeJsonParser(storeProduct))
+                .execute(apiRequest)
+        }
 
     /**
      * Gets the API response for fetching the i18n localization texts
