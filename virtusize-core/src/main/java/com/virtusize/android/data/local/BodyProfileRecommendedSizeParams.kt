@@ -43,7 +43,6 @@ internal data class BodyProfileRecommendedSizeParams constructor(
             .plus(
                 mapOf(PARAM_ITEMS to arrayOf(createItemsParams()))
             )
-
     }
 
     private fun createItemsParams(): Map<String, Any?> {

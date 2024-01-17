@@ -141,6 +141,7 @@ class VirtusizeApiTask(
                             // If the API key is empty or invalid
                             VirtusizeErrorType.ApiKeyNullOrInvalid.virtusizeError()
                         }
+
                         HttpURLConnection.HTTP_NOT_FOUND -> {
                             // If the product cannot be found in the Virtusize Server
                             if (response is ProductCheck) {
@@ -158,6 +159,7 @@ class VirtusizeApiTask(
                                 )
                             )
                         }
+
                         else -> {
                             VirtusizeErrorType.APIError.virtusizeError(
                                 urlConnection.responseCode,
@@ -170,6 +172,7 @@ class VirtusizeApiTask(
                     }
                     return VirtusizeApiResponse.Error(error)
                 }
+
                 else -> return VirtusizeApiResponse.Error(
                     VirtusizeErrorType.APIError.virtusizeError(
                         urlConnection.responseCode,
@@ -288,8 +291,9 @@ class VirtusizeApiTask(
      * @return the boolean value to tell whether the response of the apiRequestUrl is a JSON array.
      */
     private fun responseIsJsonArray(apiRequestUrl: String): Boolean {
-        return apiRequestUrl.contains(VirtusizeEndpoint.ProductType.getPath()) ||
-                apiRequestUrl.contains(VirtusizeEndpoint.UserProducts.getPath()) ||
+        return apiRequestUrl.contains(VirtusizeEndpoint.ProductType.getPath()) || apiRequestUrl.contains(
+            VirtusizeEndpoint.UserProducts.getPath()
+        ) ||
                 apiRequestUrl.contains(VirtusizeEndpoint.GetSize.getPath())
     }
 

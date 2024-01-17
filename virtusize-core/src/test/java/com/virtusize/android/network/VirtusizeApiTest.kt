@@ -46,9 +46,9 @@ class VirtusizeApiTest {
         val actualApiRequest = VirtusizeApi.productCheck(TestFixtures.VIRTUSIZE_PRODUCT)
 
         val expectedUrl = "https://services.virtusize.com/stg/product/check" +
-            "?apiKey=${TestFixtures.API_KEY}" +
-            "&externalId=${TestFixtures.EXTERNAL_ID}" +
-            "&version=1"
+                "?apiKey=${TestFixtures.API_KEY}" +
+                "&externalId=${TestFixtures.EXTERNAL_ID}" +
+                "&version=1"
 
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
 
@@ -192,7 +192,7 @@ class VirtusizeApiTest {
         val actualApiRequest = VirtusizeApi.getStoreInfo()
 
         val expectedUrl = "https://staging.virtusize.com/a/api/v3/stores/api-key/test_apiKey" +
-            "?format=json"
+                "?format=json"
 
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
 
@@ -204,7 +204,7 @@ class VirtusizeApiTest {
         val actualApiRequest = VirtusizeApi.getStoreProductInfo("16099122")
 
         val expectedUrl = "https://staging.virtusize.com/a/api/v3/store-products/16099122" +
-            "?format=json"
+                "?format=json"
 
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
 
@@ -378,21 +378,8 @@ class VirtusizeApiTest {
         for (item in items) {
             assertThat(item["extProductId"]).isEqualTo("694")
             assertThat(item["productType"]).isEqualTo("jacket")
-            assertThat(item["itemSizesOrig"]).isEqualTo(mutableMapOf(
-                "38" to mutableMapOf(
-                    "bust" to 660,
-                    "sleeve" to 845,
-                    "height" to 760
-                ),
-                "36" to mutableMapOf(
-                    "bust" to 645,
-                    "sleeve" to 825,
-                    "height" to 750
-                )
-            ))
-            assertThat(item["additionalInfo"]).isEqualTo(mutableMapOf(
-                "fit" to "regular",
-                "sizes" to mutableMapOf(
+            assertThat(item["itemSizesOrig"]).isEqualTo(
+                mutableMapOf(
                     "38" to mutableMapOf(
                         "bust" to 660,
                         "sleeve" to 845,
@@ -403,17 +390,34 @@ class VirtusizeApiTest {
                         "sleeve" to 825,
                         "height" to 750
                     )
-                ),
-                "gender" to "female",
-                "brand" to "Virtusize",
-                "modelInfo" to mutableMapOf(
-                    "waist" to 56,
-                    "bust" to 78,
-                    "size" to "38",
-                    "hip" to 85,
-                    "height" to 165
                 )
-            ))
+            )
+            assertThat(item["additionalInfo"]).isEqualTo(
+                mutableMapOf(
+                    "fit" to "regular",
+                    "sizes" to mutableMapOf(
+                        "38" to mutableMapOf(
+                            "bust" to 660,
+                            "sleeve" to 845,
+                            "height" to 760
+                        ),
+                        "36" to mutableMapOf(
+                            "bust" to 645,
+                            "sleeve" to 825,
+                            "height" to 750
+                        )
+                    ),
+                    "gender" to "female",
+                    "brand" to "Virtusize",
+                    "modelInfo" to mutableMapOf(
+                        "waist" to 56,
+                        "bust" to 78,
+                        "size" to "38",
+                        "hip" to 85,
+                        "height" to 165
+                    )
+                )
+            )
         }
     }
 }

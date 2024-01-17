@@ -1,8 +1,6 @@
 package com.virtusize.android.network
 
 import android.net.Uri
-import android.util.Log
-import com.google.gson.Gson
 import com.virtusize.android.data.local.BodyProfileRecommendedSizeParams
 import com.virtusize.android.data.local.I18N_URL
 import com.virtusize.android.data.local.VirtusizeEnvironment
