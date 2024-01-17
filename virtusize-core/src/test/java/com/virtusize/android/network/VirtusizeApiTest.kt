@@ -47,7 +47,7 @@ class VirtusizeApiTest {
 
         val expectedUrl =
             "https://services.virtusize.com/stg/product/check" + "?apiKey=${TestFixtures.API_KEY}" +
-                    "&externalId=${TestFixtures.EXTERNAL_ID}" + "&version=1"
+                "&externalId=${TestFixtures.EXTERNAL_ID}" + "&version=1"
 
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
 
@@ -191,7 +191,7 @@ class VirtusizeApiTest {
         val actualApiRequest = VirtusizeApi.getStoreInfo()
 
         val expectedUrl = "https://staging.virtusize.com/a/api/v3/stores/api-key/test_apiKey" +
-                "?format=json"
+            "?format=json"
 
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
 
@@ -203,7 +203,7 @@ class VirtusizeApiTest {
         val actualApiRequest = VirtusizeApi.getStoreProductInfo("16099122")
 
         val expectedUrl = "https://staging.virtusize.com/a/api/v3/store-products/16099122" +
-                "?format=json"
+            "?format=json"
 
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
 

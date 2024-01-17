@@ -53,7 +53,7 @@ internal data class BodyProfileRecommendedSizeParams constructor(
             .plus(
                 mapOf(
                     PARAM_PRODUCT_TYPE to
-                            (productTypes.find { it.id == storeProduct.productType }?.name ?: "")
+                        (productTypes.find { it.id == storeProduct.productType }?.name ?: "")
                 )
             )
             .plus(
@@ -70,13 +70,13 @@ internal data class BodyProfileRecommendedSizeParams constructor(
     fun createAdditionalInfoParams(): Map<String, Any?> {
         val brand = storeProduct.storeProductMeta?.additionalInfo?.brand
             ?: storeProduct.storeProductMeta?.brand
-        val sizeHashMap = storeProduct.storeProductMeta?.additionalInfo?.sizes?.map {
-            it.name to it.measurements.map { measurement ->
+        val sizeHashMap = storeProduct.storeProductMeta?.additionalInfo?.sizes?.associate {
+            it.name to it.measurements.associate { measurement ->
                 measurement.name to measurement.millimeter
-            }.toMap()
-        }?.toMap()
-        val gender = storeProduct.storeProductMeta?.additionalInfo?.gender
-            ?: storeProduct.storeProductMeta?.gender
+            }
+        }
+        /*val gender = storeProduct.storeProductMeta?.additionalInfo?.gender
+            ?: storeProduct.storeProductMeta?.gender*/
         return emptyMap<String, Any?>()
             .plus(
                 mapOf(PARAM_BRAND to (brand ?: ""))
@@ -100,11 +100,11 @@ internal data class BodyProfileRecommendedSizeParams constructor(
             )
     }
 
-    private fun createModelInfoParams(): Map<String, Any?> {
+    /*private fun createModelInfoParams(): Map<String, Any?> {
         return emptyMap<String, Any?>()
             .plus("height" to userBodyProfile.height)
             .plus("size" to "small")
-    }
+    }*/
 
     /**
      * Creates the map that represents the user body data
@@ -142,9 +142,9 @@ internal data class BodyProfileRecommendedSizeParams constructor(
         return emptyMap<String, Any?>()
             .plus(
                 storeProduct.sizes.map { productSize ->
-                    productSize.name to productSize.measurements.map { measurement ->
+                    productSize.name to productSize.measurements.associate { measurement ->
                         measurement.name to measurement.millimeter
-                    }.toMap()
+                    }
                 }
             )
     }
