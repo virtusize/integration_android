@@ -2,8 +2,6 @@ package com.virtusize.android
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.util.Log
-import com.google.gson.Gson
 import com.virtusize.android.data.local.SizeComparisonRecommendedSize
 import com.virtusize.android.data.local.SizeRecommendationType
 import com.virtusize.android.data.local.VirtusizeError

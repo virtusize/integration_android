@@ -323,7 +323,8 @@ internal class VirtusizeAPIService(
         productTypes: List<ProductType>,
         storeProduct: Product,
         userBodyProfile: UserBodyProfile
-    ): VirtusizeApiResponse<ArrayList<BodyProfileRecommendedSizeNew>?> = withContext(Dispatchers.IO) {
+    ): VirtusizeApiResponse<ArrayList<BodyProfileRecommendedSizeNew>?> =
+        withContext(Dispatchers.IO) {
         val apiRequest = VirtusizeApi.getSize(productTypes, storeProduct, userBodyProfile)
         VirtusizeApiTask(
             httpURLConnection,
