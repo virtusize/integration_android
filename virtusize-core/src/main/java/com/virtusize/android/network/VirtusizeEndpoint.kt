@@ -30,8 +30,11 @@ fun VirtusizeEndpoint.getPath(env: VirtusizeEnvironment? = null): String {
         VirtusizeEndpoint.ProductCheck -> {
             "/product/check"
         }
-        VirtusizeEndpoint.GetSize -> {
+        /*VirtusizeEndpoint.GetSize -> {
             "/ds-functions/size-rec/get-size"
+        }*/
+        VirtusizeEndpoint.GetSize -> {
+            "/item"
         }
         VirtusizeEndpoint.VirtusizeWebView -> {
             val stgPath = when (env) {

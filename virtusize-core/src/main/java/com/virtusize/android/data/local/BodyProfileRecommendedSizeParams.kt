@@ -28,19 +28,7 @@ internal data class BodyProfileRecommendedSizeParams constructor(
     fun paramsToMap(): Map<String, Any> {
         return emptyMap<String, Any>()
             .plus(
-                mapOf(PARAM_ADDITIONAL_INFO to createAdditionalInfoParams())
-            )
-            .plus(
                 mapOf(PARAM_BODY_DATA to createBodyDataParams())
-            )
-            .plus(
-                mapOf(PARAM_ITEM_SIZES to createItemSizesParams())
-            )
-            .plus(
-                mapOf(
-                    PARAM_PRODUCT_TYPE to
-                        (productTypes.find { it.id == storeProduct.productType }?.name ?: "")
-                )
             )
             .plus(
                 mapOf(PARAM_USER_GENDER to userBodyProfile.gender)
@@ -51,6 +39,26 @@ internal data class BodyProfileRecommendedSizeParams constructor(
             .plus(
                 userBodyProfile.weight.toFloatOrNull()?.let { mapOf(PARAM_USER_WEIGHT to it) }
                     .orEmpty()
+            )
+            .plus(
+                mapOf(PARAM_ITEMS to arrayOf(createItemsParams()))
+            )
+
+    }
+
+    private fun createItemsParams(): Map<String, Any?> {
+        return emptyMap<String, Any?>()
+            .plus(
+                mapOf(PARAM_ITEM_SIZES to createItemSizesParams())
+            )
+            .plus(
+                mapOf(
+                    PARAM_PRODUCT_TYPE to
+                            (productTypes.find { it.id == storeProduct.productType }?.name ?: "")
+                )
+            )
+            .plus(
+                mapOf(PARAM_ADDITIONAL_INFO to createAdditionalInfoParams())
             )
             .plus(
                 mapOf(PARAM_EXTERNAL_PRODUCT_ID to (storeProduct.externalId ?: ""))
@@ -85,12 +93,18 @@ internal data class BodyProfileRecommendedSizeParams constructor(
             .plus(
                 mapOf(
                     PARAM_MODEL_INFO to
-                        (storeProduct.storeProductMeta?.additionalInfo?.modelInfo ?: mutableMapOf())
+                        (storeProduct.storeProductMeta?.additionalInfo?.modelInfo ?: JSONObject.NULL)
                 )
             )
             .plus(
-                mapOf(PARAM_GENDER to (gender ?: JSONObject.NULL))
+                mapOf(PARAM_GENDER to userBodyProfile.gender)
             )
+    }
+
+    private fun createModelInfoParams(): Map<String, Any?> {
+        return emptyMap<String, Any?>()
+            .plus("height" to userBodyProfile.height)
+            .plus("size" to "small")
     }
 
     /**
@@ -140,6 +154,7 @@ internal data class BodyProfileRecommendedSizeParams constructor(
         const val PARAM_ADDITIONAL_INFO = "additionalInfo"
         const val PARAM_BODY_DATA = "bodyData"
         const val PARAM_ITEM_SIZES = "itemSizesOrig"
+        const val PARAM_ITEMS = "items"
         const val PARAM_PRODUCT_TYPE = "productType"
         const val PARAM_USER_GENDER = "userGender"
         const val PARAM_USER_HEIGHT = "userHeight"

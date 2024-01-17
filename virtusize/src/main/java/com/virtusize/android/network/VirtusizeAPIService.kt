@@ -25,7 +25,7 @@ import com.virtusize.android.data.parsers.StoreProductJsonParser
 import com.virtusize.android.data.parsers.UserBodyProfileJsonParser
 import com.virtusize.android.data.parsers.UserProductJsonParser
 import com.virtusize.android.data.parsers.UserSessionInfoJsonParser
-import com.virtusize.android.data.remote.BodyProfileRecommendedSize
+import com.virtusize.android.data.remote.BodyProfileRecommendedSizeNew
 import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.data.remote.Product
 import com.virtusize.android.data.remote.ProductCheck
@@ -323,7 +323,7 @@ internal class VirtusizeAPIService(
         productTypes: List<ProductType>,
         storeProduct: Product,
         userBodyProfile: UserBodyProfile
-    ): VirtusizeApiResponse<BodyProfileRecommendedSize?> = withContext(Dispatchers.IO) {
+    ): VirtusizeApiResponse<ArrayList<BodyProfileRecommendedSizeNew>?> = withContext(Dispatchers.IO) {
         val apiRequest = VirtusizeApi.getSize(productTypes, storeProduct, userBodyProfile)
         VirtusizeApiTask(
             httpURLConnection,

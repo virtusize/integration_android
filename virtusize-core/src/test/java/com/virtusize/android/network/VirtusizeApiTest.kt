@@ -35,7 +35,7 @@ class VirtusizeApiTest {
     @Before
     fun initVirtusizeApi() {
         VirtusizeApi.init(
-            env = VirtusizeEnvironment.STAGING,
+            env = VirtusizeEnvironment.JAPAN,
             key = TestFixtures.API_KEY,
             userId = TestFixtures.USER_ID
         )
@@ -274,7 +274,7 @@ class VirtusizeApiTest {
             TestFixtures.userBodyProfile
         )
 
-        val expectedUrl = "https://services.virtusize.com/stg/ds-functions/size-rec/get-size"
+        val expectedUrl = "https://size-recommendation.virtusize.jp/item"
 
         assertThat(actualApiRequest.url).isEqualTo(expectedUrl)
         assertThat(actualApiRequest.method).isEqualTo(HttpMethod.POST)
@@ -282,48 +282,6 @@ class VirtusizeApiTest {
         assertThat(actualApiRequest.params["userGender"]).isEqualTo("female")
         assertThat(actualApiRequest.params["userHeight"]).isEqualTo(1630)
         assertThat(actualApiRequest.params["userWeight"]).isEqualTo(50)
-        assertThat(actualApiRequest.params["extProductId"]).isEqualTo("694")
-        assertThat(actualApiRequest.params["productType"]).isEqualTo("jacket")
-        assertThat(actualApiRequest.params["itemSizesOrig"]).isEqualTo(
-            mutableMapOf(
-                "38" to mutableMapOf(
-                    "bust" to 660,
-                    "sleeve" to 845,
-                    "height" to 760
-                ),
-                "36" to mutableMapOf(
-                    "bust" to 645,
-                    "sleeve" to 825,
-                    "height" to 750
-                )
-            )
-        )
-        assertThat(actualApiRequest.params["additionalInfo"]).isEqualTo(
-            mutableMapOf(
-                "fit" to "regular",
-                "sizes" to mutableMapOf(
-                    "38" to mutableMapOf(
-                        "bust" to 660,
-                        "sleeve" to 845,
-                        "height" to 760
-                    ),
-                    "36" to mutableMapOf(
-                        "bust" to 645,
-                        "sleeve" to 825,
-                        "height" to 750
-                    )
-                ),
-                "gender" to "female",
-                "brand" to "Virtusize",
-                "modelInfo" to mutableMapOf(
-                    "waist" to 56,
-                    "bust" to 78,
-                    "size" to "38",
-                    "hip" to 85,
-                    "height" to 165
-                )
-            )
-        )
         assertThat(actualApiRequest.params["bodyData"]).isEqualTo(
             mutableMapOf(
                 "waistWidth" to mutableMapOf(
@@ -416,5 +374,46 @@ class VirtusizeApiTest {
                 )
             )
         )
+        val items = actualApiRequest.params["items"] as Array<Map<String, Any>>
+        for (item in items) {
+            assertThat(item["extProductId"]).isEqualTo("694")
+            assertThat(item["productType"]).isEqualTo("jacket")
+            assertThat(item["itemSizesOrig"]).isEqualTo(mutableMapOf(
+                "38" to mutableMapOf(
+                    "bust" to 660,
+                    "sleeve" to 845,
+                    "height" to 760
+                ),
+                "36" to mutableMapOf(
+                    "bust" to 645,
+                    "sleeve" to 825,
+                    "height" to 750
+                )
+            ))
+            assertThat(item["additionalInfo"]).isEqualTo(mutableMapOf(
+                "fit" to "regular",
+                "sizes" to mutableMapOf(
+                    "38" to mutableMapOf(
+                        "bust" to 660,
+                        "sleeve" to 845,
+                        "height" to 760
+                    ),
+                    "36" to mutableMapOf(
+                        "bust" to 645,
+                        "sleeve" to 825,
+                        "height" to 750
+                    )
+                ),
+                "gender" to "female",
+                "brand" to "Virtusize",
+                "modelInfo" to mutableMapOf(
+                    "waist" to 56,
+                    "bust" to 78,
+                    "size" to "38",
+                    "hip" to 85,
+                    "height" to 165
+                )
+            ))
+        }
     }
 }

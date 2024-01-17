@@ -289,7 +289,8 @@ class VirtusizeApiTask(
      */
     private fun responseIsJsonArray(apiRequestUrl: String): Boolean {
         return apiRequestUrl.contains(VirtusizeEndpoint.ProductType.getPath()) ||
-            apiRequestUrl.contains(VirtusizeEndpoint.UserProducts.getPath())
+                apiRequestUrl.contains(VirtusizeEndpoint.UserProducts.getPath()) ||
+                apiRequestUrl.contains(VirtusizeEndpoint.GetSize.getPath())
     }
 
     /**
