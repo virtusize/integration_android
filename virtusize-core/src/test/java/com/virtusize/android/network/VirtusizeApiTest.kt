@@ -45,10 +45,9 @@ class VirtusizeApiTest {
     fun productCheck_shouldReturnExpectedApiRequest() {
         val actualApiRequest = VirtusizeApi.productCheck(TestFixtures.VIRTUSIZE_PRODUCT)
 
-        val expectedUrl = "https://services.virtusize.com/stg/product/check" +
-                "?apiKey=${TestFixtures.API_KEY}" +
-                "&externalId=${TestFixtures.EXTERNAL_ID}" +
-                "&version=1"
+        val expectedUrl =
+            "https://services.virtusize.com/stg/product/check" + "?apiKey=${TestFixtures.API_KEY}" +
+                    "&externalId=${TestFixtures.EXTERNAL_ID}" + "&version=1"
 
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
 
