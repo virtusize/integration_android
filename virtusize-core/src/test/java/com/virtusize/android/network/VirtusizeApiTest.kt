@@ -35,7 +35,7 @@ class VirtusizeApiTest {
     @Before
     fun initVirtusizeApi() {
         VirtusizeApi.init(
-            env = VirtusizeEnvironment.JAPAN,
+            env = VirtusizeEnvironment.STAGING,
             key = TestFixtures.API_KEY,
             userId = TestFixtures.USER_ID
         )
@@ -274,7 +274,7 @@ class VirtusizeApiTest {
             TestFixtures.userBodyProfile
         )
 
-        val expectedUrl = "https://size-recommendation.virtusize.jp/item"
+        val expectedUrl = "https://size-recommendation.staging.virtusize.jp/item"
 
         assertThat(actualApiRequest.url).isEqualTo(expectedUrl)
         assertThat(actualApiRequest.method).isEqualTo(HttpMethod.POST)
