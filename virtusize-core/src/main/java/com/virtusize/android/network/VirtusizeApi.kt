@@ -113,7 +113,7 @@ object VirtusizeApi {
     fun sendProductImageToBackend(product: VirtusizeProduct): ApiRequest {
         val url = Uri.parse(
             environment.defaultApiUrl() +
-                    VirtusizeEndpoint.ProductMetaDataHints.getPath()
+                VirtusizeEndpoint.ProductMetaDataHints.getPath()
         )
             .buildUpon()
             .build()
@@ -239,8 +239,8 @@ object VirtusizeApi {
     fun getStoreInfo(): ApiRequest {
         val url = Uri.parse(
             environment.defaultApiUrl() +
-                    VirtusizeEndpoint.StoreViewApiKey.getPath() +
-                    apiKey
+                VirtusizeEndpoint.StoreViewApiKey.getPath() +
+                apiKey
         )
             .buildUpon()
             .appendQueryParameter("format", "json")
@@ -257,8 +257,8 @@ object VirtusizeApi {
     fun getStoreProductInfo(productId: String): ApiRequest {
         val url = Uri.parse(
             environment.defaultApiUrl() +
-                    VirtusizeEndpoint.StoreProducts.getPath() +
-                    productId
+                VirtusizeEndpoint.StoreProducts.getPath() +
+                productId
         )
             .buildUpon()
             .appendQueryParameter("format", "json")
