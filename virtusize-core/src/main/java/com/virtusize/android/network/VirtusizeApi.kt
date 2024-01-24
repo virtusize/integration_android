@@ -11,6 +11,7 @@ import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.defaultApiUrl
 import com.virtusize.android.data.local.eventApiUrl
 import com.virtusize.android.data.local.servicesApiUrl
+import com.virtusize.android.data.local.sizeRecommendationApiBaseUrl
 import com.virtusize.android.data.local.virtusizeUrl
 import com.virtusize.android.data.parsers.JsonUtils
 import com.virtusize.android.data.remote.Product
@@ -352,10 +353,11 @@ object VirtusizeApi {
     ): ApiRequest {
         val bodyProfileRecommendedSizeParams =
             BodyProfileRecommendedSizeParams(productTypes, storeProduct, userBodyProfile)
-        val url = Uri.parse(environment.servicesApiUrl() + VirtusizeEndpoint.GetSize.getPath())
-            .buildUpon()
-            .build()
-            .toString()
+        val url =
+            Uri.parse("${environment.sizeRecommendationApiBaseUrl()}${VirtusizeEndpoint.GetSize.getPath()}")
+                .buildUpon()
+                .build()
+                .toString()
         return ApiRequest(url, HttpMethod.POST, bodyProfileRecommendedSizeParams.paramsToMap())
     }
 }
