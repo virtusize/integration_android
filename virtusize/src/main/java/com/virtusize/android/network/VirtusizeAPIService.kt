@@ -25,7 +25,7 @@ import com.virtusize.android.data.parsers.StoreProductJsonParser
 import com.virtusize.android.data.parsers.UserBodyProfileJsonParser
 import com.virtusize.android.data.parsers.UserProductJsonParser
 import com.virtusize.android.data.parsers.UserSessionInfoJsonParser
-import com.virtusize.android.data.remote.BodyProfileRecommendedSize
+import com.virtusize.android.data.remote.BodyProfileRecommendedSizeNew
 import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.data.remote.Product
 import com.virtusize.android.data.remote.ProductCheck
@@ -323,16 +323,17 @@ internal class VirtusizeAPIService(
         productTypes: List<ProductType>,
         storeProduct: Product,
         userBodyProfile: UserBodyProfile
-    ): VirtusizeApiResponse<BodyProfileRecommendedSize?> = withContext(Dispatchers.IO) {
-        val apiRequest = VirtusizeApi.getSize(productTypes, storeProduct, userBodyProfile)
-        VirtusizeApiTask(
-            httpURLConnection,
-            sharedPreferencesHelper,
-            messageHandler
-        )
-            .setJsonParser(BodyProfileRecommendedSizeJsonParser(storeProduct))
-            .execute(apiRequest)
-    }
+    ): VirtusizeApiResponse<ArrayList<BodyProfileRecommendedSizeNew>?> =
+        withContext(Dispatchers.IO) {
+            val apiRequest = VirtusizeApi.getSize(productTypes, storeProduct, userBodyProfile)
+            VirtusizeApiTask(
+                httpURLConnection,
+                sharedPreferencesHelper,
+                messageHandler
+            )
+                .setJsonParser(BodyProfileRecommendedSizeJsonParser(storeProduct))
+                .execute(apiRequest)
+        }
 
     /**
      * Gets the API response for fetching the i18n localization texts
