@@ -27,67 +27,93 @@ internal class I18nLocalizationJsonParser(
         val configuredContext = VirtusizeUtils.getConfiguredContext(context, virtusizeLanguage)
         val defaultAccessoryText = inpageJSONObject?.optString(
             FIELD_DEFAULT_ACCESSORY_TEXT,
-            configuredContext?.getString(com.virtusize.android.core.R.string.inpage_default_accessory_text) ?: ""
+            configuredContext?.getString(
+                com.virtusize.android.core.R.string.inpage_default_accessory_text
+            ) ?: ""
         ) ?: ""
 
         val hasProductAccessoryTopText = accessoryJSONObject?.optString(
             FIELD_HAS_PRODUCT_LEAD,
-            configuredContext?.getString(com.virtusize.android.core.R.string.inpage_has_product_top_text) ?: ""
+            configuredContext?.getString(
+                com.virtusize.android.core.R.string.inpage_has_product_top_text
+            ) ?: ""
         ) ?: ""
 
         val hasProductAccessoryBottomText = accessoryJSONObject?.optString(
             FIELD_HAS_PRODUCT,
-            configuredContext?.getString(com.virtusize.android.core.R.string.inpage_has_product_bottom_text) ?: ""
+            configuredContext?.getString(
+                com.virtusize.android.core.R.string.inpage_has_product_bottom_text
+            ) ?: ""
         ) ?: ""
 
         val oneSizeCloseTopText = oneSizeJSONObject?.optString(
             FIELD_CLOSE_LEAD,
-            configuredContext?.getString(com.virtusize.android.core.R.string.inpage_one_size_close_top_text) ?: ""
+            configuredContext?.getString(
+                com.virtusize.android.core.R.string.inpage_one_size_close_top_text
+            ) ?: ""
         ) ?: ""
 
         val oneSizeSmallerTopText = oneSizeJSONObject?.optString(
             FIELD_SMALLER_LEAD,
-            configuredContext?.getString(com.virtusize.android.core.R.string.inpage_one_size_smaller_top_text) ?: ""
+            configuredContext?.getString(
+                com.virtusize.android.core.R.string.inpage_one_size_smaller_top_text
+            ) ?: ""
         ) ?: ""
 
         val oneSizeLargerTopText = oneSizeJSONObject?.optString(
             FIELD_LARGER_LEAD,
-            configuredContext?.getString(com.virtusize.android.core.R.string.inpage_one_size_larger_top_text) ?: ""
+            configuredContext?.getString(
+                com.virtusize.android.core.R.string.inpage_one_size_larger_top_text
+            ) ?: ""
         ) ?: ""
 
         val oneSizeCloseBottomText = oneSizeJSONObject?.optString(
             FIELD_CLOSE,
-            configuredContext?.getString(com.virtusize.android.core.R.string.inpage_one_size_close_bottom_text) ?: ""
+            configuredContext?.getString(
+                com.virtusize.android.core.R.string.inpage_one_size_close_bottom_text
+            ) ?: ""
         ) ?: ""
 
         val oneSizeSmallerBottomText = oneSizeJSONObject?.optString(
             FIELD_SMALLER,
-            configuredContext?.getString(com.virtusize.android.core.R.string.inpage_one_size_smaller_bottom_text) ?: ""
+            configuredContext?.getString(
+                com.virtusize.android.core.R.string.inpage_one_size_smaller_bottom_text
+            ) ?: ""
         ) ?: ""
 
         val oneSizeLargerBottomText = oneSizeJSONObject?.optString(
             FIELD_LARGER,
-            configuredContext?.getString(com.virtusize.android.core.R.string.inpage_one_size_larger_bottom_text) ?: ""
+            configuredContext?.getString(
+                com.virtusize.android.core.R.string.inpage_one_size_larger_bottom_text
+            ) ?: ""
         ) ?: ""
 
         val bodyProfileOneSizeText = oneSizeJSONObject?.optString(
             FIELD_BODY_PROFILE,
-            configuredContext?.getString(com.virtusize.android.core.R.string.inpage_one_size_body_profile_text) ?: ""
+            configuredContext?.getString(
+                com.virtusize.android.core.R.string.inpage_one_size_body_profile_text
+            ) ?: ""
         ) ?: ""
 
         val sizeComparisonMultiSizeText = multiSizeJSONObject?.optString(
             FIELD_SIZE_COMPARISON,
-            configuredContext?.getString(com.virtusize.android.core.R.string.inpage_multi_size_comparison_text) ?: ""
+            configuredContext?.getString(
+                com.virtusize.android.core.R.string.inpage_multi_size_comparison_text
+            ) ?: ""
         ) ?: ""
 
         val bodyProfileMultiSizeText = multiSizeJSONObject?.optString(
             FIELD_BODY_PROFILE,
-            configuredContext?.getString(com.virtusize.android.core.R.string.inpage_multi_size_body_profile_text) ?: ""
+            configuredContext?.getString(
+                com.virtusize.android.core.R.string.inpage_multi_size_body_profile_text
+            ) ?: ""
         ) ?: ""
 
         val defaultNoDataText = inpageJSONObject?.optString(
             FIELD_NO_DATA_TEXT,
-            configuredContext?.getString(com.virtusize.android.core.R.string.inpage_no_data_text) ?: ""
+            configuredContext?.getString(
+                com.virtusize.android.core.R.string.inpage_no_data_text
+            ) ?: ""
         ) ?: ""
 
         return I18nLocalization(
