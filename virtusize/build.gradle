@@ -77,7 +77,3 @@ ext {
 
 apply from: "${rootDir}/gradle/ktlint.gradle"
 apply from: "${rootDir}/gradle/deploy.gradle"
-
-afterEvaluate {
-    generateMetadataFileForReleasePublication.dependsOn androidSourcesJar
-}
