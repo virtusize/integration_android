@@ -5,15 +5,11 @@ plugins {
 }
 
 android {
-
     compileSdk rootProject.ext.compileSdkVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        aarMetadata {
-            minCompileSdk = rootProject.ext.minSdkVersion
-        }
     }
 
     buildTypes {
