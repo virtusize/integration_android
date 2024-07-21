@@ -94,19 +94,19 @@ class I18nLocalizationJsonParserTest {
 
     private fun getExpectedI18nLocalization(localizedContext: Context): I18nLocalization {
         return I18nLocalization(
-            localizedContext.getString(R.string.inpage_default_accessory_text),
-            localizedContext.getString(R.string.inpage_has_product_top_text),
-            localizedContext.getString(R.string.inpage_has_product_bottom_text),
-            localizedContext.getString(R.string.inpage_one_size_close_top_text),
-            localizedContext.getString(R.string.inpage_one_size_smaller_top_text),
-            localizedContext.getString(R.string.inpage_one_size_larger_top_text),
-            localizedContext.getString(R.string.inpage_one_size_close_bottom_text),
-            localizedContext.getString(R.string.inpage_one_size_smaller_bottom_text),
-            localizedContext.getString(R.string.inpage_one_size_larger_bottom_text),
-            localizedContext.getString(R.string.inpage_one_size_body_profile_text),
-            localizedContext.getString(R.string.inpage_multi_size_comparison_text),
-            localizedContext.getString(R.string.inpage_multi_size_body_profile_text),
-            localizedContext.getString(R.string.inpage_no_data_text)
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_default_accessory_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_has_product_top_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_has_product_bottom_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_one_size_close_top_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_one_size_smaller_top_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_one_size_larger_top_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_one_size_close_bottom_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_one_size_smaller_bottom_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_one_size_larger_bottom_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_one_size_body_profile_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_multi_size_comparison_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_multi_size_body_profile_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_no_data_text)
         )
     }
 }
