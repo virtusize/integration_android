@@ -75,8 +75,6 @@ internal data class BodyProfileRecommendedSizeParams constructor(
                 measurement.name to measurement.millimeter
             }
         }
-        /*val gender = storeProduct.storeProductMeta?.additionalInfo?.gender
-            ?: storeProduct.storeProductMeta?.gender*/
         return emptyMap<String, Any?>()
             .plus(
                 mapOf(PARAM_BRAND to (brand ?: ""))
@@ -99,12 +97,6 @@ internal data class BodyProfileRecommendedSizeParams constructor(
                 mapOf(PARAM_GENDER to userBodyProfile.gender)
             )
     }
-
-    /*private fun createModelInfoParams(): Map<String, Any?> {
-        return emptyMap<String, Any?>()
-            .plus("height" to userBodyProfile.height)
-            .plus("size" to "small")
-    }*/
 
     /**
      * Creates the map that represents the user body data
