@@ -33,12 +33,12 @@ class WebViewFragment: DialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        dialog?.window?.attributes?.windowAnimations = R.style.VirtusizeDialogFragmentAnimation
+        dialog?.window?.attributes?.windowAnimations = com.virtusize.android.R.style.VirtusizeDialogFragmentAnimation
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.FullScreenDialogStyle)
+        setStyle(STYLE_NORMAL, com.virtusize.android.R.style.FullScreenDialogStyle)
     }
 
     override fun onCreateView(

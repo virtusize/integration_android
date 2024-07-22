@@ -5,7 +5,6 @@ plugins {
 }
 
 android {
-
     compileSdk rootProject.ext.compileSdkVersion
 
     defaultConfig {
@@ -55,7 +54,6 @@ dependencies {
     implementation 'androidx.browser:browser:1.6.0'
     implementation "androidx.cardview:cardview:1.0.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
@@ -77,7 +75,3 @@ ext {
 
 apply from: "${rootDir}/gradle/ktlint.gradle"
 apply from: "${rootDir}/gradle/deploy.gradle"
-
-afterEvaluate {
-    generateMetadataFileForReleasePublication.dependsOn androidSourcesJar
-}
