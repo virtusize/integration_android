@@ -1,6 +1,7 @@
 package com.virtusize.sampleappjava;
 
 import android.app.Application;
+
 import com.virtusize.android.Virtusize;
 import com.virtusize.android.VirtusizeBuilder;
 import com.virtusize.android.data.local.VirtusizeEnvironment;

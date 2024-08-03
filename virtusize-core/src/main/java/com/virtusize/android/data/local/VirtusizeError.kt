@@ -10,5 +10,5 @@ package com.virtusize.android.data.local
 data class VirtusizeError(
     val type: VirtusizeErrorType? = null,
     val code: Int? = null,
-    val message: String
+    val message: String,
 )

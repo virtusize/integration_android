@@ -28,7 +28,7 @@ data class Product(
     var isFavorite: Boolean? = null,
     val storeId: Int,
     var storeProductMeta: StoreProductMeta? = null,
-    var clientProductImageURL: String? = null
+    var clientProductImageURL: String? = null,
 ) {
     /**
      * Gets the InPage recommendation text based on the product info
@@ -38,20 +38,22 @@ data class Product(
     fun getRecommendationText(
         i18nLocalization: I18nLocalization,
         sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?,
-        bodyProfileRecommendedSizeName: String?
+        bodyProfileRecommendedSizeName: String?,
     ): String {
         return when {
             isAccessory() -> accessoryText(i18nLocalization, sizeComparisonRecommendedSize)
-            sizes.size == 1 -> oneSizeText(
-                i18nLocalization,
-                sizeComparisonRecommendedSize,
-                bodyProfileRecommendedSizeName
-            )
-            else -> multiSizeText(
-                i18nLocalization,
-                sizeComparisonRecommendedSize,
-                bodyProfileRecommendedSizeName
-            )
+            sizes.size == 1 ->
+                oneSizeText(
+                    i18nLocalization,
+                    sizeComparisonRecommendedSize,
+                    bodyProfileRecommendedSizeName,
+                )
+            else ->
+                multiSizeText(
+                    i18nLocalization,
+                    sizeComparisonRecommendedSize,
+                    bodyProfileRecommendedSizeName,
+                )
         }
     }
 
@@ -68,12 +70,13 @@ data class Product(
      */
     private fun accessoryText(
         i18nLocalization: I18nLocalization,
-        sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?
+        sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?,
     ): String {
-        return if (sizeComparisonRecommendedSize?.bestStoreProductSize?.name != null)
+        return if (sizeComparisonRecommendedSize?.bestStoreProductSize?.name != null) {
             i18nLocalization.getHasProductAccessoryText()
-        else
+        } else {
             i18nLocalization.defaultAccessoryText
+        }
     }
 
     /**
@@ -82,7 +85,7 @@ data class Product(
     private fun oneSizeText(
         i18nLocalization: I18nLocalization,
         sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?,
-        bodyProfileRecommendedSizeName: String?
+        bodyProfileRecommendedSizeName: String?,
     ): String {
         sizeComparisonRecommendedSize?.let {
             return i18nLocalization.getOneSizeProductComparisonText(it)
@@ -99,7 +102,7 @@ data class Product(
     private fun multiSizeText(
         i18nLocalization: I18nLocalization,
         sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?,
-        bodyProfileRecommendedSizeName: String?
+        bodyProfileRecommendedSizeName: String?,
     ): String {
         sizeComparisonRecommendedSize?.bestStoreProductSize?.name?.let {
             return i18nLocalization.getMultiSizeProductComparisonText(it)

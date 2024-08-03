@@ -7,5 +7,5 @@ package com.virtusize.android.data.remote
  */
 data class Measurement(
     val name: String,
-    val millimeter: Int
+    val millimeter: Int,
 )

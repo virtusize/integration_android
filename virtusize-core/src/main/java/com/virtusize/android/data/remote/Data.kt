@@ -16,5 +16,5 @@ data class Data(
     val productTypeName: String,
     val storeName: String,
     val storeId: Int,
-    val productTypeId: Int
+    val productTypeId: Int,
 ) : Parcelable

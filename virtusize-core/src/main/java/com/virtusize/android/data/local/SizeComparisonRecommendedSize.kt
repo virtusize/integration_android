@@ -16,5 +16,5 @@ data class SizeComparisonRecommendedSize(
     var bestFitScore: Float = 0f,
     var bestStoreProductSize: ProductSize? = null,
     var bestUserProduct: Product? = null,
-    var isStoreProductSmaller: Boolean? = false
+    var isStoreProductSmaller: Boolean? = false,
 )

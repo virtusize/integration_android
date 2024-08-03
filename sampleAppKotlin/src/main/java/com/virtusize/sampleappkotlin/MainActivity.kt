@@ -15,7 +15,6 @@ import com.virtusize.android.util.spToPx
 import com.virtusize.sampleappkotlin.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-
     companion object {
         const val TAG = "MAIN_ACTIVITY"
     }
@@ -29,24 +28,26 @@ class MainActivity : AppCompatActivity() {
         /*
          * Register message handler to listen to events from Virtusize
          */
-        (application as App).Virtusize.registerMessageHandler(activityMessageHandler)
+        (application as App).virtusize.registerMessageHandler(activityMessageHandler)
 
         /*
          * Set up Virtusize product for all the Virtusize views
          */
-        val product = VirtusizeProduct(
-            externalId = "vs_dress",
-            imageUrl = "http://www.image.com/goods/12345.jpg"
-        )
-        (application as App).Virtusize.load(product)
+        val product =
+            VirtusizeProduct(
+                externalId = "vs_dress",
+                imageUrl = "http://www.image.com/goods/12345.jpg",
+            )
+        (application as App).virtusize.load(product)
 
         /*
          * Set up Virtusize button
          */
+
         // Virtusize opens automatically when button is clicked
-        (application as App).Virtusize.setupVirtusizeView(
+        (application as App).virtusize.setupVirtusizeView(
             virtusizeView = binding.exampleVirtusizeButton,
-            product = product
+            product = product,
         )
         // Set up the Virtusize view style programmatically
         binding.exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.TEAL
@@ -54,10 +55,10 @@ class MainActivity : AppCompatActivity() {
         /*
          * Set up Virtusize InPage Standard
          */
-        (application as App).Virtusize
+        (application as App).virtusize
             .setupVirtusizeView(
                 virtusizeView = binding.exampleVirtusizeInPageStandard,
-                product = product
+                product = product,
             )
         binding.exampleVirtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
         // If you like, you can set up the horizontal margins between the edges of the app screen and the InPage Standard view
@@ -77,9 +78,9 @@ class MainActivity : AppCompatActivity() {
         /*
          * Set up Virtusize InPage Mini
          */
-        (application as App).Virtusize.setupVirtusizeView(
+        (application as App).virtusize.setupVirtusizeView(
             virtusizeView = binding.exampleVirtusizeInPageMini,
-            product = product
+            product = product,
         )
         binding.exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.TEAL
 
@@ -101,9 +102,7 @@ class MainActivity : AppCompatActivity() {
          * exampleVirtusizeInPageMini.dismissVirtusizeView()
          */
 
-        /*
-         * The sample function to send an order to the Virtusize server
-         */
+        // The sample function to send an order to the Virtusize server
         sendOrderSample()
     }
 
@@ -116,25 +115,27 @@ class MainActivity : AppCompatActivity() {
      */
     private fun sendOrderSample() {
         val order = VirtusizeOrder("888400111032")
-        order.items = mutableListOf(
-            VirtusizeOrderItem(
-                "P001",
-                "L",
-                "Large",
-                "P001_SIZEL_RED",
-                "http://images.example.com/products/P001/red/image1xl.jpg",
-                "Red",
-                "W",
-                51000.00,
-                "JPY",
-                1,
-                "http://example.com/products/P001"
+        order.items =
+            mutableListOf(
+                VirtusizeOrderItem(
+                    "P001",
+                    "L",
+                    "Large",
+                    "P001_SIZEL_RED",
+                    "http://images.example.com/products/P001/red/image1xl.jpg",
+                    "Red",
+                    "W",
+                    51000.00,
+                    "JPY",
+                    1,
+                    "http://example.com/products/P001",
+                ),
             )
-        )
 
         (application as App)
-            .Virtusize
-            .sendOrder(order,
+            .virtusize
+            .sendOrder(
+                order,
                 // this optional success callback is called when the app successfully sends the order
                 onSuccess = {
                     Log.i(TAG, "Successfully sent the order")
@@ -142,23 +143,28 @@ class MainActivity : AppCompatActivity() {
                 // this optional error callback is called when an error occurs when the app is sending the order
                 onError = { error ->
                     Log.e(TAG, error.message)
-                })
+                },
+            )
     }
 
     override fun onPause() {
         // Always un register message handler in onPause() or depending on implementation onStop().
         (application as App)
-            .Virtusize.unregisterMessageHandler(activityMessageHandler)
+            .virtusize.unregisterMessageHandler(activityMessageHandler)
         super.onPause()
     }
 
-    private val activityMessageHandler = object : VirtusizeMessageHandler {
-        override fun onEvent(product: VirtusizeProduct, event: VirtusizeEvent) {
-            Log.i(TAG, event.name)
-        }
+    private val activityMessageHandler =
+        object : VirtusizeMessageHandler {
+            override fun onEvent(
+                product: VirtusizeProduct,
+                event: VirtusizeEvent,
+            ) {
+                Log.i(TAG, event.name)
+            }
 
-        override fun onError(error: VirtusizeError) {
-            Log.e(TAG, error.message)
+            override fun onError(error: VirtusizeError) {
+                Log.e(TAG, error.message)
+            }
         }
-    }
 }

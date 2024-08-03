@@ -11,5 +11,5 @@ data class UserSessionInfo(
     val accessToken: String,
     internal val bid: String?,
     val authToken: String,
-    val userSessionResponse: String
+    val userSessionResponse: String,
 )

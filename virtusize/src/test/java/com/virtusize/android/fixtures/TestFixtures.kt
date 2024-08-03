@@ -9,7 +9,6 @@ import com.virtusize.android.data.remote.UserBodyProfile
 import org.json.JSONObject
 
 internal object TestFixtures {
-
     const val API_KEY = "test_apiKey"
     const val USER_ID = "123"
     const val STORE_ID = 2
@@ -19,8 +18,9 @@ internal object TestFixtures {
 
     val EMPTY_JSON_DATA = JSONObject("{}")
 
-    val PRODUCT_DATA_CHECK = JSONObject(
-        """
+    val PRODUCT_DATA_CHECK =
+        JSONObject(
+            """
             {
                 "data":{
                     "productTypeName": "pants",
@@ -37,11 +37,12 @@ internal object TestFixtures {
                 "name": "backend-checked-product", 
                 "productId": "$EXTERNAL_ID"
             }
-        """.trimIndent()
-    )
+            """.trimIndent(),
+        )
 
-    val INVALID_PRODUCT_DATA_CHECK = JSONObject(
-        """
+    val INVALID_PRODUCT_DATA_CHECK =
+        JSONObject(
+            """
             {
                 "data": {
                     "productDataId": null,
@@ -53,15 +54,16 @@ internal object TestFixtures {
                 "name": "backend-checked-product",
                 "productId": "63434343"
             }
-        """.trimIndent()
-    )
+            """.trimIndent(),
+        )
 
     val PRODUCT_CHECK = ProductCheckJsonParser().parse(PRODUCT_DATA_CHECK)
 
     val VIRTUSIZE_PRODUCT = VirtusizeProduct(EXTERNAL_ID, "http://image.com/xxx.jpg", PRODUCT_CHECK)
 
-    val PRODUCT_DATA_CHECK_DATA = JSONObject(
-        """
+    val PRODUCT_DATA_CHECK_DATA =
+        JSONObject(
+            """
             {
                 "productTypeName": "pants",
                 "storeName": "virtusize",
@@ -74,22 +76,24 @@ internal object TestFixtures {
                         "should_see_ph_tooltip": false
                 }
             }
-        """.trimIndent()
-    )
+            """.trimIndent(),
+        )
 
-    val PRODUCT_META_DATA_HINTS = JSONObject(
-        """
+    val PRODUCT_META_DATA_HINTS =
+        JSONObject(
+            """
             {
                 "apiKey": "test_apiKey",
                 "imageUrl": "http://www.test.com/goods/31/12/11/71/1234_COL_COL02_570.jpg",
                 "cloudinaryPublicId": "test_cloudinaryPublicId",
                 "externalProductId": "$EXTERNAL_ID"
             }
-        """.trimIndent()
-    )
+            """.trimIndent(),
+        )
 
-    val USER_SAW_PRODUCT_EVENT_RESPONSE = JSONObject(
-        """
+    val USER_SAW_PRODUCT_EVENT_RESPONSE =
+        JSONObject(
+            """
             {
                 "apiKey": "$API_KEY",
                 "name": "user-saw-product",
@@ -118,11 +122,12 @@ internal object TestFixtures {
                 "browserLanguage": "en",
                 "@timestamp": "2020-06-16T13:06:24.842988Z"
             }
-        """.trimIndent()
-    )
+            """.trimIndent(),
+        )
 
-    val STORE_WITH_FULL_INFO = JSONObject(
-        """
+    val STORE_WITH_FULL_INFO =
+        JSONObject(
+            """
             {
                 "id": 2,
                 "surveyLink": "https://www.survey.com/s/xxxxxx",
@@ -136,11 +141,12 @@ internal object TestFixtures {
                 "typemapperEnabled": false,
                 "region": "KR"
             }
-        """.trimIndent()
-    )
+            """.trimIndent(),
+        )
 
-    val STORE_WITH_NULL_VALUES = JSONObject(
-        """
+    val STORE_WITH_NULL_VALUES =
+        JSONObject(
+            """
             {
                 "id": 2,
                 "surveyLink": "https://www.survey.com/s/xxxxxx",
@@ -154,107 +160,111 @@ internal object TestFixtures {
                 "typemapperEnabled": false,
                 "region": null
             }
-        """.trimIndent()
-    )
-
-    val VIRTUSIZE_ORDER = VirtusizeOrder(
-        "888400111032",
-        mutableListOf(
-            VirtusizeOrderItem(
-                "P001",
-                "L",
-                "Large",
-                "P001_SIZEL_RED",
-                "http://images.example.com/products/P001/red/image1xl.jpg",
-                "Red",
-                "W",
-                5100.00,
-                "JPY",
-                1,
-                "http://example.com/products/P001"
-            )
+            """.trimIndent(),
         )
-    )
 
-    val USER_BODY_JSONObject = JSONObject(
-        """
-                {
-                  "wardrobe": "1234567",
-                  "gender": "female",
-                  "age": 32,
-                  "height": 1630,
-                  "weight": "50.00",
-                  "braSize": {}, 
-                  "concernAreas": {},
-                  "bodyData": {
-                    "hip": 830,
-                    "bust": 755,
-                    "neck": 300,
-                    "rise": 215,
-                    "bicep": 220,
-                    "thigh": 480,
-                    "waist": 630,
-                    "inseam": 700,
-                    "sleeve": 720,
-                    "shoulder": 370,
-                    "hipWidth": 300,
-                    "bustWidth": 245,
-                    "hipHeight": 750,
-                    "headHeight": 215,
-                    "kneeHeight": 395,
-                    "waistWidth": 225,
-                    "waistHeight": 920,
-                    "armpitHeight": 1130,
-                    "sleeveLength": 520,
-                    "shoulderWidth": 340,
-                    "shoulderHeight": 1240
-                  }
-                }
-        """.trimIndent()
-    )
-
-    val NULL_USER_BODY_PROFILE = JSONObject(
-        """
-                {   
-                    "gender": "",
-                    "age": null,
-                    "height": null,
-                    "weight": null,
-                    "braSize": null,
-                    "concernAreas": null,
-                    "bodyData": null
-                }
-        """.trimIndent()
-    )
-
-    val userBodyProfile = UserBodyProfile(
-        "female",
-        32,
-        1630,
-        "50.00",
-        mutableSetOf(
-            Measurement("hip", 830),
-            Measurement("hip", 830),
-            Measurement("bust", 755),
-            Measurement("neck", 300),
-            Measurement("rise", 215),
-            Measurement("bicep", 220),
-            Measurement("thigh", 480),
-            Measurement("waist", 630),
-            Measurement("inseam", 700),
-            Measurement("sleeve", 720),
-            Measurement("shoulder", 370),
-            Measurement("hipWidth", 300),
-            Measurement("bustWidth", 245),
-            Measurement("hipHeight", 750),
-            Measurement("headHeight", 215),
-            Measurement("kneeHeight", 395),
-            Measurement("waistWidth", 225),
-            Measurement("waistHeight", 920),
-            Measurement("armpitHeight", 1130),
-            Measurement("sleeveLength", 520),
-            Measurement("shoulderWidth", 340),
-            Measurement("shoulderHeight", 1240)
+    val VIRTUSIZE_ORDER =
+        VirtusizeOrder(
+            "888400111032",
+            mutableListOf(
+                VirtusizeOrderItem(
+                    "P001",
+                    "L",
+                    "Large",
+                    "P001_SIZEL_RED",
+                    "http://images.example.com/products/P001/red/image1xl.jpg",
+                    "Red",
+                    "W",
+                    5100.00,
+                    "JPY",
+                    1,
+                    "http://example.com/products/P001",
+                ),
+            ),
         )
-    )
+
+    val USER_BODY_JSONObject =
+        JSONObject(
+            """
+            {
+              "wardrobe": "1234567",
+              "gender": "female",
+              "age": 32,
+              "height": 1630,
+              "weight": "50.00",
+              "braSize": {}, 
+              "concernAreas": {},
+              "bodyData": {
+                "hip": 830,
+                "bust": 755,
+                "neck": 300,
+                "rise": 215,
+                "bicep": 220,
+                "thigh": 480,
+                "waist": 630,
+                "inseam": 700,
+                "sleeve": 720,
+                "shoulder": 370,
+                "hipWidth": 300,
+                "bustWidth": 245,
+                "hipHeight": 750,
+                "headHeight": 215,
+                "kneeHeight": 395,
+                "waistWidth": 225,
+                "waistHeight": 920,
+                "armpitHeight": 1130,
+                "sleeveLength": 520,
+                "shoulderWidth": 340,
+                "shoulderHeight": 1240
+              }
+            }
+            """.trimIndent(),
+        )
+
+    val NULL_USER_BODY_PROFILE =
+        JSONObject(
+            """
+            {   
+                "gender": "",
+                "age": null,
+                "height": null,
+                "weight": null,
+                "braSize": null,
+                "concernAreas": null,
+                "bodyData": null
+            }
+            """.trimIndent(),
+        )
+
+    val userBodyProfile =
+        UserBodyProfile(
+            "female",
+            32,
+            1630,
+            "50.00",
+            mutableSetOf(
+                Measurement("hip", 830),
+                Measurement("hip", 830),
+                Measurement("bust", 755),
+                Measurement("neck", 300),
+                Measurement("rise", 215),
+                Measurement("bicep", 220),
+                Measurement("thigh", 480),
+                Measurement("waist", 630),
+                Measurement("inseam", 700),
+                Measurement("sleeve", 720),
+                Measurement("shoulder", 370),
+                Measurement("hipWidth", 300),
+                Measurement("bustWidth", 245),
+                Measurement("hipHeight", 750),
+                Measurement("headHeight", 215),
+                Measurement("kneeHeight", 395),
+                Measurement("waistWidth", 225),
+                Measurement("waistHeight", 920),
+                Measurement("armpitHeight", 1130),
+                Measurement("sleeveLength", 520),
+                Measurement("shoulderWidth", 340),
+                Measurement("shoulderHeight", 1240),
+            ),
+        )
 }

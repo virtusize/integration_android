@@ -13,7 +13,6 @@ import org.json.JSONObject
  */
 internal class BodyProfileRecommendedSizeJsonParser(private val product: Product) :
     VirtusizeJsonParser<BodyProfileRecommendedSizeNew> {
-
     override fun parse(json: JSONObject): BodyProfileRecommendedSizeNew? {
         val sizeName = json.getString(FIELD_NAME)
         val extProductId = json.optString(EXT_PRODUCT_ID, "")
@@ -28,23 +27,25 @@ internal class BodyProfileRecommendedSizeJsonParser(private val product: Product
         val willFit = json.optBoolean(WILL_FIT, false)
         var virtualItem: VirtualItem? = null
         virtualItemJsonObj?.let {
-            virtualItem = VirtualItem(
-                bust = it.optDouble(BUST, 0.0),
-                hip = it.optDouble(HIP, 0.0),
-                inseam = it.optDouble(INSEAM, 0.0),
-                sleeve = it.optDouble(SLEEVE, 0.0),
-                waist = it.optDouble(WAIST, 0.0),
-            )
+            virtualItem =
+                VirtualItem(
+                    bust = it.optDouble(BUST, 0.0),
+                    hip = it.optDouble(HIP, 0.0),
+                    inseam = it.optDouble(INSEAM, 0.0),
+                    sleeve = it.optDouble(SLEEVE, 0.0),
+                    waist = it.optDouble(WAIST, 0.0),
+                )
         }
         var willFitForSizes: WillFitForSizes? = null
         willFitForSizesJsonObj?.let {
-            willFitForSizes = WillFitForSizes(
-                extra_large = it.optBoolean(EXTRA_LARGE, false),
-                extra_small = it.optBoolean(EXTRA_SMALL, false),
-                large = it.optBoolean(LARGE, false),
-                medium = it.optBoolean(MEDIUM, false),
-                small = it.optBoolean(SMALL, false),
-            )
+            willFitForSizes =
+                WillFitForSizes(
+                    extra_large = it.optBoolean(EXTRA_LARGE, false),
+                    extra_small = it.optBoolean(EXTRA_SMALL, false),
+                    large = it.optBoolean(LARGE, false),
+                    medium = it.optBoolean(MEDIUM, false),
+                    small = it.optBoolean(SMALL, false),
+                )
         }
 
         return BodyProfileRecommendedSizeNew(
@@ -58,7 +59,7 @@ internal class BodyProfileRecommendedSizeJsonParser(private val product: Product
             thresholdFitScore = thresholdFitScore,
             willFit = willFit,
             virtualItem = virtualItem,
-            willFitForSizes = willFitForSizes
+            willFitForSizes = willFitForSizes,
         )
     }
 
