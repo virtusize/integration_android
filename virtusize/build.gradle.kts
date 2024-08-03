@@ -134,8 +134,8 @@ publishing {
 
     val shouldSign =
         getProperties("GPG_KEY_ID") != null &&
-                getProperties("GPG_KEY") != null &&
-                getProperties("GPG_KEY_PASSWORD") != null
+            getProperties("GPG_KEY") != null &&
+            getProperties("GPG_KEY_PASSWORD") != null
 
     signing {
         isRequired = shouldSign && gradle.taskGraph.hasTask("publish")
