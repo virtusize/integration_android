@@ -81,8 +81,8 @@ dependencies {
 }
 
 publish(
-    publishId = Constants.Virtusize.ARTIFACT_ID,
-    publishName = Constants.Virtusize.ARTIFACT_NAME,
-    publishDescription = Constants.Virtusize.ARTIFACT_DESCRIPTION,
+    publishId = "virtusize",
+    publishName = "virtusize",
+    publishDescription = "Virtusize Android SDK",
     publication = publishing,
 )

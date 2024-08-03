@@ -76,8 +76,8 @@ dependencies {
 }
 
 publish(
-    publishId = Constants.VirtusizeCore.ARTIFACT_ID,
-    publishName = Constants.VirtusizeCore.ARTIFACT_NAME,
-    publishDescription = Constants.VirtusizeCore.ARTIFACT_DESCRIPTION,
+    publishId = "virtusize-core",
+    publishName = "virtusize-core",
+    publishDescription = "The core module of Virtusize Android SDK",
     publication = publishing,
 )

@@ -49,10 +49,11 @@ private fun Project.configureMavenPublication(
                 }
 
                 pom {
+                    val pomURL = "https://github.com/virtusize/integration_android"
                     name.set(publishName)
                     packaging = "aar"
                     description.set(publishDescription)
-                    url.set(Constants.POM_URL)
+                    url.set(pomURL)
 
                     licenses {
                         license {
@@ -72,7 +73,7 @@ private fun Project.configureMavenPublication(
                     scm {
                         connection.set("scm:git@github.com/virtusize/integration_android.git")
                         developerConnection.set("scm:git@github.com/virtusize/integration_android.git")
-                        url.set(Constants.POM_URL)
+                        url.set(pomURL)
                     }
                 }
             }
