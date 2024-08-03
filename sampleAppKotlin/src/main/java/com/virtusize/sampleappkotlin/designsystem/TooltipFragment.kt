@@ -91,9 +91,9 @@ class TooltipFragment: Fragment() {
 
         val customView = customTooltip.getCustomView()
         val customTooltipLayout = customView.findViewById<LinearLayout>(R.id.customTooltipLayout)
-        customTooltipLayout.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.vs_gray_900))
+        customTooltipLayout.setBackgroundColor(ContextCompat.getColor(requireContext(), com.virtusize.android.ui.R.color.vs_gray_900))
         val customTooltipTextView = customView.findViewById<TextView>(R.id.customTooltipTextView)
-        customTooltipTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.vs_white))
+        customTooltipTextView.setTextColor(ContextCompat.getColor(requireContext(), com.virtusize.android.ui.R.color.vs_white))
 
         binding.customTooltipButton.setOnClickListener {
             customTooltip.show()
@@ -102,7 +102,7 @@ class TooltipFragment: Fragment() {
         fittingRoomTooltip = VirtusizeTooltip.Builder(requireContext())
             .anchor(binding.fittingRoomEntryButton)
             .position(VirtusizeTooltip.Position.LEFT)
-            .text(R.string.vs_similar_items)
+            .text(com.virtusize.android.ui.R.string.vs_similar_items)
             .hideCloseButton()
             .create()
 
