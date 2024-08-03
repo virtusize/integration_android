@@ -20,7 +20,7 @@ class App: Application() {
             // For using the Order API, a user ID is required
             .setUserId("123")
             // By default, the Virtusize environment will be set to GLOBAL
-            .setEnv(VirtusizeEnvironment.STAGING)
+            .setEnv(VirtusizeEnvironment.JAPAN)
             // By default, the initial language will be set based on the Virtusize environment
             .setLanguage(VirtusizeLanguage.JP)
             // By default, ShowSGI is false

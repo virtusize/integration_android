@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        minSdk 21
-        targetSdk 34
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -68,7 +68,3 @@ ext {
 
 apply from: "${rootDir}/gradle/ktlint.gradle"
 apply from: "${rootDir}/gradle/deploy.gradle"
-
-afterEvaluate {
-    generateMetadataFileForReleasePublication.dependsOn androidSourcesJar
-}

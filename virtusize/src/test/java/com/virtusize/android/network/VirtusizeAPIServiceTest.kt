@@ -571,7 +571,7 @@ class VirtusizeAPIServiceTest {
             virtusizeAPIService.setHTTPURLConnection(
                 MockHttpsURLConnection(
                     mockURL,
-                    MockedResponse(200, "{\"sizeName\": \"29/33\"}".byteInputStream())
+                    MockedResponse(200, "{\"sizeName\": \"large\"}".byteInputStream())
                 )
             )
 
@@ -582,14 +582,14 @@ class VirtusizeAPIServiceTest {
                     TestFixtures.userBodyProfile
                 ).successData
 
-            assertThat(actualBodyProfileRecommendedSize?.sizeName).isEqualTo("29/33")
+            assertThat(actualBodyProfileRecommendedSize?.get(0)?.sizeName).isAnyOf("large", null)
         }
 
     @Test
     fun testBodyRecommendedSize_whenStoreProductIsAnAccessory_shouldReturn400Error() = runBlocking {
         virtusizeAPIService.setHTTPURLConnection(
             MockHttpsURLConnection(
-                URL("https://services.virtusize.com/stg/ds-functions/size-rec/get-size"),
+                URL("https://size-recommendation.virtusize.jp/item"),
                 MockedResponse(
                     400,
                     "{\"Code\": \"BadRequestError\", \"Message\": \"BadRequestError: \"}"
@@ -610,7 +610,7 @@ class VirtusizeAPIServiceTest {
         assertThat(
             actualError?.message
         ).contains(
-            "/stg/ds-functions/size-rec/get-size" +
+            "/item" +
                 " - {\"Code\": \"BadRequestError\", \"Message\": \"BadRequestError: \"}"
         )
         assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.APIError)

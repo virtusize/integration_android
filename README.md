@@ -58,7 +58,7 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 ## Requirements
 
 - minSdkVersion >= 21
-- compileSdkVersion >= 30
+- compileSdkVersion >= 34
 - Setup in AppCompatActivity
 
 
@@ -74,7 +74,7 @@ In your app `build.gradle` file, add the following dependencies:
 
 ```groovy
 dependencies {
-  implementation 'com.virtusize.android:virtusize:2.5.1'
+  implementation 'com.virtusize.android:virtusize:2.5.5'
 }
 ```
 

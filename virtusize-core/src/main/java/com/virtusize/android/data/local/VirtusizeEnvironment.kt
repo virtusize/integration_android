@@ -53,6 +53,16 @@ fun VirtusizeEnvironment.servicesApiUrl(): String {
     }
 }
 
+fun VirtusizeEnvironment.sizeRecommendationApiBaseUrl(): String {
+    return when (this) {
+        VirtusizeEnvironment.TESTING -> "https://size-recommendation.staging.virtusize.jp"
+        VirtusizeEnvironment.STAGING -> "https://size-recommendation.staging.virtusize.jp"
+        VirtusizeEnvironment.GLOBAL -> "https://size-recommendation.virtusize.com"
+        VirtusizeEnvironment.JAPAN -> "https://size-recommendation.virtusize.jp"
+        VirtusizeEnvironment.KOREA -> "https://size-recommendation.virtusize.kr"
+    }
+}
+
 /**
  * Gets the URL for loading the Virtusize web app corresponding to the Virtusize Environment
  * @return A String value of the Virtusize URL
