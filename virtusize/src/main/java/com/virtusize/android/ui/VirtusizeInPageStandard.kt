@@ -346,7 +346,7 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
                 setSizeCheckButtonBackgroundTint(
                     ContextCompat.getColor(
                         context,
-                        R.color.vs_teal
+                        com.virtusize.android.ui.R.color.vs_teal
                     )
                 )
             }
@@ -354,7 +354,7 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
                 setSizeCheckButtonBackgroundTint(
                     ContextCompat.getColor(
                         context,
-                        R.color.vs_gray_900
+                        com.virtusize.android.ui.R.color.vs_gray_900
                     )
                 )
             }
@@ -364,7 +364,7 @@ class VirtusizeInPageStandard @JvmOverloads constructor(
         binding.inpageCardView.setBackgroundColor(
             ContextCompat.getColor(
                 context,
-                R.color.vs_white
+                com.virtusize.android.ui.R.color.vs_white
             )
         )
 

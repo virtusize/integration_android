@@ -13,6 +13,10 @@
     <string name="color_button_title" translatable="false">Color</string>
     <string name="size_button_title" translatable="false">Size</string>
     <string name="text_size_button_title" translatable="false">Text Size</string>
+    <string name="fluid_and_block_level_button_title" translatable="false">Fluid and Block-Level Buttons</string>
+    <string name="font_weight_button_title" translatable="false">Font Weight</string>
+    <string name="border_elevation_transparent_button_title" translatable="false">Border, Elevation, transparent</string>
+    <string name="square_button_title" translatable="false">Square Button</string>
     <string name="icon_button_title" translatable="false">Leading and Trailing Icons</string>
     <string name="round_button_title" translatable="false">Round Buttons</string>
     <string name="size_avatar_title" translatable="false">Size</string>
@@ -42,4 +46,13 @@
     <string name="vs_tooltip2_text" translatable="false">You can set an \"inverseStyle\" prop to change the color. or \"position\" prop to change the position relative to the anchor</string>
     <string name="vs_tooltip3_text" translatable="false">You can also set \"hideArrow\" and \"hideCloseButton\" to not show each of these</string>
     <string name="vs_custom_tooltip_text" translatable="false">You can set \"customView\" prop for the custom Tooltip layout and access its views by the method \"getCustomView\"</string>
+    <string name="block_level_button" translatable="false">Block-Level Button</string>
+    <string name="button_that_is_not_block_nor_fluid" translatable="false">Button that is not Block nor Fluid</string>
+    <string name="fluid_button" translatable="false">Fluid Button</string>
+    <string name="default_weight_font_is_bold" translatable="false">Default Weight Font is Bold</string>
+    <string name="regular_weight_font" translatable="false">Regular Weight Font</string>
+    <string name="button_with_no_borders" translatable="false">Button with No Borders</string>
+    <string name="button_that_sits_flat_no_shadow_below_it" translatable="false">Button that sits flat, no shadow below it</string>
+    <string name="transparent_button" translatable="false">Transparent button</string>
+    <string name="transparent_and_no_border" translatable="false">Transparent and no border</string>
 </resources>

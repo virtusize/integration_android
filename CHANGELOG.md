@@ -1,3 +1,28 @@
+## 2.5.5
+
+* Updated Size Recommendation API related URL, request model, response model.
+* Added environment related size recommendation base URLs.
+* Updated unit test
+
+## 2.5.1
+
+* Handle SNS auth for web view apps
+* Change back the SDK webview URL
+
+## 2.5.0
+
+* Perform Virtusize SNS authentication with Chrome Custom Tabs
+
+## 2.4.2
+
+* Create a submodule `virtusize-core`
+* If you continue to integrate our SDK using JitPack, the new artifact name is `com.github.virtusize.integration_android:virtusize:${virtusize_version}`
+
+## 2.4.1
+
+* Use the staging API URLs for staging
+* Add the `testing` env for internal use
+
 ## 2.4.0
 
 * Add ktlint

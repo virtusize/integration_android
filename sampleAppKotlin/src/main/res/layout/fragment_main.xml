@@ -36,6 +36,7 @@
         android:id="@+id/designSystemButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:uiButtonStyle="virtusize_default"
         android:layout_margin="@dimen/virtusize_16dp"
         android:text="@string/virtusize_design_system"/>
 

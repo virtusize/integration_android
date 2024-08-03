@@ -1,4 +1,4 @@
-package com.virtusize.android.designsystem
+package com.virtusize.sampleappkotlin.designsystem
 
 import android.os.Bundle
 import android.view.LayoutInflater

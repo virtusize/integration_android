@@ -49,14 +49,14 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet) 
             binding.inpageBorderImageView.setImageDrawable(
                 ContextCompat.getDrawable(
                     context,
-                    R.drawable.ic_avatar_border_thick_dashed
+                    com.virtusize.android.ui.R.drawable.ic_avatar_border_thick_dashed
                 )
             )
         } else {
             binding.inpageBorderImageView.setImageDrawable(
                 ContextCompat.getDrawable(
                     context,
-                    R.drawable.ic_avatar_border_thin_solid
+                    com.virtusize.android.ui.R.drawable.ic_avatar_border_thin_solid
                 )
             )
         }
@@ -83,7 +83,7 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet) 
             binding.inpageProductCardView.setCardBackgroundColor(
                 ContextCompat.getColor(
                     context,
-                    R.color.vs_gray_200
+                    com.virtusize.android.ui.R.color.vs_gray_200
                 )
             )
         }
@@ -110,12 +110,14 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet) 
             productPlaceholderImage = productTypeImageWithStyle
         }
         if (productImageType == ProductImageType.USER) {
-            productPlaceholderImage?.setTint(ContextCompat.getColor(context, R.color.vs_teal))
+            productPlaceholderImage?.setTint(
+                ContextCompat.getColor(context, com.virtusize.android.ui.R.color.vs_teal)
+            )
         } else {
             productPlaceholderImage?.setTint(
                 ContextCompat.getColor(
                     context,
-                    R.color.vs_black
+                    com.virtusize.android.ui.R.color.vs_black
                 )
             )
         }

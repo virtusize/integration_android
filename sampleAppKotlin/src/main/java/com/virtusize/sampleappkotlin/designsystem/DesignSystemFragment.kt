@@ -1,4 +1,4 @@
-package com.virtusize.android.designsystem
+package com.virtusize.sampleappkotlin.designsystem
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.virtusize.sampleappkotlin.R
 import com.virtusize.sampleappkotlin.databinding.FragmentDesignSystemBinding
+import com.virtusize.sampleappkotlin.designsystem.DesignSystemAdapter
 
 class DesignSystemFragment : Fragment() {
 

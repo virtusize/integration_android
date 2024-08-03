@@ -227,8 +227,8 @@ internal class VirtusizeRepository(
         shouldUpdateBodyProfile: Boolean = true
     ) {
         var storeProduct = lastProductOnVirtusizeWebView
-        externalProductId?.let { externalProductId ->
-            getProductBy(externalProductId)?.let { product ->
+        externalProductId?.let {
+            getProductBy(it)?.let { product ->
                 storeProduct = product
             }
         }
@@ -345,7 +345,7 @@ internal class VirtusizeRepository(
                     storeProduct,
                     userBodyProfileResponse.successData!!
                 )
-            return bodyProfileRecommendedSizeResponse.successData?.sizeName
+            return bodyProfileRecommendedSizeResponse.successData?.get(0)?.sizeName
         } else if (userBodyProfileResponse.failureData?.code != HttpURLConnection.HTTP_NOT_FOUND) {
             userBodyProfileResponse.failureData?.let {
                 messageHandler.onError(it)

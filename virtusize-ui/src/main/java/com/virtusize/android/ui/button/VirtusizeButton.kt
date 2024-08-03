@@ -1,11 +1,16 @@
 package com.virtusize.android.ui.button
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.AttributeSet
 import android.util.TypedValue
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import android.widget.LinearLayout.LayoutParams
 import androidx.annotation.ColorInt
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
@@ -23,6 +28,24 @@ class VirtusizeButton @JvmOverloads constructor(
         set(value) {
             field = value
             setButtonStyle()
+        }
+
+    var virtusizeButtonLevel = VirtusizeButtonLevel.NONE
+        set(value) {
+            field = value
+            setButtonLevel()
+        }
+
+    var virtusizeButtonBordersWithTransparency = VirtusizeButtonBordersWithTransparency.NONE
+        set(value) {
+            field = value
+            setButtonBordersWithTransparency()
+        }
+
+    var virtusizeButtonFontWeight = VirtusizeButtonFontWeight.BOLD
+        set(value) {
+            field = value
+            setButtonFontWeight()
         }
 
     var virtusizeButtonSize = VirtusizeButtonSize.STANDARD
@@ -49,6 +72,15 @@ class VirtusizeButton @JvmOverloads constructor(
 
         val buttonStyle = attrsArray.getInt(R.styleable.VirtusizeButton_uiButtonStyle, VirtusizeButtonStyle.NONE.ordinal)
         virtusizeButtonStyle = VirtusizeButtonStyle.values().firstOrNull { it.ordinal == buttonStyle } ?: VirtusizeButtonStyle.NONE
+
+        val buttonLevel = attrsArray.getInt(R.styleable.VirtusizeButton_uiButtonLevel, VirtusizeButtonLevel.NONE.ordinal)
+        virtusizeButtonLevel = VirtusizeButtonLevel.values().firstOrNull { it.ordinal == buttonLevel } ?: VirtusizeButtonLevel.NONE
+
+        val buttonBorderWithTransparency = attrsArray.getInt(R.styleable.VirtusizeButton_virtusizeButtonBorderAndTransparency, VirtusizeButtonBordersWithTransparency.NONE.ordinal)
+        virtusizeButtonBordersWithTransparency = VirtusizeButtonBordersWithTransparency.values().firstOrNull { it.ordinal == buttonBorderWithTransparency } ?: VirtusizeButtonBordersWithTransparency.NONE
+
+        val buttonFontWeight = attrsArray.getInt(R.styleable.VirtusizeButton_buttonFontWeight, VirtusizeButtonFontWeight.BOLD.ordinal)
+        virtusizeButtonFontWeight = VirtusizeButtonFontWeight.values().firstOrNull { it.ordinal == buttonFontWeight } ?: VirtusizeButtonFontWeight.BOLD
 
         val buttonSize = attrsArray.getInt(R.styleable.VirtusizeButton_virtusizeButtonSize, VirtusizeButtonSize.STANDARD.ordinal)
         virtusizeButtonSize = VirtusizeButtonSize.values().firstOrNull { it.ordinal == buttonSize } ?: VirtusizeButtonSize.STANDARD
@@ -113,6 +145,7 @@ class VirtusizeButton @JvmOverloads constructor(
         setIcons()
         setElevation()
         setTextStyle()
+        setButtonFontWeight()
     }
 
     fun setVirtusizeBackgroundColor(@ColorInt color: Int) {
@@ -188,6 +221,64 @@ class VirtusizeButton @JvmOverloads constructor(
             }
         }
         setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
+    }
+
+    private fun setButtonLevel() {
+        when (virtusizeButtonLevel) {
+
+            VirtusizeButtonLevel.FLUID -> {
+                // Take all the width available in the screen
+                val layoutParams = LayoutParams(
+                    MATCH_PARENT,
+                    WRAP_CONTENT
+                )
+                this.layoutParams = layoutParams
+            }
+
+            VirtusizeButtonLevel.BLOCK -> {
+                // Set Fixed Size or take width from user
+                val layoutParams = LayoutParams(
+                    resources.getDimension(R.dimen.virtusize_button_block_width).toInt(),
+                    WRAP_CONTENT
+                )
+                this.layoutParams = layoutParams
+            }
+            else -> {}
+        }
+    }
+
+    private fun setButtonFontWeight() {
+        when (virtusizeButtonFontWeight) {
+
+            VirtusizeButtonFontWeight.BOLD -> {
+                setTypeface(null, Typeface.BOLD)
+            }
+
+            VirtusizeButtonFontWeight.REGULAR -> {
+                setTypeface(null, Typeface.NORMAL)
+            }
+
+            else -> {}
+        }
+    }
+
+    private fun setButtonBordersWithTransparency() {
+        when (virtusizeButtonBordersWithTransparency) {
+
+            VirtusizeButtonBordersWithTransparency.NO_BORDER -> {
+                setBackgroundResource(R.drawable.virtusize_button_no_border_background)
+            }
+
+            VirtusizeButtonBordersWithTransparency.TRANSPARENT -> {
+                setBackgroundResource(R.drawable.virtusize_button_transparent_background)
+            }
+
+            VirtusizeButtonBordersWithTransparency.NO_BORDER_AND_TRANSPARENT -> {
+                setBackgroundColor(Color.TRANSPARENT)
+            }
+
+            else -> {}
+        }
     }
 
     private fun setElevation() {

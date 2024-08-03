@@ -14,6 +14,6 @@ class VSFittingRoomButton@JvmOverloads constructor(
 
     init {
         roundImageButtonStyle = VirtusizeRoundImageButtonStyle.DEFAULT
-        setImageResource(R.drawable.ic_search_product)
+        setImageResource(com.virtusize.android.ui.R.drawable.ic_search_product)
     }
 }

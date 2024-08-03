@@ -1,4 +1,4 @@
-package com.virtusize.android.designsystem
+package com.virtusize.sampleappkotlin.designsystem
 
 import android.graphics.Color
 import android.os.Bundle

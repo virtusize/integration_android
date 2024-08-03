@@ -130,7 +130,9 @@ class VirtusizeInPageMini @JvmOverloads constructor(
         binding.inpageMiniLoadingText.visibility = View.GONE
         binding.inpageMiniText.visibility = View.VISIBLE
         binding.inpageMiniText.text = configuredContext?.getText(R.string.inpage_short_error_text)
-        binding.inpageMiniText.setTextColor(ContextCompat.getColor(context, R.color.vs_gray_700))
+        binding.inpageMiniText.setTextColor(
+            ContextCompat.getColor(context, com.virtusize.android.ui.R.color.vs_gray_700)
+        )
         binding.inpageMiniImageView.setImageDrawable(
             ContextCompat.getDrawable(
                 context,
@@ -158,7 +160,7 @@ class VirtusizeInPageMini @JvmOverloads constructor(
             binding.inpageMiniLayout.setBackgroundColor(
                 ContextCompat.getColor(
                     context,
-                    R.color.vs_white
+                    com.virtusize.android.ui.R.color.vs_white
                 )
             )
             binding.inpageMiniLoadingText.startAnimation()
@@ -190,13 +192,15 @@ class VirtusizeInPageMini @JvmOverloads constructor(
             binding.inpageMiniLayout.setBackgroundColor(
                 ContextCompat.getColor(
                     context,
-                    R.color.vs_teal
+                    com.virtusize.android.ui.R.color.vs_teal
                 )
             )
             binding.inpageMiniButton.setTextColor(
-                ContextCompat.getColor(context, R.color.vs_teal)
+                ContextCompat.getColor(context, com.virtusize.android.ui.R.color.vs_teal)
             )
-            setButtonRightArrowColor(ContextCompat.getColor(context, R.color.vs_teal))
+            setButtonRightArrowColor(
+                ContextCompat.getColor(context, com.virtusize.android.ui.R.color.vs_teal)
+            )
         }
     }
 
