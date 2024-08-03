@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.virtusize.android"
+    namespace = Constants.GROUP_ID
     compileSdk = Constants.COMPILE_SDK
 
     defaultConfig {
@@ -64,7 +64,7 @@ android {
 
 dependencies {
     api(project(":virtusize-core"))
-    implementation(libs.virtusize.auth)
+    compileOnly(libs.virtusize.auth)
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)

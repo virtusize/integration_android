@@ -21,11 +21,12 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
@@ -46,5 +47,8 @@ dependencies {
 
 //    implementation(libs.virtusize)
     implementation(project(":virtusize"))
-    implementation(libs.virtusize.auth)
+    implementation(libs.virtusize.auth) {
+        // TOOO: fix virtusize-auth dependency configuration
+        exclude(group = "com.virtusize.android", module = "virtusize-core")
+    }
 }

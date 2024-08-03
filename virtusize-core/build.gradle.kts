@@ -10,7 +10,7 @@ plugins {
 }
 
 android {
-    namespace = "com.virtusize.android.core"
+    namespace = "${Constants.GROUP_ID}.core"
     compileSdk = Constants.COMPILE_SDK
 
     defaultConfig {
