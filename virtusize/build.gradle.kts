@@ -1,4 +1,5 @@
 import com.virtusize.android.Constants
+import com.virtusize.android.getProperties
 
 plugins {
     alias(libs.plugins.android.library)
@@ -85,8 +86,8 @@ publishing {
             val snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
             url = uri(if (Constants.VERSION_NAME.endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
             credentials {
-                username = System.getenv("OSSRH_USERNAME")
-                password = System.getenv("OSSRH_PASSWORD")
+                username = getProperties("OSSRH_USERNAME")
+                password = getProperties("OSSRH_PASSWORD")
             }
         }
     }
@@ -132,17 +133,17 @@ publishing {
     }
 
     val shouldSign =
-        System.getenv("GPG_KEY_ID") != null &&
-            System.getenv("GPG_KEY") != null &&
-            System.getenv("GPG_KEY_PASSWORD") != null
+        getProperties("GPG_KEY_ID") != null &&
+                getProperties("GPG_KEY") != null &&
+                getProperties("GPG_KEY_PASSWORD") != null
 
     signing {
         isRequired = shouldSign && gradle.taskGraph.hasTask("publish")
         if (isRequired) {
             useInMemoryPgpKeys(
-                System.getenv("GPG_KEY_ID"),
-                System.getenv("GPG_KEY"),
-                System.getenv("GPG_KEY_PASSWORD"),
+                getProperties("GPG_KEY_ID"),
+                getProperties("GPG_KEY"),
+                getProperties("GPG_KEY_PASSWORD"),
             )
         }
         sign(publishing.publications["maven"])
