@@ -47,8 +47,5 @@ dependencies {
 
 //    implementation(libs.virtusize)
     implementation(project(":virtusize"))
-    implementation(libs.virtusize.auth) {
-        // TOOO: fix virtusize-auth dependency configuration
-        exclude(group = "com.virtusize.android", module = "virtusize-core")
-    }
+    implementation(libs.virtusize.auth)
 }

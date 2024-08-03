@@ -16,7 +16,7 @@ nextPublish = "1.1.0"
 robolectric = "4.13"
 truth = "1.4.4"
 virtusize = "2.5.5"
-virtusizeAuth = "1.0.4"
+virtusizeAuth = "1.0.5"
 
 [libraries]
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
