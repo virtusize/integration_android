@@ -25,5 +25,5 @@ rootProject.name = "integration_android"
 
 include(":virtusize")
 include(":virtusize-core")
-include(":sampleappjava")
+include(":sampleAppJava")
 include(":sampleAppKotlin")
