@@ -255,7 +255,7 @@
             style="@style/VirtusizeDesignSystemFlow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="blockLevelButton, defaultLevelButton, fluidLevelButton"
+            app:constraint_referenced_ids="blockLevelButton,defaultLevelButton,fluidLevelButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fluidAndBlockTextView" />
 
@@ -314,7 +314,8 @@
             style="@style/VirtusizeDesignSystemFlow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="boldWeightButton, regularWeightButton"
+            app:constraint_referenced_ids="boldWeightButton,regularWeightButton"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fontWeightTextView" />
 
         <TextView
@@ -367,7 +368,8 @@
             style="@style/VirtusizeDesignSystemFlow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="noBordersButton, nonElevatedButton, transparentButton, noBorderWithTransparentButton"
+            app:constraint_referenced_ids="noBordersButton,nonElevatedButton,transparentButton,noBorderWithTransparentButton"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/borderElevationTextView" />
 
         <TextView
