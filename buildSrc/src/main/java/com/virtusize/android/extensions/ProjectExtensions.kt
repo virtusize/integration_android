@@ -1,4 +1,4 @@
-package com.virtusize.android
+package com.virtusize.android.extensions
 
 import org.gradle.api.Project
 import java.util.Properties

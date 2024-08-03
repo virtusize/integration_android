@@ -1,4 +1,4 @@
-package com.virtusize.android
+package com.virtusize.android.constants
 
 object Constants {
     const val COMPILE_SDK = 34

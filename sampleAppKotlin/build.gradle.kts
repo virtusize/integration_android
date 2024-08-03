@@ -1,4 +1,4 @@
-import com.virtusize.android.Constants
+import com.virtusize.android.constants.Constants
 
 plugins {
     alias(libs.plugins.android.application)

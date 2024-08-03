@@ -1,4 +1,4 @@
-import com.virtusize.android.getProperties
+import com.virtusize.android.extensions.getProperties
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
