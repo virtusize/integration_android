@@ -68,15 +68,28 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 もし、1.x.xの古いバージョンを引き続きご利用いただく場合は、[v1](https://github.com/virtusize/integration_android/tree/v1)を参照くださいませ。
 
 
+
 ### 1. Virtusize SDKを実装する
 
 In your appの`build.gradle`ファイルに下記のdependencyを追加
 
-```groovy
-dependencies {
-  implementation 'com.virtusize.android:virtusize:2.5.5'
-}
-```
+- Groovy
+
+  ```groovy
+  dependencies {
+    implementation 'com.virtusize.android:virtusize:2.5.5'
+  }
+  ```
+
+- Kotlin
+
+  ```kotlin
+  dependencies {
+    implementation("com.virtusize.android:virtusize:2.5.5")
+  }
+  ```
+
+
 
 ### 2. Proguardの設定
 
@@ -109,12 +122,12 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
 - Kotlin
 
   ```kotlin
-  lateinit var Virtusize: Virtusize
+  lateinit var virtusize: Virtusize
   override fun onCreate() {
       super.onCreate()
   
       // Initialize Virtusize instance for your application
-      Virtusize = VirtusizeBuilder().init(this)
+      virtusize = VirtusizeBuilder().init(this)
       // Only the API key is required
       .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
       // For using the Order API, a user ID is required
@@ -136,14 +149,14 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
 - Java
 
   ```java
-  Virtusize Virtusize;
+  Virtusize virtusize;
   
   @Override
   public void onCreate() {
       super.onCreate();
   
       // Initialize Virtusize instance for your application
-      Virtusize = new VirtusizeBuilder().init(this)
+      virtusize = new VirtusizeBuilder().init(this)
         // Only the API key is required
         .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
         // For using the Order API, a user ID is required
@@ -172,7 +185,7 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
   - An `exernalId` that will be used to reference the product in the Virtusize server
      - An `imageURL` for the product image
      
-      - Pass the `VirtusizeProduct` object to the `Virtusize.load` function
+      - Pass the `VirtusizeProduct` object to the `Virtusize#load` function
 
    Kotlin
 
@@ -183,7 +196,7 @@ val product = VirtusizeProduct(
 )
    
 (application as App)
-       .Virtusize
+       .virtusize
        .load(product)
    ```
 
@@ -195,7 +208,7 @@ VirtusizeProduct product = new VirtusizeProduct(
     "http://www.image.com/goods/12345.jpg"
 );
    
-app.Virtusize.load(product);
+app.virtusize.load(product);
    ```
 
 
@@ -257,7 +270,7 @@ Edit your `AndroidManifest.xml` file to include an intent filter and a `<data>` 
   override fun onCreate(savedInstanceState: Bundle?) {
       //...
       // Register message handler to listen to events from Virtusize
-      (application as App).Virtusize.registerMessageHandler(activityMessageHandler)
+      (application as App).virtusize.registerMessageHandler(activityMessageHandler)
       //...
   }
   ```
@@ -282,7 +295,7 @@ Edit your `AndroidManifest.xml` file to include an intent filter and a `<data>` 
               Log.e(TAG, error.getMessage());
           }
       }
-      app.Virtusize.registerMessageHandler(virtusizeMessageHandler);
+      app.virtusize.registerMessageHandler(virtusizeMessageHandler);
       //...
   }
   ```
@@ -299,7 +312,7 @@ Message Handlerはアクティビティ（activity）やフラグメント（fra
   private val activityMessageHandler: VirtusizeMessageHandler
   override fun onPause() {
           // Always un register message handler in onPause() or depending on implementation onStop().
-          (application as App).Virtusize.unregisterMessageHandler(activityMessageHandler)
+          (application as App).virtusize.unregisterMessageHandler(activityMessageHandler)
           super.onPause()
   }
   ```
@@ -310,7 +323,7 @@ Message Handlerはアクティビティ（activity）やフラグメント（fra
   VirtusizeMessageHandler virtusizeMessageHandler;
   @Override
   protected void onPause() {
-      app.Virtusize.unregisterMessageHandler(virtusizeMessageHandler);
+      app.virtusize.unregisterMessageHandler(virtusizeMessageHandler);
       super.onPause();
   }
   ```
@@ -382,18 +395,18 @@ SDKのVirtusizeボタンには2つのデフォルトスタイルがあります�
     android:text="@string/virtusize_button_text" />
 ```
 
-**C. Connect the Virtusize button, along with the** `VirtusizeProduct` **object (which you have passed to** `Virtusize.load`) **into the Virtusize API by using the** `Virtusize.setupVirtusizeView` **function in your activity.**
+**C. Connect the Virtusize button, along with the** `VirtusizeProduct` **object (which you have passed to** `Virtusize#load`) **into the Virtusize API by using the** `Virtusize#setupVirtusizeView` **function in your activity.**
 
 - Kotlin
 
   ```kotlin
-  (application as App).Virtusize.setupVirtusizeView(exampleVirtusizeButton, product)
+  (application as App).virtusize.setupVirtusizeView(exampleVirtusizeButton, product)
   ```
 
 - Java
 
   ```java
-  app.Virtusize.setupVirtusizeView(virtusizeButton, product);
+  app.virtusize.setupVirtusizeView(virtusizeButton, product);
   ```
 
 
@@ -482,20 +495,20 @@ Virtusize SDKには2種類のInPageがあります。
     virtusizeInPageStandard.setButtonTextSize(ExtensionsKt.getSpToPx(10));
     ```
 
-- **Connect the InPage Standard, along with the** `VirtusizeProduct` **object (which you have passed to** `Virtusize.load`) **into the Virtusize API by using the** `Virtusize.setupVirtusizeView` **function in your activity.**
+- **Connect the InPage Standard, along with the** `VirtusizeProduct` **object (which you have passed to** `Virtusize#load`) **into the Virtusize API by using the** `Virtusize#setupVirtusizeView` **function in your activity.**
 
   - Kotlin
 
     ```kotlin
     (application as App)
-        .Virtusize
+        .virtusize
         .setupVirtusizeView(exampleVirtusizeInPageStandard, product)
     ```
 
   - Java
 
     ```java
-    app.Virtusize.setupVirtusizeView(virtusizeInPageStandard, product);
+    app.virtusize.setupVirtusizeView(virtusizeInPageStandard, product);
     ```
 
 
@@ -601,7 +614,7 @@ Virtusize SDKには2種類のInPageがあります。
     virtusizeInPageMini.setButtonTextSize(ExtensionsKt.getSpToPx(10));
     ```
 
-- **Connect the InPage Mini, along with the** `VirtusizeProduct` **object (which you have passed to** `Virtusize.load`) **into the Virtusize API by using the** `Virtusize.setupVirtusizeView` **function in your activity.**
+- **Connect the InPage Mini, along with the** `VirtusizeProduct` **object (which you have passed to** `Virtusize#load`) **into the Virtusize API by using the** `Virtusize#setupVirtusizeView` **function in your activity.**
 
   - Kotlin
 
@@ -614,7 +627,7 @@ Virtusize SDKには2種類のInPageがあります。
   - Java
 
     ```java
-    app.Virtusize.setupVirtusizeView(virtusizeInPageMini, product);
+    app.vituriszesetupVirtusizeView(virtusizeInPageMini, product);
     ```
 
 
@@ -688,7 +701,7 @@ override fun onCreate() {
 }
 
 // アプリローンチ後に、アクティビティやフラグメントで設定
-(application as App).Virtusize.setUserID("user_id")
+(application as App).vituriszesetUserID("user_id")
 ```
 
 * Java
@@ -708,14 +721,14 @@ Virtusize = new VirtusizeBuilder()
   
 // アプリローンチ後に、アクティビティやフラグメントで設定
 app = (App) getApplication();
-app.Virtusize.setUserId("user_id");
+app.vituriszesetUserId("user_id");
 ~~~~
 
 
 
 #### 2. 注文データ向けに*VirtusizeOrder* オブジェクトを作成
 
-*VirtusizeOrder*オブジェクトはVirtusize.sendOrderに情報を送るもので、下記の項目が必要です。
+*VirtusizeOrder*オブジェクトはViturisze#sendOrderに情報を送るもので、下記の項目が必要です。
 
 注意: * 表記のある場合項目は必須項目です
 
@@ -789,7 +802,7 @@ items.add(new VirtusizeOrderItem(
 
 #### 3. 注文情報の送信
 
-ユーザーが注文完了時、ActivityあるいはFragment内で `Virtusize.sendOrder`を呼び出してください。
+ユーザーが注文完了時、ActivityあるいはFragment内で `Viturisze#sendOrder`を呼び出してください。
 
 * Kotlin
 
@@ -814,7 +827,7 @@ items.add(new VirtusizeOrderItem(
 `SuccessResponseHandler`と`ErrorResponseHandler`のコールバックはオプションです。
 
 ~~~~java
-app.Virtusize.sendOrder(order,
+app.vituriszesendOrder(order,
         // This success callback is optional and gets called when the app successfully sends the order
         new SuccessResponseHandler() {
             @Override
@@ -849,4 +862,4 @@ Use the [Virtusize Auth SDK](https://github.com/virtusize/virtusize_auth_android
 
 ## License
 
-Copyright (c) 2018-21 Virtusize CO LTD (https://www.virtusize.jp)
+Copyright (c) 2018-24 Virtusize CO LTD (https://www.virtusize.jp)

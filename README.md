@@ -68,15 +68,27 @@ You need a unique API key and an Admin account, only available to Virtusize cust
 If you'd like to continue using the old Version 1.x.x, refer to the branch [v1](https://github.com/virtusize/integration_android/tree/v1).
 
 
+
 ### 1. Installation
 
 In your app `build.gradle` file, add the following dependencies:
 
-```groovy
-dependencies {
-  implementation 'com.virtusize.android:virtusize:2.5.5'
-}
-```
+- Groovy
+
+  ```groovy
+  dependencies {
+    implementation 'com.virtusize.android:virtusize:2.5.5'
+  }
+  ```
+
+- Kotlin
+
+  ```kotlin
+  dependencies {
+    implementation("com.virtusize.android:virtusize:2.5.5")
+  }
+  ```
+
 
 
 ### 2. Proguard Rules
@@ -110,12 +122,12 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
 - Kotlin
 
   ```kotlin
-  lateinit var Virtusize: Virtusize
+  lateinit var virtusize: Virtusize
   override fun onCreate() {
       super.onCreate()
   
       // Initialize Virtusize instance for your application
-      Virtusize = VirtusizeBuilder().init(this)
+      virtusize = VirtusizeBuilder().init(this)
       // Only the API key is required
       .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
       // For using the Order API, a user ID is required
@@ -137,14 +149,14 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
 - Java
 
   ```java
-  Virtusize Virtusize;
+  Virtusize virtusize;
   
   @Override
   public void onCreate() {
       super.onCreate();
   
       // Initialize Virtusize instance for your application
-      Virtusize = new VirtusizeBuilder().init(this)
+      virtusize = new VirtusizeBuilder().init(this)
         // Only the API key is required
         .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
         // For using the Order API, a user ID is required
@@ -172,7 +184,7 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
    - Create a `VirtusizeProduct` object with:
   - An `exernalId` that will be used to reference the product in the Virtusize server
      - An `imageURL` for the product image
-   - Pass the `VirtusizeProduct` object to the `Virtusize.load` function
+   - Pass the `VirtusizeProduct` object to the `Virtusize#load` function
 
    Kotlin
 
@@ -184,9 +196,7 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
     imageUrl = "http://www.image.com/goods/12345.jpg"
    )
 
-   (application as App)
-       .Virtusize
-       .load(product)
+   (application as App).virtusize.load(product)
    ```
 
    Java
@@ -197,7 +207,7 @@ Initialize the Virtusize object in your Application class's `onCreate` method us
            "http://www.image.com/goods/12345.jpg"
    );
    
-   app.Virtusize.load(product);
+   app.virtusize.load(product);
    ```
 
 
@@ -238,7 +248,6 @@ Edit your `AndroidManifest.xml` file to include an intent filter and a `<data>` 
 
 
 
-
 ### 4. Register Virtusize Message Handler (Optional)
 
 Please do not forget to unregister message handler in activity or fragment's lifecycle method before it dies or is removed. See the next section for a how-to.
@@ -259,7 +268,7 @@ Please do not forget to unregister message handler in activity or fragment's lif
   override fun onCreate(savedInstanceState: Bundle?) {
       //...
       // Register message handler to listen to events from Virtusize
-      (application as App).Virtusize.registerMessageHandler(activityMessageHandler)
+      (application as App).virtusize.registerMessageHandler(activityMessageHandler)
       //...
   }
   ```
@@ -284,7 +293,7 @@ Please do not forget to unregister message handler in activity or fragment's lif
               Log.e(TAG, error.getMessage());
           }
       }
-      app.Virtusize.registerMessageHandler(virtusizeMessageHandler);
+      app.virtusize.registerMessageHandler(virtusizeMessageHandler);
       //...
   }
   ```
@@ -301,7 +310,7 @@ A message handler is tied to an activity or fragment's lifecycle, but the Virtus
   private val activityMessageHandler: VirtusizeMessageHandler
   override fun onPause() {
           // Always un register message handler in onPause() or depending on implementation onStop().
-          (application as App).Virtusize.unregisterMessageHandler(activityMessageHandler)
+          (application as App).virtusize.unregisterMessageHandler(activityMessageHandler)
           super.onPause()
   }
   ```
@@ -312,7 +321,7 @@ A message handler is tied to an activity or fragment's lifecycle, but the Virtus
   VirtusizeMessageHandler virtusizeMessageHandler;
   @Override
   protected void onPause() {
-      app.Virtusize.unregisterMessageHandler(virtusizeMessageHandler);
+      app.virtusize.unregisterMessageHandler(virtusizeMessageHandler);
       super.onPause();
   }
   ```
@@ -386,18 +395,18 @@ In order to use our default button styles, set `app:virtusizeButtonStyle="virtus
     android:text="@string/virtusize_button_text" />
 ```
 
-**C. Connect the Virtusize button, along with the** `VirtusizeProduct` **object (which you have passed to ** `Virtusize.load`) **into the Virtusize API by using the** `Virtusize.setupVirtusizeView` **function in your activity.**
+**C. Connect the Virtusize button, along with the** `VirtusizeProduct` **object (which you have passed to ** `Virtusize#load`) **into the Virtusize API by using the** `Virtusize#setupVirtusizeView` **function in your activity.**
 
 - Kotlin
 
   ```kotlin
-  (application as App).Virtusize.setupVirtusizeView(exampleVirtusizeButton, product)
+  (application as App).virtusize.setupVirtusizeView(exampleVirtusizeButton, product)
   ```
 
 - Java
 
   ```java
-  app.Virtusize.setupVirtusizeView(virtusizeButton, product);
+  app.virtusize.setupVirtusizeView(virtusizeButton, product);
   ```
 
 
@@ -485,20 +494,20 @@ There are two types of InPage in our Virtusize SDK.
     virtusizeInPageStandard.setButtonTextSize(ExtensionsKt.getSpToPx(10));
     ```
 
-- **Connect the InPage Standard, along with the** `VirtusizeProduct` **object (which you have passed to ** `Virtusize.load`) **into the Virtusize API by using the** `Virtusize.setupVirtusizeView` **function in your activity.**
+- **Connect the InPage Standard, along with the** `VirtusizeProduct` **object (which you have passed to ** `Virtusize#load`) **into the Virtusize API by using the** `Virtusize#setupVirtusizeView` **function in your activity.**
 
   - Kotlin
 
     ```kotlin
     (application as App)
-        .Virtusize
+        .virtusize
         .setupVirtusizeView(exampleVirtusizeInPageStandard, product)
     ```
 
   - Java
 
     ```java
-    app.Virtusize.setupVirtusizeView(virtusizeInPageStandard, product);
+    app.virtusize.setupVirtusizeView(virtusizeInPageStandard, product);
     ```
 
 
@@ -604,20 +613,20 @@ This is a mini version of InPage you can place in your application. The discreet
     virtusizeInPageMini.setButtonTextSize(ExtensionsKt.getSpToPx(10));
     ```
 
-- **Connect the InPage Mini, along with the** `VirtusizeProduct` **object (which you have passed to ** `Virtusize.load`) **into the Virtusize API by using the** `Virtusize.setupVirtusizeView` **function in your activity.**
+- **Connect the InPage Mini, along with the** `VirtusizeProduct` **object (which you have passed to ** `Virtusize#load`) **into the Virtusize API by using the** `Virtusize#setupVirtusizeView` **function in your activity.**
 
   - Kotlin
 
     ```kotlin
     (application as App)
-        .Virtusize
+        .virtusize
         .setupVirtusizeView(exampleVirtusizeInPageMini, product)
     ```
 
   - Java
 
     ```java
-    app.Virtusize.setupVirtusizeView(virtusizeInPageMini, product);
+    app.virtusize.setupVirtusizeView(virtusizeInPageMini, product);
     ```
 
 
@@ -682,10 +691,10 @@ in your activity or fragment after the app is launched
 
     ```kotlin
     // In your Application class's `onCreate` method before the app is launched
-    lateinit var Virtusize: Virtusize
+    lateinit var virtusize: Virtusize
     override fun onCreate() {
         super.onCreate()
-        Virtusize = VirtusizeBuilder().init(this)
+        virtusize = VirtusizeBuilder().init(this)
             .setApiKey(api_key)
             .setUserId(user_id)
             .setEnv(VirtusizeEnvironment.STAGING)
@@ -693,17 +702,17 @@ in your activity or fragment after the app is launched
     }
     
     // In your activity or fragment after the app is launched
-    (application as App).Virtusize.setUserID("user_id")
+    (application as App).virtusize.setUserID("user_id")
     ```
 * Java
 
     ~~~~java
     // In your Application class's `onCreate` method before the app is launched 
-    Virtusize Virtusize;
+    Virtusize virtusize;
     @Override
     public void onCreate() {
     super.onCreate();
-    Virtusize = new VirtusizeBuilder()
+    virtusize = new VirtusizeBuilder()
             .init(this)
             .setApiKey(api_key)
             .setUserId(user_id)
@@ -712,14 +721,14 @@ in your activity or fragment after the app is launched
       
     // In your activity or fragment after the app is launched
     app = (App) getApplication();
-    app.Virtusize.setUserId("user_id");
+    app.virtusize.setUserId("user_id");
     ~~~~
 
 
 
 #### 2. Create a *VirtusizeOrder* object for order data
 
-The ***VirtusizeOrder*** object gets passed to the `Virtusize.sendOrder` method, and has the following attributes:
+The ***VirtusizeOrder*** object gets passed to the `Virtusize#sendOrder` method, and has the following attributes:
 
 __**Note:**__ * means the attribute is required
 
@@ -793,7 +802,7 @@ __**Note:**__ * means the attribute is required
 
 #### 3. Send an Order
 
-Call the `Virtusize.sendOrder` method in your activity or fragment when the user places an order.
+Call the `Virtusize#sendOrder` method in your activity or fragment when the user places an order.
 
 * Kotlin
 
@@ -801,7 +810,7 @@ Call the `Virtusize.sendOrder` method in your activity or fragment when the user
     
     ~~~~kotlin
     (application as App)
-        .Virtusize
+        .virtusize
         .sendOrder(order,
             // This success callback is optional and gets called when the app successfully sends the order
             onSuccess = {
@@ -819,7 +828,7 @@ Call the `Virtusize.sendOrder` method in your activity or fragment when the user
     The `SuccessResponseHandler` and `ErrorResponseHandler` callbacks are optional.
     
     ~~~~java
-    app.Virtusize.sendOrder(order,
+    app.virtusize.sendOrder(order,
             // This success callback is optional and gets called when the app successfully sends the order
             new SuccessResponseHandler() {
                 @Override
@@ -848,10 +857,10 @@ Use the [Virtusize Auth SDK](https://github.com/virtusize/virtusize_auth_android
 ## Examples
 
 1. Kotlin example https://github.com/virtusize/integration_android/tree/master/sampleAppKotlin
-2. Java example https://github.com/virtusize/integration_android/tree/master/sampleappjava
+2. Java example https://github.com/virtusize/integration_android/tree/master/sampleAppJava
 
 
 
 ## License
 
-Copyright (c) 2018-21 Virtusize CO LTD (https://www.virtusize.jp)
+Copyright (c) 2018-24 Virtusize CO LTD (https://www.virtusize.jp)
