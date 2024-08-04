@@ -9,6 +9,9 @@ import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.get
 import org.gradle.plugins.signing.SigningExtension
 
+private val isSnapshot: Boolean
+    get() = Constants.VERSION_NAME.endsWith("SNAPSHOT")
+
 private fun Project.configureRepositories() {
     configure<PublishingExtension> {
         publications {
@@ -19,7 +22,7 @@ private fun Project.configureRepositories() {
                     val snapshotsRepoUrl =
                         "https://s01.oss.sonatype.org/content/repositories/snapshots/"
                     url =
-                        uri(if (Constants.VERSION_NAME.endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
+                        uri(if (isSnapshot) snapshotsRepoUrl else releasesRepoUrl)
                     credentials {
                         username = getProperties("OSSRH_USERNAME")
                         password = getProperties("OSSRH_PASSWORD")
@@ -83,11 +86,11 @@ private fun Project.configureMavenPublication(
 
 private fun Project.configureSigning(publication: PublishingExtension) {
     configure<SigningExtension> {
-        val shouldSign =
+        val hasSigningCredentials =
             getProperties("GPG_KEY_ID") != null &&
                 getProperties("GPG_KEY") != null &&
                 getProperties("GPG_KEY_PASSWORD") != null
-        isRequired = shouldSign && gradle.taskGraph.hasTask("publish")
+        isRequired = !isSnapshot && hasSigningCredentials
         if (isRequired) {
             useInMemoryPgpKeys(
                 getProperties("GPG_KEY_ID"),
