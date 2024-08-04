@@ -86,11 +86,11 @@ private fun Project.configureMavenPublication(
 
 private fun Project.configureSigning(publication: PublishingExtension) {
     configure<SigningExtension> {
-        val hasSigningCredentials =
+        val areSigningCredentialsProvided =
             getProperties("GPG_KEY_ID") != null &&
                 getProperties("GPG_KEY") != null &&
                 getProperties("GPG_KEY_PASSWORD") != null
-        isRequired = !isSnapshot && hasSigningCredentials
+        isRequired = !isSnapshot && areSigningCredentialsProvided
         if (isRequired) {
             useInMemoryPgpKeys(
                 getProperties("GPG_KEY_ID"),
