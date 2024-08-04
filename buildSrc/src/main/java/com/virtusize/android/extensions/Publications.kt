@@ -30,7 +30,7 @@ private fun Project.configureRepositories() {
     }
 }
 
-val mavenPublicationName = "maven"
+private val mavenPublicationName = "maven"
 
 private fun Project.configureMavenPublication(
     publishId: String,
