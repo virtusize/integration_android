@@ -7,7 +7,6 @@ import com.virtusize.android.ui.utils.Font
 
 // The object that wraps Font utility functions
 internal object FontUtils {
-
     /**
      * Sets up the TypeFace for a TextView by the display language
      */
@@ -15,7 +14,7 @@ internal object FontUtils {
         context: Context,
         textView: TextView,
         language: VirtusizeLanguage?,
-        fontType: Font.FontType
+        fontType: Font.FontType,
     ) {
         setTypeFaces(context, mutableListOf(textView), language, fontType)
     }
@@ -27,7 +26,7 @@ internal object FontUtils {
         context: Context,
         textViews: List<TextView>,
         language: VirtusizeLanguage?,
-        fontType: Font.FontType
+        fontType: Font.FontType,
     ) {
         when (language) {
             VirtusizeLanguage.EN -> {
@@ -38,7 +37,7 @@ internal object FontUtils {
                     context,
                     textViews,
                     Font.FontName.NOTO_SANS_CJK_JP,
-                    fontType
+                    fontType,
                 )
             }
             VirtusizeLanguage.KR -> {
@@ -46,7 +45,7 @@ internal object FontUtils {
                     context,
                     textViews,
                     Font.FontName.NOTO_SANS_CJK_KR,
-                    fontType
+                    fontType,
                 )
             }
 

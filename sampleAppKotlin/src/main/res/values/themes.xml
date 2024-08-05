@@ -1,0 +1,22 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="VirtusizeDesignSystemFlow">
+        <item name="android:paddingStart">@dimen/virtusize_16dp</item>
+        <item name="android:paddingEnd">@dimen/virtusize_16dp</item>
+        <item name="flow_horizontalBias">0</item>
+        <item name="flow_horizontalGap">@dimen/virtusize_8dp</item>
+        <item name="flow_horizontalStyle">packed</item>
+        <item name="flow_verticalBias">0</item>
+        <item name="flow_verticalGap">@dimen/virtusize_8dp</item>
+        <item name="flow_wrapMode">chain</item>
+    </style>
+
+</resources>

@@ -7,5 +7,5 @@ package com.virtusize.android.data.remote
  */
 data class BrandSizing(
     val compare: String,
-    val itemBrand: Boolean
+    val itemBrand: Boolean,
 )

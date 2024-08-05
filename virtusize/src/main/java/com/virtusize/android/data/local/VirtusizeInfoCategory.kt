@@ -7,5 +7,5 @@ enum class VirtusizeInfoCategory(val value: String) {
     MODEL_INFO("modelInfo"),
     GENERAL_FIT("generalFit"),
     BRAND_SIZING("brandSizing"),
-    MATERIAL("material")
+    MATERIAL("material"),
 }

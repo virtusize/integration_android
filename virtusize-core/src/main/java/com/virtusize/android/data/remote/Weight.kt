@@ -7,5 +7,5 @@ package com.virtusize.android.data.remote
  */
 data class Weight(
     val factor: String,
-    val value: Float
+    val value: Float,
 )

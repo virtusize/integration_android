@@ -8,5 +8,5 @@ enum class VirtusizeButtonTextSize {
     SMALLER,
     NORMAL,
     LARGE,
-    LARGER
+    LARGER,
 }

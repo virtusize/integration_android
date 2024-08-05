@@ -2,19 +2,24 @@ package com.virtusize.sampleappkotlin
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.virtusize.android.data.local.*
+import com.virtusize.android.data.local.VirtusizeError
+import com.virtusize.android.data.local.VirtusizeEvent
+import com.virtusize.android.data.local.VirtusizeMessageHandler
+import com.virtusize.android.data.local.VirtusizeOrder
+import com.virtusize.android.data.local.VirtusizeOrderItem
+import com.virtusize.android.data.local.VirtusizeProduct
+import com.virtusize.android.data.local.VirtusizeViewStyle
+import com.virtusize.android.ui.button.VirtusizeButtonStyle
 import com.virtusize.android.util.dpInPx
 import com.virtusize.android.util.spToPx
-import com.virtusize.android.ui.button.VirtusizeButtonStyle
 import com.virtusize.sampleappkotlin.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
-
     companion object {
         private const val TAG = "MainFragment"
     }
@@ -23,24 +28,27 @@ class MainFragment : Fragment() {
     private lateinit var product: VirtusizeProduct
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         binding = FragmentMainBinding.inflate(inflater, container, false)
 
-        product = VirtusizeProduct(
-            externalId = "vs_dress",
-            imageUrl = "http://www.image.com/goods/12345.jpg"
-        )
-        (activity?.application as App).Virtusize.load(product)
+        product =
+            VirtusizeProduct(
+                externalId = "vs_dress",
+                imageUrl = "http://www.image.com/goods/12345.jpg",
+            )
+        (activity?.application as App).virtusize.load(product)
 
         /*
          * Set up Virtusize button
          */
+
         // Virtusize opens automatically when button is clicked
-        (activity?.application as App).Virtusize.setupVirtusizeView(
+        (activity?.application as App).virtusize.setupVirtusizeView(
             binding.exampleVirtusizeButton,
-            product = product
+            product = product,
         )
         // Set up the Virtusize view style programmatically
         binding.exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.TEAL
@@ -48,10 +56,10 @@ class MainFragment : Fragment() {
         /*
          * Set up Virtusize InPage Standard
          */
-        (activity?.application as App).Virtusize
+        (activity?.application as App).virtusize
             .setupVirtusizeView(
                 virtusizeView = binding.exampleVirtusizeInPageStandard,
-                product = product
+                product = product,
             )
         binding.exampleVirtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
         // If you like, you can set up the horizontal margins between the edges of the app screen and the InPage Standard view
@@ -72,9 +80,9 @@ class MainFragment : Fragment() {
          * Set up Virtusize InPage Mini
          */
 
-        (activity?.application as App).Virtusize.setupVirtusizeView(
+        (activity?.application as App).virtusize.setupVirtusizeView(
             virtusizeView = binding.exampleVirtusizeInPageMini,
-            product = product
+            product = product,
         )
         binding.exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.TEAL
 
@@ -91,16 +99,19 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         /*
          * Register message handler to listen to events from Virtusize
          */
-        (activity?.application as App).Virtusize.registerMessageHandler(activityMessageHandler)
+        (activity?.application as App).virtusize.registerMessageHandler(activityMessageHandler)
 
         /*
          * Load the product for all the Virtusize views
          */
-        (activity?.application as App).Virtusize.load(product)
+        (activity?.application as App).virtusize.load(product)
 
         /*
          * To close the Virtusize page
@@ -110,9 +121,7 @@ class MainFragment : Fragment() {
          * exampleVirtusizeInPageMini.dismissVirtusizeView()
          */
 
-        /*
-         * The sample function to send an order to the Virtusize server
-         */
+        // The sample function to send an order to the Virtusize server
         sendOrderSample()
 
         // Navigate to Virtusize Design System
@@ -132,25 +141,27 @@ class MainFragment : Fragment() {
      */
     private fun sendOrderSample() {
         val order = VirtusizeOrder("888400111032")
-        order.items = mutableListOf(
-            VirtusizeOrderItem(
-                "P001",
-                "L",
-                "Large",
-                "P001_SIZEL_RED",
-                "http://images.example.com/products/P001/red/image1xl.jpg",
-                "Red",
-                "W",
-                51000.00,
-                "JPY",
-                1,
-                "http://example.com/products/P001"
+        order.items =
+            mutableListOf(
+                VirtusizeOrderItem(
+                    "P001",
+                    "L",
+                    "Large",
+                    "P001_SIZEL_RED",
+                    "http://images.example.com/products/P001/red/image1xl.jpg",
+                    "Red",
+                    "W",
+                    51000.00,
+                    "JPY",
+                    1,
+                    "http://example.com/products/P001",
+                ),
             )
-        )
 
         (activity?.application as App)
-            .Virtusize
-            .sendOrder(order,
+            .virtusize
+            .sendOrder(
+                order,
                 // this optional success callback is called when the app successfully sends the order
                 onSuccess = {
                     Log.i(TAG, "Successfully sent the order")
@@ -158,23 +169,28 @@ class MainFragment : Fragment() {
                 // this optional error callback is called when an error occurs when the app is sending the order
                 onError = { error ->
                     Log.e(TAG, error.message)
-                })
+                },
+            )
     }
 
     override fun onPause() {
         // Always un register message handler in onPause() or depending on implementation onStop().
         (activity?.application as App)
-            .Virtusize.unregisterMessageHandler(activityMessageHandler)
+            .virtusize.unregisterMessageHandler(activityMessageHandler)
         super.onPause()
     }
 
-    private val activityMessageHandler = object : VirtusizeMessageHandler {
-        override fun onEvent(product: VirtusizeProduct, event: VirtusizeEvent) {
-            Log.i(TAG, event.name)
-        }
+    private val activityMessageHandler =
+        object : VirtusizeMessageHandler {
+            override fun onEvent(
+                product: VirtusizeProduct,
+                event: VirtusizeEvent,
+            ) {
+                Log.i(TAG, event.name)
+            }
 
-        override fun onError(error: VirtusizeError) {
-            Log.e(TAG, error.message)
+            override fun onError(error: VirtusizeError) {
+                Log.e(TAG, error.message)
+            }
         }
-    }
 }

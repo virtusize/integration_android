@@ -19,5 +19,5 @@ data class StoreProductAdditionalInfo(
     val modelInfo: Map<String, Any>?,
     val fit: String?,
     val style: String?,
-    val brandSizing: BrandSizing?
+    val brandSizing: BrandSizing?,
 )

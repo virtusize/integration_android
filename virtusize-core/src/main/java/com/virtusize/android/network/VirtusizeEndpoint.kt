@@ -18,7 +18,7 @@ enum class VirtusizeEndpoint {
     User,
     UserProducts,
     UserBodyMeasurements,
-    I18N
+    I18N,
 }
 
 /**
@@ -37,10 +37,11 @@ fun VirtusizeEndpoint.getPath(env: VirtusizeEnvironment? = null): String {
             "/item"
         }
         VirtusizeEndpoint.VirtusizeWebView -> {
-            val stgPath = when (env) {
-                VirtusizeEnvironment.TESTING, VirtusizeEnvironment.STAGING -> "staging"
-                else -> "latest"
-            }
+            val stgPath =
+                when (env) {
+                    VirtusizeEnvironment.TESTING, VirtusizeEnvironment.STAGING -> "staging"
+                    else -> "latest"
+                }
             "/a/aoyama/$stgPath/sdk-webview.html"
         }
         VirtusizeEndpoint.ProductMetaDataHints -> {

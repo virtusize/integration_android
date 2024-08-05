@@ -11,5 +11,5 @@ data class BodyProfileRecommendedSizeNew(
     val thresholdFitScore: Double,
     val virtualItem: VirtualItem?,
     val willFit: Boolean,
-    val willFitForSizes: WillFitForSizes?
+    val willFitForSizes: WillFitForSizes?,
 )

@@ -15,10 +15,13 @@ import com.virtusize.android.util.VirtusizeUtils
 interface VirtusizeView {
     // The product which is bounded with this Virtusize
     var clientProduct: VirtusizeProduct?
+
     // The parameter object to be passed to the Virtusize web app
     var virtusizeParams: VirtusizeParams
+
     // Receives Virtusize messages
     var virtusizeMessageHandler: VirtusizeMessageHandler
+
     // The Virtusize view that opens when the view is clicked
     var virtusizeDialogFragment: VirtusizeWebViewFragment
 
@@ -31,7 +34,7 @@ interface VirtusizeView {
     fun initialSetup(
         product: VirtusizeProduct,
         params: VirtusizeParams,
-        messageHandler: VirtusizeMessageHandler
+        messageHandler: VirtusizeMessageHandler,
     ) {
         clientProduct = product
         virtusizeParams = params
@@ -62,13 +65,16 @@ interface VirtusizeView {
     /**
      * A clickable function to open the Virtusize WebView
      */
-    fun openVirtusizeWebView(context: Context, product: VirtusizeProduct) {
+    fun openVirtusizeWebView(
+        context: Context,
+        product: VirtusizeProduct,
+    ) {
         VirtusizeUtils.openVirtusizeWebView(
             context,
             virtusizeParams,
             virtusizeDialogFragment,
             product,
-            virtusizeMessageHandler
+            virtusizeMessageHandler,
         )
     }
 }

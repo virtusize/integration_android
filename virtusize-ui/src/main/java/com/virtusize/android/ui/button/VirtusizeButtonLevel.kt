@@ -6,5 +6,5 @@ package com.virtusize.android.ui.button
 enum class VirtusizeButtonLevel {
     FLUID,
     BLOCK,
-    NONE
+    NONE,
 }

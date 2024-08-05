@@ -10,5 +10,5 @@ enum class VirtusizeButtonStyle {
     ROUND,
     ROUND_INVERTED,
     SQUARE,
-    NONE
+    NONE,
 }

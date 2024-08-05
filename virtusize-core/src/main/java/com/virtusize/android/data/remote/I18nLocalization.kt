@@ -19,11 +19,11 @@ data class I18nLocalization(
     val bodyProfileOneSizeText: String,
     val sizeComparisonMultiSizeText: String,
     val bodyProfileMultiSizeText: String,
-    val defaultNoDataText: String
+    val defaultNoDataText: String,
 ) {
-
     enum class TrimType {
-        ONELINE, MULTIPLELINES
+        ONELINE,
+        MULTIPLELINES,
     }
 
     /**
@@ -37,15 +37,15 @@ data class I18nLocalization(
     /**
      * Gets the product comparison text for a one-size product
      */
-    internal fun getOneSizeProductComparisonText(
-        sizeComparisonRecommendedSize: SizeComparisonRecommendedSize
-    ): String {
-        if (sizeComparisonRecommendedSize.bestFitScore > 84)
+    internal fun getOneSizeProductComparisonText(sizeComparisonRecommendedSize: SizeComparisonRecommendedSize): String {
+        if (sizeComparisonRecommendedSize.bestFitScore > 84) {
             return "$oneSizeCloseTopText ${I18nConstants.BOLD_START_PLACEHOLDER}" +
                 "$oneSizeCloseBottomText${I18nConstants.BOLD_END_PLACEHOLDER}"
-        if (sizeComparisonRecommendedSize.isStoreProductSmaller == true)
+        }
+        if (sizeComparisonRecommendedSize.isStoreProductSmaller == true) {
             return "$oneSizeSmallerTopText ${I18nConstants.BOLD_START_PLACEHOLDER}" +
                 "$oneSizeSmallerBottomText${I18nConstants.BOLD_END_PLACEHOLDER}"
+        }
         return "$oneSizeLargerTopText ${I18nConstants.BOLD_START_PLACEHOLDER}" +
             "$oneSizeLargerBottomText${I18nConstants.BOLD_END_PLACEHOLDER}"
     }
@@ -53,9 +53,7 @@ data class I18nLocalization(
     /**
      * Gets the product comparison text for a multi-size product
      */
-    internal fun getMultiSizeProductComparisonText(
-        sizeComparisonRecommendedSizeName: String
-    ): String {
+    internal fun getMultiSizeProductComparisonText(sizeComparisonRecommendedSizeName: String): String {
         return "$sizeComparisonMultiSizeText ${I18nConstants.BOLD_START_PLACEHOLDER}" +
             "$sizeComparisonRecommendedSizeName${I18nConstants.BOLD_END_PLACEHOLDER}"
     }

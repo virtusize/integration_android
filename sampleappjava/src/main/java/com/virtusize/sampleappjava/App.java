@@ -1,6 +1,7 @@
 package com.virtusize.sampleappjava;
 
 import android.app.Application;
+
 import com.virtusize.android.Virtusize;
 import com.virtusize.android.VirtusizeBuilder;
 import com.virtusize.android.data.local.VirtusizeEnvironment;
@@ -11,14 +12,14 @@ import java.util.Arrays;
 
 public class App extends Application {
 
-    Virtusize Virtusize;
+    Virtusize virtusize;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         // Initialize Virtusize instance for your application
-        Virtusize = new VirtusizeBuilder().init(this)
+        virtusize = new VirtusizeBuilder().init(this)
                 // Only the API key is required
                 .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
                 // For using the Order API, a user ID is required
