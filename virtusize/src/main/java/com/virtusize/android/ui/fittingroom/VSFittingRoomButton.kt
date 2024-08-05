@@ -7,7 +7,8 @@ import com.virtusize.android.ui.button.VirtusizeRoundImageButton
 import com.virtusize.android.ui.button.VirtusizeRoundImageButtonStyle
 
 class
-VSFittingRoomButton@JvmOverloads
+VSFittingRoomButton
+    @JvmOverloads
     constructor(
         context: Context,
         attrs: AttributeSet? = null,
