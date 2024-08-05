@@ -8,14 +8,14 @@ import org.json.JSONObject
  * This class parses a JSONObject to the [Product] object
  */
 open class ProductJsonParser : VirtusizeJsonParser<Product> {
-
     override fun parse(json: JSONObject): Product? {
         val id = json.optInt(FIELD_ID)
         var sizes = emptyList<ProductSize>()
         json.optJSONArray(FIELD_SIZES)?.let { jsonArray ->
-            sizes = (0 until jsonArray.length())
-                .map { idx -> jsonArray.getJSONObject(idx) }
-                .mapNotNull { ProductSizeJsonParser().parse(it) }
+            sizes =
+                (0 until jsonArray.length())
+                    .map { idx -> jsonArray.getJSONObject(idx) }
+                    .mapNotNull { ProductSizeJsonParser().parse(it) }
         }
         val productType = json.optInt(FIELD_PRODUCT_TYPE)
         val name = json.optString(FIELD_NAME)
@@ -30,7 +30,7 @@ open class ProductJsonParser : VirtusizeJsonParser<Product> {
             productType = productType,
             name = name,
             cloudinaryPublicId = cloudinaryPublicId,
-            storeId = storeId
+            storeId = storeId,
         )
     }
 

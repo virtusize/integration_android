@@ -8,7 +8,7 @@ enum class VirtusizeEnvironment {
     STAGING,
     GLOBAL,
     JAPAN,
-    KOREA
+    KOREA,
 }
 
 /**
@@ -70,9 +70,11 @@ fun VirtusizeEnvironment.sizeRecommendationApiBaseUrl(): String {
 fun VirtusizeEnvironment.virtusizeUrl(): String {
     return when (this) {
         VirtusizeEnvironment.STAGING,
-        VirtusizeEnvironment.GLOBAL -> "https://static.api.virtusize.com"
+        VirtusizeEnvironment.GLOBAL,
+        -> "https://static.api.virtusize.com"
         VirtusizeEnvironment.TESTING,
-        VirtusizeEnvironment.JAPAN -> "https://static.api.virtusize.jp"
+        VirtusizeEnvironment.JAPAN,
+        -> "https://static.api.virtusize.jp"
         VirtusizeEnvironment.KOREA -> "https://static.api.virtusize.kr"
     }
 }

@@ -6,5 +6,5 @@ package com.virtusize.android.ui.button
 enum class VirtusizeButtonFontWeight {
     BOLD,
     REGULAR,
-    NONE
+    NONE,
 }

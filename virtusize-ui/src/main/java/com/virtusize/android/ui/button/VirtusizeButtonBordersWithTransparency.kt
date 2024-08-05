@@ -7,5 +7,5 @@ enum class VirtusizeButtonBordersWithTransparency {
     NO_BORDER,
     TRANSPARENT,
     NO_BORDER_AND_TRANSPARENT,
-    NONE
+    NONE,
 }

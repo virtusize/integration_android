@@ -14,19 +14,22 @@ import com.virtusize.android.ui.button.VirtusizeRoundImageButtonStyle
 import com.virtusize.sampleappkotlin.R
 import com.virtusize.sampleappkotlin.databinding.FragmentButtonBinding
 
-class ButtonFragment: Fragment() {
-
+class ButtonFragment : Fragment() {
     private lateinit var binding: FragmentButtonBinding
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         binding = FragmentButtonBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.defaultButton.virtusizeButtonStyle = VirtusizeButtonStyle.DEFAULT

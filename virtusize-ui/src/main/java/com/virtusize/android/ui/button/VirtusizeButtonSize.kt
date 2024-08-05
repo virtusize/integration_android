@@ -5,5 +5,5 @@ package com.virtusize.android.ui.button
  */
 enum class VirtusizeButtonSize {
     STANDARD,
-    SMALL
+    SMALL,
 }

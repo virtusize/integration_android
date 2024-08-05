@@ -18,7 +18,7 @@ enum class VirtusizeEvents {
     UserAuthData,
     UserLoggedIn,
     UserLoggedOut,
-    UserDeletedData
+    UserDeletedData,
 }
 
 /**
@@ -48,8 +48,8 @@ fun VirtusizeEvents.getEventName(): String {
  * Based on a user's selection of the type in the web view, the SDK displays a corresponding InPage comparison
  */
 enum class SizeRecommendationType {
-    body,
-    compareProduct
+    Body,
+    CompareProduct,
 }
 
 /**

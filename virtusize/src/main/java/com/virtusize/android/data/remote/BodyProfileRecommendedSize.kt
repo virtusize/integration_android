@@ -7,5 +7,5 @@ package com.virtusize.android.data.remote
  */
 data class BodyProfileRecommendedSize(
     val product: Product,
-    internal val sizeName: String
+    internal val sizeName: String,
 )

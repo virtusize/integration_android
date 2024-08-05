@@ -27,8 +27,9 @@ val Int.dp: Float
  * Float extension function to convert sp to px
  */
 val Float.sp: Float
-    get() = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_SP,
-        this,
-        Resources.getSystem().displayMetrics
-    )
+    get() =
+        TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_SP,
+            this,
+            Resources.getSystem().displayMetrics,
+        )

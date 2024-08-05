@@ -5,5 +5,5 @@ data class VirtualItem(
     val hip: Double,
     val inseam: Double,
     val sleeve: Double,
-    val waist: Double
+    val waist: Double,
 )

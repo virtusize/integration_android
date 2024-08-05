@@ -11,22 +11,28 @@ import com.virtusize.sampleappkotlin.databinding.DesignSystemRowItemBinding
 
 class DesignSystemAdapter(private val context: Context, private val dataSet: Array<String>) :
     RecyclerView.Adapter<DesignSystemAdapter.ViewHolder>() {
-
-    private val onClickMap: Map<String, Int> = mutableMapOf(
-        context.getString(R.string.virtusize_button) to R.id.action_designSystemFragment_to_buttonFragment,
-        context.getString(R.string.virtusize_tooltip) to R.id.action_designSystemFragment_to_tooltipFragment,
-        context.getString(R.string.virtusize_avatar) to R.id.action_designSystemFragment_to_avatarFragment
-    )
+    private val onClickMap: Map<String, Int> =
+        mutableMapOf(
+            context.getString(R.string.virtusize_button) to R.id.action_designSystemFragment_to_buttonFragment,
+            context.getString(R.string.virtusize_tooltip) to R.id.action_designSystemFragment_to_tooltipFragment,
+            context.getString(R.string.virtusize_avatar) to R.id.action_designSystemFragment_to_avatarFragment,
+        )
 
     class ViewHolder(binding: DesignSystemRowItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val textView: TextView = binding.textView
     }
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(
+        viewGroup: ViewGroup,
+        viewType: Int,
+    ): ViewHolder {
         return ViewHolder(DesignSystemRowItemBinding.inflate(LayoutInflater.from(viewGroup.context)))
     }
 
-    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        viewHolder: ViewHolder,
+        position: Int,
+    ) {
         viewHolder.textView.text = dataSet[position]
 
         viewHolder.itemView.setOnClickListener { view ->
@@ -37,5 +43,4 @@ class DesignSystemAdapter(private val context: Context, private val dataSet: Arr
     }
 
     override fun getItemCount() = dataSet.size
-
 }

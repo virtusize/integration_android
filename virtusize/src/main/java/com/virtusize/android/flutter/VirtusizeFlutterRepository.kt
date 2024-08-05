@@ -27,7 +27,7 @@ import java.net.HttpURLConnection
 
 class VirtusizeFlutterRepository(
     context: Context,
-    private val messageHandler: VirtusizeMessageHandler
+    private val messageHandler: VirtusizeMessageHandler,
 ) {
     private val apiService: VirtusizeAPIService =
         VirtusizeAPIService.getInstance(context, messageHandler)
@@ -42,13 +42,13 @@ class VirtusizeFlutterRepository(
 
     private suspend fun sendEventsAndProductImage(
         product: VirtusizeProduct,
-        pdcResponse: VirtusizeApiResponse<ProductCheck>
+        pdcResponse: VirtusizeApiResponse<ProductCheck>,
     ) {
         if (pdcResponse.isSuccessful) {
             product.productCheckData = pdcResponse.successData
             sendEvent(
                 product,
-                VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName())
+                VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()),
             )
             val productCheck = pdcResponse.successData
             productCheck?.data?.apply {
@@ -61,7 +61,7 @@ class VirtusizeFlutterRepository(
                             if (!sendProductImageResponse.isSuccessful) {
                                 sendProductImageResponse.failureData?.let {
                                     messageHandler.onError(
-                                        it
+                                        it,
                                     )
                                 }
                             }
@@ -72,18 +72,22 @@ class VirtusizeFlutterRepository(
 
                     sendEvent(
                         product,
-                        VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName())
+                        VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName()),
                     )
                 }
             }
         }
     }
 
-    private suspend fun sendEvent(product: VirtusizeProduct, vsEvent: VirtusizeEvent) {
-        val sendEventResponse = apiService.sendEvent(
-            event = vsEvent,
-            withDataProduct = product.productCheckData
-        )
+    private suspend fun sendEvent(
+        product: VirtusizeProduct,
+        vsEvent: VirtusizeEvent,
+    ) {
+        val sendEventResponse =
+            apiService.sendEvent(
+                event = vsEvent,
+                withDataProduct = product.productCheckData,
+            )
         if (sendEventResponse.isSuccessful) {
             messageHandler.onEvent(product, vsEvent)
         }
@@ -93,8 +97,7 @@ class VirtusizeFlutterRepository(
 
     suspend fun getProductTypes() = apiService.getProductTypes().successData
 
-    suspend fun getI18nLocalization(language: VirtusizeLanguage?) =
-        apiService.getI18n(language).successData
+    suspend fun getI18nLocalization(language: VirtusizeLanguage?) = apiService.getI18n(language).successData
 
     suspend fun getUserSessionResponse(): String? {
         val userSessionInfo = apiService.getUserSessionInfo().successData
@@ -116,8 +119,8 @@ class VirtusizeFlutterRepository(
         } catch (e: JSONException) {
             messageHandler.onError(
                 VirtusizeErrorType.JsonParsingError.virtusizeError(
-                    extraMessage = e.localizedMessage
-                )
+                    extraMessage = e.localizedMessage,
+                ),
             )
         }
     }
@@ -137,11 +140,11 @@ class VirtusizeFlutterRepository(
     suspend fun getBodyProfileRecommendedSize(
         productTypes: List<ProductType>,
         storeProduct: Product,
-        userBodyProfile: UserBodyProfile
+        userBodyProfile: UserBodyProfile,
     ) = apiService.getBodyProfileRecommendedSize(
         productTypes,
         storeProduct,
-        userBodyProfile
+        userBodyProfile,
     ).successData
 
     suspend fun deleteUser(): Any? {
@@ -156,7 +159,7 @@ class VirtusizeFlutterRepository(
         virtusize: Virtusize?,
         orderMap: Map<String, Any?>,
         onSuccess: ((Any?) -> Unit)?,
-        onError: ((VirtusizeError) -> Unit)?
+        onError: ((VirtusizeError) -> Unit)?,
     ) {
         if (virtusize?.params?.externalUserId.isNullOrEmpty()) {
             VirtusizeErrorType.UserIdNullOrEmpty.throwError()
@@ -166,7 +169,7 @@ class VirtusizeFlutterRepository(
             val sendOrderResponse =
                 apiService.sendOrder(
                     storeInfoResponse.successData?.region,
-                    VirtusizeOrder.parseMap(orderMap)
+                    VirtusizeOrder.parseMap(orderMap),
                 )
             if (sendOrderResponse.isSuccessful) {
                 onSuccess?.invoke(sendOrderResponse.successData)

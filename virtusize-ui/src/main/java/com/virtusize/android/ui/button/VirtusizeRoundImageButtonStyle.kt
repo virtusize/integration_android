@@ -6,5 +6,5 @@ package com.virtusize.android.ui.button
 enum class VirtusizeRoundImageButtonStyle {
     DEFAULT,
     INVERTED,
-    COLOR
+    COLOR,
 }

@@ -55,21 +55,21 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, error.getMessage());
             }
         };
-        app.Virtusize.registerMessageHandler(virtusizeMessageHandler);
+        app.virtusize.registerMessageHandler(virtusizeMessageHandler);
 
         VirtusizeProduct product = new VirtusizeProduct(
                 "694",
                 "http://www.image.com/goods/12345.jpg"
         );
-        app.Virtusize.load(product);
+        app.virtusize.load(product);
 
-        app.Virtusize.setupVirtusizeView(virtusizeButton, product);
+        app.virtusize.setupVirtusizeView(virtusizeButton, product);
         /*
          * To set up the button style programmatically
          * virtusizeButton.setVirtusizeViewStyle(VirtusizeViewStyle.BLACK);
          */
 
-        app.Virtusize.setupVirtusizeView(virtusizeInPageStandard, product);
+        app.virtusize.setupVirtusizeView(virtusizeInPageStandard, product);
         // Set up the InPage Standard style programmatically
         virtusizeInPageStandard.setVirtusizeViewStyle(VirtusizeViewStyle.TEAL);
         /*
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         virtusizeInPageStandard.setButtonTextSize(ExtensionsKt.getSpToPx(10));
 
 
-        app.Virtusize.setupVirtusizeView(virtusizeInPageMini, product);
+        app.virtusize.setupVirtusizeView(virtusizeInPageMini, product);
         virtusizeInPageMini.setVirtusizeViewStyle(VirtusizeViewStyle.TEAL);
         /*
          * If you like, you can set up the background of InPage Mini view as long as it passes WebAIM contrast test.
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         ));
         order.setItems(items);
 
-        app.Virtusize.sendOrder(order,
+        app.virtusize.sendOrder(order,
                 // this optional success callback is called when the app successfully sends the order
                 new SuccessResponseHandler() {
                     @Override
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        app.Virtusize.unregisterMessageHandler(virtusizeMessageHandler);
+        app.virtusize.unregisterMessageHandler(virtusizeMessageHandler);
         super.onPause();
     }
 }

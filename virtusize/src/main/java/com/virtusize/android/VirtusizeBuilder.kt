@@ -118,9 +118,7 @@ class VirtusizeBuilder {
      * @param detailsPanelCards the list of [VirtusizeInfoCategory]
      * @return VirtusizeBuilder
      */
-    fun setDetailsPanelCards(
-        detailsPanelCards: MutableList<VirtusizeInfoCategory>
-    ): VirtusizeBuilder {
+    fun setDetailsPanelCards(detailsPanelCards: MutableList<VirtusizeInfoCategory>): VirtusizeBuilder {
         this.detailsPanelCards = detailsPanelCards
         return this
     }
@@ -137,17 +135,18 @@ class VirtusizeBuilder {
         if (context == null) {
             VirtusizeErrorType.NullContext.throwError()
         }
-        val params = VirtusizeParams(
-            context = context!!,
-            apiKey = apiKey,
-            environment = env,
-            region = region,
-            language = language ?: region.defaultLanguage(),
-            allowedLanguages = allowedLanguages,
-            externalUserId = userId,
-            showSGI = showSGI,
-            detailsPanelCards = detailsPanelCards
-        )
+        val params =
+            VirtusizeParams(
+                context = context!!,
+                apiKey = apiKey,
+                environment = env,
+                region = region,
+                language = language ?: region.defaultLanguage(),
+                allowedLanguages = allowedLanguages,
+                externalUserId = userId,
+                showSGI = showSGI,
+                detailsPanelCards = detailsPanelCards,
+            )
         return Virtusize(context = context!!, params = params)
     }
 }

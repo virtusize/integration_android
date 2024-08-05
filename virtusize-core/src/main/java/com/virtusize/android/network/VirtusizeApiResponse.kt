@@ -17,6 +17,7 @@ sealed class VirtusizeApiResponse<out R> {
 
     // The successful response with data of <T>
     data class Success<out T>(val data: T) : VirtusizeApiResponse<T>()
+
     // The error response with an error of [VirtusizeError]
     data class Error(val error: VirtusizeError) : VirtusizeApiResponse<Nothing>()
 
