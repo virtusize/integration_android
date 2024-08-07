@@ -13,5 +13,5 @@ data class ProductCheck(
     val productId: String,
     val name: String,
     // the JSON response as a String (For the Flutter SDK)
-    val jsonString: String?
+    val jsonString: String?,
 ) : Parcelable

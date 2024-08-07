@@ -31,7 +31,7 @@ internal class StoreJsonParser : VirtusizeJsonParser<Store> {
             updated,
             disabled,
             typeMapperEnabled,
-            region
+            region,
         )
     }
 

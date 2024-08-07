@@ -8,16 +8,17 @@ import com.virtusize.sampleappkotlin.databinding.ActivityProductBinding
 
 class ProductActivity : AppCompatActivity() {
     companion object {
-        val externalProductIds = listOf(
-            "vs_dress",
-            "vs_top",
-            "vs_shirt",
-            "vs_coat",
-            "vs_jacket",
-            "vs_sweater",
-            "vs_skirt",
-            "vs_pants"
-        )
+        val externalProductIds =
+            listOf(
+                "vs_dress",
+                "vs_top",
+                "vs_shirt",
+                "vs_coat",
+                "vs_jacket",
+                "vs_sweater",
+                "vs_skirt",
+                "vs_pants",
+            )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,27 +28,28 @@ class ProductActivity : AppCompatActivity() {
         setContentView(binding.root)
         setContentView(R.layout.activity_product)
 
-        val product =  VirtusizeProduct(
-            externalId = externalProductIds.random(),
-            imageUrl = "http://www.image.com/goods/12345.jpg"
-        )
-
-        (application as App).Virtusize.load(product)
-
-        (application as App).Virtusize.setupVirtusizeView(
-            virtusizeView = binding.exampleVirtusizeButton,
-            product = product
-        )
-
-        (application as App).Virtusize
-            .setupVirtusizeView(
-                virtusizeView = binding.exampleVirtusizeInPageStandard,
-                product = product
+        val product =
+            VirtusizeProduct(
+                externalId = externalProductIds.random(),
+                imageUrl = "http://www.image.com/goods/12345.jpg",
             )
 
-        (application as App).Virtusize.setupVirtusizeView(
+        (application as App).virtusize.load(product)
+
+        (application as App).virtusize.setupVirtusizeView(
+            virtusizeView = binding.exampleVirtusizeButton,
+            product = product,
+        )
+
+        (application as App).virtusize
+            .setupVirtusizeView(
+                virtusizeView = binding.exampleVirtusizeInPageStandard,
+                product = product,
+            )
+
+        (application as App).virtusize.setupVirtusizeView(
             virtusizeView = binding.exampleVirtusizeInPageMini,
-            product = product
+            product = product,
         )
 
         binding.nextProductButton.setOnClickListener {

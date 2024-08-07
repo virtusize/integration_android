@@ -17,13 +17,13 @@ import com.virtusize.android.util.getDrawableResourceByName
  */
 internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet) :
     LinearLayout(context, attrs) {
-
     // The product type to determine the UI style
     private var productImageType: ProductImageType = ProductImageType.STORE
 
     // This enum contains the possible product types
     enum class ProductImageType {
-        STORE, USER
+        STORE,
+        USER,
     }
 
     private val binding = ViewProductImageBinding.inflate(LayoutInflater.from(context), this)
@@ -31,33 +31,35 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet) 
     init {
         orientation = VERTICAL
 
-        val typedArray = context.obtainStyledAttributes(
-            attrs,
-            R.styleable.VirtusizeProductImageView,
-            0,
-            0
-        )
-
-        productImageType = ProductImageType.values()[
-            typedArray.getInt(
-                R.styleable.VirtusizeProductImageView_productImageType,
-                0
+        val typedArray =
+            context.obtainStyledAttributes(
+                attrs,
+                R.styleable.VirtusizeProductImageView,
+                0,
+                0,
             )
-        ]
+
+        productImageType =
+            ProductImageType.values()[
+                typedArray.getInt(
+                    R.styleable.VirtusizeProductImageView_productImageType,
+                    0,
+                ),
+            ]
 
         if (productImageType == ProductImageType.USER) {
             binding.inpageBorderImageView.setImageDrawable(
                 ContextCompat.getDrawable(
                     context,
-                    R.drawable.ic_image_border_green_dash
-                )
+                    R.drawable.ic_image_border_green_dash,
+                ),
             )
         } else {
             binding.inpageBorderImageView.setImageDrawable(
                 ContextCompat.getDrawable(
                     context,
-                    R.drawable.ic_image_border_gray
-                )
+                    R.drawable.ic_image_border_gray,
+                ),
             )
         }
 
@@ -78,17 +80,20 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet) 
      * @param productType the product type, which is fetched from the store product info
      * @param style the product style, which is fetched from the store product info
      */
-    fun setProductPlaceHolderImage(productType: Int?, style: String?) {
+    fun setProductPlaceHolderImage(
+        productType: Int?,
+        style: String?,
+    ) {
         if (productImageType == ProductImageType.STORE) {
             binding.inpageProductCardView.setCardBackgroundColor(
                 ContextCompat.getColor(
                     context,
-                    R.color.color_gray_200
-                )
+                    R.color.color_gray_200,
+                ),
             )
         }
         binding.inpageProductImageView.setImageDrawable(
-            getProductPlaceholderImage(productType, style)
+            getProductPlaceholderImage(productType, style),
         )
         binding.inpageProductImageView.setPadding(6.dpInPx, 6.dpInPx, 6.dpInPx, 6.dpInPx)
     }
@@ -99,13 +104,18 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet) 
      * @param style the product style, which is fetched from the store product info
      * @return a Drawable of product placeholder image
      */
-    private fun getProductPlaceholderImage(productType: Int?, style: String?): Drawable? {
-        var productPlaceholderImage = context.getDrawableResourceByName(
-            "ic_product_type_$productType"
-        )
-        val productTypeImageWithStyle = context.getDrawableResourceByName(
-            "ic_product_type_${productType}_$style"
-        )
+    private fun getProductPlaceholderImage(
+        productType: Int?,
+        style: String?,
+    ): Drawable? {
+        var productPlaceholderImage =
+            context.getDrawableResourceByName(
+                "ic_product_type_$productType",
+            )
+        val productTypeImageWithStyle =
+            context.getDrawableResourceByName(
+                "ic_product_type_${productType}_$style",
+            )
         if (productTypeImageWithStyle != null) {
             productPlaceholderImage = productTypeImageWithStyle
         }
@@ -115,8 +125,8 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet) 
             productPlaceholderImage?.setTint(
                 ContextCompat.getColor(
                     context,
-                    R.color.virtusizeBlack
-                )
+                    R.color.virtusizeBlack,
+                ),
             )
         }
         return productPlaceholderImage

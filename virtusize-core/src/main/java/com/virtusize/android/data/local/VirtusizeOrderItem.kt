@@ -15,90 +15,91 @@ package com.virtusize.android.data.local
  * @param url the URL of the product page. Please make sure this is a URL that users can access.
  *
  */
-data class VirtusizeOrderItem @JvmOverloads constructor(
-    private val productId: String,
-    private val size: String,
-    private val sizeAlias: String? = null,
-    private val variantId: String? = null,
-    private val imageUrl: String,
-    private val color: String? = null,
-    private val gender: String? = null,
-    private val unitPrice: Double,
-    private val currency: String,
-    private val quantity: Int = 1,
-    private val url: String? = null
-) {
-
-    /**
-     * Returns the map that represents the parameters for the order request
-     */
-    fun paramsToMap(): Map<String, Any> {
-        return emptyMap<String, Any>()
-            .plus(
-                mapOf(PARAM_PRODUCT_ID to productId)
-            )
-            .plus(
-                mapOf(PARAM_SIZE to size)
-            )
-            .plus(
-                sizeAlias?.let { mapOf(PARAM_SIZE_ALIAS to it) }.orEmpty()
-            )
-            .plus(
-                variantId?.let { mapOf(PARAM_VARIANT_ID to it) }.orEmpty()
-            )
-            .plus(
-                mapOf(PARAM_IMAGE_URL to imageUrl)
-            )
-            .plus(
-                color?.let { mapOf(PARAM_COLOR to it) }.orEmpty()
-            )
-            .plus(
-                gender?.let { mapOf(PARAM_GENDER to it) }.orEmpty()
-            )
-            .plus(
-                mapOf(PARAM_UNIT_PRICE to "%.2f".format(unitPrice).toDouble())
-            )
-            .plus(
-                mapOf(PARAM_CURRENCY to currency)
-            )
-            .plus(
-                mapOf(PARAM_QUANTITY to quantity)
-            )
-            .plus(
-                url?.let { mapOf(PARAM_URL to it) }.orEmpty()
-            )
-    }
-
-    companion object {
-        private const val PARAM_PRODUCT_ID = "externalProductId"
-        private const val PARAM_SIZE = "size"
-        private const val PARAM_SIZE_ALIAS = "sizeAlias"
-        private const val PARAM_VARIANT_ID = "variantId"
-        private const val PARAM_IMAGE_URL = "imageUrl"
-        private const val PARAM_COLOR = "color"
-        private const val PARAM_GENDER = "gender"
-        private const val PARAM_UNIT_PRICE = "unitPrice"
-        private const val PARAM_CURRENCY = "currency"
-        private const val PARAM_QUANTITY = "quantity"
-        private const val PARAM_URL = "url"
-
+data class VirtusizeOrderItem
+    @JvmOverloads
+    constructor(
+        private val productId: String,
+        private val size: String,
+        private val sizeAlias: String? = null,
+        private val variantId: String? = null,
+        private val imageUrl: String,
+        private val color: String? = null,
+        private val gender: String? = null,
+        private val unitPrice: Double,
+        private val currency: String,
+        private val quantity: Int = 1,
+        private val url: String? = null,
+    ) {
         /**
-         * Parses a Map of the order item data to a [VirtusizeOrderItem] object
+         * Returns the map that represents the parameters for the order request
          */
-        internal fun parseMap(orderItemMap: Map<String, Any?>): VirtusizeOrderItem {
-            return VirtusizeOrderItem(
-                productId = orderItemMap[PARAM_PRODUCT_ID] as String,
-                size = orderItemMap[PARAM_SIZE] as String,
-                sizeAlias = orderItemMap[PARAM_SIZE_ALIAS] as? String,
-                variantId = orderItemMap[PARAM_VARIANT_ID] as? String,
-                imageUrl = orderItemMap[PARAM_IMAGE_URL] as String,
-                color = orderItemMap[PARAM_COLOR] as? String,
-                gender = orderItemMap[PARAM_GENDER] as? String,
-                unitPrice = orderItemMap[PARAM_UNIT_PRICE] as Double,
-                currency = orderItemMap[PARAM_CURRENCY] as String,
-                quantity = orderItemMap[PARAM_QUANTITY] as Int,
-                url = orderItemMap[PARAM_URL] as? String
-            )
+        fun paramsToMap(): Map<String, Any> {
+            return emptyMap<String, Any>()
+                .plus(
+                    mapOf(PARAM_PRODUCT_ID to productId),
+                )
+                .plus(
+                    mapOf(PARAM_SIZE to size),
+                )
+                .plus(
+                    sizeAlias?.let { mapOf(PARAM_SIZE_ALIAS to it) }.orEmpty(),
+                )
+                .plus(
+                    variantId?.let { mapOf(PARAM_VARIANT_ID to it) }.orEmpty(),
+                )
+                .plus(
+                    mapOf(PARAM_IMAGE_URL to imageUrl),
+                )
+                .plus(
+                    color?.let { mapOf(PARAM_COLOR to it) }.orEmpty(),
+                )
+                .plus(
+                    gender?.let { mapOf(PARAM_GENDER to it) }.orEmpty(),
+                )
+                .plus(
+                    mapOf(PARAM_UNIT_PRICE to "%.2f".format(unitPrice).toDouble()),
+                )
+                .plus(
+                    mapOf(PARAM_CURRENCY to currency),
+                )
+                .plus(
+                    mapOf(PARAM_QUANTITY to quantity),
+                )
+                .plus(
+                    url?.let { mapOf(PARAM_URL to it) }.orEmpty(),
+                )
+        }
+
+        companion object {
+            private const val PARAM_PRODUCT_ID = "externalProductId"
+            private const val PARAM_SIZE = "size"
+            private const val PARAM_SIZE_ALIAS = "sizeAlias"
+            private const val PARAM_VARIANT_ID = "variantId"
+            private const val PARAM_IMAGE_URL = "imageUrl"
+            private const val PARAM_COLOR = "color"
+            private const val PARAM_GENDER = "gender"
+            private const val PARAM_UNIT_PRICE = "unitPrice"
+            private const val PARAM_CURRENCY = "currency"
+            private const val PARAM_QUANTITY = "quantity"
+            private const val PARAM_URL = "url"
+
+            /**
+             * Parses a Map of the order item data to a [VirtusizeOrderItem] object
+             */
+            internal fun parseMap(orderItemMap: Map<String, Any?>): VirtusizeOrderItem {
+                return VirtusizeOrderItem(
+                    productId = orderItemMap[PARAM_PRODUCT_ID] as String,
+                    size = orderItemMap[PARAM_SIZE] as String,
+                    sizeAlias = orderItemMap[PARAM_SIZE_ALIAS] as? String,
+                    variantId = orderItemMap[PARAM_VARIANT_ID] as? String,
+                    imageUrl = orderItemMap[PARAM_IMAGE_URL] as String,
+                    color = orderItemMap[PARAM_COLOR] as? String,
+                    gender = orderItemMap[PARAM_GENDER] as? String,
+                    unitPrice = orderItemMap[PARAM_UNIT_PRICE] as Double,
+                    currency = orderItemMap[PARAM_CURRENCY] as String,
+                    quantity = orderItemMap[PARAM_QUANTITY] as Int,
+                    url = orderItemMap[PARAM_URL] as? String,
+                )
+            }
         }
     }
-}

@@ -16,16 +16,17 @@ internal class StoreProductAdditionalInfoJsonParser :
         val gender = JsonUtils.optNullableString(json, FIELD_GENDER)
         var sizes = setOf<ProductSize>()
         json.optJSONObject(FIELD_SIZES)?.let { jsonObject ->
-            sizes = JsonUtils.jsonObjectToMap(jsonObject)
-                .map { filteredSizeHashMap ->
-                    ProductSize(
-                        filteredSizeHashMap.key,
-                        (filteredSizeHashMap.value as MutableMap<String, Int>)
-                            .map {
-                                Measurement(it.key, it.value)
-                            }.toMutableSet()
-                    )
-                }.toMutableSet()
+            sizes =
+                JsonUtils.jsonObjectToMap(jsonObject)
+                    .map { filteredSizeHashMap ->
+                        ProductSize(
+                            filteredSizeHashMap.key,
+                            (filteredSizeHashMap.value as MutableMap<String, Int>)
+                                .map {
+                                    Measurement(it.key, it.value)
+                                }.toMutableSet(),
+                        )
+                    }.toMutableSet()
         }
         var modelInfo = mutableMapOf<String, Any>()
         json.optJSONObject(FIELD_MODEL_INFO)?.let {

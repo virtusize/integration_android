@@ -23,7 +23,6 @@ import kotlin.math.abs
 
 // The object that wraps Virtusize utility functions
 internal object VirtusizeUtils {
-
     // The context wrapper that is configured to a designated locale
     class ConfiguredContext(base: Context?) : ContextWrapper(base)
 
@@ -32,7 +31,10 @@ internal object VirtusizeUtils {
      * @param context the base application Context
      * @param locale the locale to switch to
      */
-    private fun configureLocale(context: Context, locale: Locale?): ContextWrapper? {
+    private fun configureLocale(
+        context: Context,
+        locale: Locale?,
+    ): ContextWrapper? {
         var updatedContext = context
         val resources = context.resources
         val configuration = resources.configuration
@@ -54,7 +56,10 @@ internal object VirtusizeUtils {
     /**
      * Gets configured context base on the language that clients set up with the Virtusize Builder in the application
      */
-    fun getConfiguredContext(context: Context, language: VirtusizeLanguage?): ContextWrapper? {
+    fun getConfiguredContext(
+        context: Context,
+        language: VirtusizeLanguage?,
+    ): ContextWrapper? {
         return when (language) {
             VirtusizeLanguage.EN -> configureLocale(context, Locale.ENGLISH)
             VirtusizeLanguage.JP -> configureLocale(context, Locale.JAPAN)
@@ -73,7 +78,7 @@ internal object VirtusizeUtils {
     fun findBestFitProductSize(
         userProducts: List<Product>?,
         storeProduct: Product?,
-        productTypes: List<ProductType>?
+        productTypes: List<ProductType>?,
     ): SizeComparisonRecommendedSize? {
         if (userProducts == null || storeProduct == null || productTypes == null) {
             return null
@@ -87,11 +92,12 @@ internal object VirtusizeUtils {
         compatibleUserProducts.iterator().forEach { userProduct ->
             val userProductSize = userProduct.sizes[0]
             storeProduct.sizes.iterator().forEach { storeProductSize ->
-                val productComparisonFitInfo = getProductComparisonFitInfo(
-                    userProductSize,
-                    storeProductSize,
-                    storeProductType.weights
-                )
+                val productComparisonFitInfo =
+                    getProductComparisonFitInfo(
+                        userProductSize,
+                        storeProductSize,
+                        storeProductType.weights,
+                    )
                 if (
                     productComparisonFitInfo.fitScore > sizeComparisonRecommendedSize.bestFitScore
                 ) {
@@ -119,7 +125,7 @@ internal object VirtusizeUtils {
     fun getProductComparisonFitInfo(
         userProductSize: ProductSize,
         storeProductSize: ProductSize,
-        storeProductTypeScoreWeights: Set<Weight>
+        storeProductTypeScoreWeights: Set<Weight>,
     ): ProductComparisonFitInfo {
         var rawScore = 0f
         var isSmaller: Boolean? = null
@@ -134,7 +140,7 @@ internal object VirtusizeUtils {
             if (userProductSizeMeasurement != null && storeProductSizeMeasurement != null) {
                 rawScore +=
                     abs(
-                        weight.value * (userProductSizeMeasurement - storeProductSizeMeasurement)
+                        weight.value * (userProductSizeMeasurement - storeProductSizeMeasurement),
                     )
                 isSmaller =
                     isSmaller ?: (userProductSizeMeasurement - storeProductSizeMeasurement > 0)
@@ -155,7 +161,7 @@ internal object VirtusizeUtils {
         virtusizeParams: VirtusizeParams?,
         virtusizeDialogFragment: VirtusizeWebViewFragment,
         product: VirtusizeProduct,
-        messageHandler: VirtusizeMessageHandler
+        messageHandler: VirtusizeMessageHandler,
     ) {
         val fragmentTransaction =
             (context as FragmentActivity).supportFragmentManager.beginTransaction()
@@ -169,7 +175,7 @@ internal object VirtusizeUtils {
         virtusizeParams?.let { params ->
             args.putString(
                 Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY,
-                "javascript:vsParamsFromSDK(${params.vsParamsString(product)})"
+                "javascript:vsParamsFromSDK(${params.vsParamsString(product)})",
             )
         }
         args.putParcelable(Constants.VIRTUSIZE_PRODUCT_KEY, product)

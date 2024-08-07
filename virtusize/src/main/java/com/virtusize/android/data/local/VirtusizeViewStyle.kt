@@ -6,5 +6,5 @@ package com.virtusize.android.data.local
 enum class VirtusizeViewStyle(val value: Int) {
     NONE(-1),
     BLACK(0),
-    TEAL(1)
+    TEAL(1),
 }

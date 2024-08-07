@@ -1,0 +1,43 @@
+[versions]
+agp = "8.5.1"
+androidxTestCore = "1.6.1"
+appcompat = "1.7.0"
+coreKtx = "1.13.1"
+espressoCore = "3.6.1"
+json = "20230227"
+junit = "4.13.2"
+junitVersion = "1.2.1"
+kotlin = "2.0.0"
+kotlinxCoroutinesTest = "1.8.1"
+ktlint = "1.2.1"
+lifecycleViewmodelKtx = "2.8.4"
+material = "1.12.0"
+nextPublish = "1.1.0"
+robolectric = "4.13"
+truth = "1.4.4"
+virtusize = "2.5.5"
+virtusizeAuth = "1.0.5"
+
+[libraries]
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
+androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
+json = { module = "org.json:json", version.ref = "json" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+ktlint = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
+virtusize = { group = "com.virtusize.android", name = "virtusize", version.ref = "virtusize" }
+virtusize-auth = { module = "com.virtusize.android:virtusize-auth", version.ref = "virtusizeAuth" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nextPublish" }

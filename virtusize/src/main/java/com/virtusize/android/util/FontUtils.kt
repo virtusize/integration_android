@@ -6,14 +6,13 @@ import com.virtusize.android.data.local.VirtusizeLanguage
 
 // The object that wraps Font utility functions
 internal object FontUtils {
-
     /**
      * This enum contains all available font names used in this SDK
      */
     enum class FontName(val value: String) {
         ROBOTO("roboto"),
         NOTO_SANS_CJK_JP("noto_sans_cjk_jp"),
-        NOTO_SANS_CJK_KR("noto_sans_cjk_kr")
+        NOTO_SANS_CJK_KR("noto_sans_cjk_kr"),
     }
 
     /**
@@ -21,7 +20,7 @@ internal object FontUtils {
      */
     enum class FontType(val value: String) {
         REGULAR("_regular"),
-        BOLD("_bold")
+        BOLD("_bold"),
     }
 
     /**
@@ -31,7 +30,7 @@ internal object FontUtils {
         context: Context,
         textView: TextView,
         language: VirtusizeLanguage?,
-        fontType: FontType
+        fontType: FontType,
     ) {
         setTypeFaces(context, mutableListOf(textView), language, fontType)
     }
@@ -43,7 +42,7 @@ internal object FontUtils {
         context: Context,
         textViews: List<TextView>,
         language: VirtusizeLanguage?,
-        fontType: FontType
+        fontType: FontType,
     ) {
         when (language) {
             VirtusizeLanguage.EN -> {
@@ -67,7 +66,7 @@ internal object FontUtils {
         context: Context,
         textViews: List<TextView>,
         fontName: FontName,
-        fontType: FontType
+        fontType: FontType,
     ) {
         for (textView in textViews) {
             setTypeFace(context, textView, fontName, fontType)
@@ -81,7 +80,7 @@ internal object FontUtils {
         context: Context,
         textView: TextView,
         fontName: FontName,
-        fontType: FontType
+        fontType: FontType,
     ) {
         textView.typeface = context.getTypefaceByName(fontName.value + fontType.value)
     }

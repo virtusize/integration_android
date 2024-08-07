@@ -1,8 +1,0 @@
-task installGitHooks(type: Copy) {
-    from new File(rootProject.rootDir, '.githooks/pre-push')
-    into { new File(rootProject.rootDir, '.git/hooks') }
-    fileMode 0775
-}
-
-/* Uncomment the following line if you want the installGitHooks task to be run automatically */
-// tasks.getByPath(':virtusize:preBuild').dependsOn installGitHooks

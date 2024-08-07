@@ -12,8 +12,10 @@ import kotlinx.android.parcel.Parcelize
  * @param productCheckData the product check response from Virtusize API
  */
 @Parcelize
-data class VirtusizeProduct @JvmOverloads constructor(
-    val externalId: String,
-    var imageUrl: String? = null,
-    var productCheckData: ProductCheck? = null
-) : Parcelable
+data class VirtusizeProduct
+    @JvmOverloads
+    constructor(
+        val externalId: String,
+        var imageUrl: String? = null,
+        var productCheckData: ProductCheck? = null,
+    ) : Parcelable

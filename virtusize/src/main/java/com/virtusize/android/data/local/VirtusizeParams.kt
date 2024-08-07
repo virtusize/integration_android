@@ -25,9 +25,8 @@ data class VirtusizeParams(
     private val allowedLanguages: MutableList<VirtusizeLanguage>,
     internal var externalUserId: String?,
     private val showSGI: Boolean,
-    private val detailsPanelCards: MutableList<VirtusizeInfoCategory>
+    private val detailsPanelCards: MutableList<VirtusizeInfoCategory>,
 ) {
-
     /**
      * Returns the virtusize parameter string to be passed to the JavaScript function vsParamsFromSDK
      */

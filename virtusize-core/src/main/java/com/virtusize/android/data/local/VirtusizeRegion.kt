@@ -18,7 +18,7 @@ enum class VirtusizeRegion(val value: String) {
         override fun defaultLanguage(): VirtusizeLanguage {
             return VirtusizeLanguage.KR
         }
-    };
+    }, ;
 
     /**
      * The abstract method to get the default display language of the Virtusize web app corresponding to the [VirtusizeRegion] value
