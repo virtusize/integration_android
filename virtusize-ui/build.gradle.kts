@@ -33,6 +33,7 @@ android {
         getByName("main") {
             res.srcDirs(
                 "src/main/res",
+                "src/main/java/com/virtusize/android/ui/avatar/res",
                 "src/main/java/com/virtusize/android/ui/button/res",
                 "src/main/java/com/virtusize/android/ui/tooltip/res",
             )
@@ -49,15 +50,7 @@ android {
     }
 
     buildFeatures {
-        buildConfig = true
         viewBinding = true
-    }
-
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-            isReturnDefaultValues = true
-        }
     }
 
     publishing {
@@ -70,14 +63,7 @@ android {
 }
 
 dependencies {
-    api(project(":virtusize-core"))
-    compileOnly(libs.virtusize.auth)
-
-    implementation("androidx.appcompat:appcompat:1.7.0")
-
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.2")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
+    implementation(libs.androidx.appcompat)
 }
 
 publish(

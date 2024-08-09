@@ -72,10 +72,10 @@ class VirtusizeButton
             val attrsArray = context.obtainStyledAttributes(attrs, R.styleable.VirtusizeButton, 0, 0)
 
             val buttonStyle = attrsArray.getInt(R.styleable.VirtusizeButton_uiButtonStyle, VirtusizeButtonStyle.NONE.ordinal)
-            virtusizeButtonStyle = VirtusizeButtonStyle.values().firstOrNull { it.ordinal == buttonStyle } ?: VirtusizeButtonStyle.NONE
+            virtusizeButtonStyle = VirtusizeButtonStyle.entries.firstOrNull { it.ordinal == buttonStyle } ?: VirtusizeButtonStyle.NONE
 
             val buttonLevel = attrsArray.getInt(R.styleable.VirtusizeButton_uiButtonLevel, VirtusizeButtonLevel.NONE.ordinal)
-            virtusizeButtonLevel = VirtusizeButtonLevel.values().firstOrNull { it.ordinal == buttonLevel } ?: VirtusizeButtonLevel.NONE
+            virtusizeButtonLevel = VirtusizeButtonLevel.entries.firstOrNull { it.ordinal == buttonLevel } ?: VirtusizeButtonLevel.NONE
 
             val buttonBorderWithTransparency =
                 attrsArray.getInt(
@@ -92,7 +92,7 @@ class VirtusizeButton
             } ?: VirtusizeButtonFontWeight.BOLD
 
             val buttonSize = attrsArray.getInt(R.styleable.VirtusizeButton_virtusizeButtonSize, VirtusizeButtonSize.STANDARD.ordinal)
-            virtusizeButtonSize = VirtusizeButtonSize.values().firstOrNull { it.ordinal == buttonSize } ?: VirtusizeButtonSize.STANDARD
+            virtusizeButtonSize = VirtusizeButtonSize.entries.firstOrNull { it.ordinal == buttonSize } ?: VirtusizeButtonSize.STANDARD
 
             virtusizeBackgroundColor = attrsArray.getColor(R.styleable.VirtusizeButton_virtusizeBackgroundColor, 0)
 

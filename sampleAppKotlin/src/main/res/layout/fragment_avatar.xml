@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".designsystem.AvatarFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/virtusize_16dp">
+
+        <TextView
+            android:id="@+id/avatar_text_view"
+            style="@style/TextAppearance.Virtusize.Headline3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/virtusize_16dp"
+            android:text="@string/virtusize_avatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.virtusize.android.ui.avatar.VirtusizeAvatar
+            android:id="@+id/default_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/virtusize_16dp"
+            android:src="@drawable/ic_sample_woman"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/avatar_text_view" />
+
+        <TextView
+            android:id="@+id/size_text_view"
+            style="@style/TextAppearance.Virtusize.Headline3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/virtusize_16dp"
+            android:text="@string/size_avatar_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/default_avatar" />
+
+        <com.virtusize.android.ui.avatar.VirtusizeAvatar
+            android:id="@+id/smaller_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_sample_woman"
+            app:avatarSize="smaller"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.virtusize.android.ui.avatar.VirtusizeAvatar
+            android:id="@+id/small_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_sample_woman"
+            app:avatarSize="small" />
+
+        <com.virtusize.android.ui.avatar.VirtusizeAvatar
+            android:id="@+id/medium_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_sample_woman"
+            app:avatarSize="medium" />
+
+        <com.virtusize.android.ui.avatar.VirtusizeAvatar
+            android:id="@+id/large_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_sample_woman"
+            app:avatarSize="large" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/size_avatar_flow"
+            style="@style/VirtusizeDesignSystemFlow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="smaller_avatar,small_avatar,medium_avatar,large_avatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/size_text_view" />
+
+        <TextView
+            android:id="@+id/style_text_view"
+            style="@style/TextAppearance.Virtusize.Headline3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/virtusize_16dp"
+            android:text="@string/border_style_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/size_avatar_flow" />
+
+        <com.virtusize.android.ui.avatar.VirtusizeAvatar
+            android:id="@+id/default_border_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_sample_woman" />
+
+        <com.virtusize.android.ui.avatar.VirtusizeAvatar
+            android:id="@+id/thin_dashed_border_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_sample_woman"
+            app:avatarBorderColor="@color/vs_teal"
+            app:avatarBorderStyle="dashed" />
+
+        <com.virtusize.android.ui.avatar.VirtusizeAvatar
+            android:id="@+id/thick_dashed_border_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_sample_woman"
+            app:avatarBorderColor="@color/vs_red"
+            app:avatarBorderStyle="dashed"
+            app:avatarBorderWidth="thick" />
+
+        <com.virtusize.android.ui.avatar.VirtusizeAvatar
+            android:id="@+id/no_border_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_sample_woman"
+            app:avatarBorderStyle="none" />
+
+        <com.virtusize.android.ui.avatar.VirtusizeAvatar
+            android:id="@+id/colored_thin_solid_border_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_sample_woman"
+            app:avatarBorderColor="@color/vs_grd_primary_dark" />
+
+        <com.virtusize.android.ui.avatar.VirtusizeAvatar
+            android:id="@+id/thick_solid_border_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_sample_woman"
+            app:avatarBorderWidth="thick" />
+
+        <com.virtusize.android.ui.avatar.VirtusizeAvatar
+            android:id="@+id/colored_thick_solid_border_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_sample_woman"
+            app:avatarBorderColor="@color/vs_red"
+            app:avatarBorderWidth="thick" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/style_avatar_flow"
+            style="@style/VirtusizeDesignSystemFlow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="default_border_avatar,colored_thin_solid_border_avatar,thin_dashed_border_avatar,thick_dashed_border_avatar,no_border_avatar,thick_solid_border_avatar,colored_thick_solid_border_avatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/style_text_view" />
+
+        <TextView
+            android:id="@+id/fitting_room_text_view"
+            style="@style/TextAppearance.Virtusize.Headline3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/virtusize_16dp"
+            android:text="@string/fitting_room_avatar_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/style_avatar_flow" />
+
+        <com.virtusize.android.ui.fittingroom.VirtusizeCurationAvatar
+            android:id="@+id/fr_item_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_sample_woman"
+            app:avatarBorderColor="@color/vs_black" />
+
+        <com.virtusize.android.ui.fittingroom.VirtusizeCurationAvatar
+            android:id="@+id/fr_my_size_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_my_size"
+            app:avatarBorderColor="@color/vs_teal" />
+
+        <com.virtusize.android.ui.fittingroom.VirtusizeCurationAvatar
+            android:id="@+id/fr_my_size_selected_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_my_size"
+            app:avatarBorderColor="@color/vs_teal"
+            app:avatarIsSelected="true" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/fitting_room_avatar_flow"
+            style="@style/VirtusizeDesignSystemFlow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="fr_item_avatar,fr_my_size_avatar,fr_my_size_selected_avatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fitting_room_text_view" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

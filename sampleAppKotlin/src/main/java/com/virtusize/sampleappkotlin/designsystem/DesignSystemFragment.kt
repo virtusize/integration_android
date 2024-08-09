@@ -30,6 +30,7 @@ class DesignSystemFragment : Fragment() {
                 arrayOf(
                     requireContext().getString(R.string.virtusize_button),
                     requireContext().getString(R.string.virtusize_tooltip),
+                    requireContext().getString(R.string.virtusize_avatar),
                 ),
             )
         binding.recyclerView.adapter = adapter

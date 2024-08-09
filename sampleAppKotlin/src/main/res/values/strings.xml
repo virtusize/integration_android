@@ -7,6 +7,7 @@
 
     <string name="virtusize_button" translatable="false">Button</string>
     <string name="virtusize_tooltip" translatable="false">Tooltip</string>
+    <string name="virtusize_avatar" translatable="false">Avatar</string>
 
     <string name="style_button_title" translatable="false">Default, Inverted, and Disabled Buttons</string>
     <string name="color_button_title" translatable="false">Color</string>
@@ -18,6 +19,9 @@
     <string name="square_button_title" translatable="false">Square Button</string>
     <string name="icon_button_title" translatable="false">Leading and Trailing Icons</string>
     <string name="round_button_title" translatable="false">Round Buttons</string>
+    <string name="size_avatar_title" translatable="false">Size</string>
+    <string name="border_style_title" translatable="false">Border Style, Color, and Width</string>
+    <string name="fitting_room_avatar_title" translatable="false">Fitting Room Avatars</string>
 
     <string name="default_button" translatable="false">Default Button</string>
     <string name="flat_button" translatable="false">Flat Button</string>

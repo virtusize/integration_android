@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="VirtusizeAvatar">
+        <attr name="android:src" format="reference"/>
+        <attr name="avatarSize">
+            <enum name="smaller" value="0" />
+            <enum name="small" value="1" />
+            <enum name="medium" value="2" />
+            <enum name="large" value="3" />
+        </attr>
+        <attr name="avatarBorderStyle">
+            <enum name="solid" value="0" />
+            <enum name="dashed" value="1" />
+            <enum name="none" value="2" />
+        </attr>
+        <attr name="avatarBorderWidth">
+            <enum name="thin" value="0" />
+            <enum name="thick" value="1" />
+        </attr>
+        <attr name="avatarBorderColor" format="color"/>
+        <attr name="avatarGapEnabled" format="boolean"/>
+        <attr name="avatarIsSelected" format="boolean"/>
+    </declare-styleable>
+</resources>
