@@ -22,7 +22,8 @@ import com.virtusize.android.ui.VirtusizeView
 import com.virtusize.android.util.trimI18nText
 import com.virtusize.android.util.valueOf
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 /**
@@ -34,6 +35,7 @@ import kotlinx.coroutines.launch
 internal class VirtusizeImpl(
     private val context: Context,
     override val params: VirtusizeParams,
+    private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
 ) : Virtusize {
     // The getter of the display language
     override val displayLanguage: VirtusizeLanguage = params.language
@@ -55,7 +57,7 @@ internal class VirtusizeImpl(
                 when (event.name) {
                     VirtusizeEvents.UserOpenedWidget.getEventName() -> {
                         virtusizeRepository.setLastProductOnVirtusizeWebView(product.externalId)
-                        CoroutineScope(Main).launch {
+                        scope.launch {
                             virtusizeRepository.fetchDataForInPageRecommendation(
                                 shouldUpdateUserProducts = false,
                                 shouldUpdateBodyProfile = false,
@@ -72,7 +74,7 @@ internal class VirtusizeImpl(
 
                     VirtusizeEvents.UserSelectedProduct.getEventName() -> {
                         val userProductId = event.data?.optInt("userProductId")
-                        CoroutineScope(Main).launch {
+                        scope.launch {
                             virtusizeRepository.fetchDataForInPageRecommendation(
                                 selectedUserProductId = userProductId,
                                 shouldUpdateUserProducts = false,
@@ -85,7 +87,7 @@ internal class VirtusizeImpl(
                     }
 
                     VirtusizeEvents.UserAddedProduct.getEventName() -> {
-                        CoroutineScope(Main).launch {
+                        scope.launch {
                             virtusizeRepository.fetchDataForInPageRecommendation(
                                 shouldUpdateUserProducts = true,
                                 shouldUpdateBodyProfile = false,
@@ -100,7 +102,7 @@ internal class VirtusizeImpl(
                         event.data?.optInt("userProductId")?.let { userProductId ->
                             virtusizeRepository.deleteUserProduct(userProductId)
                         }
-                        CoroutineScope(Main).launch {
+                        scope.launch {
                             virtusizeRepository.fetchDataForInPageRecommendation(
                                 shouldUpdateUserProducts = false,
                                 shouldUpdateBodyProfile = false,
@@ -115,7 +117,7 @@ internal class VirtusizeImpl(
                         event.data?.optString("recommendationType")?.let {
                             recommendationType = valueOf<SizeRecommendationType>(it)
                         }
-                        CoroutineScope(Main).launch {
+                        scope.launch {
                             virtusizeRepository.updateInPageRecommendation(
                                 type = recommendationType,
                             )
@@ -125,7 +127,7 @@ internal class VirtusizeImpl(
                     VirtusizeEvents.UserUpdatedBodyMeasurements.getEventName() -> {
                         // Updates the body recommendation size and switches the view to the body comparison
                         val sizeRecName = event.data?.optString("sizeRecName")
-                        CoroutineScope(Main).launch {
+                        scope.launch {
                             virtusizeRepository.updateUserBodyRecommendedSize(sizeRecName)
                             virtusizeRepository.updateInPageRecommendation(
                                 type = SizeRecommendationType.Body,
@@ -135,7 +137,7 @@ internal class VirtusizeImpl(
 
                     VirtusizeEvents.UserLoggedIn.getEventName() -> {
                         // Updates the user session and fetches updated user products and body profile from the server
-                        CoroutineScope(Main).launch {
+                        scope.launch {
                             virtusizeRepository.updateUserSession()
                             virtusizeRepository.fetchDataForInPageRecommendation()
                             virtusizeRepository.updateInPageRecommendation()
@@ -147,7 +149,7 @@ internal class VirtusizeImpl(
                     -> {
                         // Clears user related data and updates the session,
                         // and then re-fetches user products and body profile from the server
-                        CoroutineScope(Main).launch {
+                        scope.launch {
                             virtusizeRepository.clearUserData()
                             virtusizeRepository.updateUserSession()
                             virtusizeRepository.fetchDataForInPageRecommendation(
@@ -177,7 +179,7 @@ internal class VirtusizeImpl(
                     virtusizeView.setProductWithProductDataCheck(productWithPDC)
                 }
                 if (virtusizeViewsContainInPage()) {
-                    CoroutineScope(Main).launch {
+                    scope.launch {
                         virtusizeRepository.fetchInitialData(params.language, productWithPDC)
                         virtusizeRepository.updateUserSession(productWithPDC.externalId)
                         virtusizeRepository.fetchDataForInPageRecommendation(
@@ -239,8 +241,7 @@ internal class VirtusizeImpl(
             }
         }
 
-    private val virtusizeRepository: VirtusizeRepository =
-        VirtusizeRepository(context, messageHandler, virtusizePresenter)
+    private val virtusizeRepository: VirtusizeRepository = VirtusizeRepository(context, messageHandler, virtusizePresenter)
 
     // TODO: Remove the array and find a way to have callbacks inside the VirtusizeView
     // This variable holds the Virtusize view that clients use on their application
@@ -283,10 +284,16 @@ internal class VirtusizeImpl(
      * @see Virtusize.load
      */
     override fun load(virtusizeProduct: VirtusizeProduct) {
-        CoroutineScope(Main).launch {
-            virtusizeRepository.productDataCheck(virtusizeProduct)
+        scope.launch {
+            productDataCheck(virtusizeProduct)
         }
     }
+
+    /**
+     * @see Virtusize.productDataCheck
+     */
+    override suspend fun productDataCheck(virtusizeProduct: VirtusizeProduct): Boolean =
+        virtusizeRepository.productDataCheck(virtusizeProduct)
 
     /**
      * @see Virtusize.setupVirtusizeView
@@ -318,7 +325,7 @@ internal class VirtusizeImpl(
         onSuccess: (() -> Unit)?,
         onError: ((VirtusizeError) -> Unit)?,
     ) {
-        CoroutineScope(Main).launch {
+        scope.launch {
             virtusizeRepository.sendOrder(params, order, { _ ->
                 onSuccess?.invoke()
             }, { error ->
@@ -335,7 +342,7 @@ internal class VirtusizeImpl(
         onSuccess: SuccessResponseHandler?,
         onError: ErrorResponseHandler?,
     ) {
-        CoroutineScope(Main).launch {
+        scope.launch {
             virtusizeRepository.sendOrder(params, order, { data ->
                 onSuccess?.onSuccess(data)
             }, { error ->

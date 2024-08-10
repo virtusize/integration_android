@@ -91,8 +91,17 @@ interface Virtusize {
      * Sets up the product for the product detail page
      *
      * @param virtusizeProduct VirtusizeProduct that is being loaded with the Virtusize API
+     * @return true if the product is valid, false otherwise
      */
     fun load(virtusizeProduct: VirtusizeProduct)
+
+    /**
+     * Sets up and check the product for the product detail page
+     *
+     * @param virtusizeProduct VirtusizeProduct that is being loaded with the Virtusize API
+     * @return true if the product is valid, false otherwise
+     */
+    suspend fun productDataCheck(virtusizeProduct: VirtusizeProduct): Boolean
 
     /**
      * Sets up the Virtusize view by passing the VirtusizeView along with the bound VirtusizeProduct
