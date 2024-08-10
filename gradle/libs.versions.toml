@@ -1,4 +1,5 @@
 [versions]
+activityCompose = "1.9.1"
 agp = "8.5.1"
 androidxComposeBom = "2024.06.00"
 androidxTestCore = "1.6.1"
@@ -9,7 +10,7 @@ junit = "4.13.2"
 kotlin = "2.0.0"
 kotlinxCoroutinesTest = "1.8.1"
 ktlint = "1.2.1"
-lifecycleViewmodelKtx = "2.8.4"
+lifecycleViewmodel = "2.8.4"
 material = "1.12.0"
 nextPublish = "1.1.0"
 robolectric = "4.13"
@@ -18,6 +19,7 @@ virtusize = "2.5.5"
 virtusizeAuth = "1.0.5"
 
 [libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-foundation = { module = "androidx.compose.foundation:foundation" }
@@ -25,7 +27,8 @@ androidx-compose-material3 = { group = "androidx.compose.material3", name = "mat
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
+androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodel" }
+androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodel" }
 androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
 json = { module = "org.json:json", version.ref = "json" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
