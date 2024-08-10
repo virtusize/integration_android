@@ -14,6 +14,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,9 +27,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.virtusize.android.R
 import com.virtusize.android.compose.theme.VirtusizeColors
+import com.virtusize.android.data.local.VirtusizeError
+import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeProduct
+import com.virtusize.android.model.VirtusizeMessage
 
 @Composable
 fun VirtusizeButton(
@@ -40,47 +46,62 @@ fun VirtusizeButton(
     border: BorderStroke? = null,
     contentPadding: PaddingValues = VirtusizeButtonDefaults.ContentPadding,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    onEvent: (product: VirtusizeProduct, event: VirtusizeEvent) -> Unit = { _, _ -> },
+    onError: (error: VirtusizeError) -> Unit = { _ -> },
     content: @Composable RowScope.() -> Unit = emptyContent,
 ) {
-    val virtusizeButtonViewModel = VirtusizeButtonViewModel()
     val context = LocalContext.current
-    Button(
-        onClick = { virtusizeButtonViewModel.onButtonClick(context, product) },
-        modifier = modifier,
-        enabled = enable,
-        shape = shape,
-        colors =
-            colors?.let {
-                ButtonDefaults.buttonColors(
-                    containerColor = colors.containerColor,
-                    contentColor = colors.contentColor,
-                    disabledContainerColor = colors.disabledContainerColor,
-                    disabledContentColor = colors.disabledContentColor,
+    val viewModel: VirtusizeButtonViewModel = viewModel<VirtusizeButtonViewModel>()
+
+    val state by viewModel.uiStateFlow.collectAsState()
+    if (state == VirtusizeButtonUiState.Shown) {
+        Button(
+            onClick = { viewModel.onButtonClick(context, product) },
+            modifier = modifier,
+            enabled = enable,
+            shape = shape,
+            colors =
+                colors?.let {
+                    ButtonDefaults.buttonColors(
+                        containerColor = colors.containerColor,
+                        contentColor = colors.contentColor,
+                        disabledContainerColor = colors.disabledContainerColor,
+                        disabledContentColor = colors.disabledContentColor,
+                    )
+                } ?: ButtonDefaults.buttonColors(),
+            elevation = elevation,
+            border = border,
+            contentPadding = contentPadding,
+            interactionSource = interactionSource,
+        ) {
+            if (content == emptyContent) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_vs_icon_white),
+                    contentDescription = null,
+                    modifier = Modifier.size(width = 18.dp, height = 13.dp),
                 )
-            } ?: ButtonDefaults.buttonColors(),
-        elevation = elevation,
-        border = border,
-        contentPadding = contentPadding,
-        interactionSource = interactionSource,
-    ) {
-        if (content == emptyContent) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_vs_icon_white),
-                contentDescription = null,
-                modifier = Modifier.size(width = 18.dp, height = 13.dp),
-            )
-            Spacer(modifier = Modifier.size(5.dp))
-            Text(
-                text = stringResource(id = R.string.virtusize_button_text),
-                fontSize = 14.sp,
-            )
-        } else {
-            content()
+                Spacer(modifier = Modifier.size(5.dp))
+                Text(
+                    text = stringResource(id = R.string.virtusize_button_text),
+                    fontSize = 14.sp,
+                )
+            } else {
+                content()
+            }
         }
     }
 
     LaunchedEffect(product) {
-        virtusizeButtonViewModel.loadProduct(product)
+        viewModel.loadProduct(product)
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.messageFlow.collect { message ->
+            when (message) {
+                is VirtusizeMessage.Event -> onEvent(message.product, message.event)
+                is VirtusizeMessage.Error -> onError(message.error)
+            }
+        }
     }
 }
 
