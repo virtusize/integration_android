@@ -96,7 +96,7 @@ private fun VirtusizeButton(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     content: @Composable RowScope.() -> Unit = emptyContent,
 ) {
-    if (state == VirtusizeButtonUiState.Shown) {
+    if (state == VirtusizeButtonUiState.Loaded) {
         Button(
             onClick = onClick,
             modifier = modifier,
@@ -194,7 +194,7 @@ private val emptyContent: @Composable RowScope.() -> Unit = {}
 @Preview
 private fun VirtusizeButtonPreview() {
     VirtusizeButton(
-        state = VirtusizeButtonUiState.Shown,
+        state = VirtusizeButtonUiState.Loaded,
         onClick = {},
     )
 }

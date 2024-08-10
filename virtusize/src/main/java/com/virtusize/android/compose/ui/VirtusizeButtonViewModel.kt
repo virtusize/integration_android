@@ -49,7 +49,7 @@ internal class VirtusizeButtonViewModel : ViewModel() {
         viewModelScope.launch {
             val isProductValid = virtusize.productDataCheck(product)
             if (isProductValid) {
-                mutableUiStateFlow.tryEmit(VirtusizeButtonUiState.Shown)
+                mutableUiStateFlow.tryEmit(VirtusizeButtonUiState.Loaded)
             } else {
                 mutableUiStateFlow.tryEmit(VirtusizeButtonUiState.Idle)
             }
