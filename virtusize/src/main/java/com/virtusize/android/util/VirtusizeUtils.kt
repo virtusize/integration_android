@@ -172,16 +172,7 @@ internal object VirtusizeUtils {
             fragmentTransaction.remove(fragment)
         }
         fragmentTransaction.addToBackStack(null)
-        val args = Bundle()
-        args.putString(Constants.URL_KEY, VirtusizeApi.virtusizeWebViewURL())
-        virtusizeParams?.let { params ->
-            args.putString(
-                Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY,
-                "javascript:vsParamsFromSDK(${params.vsParamsString(product)})",
-            )
-        }
-        args.putParcelable(Constants.VIRTUSIZE_PRODUCT_KEY, product)
-        virtusizeDialogFragment.arguments = args
+        virtusizeDialogFragment.arguments = createBundle(virtusizeParams, product)
         virtusizeDialogFragment.setupMessageHandler(messageHandler)
         virtusizeDialogFragment.show(fragmentTransaction, Constants.FRAG_TAG)
     }
@@ -195,19 +186,23 @@ internal object VirtusizeUtils {
         VirtusizeWebViewInMemoryCache.setupMessageHandler(messageHandler)
         val intent =
             Intent(context, VirtusizeWebViewActivity::class.java).apply {
-                putExtras(
-                    Bundle().apply {
-                        putString(Constants.URL_KEY, VirtusizeApi.virtusizeWebViewURL())
-                        virtusizeParams?.let { params ->
-                            putString(
-                                Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY,
-                                "javascript:vsParamsFromSDK(${params.vsParamsString(product)})",
-                            )
-                        }
-                        putParcelable(Constants.VIRTUSIZE_PRODUCT_KEY, product)
-                    },
-                )
+                putExtras(createBundle(virtusizeParams, product))
             }
         context.startActivity(intent)
     }
+
+    private fun createBundle(
+        virtusizeParams: VirtusizeParams?,
+        product: VirtusizeProduct,
+    ): Bundle =
+        Bundle().apply {
+            putString(Constants.URL_KEY, VirtusizeApi.virtusizeWebViewURL())
+            virtusizeParams?.let { params ->
+                putString(
+                    Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY,
+                    "javascript:vsParamsFromSDK(${params.vsParamsString(product)})",
+                )
+            }
+            putParcelable(Constants.VIRTUSIZE_PRODUCT_KEY, product)
+        }
 }
