@@ -24,10 +24,10 @@ internal fun VirtusizeSampleApp() {
             VirtusizeButton(
                 product = product,
                 onEvent = { event ->
-                    Log.d("VirtusizeButton", "Event: $event")
+                    Log.i(VirtusizeButtonTag, event.name)
                 },
                 onError = { error ->
-                    Log.e("VirtusizeButton", "Error: $error")
+                    Log.e(VirtusizeButtonTag, error.message)
                 },
             )
         }
@@ -39,3 +39,5 @@ internal fun VirtusizeSampleApp() {
 private fun VirtusizeSampleAppPreview() {
     VirtusizeSampleApp()
 }
+
+private const val VirtusizeButtonTag = "VirtusizeButton"
