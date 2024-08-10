@@ -1,5 +1,6 @@
 package com.virtusize.sampleapp.compose
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -20,7 +21,15 @@ internal fun VirtusizeSampleApp() {
                     imageUrl = "http://www.image.com/goods/12345.jpg",
                 )
 
-            VirtusizeButton(product = product)
+            VirtusizeButton(
+                product = product,
+                onEvent = { event ->
+                    Log.d("VirtusizeButton", "Event: $event")
+                },
+                onError = { error ->
+                    Log.e("VirtusizeButton", "Error: $error")
+                },
+            )
         }
     }
 }

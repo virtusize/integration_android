@@ -10,7 +10,6 @@ import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.getEventName
 import com.virtusize.android.model.VirtusizeMessage
-import com.virtusize.android.ui.VirtusizeWebViewFragment
 import com.virtusize.android.util.VirtusizeUtils
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,8 +25,6 @@ internal class VirtusizeButtonViewModel : ViewModel() {
     val messageFlow = mutableMessageFlow.receiveAsFlow()
 
     private val virtusize: Virtusize by lazy { Virtusize.getInstance() }
-
-    private val virtusizeDialogFragment: VirtusizeWebViewFragment by lazy { VirtusizeWebViewFragment() }
 
     private val messageHandler =
         object : VirtusizeMessageHandler {
@@ -61,7 +58,6 @@ internal class VirtusizeButtonViewModel : ViewModel() {
         VirtusizeUtils.openVirtusizeWebView(
             context,
             virtusize.params,
-            virtusizeDialogFragment,
             product,
             messageHandler,
         )

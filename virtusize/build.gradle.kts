@@ -71,6 +71,7 @@ dependencies {
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
+    implementation("androidx.fragment:fragment-ktx:1.8.2")
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.material)
 

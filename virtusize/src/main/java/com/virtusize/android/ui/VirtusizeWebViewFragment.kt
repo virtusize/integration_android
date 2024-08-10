@@ -2,6 +2,7 @@ package com.virtusize.android.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -25,7 +26,7 @@ import com.virtusize.android.auth.utils.VirtusizeURLCheck
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.parsers.VirtusizeEventJsonParser
-import com.virtusize.android.databinding.WebActivityBinding
+import com.virtusize.android.databinding.FragmentVirtusizeWebviewBinding
 import com.virtusize.android.util.Constants
 import org.json.JSONObject
 
@@ -41,7 +42,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
 
     private lateinit var sharedPreferencesHelper: SharedPreferencesHelper
 
-    private lateinit var binding: WebActivityBinding
+    private lateinit var binding: FragmentVirtusizeWebviewBinding
 
     private val virtusizeSNSAuthLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -68,7 +69,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = WebActivityBinding.inflate(inflater, container, false)
+        binding = FragmentVirtusizeWebviewBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -222,6 +223,14 @@ class VirtusizeWebViewFragment : DialogFragment() {
         super.onDestroyView()
         binding.webView.stopLoading()
         binding.webView.destroy()
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        val activity = requireActivity()
+        if (activity is VirtusizeWebViewActivity) {
+            activity.finish()
+        }
+        super.onDismiss(dialog)
     }
 
     /**

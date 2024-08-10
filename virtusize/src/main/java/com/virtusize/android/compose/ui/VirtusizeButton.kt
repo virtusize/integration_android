@@ -46,7 +46,7 @@ fun VirtusizeButton(
     border: BorderStroke? = null,
     contentPadding: PaddingValues = VirtusizeButtonDefaults.ContentPadding,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    onEvent: (product: VirtusizeProduct, event: VirtusizeEvent) -> Unit = { _, _ -> },
+    onEvent: (event: VirtusizeEvent) -> Unit = { _ -> },
     onError: (error: VirtusizeError) -> Unit = { _ -> },
     content: @Composable RowScope.() -> Unit = emptyContent,
 ) {
@@ -75,7 +75,7 @@ fun VirtusizeButton(
     LaunchedEffect(Unit) {
         viewModel.messageFlow.collect { message ->
             when (message) {
-                is VirtusizeMessage.Event -> onEvent(message.product, message.event)
+                is VirtusizeMessage.Event -> onEvent(message.event)
                 is VirtusizeMessage.Error -> onError(message.error)
             }
         }
