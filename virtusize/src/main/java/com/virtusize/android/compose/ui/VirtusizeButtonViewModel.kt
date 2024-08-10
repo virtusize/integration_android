@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 
 internal class VirtusizeButtonViewModel : ViewModel() {
-    private val mutableUiStateFlow = MutableStateFlow<VirtusizeButtonUiState>(VirtusizeButtonUiState.Hidden)
+    private val mutableUiStateFlow = MutableStateFlow<VirtusizeButtonUiState>(VirtusizeButtonUiState.Idle)
     val uiStateFlow: StateFlow<VirtusizeButtonUiState> = mutableUiStateFlow.asStateFlow()
 
     private val mutableMessageFlow: Channel<VirtusizeMessage> by lazy { Channel() }
@@ -48,6 +48,7 @@ internal class VirtusizeButtonViewModel : ViewModel() {
     }
 
     fun loadProduct(product: VirtusizeProduct) {
+        mutableUiStateFlow.tryEmit(VirtusizeButtonUiState.Loading)
         virtusize.load(product)
     }
 
