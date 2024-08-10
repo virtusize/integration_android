@@ -39,9 +39,9 @@ import com.virtusize.android.model.VirtusizeMessage
 fun VirtusizeButton(
     product: VirtusizeProduct,
     modifier: Modifier = Modifier,
-    enable: Boolean = true,
+    enabled: Boolean = true,
     shape: Shape = VirtusizeButtonDefaults.shape,
-    colors: VirtusizeButtonColors? = null,
+    colors: VirtusizeButtonColors = VirtusizeButtonDefaults.teal(),
     elevation: ButtonElevation? = VirtusizeButtonDefaults.buttonElevation(),
     border: BorderStroke? = null,
     contentPadding: PaddingValues = VirtusizeButtonDefaults.ContentPadding,
@@ -54,21 +54,61 @@ fun VirtusizeButton(
     val viewModel: VirtusizeButtonViewModel = viewModel<VirtusizeButtonViewModel>()
 
     val state by viewModel.uiStateFlow.collectAsState()
+    VirtusizeButton(
+        state = state,
+        onClick = { viewModel.onButtonClick(context, product) },
+        modifier = modifier,
+        enabled = enabled,
+        shape = shape,
+        colors = colors,
+        elevation = elevation,
+        border = border,
+        contentPadding = contentPadding,
+        interactionSource = interactionSource,
+        content = content,
+    )
+
+    LaunchedEffect(product) {
+        viewModel.loadProduct(product)
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.messageFlow.collect { message ->
+            when (message) {
+                is VirtusizeMessage.Event -> onEvent(message.product, message.event)
+                is VirtusizeMessage.Error -> onError(message.error)
+            }
+        }
+    }
+}
+
+@Composable
+private fun VirtusizeButton(
+    state: VirtusizeButtonUiState,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    shape: Shape = ButtonDefaults.shape,
+    colors: VirtusizeButtonColors = VirtusizeButtonDefaults.teal(),
+    elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
+    border: BorderStroke? = null,
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    content: @Composable RowScope.() -> Unit = emptyContent,
+) {
     if (state == VirtusizeButtonUiState.Shown) {
         Button(
-            onClick = { viewModel.onButtonClick(context, product) },
+            onClick = onClick,
             modifier = modifier,
-            enabled = enable,
+            enabled = enabled,
             shape = shape,
             colors =
-                colors?.let {
-                    ButtonDefaults.buttonColors(
-                        containerColor = colors.containerColor,
-                        contentColor = colors.contentColor,
-                        disabledContainerColor = colors.disabledContainerColor,
-                        disabledContentColor = colors.disabledContentColor,
-                    )
-                } ?: ButtonDefaults.buttonColors(),
+                ButtonDefaults.buttonColors(
+                    containerColor = colors.containerColor,
+                    contentColor = colors.contentColor,
+                    disabledContainerColor = colors.disabledContainerColor,
+                    disabledContentColor = colors.disabledContentColor,
+                ),
             elevation = elevation,
             border = border,
             contentPadding = contentPadding,
@@ -87,19 +127,6 @@ fun VirtusizeButton(
                 )
             } else {
                 content()
-            }
-        }
-    }
-
-    LaunchedEffect(product) {
-        viewModel.loadProduct(product)
-    }
-
-    LaunchedEffect(Unit) {
-        viewModel.messageFlow.collect { message ->
-            when (message) {
-                is VirtusizeMessage.Event -> onEvent(message.product, message.event)
-                is VirtusizeMessage.Error -> onError(message.error)
             }
         }
     }
@@ -167,11 +194,7 @@ private val emptyContent: @Composable RowScope.() -> Unit = {}
 @Preview
 private fun VirtusizeButtonPreview() {
     VirtusizeButton(
-        product =
-            VirtusizeProduct(
-                "694",
-                "http://www.image.com/goods/12345.jpg",
-            ),
-        colors = VirtusizeButtonDefaults.teal(),
+        state = VirtusizeButtonUiState.Shown,
+        onClick = {},
     )
 }
