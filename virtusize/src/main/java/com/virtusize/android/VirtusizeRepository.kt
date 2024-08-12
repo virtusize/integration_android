@@ -22,6 +22,8 @@ import com.virtusize.android.data.remote.Product
 import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.network.VirtusizeAPIService
 import com.virtusize.android.util.VirtusizeUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.json.JSONException
 import org.json.JSONObject
 import java.net.HttpURLConnection
@@ -79,8 +81,9 @@ internal class VirtusizeRepository(
     /**
      * Checks if the product is valid
      * @param virtusizeProduct the product info set by a client
+     * @return true if the product is valid, false otherwise
      */
-    internal suspend fun productDataCheck(virtusizeProduct: VirtusizeProduct) {
+    internal suspend fun productDataCheck(virtusizeProduct: VirtusizeProduct): Boolean {
         val productCheckResponse = virtusizeAPIService.productDataCheck(virtusizeProduct)
         if (productCheckResponse.isSuccessful) {
             val productCheck = productCheckResponse.successData!!
@@ -93,9 +96,9 @@ internal class VirtusizeRepository(
                 VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()),
             )
 
-            productCheck.data?.apply {
-                if (validProduct) {
-                    if (fetchMetaData) {
+            productCheck.data?.let { productCheckData ->
+                if (productCheckData.validProduct) {
+                    if (productCheckData.fetchMetaData) {
                         if (virtusizeProduct.imageUrl != null) {
                             // If image URL is valid, send image URL to server
                             val sendProductImageResponse =
@@ -120,18 +123,26 @@ internal class VirtusizeRepository(
                         VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName()),
                     )
 
-                    presenter?.onValidProductDataCheck(virtusizeProduct)
+                    withContext(Dispatchers.Main) {
+                        presenter?.onValidProductDataCheck(virtusizeProduct)
+                    }
+                    return true
                 } else {
-                    presenter?.hasInPageError(
-                        virtusizeProduct.externalId,
-                        VirtusizeErrorType.InvalidProduct.virtusizeError(
-                            extraMessage = virtusizeProduct.externalId,
-                        ),
-                    )
+                    withContext(Dispatchers.Main) {
+                        presenter?.hasInPageError(
+                            externalProductId = virtusizeProduct.externalId,
+                            error =
+                                VirtusizeErrorType.InvalidProduct.virtusizeError(
+                                    extraMessage = virtusizeProduct.externalId,
+                                ),
+                        )
+                    }
+                    return false
                 }
-            }
+            } ?: return false
         } else {
-            productCheckResponse.failureData?.let { messageHandler.onError(it) }
+            productCheckResponse.failureData?.let { error -> messageHandler.onError(error) }
+            return false
         }
     }
 
@@ -167,7 +178,9 @@ internal class VirtusizeRepository(
         val externalProductId = product.externalId
         val storeProductResponse = virtusizeAPIService.getStoreProduct(productId)
         if (storeProductResponse.successData == null) {
-            presenter?.hasInPageError(externalProductId, storeProductResponse.failureData)
+            withContext(Dispatchers.Main) {
+                presenter?.hasInPageError(externalProductId, storeProductResponse.failureData)
+            }
             return
         }
 
@@ -177,13 +190,17 @@ internal class VirtusizeRepository(
 
         val productTypesResponse = virtusizeAPIService.getProductTypes()
         if (productTypesResponse.successData == null) {
-            presenter?.hasInPageError(externalProductId, productTypesResponse.failureData)
+            withContext(Dispatchers.Main) {
+                presenter?.hasInPageError(externalProductId, productTypesResponse.failureData)
+            }
             return
         }
 
         val i18nResponse = virtusizeAPIService.getI18n(language)
         if (i18nResponse.successData == null) {
-            presenter?.hasInPageError(externalProductId, i18nResponse.failureData)
+            withContext(Dispatchers.Main) {
+                presenter?.hasInPageError(externalProductId, i18nResponse.failureData)
+            }
             return
         }
 
@@ -210,7 +227,9 @@ internal class VirtusizeRepository(
                 )
             }
         } else {
-            presenter?.hasInPageError(externalProductId, userSessionInfoResponse.failureData)
+            withContext(Dispatchers.Main) {
+                presenter?.hasInPageError(externalProductId, userSessionInfoResponse.failureData)
+            }
         }
     }
 
@@ -238,10 +257,12 @@ internal class VirtusizeRepository(
             if (userProductsResponse.isSuccessful) {
                 userProducts = userProductsResponse.successData
             } else if (userProductsResponse.failureData?.code != HttpURLConnection.HTTP_NOT_FOUND) {
-                presenter?.hasInPageError(
-                    storeProduct?.externalId,
-                    userProductsResponse.failureData,
-                )
+                withContext(Dispatchers.Main) {
+                    presenter?.hasInPageError(
+                        storeProduct?.externalId,
+                        userProductsResponse.failureData,
+                    )
+                }
                 return
             }
         }
@@ -284,32 +305,34 @@ internal class VirtusizeRepository(
      * @param externalProductId the external product ID set by a client
      * @param type the selected recommendation compare view type
      */
-    internal fun updateInPageRecommendation(
+    internal suspend fun updateInPageRecommendation(
         externalProductId: String? = null,
         type: SizeRecommendationType? = null,
     ) {
         (externalProductId ?: lastProductOnVirtusizeWebView?.externalId)?.let { externalProductId ->
-            when (type) {
-                SizeRecommendationType.CompareProduct -> {
-                    presenter?.gotSizeRecommendations(
-                        externalProductId,
-                        userProductRecommendedSize,
-                        null,
-                    )
-                }
-                SizeRecommendationType.Body -> {
-                    presenter?.gotSizeRecommendations(
-                        externalProductId,
-                        null,
-                        userBodyRecommendedSize,
-                    )
-                }
-                else -> {
-                    presenter?.gotSizeRecommendations(
-                        externalProductId,
-                        userProductRecommendedSize,
-                        userBodyRecommendedSize,
-                    )
+            withContext(Dispatchers.Main) {
+                when (type) {
+                    SizeRecommendationType.CompareProduct -> {
+                        presenter?.gotSizeRecommendations(
+                            externalProductId,
+                            userProductRecommendedSize,
+                            null,
+                        )
+                    }
+                    SizeRecommendationType.Body -> {
+                        presenter?.gotSizeRecommendations(
+                            externalProductId,
+                            null,
+                            userBodyRecommendedSize,
+                        )
+                    }
+                    else -> {
+                        presenter?.gotSizeRecommendations(
+                            externalProductId,
+                            userProductRecommendedSize,
+                            userBodyRecommendedSize,
+                        )
+                    }
                 }
             }
         }

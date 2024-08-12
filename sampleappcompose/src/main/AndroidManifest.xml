@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:name=".VirtusizeSampleApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- SNS authentication setup:
+       Include an intent-filter and set the android:scheme on the VitrusizeAuthActivity that will be responsible for handling the deep link back into the app
+       -->
+        <activity
+            android:name="com.virtusize.android.auth.views.VitrusizeAuthActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- The URL host has to be sns-auth and the URL scheme must begin with your app's package ID (com.company.app) and end with .virtusize
+                Note: The scheme you define must use all lowercase letters.
+                -->
+                <data
+                    android:host="sns-auth"
+                    android:scheme="com.virtusize.sampleapp.compose.virtusize" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>

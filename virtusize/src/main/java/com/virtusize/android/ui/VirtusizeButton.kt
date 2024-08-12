@@ -67,7 +67,7 @@ class VirtusizeButton
                     R.styleable.VirtusizeButton_virtusizeButtonStyle,
                     VirtusizeViewStyle.NONE.value,
                 )
-            virtusizeViewStyle = VirtusizeViewStyle.values().firstOrNull { it.value == buttonStyle }
+            virtusizeViewStyle = VirtusizeViewStyle.entries.firstOrNull { it.value == buttonStyle }
                 ?: VirtusizeViewStyle.NONE
             attrsArray.recycle()
             setupButtonStyle()

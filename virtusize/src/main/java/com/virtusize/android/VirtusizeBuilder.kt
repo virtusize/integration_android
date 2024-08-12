@@ -30,10 +30,10 @@ class VirtusizeBuilder {
     private var region: VirtusizeRegion = VirtusizeRegion.JP
     private var language: VirtusizeLanguage? = null
     private var allowedLanguages: MutableList<VirtusizeLanguage> =
-        VirtusizeLanguage.values().asList().toMutableList()
+        VirtusizeLanguage.entries.toMutableList()
     private var showSGI: Boolean = false
     private var detailsPanelCards: MutableList<VirtusizeInfoCategory> =
-        VirtusizeInfoCategory.values().asList().toMutableList()
+        VirtusizeInfoCategory.entries.toMutableList()
 
     /**
      * This method is used to add the application context to the Virtusize builder
@@ -147,6 +147,6 @@ class VirtusizeBuilder {
                 showSGI = showSGI,
                 detailsPanelCards = detailsPanelCards,
             )
-        return Virtusize(context = context!!, params = params)
+        return Virtusize.init(context = context!!, params = params)
     }
 }
