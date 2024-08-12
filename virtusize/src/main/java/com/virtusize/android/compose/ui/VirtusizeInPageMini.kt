@@ -1,7 +1,15 @@
 package com.virtusize.android.compose.ui
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.VectorConverter
+import androidx.compose.animation.core.animateValue
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -10,53 +18,115 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.virtusize.android.R
 import com.virtusize.android.compose.theme.VirtusizeColors
+import com.virtusize.android.data.local.VirtusizeProduct
+import com.virtusize.android.ui.VirtusizeInPageMini
 
 @Composable
 fun VirtusizeInPageMini(
+    product: VirtusizeProduct,
     modifier: Modifier = Modifier,
     backgroundColor: Color = VirtusizeColors.Black,
 ) {
+    val context = LocalContext.current
+    val viewModel: VirtusizePageMiniViewModel = viewModel<VirtusizePageMiniViewModel>()
+    val state by viewModel.uiStateFlow.collectAsState()
+    VirtusizeInPageMini(
+        state = state,
+        onClick = { viewModel.onButtonClick(context, product) },
+        backgroundColor = backgroundColor,
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun VirtusizeInPageMini(
+    state: VirtusizeInPageMiniUiState,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = VirtusizeColors.Black,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+) {
+    if (state is VirtusizeInPageMiniUiState.Hidden) return
     Row(
         modifier =
             modifier
                 .height(40.dp)
-                .background(backgroundColor),
+                .background(backgroundColor)
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    onClick = onClick,
+                ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Spacer(modifier = Modifier.width(12.dp))
-        Text(
+        LoadingDottedText(
             text = stringResource(id = R.string.inpage_loading_text),
             modifier = Modifier.weight(1f),
-            color = VirtusizeColors.White,
-            fontSize = 14.sp,
+            style =
+                TextStyle(
+                    color = VirtusizeColors.White,
+                    fontSize = 14.sp,
+                ),
         )
-        Spacer(modifier = Modifier.width(4.dp))
-        InPageMiniButton(
-            onClick = { /*TODO*/ },
-            contentColor = backgroundColor,
-            modifier = Modifier.height(24.dp),
-        )
+        if (state is VirtusizeInPageMiniUiState.Success) {
+            Spacer(modifier = Modifier.width(4.dp))
+            InPageMiniButton(
+                onClick = onClick,
+                contentColor = backgroundColor,
+                modifier = Modifier.height(24.dp),
+            )
+        }
         Spacer(modifier = Modifier.width(12.dp))
     }
+}
+
+@Composable
+private fun LoadingDottedText(
+    text: String,
+    modifier: Modifier,
+    style: TextStyle,
+) {
+    val infiniteTransition = rememberInfiniteTransition(label = "InfiniteTransition")
+    val animatedDotCount =
+        infiniteTransition.animateValue(
+            initialValue = 0,
+            targetValue = 4,
+            typeConverter = Int.VectorConverter,
+            animationSpec =
+                infiniteRepeatable(
+                    animation = tween(durationMillis = 1500, easing = LinearEasing),
+                    repeatMode = RepeatMode.Restart,
+                ),
+            label = "ValueAnimation",
+        )
+
+    Text(
+        text = text + "·".repeat(animatedDotCount.value),
+        modifier = modifier,
+        style = style,
+    )
 }
 
 @Composable
@@ -70,18 +140,23 @@ private fun InPageMiniButton(
 ) {
     Surface(
         onClick = onClick,
-        modifier = modifier.semantics { role = Role.Button },
+        modifier = modifier,
         enabled = enabled,
-        shape = RoundedCornerShape(24.dp),
+        shape = CircleShape,
         color = VirtusizeColors.White,
         contentColor = contentColor,
         tonalElevation = 0.dp,
         shadowElevation = 0.dp,
         border = border,
-        interactionSource = interactionSource,
     ) {
         Row(
-            Modifier.padding(start = 8.dp, top = 4.dp, end = 4.dp, bottom = 4.dp),
+            Modifier
+                .padding(start = 8.dp, top = 4.dp, end = 4.dp, bottom = 4.dp)
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    onClick = onClick,
+                ),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -100,6 +175,30 @@ private fun InPageMiniButton(
 
 @Preview
 @Composable
-private fun VirtusizeInPageMiniPreview() {
-    VirtusizeInPageMini()
+private fun LoadingVirtusizeInPageMiniPreview() {
+    VirtusizeInPageMini(
+        state = VirtusizeInPageMiniUiState.Loading,
+        onClick = {},
+        backgroundColor = VirtusizeColors.Teal,
+    )
+}
+
+@Preview
+@Composable
+private fun SuccessVirtusizeInPageMiniPreview() {
+    VirtusizeInPageMini(
+        state = VirtusizeInPageMiniUiState.Success("Find the right size"),
+        onClick = {},
+        backgroundColor = VirtusizeColors.Black,
+    )
+}
+
+@Preview
+@Composable
+private fun ErrorVirtusizeInPageMiniPreview() {
+    VirtusizeInPageMini(
+        state = VirtusizeInPageMiniUiState.Error,
+        onClick = {},
+        backgroundColor = VirtusizeColors.Black,
+    )
 }
