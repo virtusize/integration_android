@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.onEach
 fun VirtusizeInPageMini(
     product: VirtusizeProduct,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = VirtusizeColors.Teal,
+    backgroundColor: Color = VirtusizeColors.Black,
     onEvent: (event: VirtusizeEvent) -> Unit = { _ -> },
     onError: (error: VirtusizeError) -> Unit = { _ -> },
 ) {
