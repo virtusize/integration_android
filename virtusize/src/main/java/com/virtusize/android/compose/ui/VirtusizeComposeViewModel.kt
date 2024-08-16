@@ -1,30 +1,46 @@
 package com.virtusize.android.compose.ui
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.virtusize.android.Virtusize
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeEvent
+import com.virtusize.android.data.local.VirtusizeEvents
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeProduct
+import com.virtusize.android.data.local.getEventName
 import com.virtusize.android.model.VirtusizeMessage
-import com.virtusize.android.util.VirtusizeUtils
+import com.virtusize.android.ui.VirtusizeView
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
 
-internal class VirtusizeButtonViewModel : ViewModel() {
-    private val mutableUiStateFlow by lazy { MutableStateFlow<VirtusizeButtonUiState>(VirtusizeButtonUiState.Idle) }
-    val uiStateFlow: StateFlow<VirtusizeButtonUiState> = mutableUiStateFlow.asStateFlow()
+internal class VirtusizeComposeViewModel : ViewModel() {
+    private val virtusize: Virtusize by lazy { Virtusize.getInstance() }
 
     private val mutableMessageFlow: Channel<VirtusizeMessage> by lazy { Channel() }
-    val messageFlow = mutableMessageFlow.receiveAsFlow()
+    val messageFlow: SharedFlow<VirtusizeMessage> =
+        mutableMessageFlow.receiveAsFlow()
+            .shareIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(),
+            )
 
-    private val virtusize: Virtusize by lazy { Virtusize.getInstance() }
+    val isLoadedFlow: StateFlow<Boolean> =
+        messageFlow
+            .filter { message -> message is VirtusizeMessage.Event && message.event.name == VirtusizeEvents.UserSawProduct.getEventName() }
+            .map { true }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = false,
+            )
 
     private val messageHandler =
         object : VirtusizeMessageHandler {
@@ -44,28 +60,12 @@ internal class VirtusizeButtonViewModel : ViewModel() {
         virtusize.registerMessageHandler(messageHandler)
     }
 
-    fun loadProduct(product: VirtusizeProduct) {
-        viewModelScope.launch {
-            mutableUiStateFlow.tryEmit(VirtusizeButtonUiState.Loading)
-            val isProductValid = virtusize.productDataCheck(product)
-            if (isProductValid) {
-                mutableUiStateFlow.tryEmit(VirtusizeButtonUiState.Loaded)
-            } else {
-                mutableUiStateFlow.tryEmit(VirtusizeButtonUiState.Idle)
-            }
-        }
-    }
-
-    fun onButtonClick(
-        context: Context,
+    fun load(
         product: VirtusizeProduct,
+        virtusizeView: VirtusizeView,
     ) {
-        VirtusizeUtils.openVirtusizeWebView(
-            context,
-            virtusize.params,
-            product,
-            messageHandler,
-        )
+        virtusize.setupVirtusizeView(product = product, virtusizeView = virtusizeView)
+        virtusize.load(product)
     }
 
     override fun onCleared() {

@@ -12,8 +12,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.virtusize.android.compose.ui.VirtusizeButton
+import com.virtusize.android.compose.ui.VirtusizeButtonColors
 import com.virtusize.android.data.local.VirtusizeProduct
 
 @Composable
@@ -36,6 +38,11 @@ internal fun VirtusizeSampleApp() {
             VirtusizeButton(
                 product = product,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
+                colors =
+                    VirtusizeButtonColors(
+                        containerColor = Color.Black,
+                        contentColor = Color.White,
+                    ),
                 onEvent = { event ->
                     Log.i(VIRTUSIZE_BUTTON_TAG, event.name)
                 },
