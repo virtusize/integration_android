@@ -2,11 +2,14 @@ package com.virtusize.android.compose.ui
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.virtusize.android.Virtusize
+import com.virtusize.android.data.VirtusizeRepositoryImpl
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeProduct
+import com.virtusize.android.domain.VirtusizeRepository
 import com.virtusize.android.model.VirtusizeMessage
 import com.virtusize.android.util.VirtusizeUtils
 import kotlinx.coroutines.channels.Channel
@@ -14,6 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
 internal class VirtusizePageMiniViewModel : ViewModel() {
     private val mutableUiStateFlow by lazy { MutableStateFlow<VirtusizeInPageMiniUiState>(VirtusizeInPageMiniUiState.Hidden) }
@@ -37,6 +41,20 @@ internal class VirtusizePageMiniViewModel : ViewModel() {
                 mutableMessageFlow.trySend(VirtusizeMessage.Error(error))
             }
         }
+
+    private val repository: VirtusizeRepository by lazy {
+        VirtusizeRepositoryImpl(
+            context = virtusize.params.context,
+            messageHandler = messageHandler,
+        )
+    }
+
+    fun loadProduct(product: VirtusizeProduct) {
+        viewModelScope.launch {
+            mutableUiStateFlow.tryEmit(VirtusizeInPageMiniUiState.Loading)
+            // TODO: Implement the method
+        }
+    }
 
     fun onButtonClick(
         context: Context,

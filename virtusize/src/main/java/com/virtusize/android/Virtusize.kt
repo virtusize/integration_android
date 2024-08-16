@@ -56,7 +56,7 @@ interface Virtusize {
     /**
      * The [VirtusizeParams] object that contains userId, apiKey, env and other parameters to be passed to the Virtusize web app
      */
-    val params: VirtusizeParams?
+    val params: VirtusizeParams
 
     /**
      * The language that the Virtusize web app will display in
@@ -94,14 +94,6 @@ interface Virtusize {
      * @return true if the product is valid, false otherwise
      */
     fun load(virtusizeProduct: VirtusizeProduct)
-
-    /**
-     * Sets up and check the product for the product detail page
-     *
-     * @param virtusizeProduct VirtusizeProduct that is being loaded with the Virtusize API
-     * @return true if the product is valid, false otherwise
-     */
-    suspend fun productDataCheck(virtusizeProduct: VirtusizeProduct): Boolean
 
     /**
      * Sets up the Virtusize view by passing the VirtusizeView along with the bound VirtusizeProduct

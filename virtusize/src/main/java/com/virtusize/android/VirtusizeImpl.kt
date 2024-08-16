@@ -285,15 +285,9 @@ internal class VirtusizeImpl(
      */
     override fun load(virtusizeProduct: VirtusizeProduct) {
         scope.launch {
-            productDataCheck(virtusizeProduct)
+            virtusizeRepository.productDataCheck(virtusizeProduct)
         }
     }
-
-    /**
-     * @see Virtusize.productDataCheck
-     */
-    override suspend fun productDataCheck(virtusizeProduct: VirtusizeProduct): Boolean =
-        virtusizeRepository.productDataCheck(virtusizeProduct)
 
     /**
      * @see Virtusize.setupVirtusizeView

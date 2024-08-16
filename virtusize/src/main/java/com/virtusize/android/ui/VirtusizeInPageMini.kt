@@ -140,10 +140,7 @@ class VirtusizeInPageMini
             }
             binding.inpageMiniLoadingText.visibility = View.GONE
             binding.inpageMiniText.visibility = View.VISIBLE
-            binding.inpageMiniText.text =
-                configuredContext?.getText(
-                    R.string.inpage_short_error_text,
-                )
+            binding.inpageMiniText.text = configuredContext?.getText(R.string.inpage_short_error_text)
             binding.inpageMiniText.setTextColor(
                 ContextCompat.getColor(context, R.color.color_gray_700),
             )

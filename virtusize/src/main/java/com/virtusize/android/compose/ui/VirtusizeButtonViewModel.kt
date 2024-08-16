@@ -4,10 +4,12 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.virtusize.android.Virtusize
+import com.virtusize.android.data.VirtusizeRepositoryImpl
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeProduct
+import com.virtusize.android.domain.VirtusizeRepository
 import com.virtusize.android.model.VirtusizeMessage
 import com.virtusize.android.util.VirtusizeUtils
 import kotlinx.coroutines.channels.Channel
@@ -40,6 +42,13 @@ internal class VirtusizeButtonViewModel : ViewModel() {
             }
         }
 
+    private val repository: VirtusizeRepository by lazy {
+        VirtusizeRepositoryImpl(
+            context = virtusize.params.context,
+            messageHandler = messageHandler,
+        )
+    }
+
     init {
         virtusize.registerMessageHandler(messageHandler)
     }
@@ -47,11 +56,12 @@ internal class VirtusizeButtonViewModel : ViewModel() {
     fun loadProduct(product: VirtusizeProduct) {
         viewModelScope.launch {
             mutableUiStateFlow.tryEmit(VirtusizeButtonUiState.Loading)
-            val isProductValid = virtusize.productDataCheck(product)
-            if (isProductValid) {
-                mutableUiStateFlow.tryEmit(VirtusizeButtonUiState.Loaded)
-            } else {
-                mutableUiStateFlow.tryEmit(VirtusizeButtonUiState.Idle)
+            repository.productDataCheck(product)?.let { productCheck ->
+                if (productCheck.data?.validProduct == true) {
+                    mutableUiStateFlow.tryEmit(VirtusizeButtonUiState.Loaded)
+                } else {
+                    mutableUiStateFlow.tryEmit(VirtusizeButtonUiState.Idle)
+                }
             }
         }
     }

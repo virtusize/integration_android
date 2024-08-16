@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -39,7 +40,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.virtusize.android.R
 import com.virtusize.android.compose.theme.VirtusizeColors
+import com.virtusize.android.data.local.VirtusizeError
+import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeProduct
+import com.virtusize.android.model.VirtusizeMessage
 import com.virtusize.android.ui.VirtusizeInPageMini
 
 @Composable
@@ -47,6 +51,8 @@ fun VirtusizeInPageMini(
     product: VirtusizeProduct,
     modifier: Modifier = Modifier,
     backgroundColor: Color = VirtusizeColors.Black,
+    onEvent: (event: VirtusizeEvent) -> Unit = { _ -> },
+    onError: (error: VirtusizeError) -> Unit = { _ -> },
 ) {
     val context = LocalContext.current
     val viewModel: VirtusizePageMiniViewModel = viewModel<VirtusizePageMiniViewModel>()
@@ -57,6 +63,15 @@ fun VirtusizeInPageMini(
         backgroundColor = backgroundColor,
         modifier = modifier,
     )
+
+    LaunchedEffect(Unit) {
+        viewModel.messageFlow.collect { message ->
+            when (message) {
+                is VirtusizeMessage.Event -> onEvent(message.event)
+                is VirtusizeMessage.Error -> onError(message.error)
+            }
+        }
+    }
 }
 
 @Composable

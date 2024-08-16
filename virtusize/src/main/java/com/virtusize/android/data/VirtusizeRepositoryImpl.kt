@@ -1,4 +1,4 @@
-package com.virtusize.android.flutter
+package com.virtusize.android.data
 
 import android.content.Context
 import com.virtusize.android.SharedPreferencesHelper
@@ -19,22 +19,23 @@ import com.virtusize.android.data.remote.Product
 import com.virtusize.android.data.remote.ProductCheck
 import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.data.remote.UserBodyProfile
+import com.virtusize.android.domain.VirtusizeRepository
 import com.virtusize.android.network.VirtusizeAPIService
 import com.virtusize.android.network.VirtusizeApiResponse
 import org.json.JSONException
 import org.json.JSONObject
 import java.net.HttpURLConnection
 
-class VirtusizeFlutterRepository(
+internal class VirtusizeRepositoryImpl(
     context: Context,
     private val messageHandler: VirtusizeMessageHandler,
-) {
+) : VirtusizeRepository {
     private val apiService: VirtusizeAPIService =
         VirtusizeAPIService.getInstance(context, messageHandler)
     private val sharedPreferencesHelper: SharedPreferencesHelper =
         SharedPreferencesHelper.getInstance(context)
 
-    suspend fun productDataCheck(product: VirtusizeProduct): ProductCheck? {
+    override suspend fun productDataCheck(product: VirtusizeProduct): ProductCheck? {
         val productCheckResponse = apiService.productDataCheck(product)
         sendEventsAndProductImage(product, productCheckResponse)
         return productCheckResponse.successData
