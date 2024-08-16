@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.LocaleList
-import androidx.fragment.app.FragmentActivity
 import com.virtusize.android.data.local.ProductComparisonFitInfo
 import com.virtusize.android.data.local.SizeComparisonRecommendedSize
 import com.virtusize.android.data.local.VirtusizeLanguage
@@ -20,7 +19,6 @@ import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.data.remote.Weight
 import com.virtusize.android.network.VirtusizeApi
 import com.virtusize.android.ui.VirtusizeWebViewActivity
-import com.virtusize.android.ui.VirtusizeWebViewFragment
 import java.util.Locale
 import kotlin.math.abs
 
@@ -159,24 +157,6 @@ internal object VirtusizeUtils {
     /**
      * A function to open the Virtusize WebView
      */
-    fun openVirtusizeWebView(
-        context: Context,
-        virtusizeParams: VirtusizeParams?,
-        virtusizeDialogFragment: VirtusizeWebViewFragment,
-        product: VirtusizeProduct,
-        messageHandler: VirtusizeMessageHandler,
-    ) {
-        val fragmentTransaction = (context as FragmentActivity).supportFragmentManager.beginTransaction()
-        val previousFragment = context.supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
-        previousFragment?.let { fragment ->
-            fragmentTransaction.remove(fragment)
-        }
-        fragmentTransaction.addToBackStack(null)
-        virtusizeDialogFragment.arguments = createBundle(virtusizeParams, product)
-        virtusizeDialogFragment.setupMessageHandler(messageHandler)
-        virtusizeDialogFragment.show(fragmentTransaction, Constants.FRAG_TAG)
-    }
-
     fun openVirtusizeWebView(
         context: Context,
         virtusizeParams: VirtusizeParams?,
