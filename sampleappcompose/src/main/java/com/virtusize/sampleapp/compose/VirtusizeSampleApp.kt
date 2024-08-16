@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.virtusize.android.compose.theme.VirtusizeColors
 import com.virtusize.android.compose.ui.VirtusizeButton
 import com.virtusize.android.compose.ui.VirtusizeButtonColors
-import com.virtusize.android.compose.ui.VirtusizeInpageMini
+import com.virtusize.android.compose.ui.VirtusizeInPageMini
 import com.virtusize.android.data.local.VirtusizeProduct
 
 @Composable
@@ -57,7 +57,7 @@ internal fun VirtusizeSampleApp() {
                 },
             )
             Spacer(modifier = Modifier.height(16.dp))
-            VirtusizeInpageMini(
+            VirtusizeInPageMini(
                 product = product,
                 modifier = Modifier.padding(horizontal = 16.dp),
                 backgroundColor = Color.Blue,
@@ -79,4 +79,4 @@ private fun VirtusizeSampleAppPreview() {
 }
 
 private const val VIRTUSIZE_BUTTON_TAG = "VirtusizeButton"
-private const val VIRTUSIZE_INPAGE_MINI_TAG = "VirtusizeInpageMini"
+private const val VIRTUSIZE_INPAGE_MINI_TAG = "VirtusizeInPageMini"

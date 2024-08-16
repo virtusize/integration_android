@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @Composable
-fun VirtusizeInpageMini(
+fun VirtusizeInPageMini(
     product: VirtusizeProduct,
     modifier: Modifier = Modifier,
     backgroundColor: Color = VirtusizeColors.Teal,
