@@ -19,8 +19,10 @@ import com.virtusize.android.data.local.virtusizeError
 import com.virtusize.android.data.parsers.UserAuthDataJsonParser
 import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.data.remote.Product
+import com.virtusize.android.data.remote.ProductCheck
 import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.network.VirtusizeAPIService
+import com.virtusize.android.network.VirtusizeApiResponse
 import com.virtusize.android.util.VirtusizeUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -49,7 +51,7 @@ internal class VirtusizeRepository(
     private var productTypes: List<ProductType>? = null
 
     // A set to cache the product data check data of all the visited products
-    private val virtusizeProductSet = mutableSetOf<VirtusizeProduct>()
+    private val virtusizeProductCheckResponseMap: MutableMap<String, VirtusizeApiResponse<ProductCheck>> = mutableMapOf()
 
     // A set to cache the store product information of all the visited products
     private val storeProductSet = mutableSetOf<Product>()
@@ -84,11 +86,14 @@ internal class VirtusizeRepository(
      * @return true if the product is valid, false otherwise
      */
     internal suspend fun productDataCheck(virtusizeProduct: VirtusizeProduct): Boolean {
-        val productCheckResponse = virtusizeAPIService.productDataCheck(virtusizeProduct)
+        val productCheckResponse =
+            virtusizeProductCheckResponseMap[virtusizeProduct.externalId] ?: virtusizeAPIService.productDataCheck(virtusizeProduct).also {
+                    productCheckResponse ->
+                virtusizeProductCheckResponseMap[virtusizeProduct.externalId] = productCheckResponse
+            }
         if (productCheckResponse.isSuccessful) {
             val productCheck = productCheckResponse.successData!!
             virtusizeProduct.productCheckData = productCheck
-            virtusizeProductSet.add(virtusizeProduct)
 
             // Send API Event UserSawProduct
             sendEvent(

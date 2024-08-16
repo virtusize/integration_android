@@ -64,8 +64,8 @@ internal class VirtusizeComposeViewModel : ViewModel() {
         product: VirtusizeProduct,
         virtusizeView: VirtusizeView,
     ) {
-        virtusize.setupVirtusizeView(product = product, virtusizeView = virtusizeView)
         virtusize.load(product)
+        virtusize.setupVirtusizeView(product = product, virtusizeView = virtusizeView)
     }
 
     override fun onCleared() {
