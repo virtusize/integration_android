@@ -12,8 +12,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.virtusize.android.compose.theme.VirtusizeColors
 import com.virtusize.android.compose.ui.VirtusizeButton
 import com.virtusize.android.compose.ui.VirtusizeButtonColors
 import com.virtusize.android.data.local.VirtusizeProduct
@@ -22,7 +22,10 @@ import com.virtusize.android.data.local.VirtusizeProduct
 internal fun VirtusizeSampleApp() {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(innerPadding),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -40,8 +43,8 @@ internal fun VirtusizeSampleApp() {
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 colors =
                     VirtusizeButtonColors(
-                        containerColor = Color.Black,
-                        contentColor = Color.White,
+                        containerColor = VirtusizeColors.Black,
+                        contentColor = VirtusizeColors.White,
                     ),
                 onEvent = { event ->
                     Log.i(VIRTUSIZE_BUTTON_TAG, event.name)
