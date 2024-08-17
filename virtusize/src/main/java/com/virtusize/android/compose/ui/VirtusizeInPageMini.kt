@@ -80,7 +80,7 @@ private fun VirtusizeInPageMini(
 
 @Preview
 @Composable
-fun VirtusizeInPageMiniPreview() {
+private fun VirtusizeInPageMiniPreview() {
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         VirtusizeInPageMini(
             update = { virtusizeInPageMini ->
