@@ -27,9 +27,9 @@ import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.VirtusizeViewStyle
 import com.virtusize.android.model.VirtusizeMessage
+import com.virtusize.android.ui.VirtusizeButton
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import com.virtusize.android.ui.VirtusizeButton as AndroidViewVirtusizeButton
 
 /**
  * A composable that displays the VirtusizeButton
@@ -82,12 +82,12 @@ fun VirtusizeButton(
 private fun VirtusizeButton(
     modifier: Modifier = Modifier,
     style: VirtusizeViewStyle = VirtusizeViewStyle.BLACK,
-    update: (AndroidViewVirtusizeButton) -> Unit = NoOpUpdate,
+    update: (VirtusizeButton) -> Unit = NoOpUpdate,
 ) {
     AndroidView(
         modifier = modifier,
         factory = { context ->
-            AndroidViewVirtusizeButton(context)
+            VirtusizeButton(context)
         },
         update = { virtusizeButton ->
             virtusizeButton.virtusizeViewStyle = style
@@ -151,7 +151,7 @@ object VirtusizeButtonDefaults {
  * A extension function to set rounded corner background of the [VirtusizeButton].
  * @param backgroundColor The color to be set as the background of the [VirtusizeButton].
  */
-private fun AndroidViewVirtusizeButton.setRoundedCornerBackground(
+private fun VirtusizeButton.setRoundedCornerBackground(
     @ColorInt backgroundColor: Int,
 ) {
     val drawable = GradientDrawable()
@@ -192,7 +192,7 @@ private fun AndroidViewVirtusizeButton.setRoundedCornerBackground(
 /**
  * A extension function to specify the Virtusize logo tint color of the [VirtusizeButton].
  */
-private fun AndroidViewVirtusizeButton.setVirtusizeLogoTint(
+private fun VirtusizeButton.setVirtusizeLogoTint(
     @ColorInt iconTint: Int,
 ) {
     compoundDrawables.getOrNull(0)?.setTint(iconTint)
@@ -202,7 +202,7 @@ private fun AndroidViewVirtusizeButton.setVirtusizeLogoTint(
 @Preview
 private fun VirtusizeButtonPreview() {
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        val update: (AndroidViewVirtusizeButton) -> Unit = { virtusizeButton ->
+        val update: (VirtusizeButton) -> Unit = { virtusizeButton ->
             virtusizeButton.text = virtusizeButton.context.resources.getText(R.string.virtusize_button_text)
             virtusizeButton.visibility = View.VISIBLE
         }
