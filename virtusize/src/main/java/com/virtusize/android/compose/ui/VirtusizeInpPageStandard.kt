@@ -17,6 +17,14 @@ import com.virtusize.android.ui.VirtusizeInPageStandard
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+/**
+ * A composable that displays the VirtusizeInPageStandard
+ * @param product The product to be linked with the [VirtusizeInPageStandard].
+ * @param modifier The modifier to be applied to the [VirtusizeInPageStandard] layout.
+ * @param backgroundColor The background color to be applied to the [VirtusizeInPageStandard].
+ * @param onEvent The callback to be invoked when an [VirtusizeEvent] is triggered.
+ * @param onError The callback to be invoked when an [VirtusizeError] is triggered.
+ */
 @Composable
 fun VirtusizeInPageStandard(
     product: VirtusizeProduct,
