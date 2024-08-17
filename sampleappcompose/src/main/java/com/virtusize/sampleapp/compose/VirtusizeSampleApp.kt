@@ -62,7 +62,7 @@ internal fun VirtusizeSampleApp() {
             VirtusizeInPageMini(
                 product = product,
                 modifier = Modifier.padding(horizontal = 16.dp),
-                backgroundColor = Color.Blue,
+                backgroundColor = VirtusizeColors.Teal,
                 onEvent = { event ->
                     Log.i(VIRTUSIZE_INPAGE_MINI_TAG, event.name)
                 },
