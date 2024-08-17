@@ -28,7 +28,10 @@ import com.virtusize.android.data.local.VirtusizeProduct
 internal fun VirtusizeSampleApp() {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(innerPadding),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -46,8 +49,8 @@ internal fun VirtusizeSampleApp() {
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 colors =
                     VirtusizeButtonColors(
-                        containerColor = Color.Black,
-                        contentColor = Color.White,
+                        containerColor = VirtusizeColors.Black,
+                        contentColor = VirtusizeColors.White,
                     ),
                 onEvent = { event ->
                     Log.i(VIRTUSIZE_BUTTON_TAG, event.name)

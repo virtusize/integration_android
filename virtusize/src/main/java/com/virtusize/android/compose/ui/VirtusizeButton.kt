@@ -1,6 +1,8 @@
 package com.virtusize.android.compose.ui
 
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.LayerDrawable
 import android.os.Build
 import androidx.annotation.ColorInt
 import androidx.compose.runtime.Composable
@@ -18,10 +20,17 @@ import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.VirtusizeViewStyle
 import com.virtusize.android.model.VirtusizeMessage
 import com.virtusize.android.ui.VirtusizeButton
-import com.virtusize.android.util.dpInPx
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+/**
+ * A button composable that displays the Virtusize button
+ * @param product The product to be linked with the button.
+ * @param modifier The modifier to be applied to the button layout.
+ * @param colors The colors to be applied to the button.
+ * @param onEvent The callback to be invoked when an [VirtusizeEvent] is triggered.
+ * @param onError The callback to be invoked when an [VirtusizeError] is triggered.
+ */
 @Composable
 fun VirtusizeButton(
     product: VirtusizeProduct,
@@ -40,9 +49,9 @@ fun VirtusizeButton(
                 .onEach { isLoaded ->
                     if (isLoaded) {
                         virtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.BLACK
-                        virtusizeButton.setRoundedBackgroundColor(colors.containerColor.toArgb())
+                        virtusizeButton.setRoundedCornerBackground(colors.containerColor.toArgb())
                         colors.contentColor.toArgb().apply {
-                            virtusizeButton.setLogoTint(this)
+                            virtusizeButton.setVirtusizeLogoTint(this)
                             virtusizeButton.setTextColor(this)
                         }
                     }
@@ -62,58 +71,96 @@ fun VirtusizeButton(
     }
 }
 
-private fun VirtusizeButton.setRoundedBackgroundColor(
-    @ColorInt backgroundColor: Int,
-) {
-    val shape = GradientDrawable()
-    shape.shape = GradientDrawable.RECTANGLE
-    shape.cornerRadii =
-        floatArrayOf(
-            32.dpInPx.toFloat(),
-            32.dpInPx.toFloat(),
-            32.dpInPx.toFloat(),
-            32.dpInPx.toFloat(),
-            32.dpInPx.toFloat(),
-            32.dpInPx.toFloat(),
-            32.dpInPx.toFloat(),
-            32.dpInPx.toFloat(),
-        )
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        shape.setPadding(12.dpInPx, 10.dpInPx, 12.dpInPx, 10.dpInPx)
-    }
-    shape.setColor(backgroundColor)
-    background = shape
-}
-
-private fun VirtusizeButton.setLogoTint(
-    @ColorInt iconTint: Int,
-) {
-    compoundDrawables.getOrNull(0)?.setTint(iconTint)
-}
-
+/**
+ * Represents the container and content colors used in a [VirtusizeButton].
+ * @param containerColor the container color of this [VirtusizeButton].
+ * @param contentColor the content color of this [VirtusizeButton].
+ */
 data class VirtusizeButtonColors(
     val containerColor: Color,
     val contentColor: Color,
 )
 
-internal object VirtusizeButtonDefaults {
+/**
+ * Contains the default values used by [VirtusizeButton].
+ */
+object VirtusizeButtonDefaults {
+    /**
+     * Creates a [VirtusizeButtonColors] that represents the default container and content colors used for the [teal] style.
+     */
     @Composable
-    fun teal(
-        containerColor: Color = VirtusizeColors.Teal,
-        contentColor: Color = VirtusizeColors.White,
-    ): VirtusizeButtonColors =
+    fun teal(): VirtusizeButtonColors =
         VirtusizeButtonColors(
-            containerColor = containerColor,
-            contentColor = contentColor,
+            containerColor = VirtusizeColors.Teal,
+            contentColor = VirtusizeColors.White,
         )
 
+    /**
+     * Creates a [VirtusizeButtonColors] that represents the default container and content colors used for the [black] style.
+     */
     @Composable
-    fun black(
-        containerColor: Color = VirtusizeColors.Black,
-        contentColor: Color = VirtusizeColors.White,
+    fun black(): VirtusizeButtonColors =
+        VirtusizeButtonColors(
+            containerColor = VirtusizeColors.Black,
+            contentColor = VirtusizeColors.White,
+        )
+
+    /**
+     * Creates a [VirtusizeButtonColors] that represents the default container and content colors used in a [VirtusizeButton].
+     * @param containerColor the container color of this [VirtusizeButton].
+     * @param contentColor the content color of this [VirtusizeButton].
+     */
+    @Composable
+    fun colors(
+        containerColor: Color = Color.Unspecified,
+        contentColor: Color = Color.Unspecified,
     ): VirtusizeButtonColors =
         VirtusizeButtonColors(
             containerColor = containerColor,
             contentColor = contentColor,
         )
+}
+
+/**
+ * A extension function to set rounded corner background of the [VirtusizeButton].
+ * @param backgroundColor The color to be set as the background of the [VirtusizeButton].
+ */
+private fun VirtusizeButton.setRoundedCornerBackground(
+    @ColorInt backgroundColor: Int,
+) {
+    val drawable = GradientDrawable()
+    drawable.shape = GradientDrawable.RECTANGLE
+    val cornerRadius = resources.getDimension(R.dimen.virtusize_button_corner_radius)
+    drawable.cornerRadii =
+        floatArrayOf(
+            cornerRadius,
+            cornerRadius,
+            cornerRadius,
+            cornerRadius,
+            cornerRadius,
+            cornerRadius,
+            cornerRadius,
+            cornerRadius,
+        )
+    drawable.setColor(backgroundColor)
+    val verticalPadding = resources.getDimension(R.dimen.virtusize_button_vertical_padding).toInt()
+    val horizontalPadding = resources.getDimension(R.dimen.virtusize_button_horizontal_padding).toInt()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        drawable.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
+        background = drawable
+    } else {
+        val layers = arrayOf<Drawable>(drawable)
+        val layerDrawable = LayerDrawable(layers)
+        layerDrawable.setLayerInset(0, horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
+        background = layerDrawable.getDrawable(0)
+    }
+}
+
+/**
+ * A extension function to specify the Virtusize logo tint color of the [VirtusizeButton].
+ */
+private fun VirtusizeButton.setVirtusizeLogoTint(
+    @ColorInt iconTint: Int,
+) {
+    compoundDrawables.getOrNull(0)?.setTint(iconTint)
 }
