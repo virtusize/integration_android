@@ -51,7 +51,8 @@ internal class VirtusizeRepository(
     private var productTypes: List<ProductType>? = null
 
     // A set to cache the product data check data of all the visited products
-    private val virtusizeProductCheckResponseMap: MutableMap<String, VirtusizeApiResponse<ProductCheck>> = mutableMapOf()
+    private val virtusizeProductCheckResponseMap: MutableMap<ProductExternalId, VirtusizeApiResponse<ProductCheck>> =
+        mutableMapOf()
 
     // A set to cache the store product information of all the visited products
     private val storeProductSet = mutableSetOf<Product>()
@@ -87,9 +88,8 @@ internal class VirtusizeRepository(
      */
     internal suspend fun productDataCheck(virtusizeProduct: VirtusizeProduct): Boolean {
         val productCheckResponse =
-            virtusizeProductCheckResponseMap[virtusizeProduct.externalId] ?: virtusizeAPIService.productDataCheck(virtusizeProduct).also {
-                    productCheckResponse ->
-                virtusizeProductCheckResponseMap[virtusizeProduct.externalId] = productCheckResponse
+            virtusizeProductCheckResponseMap.getOrPut(virtusizeProduct.externalId) {
+                virtusizeAPIService.productDataCheck(virtusizeProduct)
             }
         if (productCheckResponse.isSuccessful) {
             val productCheck = productCheckResponse.successData!!
@@ -137,9 +137,9 @@ internal class VirtusizeRepository(
                         presenter?.hasInPageError(
                             externalProductId = virtusizeProduct.externalId,
                             error =
-                                VirtusizeErrorType.InvalidProduct.virtusizeError(
-                                    extraMessage = virtusizeProduct.externalId,
-                                ),
+                            VirtusizeErrorType.InvalidProduct.virtusizeError(
+                                extraMessage = virtusizeProduct.externalId,
+                            ),
                         )
                     }
                     return false
@@ -279,11 +279,11 @@ internal class VirtusizeRepository(
         userProductRecommendedSize =
             VirtusizeUtils.findBestFitProductSize(
                 userProducts =
-                    if (selectedUserProductId != null) {
-                        userProducts?.filter { it.id == selectedUserProductId }
-                    } else {
-                        userProducts
-                    },
+                if (selectedUserProductId != null) {
+                    userProducts?.filter { it.id == selectedUserProductId }
+                } else {
+                    userProducts
+                },
                 storeProduct = storeProduct,
                 productTypes = productTypes,
             )
@@ -324,6 +324,7 @@ internal class VirtusizeRepository(
                             null,
                         )
                     }
+
                     SizeRecommendationType.Body -> {
                         presenter?.gotSizeRecommendations(
                             externalProductId,
@@ -331,6 +332,7 @@ internal class VirtusizeRepository(
                             userBodyRecommendedSize,
                         )
                     }
+
                     else -> {
                         presenter?.gotSizeRecommendations(
                             externalProductId,
@@ -421,7 +423,8 @@ internal class VirtusizeRepository(
      * @param urlString the image URL string
      * @return the bitmap of the image
      */
-    internal suspend fun loadImage(urlString: String?): Bitmap? = if (urlString == null) null else virtusizeAPIService.loadImage(urlString)
+    internal suspend fun loadImage(urlString: String?): Bitmap? =
+        if (urlString == null) null else virtusizeAPIService.loadImage(urlString)
 
     /**
      * Updates the browser ID and the auth token from the data of the event user-auth-data
@@ -441,3 +444,5 @@ internal class VirtusizeRepository(
         }
     }
 }
+
+private typealias ProductExternalId = String
