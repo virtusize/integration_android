@@ -4,7 +4,10 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.os.Build
+import android.view.View
 import androidx.annotation.ColorInt
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,7 +15,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.viewinterop.NoOpUpdate
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.virtusize.android.R
 import com.virtusize.android.compose.theme.VirtusizeColors
@@ -21,9 +27,9 @@ import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.VirtusizeViewStyle
 import com.virtusize.android.model.VirtusizeMessage
-import com.virtusize.android.ui.VirtusizeButton
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import com.virtusize.android.ui.VirtusizeButton as AndroidViewVirtusizeButton
 
 /**
  * A composable that displays the VirtusizeButton
@@ -43,9 +49,8 @@ fun VirtusizeButton(
 ) {
     val viewModel: VirtusizeComposeViewModel = viewModel<VirtusizeComposeViewModel>()
     val coroutineScope = rememberCoroutineScope()
-    AndroidView(
+    VirtusizeButton(
         modifier = modifier,
-        factory = { context -> VirtusizeButton(context) },
         update = { virtusizeButton ->
             viewModel.isLoadedFlow
                 .onEach { isLoaded ->
@@ -71,6 +76,24 @@ fun VirtusizeButton(
             }
         }
     }
+}
+
+@Composable
+private fun VirtusizeButton(
+    modifier: Modifier = Modifier,
+    style: VirtusizeViewStyle = VirtusizeViewStyle.BLACK,
+    update: (AndroidViewVirtusizeButton) -> Unit = NoOpUpdate,
+) {
+    AndroidView(
+        modifier = modifier,
+        factory = { context ->
+            AndroidViewVirtusizeButton(context)
+        },
+        update = { virtusizeButton ->
+            virtusizeButton.virtusizeViewStyle = style
+            update(virtusizeButton)
+        },
+    )
 }
 
 /**
@@ -128,7 +151,7 @@ object VirtusizeButtonDefaults {
  * A extension function to set rounded corner background of the [VirtusizeButton].
  * @param backgroundColor The color to be set as the background of the [VirtusizeButton].
  */
-private fun VirtusizeButton.setRoundedCornerBackground(
+private fun AndroidViewVirtusizeButton.setRoundedCornerBackground(
     @ColorInt backgroundColor: Int,
 ) {
     val drawable = GradientDrawable()
@@ -147,14 +170,21 @@ private fun VirtusizeButton.setRoundedCornerBackground(
         )
     drawable.setColor(backgroundColor)
     val verticalPadding = resources.getDimension(R.dimen.virtusize_button_vertical_padding).toInt()
-    val horizontalPadding = resources.getDimension(R.dimen.virtusize_button_horizontal_padding).toInt()
+    val horizontalPadding =
+        resources.getDimension(R.dimen.virtusize_button_horizontal_padding).toInt()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         drawable.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
         background = drawable
     } else {
         val layers = arrayOf<Drawable>(drawable)
         val layerDrawable = LayerDrawable(layers)
-        layerDrawable.setLayerInset(0, horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
+        layerDrawable.setLayerInset(
+            0,
+            horizontalPadding,
+            verticalPadding,
+            horizontalPadding,
+            verticalPadding,
+        )
         background = layerDrawable.getDrawable(0)
     }
 }
@@ -162,8 +192,27 @@ private fun VirtusizeButton.setRoundedCornerBackground(
 /**
  * A extension function to specify the Virtusize logo tint color of the [VirtusizeButton].
  */
-private fun VirtusizeButton.setVirtusizeLogoTint(
+private fun AndroidViewVirtusizeButton.setVirtusizeLogoTint(
     @ColorInt iconTint: Int,
 ) {
     compoundDrawables.getOrNull(0)?.setTint(iconTint)
+}
+
+@Composable
+@Preview
+private fun VirtusizeButtonPreview() {
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        val update: (AndroidViewVirtusizeButton) -> Unit = { virtusizeButton ->
+            virtusizeButton.text = virtusizeButton.context.resources.getText(R.string.virtusize_button_text)
+            virtusizeButton.visibility = View.VISIBLE
+        }
+        VirtusizeButton(
+            style = VirtusizeViewStyle.TEAL,
+            update = update,
+        )
+        VirtusizeButton(
+            style = VirtusizeViewStyle.BLACK,
+            update = update,
+        )
+    }
 }
