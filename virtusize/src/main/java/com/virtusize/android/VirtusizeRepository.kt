@@ -50,8 +50,9 @@ internal class VirtusizeRepository(
     // This variable holds the list of product types from the Virtusize API
     private var productTypes: List<ProductType>? = null
 
-    // A set to cache the product data check data of all the visited products
-    private val virtusizeProductCheckResponseMap: MutableMap<String, VirtusizeApiResponse<ProductCheck>> = mutableMapOf()
+    // A map to cache the product data check data of all the visited products
+    private val virtusizeProductCheckResponseMap: MutableMap<ProductExternalId, VirtusizeApiResponse<ProductCheck>> =
+        mutableMapOf()
 
     // A set to cache the store product information of all the visited products
     private val storeProductSet = mutableSetOf<Product>()
@@ -87,9 +88,8 @@ internal class VirtusizeRepository(
      */
     internal suspend fun productDataCheck(virtusizeProduct: VirtusizeProduct): Boolean {
         val productCheckResponse =
-            virtusizeProductCheckResponseMap[virtusizeProduct.externalId] ?: virtusizeAPIService.productDataCheck(virtusizeProduct).also {
-                    productCheckResponse ->
-                virtusizeProductCheckResponseMap[virtusizeProduct.externalId] = productCheckResponse
+            virtusizeProductCheckResponseMap.getOrPut(virtusizeProduct.externalId) {
+                virtusizeAPIService.productDataCheck(virtusizeProduct)
             }
         if (productCheckResponse.isSuccessful) {
             val productCheck = productCheckResponse.successData!!
@@ -324,6 +324,7 @@ internal class VirtusizeRepository(
                             null,
                         )
                     }
+
                     SizeRecommendationType.Body -> {
                         presenter?.gotSizeRecommendations(
                             externalProductId,
@@ -331,6 +332,7 @@ internal class VirtusizeRepository(
                             userBodyRecommendedSize,
                         )
                     }
+
                     else -> {
                         presenter?.gotSizeRecommendations(
                             externalProductId,
@@ -441,3 +443,5 @@ internal class VirtusizeRepository(
         }
     }
 }
+
+private typealias ProductExternalId = String
