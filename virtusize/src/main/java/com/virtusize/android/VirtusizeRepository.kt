@@ -50,7 +50,7 @@ internal class VirtusizeRepository(
     // This variable holds the list of product types from the Virtusize API
     private var productTypes: List<ProductType>? = null
 
-    // A set to cache the product data check data of all the visited products
+    // A map to cache the product data check data of all the visited products
     private val virtusizeProductCheckResponseMap: MutableMap<ProductExternalId, VirtusizeApiResponse<ProductCheck>> =
         mutableMapOf()
 
@@ -137,9 +137,9 @@ internal class VirtusizeRepository(
                         presenter?.hasInPageError(
                             externalProductId = virtusizeProduct.externalId,
                             error =
-                            VirtusizeErrorType.InvalidProduct.virtusizeError(
-                                extraMessage = virtusizeProduct.externalId,
-                            ),
+                                VirtusizeErrorType.InvalidProduct.virtusizeError(
+                                    extraMessage = virtusizeProduct.externalId,
+                                ),
                         )
                     }
                     return false
@@ -279,11 +279,11 @@ internal class VirtusizeRepository(
         userProductRecommendedSize =
             VirtusizeUtils.findBestFitProductSize(
                 userProducts =
-                if (selectedUserProductId != null) {
-                    userProducts?.filter { it.id == selectedUserProductId }
-                } else {
-                    userProducts
-                },
+                    if (selectedUserProductId != null) {
+                        userProducts?.filter { it.id == selectedUserProductId }
+                    } else {
+                        userProducts
+                    },
                 storeProduct = storeProduct,
                 productTypes = productTypes,
             )
@@ -423,8 +423,7 @@ internal class VirtusizeRepository(
      * @param urlString the image URL string
      * @return the bitmap of the image
      */
-    internal suspend fun loadImage(urlString: String?): Bitmap? =
-        if (urlString == null) null else virtusizeAPIService.loadImage(urlString)
+    internal suspend fun loadImage(urlString: String?): Bitmap? = if (urlString == null) null else virtusizeAPIService.loadImage(urlString)
 
     /**
      * Updates the browser ID and the auth token from the data of the event user-auth-data
