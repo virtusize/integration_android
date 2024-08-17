@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import com.virtusize.android.compose.theme.VirtusizeColors
 import com.virtusize.android.compose.ui.VirtusizeButton
 import com.virtusize.android.compose.ui.VirtusizeButtonDefaults
-import com.virtusize.android.compose.ui.VirtusizeButtonColors
 import com.virtusize.android.compose.ui.VirtusizeInPageMini
 import com.virtusize.android.data.local.VirtusizeProduct
 
