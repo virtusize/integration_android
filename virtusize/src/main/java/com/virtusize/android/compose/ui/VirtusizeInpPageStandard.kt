@@ -1,17 +1,24 @@
 package com.virtusize.android.compose.ui
 
+import android.view.View
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.viewinterop.NoOpUpdate
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.virtusize.android.compose.theme.VirtusizeColors
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeProduct
+import com.virtusize.android.data.local.VirtusizeViewStyle
 import com.virtusize.android.model.VirtusizeMessage
 import com.virtusize.android.ui.VirtusizeInPageStandard
 import kotlinx.coroutines.flow.launchIn
@@ -35,13 +42,9 @@ fun VirtusizeInPageStandard(
 ) {
     val viewModel: VirtusizeComposeViewModel = viewModel<VirtusizeComposeViewModel>()
     val coroutineScope = rememberCoroutineScope()
-    AndroidView(
+
+    VirtusizeInPageStandard(
         modifier = modifier,
-        factory = { context ->
-            VirtusizeInPageStandard(context).apply {
-                horizontalMargin = 0
-            }
-        },
         update = { virtusizeInPageStandard ->
             viewModel.isLoadedFlow
                 .onEach { isLoaded ->
@@ -61,5 +64,40 @@ fun VirtusizeInPageStandard(
                 is VirtusizeMessage.Error -> onError(message.error)
             }
         }
+    }
+}
+
+@Composable
+private fun VirtusizeInPageStandard(
+    modifier: Modifier = Modifier,
+    update: (VirtusizeInPageStandard) -> Unit = NoOpUpdate,
+) {
+    AndroidView(
+        modifier = modifier,
+        factory = { context ->
+            VirtusizeInPageStandard(context).apply {
+                horizontalMargin = 0
+            }
+        },
+        update = update,
+    )
+}
+
+@Preview
+@Composable
+private fun VirtusizeInPageStandardPreview() {
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        VirtusizeInPageStandard(
+            update = { virtusizeInPageStandard ->
+                virtusizeInPageStandard.visibility = View.VISIBLE
+                virtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
+            },
+        )
+        VirtusizeInPageStandard(
+            update = { virtusizeInPageStandard ->
+                virtusizeInPageStandard.visibility = View.VISIBLE
+                virtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.BLACK
+            },
+        )
     }
 }
