@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.virtusize.android.compose.theme.VirtusizeColors
 import com.virtusize.android.compose.ui.VirtusizeButton
 import com.virtusize.android.compose.ui.VirtusizeButtonColors
