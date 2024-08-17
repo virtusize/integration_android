@@ -77,7 +77,7 @@ fun VirtusizeButton(
  * @param containerColor the container color of this [VirtusizeButton].
  * @param contentColor the content color of this [VirtusizeButton].
  */
-data class VirtusizeButtonColors(
+class VirtusizeButtonColors internal constructor(
     val containerColor: Color,
     val contentColor: Color,
 )

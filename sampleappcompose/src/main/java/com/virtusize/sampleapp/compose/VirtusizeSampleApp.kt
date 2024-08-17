@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.virtusize.android.compose.theme.VirtusizeColors
 import com.virtusize.android.compose.ui.VirtusizeButton
-import com.virtusize.android.compose.ui.VirtusizeButtonColors
+import com.virtusize.android.compose.ui.VirtusizeButtonDefaults
 import com.virtusize.android.data.local.VirtusizeProduct
 
 @Composable
@@ -42,7 +42,7 @@ internal fun VirtusizeSampleApp() {
                 product = product,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 colors =
-                    VirtusizeButtonColors(
+                    VirtusizeButtonDefaults.colors(
                         containerColor = VirtusizeColors.Black,
                         contentColor = VirtusizeColors.White,
                     ),
