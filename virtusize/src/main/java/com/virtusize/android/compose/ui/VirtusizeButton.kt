@@ -6,6 +6,7 @@ import android.graphics.drawable.LayerDrawable
 import android.os.Build
 import androidx.annotation.ColorInt
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -77,7 +78,8 @@ fun VirtusizeButton(
  * @param containerColor the container color of this [VirtusizeButton].
  * @param contentColor the content color of this [VirtusizeButton].
  */
-data class VirtusizeButtonColors(
+@Immutable
+data class VirtusizeButtonColors internal constructor(
     val containerColor: Color,
     val contentColor: Color,
 )
