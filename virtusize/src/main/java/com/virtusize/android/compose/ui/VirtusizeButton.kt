@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 /**
- * A button composable that displays the Virtusize button
+ * A composable that displays the VirtusizeButton
  * @param product The product to be linked with the button.
  * @param modifier The modifier to be applied to the button layout.
  * @param colors The colors to be applied to the button.
