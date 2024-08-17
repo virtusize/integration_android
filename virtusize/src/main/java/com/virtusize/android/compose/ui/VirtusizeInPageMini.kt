@@ -17,6 +17,14 @@ import com.virtusize.android.ui.VirtusizeInPageMini
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+/**
+ * A composable that displays the VirtusizeInPageMini
+ * @param product The product to be linked with the [VirtusizeInPageMini].
+ * @param modifier The modifier to be applied to the [VirtusizeInPageMini] layout.
+ * @param backgroundColor The background color to be applied to the [VirtusizeInPageMini].
+ * @param onEvent The callback to be invoked when an [VirtusizeEvent] is triggered.
+ * @param onError The callback to be invoked when an [VirtusizeError] is triggered.
+ */
 @Composable
 fun VirtusizeInPageMini(
     product: VirtusizeProduct,
