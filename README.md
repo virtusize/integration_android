@@ -121,12 +121,11 @@ following table:
 - Kotlin
 
   ```kotlin
-  lateinit var virtusize: Virtusize
   override fun onCreate() {
       super.onCreate()
   
       // Initialize Virtusize instance for your application
-      virtusize = VirtusizeBuilder().init(this)
+      VirtusizeBuilder().init(this)
       // Only the API key is required
       .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
       // For using the Order API, a user ID is required
@@ -192,9 +191,9 @@ Kotlin
     externalId = "vs_dress",
     // Set the product image URL
     imageUrl = "http://www.image.com/goods/12345.jpg"
-)
+   )
 
-(application as App).virtusize.load(product)
+   Virtusize.getInstance().load(product)
    ```
 
 Java
@@ -203,11 +202,9 @@ Java
    VirtusizeProduct product = new VirtusizeProduct(
         "vs_dress",
         "http://www.image.com/goods/12345.jpg"
-);
+   );
    
-   app.virtusize.
-
-load(product);
+   app.virtusize.load(product);
    ```
 
 ### 3. Enable SNS authentication
@@ -266,7 +263,7 @@ it dies or is removed. See the next section for a how-to.
   override fun onCreate(savedInstanceState: Bundle?) {
       //...
       // Register message handler to listen to events from Virtusize
-      (application as App).virtusize.registerMessageHandler(activityMessageHandler)
+      Virtusize.getInstance().registerMessageHandler(activityMessageHandler)
       //...
   }
   ```
@@ -310,9 +307,9 @@ same guidelines in the case of fragment as well.
   ```kotlin
   private val activityMessageHandler: VirtusizeMessageHandler
   override fun onPause() {
-          // Always un register message handler in onPause() or depending on implementation onStop().
-          (application as App).virtusize.unregisterMessageHandler(activityMessageHandler)
-          super.onPause()
+      // Always un register message handler in onPause() or depending on implementation onStop().
+      Virtusize.getInstance().unregisterMessageHandler(activityMessageHandler)
+      super.onPause()
   }
   ```
 
@@ -398,7 +395,7 @@ passed to ** `Virtusize#load`) **into the Virtusize API by using the
 - Kotlin
 
   ```kotlin
-  (application as App).virtusize.setupVirtusizeView(exampleVirtusizeButton, product)
+  Virtusize.getInstance().setupVirtusizeView(exampleVirtusizeButton, product)
   ```
 
 - Java
@@ -501,9 +498,7 @@ There are two types of InPage in our Virtusize SDK.
     - Kotlin
 
       ```kotlin
-      (application as App)
-          .virtusize
-          .setupVirtusizeView(exampleVirtusizeInPageStandard, product)
+      Virtusize.getInstance().setupVirtusizeView(exampleVirtusizeInPageStandard, product)
       ```
 
     - Java
@@ -623,9 +618,7 @@ for layouts where customers are browsing product images and size tables.
     - Kotlin
 
       ```kotlin
-      (application as App)
-          .virtusize
-          .setupVirtusizeView(exampleVirtusizeInPageMini, product)
+      Virtusize.getInstance().setupVirtusizeView(exampleVirtusizeInPageMini, product)
       ```
 
     - Java
@@ -695,10 +688,9 @@ in your activity or fragment after the app is launched
 
     ```kotlin
     // In your Application class's `onCreate` method before the app is launched
-    lateinit var virtusize: Virtusize
     override fun onCreate() {
         super.onCreate()
-        virtusize = VirtusizeBuilder().init(this)
+        VirtusizeBuilder().init(this)
             .setApiKey(api_key)
             .setUserId(user_id)
             .setEnv(VirtusizeEnvironment.STAGING)
@@ -706,7 +698,7 @@ in your activity or fragment after the app is launched
     }
     
     // In your activity or fragment after the app is launched
-    (application as App).virtusize.setUserID("user_id")
+    Virtusize.getInstance().setUserID("user_id")
     ```
 * Java
 
@@ -810,9 +802,7 @@ Call the `Virtusize#sendOrder` method in your activity or fragment when the user
   The `onSuccess` and `onError` callbacks are optional.
 
     ~~~~kotlin
-    (application as App)
-        .virtusize
-        .sendOrder(order,
+    Virtusize.getInstance().sendOrder(order,
             // This success callback is optional and gets called when the app successfully sends the order
             onSuccess = {
                 Log.i(TAG, "Successfully sent the order")
