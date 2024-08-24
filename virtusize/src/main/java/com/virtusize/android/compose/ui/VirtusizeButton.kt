@@ -43,7 +43,7 @@ import kotlinx.coroutines.flow.onEach
 fun VirtusizeButton(
     product: VirtusizeProduct,
     modifier: Modifier = Modifier,
-    colors: VirtusizeButtonColors = VirtusizeButtonDefaults.teal(),
+    colors: VirtusizeButtonColors = VirtusizeButtonDefaults.black(),
     onEvent: (event: VirtusizeEvent) -> Unit = { _ -> },
     onError: (error: VirtusizeError) -> Unit = { _ -> },
 ) {

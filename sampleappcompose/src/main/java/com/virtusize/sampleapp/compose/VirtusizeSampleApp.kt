@@ -48,7 +48,7 @@ internal fun VirtusizeSampleApp() {
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 colors =
                     VirtusizeButtonDefaults.colors(
-                        containerColor = VirtusizeColors.Black,
+                        containerColor = VirtusizeColors.Teal,
                         contentColor = VirtusizeColors.White,
                     ),
                 onEvent = { event ->
