@@ -307,24 +307,24 @@ There are two types of InPage in our Virtusize SDK.
 
 ##### A. Usage
 
-    **A. Prepare the product for the VirtusizeInPageStandard**
-    
-    1. Create a `VirtusizeProduct` object with:
-    
-        - An `exernalId` that will be used to reference the product in the Virtusize server
-        - An `imageURL` for the product image
-    
-        ```kotlin
-        val product = VirtusizeProduct(
-        // Set the product's external ID
-        externalId = "vs_dress",
-        // Set the product image URL
-        imageUrl = "http://www.image.com/goods/12345.jpg"
-        )
-        ```
-    
-    **B. Add a VirtusizeInPageStandard**
-    
+- **A. Prepare the product for the VirtusizeInPageStandard**
+
+  1. Create a `VirtusizeProduct` object with:
+
+      - An `exernalId` that will be used to reference the product in the Virtusize server
+      - An `imageURL` for the product image
+
+      ```kotlin
+      val product = VirtusizeProduct(
+      // Set the product's external ID
+      externalId = "vs_dress",
+      // Set the product image URL
+      imageUrl = "http://www.image.com/goods/12345.jpg"
+      )
+      ```
+
+- **B. Add a VirtusizeInPageStandard**
+
     ```kotlin
     VirtusizeInPageStandard(
         // Set the product for the VirtusizeInPageStandard
@@ -348,21 +348,21 @@ There are two types of InPage in our Virtusize SDK.
 
 - ##### Default Designs
 
-There are two types of InPage in our Virtusize SDK.
+  There are two default design variations.
 
-|                                                    InPage Standard                                                     |                                                    InPage Mini                                                     |
-|:----------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------:|
-| ![InPageStandard](https://user-images.githubusercontent.com/7802052/92671977-9cb1fe80-f352-11ea-803b-5e3cb3469be4.png) | ![InPageMini](https://user-images.githubusercontent.com/7802052/92671979-9e7bc200-f352-11ea-8594-ed441649855c.png) |
+  |                          Teal Theme                          |                         Black Theme                          |
+          | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | ![InPageStandardTeal](https://user-images.githubusercontent.com/7802052/92672035-b9e6cd00-f352-11ea-9e9e-5385a19e96da.png) | ![InPageStandardBlack](https://user-images.githubusercontent.com/7802052/92672031-b81d0980-f352-11ea-8b7a-564dd6c2a7f1.png) |
 
 - ##### Layout Variations
 
-Here are some possible layouts
+  Here are some possible layouts
 
-|               1 thumbnail + 2 lines of message               |              2 thumbnails + 2 lines of message               |
-      | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| ![1 thumbnail + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399368-5e879300-1930-11eb-8b77-b49e06813550.png) | ![2 thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399370-5f202980-1930-11eb-9a2d-7b71714aa7b4.png) |
-|             **1 thumbnail + 1 line of message**              |        **2 animated thumbnails + 2 lines of message**        |
-| ![1 thumbnail + 1 line of message](https://user-images.githubusercontent.com/7802052/97399373-5f202980-1930-11eb-81fe-9946b656eb4c.png) | ![2 animated thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399355-59c2df00-1930-11eb-8a52-292956b8762d.gif) |
+  |               1 thumbnail + 2 lines of message               |              2 thumbnails + 2 lines of message               |
+          | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | ![1 thumbnail + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399368-5e879300-1930-11eb-8b77-b49e06813550.png) | ![2 thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399370-5f202980-1930-11eb-9a2d-7b71714aa7b4.png) |
+  |             **1 thumbnail + 1 line of message**              |        **2 animated thumbnails + 2 lines of message**        |
+  | ![1 thumbnail + 1 line of message](https://user-images.githubusercontent.com/7802052/97399373-5f202980-1930-11eb-81fe-9946b656eb4c.png) | ![2 animated thumbnails + 2 lines of message](https://user-images.githubusercontent.com/7802052/97399355-59c2df00-1930-11eb-8a52-292956b8762d.gif) |
 
 - ##### Recommended Placement
 
@@ -394,24 +394,24 @@ for layouts where customers are browsing product images and size tables.
 
 ##### A. Usage
 
-    **A. Prepare the product for the VirtusizeInPageMini**
-    
-    1. Create a `VirtusizeProduct` object with:
-    
-        - An `exernalId` that will be used to reference the product in the Virtusize server
-        - An `imageURL` for the product image
-    
-        ```kotlin
-        val product = VirtusizeProduct(
-        // Set the product's external ID
-        externalId = "vs_dress",
-        // Set the product image URL
-        imageUrl = "http://www.image.com/goods/12345.jpg"
-        )
-        ```
-    
-    **B. Add a VirtusizeInPageMini**
-    
+- **A. Prepare the product for the VirtusizeInPageMini**
+
+  1. Create a `VirtusizeProduct` object with:
+
+      - An `exernalId` that will be used to reference the product in the Virtusize server
+      - An `imageURL` for the product image
+
+      ```kotlin
+      val product = VirtusizeProduct(
+      // Set the product's external ID
+      externalId = "vs_dress",
+      // Set the product image URL
+      imageUrl = "http://www.image.com/goods/12345.jpg"
+      )
+      ```
+
+- **B. Add a VirtusizeInPageMini**
+
     ```kotlin
     VirtusizeInPageMini(
         // Set the product for the VirtusizeInPageMini
@@ -435,17 +435,17 @@ for layouts where customers are browsing product images and size tables.
 
 - ##### Default designs
 
-There are two default design variations.
+  There are two default design variations.
 
-|                          Teal Theme                          |                         Black Theme                          |
-      | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| ![InPageMiniTeal](https://user-images.githubusercontent.com/7802052/92672234-2d88da00-f353-11ea-99d9-b9e9b6aa5620.png) | ![InPageMiniBlack](https://user-images.githubusercontent.com/7802052/92672232-2c57ad00-f353-11ea-80f6-55a9c72fb0b5.png) |
+  |                          Teal Theme                          |                         Black Theme                          |
+          | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | ![InPageMiniTeal](https://user-images.githubusercontent.com/7802052/92672234-2d88da00-f353-11ea-99d9-b9e9b6aa5620.png) | ![InPageMiniBlack](https://user-images.githubusercontent.com/7802052/92672232-2c57ad00-f353-11ea-80f6-55a9c72fb0b5.png) |
 
 - ##### Recommended Placements
 
-|                 Underneath the product image                 |              Underneath or near the size table               |
-      | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| <img src="https://user-images.githubusercontent.com/7802052/92672261-3c6f8c80-f353-11ea-995c-ede56e0aacc3.png" /> | <img src="https://user-images.githubusercontent.com/7802052/92672266-40031380-f353-11ea-8f63-a67c9cf46c68.png" /> |
+  |                 Underneath the product image                 |              Underneath or near the size table               |
+          | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | <img src="https://user-images.githubusercontent.com/7802052/92672261-3c6f8c80-f353-11ea-995c-ede56e0aacc3.png" /> | <img src="https://user-images.githubusercontent.com/7802052/92672266-40031380-f353-11ea-8f63-a67c9cf46c68.png" /> |
 
 - ##### Default Fonts
 
