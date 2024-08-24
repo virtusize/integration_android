@@ -39,7 +39,7 @@ customers. [Contact our sales team](mailto:sales@virtusize.com) to become a cust
     - [Register Virtusize Message Handler (Optional)](#3-register-virtusize-message-handler-optional)
     - [Unregister Virtusize Message Handler (Optional)](#4-unregister-virtusize-message-handler-optional)
 
-- [Virtusize Views](#virtusize-views)
+- [Virtusize UI Components](#virtusize-ui-components)
 
     - [Virtusize Button](#1-virtusize-button)
     - [Virtusize InPage](#2-virtusize-inpage)
