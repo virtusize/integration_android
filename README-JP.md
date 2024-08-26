@@ -308,7 +308,7 @@ Handlerを登録したかによって、superメソッドが呼ばれる前に`o
   ```kotlin
   private val activityMessageHandler: VirtusizeMessageHandler
   override fun onPause() {
-          // Always un register message handler in onPause() or depending on implementation onStop().
+          // Always unregister message handler in onPause() or depending on implementation onStop().
           (application as App).virtusize.unregisterMessageHandler(activityMessageHandler)
           super.onPause()
   }

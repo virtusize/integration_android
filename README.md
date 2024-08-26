@@ -309,7 +309,7 @@ same guidelines in the case of fragment as well.
   ```kotlin
   private val activityMessageHandler: VirtusizeMessageHandler
   override fun onPause() {
-      // Always un register message handler in onPause() or depending on implementation onStop().
+      // Always unregister message handler in onPause() or depending on implementation onStop().
       Virtusize.getInstance().unregisterMessageHandler(activityMessageHandler)
       super.onPause()
   }

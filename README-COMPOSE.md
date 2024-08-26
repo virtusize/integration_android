@@ -211,7 +211,7 @@ unregister it in your `onPause` or `onStop` method before the super method is ca
 ```kotlin
 private val activityMessageHandler: VirtusizeMessageHandler
 override fun onPause() {
-  // Always un register message handler in onPause() or depending on implementation onStop().
+  // Always unregister message handler in onPause() or depending on implementation onStop().
   Virtusize.getInstance().unregisterMessageHandler(activityMessageHandler)
   super.onPause()
 }
