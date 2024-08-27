@@ -14,7 +14,6 @@ internal class I18nLocalizationJsonParser(
     val context: Context,
     private val virtusizeLanguage: VirtusizeLanguage?,
 ) : VirtusizeJsonParser<I18nLocalization> {
-    
     override fun parse(json: JSONObject): I18nLocalization {
         val aoyamaJSONObject =
             json.optJSONObject(FIELD_KEYS)
