@@ -3,6 +3,7 @@ package com.virtusize.sampleappkotlin
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.virtusize.android.Virtusize
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeMessageHandler
@@ -28,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         /*
          * Register message handler to listen to events from Virtusize
          */
-        (application as App).virtusize.registerMessageHandler(activityMessageHandler)
+        Virtusize.getInstance().registerMessageHandler(activityMessageHandler)
 
         /*
          * Set up Virtusize product for all the Virtusize views
@@ -38,14 +39,14 @@ class MainActivity : AppCompatActivity() {
                 externalId = "vs_dress",
                 imageUrl = "http://www.image.com/goods/12345.jpg",
             )
-        (application as App).virtusize.load(product)
+        Virtusize.getInstance().load(product)
 
         /*
          * Set up Virtusize button
          */
 
         // Virtusize opens automatically when button is clicked
-        (application as App).virtusize.setupVirtusizeView(
+        Virtusize.getInstance().setupVirtusizeView(
             virtusizeView = binding.exampleVirtusizeButton,
             product = product,
         )
@@ -55,11 +56,10 @@ class MainActivity : AppCompatActivity() {
         /*
          * Set up Virtusize InPage Standard
          */
-        (application as App).virtusize
-            .setupVirtusizeView(
-                virtusizeView = binding.exampleVirtusizeInPageStandard,
-                product = product,
-            )
+        Virtusize.getInstance().setupVirtusizeView(
+            virtusizeView = binding.exampleVirtusizeInPageStandard,
+            product = product,
+        )
         binding.exampleVirtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
         // If you like, you can set up the horizontal margins between the edges of the app screen and the InPage Standard view
         // Note: Use the helper extension function `dpInPx` if you like
@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         /*
          * Set up Virtusize InPage Mini
          */
-        (application as App).virtusize.setupVirtusizeView(
+        Virtusize.getInstance().setupVirtusizeView(
             virtusizeView = binding.exampleVirtusizeInPageMini,
             product = product,
         )
@@ -132,8 +132,7 @@ class MainActivity : AppCompatActivity() {
                 ),
             )
 
-        (application as App)
-            .virtusize
+        Virtusize.getInstance()
             .sendOrder(
                 order,
                 // this optional success callback is called when the app successfully sends the order
@@ -148,9 +147,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
-        // Always un register message handler in onPause() or depending on implementation onStop().
-        (application as App)
-            .virtusize.unregisterMessageHandler(activityMessageHandler)
+        // Always unregister message handler in onPause() or depending on implementation onStop().
+        Virtusize.getInstance().unregisterMessageHandler(activityMessageHandler)
         super.onPause()
     }
 
