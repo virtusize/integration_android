@@ -3,6 +3,7 @@ package com.virtusize.sampleappkotlin
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.virtusize.android.Virtusize
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.sampleappkotlin.databinding.ActivityProductBinding
 
@@ -34,20 +35,20 @@ class ProductActivity : AppCompatActivity() {
                 imageUrl = "http://www.image.com/goods/12345.jpg",
             )
 
-        (application as App).virtusize.load(product)
+        Virtusize.getInstance().load(product)
 
-        (application as App).virtusize.setupVirtusizeView(
+        Virtusize.getInstance().setupVirtusizeView(
             virtusizeView = binding.exampleVirtusizeButton,
             product = product,
         )
 
-        (application as App).virtusize
+        Virtusize.getInstance()
             .setupVirtusizeView(
                 virtusizeView = binding.exampleVirtusizeInPageStandard,
                 product = product,
             )
 
-        (application as App).virtusize.setupVirtusizeView(
+        Virtusize.getInstance().setupVirtusizeView(
             virtusizeView = binding.exampleVirtusizeInPageMini,
             product = product,
         )

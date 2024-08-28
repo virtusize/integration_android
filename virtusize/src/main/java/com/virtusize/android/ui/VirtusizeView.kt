@@ -72,7 +72,6 @@ interface VirtusizeView {
         VirtusizeUtils.openVirtusizeWebView(
             context,
             virtusizeParams,
-            virtusizeDialogFragment,
             product,
             virtusizeMessageHandler,
         )

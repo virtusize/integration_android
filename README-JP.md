@@ -78,7 +78,7 @@ In your appの`build.gradle`ファイルに下記のdependencyを追加
 
   ```groovy
   dependencies {
-    implementation 'com.virtusize.android:virtusize:2.5.5'
+    implementation 'com.virtusize.android:virtusize:2.6.0'
   }
   ```
 
@@ -86,7 +86,7 @@ In your appの`build.gradle`ファイルに下記のdependencyを追加
 
   ```kotlin
   dependencies {
-    implementation("com.virtusize.android:virtusize:2.5.5")
+    implementation("com.virtusize.android:virtusize:2.6.0")
   }
   ```
 
@@ -308,7 +308,7 @@ Handlerを登録したかによって、superメソッドが呼ばれる前に`o
   ```kotlin
   private val activityMessageHandler: VirtusizeMessageHandler
   override fun onPause() {
-          // Always un register message handler in onPause() or depending on implementation onStop().
+          // Always unregister message handler in onPause() or depending on implementation onStop().
           (application as App).virtusize.unregisterMessageHandler(activityMessageHandler)
           super.onPause()
   }

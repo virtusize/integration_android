@@ -1,4 +1,4 @@
-package com.virtusize.android.compose.ui
+package com.virtusize.android.compose.ui.wip
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -18,7 +18,11 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 internal class VirtusizeButtonViewModel : ViewModel() {
-    private val mutableUiStateFlow by lazy { MutableStateFlow<VirtusizeButtonUiState>(VirtusizeButtonUiState.Idle) }
+    private val mutableUiStateFlow by lazy {
+        MutableStateFlow<VirtusizeButtonUiState>(
+            VirtusizeButtonUiState.Idle,
+        )
+    }
     val uiStateFlow: StateFlow<VirtusizeButtonUiState> = mutableUiStateFlow.asStateFlow()
 
     private val mutableMessageFlow: Channel<VirtusizeMessage> by lazy { Channel() }
