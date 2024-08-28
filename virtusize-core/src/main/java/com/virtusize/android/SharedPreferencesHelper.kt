@@ -9,7 +9,6 @@ import kotlin.random.Random
  * This class is used to store and get the browser identifier and user auth data specific to this SDK
  */
 class SharedPreferencesHelper {
-
     companion object {
         private const val SHARED_PREFS_NAME = "VIRTUSIZE_SHARED_PREFS"
         private const val PREFS_BID_KEY = "BID_KEY_VIRTUSIZE"
@@ -22,10 +21,11 @@ class SharedPreferencesHelper {
 
         // Gets the instance of [SharedPreferencesHelper]
         fun getInstance(context: Context): SharedPreferencesHelper {
-            preferences = context.getSharedPreferences(
-                SHARED_PREFS_NAME,
-                Context.MODE_PRIVATE
-            )
+            preferences =
+                context.getSharedPreferences(
+                    SHARED_PREFS_NAME,
+                    Context.MODE_PRIVATE,
+                )
             if (sharedPreferenceHelper == null) {
                 sharedPreferenceHelper =
                     SharedPreferencesHelper()

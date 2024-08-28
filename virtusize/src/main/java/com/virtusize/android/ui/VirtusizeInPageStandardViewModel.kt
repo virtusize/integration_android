@@ -9,9 +9,8 @@ import com.virtusize.android.data.remote.Product
 import kotlinx.coroutines.launch
 
 internal class VirtusizeInPageStandardViewModel(
-    private val virtusizeRepository: VirtusizeRepository
+    private val virtusizeRepository: VirtusizeRepository,
 ) : ViewModel() {
-
     val productNetworkImageLiveData = MutableLiveData<Pair<VirtusizeProductImageView, Bitmap>>()
 
     val productPlaceholderImageLiveData =

@@ -13,5 +13,5 @@ data class UserBodyProfile(
     val age: Int,
     val height: Int,
     val weight: String,
-    val bodyData: Set<Measurement>
+    val bodyData: Set<Measurement>,
 )

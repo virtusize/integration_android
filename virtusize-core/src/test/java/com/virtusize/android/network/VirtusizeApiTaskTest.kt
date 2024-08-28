@@ -33,11 +33,12 @@ class VirtusizeApiTaskTest {
 
     @Before
     fun setup() {
-        virtusizeApiTask = VirtusizeApiTask(
-            null,
-            SharedPreferencesHelper.getInstance(context),
-            null
-        )
+        virtusizeApiTask =
+            VirtusizeApiTask(
+                null,
+                SharedPreferencesHelper.getInstance(context),
+                null,
+            )
     }
 
     @Test
@@ -45,15 +46,17 @@ class VirtusizeApiTaskTest {
         virtusizeApiTask
             .setJsonParser(UserBodyProfileJsonParser())
 
-        val parseInputStreamStringToObjectMethod = VirtusizeApiTask::class.java.declaredMethods
-            .find { it.name == "parseInputStreamStringToObject" }
+        val parseInputStreamStringToObjectMethod =
+            VirtusizeApiTask::class.java.declaredMethods
+                .find { it.name == "parseInputStreamStringToObject" }
         parseInputStreamStringToObjectMethod?.let { method ->
             method.isAccessible = true
-            val returnValue = method.invoke(
-                virtusizeApiTask,
-                "",
-                TestFixtures.USER_BODY_JSONObject.toString()
-            )
+            val returnValue =
+                method.invoke(
+                    virtusizeApiTask,
+                    "",
+                    TestFixtures.USER_BODY_JSONObject.toString(),
+                )
             val actualUserBodyProfile = returnValue as? UserBodyProfile
             assertThat(actualUserBodyProfile?.age).isEqualTo(32)
             assertThat(actualUserBodyProfile?.gender).isEqualTo("female")
@@ -82,8 +85,8 @@ class VirtusizeApiTaskTest {
                     Measurement("armpitHeight", 1130),
                     Measurement("sleeveLength", 520),
                     Measurement("shoulderWidth", 340),
-                    Measurement("shoulderHeight", 1240)
-                )
+                    Measurement("shoulderHeight", 1240),
+                ),
             )
         }
     }
@@ -93,16 +96,18 @@ class VirtusizeApiTaskTest {
         virtusizeApiTask
             .setJsonParser(UserBodyProfileJsonParser())
 
-        val parseInputStreamStringToObjectMethod = VirtusizeApiTask::class.java.declaredMethods
-            .find { it.name == "parseInputStreamStringToObject" }
+        val parseInputStreamStringToObjectMethod =
+            VirtusizeApiTask::class.java.declaredMethods
+                .find { it.name == "parseInputStreamStringToObject" }
         parseInputStreamStringToObjectMethod?.let { method ->
             method.isAccessible = true
-            val returnValue = method.invoke(
-                virtusizeApiTask,
-                "",
-                "{\"gender\":\"\",\"age\":null,\"height\":null,\"weight\":null,\"braSize\":null," +
-                    "\"concernAreas\":null,\"bodyData\":null}"
-            )
+            val returnValue =
+                method.invoke(
+                    virtusizeApiTask,
+                    "",
+                    "{\"gender\":\"\",\"age\":null,\"height\":null,\"weight\":null,\"braSize\":null," +
+                        "\"concernAreas\":null,\"bodyData\":null}",
+                )
             assertThat(returnValue).isNull()
         }
     }
@@ -112,43 +117,47 @@ class VirtusizeApiTaskTest {
         virtusizeApiTask
             .setJsonParser(ProductCheckJsonParser())
 
-        val parseErrorStreamStringToObjectMethod = VirtusizeApiTask::class.java.declaredMethods
-            .find { it.name == "parseErrorStreamStringToObject" }
+        val parseErrorStreamStringToObjectMethod =
+            VirtusizeApiTask::class.java.declaredMethods
+                .find { it.name == "parseErrorStreamStringToObject" }
         parseErrorStreamStringToObjectMethod?.let { method ->
             method.isAccessible = true
-            val pdcJsonString = """
-                    {
-                        "data": {
-                            "productDataId": null, 
-                            "userData": {}, 
-                            "storeId": 2, 
-                            "storeName": "virtusize", 
-                            "validProduct": false, 
-                            "fetchMetaData": false
-                        }, 
-                        "name": "backend-checked-product", 
-                        "productId": "123"
-                    }
-            """.trimIndent()
-            val returnValue = method.invoke(
-                virtusizeApiTask,
-                pdcJsonString
-            )
-            val expectedProductCheck = ProductCheck(
-                Data(
-                    validProduct = false,
-                    fetchMetaData = false,
-                    shouldSeePhTooltip = false,
-                    productDataId = 0,
-                    productTypeName = "",
-                    storeName = "virtusize",
-                    storeId = 2,
-                    productTypeId = 0
-                ),
-                productId = "123",
-                name = "backend-checked-product",
-                JSONObject(pdcJsonString).toString()
-            )
+            val pdcJsonString =
+                """
+                {
+                    "data": {
+                        "productDataId": null, 
+                        "userData": {}, 
+                        "storeId": 2, 
+                        "storeName": "virtusize", 
+                        "validProduct": false, 
+                        "fetchMetaData": false
+                    }, 
+                    "name": "backend-checked-product", 
+                    "productId": "123"
+                }
+                """.trimIndent()
+            val returnValue =
+                method.invoke(
+                    virtusizeApiTask,
+                    pdcJsonString,
+                )
+            val expectedProductCheck =
+                ProductCheck(
+                    Data(
+                        validProduct = false,
+                        fetchMetaData = false,
+                        shouldSeePhTooltip = false,
+                        productDataId = 0,
+                        productTypeName = "",
+                        storeName = "virtusize",
+                        storeId = 2,
+                        productTypeId = 0,
+                    ),
+                    productId = "123",
+                    name = "backend-checked-product",
+                    JSONObject(pdcJsonString).toString(),
+                )
             assertThat(returnValue).isEqualTo(expectedProductCheck)
         }
     }
@@ -158,14 +167,16 @@ class VirtusizeApiTaskTest {
         virtusizeApiTask
             .setJsonParser(UserProductJsonParser())
 
-        val parseErrorStreamStringToObjectMethod = VirtusizeApiTask::class.java.declaredMethods
-            .find { it.name == "parseErrorStreamStringToObject" }
+        val parseErrorStreamStringToObjectMethod =
+            VirtusizeApiTask::class.java.declaredMethods
+                .find { it.name == "parseErrorStreamStringToObject" }
         parseErrorStreamStringToObjectMethod?.let { method ->
             method.isAccessible = true
-            val returnValue = method.invoke(
-                virtusizeApiTask,
-                "{\"detail\":\"No wardrobe found\"}"
-            )
+            val returnValue =
+                method.invoke(
+                    virtusizeApiTask,
+                    "{\"detail\":\"No wardrobe found\"}",
+                )
             assertThat(returnValue).isEqualTo("{\"detail\":\"No wardrobe found\"}")
         }
     }
@@ -175,15 +186,17 @@ class VirtusizeApiTaskTest {
         virtusizeApiTask
             .setJsonParser(ProductTypeJsonParser())
 
-        val parseStringToObjectMethod = VirtusizeApiTask::class.java.declaredMethods
-            .find { it.name == "parseStringToObject" }
+        val parseStringToObjectMethod =
+            VirtusizeApiTask::class.java.declaredMethods
+                .find { it.name == "parseStringToObject" }
         parseStringToObjectMethod?.let { method ->
             method.isAccessible = true
-            val returnValue = method.invoke(
-                virtusizeApiTask,
-                "https://staging.virtusize.jp/a/api/v3/product-types",
-                ProductFixtures.PRODUCT_TYPE_JSON_ARRAY.toString()
-            )
+            val returnValue =
+                method.invoke(
+                    virtusizeApiTask,
+                    "https://staging.virtusize.jp/a/api/v3/product-types",
+                    ProductFixtures.PRODUCT_TYPE_JSON_ARRAY.toString(),
+                )
             val productTypes = returnValue as List<ProductType>
             assertThat(productTypes.size).isEqualTo(4)
         }
@@ -194,40 +207,44 @@ class VirtusizeApiTaskTest {
         virtusizeApiTask
             .setJsonParser(UserSessionInfoJsonParser())
 
-        val parseStringToObjectMethod = VirtusizeApiTask::class.java.declaredMethods
-            .find { it.name == "parseStringToObject" }
+        val parseStringToObjectMethod =
+            VirtusizeApiTask::class.java.declaredMethods
+                .find { it.name == "parseStringToObject" }
 
         parseStringToObjectMethod?.let { method ->
             method.isAccessible = true
-            val streamString = """
-                    {
-                        "id":"test_access_token",
-                        "expiresAt":1619062232,
-                        "user":{
-                            "id":null,
-                            "bid":"test_bid",
-                            "authType":"EMPTY",
-                            "created":null,
-                            "lastLogin":null,
-                            "firstName":"Anonymous",
-                            "language":null
-                        },
-                        "x-vs-auth":""
-                    }
-            """.trimIndent().replace("\\s+|[\\n]+".toRegex(), "")
+            val streamString =
+                """
+                {
+                    "id":"test_access_token",
+                    "expiresAt":1619062232,
+                    "user":{
+                        "id":null,
+                        "bid":"test_bid",
+                        "authType":"EMPTY",
+                        "created":null,
+                        "lastLogin":null,
+                        "firstName":"Anonymous",
+                        "language":null
+                    },
+                    "x-vs-auth":""
+                }
+                """.trimIndent().replace("\\s+|[\\n]+".toRegex(), "")
 
-            val returnValue = method.invoke(
-                virtusizeApiTask,
-                "https://staging.virtusize.jp/a/api/v3/sessions",
-                streamString
-            )
+            val returnValue =
+                method.invoke(
+                    virtusizeApiTask,
+                    "https://staging.virtusize.jp/a/api/v3/sessions",
+                    streamString,
+                )
 
-            val expectedUserSessionInfo = UserSessionInfo(
-                accessToken = "test_access_token",
-                bid = "test_bid",
-                authToken = "",
-                userSessionResponse = streamString
-            )
+            val expectedUserSessionInfo =
+                UserSessionInfo(
+                    accessToken = "test_access_token",
+                    bid = "test_bid",
+                    authToken = "",
+                    userSessionResponse = streamString,
+                )
             assertThat(returnValue).isEqualTo(expectedUserSessionInfo)
         }
     }
@@ -237,15 +254,17 @@ class VirtusizeApiTaskTest {
         virtusizeApiTask
             .setJsonParser(UserBodyProfileJsonParser())
 
-        val parseStringToObjectMethod = VirtusizeApiTask::class.java.declaredMethods
-            .find { it.name == "parseStringToObject" }
+        val parseStringToObjectMethod =
+            VirtusizeApiTask::class.java.declaredMethods
+                .find { it.name == "parseStringToObject" }
 
         parseStringToObjectMethod?.let { method ->
             method.isAccessible = true
-            val returnValue = method.invoke(
-                virtusizeApiTask,
-                "https://staging.virtusize.jp/a/api/v3/user-body-measurements",
-                """
+            val returnValue =
+                method.invoke(
+                    virtusizeApiTask,
+                    "https://staging.virtusize.jp/a/api/v3/user-body-measurements",
+                    """
                     {
                         "gender":"",
                         "age":null,
@@ -255,8 +274,8 @@ class VirtusizeApiTaskTest {
                         "concernAreas":null,
                         "bodyData":null
                     }
-                """.trimIndent()
-            )
+                    """.trimIndent(),
+                )
 
             assertThat(returnValue).isNull()
         }

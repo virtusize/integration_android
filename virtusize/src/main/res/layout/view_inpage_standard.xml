@@ -90,6 +90,7 @@
                     android:layout_marginLeft="@dimen/virtusize_inpage_standard_product_image_horizontal_margin"
                     android:layout_marginTop="@dimen/virtusize_inpage_standard_product_image_vertical_margin"
                     android:layout_marginBottom="@dimen/virtusize_inpage_standard_product_image_vertical_margin"
+                    android:visibility="gone"
                     android:src="@drawable/ic_vs_icon_black" />
             </RelativeLayout>
 
@@ -136,6 +137,7 @@
                     android:includeFontPadding="false"
                     android:textColor="@color/color_gray_900"
                     android:textSize="@dimen/virtusize_inpage_standard_bold_textSize"
+                    android:visibility="gone"
                     tools:text="@string/inpage_loading_text" />
 
             </LinearLayout>

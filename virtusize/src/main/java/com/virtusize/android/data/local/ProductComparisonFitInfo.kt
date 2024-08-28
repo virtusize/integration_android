@@ -7,5 +7,5 @@ package com.virtusize.android.data.local
  */
 internal data class ProductComparisonFitInfo(
     val fitScore: Float,
-    var isSmaller: Boolean?
+    var isSmaller: Boolean?,
 )

@@ -1,20 +1,17 @@
 package com.virtusize.sampleappkotlin
 
 import android.app.Application
-import com.virtusize.android.Virtusize
 import com.virtusize.android.VirtusizeBuilder
 import com.virtusize.android.data.local.VirtusizeEnvironment
 import com.virtusize.android.data.local.VirtusizeInfoCategory
 import com.virtusize.android.data.local.VirtusizeLanguage
 
-class App: Application() {
-    lateinit var Virtusize: Virtusize
-
+class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-       // Initialize Virtusize instance for your application
-        Virtusize = VirtusizeBuilder().init(this)
+        // Initialize Virtusize instance for your application
+        VirtusizeBuilder().init(this)
             // Only the API key is required
             .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
             // For using the Order API, a user ID is required

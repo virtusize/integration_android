@@ -1,0 +1,51 @@
+[versions]
+activityCompose = "1.9.1"
+agp = "8.5.1"
+androidxComposeBom = "2024.06.00"
+androidxTestCore = "1.6.1"
+appcompat = "1.7.0"
+coreKtx = "1.13.1"
+fragment = "1.8.2"
+json = "20230227"
+junit = "4.13.2"
+kotlin = "2.0.0"
+kotlinxCoroutinesTest = "1.8.1"
+ktlint = "1.2.1"
+lifecycleViewmodel = "2.8.4"
+material = "1.12.0"
+nextPublish = "1.1.0"
+robolectric = "4.13"
+truth = "1.4.4"
+virtusize = "2.6.0"
+virtusizeAuth = "1.0.5"
+
+[libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
+androidx-compose-foundation = { module = "androidx.compose.foundation:foundation" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment" }
+androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodel" }
+androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodel" }
+androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
+json = { module = "org.json:json", version.ref = "json" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+ktlint = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
+virtusize = { group = "com.virtusize.android", name = "virtusize", version.ref = "virtusize" }
+virtusize-auth = { module = "com.virtusize.android:virtusize-auth", version.ref = "virtusizeAuth" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nextPublish" }

@@ -5,7 +5,6 @@ import com.virtusize.android.fixtures.TestFixtures
 import org.junit.Test
 
 class UserBodyProfileJsonParserTest {
-
     @Test
     fun test_parseValidUserBodyResponse_returnExpectedUserBodyProfile() {
         val actualUserBodyProfile =

@@ -1,3 +1,10 @@
+## 2.6.0
+
+* Added Jetpack Compose UI component for VirtusizeButton
+* Added Jetpack Compose UI component for VirtusizeInPageStandard
+* Added Jetpack Compose UI component for VirtusizeInPageMini
+* Added README for integrating Jetpack Compose UI components
+
 ## 2.5.5
 
 * Updated Size Recommendation API related URL, request model, response model.

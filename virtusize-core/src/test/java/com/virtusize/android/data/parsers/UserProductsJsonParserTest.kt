@@ -9,32 +9,32 @@ import com.virtusize.android.fixtures.TestFixtures
 import org.junit.Test
 
 class UserProductsJsonParserTest {
-
     @Test
     fun parse_validUserProduct_returnExpectedUserProduct() {
         val actualUserProduct =
             UserProductJsonParser().parse(ProductFixtures.USER_PRODUCT_ONE_JSON_OBJECT)
 
-        val expectedUserProduct = Product(
-            123456,
-            mutableListOf(
-                ProductSize(
-                    "S",
-                    mutableSetOf(
-                        Measurement("height", 1000),
-                        Measurement("bust", 400),
-                        Measurement("waist", 340)
-                    )
-                )
-            ),
-            null,
-            11,
-            "Test Womenswear Strapless Dress",
-            "",
-            false,
-            0,
-            null
-        )
+        val expectedUserProduct =
+            Product(
+                123456,
+                mutableListOf(
+                    ProductSize(
+                        "S",
+                        mutableSetOf(
+                            Measurement("height", 1000),
+                            Measurement("bust", 400),
+                            Measurement("waist", 340),
+                        ),
+                    ),
+                ),
+                null,
+                11,
+                "Test Womenswear Strapless Dress",
+                "",
+                false,
+                0,
+                null,
+            )
 
         assertThat(actualUserProduct).isEqualTo(expectedUserProduct)
     }

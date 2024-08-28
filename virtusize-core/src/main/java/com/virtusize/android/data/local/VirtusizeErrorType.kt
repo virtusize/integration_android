@@ -18,7 +18,7 @@ enum class VirtusizeErrorType {
     APIError,
     JsonParsingError,
     WardrobeNotFound,
-    PrivacyLinkNotOpen
+    PrivacyLinkNotOpen,
 }
 
 /**
@@ -30,7 +30,8 @@ fun VirtusizeErrorType.code(): Int? {
         VirtusizeErrorType.ApiKeyNullOrInvalid -> HttpURLConnection.HTTP_FORBIDDEN
         VirtusizeErrorType.InvalidProduct,
         VirtusizeErrorType.UnParsedProduct,
-        VirtusizeErrorType.WardrobeNotFound -> HttpURLConnection.HTTP_NOT_FOUND
+        VirtusizeErrorType.WardrobeNotFound,
+        -> HttpURLConnection.HTTP_NOT_FOUND
         else -> null
     }
 }
@@ -76,7 +77,7 @@ fun VirtusizeErrorType.message(extraMessage: String? = null): String {
  */
 fun VirtusizeErrorType.virtusizeError(
     code: Int? = null,
-    extraMessage: String? = null
+    extraMessage: String? = null,
 ): VirtusizeError {
     return VirtusizeError(this, code ?: this.code(), this.message(extraMessage))
 }

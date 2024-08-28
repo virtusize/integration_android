@@ -6,5 +6,5 @@ package com.virtusize.android.data.local
 enum class VirtusizeLanguage(val value: String, val label: String) {
     EN("en", "English"),
     JP("ja", "日本語"),
-    KR("ko", "한국어")
+    KR("ko", "한국어"),
 }

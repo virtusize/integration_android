@@ -8,9 +8,10 @@ import org.json.JSONObject
  */
 class ProductCheckJsonParser : VirtusizeJsonParser<ProductCheck> {
     override fun parse(json: JSONObject): ProductCheck {
-        val data = json.optJSONObject(FIELD_DATA)?.let {
-            DataJsonParser().parse(it)
-        }
+        val data =
+            json.optJSONObject(FIELD_DATA)?.let {
+                DataJsonParser().parse(it)
+            }
         val productId = JsonUtils.optString(json, FIELD_PRODUCT_ID)
         val name = JsonUtils.optString(json, FIELD_NAME)
         return ProductCheck(data, productId, name, json.toString())

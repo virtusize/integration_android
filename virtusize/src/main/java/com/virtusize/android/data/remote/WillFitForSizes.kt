@@ -5,5 +5,5 @@ data class WillFitForSizes(
     val extra_small: Boolean,
     val large: Boolean,
     val medium: Boolean,
-    val small: Boolean
+    val small: Boolean,
 )

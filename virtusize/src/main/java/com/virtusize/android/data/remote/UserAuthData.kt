@@ -7,5 +7,5 @@ package com.virtusize.android.data.remote
  */
 internal data class UserAuthData(
     val bid: String,
-    val auth: String
+    val auth: String,
 )

@@ -12,5 +12,5 @@ data class StoreProductMeta(
     val id: Int,
     val additionalInfo: StoreProductAdditionalInfo?,
     val brand: String,
-    val gender: String?
+    val gender: String?,
 )

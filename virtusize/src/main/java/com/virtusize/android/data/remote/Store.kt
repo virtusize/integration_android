@@ -14,5 +14,5 @@ internal data class Store(
     val updated: String,
     val disabled: String,
     val typeMapperEnabled: Boolean,
-    val region: String
+    val region: String,
 )
