@@ -1,4 +1,4 @@
-## Next Release
+## 2.6.0
 
 * Added Jetpack Compose UI component for VirtusizeButton
 * Added Jetpack Compose UI component for VirtusizeInPageStandard
