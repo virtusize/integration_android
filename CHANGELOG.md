@@ -1,3 +1,9 @@
+## [@next](https://github.com/virtusize/integration_android/releases/tag/@next) (2024-8-\_\_)
+
+### Enhancement
+
+- Remove Japanese link in README-COMPOSE.md
+
 ## 2.6.0
 
 * Added Jetpack Compose UI component for VirtusizeButton
