@@ -63,6 +63,10 @@ android {
             // withJavadocJar()
         }
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
+    }
 }
 
 dependencies {
