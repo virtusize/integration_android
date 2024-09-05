@@ -170,23 +170,31 @@ internal class VirtusizeImpl(
         }
 
     /**
+     * The current product external ID
+     */
+    private var currentProductExternalId: String? = null
+
+    /**
      * The VirtusizePresenter handles the data passed from the actions of VirtusizeRepository
      */
     private val virtusizePresenter =
         object : VirtusizePresenter {
-            override fun onValidProductDataCheck(productWithPDC: VirtusizeProduct) {
+            override fun onValidProductDataCheck(productWithPDCData: VirtusizeProduct) {
                 for (virtusizeView in virtusizeViews) {
-                    virtusizeView.setProductWithProductDataCheck(productWithPDC)
+                    virtusizeView.setProductWithProductDataCheck(productWithPDCData)
                 }
-                if (virtusizeViewsContainInPage()) {
-                    scope.launch {
-                        virtusizeRepository.fetchInitialData(params.language, productWithPDC)
-                        virtusizeRepository.updateUserSession(productWithPDC.externalId)
-                        virtusizeRepository.fetchDataForInPageRecommendation(
-                            productWithPDC.externalId,
-                        )
-                        virtusizeRepository.updateInPageRecommendation(productWithPDC.externalId)
+                if (currentProductExternalId != productWithPDCData.externalId) {
+                    if (virtusizeViewsContainInPage()) {
+                        scope.launch {
+                            virtusizeRepository.fetchInitialData(params.language, productWithPDCData)
+                            virtusizeRepository.updateUserSession(productWithPDCData.externalId)
+                            virtusizeRepository.fetchDataForInPageRecommendation(
+                                productWithPDCData.externalId,
+                            )
+                            virtusizeRepository.updateInPageRecommendation(productWithPDCData.externalId)
+                        }
                     }
+                    currentProductExternalId = productWithPDCData.externalId
                 }
             }
 
