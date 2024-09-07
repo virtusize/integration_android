@@ -2,7 +2,8 @@
 
 ### Enhancement
 
-- Remove Japanese link in README-COMPOSE.md
+- Removed Japanese link in README-COMPOSE.md
+- Fixed an issue where the SDK could not retain the email login session.
 
 ## 2.6.0
 

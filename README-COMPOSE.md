@@ -248,10 +248,10 @@ There are two default styles of the Virtusize Button in our Virtusize SDK.
 
     ```kotlin
     val product = VirtusizeProduct(
-    // Set the product's external ID
-    externalId = "vs_dress",
-    // Set the product image URL
-    imageUrl = "http://www.image.com/goods/12345.jpg"
+        // Set the product's external ID
+        externalId = "vs_dress",
+        // Set the product image URL
+        imageUrl = "http://www.image.com/goods/12345.jpg"
     )
     ```
 
@@ -314,10 +314,10 @@ There are two types of InPage in our Virtusize SDK.
 
       ```kotlin
       val product = VirtusizeProduct(
-      // Set the product's external ID
-      externalId = "vs_dress",
-      // Set the product image URL
-      imageUrl = "http://www.image.com/goods/12345.jpg"
+          // Set the product's external ID
+          externalId = "vs_dress",
+          // Set the product image URL
+          imageUrl = "http://www.image.com/goods/12345.jpg"
       )
       ```
 
@@ -404,10 +404,10 @@ for layouts where customers are browsing product images and size tables.
 
       ```kotlin
       val product = VirtusizeProduct(
-      // Set the product's external ID
-      externalId = "vs_dress",
-      // Set the product image URL
-      imageUrl = "http://www.image.com/goods/12345.jpg"
+          // Set the product's external ID
+          externalId = "vs_dress",
+          // Set the product image URL
+          imageUrl = "http://www.image.com/goods/12345.jpg"
       )
       ```
 
