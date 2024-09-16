@@ -51,5 +51,4 @@ dependencies {
 
 //    implementation(libs.virtusize)
     implementation(project(":virtusize"))
-    implementation(libs.virtusize.auth)
 }

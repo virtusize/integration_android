@@ -1,4 +1,3 @@
-import com.virtusize.android.constants.Constants
 import com.virtusize.android.extensions.getProperties
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
@@ -13,10 +12,6 @@ plugins {
 
 apply(from = "${project.rootDir}/gradle/githooks.gradle.kts")
 apply(from = "${project.rootDir}/gradle/ktlint.gradle.kts")
-
-allprojects {
-    group = Constants.GROUP_ID
-}
 
 nexusPublishing {
     repositories {

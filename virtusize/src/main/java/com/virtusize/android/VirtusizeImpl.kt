@@ -1,6 +1,7 @@
 package com.virtusize.android
 
 import android.content.Context
+import androidx.lifecycle.AtomicReference
 import com.virtusize.android.data.local.SizeComparisonRecommendedSize
 import com.virtusize.android.data.local.SizeRecommendationType
 import com.virtusize.android.data.local.VirtusizeError
@@ -170,22 +171,31 @@ internal class VirtusizeImpl(
         }
 
     /**
+     * The current product external ID
+     */
+    private var currentProductExternalId: AtomicReference<String?> = AtomicReference()
+
+    /**
      * The VirtusizePresenter handles the data passed from the actions of VirtusizeRepository
      */
     private val virtusizePresenter =
         object : VirtusizePresenter {
-            override fun onValidProductDataCheck(productWithPDC: VirtusizeProduct) {
-                for (virtusizeView in virtusizeViews) {
-                    virtusizeView.setProductWithProductDataCheck(productWithPDC)
+            override fun onValidProductDataCheck(productWithPDCData: VirtusizeProduct) {
+                // Update VirtusizeViews with product data
+                virtusizeViews.forEach { virtusizeView ->
+                    virtusizeView.setProductWithProductDataCheck(productWithPDCData)
                 }
-                if (virtusizeViewsContainInPage()) {
-                    scope.launch {
-                        virtusizeRepository.fetchInitialData(params.language, productWithPDC)
-                        virtusizeRepository.updateUserSession(productWithPDC.externalId)
-                        virtusizeRepository.fetchDataForInPageRecommendation(
-                            productWithPDC.externalId,
-                        )
-                        virtusizeRepository.updateInPageRecommendation(productWithPDC.externalId)
+
+                // Check if product ID has changed
+                val newExternalProductId = productWithPDCData.externalId
+                if (currentProductExternalId.getAndSet(newExternalProductId) != newExternalProductId) {
+                    if (virtusizeViewsContainInPage()) {
+                        scope.launch {
+                            virtusizeRepository.fetchInitialData(params.language, productWithPDCData)
+                            virtusizeRepository.updateUserSession(newExternalProductId)
+                            virtusizeRepository.fetchDataForInPageRecommendation(newExternalProductId)
+                            virtusizeRepository.updateInPageRecommendation(newExternalProductId)
+                        }
                     }
                 }
             }

@@ -63,11 +63,17 @@ android {
             // withJavadocJar()
         }
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
+    }
 }
 
 dependencies {
     api(project(":virtusize-core"))
-    compileOnly(libs.virtusize.auth)
+    api(libs.virtusize.auth) {
+        exclude(group = "com.virtusize.android", module = "virtusize-core")
+    }
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)

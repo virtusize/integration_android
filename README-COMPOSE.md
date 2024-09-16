@@ -2,8 +2,6 @@
 
 [![](https://jitpack.io/v/virtusize/integration_android.svg)](https://jitpack.io/#virtusize/integration_android) [![](https://img.shields.io/maven-central/v/com.virtusize.android/virtusize)](https://search.maven.org/search?q=g:%22com.virtusize.android%22%20AND%20a:%22virtusize%22)
 
-[日本語](https://github.com/virtusize/integration_android/blob/master/README-JP.md)
-
 Virtusize helps retailers to illustrate the size and fit of clothing, shoes and bags online, by
 letting customers compare the
 measurements of an item they want to buy (on a retailer's product page) with an item that they
@@ -76,7 +74,7 @@ In your app `build.gradle` file, add the following dependencies:
 
   ```groovy
   dependencies {
-    implementation 'com.virtusize.android:virtusize:2.6.0'
+    implementation 'com.virtusize.android:virtusize:2.6.1'
   }
   ```
 
@@ -250,10 +248,10 @@ There are two default styles of the Virtusize Button in our Virtusize SDK.
 
     ```kotlin
     val product = VirtusizeProduct(
-    // Set the product's external ID
-    externalId = "vs_dress",
-    // Set the product image URL
-    imageUrl = "http://www.image.com/goods/12345.jpg"
+        // Set the product's external ID
+        externalId = "vs_dress",
+        // Set the product image URL
+        imageUrl = "http://www.image.com/goods/12345.jpg"
     )
     ```
 
@@ -316,10 +314,10 @@ There are two types of InPage in our Virtusize SDK.
 
       ```kotlin
       val product = VirtusizeProduct(
-      // Set the product's external ID
-      externalId = "vs_dress",
-      // Set the product image URL
-      imageUrl = "http://www.image.com/goods/12345.jpg"
+          // Set the product's external ID
+          externalId = "vs_dress",
+          // Set the product image URL
+          imageUrl = "http://www.image.com/goods/12345.jpg"
       )
       ```
 
@@ -406,10 +404,10 @@ for layouts where customers are browsing product images and size tables.
 
       ```kotlin
       val product = VirtusizeProduct(
-      // Set the product's external ID
-      externalId = "vs_dress",
-      // Set the product image URL
-      imageUrl = "http://www.image.com/goods/12345.jpg"
+          // Set the product's external ID
+          externalId = "vs_dress",
+          // Set the product image URL
+          imageUrl = "http://www.image.com/goods/12345.jpg"
       )
       ```
 
