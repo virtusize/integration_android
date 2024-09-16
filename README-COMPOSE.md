@@ -74,7 +74,7 @@ In your app `build.gradle` file, add the following dependencies:
 
   ```groovy
   dependencies {
-    implementation 'com.virtusize.android:virtusize:2.6.0'
+    implementation 'com.virtusize.android:virtusize:2.6.1'
   }
   ```
 

@@ -1,6 +1,6 @@
 ## [@next](https://github.com/virtusize/integration_android/releases/tag/@next) (2024-8-\_\_)
 
-### Enhancement
+### 2.6.1
 
 - Removed Japanese link in README-COMPOSE.md
 - Fixed an issue where the SDK could not retain the email login session.
