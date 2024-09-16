@@ -51,6 +51,4 @@ dependencies {
 
 //    implementation(libs.virtusize)
     implementation(project(":virtusize"))
-    // For the WebViewFragment example implementation
-    implementation(libs.virtusize.auth)
 }
