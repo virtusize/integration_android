@@ -17,7 +17,7 @@ nextPublish = "1.1.0"
 robolectric = "4.13"
 truth = "1.4.4"
 virtusize = "2.6.0"
-virtusizeAuth = "1.0.5"
+virtusizeAuth = "1.0.6"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }

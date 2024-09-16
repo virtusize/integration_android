@@ -71,7 +71,7 @@ android {
 
 dependencies {
     api(project(":virtusize-core"))
-    compileOnly(libs.virtusize.auth)
+    implementation(libs.virtusize.auth)
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
