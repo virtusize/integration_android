@@ -1,5 +1,6 @@
 package com.virtusize.android.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
@@ -10,11 +11,12 @@ import androidx.appcompat.widget.AppCompatTextView
  * A custom TextView to display animated dots in a text
  */
 internal class DotsLoadingTextView : AppCompatTextView {
-    private var originalText: CharSequence? = null
+    companion object {
+        private const val MAX_DOTS = 3
+    }
+
+    private val dotsLoadingHandler: Handler by lazy { Handler(Looper.getMainLooper()) }
     private var dotsLoadingRunnable: Runnable? = null
-    private var dotsLoadingHandler: Handler? = null
-    private var maxDots: Int = 3
-    private var tempDots: Int = 0
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
@@ -28,13 +30,15 @@ internal class DotsLoadingTextView : AppCompatTextView {
      * Starts the animation
      */
     fun startAnimation() {
-        originalText = text
-        dotsLoadingHandler = Handler(Looper.getMainLooper())
+        if (dotsLoadingRunnable != null) return
+        val originalText = text
+        var tempDots = 0
         dotsLoadingRunnable =
             object : Runnable {
+                @SuppressLint("SetTextI18n")
                 override fun run() {
-                    dotsLoadingHandler?.postDelayed(this, 500)
-                    if (tempDots == maxDots) {
+                    dotsLoadingHandler.postDelayed(this, 500)
+                    if (tempDots == MAX_DOTS) {
                         tempDots = 0
                         text = originalText
                     } else {
@@ -43,14 +47,17 @@ internal class DotsLoadingTextView : AppCompatTextView {
                     invalidate()
                 }
             }
-        dotsLoadingRunnable!!.run()
+        dotsLoadingRunnable?.run()
     }
 
     /**
      * Stops the animation
      */
     fun stopAnimation() {
-        dotsLoadingRunnable?.let { dotsLoadingHandler?.removeCallbacks(it) }
+        dotsLoadingRunnable?.let { runnable ->
+            dotsLoadingHandler.removeCallbacks(runnable)
+            dotsLoadingRunnable = null
+        }
     }
 
     /**
