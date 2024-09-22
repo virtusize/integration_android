@@ -1,5 +1,9 @@
 ## [@next](https://github.com/virtusize/integration_android/releases/tag/@next) (2024-8-\_\_)
 
+### 2.6.2
+
+- Fix the animation of loading dots for the InPage components
+
 ### 2.6.1
 
 - Removed Japanese link in README-COMPOSE.md
