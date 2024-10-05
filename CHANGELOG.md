@@ -1,5 +1,5 @@
 ### Next Release
-- Update the Virtusize WebView URL - Commonly Used
+- Update the Virtusize WebView URL - General Use
 
 ### 2.6.2
 
