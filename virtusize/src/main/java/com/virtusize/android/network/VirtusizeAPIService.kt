@@ -17,6 +17,7 @@ import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.virtusizeError
 import com.virtusize.android.data.parsers.BodyProfileRecommendedSizeJsonParser
 import com.virtusize.android.data.parsers.I18nLocalizationJsonParser
+import com.virtusize.android.data.parsers.LatestAoyamaVersionJsonParser
 import com.virtusize.android.data.parsers.ProductCheckJsonParser
 import com.virtusize.android.data.parsers.ProductMetaDataHintsJsonParser
 import com.virtusize.android.data.parsers.ProductTypeJsonParser
@@ -97,6 +98,18 @@ internal class VirtusizeAPIService(
     internal fun setCoroutineDispatcher(dispatcher: CoroutineDispatcher) {
         this.coroutineDispatcher = dispatcher
     }
+
+    internal suspend fun fetchLatestAoyamaVersion(): VirtusizeApiResponse<String> =
+        withContext(Dispatchers.IO) {
+            val apiRequest = VirtusizeApi.fetchLatestAoyamaVersion()
+            VirtusizeApiTask(
+                httpURLConnection,
+                sharedPreferencesHelper,
+                messageHandler,
+            )
+                .setJsonParser(LatestAoyamaVersionJsonParser)
+                .execute(apiRequest)
+        }
 
     /**
      * Executes the API task to make a network request for Product Check

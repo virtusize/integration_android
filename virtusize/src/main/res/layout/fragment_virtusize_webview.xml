@@ -7,6 +7,7 @@
 
     <WebView
         android:id="@+id/webView"
+        android:background="@color/virtusizeWhite"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
