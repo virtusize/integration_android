@@ -35,9 +35,9 @@ class VirtusizeApiTaskTest {
     fun setup() {
         virtusizeApiTask =
             VirtusizeApiTask(
-                null,
-                SharedPreferencesHelper.getInstance(context),
-                null,
+                urlConnection = null,
+                sharedPreferencesHelper = SharedPreferencesHelper.getInstance(context),
+                messageHandler = null,
             )
     }
 
@@ -52,7 +52,7 @@ class VirtusizeApiTaskTest {
         parseInputStreamStringToObjectMethod?.let { method ->
             method.isAccessible = true
             val returnValue =
-                method.invoke(
+                method(
                     virtusizeApiTask,
                     "",
                     TestFixtures.USER_BODY_JSONObject.toString(),
@@ -102,7 +102,7 @@ class VirtusizeApiTaskTest {
         parseInputStreamStringToObjectMethod?.let { method ->
             method.isAccessible = true
             val returnValue =
-                method.invoke(
+                method(
                     virtusizeApiTask,
                     "",
                     "{\"gender\":\"\",\"age\":null,\"height\":null,\"weight\":null,\"braSize\":null," +
@@ -138,7 +138,7 @@ class VirtusizeApiTaskTest {
                 }
                 """.trimIndent()
             val returnValue =
-                method.invoke(
+                method(
                     virtusizeApiTask,
                     pdcJsonString,
                 )
@@ -173,7 +173,7 @@ class VirtusizeApiTaskTest {
         parseErrorStreamStringToObjectMethod?.let { method ->
             method.isAccessible = true
             val returnValue =
-                method.invoke(
+                method(
                     virtusizeApiTask,
                     "{\"detail\":\"No wardrobe found\"}",
                 )
@@ -186,13 +186,12 @@ class VirtusizeApiTaskTest {
         virtusizeApiTask
             .setJsonParser(ProductTypeJsonParser())
 
-        val parseStringToObjectMethod =
-            VirtusizeApiTask::class.java.declaredMethods
+        val parseStringToObjectMethod = VirtusizeApiTask::class.java.declaredMethods
                 .find { it.name == "parseStringToObject" }
         parseStringToObjectMethod?.let { method ->
             method.isAccessible = true
             val returnValue =
-                method.invoke(
+                method(
                     virtusizeApiTask,
                     "https://staging.virtusize.jp/a/api/v3/product-types",
                     ProductFixtures.PRODUCT_TYPE_JSON_ARRAY.toString(),
@@ -232,7 +231,7 @@ class VirtusizeApiTaskTest {
                 """.trimIndent().replace("\\s+|[\\n]+".toRegex(), "")
 
             val returnValue =
-                method.invoke(
+                method(
                     virtusizeApiTask,
                     "https://staging.virtusize.jp/a/api/v3/sessions",
                     streamString,
@@ -261,7 +260,7 @@ class VirtusizeApiTaskTest {
         parseStringToObjectMethod?.let { method ->
             method.isAccessible = true
             val returnValue =
-                method.invoke(
+                method(
                     virtusizeApiTask,
                     "https://staging.virtusize.jp/a/api/v3/user-body-measurements",
                     """

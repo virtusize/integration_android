@@ -122,8 +122,8 @@ class VirtusizeApiTask(
                         val inputStreamString = readInputStreamAsString(inputStream)
                         val response =
                             parseInputStreamStringToObject(
-                                apiRequest.url,
-                                inputStreamString,
+                                apiRequestUrl = apiRequest.url,
+                                inputStreamString = inputStreamString,
                             )
                         VirtusizeApiResponse.Success(response) as VirtusizeApiResponse<T>
                     } catch (e: JSONException) {
@@ -235,7 +235,7 @@ class VirtusizeApiTask(
     ): Any? =
         if (inputStreamString != null) {
             try {
-                parseStringToObject(streamString = inputStreamString, apiRequestUrl = apiRequestUrl)
+                parseStringToObject(apiRequestUrl = apiRequestUrl, streamString = inputStreamString)
             } catch (e: JSONException) {
                 messageHandler?.onError(
                     VirtusizeErrorType.JsonParsingError.virtusizeError(
@@ -259,7 +259,7 @@ class VirtusizeApiTask(
         if (errorStreamString != null) {
             result =
                 try {
-                    parseStringToObject(streamString = errorStreamString) ?: errorStreamString
+                    parseStringToObject(apiRequestUrl = null, streamString = errorStreamString) ?: errorStreamString
                 } catch (e: JSONException) {
                     errorStreamString
                 }
@@ -270,14 +270,14 @@ class VirtusizeApiTask(
     /**
      * Parses the string of an input stream to an object
      *
-     * @param streamString the string of the input stream
      * @param apiRequestUrl the API request URL
+     * @param streamString the string of the input stream
      * @return either the data object that is converted from streamString or null
      */
     @Throws(JSONException::class)
     private fun parseStringToObject(
+        apiRequestUrl: String?,
         streamString: String,
-        apiRequestUrl: String? = null,
     ): Any? =
         when {
             jsonParser is LatestAoyamaVersionJsonParser -> {
