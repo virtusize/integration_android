@@ -16,6 +16,7 @@ import com.virtusize.android.data.local.getEventName
 import com.virtusize.android.data.parsers.JsonUtils
 import com.virtusize.android.fixtures.ProductFixtures
 import com.virtusize.android.fixtures.TestFixtures
+import com.virtusize.android.network.VirtusizeApi.DEFAULT_AOYAMA_VERSION
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -56,10 +57,19 @@ class VirtusizeApiTest {
     }
 
     @Test
-    fun virtusizeWebView_stagingEnv_shouldReturnExpectedUrl() {
-        val actualUrl = VirtusizeApi.virtusizeWebViewURL()
+    fun fetchLatestAoyamaVersion_stagingEnv_shouldReturnExpectedUrl() {
+        val actualApiRequest = VirtusizeApi.fetchLatestAoyamaVersion()
 
-        val expectedUrl = "https://static.api.virtusize.com/a/aoyama/staging/sdk-webview.html"
+        val expectedUrl = "https://static.api.virtusize.com/a/aoyama/latest.txt"
+
+        assertThat(actualApiRequest.url).isEqualTo(expectedUrl)
+    }
+
+    @Test
+    fun virtusizeWebView_stagingEnv_shouldReturnExpectedUrl() {
+        val actualUrl = VirtusizeApi.virtusizeWebViewURL(DEFAULT_AOYAMA_VERSION)
+
+        val expectedUrl = "https://static.api.virtusize.com/a/aoyama/$DEFAULT_AOYAMA_VERSION/sdk-webview.html"
 
         assertThat(actualUrl).isEqualTo(expectedUrl)
     }
@@ -71,8 +81,8 @@ class VirtusizeApiTest {
             TestFixtures.API_KEY,
             TestFixtures.USER_ID,
         )
-        val actualUrl = VirtusizeApi.virtusizeWebViewURL()
-        val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-webview.html"
+        val actualUrl = VirtusizeApi.virtusizeWebViewURL(DEFAULT_AOYAMA_VERSION)
+        val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/$DEFAULT_AOYAMA_VERSION/sdk-webview.html"
 
         assertThat(actualUrl).isEqualTo(expectedUrl)
     }
