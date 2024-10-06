@@ -17,7 +17,6 @@ import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.virtusizeError
 import com.virtusize.android.data.parsers.BodyProfileRecommendedSizeJsonParser
 import com.virtusize.android.data.parsers.I18nLocalizationJsonParser
-import com.virtusize.android.data.parsers.LatestAoyamaVersionJsonParser
 import com.virtusize.android.data.parsers.ProductCheckJsonParser
 import com.virtusize.android.data.parsers.ProductMetaDataHintsJsonParser
 import com.virtusize.android.data.parsers.ProductTypeJsonParser
@@ -106,9 +105,7 @@ internal class VirtusizeAPIService(
                 httpURLConnection,
                 sharedPreferencesHelper,
                 messageHandler,
-            )
-                .setJsonParser(LatestAoyamaVersionJsonParser)
-                .execute(apiRequest)
+            ).execute(apiRequest)
         }
 
     /**

@@ -49,7 +49,7 @@ data class ApiRequest(
  * @param userId the user ID that is unique from the client system
  */
 object VirtusizeApi {
-    const val DEFAULT_AOYAMA_VERSION = "3.2.6"
+    const val DEFAULT_AOYAMA_VERSION = "3.3.1"
 
     private var environment = VirtusizeEnvironment.GLOBAL
     private lateinit var apiKey: String

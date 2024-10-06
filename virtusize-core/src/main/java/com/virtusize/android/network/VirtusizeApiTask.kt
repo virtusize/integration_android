@@ -4,7 +4,6 @@ import com.virtusize.android.SharedPreferencesHelper
 import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.virtusizeError
-import com.virtusize.android.data.parsers.LatestAoyamaVersionJsonParser
 import com.virtusize.android.data.parsers.VirtusizeJsonParser
 import com.virtusize.android.data.remote.ProductCheck
 import org.json.JSONArray
@@ -280,10 +279,7 @@ class VirtusizeApiTask(
         streamString: String,
     ): Any? =
         when {
-            jsonParser is LatestAoyamaVersionJsonParser -> {
-                val jsonObject = JSONObject("{\"${LatestAoyamaVersionJsonParser.FIELD_VERSION}\": \"$streamString\"}")
-                jsonParser?.parse(jsonObject)
-            }
+            jsonParser == null -> streamString.trimIndent()
             responseIsJsonArray(apiRequestUrl) -> {
                 val jsonArray = JSONArray(streamString)
                 (0 until jsonArray.length())

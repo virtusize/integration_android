@@ -5,7 +5,6 @@ import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.virtusize.android.SharedPreferencesHelper
-import com.virtusize.android.data.parsers.LatestAoyamaVersionJsonParser
 import com.virtusize.android.data.parsers.ProductCheckJsonParser
 import com.virtusize.android.data.parsers.ProductTypeJsonParser
 import com.virtusize.android.data.parsers.UserBodyProfileJsonParser
@@ -233,12 +232,10 @@ internal class VirtusizeApiTaskTest {
 
     @Test
     fun `test latest version URL with LatestAoyamaVersionJsonParser`() {
-        virtusizeApiTask.setJsonParser(LatestAoyamaVersionJsonParser)
-
         val returnValue =
             virtusizeApiTask.parseInputStreamStringToObject(
                 apiRequestUrl = "https://static.api.virtusize.com/a/aoyama/latest.txt",
-                inputStreamString = "1.0.0",
+                inputStreamString = "1.0.0\n",
             )
 
         assertThat(returnValue).isEqualTo("1.0.0")
