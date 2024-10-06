@@ -235,9 +235,9 @@ internal class VirtusizeApiTaskTest {
         val returnValue =
             virtusizeApiTask.parseInputStreamStringToObject(
                 apiRequestUrl = "https://static.api.virtusize.com/a/aoyama/latest.txt",
-                inputStreamString = "1.0.0\n",
+                inputStreamString = "${VirtusizeApi.DEFAULT_AOYAMA_VERSION}\n",
             )
 
-        assertThat(returnValue).isEqualTo("1.0.0")
+        assertThat(returnValue).isEqualTo(VirtusizeApi.DEFAULT_AOYAMA_VERSION)
     }
 }
