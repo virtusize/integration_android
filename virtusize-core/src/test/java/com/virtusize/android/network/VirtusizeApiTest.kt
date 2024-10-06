@@ -25,7 +25,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.Q])
-class VirtusizeApiTest {
+internal class VirtusizeApiTest {
     private val context: Context = ApplicationProvider.getApplicationContext()
     private val defaultDisplay =
         (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
