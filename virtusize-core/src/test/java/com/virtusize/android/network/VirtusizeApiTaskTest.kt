@@ -237,7 +237,7 @@ internal class VirtusizeApiTaskTest {
 
         val returnValue =
             virtusizeApiTask.parseInputStreamStringToObject(
-                apiRequestUrl = "https://staging.virtusize.jp/a/aoyama/latest.txt",
+                apiRequestUrl = "https://static.api.virtusize.com/a/aoyama/latest.txt",
                 inputStreamString = "1.0.0",
             )
 
