@@ -18,6 +18,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.virtusize.android.R
@@ -89,6 +90,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         dialog?.window?.attributes?.windowAnimations = R.style.VirtusizeDialogFragmentAnimation
+        binding.webView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.virtusizeWhite))
         // Enable JavaScript in the web view
         binding.webView.settings.javaScriptEnabled = true
         binding.webView.settings.domStorageEnabled = true
