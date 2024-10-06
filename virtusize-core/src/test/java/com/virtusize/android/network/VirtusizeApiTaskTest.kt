@@ -232,10 +232,12 @@ internal class VirtusizeApiTaskTest {
 
     @Test
     fun `test latest version URL with LatestAoyamaVersionJsonParser`() {
+        virtusizeApiTask.setResponseFormat(VirtusizeApiResponseFormat.STRING)
+
         val returnValue =
-            virtusizeApiTask.parseInputStreamStringToObject(
+            virtusizeApiTask.parseStringToObject(
                 apiRequestUrl = "https://static.api.virtusize.com/a/aoyama/latest.txt",
-                inputStreamString = "${VirtusizeApi.DEFAULT_AOYAMA_VERSION}\n",
+                streamString = "${VirtusizeApi.DEFAULT_AOYAMA_VERSION}\n",
             )
 
         assertThat(returnValue).isEqualTo(VirtusizeApi.DEFAULT_AOYAMA_VERSION)
