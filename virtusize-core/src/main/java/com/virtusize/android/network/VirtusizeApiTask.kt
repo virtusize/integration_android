@@ -229,8 +229,8 @@ class VirtusizeApiTask(
      * @param inputStreamString the string of the input stream
      * @return either the object that contains the content of the string of the input stream or null
      */
-    private fun parseInputStreamStringToObject(
-        apiRequestUrl: String? = null,
+    internal fun parseInputStreamStringToObject(
+        apiRequestUrl: String = "",
         inputStreamString: String? = null,
     ): Any? =
         if (inputStreamString != null) {
@@ -254,12 +254,12 @@ class VirtusizeApiTask(
      * @param errorStreamString the string of the error stream
      * @return either an object that contains the content of the string of the input stream, the string of the error stream, or null
      */
-    private fun parseErrorStreamStringToObject(errorStreamString: String? = null): Any? {
+    internal fun parseErrorStreamStringToObject(errorStreamString: String? = null): Any? {
         var result: Any? = null
         if (errorStreamString != null) {
             result =
                 try {
-                    parseStringToObject(apiRequestUrl = null, streamString = errorStreamString) ?: errorStreamString
+                    parseStringToObject(streamString = errorStreamString) ?: errorStreamString
                 } catch (e: JSONException) {
                     errorStreamString
                 }
@@ -275,8 +275,8 @@ class VirtusizeApiTask(
      * @return either the data object that is converted from streamString or null
      */
     @Throws(JSONException::class)
-    private fun parseStringToObject(
-        apiRequestUrl: String?,
+    internal fun parseStringToObject(
+        apiRequestUrl: String = "",
         streamString: String,
     ): Any? =
         when {
@@ -284,7 +284,7 @@ class VirtusizeApiTask(
                 val jsonObject = JSONObject("{\"${LatestAoyamaVersionJsonParser.FIELD_VERSION}\": \"$streamString\"}")
                 jsonParser?.parse(jsonObject)
             }
-            apiRequestUrl != null && responseIsJsonArray(apiRequestUrl) -> {
+            responseIsJsonArray(apiRequestUrl) -> {
                 val jsonArray = JSONArray(streamString)
                 (0 until jsonArray.length())
                     .map { idx -> jsonArray.getJSONObject(idx) }
