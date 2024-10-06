@@ -105,7 +105,7 @@ internal class VirtusizeAPIService(
                 httpURLConnection,
                 sharedPreferencesHelper,
                 messageHandler,
-            ).execute(apiRequest)
+            ).setResponseFormat(VirtusizeApiResponseFormat.STRING).execute(apiRequest)
         }
 
     /**

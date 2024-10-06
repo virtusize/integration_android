@@ -48,12 +48,24 @@ class VirtusizeApiTask(
     // The Json parser interface for converting the JSON response to a given type of Java object
     private var jsonParser: VirtusizeJsonParser<Any>? = null
 
+    // The response format of the API request
+    private var responseFormat: VirtusizeApiResponseFormat = VirtusizeApiResponseFormat.JSON
+
     /**
      * Sets up the JSON parser for converting the JSON response to a given type of Java object
      * @return the [VirtusizeApiTask] with the JSON parser set up
      */
     fun setJsonParser(jsonParser: VirtusizeJsonParser<Any>?): VirtusizeApiTask {
         this.jsonParser = jsonParser
+        return this
+    }
+
+    /**
+     * Sets up the response format of the API request
+     * @return the [VirtusizeApiTask] with the response format set up
+     */
+    fun setResponseFormat(responseFormat: VirtusizeApiResponseFormat): VirtusizeApiTask {
+        this.responseFormat = responseFormat
         return this
     }
 
@@ -279,7 +291,8 @@ class VirtusizeApiTask(
         streamString: String,
     ): Any? =
         when {
-            jsonParser == null -> streamString.trimIndent()
+            responseFormat == VirtusizeApiResponseFormat.STRING -> streamString.trimIndent()
+
             responseIsJsonArray(apiRequestUrl) -> {
                 val jsonArray = JSONArray(streamString)
                 (0 until jsonArray.length())
