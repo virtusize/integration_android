@@ -17,7 +17,7 @@ import com.virtusize.android.util.VirtusizeUtils
 import com.virtusize.android.util.trimI18nText
 
 object VirtusizeFlutterUtils {
-    suspend fun openVirtusizeView(
+    fun openVirtusizeView(
         activity: Activity,
         virtusize: Virtusize?,
         product: VirtusizeProduct,
