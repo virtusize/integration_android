@@ -17,7 +17,6 @@ import com.virtusize.android.data.remote.Product
 import com.virtusize.android.data.remote.ProductSize
 import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.data.remote.Weight
-import com.virtusize.android.network.VirtusizeApi
 import com.virtusize.android.ui.VirtusizeWebViewActivity
 import java.util.Locale
 import kotlin.math.abs
@@ -176,7 +175,6 @@ internal object VirtusizeUtils {
         product: VirtusizeProduct,
     ): Bundle =
         Bundle().apply {
-            putString(Constants.URL_KEY, VirtusizeApi.virtusizeWebViewURL())
             virtusizeParams?.let { params ->
                 putString(
                     Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY,
