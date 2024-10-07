@@ -227,18 +227,19 @@ class VirtusizeWebViewFragment : DialogFragment() {
                 virtusizeWebAppUrl = VirtusizeApi.getVirtusizeWebViewURLForSpecificClients()
                 binding.webView.loadUrl(virtusizeWebAppUrl)
             }
-            else -> viewLifecycleOwner.lifecycleScope.launch {
-                val fetchedVersion =
-                    apiService.fetchLatestAoyamaVersion().successData ?: run {
-                        dismiss()
-                        return@launch
-                    }
+            else ->
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val fetchedVersion =
+                        apiService.fetchLatestAoyamaVersion().successData ?: run {
+                            dismiss()
+                            return@launch
+                        }
 
-                val versionPattern = "\\d+\\.\\d+\\.\\d+".toRegex()
-                virtusizeWebAppUrl = virtusizeWebAppUrl.replace(regex = versionPattern, replacement = fetchedVersion)
+                    val versionPattern = "\\d+\\.\\d+\\.\\d+".toRegex()
+                    virtusizeWebAppUrl = virtusizeWebAppUrl.replace(regex = versionPattern, replacement = fetchedVersion)
 
-                binding.webView.loadUrl(virtusizeWebAppUrl)
-            }
+                    binding.webView.loadUrl(virtusizeWebAppUrl)
+                }
         }
     }
 
