@@ -26,8 +26,10 @@ import com.virtusize.android.R
 import com.virtusize.android.SharedPreferencesHelper
 import com.virtusize.android.auth.VirtusizeAuth
 import com.virtusize.android.auth.utils.VirtusizeURLCheck
+import com.virtusize.android.data.local.StoreName
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeProduct
+import com.virtusize.android.data.local.VirtusizeStoreRepository
 import com.virtusize.android.data.parsers.VirtusizeEventJsonParser
 import com.virtusize.android.databinding.FragmentVirtusizeWebviewBinding
 import com.virtusize.android.network.VirtusizeAPIService
@@ -44,9 +46,12 @@ class VirtusizeWebViewFragment : DialogFragment() {
         "javascript:vsEventFromSDK({ name: 'sdk-back-button-tapped'})"
 
     private var virtusizeMessageHandler: VirtusizeMessageHandler? = null
+
     private val apiService: VirtusizeAPIService by lazy {
         VirtusizeAPIService.getInstance(requireContext(), virtusizeMessageHandler)
     }
+
+    private val storeRepository by lazy { VirtusizeStoreRepository() }
 
     private lateinit var clientProduct: VirtusizeProduct
 
@@ -216,24 +221,23 @@ class VirtusizeWebViewFragment : DialogFragment() {
             return
         }
 
+        val productStoreId = clientProduct.productCheckData?.data?.storeId
         when {
-            clientProduct.productCheckData?.data?.storeId == 99 -> {
+            productStoreId == storeRepository.getStoreId(StoreName.UNITED_ARROWS) -> {
                 virtusizeWebAppUrl = VirtusizeApi.getVirtusizeWebViewURLForSpecificClients()
                 binding.webView.loadUrl(virtusizeWebAppUrl)
             }
-            else -> {
-                viewLifecycleOwner.lifecycleScope.launch {
-                    val fetchedVersion =
-                        apiService.fetchLatestAoyamaVersion().successData ?: run {
-                            dismiss()
-                            return@launch
-                        }
+            else -> viewLifecycleOwner.lifecycleScope.launch {
+                val fetchedVersion =
+                    apiService.fetchLatestAoyamaVersion().successData ?: run {
+                        dismiss()
+                        return@launch
+                    }
 
-                    val versionPattern = "\\d+\\.\\d+\\.\\d+".toRegex()
-                    virtusizeWebAppUrl = virtusizeWebAppUrl.replace(regex = versionPattern, replacement = fetchedVersion)
+                val versionPattern = "\\d+\\.\\d+\\.\\d+".toRegex()
+                virtusizeWebAppUrl = virtusizeWebAppUrl.replace(regex = versionPattern, replacement = fetchedVersion)
 
-                    binding.webView.loadUrl(virtusizeWebAppUrl)
-                }
+                binding.webView.loadUrl(virtusizeWebAppUrl)
             }
         }
     }
