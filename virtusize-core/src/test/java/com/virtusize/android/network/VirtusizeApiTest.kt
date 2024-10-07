@@ -88,6 +88,13 @@ internal class VirtusizeApiTest {
     }
 
     @Test
+    fun getVirtusizeWebViewForSpecificClient_shouldReturnExpectedUrl() {
+        val actualUrl = VirtusizeApi.getVirtusizeWebViewURLForSpecificClients()
+        val expectedUrl = "https://static.api.virtusize.com/a/aoyama/testing/privacy-policy-phase2-vue/sdk-webview.html"
+        assertThat(actualUrl).isEqualTo(expectedUrl)
+    }
+
+    @Test
     fun sendProductImageToBackend_shouldReturnExpectedApiRequest() {
         val actualApiRequest =
             VirtusizeApi.sendProductImageToBackend(TestFixtures.VIRTUSIZE_PRODUCT)
