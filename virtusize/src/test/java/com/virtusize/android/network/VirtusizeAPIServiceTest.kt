@@ -23,6 +23,7 @@ import com.virtusize.android.fixtures.TestFixtures
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -639,6 +640,22 @@ class VirtusizeAPIServiceTest {
                     " - {\"Code\": \"BadRequestError\", \"Message\": \"BadRequestError: \"}",
             )
             assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.APIError)
+        }
+
+    @Test
+    fun `test fetchLatestAoyamaVersion should return expected value`() =
+        runTest {
+            virtusizeAPIService.setHTTPURLConnection(
+                MockHttpsURLConnection(
+                    URL("https://static.api.virtusize.com/a/aoyama/latest.txt"),
+                    MockedResponse(
+                        200,
+                        VirtusizeApi.DEFAULT_AOYAMA_VERSION.byteInputStream(),
+                    ),
+                ),
+            )
+            val actualApiResponse = virtusizeAPIService.fetchLatestAoyamaVersion()
+            assertThat(actualApiResponse.successData).isEqualTo(VirtusizeApi.DEFAULT_AOYAMA_VERSION)
         }
 
     companion object {

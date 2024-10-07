@@ -35,7 +35,7 @@ internal object VirtusizeUtils {
     private fun configureLocale(
         context: Context,
         locale: Locale?,
-    ): ContextWrapper? {
+    ): ContextWrapper {
         var updatedContext = context
         val resources = context.resources
         val configuration = resources.configuration
@@ -60,7 +60,7 @@ internal object VirtusizeUtils {
     fun getConfiguredContext(
         context: Context,
         language: VirtusizeLanguage?,
-    ): ContextWrapper? {
+    ): ContextWrapper {
         return when (language) {
             VirtusizeLanguage.EN -> configureLocale(context, Locale.ENGLISH)
             VirtusizeLanguage.JP -> configureLocale(context, Locale.JAPAN)

@@ -1,4 +1,5 @@
-## [@next](https://github.com/virtusize/integration_android/releases/tag/@next) (2024-8-\_\_)
+### Next Release
+- Update the Virtusize WebView URL - General Use
 
 ### 2.6.2
 
