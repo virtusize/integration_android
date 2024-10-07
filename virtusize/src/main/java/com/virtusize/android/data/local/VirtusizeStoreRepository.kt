@@ -3,7 +3,7 @@ package com.virtusize.android.data.local
 internal typealias StoreId = Int
 
 internal enum class StoreName(val value: String) {
-    UNITED_ARROWS("UnitedArrows"),
+    UNITED_ARROWS("united_arrows"),
 }
 
 internal class VirtusizeStoreRepository {
