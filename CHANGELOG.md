@@ -1,9 +1,10 @@
 ### Next Release
-- Update the Virtusize WebView URL - General Use
+- Updated the Virtusize WebView URL - General Use
+- Updated the Virtusize WebView URL - Client Specific
 
 ### 2.6.2
 
-- Fix the animation of loading dots for the InPage components
+- Fixed the animation of loading dots for the InPage components
 
 ### 2.6.1
 
