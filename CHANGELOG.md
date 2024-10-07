@@ -1,16 +1,16 @@
 ### Next Release
-- Updated the Virtusize WebView URL - General Use
-- Updated the Virtusize WebView URL - Client Specific
+* Refactor: Update the WebView URL to the following format: https://static.api.virtusize.jp/a/aoyama/${version}/sdk-webview.html
+* Feature: Add the client specific WebView URL. The format is as follows: https://static.api.virtusize.jp/a/aoyama/testing/privacy-policy-phase2-vue/sdk-webview.html
 
 ### 2.6.2
 
-- Fixed the animation of loading dots for the InPage components
+* Fixed the animation of loading dots for the InPage components
 
 ### 2.6.1
 
-- Removed Japanese link in README-COMPOSE.md
-- Fixed an issue where the SDK could not retain the email login session.
-- Bump virtusize-auth to 1.0.6
+* Removed Japanese link in README-COMPOSE.md
+* Fixed an issue where the SDK could not retain the email login session.
+* Bump virtusize-auth to 1.0.6
 
 ## 2.6.0
 
