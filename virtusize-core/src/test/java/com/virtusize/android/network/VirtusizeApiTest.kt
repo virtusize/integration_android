@@ -87,7 +87,7 @@ internal class VirtusizeApiTest {
     }
 
     @Test
-    fun `test getVirtusizeWebView in default global env should return expected url`() {
+    fun `test getVirtusizeWebViewURLForSpecificClients in default global env should return expected url`() {
         val actualUrl = VirtusizeApi.getVirtusizeWebViewURLForSpecificClients()
         val expectedUrl = "https://static.api.virtusize.com/a/aoyama/testing/privacy-policy-phase2-vue/sdk-webview.html"
         assertThat(actualUrl).isEqualTo(expectedUrl)
