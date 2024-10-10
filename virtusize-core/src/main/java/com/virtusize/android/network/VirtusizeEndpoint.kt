@@ -22,6 +22,10 @@ sealed interface VirtusizeEndpoint {
         override val path: String = "/a/aoyama/$version/sdk-webview.html"
     }
 
+    data object VirtusizeWebViewForSpecificClients : VirtusizeEndpoint {
+        override val path: String = "/a/aoyama/testing/privacy-policy-phase2-vue/sdk-webview.html"
+    }
+
     data object ProductMetaDataHints : VirtusizeEndpoint {
         override val path: String = "/rest-api/v1/product-meta-data-hints"
     }
