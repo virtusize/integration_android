@@ -8,7 +8,7 @@ import org.json.JSONObject
 import org.junit.Before
 import org.junit.Test
 
-class BodyProfileRecommendedSizeParamsTests {
+internal class BodyProfileRecommendedSizeParamsTests {
     private var productTypes = mutableListOf<ProductType>()
 
     @Before

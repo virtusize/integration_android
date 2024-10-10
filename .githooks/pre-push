@@ -8,9 +8,22 @@ status=$?
 
 if [ "$status" = 0 ] ; then
     echo "ktlint check ran successfully."
-    exit 0
 else
     echo "ktlint check failed. Formatting with ktlint..."
     ./gradlew ktlintFormat
+    exit 1
+fi
+
+echo "Running unit tests..."
+
+./gradlew testDebugUnitTest --daemon
+
+status=$?  # Update the status after running unit tests
+
+if [ "$status" = 0 ] ; then
+    echo "Unit tests ran successfully."
+    exit 0
+else
+    echo "Unit tests failed."
     exit 1
 fi

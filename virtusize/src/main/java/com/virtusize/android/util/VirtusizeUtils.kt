@@ -17,7 +17,6 @@ import com.virtusize.android.data.remote.Product
 import com.virtusize.android.data.remote.ProductSize
 import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.data.remote.Weight
-import com.virtusize.android.network.VirtusizeApi
 import com.virtusize.android.ui.VirtusizeWebViewActivity
 import java.util.Locale
 import kotlin.math.abs
@@ -35,7 +34,7 @@ internal object VirtusizeUtils {
     private fun configureLocale(
         context: Context,
         locale: Locale?,
-    ): ContextWrapper? {
+    ): ContextWrapper {
         var updatedContext = context
         val resources = context.resources
         val configuration = resources.configuration
@@ -60,7 +59,7 @@ internal object VirtusizeUtils {
     fun getConfiguredContext(
         context: Context,
         language: VirtusizeLanguage?,
-    ): ContextWrapper? {
+    ): ContextWrapper {
         return when (language) {
             VirtusizeLanguage.EN -> configureLocale(context, Locale.ENGLISH)
             VirtusizeLanguage.JP -> configureLocale(context, Locale.JAPAN)
@@ -176,7 +175,6 @@ internal object VirtusizeUtils {
         product: VirtusizeProduct,
     ): Bundle =
         Bundle().apply {
-            putString(Constants.URL_KEY, VirtusizeApi.virtusizeWebViewURL())
             virtusizeParams?.let { params ->
                 putString(
                     Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY,

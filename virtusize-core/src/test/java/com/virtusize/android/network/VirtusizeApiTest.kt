@@ -16,6 +16,7 @@ import com.virtusize.android.data.local.getEventName
 import com.virtusize.android.data.parsers.JsonUtils
 import com.virtusize.android.fixtures.ProductFixtures
 import com.virtusize.android.fixtures.TestFixtures
+import com.virtusize.android.network.VirtusizeApi.DEFAULT_AOYAMA_VERSION
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,10 +25,9 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.Q])
-class VirtusizeApiTest {
+internal class VirtusizeApiTest {
     private val context: Context = ApplicationProvider.getApplicationContext()
-    private val defaultDisplay =
-        (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
+    private val defaultDisplay = (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
     private val resolution = "${defaultDisplay.height}x${defaultDisplay.width}"
     private val versionCode = BuildConfig.VERSION_NANE
 
@@ -41,7 +41,7 @@ class VirtusizeApiTest {
     }
 
     @Test
-    fun productCheck_shouldReturnExpectedApiRequest() {
+    fun `test productCheck should return expected API request`() {
         val actualApiRequest = VirtusizeApi.productCheck(TestFixtures.VIRTUSIZE_PRODUCT)
 
         val expectedUrl =
@@ -56,29 +56,45 @@ class VirtusizeApiTest {
     }
 
     @Test
-    fun virtusizeWebView_stagingEnv_shouldReturnExpectedUrl() {
-        val actualUrl = VirtusizeApi.virtusizeWebViewURL()
+    fun `test fetchLatestAoyamaVersion in staging should return expected url`() {
+        val actualApiRequest = VirtusizeApi.fetchLatestAoyamaVersion()
 
-        val expectedUrl = "https://static.api.virtusize.com/a/aoyama/staging/sdk-webview.html"
+        val expectedUrl = "https://static.api.virtusize.com/a/aoyama/latest.txt"
+
+        assertThat(actualApiRequest.url).isEqualTo(expectedUrl)
+    }
+
+    @Test
+    fun `test getVirtusizeWebView in staging should return expected url`() {
+        val actualUrl = VirtusizeApi.getVirtusizeWebViewURL(DEFAULT_AOYAMA_VERSION)
+
+        val expectedUrl = "https://static.api.virtusize.com/a/aoyama/$DEFAULT_AOYAMA_VERSION/sdk-webview.html"
 
         assertThat(actualUrl).isEqualTo(expectedUrl)
     }
 
     @Test
-    fun virtusizeWebView_japanEnv_shouldReturnExpectedUrl() {
+    fun `test getVirtusizeWebView in japan env should return expected url`() {
         VirtusizeApi.init(
             VirtusizeEnvironment.JAPAN,
             TestFixtures.API_KEY,
             TestFixtures.USER_ID,
         )
-        val actualUrl = VirtusizeApi.virtusizeWebViewURL()
-        val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/latest/sdk-webview.html"
+        val actualUrl = VirtusizeApi.getVirtusizeWebViewURL(DEFAULT_AOYAMA_VERSION)
+        val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/$DEFAULT_AOYAMA_VERSION/sdk-webview.html"
 
         assertThat(actualUrl).isEqualTo(expectedUrl)
     }
 
     @Test
-    fun sendProductImageToBackend_shouldReturnExpectedApiRequest() {
+    fun `test getVirtusizeWebViewURLForSpecificClients in default global env should return expected url`() {
+        val actualUrl = VirtusizeApi.getVirtusizeWebViewURLForSpecificClients()
+        val expectedUrl = "https://static.api.virtusize.com/a/aoyama/testing/privacy-policy-phase2-vue/sdk-webview.html"
+        assertThat(actualUrl).isEqualTo(expectedUrl)
+    }
+
+    @Test
+    fun `test sendProductImageToBackend should return expected API request`() {
         val actualApiRequest =
             VirtusizeApi.sendProductImageToBackend(TestFixtures.VIRTUSIZE_PRODUCT)
 
@@ -98,7 +114,7 @@ class VirtusizeApiTest {
     }
 
     @Test
-    fun sendUserSawProductEventToAPI_shouldReturnExpectedApiRequest() {
+    fun `test sendEventToAPI should return expected API request`() {
         val eventName = VirtusizeEvents.UserSawProduct.getEventName()
         val event = VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName())
         val actualApiRequest =
@@ -124,14 +140,13 @@ class VirtusizeApiTest {
                 "snippetVersion" to versionCode.toString(),
             )
 
-        TestFixtures.PRODUCT_CHECK?.let { productCheck ->
-            expectedParams["storeProductExternalId"] = productCheck.productId
+        val productCheck = TestFixtures.PRODUCT_CHECK
+        expectedParams["storeProductExternalId"] = productCheck.productId
 
-            productCheck.data?.let { data ->
-                expectedParams["storeId"] = data.storeId.toString()
-                expectedParams["storeName"] = data.storeName
-                expectedParams["storeProductType"] = data.productTypeName
-            }
+        productCheck.data?.let { data ->
+            expectedParams["storeId"] = data.storeId.toString()
+            expectedParams["storeName"] = data.storeName
+            expectedParams["storeProductType"] = data.productTypeName
         }
 
         event.data?.optJSONObject("data")?.let {
@@ -144,7 +159,7 @@ class VirtusizeApiTest {
     }
 
     @Test
-    fun sendOrder_shouldReturnExpectedApiRequest() {
+    fun `test sendOrder should return expected API request`() {
         val order = VirtusizeOrder("888400111032")
         order.items =
             mutableListOf(
@@ -193,7 +208,7 @@ class VirtusizeApiTest {
     }
 
     @Test
-    fun retrieveStoreInfo_shouldReturnExpectedApiRequest() {
+    fun `test getStoreInfo should return expected API request`() {
         val actualApiRequest = VirtusizeApi.getStoreInfo()
 
         val expectedUrl =
@@ -206,7 +221,7 @@ class VirtusizeApiTest {
     }
 
     @Test
-    fun getStoreProductInfo_shouldReturnExpectedApiRequest() {
+    fun `test getStoreProductInfo should return expected API request`() {
         val actualApiRequest = VirtusizeApi.getStoreProductInfo("16099122")
 
         val expectedUrl =
@@ -219,7 +234,7 @@ class VirtusizeApiTest {
     }
 
     @Test
-    fun getProductTypes_shouldReturnExpectedApiRequest() {
+    fun `test getProductTypes should return expected API request`() {
         val actualApiRequest = VirtusizeApi.getProductTypes()
 
         val expectedUrl = "https://staging.virtusize.com/a/api/v3/product-types"
@@ -230,7 +245,7 @@ class VirtusizeApiTest {
     }
 
     @Test
-    fun getI18n_shouldReturnExpectedApiRequest() {
+    fun `test getI18n should return expected API request`() {
         val actualApiRequest = VirtusizeApi.getI18n(VirtusizeLanguage.KR)
 
         val expectedUrl = "https://i18n.virtusize.jp/bundle-payloads/aoyama/ko"
@@ -241,7 +256,7 @@ class VirtusizeApiTest {
     }
 
     @Test
-    fun getSessions_shouldReturnExpectedApiRequest() {
+    fun `test getOrders should return expected API request`() {
         val actualApiRequest = VirtusizeApi.getSessions()
 
         val expectedUrl = "https://staging.virtusize.com/a/api/v3/sessions"
@@ -252,7 +267,7 @@ class VirtusizeApiTest {
     }
 
     @Test
-    fun getUserProducts_shouldReturnExpectedApiRequest() {
+    fun `test getUserProducts should return expected API request`() {
         val actualApiRequest = VirtusizeApi.getUserProducts()
 
         val expectedUrl = "https://staging.virtusize.com/a/api/v3/user-products"
@@ -263,7 +278,7 @@ class VirtusizeApiTest {
     }
 
     @Test
-    fun getUserBodyProfile_shouldReturnExpectedApiRequest() {
+    fun `test getUserBodyProfile should return expected API request`() {
         val actualApiRequest = VirtusizeApi.getUserBodyProfile()
 
         val expectedUrl = "https://staging.virtusize.com/a/api/v3/user-body-measurements"
@@ -274,7 +289,7 @@ class VirtusizeApiTest {
     }
 
     @Test
-    fun getSize_shouldReturnExpectedApiRequest() {
+    fun `test getSize should return expected API request`() {
         val actualApiRequest =
             VirtusizeApi.getSize(
                 ProductFixtures.productTypes(),
