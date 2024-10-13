@@ -5,6 +5,7 @@ plugins {
 }
 
 android {
+    namespace 'com.virtusize.android.core'
     compileSdk 34
 
     defaultConfig {
@@ -36,13 +37,16 @@ android {
         jvmTarget = '17'
     }
 
+    kotlin.sourceSets.configureEach { sourceSet ->
+        sourceSet.languageSettings.enableLanguageFeature("DataObjects")
+    }
+
     testOptions {
         unitTests {
             includeAndroidResources = true
             returnDefaultValues = true
         }
     }
-    namespace 'com.virtusize.android.core'
 }
 
 dependencies {

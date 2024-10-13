@@ -3,8 +3,7 @@ package com.virtusize.android.data.local
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
-class VirtusizeOrderTest {
-
+internal class VirtusizeOrderTest {
     @Test
     fun paramsToMap_withNoOrderItem_shouldReturnExpectedMap() {
         val actualOrder = VirtusizeOrder("TEST_ORDER")

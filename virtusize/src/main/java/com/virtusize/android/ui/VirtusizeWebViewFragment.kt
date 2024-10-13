@@ -17,7 +17,9 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import com.virtusize.android.R
 import com.virtusize.android.SharedPreferencesHelper
 import com.virtusize.android.auth.VirtusizeAuth
@@ -26,18 +28,26 @@ import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.parsers.VirtusizeEventJsonParser
 import com.virtusize.android.databinding.WebActivityBinding
+import com.virtusize.android.network.VirtusizeAPIService
+import com.virtusize.android.network.VirtusizeApi
 import com.virtusize.android.util.Constants
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class VirtusizeWebViewFragment : DialogFragment() {
 
     private var virtusizeWebAppUrl =
-        "https://static.api.virtusize.jp/a/aoyama/latest/sdk-webview.html"
+        "https://static.api.virtusize.jp/a/aoyama/${VirtusizeApi.DEFAULT_AOYAMA_VERSION}/sdk-webview.html"
     private var vsParamsFromSDKScript = ""
     private var backButtonClickEventFromSDKScript =
         "javascript:vsEventFromSDK({ name: 'sdk-back-button-tapped'})"
 
     private var virtusizeMessageHandler: VirtusizeMessageHandler? = null
+
+    private val apiService: VirtusizeAPIService by lazy {
+        VirtusizeAPIService.getInstance(requireContext(), virtusizeMessageHandler)
+    }
+
     private lateinit var clientProduct: VirtusizeProduct
 
     private lateinit var sharedPreferencesHelper: SharedPreferencesHelper
@@ -77,6 +87,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dialog?.window?.attributes?.windowAnimations = R.style.VirtusizeDialogFragmentAnimation
+        binding.webView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.virtusizeWhite))
         // Enable JavaScript in the web view
         binding.webView.settings.javaScriptEnabled = true
         binding.webView.settings.domStorageEnabled = true
@@ -171,13 +182,6 @@ class VirtusizeWebViewFragment : DialogFragment() {
             true
         }
 
-        // Get the Virtusize URL passed in fragment arguments
-        arguments?.getString(Constants.URL_KEY)?.let {
-            virtusizeWebAppUrl = it
-        } ?: run {
-            dismiss()
-        }
-
         // Get the Virtusize params script passed in fragment arguments.
         // If the script is not passed, we dismiss this dialog fragment.
         arguments?.getString(Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY)?.let {
@@ -192,7 +196,26 @@ class VirtusizeWebViewFragment : DialogFragment() {
             dismiss()
         }
 
-        binding.webView.loadUrl(virtusizeWebAppUrl)
+        viewLifecycleOwner.lifecycleScope.launch {
+            val fetchedVersion =
+                apiService.fetchLatestAoyamaVersion().successData ?: run {
+                    dismiss()
+                    return@launch
+                }
+
+            // Get the Virtusize URL passed in fragment arguments
+            arguments?.getString(Constants.URL_KEY)?.let { url ->
+                virtusizeWebAppUrl =
+                    url.replace(
+                        oldValue = VirtusizeApi.DEFAULT_AOYAMA_VERSION,
+                        newValue = fetchedVersion,
+                    )
+            } ?: run {
+                dismiss()
+            }
+
+            binding.webView.loadUrl(virtusizeWebAppUrl)
+        }
     }
 
     override fun onStop() {

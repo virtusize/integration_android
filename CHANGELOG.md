@@ -1,3 +1,12 @@
+## 2.5.6
+* Update the Virtusize WebView URL - General Use
+
+## 2.5.5
+
+* Updated Size Recommendation API related URL, request model, response model.
+* Added environment related size recommendation base URLs.
+* Updated unit test
+
 ## 2.5.1
 
 * Handle SNS auth for web view apps

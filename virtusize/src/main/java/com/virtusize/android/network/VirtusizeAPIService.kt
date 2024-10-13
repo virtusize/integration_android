@@ -99,6 +99,16 @@ internal class VirtusizeAPIService(
         this.coroutineDispatcher = dispatcher
     }
 
+    internal suspend fun fetchLatestAoyamaVersion(): VirtusizeApiResponse<String> =
+        withContext(Dispatchers.IO) {
+            val apiRequest = VirtusizeApi.fetchLatestAoyamaVersion()
+            VirtusizeApiTask(
+                httpURLConnection,
+                sharedPreferencesHelper,
+                messageHandler,
+            ).setResponseFormat(VirtusizeApiResponseFormat.STRING).execute(apiRequest)
+        }
+
     /**
      * Executes the API task to make a network request for Product Check
      * @param product [VirtusizeProduct]

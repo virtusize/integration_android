@@ -12,8 +12,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 internal object ProductFixtures {
-
-    internal val PRODUCT_TYPE_ID_ONE_JSON_OBJECT_STRING =
+    val PRODUCT_TYPE_ID_ONE_JSON_OBJECT_STRING =
         """
             {
                 "id": 1,

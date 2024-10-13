@@ -49,6 +49,8 @@ data class ApiRequest(
  * @param userId the user ID that is unique from the client system
  */
 object VirtusizeApi {
+    const val DEFAULT_AOYAMA_VERSION = "3.3.1"
+
     private var environment = VirtusizeEnvironment.GLOBAL
     private lateinit var apiKey: String
     private lateinit var userId: String
@@ -84,7 +86,7 @@ object VirtusizeApi {
      */
     fun productCheck(product: VirtusizeProduct): ApiRequest {
         val urlBuilder =
-            Uri.parse(environment.servicesApiUrl() + VirtusizeEndpoint.ProductCheck.getPath())
+            Uri.parse(environment.servicesApiUrl() + VirtusizeEndpoint.ProductCheck.path)
                 .buildUpon()
                 .appendQueryParameter("apiKey", apiKey)
                 .appendQueryParameter("externalId", product.externalId)
@@ -93,15 +95,26 @@ object VirtusizeApi {
         return ApiRequest(url, HttpMethod.GET)
     }
 
+    fun fetchLatestAoyamaVersion(): ApiRequest {
+        val url =
+            Uri.parse(environment.virtusizeUrl() + VirtusizeEndpoint.LatestAoyamaVersion.path)
+                .buildUpon()
+                .build()
+                .toString()
+        return ApiRequest(url, HttpMethod.GET)
+    }
+
     /**
      * Gets the Virtusize web view URL for a VirtusizeProduct
+     *
+     * @param version the version of the Virtusize web view
      * @return the Virtusize web view URL as String
      */
-    fun virtusizeWebViewURL(): String {
-        val urlBuilder = Uri.parse(
-            environment.virtusizeUrl() + VirtusizeEndpoint.VirtusizeWebView.getPath(environment)
-        )
-            .buildUpon()
+    fun virtusizeWebViewURL(version: String = DEFAULT_AOYAMA_VERSION): String {
+        val urlBuilder =
+            Uri.parse(
+                environment.virtusizeUrl() + VirtusizeEndpoint.VirtusizeWebView(version = version).path,
+            ).buildUpon()
         return urlBuilder.build().toString()
     }
 
@@ -111,13 +124,14 @@ object VirtusizeApi {
      * @return ApiRequest
      */
     fun sendProductImageToBackend(product: VirtusizeProduct): ApiRequest {
-        val url = Uri.parse(
-            environment.defaultApiUrl() +
-                VirtusizeEndpoint.ProductMetaDataHints.getPath()
-        )
-            .buildUpon()
-            .build()
-            .toString()
+        val url =
+            Uri.parse(
+                environment.defaultApiUrl() +
+                    VirtusizeEndpoint.ProductMetaDataHints.path,
+            )
+                .buildUpon()
+                .build()
+                .toString()
         val params = mutableMapOf<String, Any>()
         product.productCheckData?.data?.storeId?.let {
             params["store_id"] = it.toString()
@@ -224,10 +238,11 @@ object VirtusizeApi {
      * @see ApiRequest
      */
     fun sendOrder(order: VirtusizeOrder): ApiRequest {
-        val url = Uri.parse(environment.defaultApiUrl() + VirtusizeEndpoint.Orders.getPath())
-            .buildUpon()
-            .build()
-            .toString()
+        val url =
+            Uri.parse(environment.defaultApiUrl() + VirtusizeEndpoint.Orders.path)
+                .buildUpon()
+                .build()
+                .toString()
         return ApiRequest(url, HttpMethod.POST, order.paramsToMap(apiKey, userId).toMutableMap())
     }
 
@@ -237,15 +252,16 @@ object VirtusizeApi {
      * @see ApiRequest
      */
     fun getStoreInfo(): ApiRequest {
-        val url = Uri.parse(
-            environment.defaultApiUrl() +
-                VirtusizeEndpoint.StoreViewApiKey.getPath() +
-                apiKey
-        )
-            .buildUpon()
-            .appendQueryParameter("format", "json")
-            .build()
-            .toString()
+        val url =
+            Uri.parse(
+                environment.defaultApiUrl() +
+                    VirtusizeEndpoint.StoreViewApiKey.path +
+                    apiKey,
+            )
+                .buildUpon()
+                .appendQueryParameter("format", "json")
+                .build()
+                .toString()
         return ApiRequest(url, HttpMethod.GET)
     }
 
@@ -255,15 +271,16 @@ object VirtusizeApi {
      * @see ApiRequest
      */
     fun getStoreProductInfo(productId: String): ApiRequest {
-        val url = Uri.parse(
-            environment.defaultApiUrl() +
-                VirtusizeEndpoint.StoreProducts.getPath() +
-                productId
-        )
-            .buildUpon()
-            .appendQueryParameter("format", "json")
-            .build()
-            .toString()
+        val url =
+            Uri.parse(
+                environment.defaultApiUrl() +
+                    VirtusizeEndpoint.StoreProducts.path +
+                    productId,
+            )
+                .buildUpon()
+                .appendQueryParameter("format", "json")
+                .build()
+                .toString()
         return ApiRequest(url, HttpMethod.GET)
     }
 
@@ -272,10 +289,11 @@ object VirtusizeApi {
      * @see ApiRequest
      */
     fun getProductTypes(): ApiRequest {
-        val url = Uri.parse(environment.defaultApiUrl() + VirtusizeEndpoint.ProductType.getPath())
-            .buildUpon()
-            .build()
-            .toString()
+        val url =
+            Uri.parse(environment.defaultApiUrl() + VirtusizeEndpoint.ProductType.path)
+                .buildUpon()
+                .build()
+                .toString()
         return ApiRequest(url, HttpMethod.GET)
     }
 
@@ -284,18 +302,20 @@ object VirtusizeApi {
      * @see ApiRequest
      */
     fun getI18n(language: VirtusizeLanguage): ApiRequest {
-        val url = Uri.parse(I18N_URL + VirtusizeEndpoint.I18N.getPath() + language.value)
-            .buildUpon()
-            .build()
-            .toString()
+        val url =
+            Uri.parse(I18N_URL + VirtusizeEndpoint.I18N.path + language.value)
+                .buildUpon()
+                .build()
+                .toString()
         return ApiRequest(url, HttpMethod.GET)
     }
 
     fun getSessions(): ApiRequest {
-        val url = Uri.parse(environment.defaultApiUrl() + VirtusizeEndpoint.Sessions.getPath())
-            .buildUpon()
-            .build()
-            .toString()
+        val url =
+            Uri.parse(environment.defaultApiUrl() + VirtusizeEndpoint.Sessions.path)
+                .buildUpon()
+                .build()
+                .toString()
         return ApiRequest(url, HttpMethod.POST)
     }
 
@@ -304,10 +324,11 @@ object VirtusizeApi {
      * @see ApiRequest
      */
     fun deleteUser(): ApiRequest {
-        val url = Uri.parse(environment.defaultApiUrl() + VirtusizeEndpoint.User.getPath())
-            .buildUpon()
-            .build()
-            .toString()
+        val url =
+            Uri.parse(environment.defaultApiUrl() + VirtusizeEndpoint.User.path)
+                .buildUpon()
+                .build()
+                .toString()
         return ApiRequest(url, HttpMethod.DELETE)
     }
 
@@ -316,12 +337,13 @@ object VirtusizeApi {
      * @see ApiRequest
      */
     fun getUserProducts(): ApiRequest {
-        val url = Uri.parse(
-            environment.defaultApiUrl() + VirtusizeEndpoint.UserProducts.getPath()
-        )
-            .buildUpon()
-            .build()
-            .toString()
+        val url =
+            Uri.parse(
+                environment.defaultApiUrl() + VirtusizeEndpoint.UserProducts.path,
+            )
+                .buildUpon()
+                .build()
+                .toString()
         return ApiRequest(url, HttpMethod.GET, authorization = true)
     }
 
@@ -330,12 +352,13 @@ object VirtusizeApi {
      * @see ApiRequest
      */
     fun getUserBodyProfile(): ApiRequest {
-        val url = Uri.parse(
-            environment.defaultApiUrl() + VirtusizeEndpoint.UserBodyMeasurements.getPath()
-        )
-            .buildUpon()
-            .build()
-            .toString()
+        val url =
+            Uri.parse(
+                environment.defaultApiUrl() + VirtusizeEndpoint.UserBodyMeasurements.path,
+            )
+                .buildUpon()
+                .build()
+                .toString()
         return ApiRequest(url, HttpMethod.GET, authorization = true)
     }
 
@@ -354,7 +377,7 @@ object VirtusizeApi {
         val bodyProfileRecommendedSizeParams =
             BodyProfileRecommendedSizeParams(productTypes, storeProduct, userBodyProfile)
         val url =
-            Uri.parse("${environment.sizeRecommendationApiBaseUrl()}${VirtusizeEndpoint.GetSize.getPath()}")
+            Uri.parse("${environment.sizeRecommendationApiBaseUrl()}${VirtusizeEndpoint.GetSize.path}")
                 .buildUpon()
                 .build()
                 .toString()

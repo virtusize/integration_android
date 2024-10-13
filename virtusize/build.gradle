@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-
+    namespace 'com.virtusize.android'
     compileSdk rootProject.ext.compileSdkVersion
 
     defaultConfig {
@@ -44,7 +44,6 @@ android {
     buildFeatures {
         viewBinding true
     }
-    namespace 'com.virtusize.android'
 }
 
 dependencies {

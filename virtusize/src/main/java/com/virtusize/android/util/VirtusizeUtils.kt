@@ -32,7 +32,10 @@ internal object VirtusizeUtils {
      * @param context the base application Context
      * @param locale the locale to switch to
      */
-    private fun configureLocale(context: Context, locale: Locale?): ContextWrapper? {
+    private fun configureLocale(
+        context: Context,
+        locale: Locale?,
+    ): ContextWrapper {
         var updatedContext = context
         val resources = context.resources
         val configuration = resources.configuration
@@ -54,7 +57,10 @@ internal object VirtusizeUtils {
     /**
      * Gets configured context base on the language that clients set up with the Virtusize Builder in the application
      */
-    fun getConfiguredContext(context: Context, language: VirtusizeLanguage?): ContextWrapper? {
+    fun getConfiguredContext(
+        context: Context,
+        language: VirtusizeLanguage?,
+    ): ContextWrapper {
         return when (language) {
             VirtusizeLanguage.EN -> configureLocale(context, Locale.ENGLISH)
             VirtusizeLanguage.JP -> configureLocale(context, Locale.JAPAN)
