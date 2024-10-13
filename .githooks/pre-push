@@ -2,7 +2,7 @@
 
 echo "Running ktlint check..."
 
-./gradlew ktlint --daemon
+./gradlew ktlintCheck --daemon
 
 status=$?
 
