@@ -112,12 +112,23 @@ object VirtusizeApi {
      * @param version the version of the Virtusize web view
      * @return the Virtusize web view URL as String
      */
-    fun virtusizeWebViewURL(version: String = DEFAULT_AOYAMA_VERSION): String {
+    fun getVirtusizeWebViewURL(version: String = DEFAULT_AOYAMA_VERSION): String {
         val urlBuilder =
             Uri
                 .parse(
                     environment.virtusizeUrl() + VirtusizeEndpoint.VirtusizeWebView(version = version).path,
                 ).buildUpon()
+        return urlBuilder.build().toString()
+    }
+
+    /**
+     * Gets the Virtusize web view URL for a VirtusizeProduct for specific clients
+     */
+    fun getVirtusizeWebViewURLForSpecificClients(): String {
+        val urlBuilder =
+            Uri
+                .parse(environment.virtusizeUrl() + VirtusizeEndpoint.VirtusizeWebViewForSpecificClients.path)
+                .buildUpon()
         return urlBuilder.build().toString()
     }
 

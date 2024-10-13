@@ -13,7 +13,6 @@ import com.virtusize.android.data.remote.BodyProfileRecommendedSize
 import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.data.remote.Product
 import com.virtusize.android.data.remote.ProductType
-import com.virtusize.android.ui.VirtusizeWebViewFragment
 import com.virtusize.android.util.VirtusizeUtils
 import com.virtusize.android.util.trimI18nText
 
@@ -27,7 +26,6 @@ object VirtusizeFlutterUtils {
         VirtusizeUtils.openVirtusizeWebView(
             activity,
             virtusize?.params,
-            VirtusizeWebViewFragment(),
             product,
             messageHandler,
         )

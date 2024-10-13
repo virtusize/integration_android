@@ -2,8 +2,10 @@ package com.virtusize.android.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Message
 import android.view.KeyEvent
@@ -24,10 +26,12 @@ import com.virtusize.android.R
 import com.virtusize.android.SharedPreferencesHelper
 import com.virtusize.android.auth.VirtusizeAuth
 import com.virtusize.android.auth.utils.VirtusizeURLCheck
+import com.virtusize.android.data.local.StoreName
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeProduct
+import com.virtusize.android.data.local.VirtusizeStoreRepository
 import com.virtusize.android.data.parsers.VirtusizeEventJsonParser
-import com.virtusize.android.databinding.WebActivityBinding
+import com.virtusize.android.databinding.FragmentVirtusizeWebviewBinding
 import com.virtusize.android.network.VirtusizeAPIService
 import com.virtusize.android.network.VirtusizeApi
 import com.virtusize.android.util.Constants
@@ -35,8 +39,8 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class VirtusizeWebViewFragment : DialogFragment() {
-    private var virtusizeWebAppUrl =
-        "https://static.api.virtusize.jp/a/aoyama/${VirtusizeApi.DEFAULT_AOYAMA_VERSION}/sdk-webview.html"
+    private var virtusizeWebAppUrl: String = VirtusizeApi.getVirtusizeWebViewURL()
+
     private var vsParamsFromSDKScript = ""
     private var backButtonClickEventFromSDKScript =
         "javascript:vsEventFromSDK({ name: 'sdk-back-button-tapped'})"
@@ -47,11 +51,13 @@ class VirtusizeWebViewFragment : DialogFragment() {
         VirtusizeAPIService.getInstance(requireContext(), virtusizeMessageHandler)
     }
 
+    private val storeRepository by lazy { VirtusizeStoreRepository() }
+
     private lateinit var clientProduct: VirtusizeProduct
 
     private lateinit var sharedPreferencesHelper: SharedPreferencesHelper
 
-    private lateinit var binding: WebActivityBinding
+    private lateinit var binding: FragmentVirtusizeWebviewBinding
 
     private val virtusizeSNSAuthLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -78,7 +84,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = WebActivityBinding.inflate(inflater, container, false)
+        binding = FragmentVirtusizeWebviewBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -203,37 +209,43 @@ class VirtusizeWebViewFragment : DialogFragment() {
 
         // Get the Virtusize params script passed in fragment arguments.
         // If the script is not passed, we dismiss this dialog fragment.
-        arguments?.getString(Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY)?.let {
-            vsParamsFromSDKScript = it
-        } ?: run {
+        vsParamsFromSDKScript = arguments?.getString(Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY) ?: run {
             dismiss()
+            return
         }
 
-        arguments?.getParcelable<VirtusizeProduct>(Constants.VIRTUSIZE_PRODUCT_KEY)?.let {
-            clientProduct = it
+        clientProduct = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelable(Constants.VIRTUSIZE_PRODUCT_KEY, VirtusizeProduct::class.java)
+        } else {
+            arguments?.getParcelable(Constants.VIRTUSIZE_PRODUCT_KEY)
         } ?: run {
             dismiss()
+            return
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            val fetchedVersion =
-                apiService.fetchLatestAoyamaVersion().successData ?: run {
-                    dismiss()
-                    return@launch
-                }
-
-            // Get the Virtusize URL passed in fragment arguments
-            arguments?.getString(Constants.URL_KEY)?.let { url ->
-                virtusizeWebAppUrl =
-                    url.replace(
-                        oldValue = VirtusizeApi.DEFAULT_AOYAMA_VERSION,
-                        newValue = fetchedVersion,
-                    )
-            } ?: run {
-                dismiss()
+        val productStoreId = clientProduct.productCheckData?.data?.storeId
+        when {
+            productStoreId == storeRepository.getStoreId(StoreName.UNITED_ARROWS) -> {
+                virtusizeWebAppUrl = VirtusizeApi.getVirtusizeWebViewURLForSpecificClients()
+                binding.webView.loadUrl(virtusizeWebAppUrl)
             }
+            else ->
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val fetchedVersion =
+                        apiService.fetchLatestAoyamaVersion().successData ?: run {
+                            dismiss()
+                            return@launch
+                        }
 
-            binding.webView.loadUrl(virtusizeWebAppUrl)
+                    val versionPattern = "\\d+\\.\\d+\\.\\d+".toRegex()
+                    virtusizeWebAppUrl =
+                        virtusizeWebAppUrl.replace(
+                            regex = versionPattern,
+                            replacement = fetchedVersion,
+                        )
+
+                    binding.webView.loadUrl(virtusizeWebAppUrl)
+                }
         }
     }
 
@@ -247,6 +259,14 @@ class VirtusizeWebViewFragment : DialogFragment() {
         super.onDestroyView()
         binding.webView.stopLoading()
         binding.webView.destroy()
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        val activity = requireActivity()
+        if (activity is VirtusizeWebViewActivity) {
+            activity.finish()
+        }
+        super.onDismiss(dialog)
     }
 
     /**

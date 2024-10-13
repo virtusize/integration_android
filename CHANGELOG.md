@@ -1,5 +1,6 @@
 ## 2.5.6
-* Update the Virtusize WebView URL - General Use
+* Refactor: Update the WebView URL to the following format: https://static.api.virtusize.jp/a/aoyama/${version}/sdk-webview.html
+* Feature: Add the client specific WebView URL. The format is as follows: https://static.api.virtusize.jp/a/aoyama/testing/privacy-policy-phase2-vue/sdk-webview.html
 
 ## 2.5.5
 

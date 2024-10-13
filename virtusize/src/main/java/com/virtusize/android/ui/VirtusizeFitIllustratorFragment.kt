@@ -43,7 +43,7 @@ class VirtusizeFitIllustratorFragment : DialogFragment() {
                 }
                 fragmentTransaction.addToBackStack(null)
                 val args = Bundle()
-                args.putString(Constants.URL_KEY, url)
+                args.putString(Constants.URL_KEY_FOR_FIT_ILLUSTRATOR, url)
                 fitIllustratorDialogFragment.arguments = args
                 fitIllustratorDialogFragment.show(fragmentTransaction, Constants.FRAG_TAG)
             } ?: run {
@@ -107,7 +107,7 @@ class VirtusizeFitIllustratorFragment : DialogFragment() {
             Constants.JS_BRIDGE_NAME,
         )
         // Get the Fit Illustrator URL passed in fragment arguments
-        arguments?.getString(Constants.URL_KEY)?.let {
+        arguments?.getString(Constants.URL_KEY_FOR_FIT_ILLUSTRATOR)?.let {
             url = it
         }
         binding.fitIllustratorWebView.loadUrl(url)

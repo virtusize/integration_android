@@ -82,6 +82,4 @@ fun VirtusizeErrorType.virtusizeError(
  * Throws error for the VirtusizeErrorType that it is called on
  * @throws IllegalArgumentException
  */
-fun VirtusizeErrorType.throwError() {
-    throw IllegalArgumentException(this.message())
-}
+fun VirtusizeErrorType.throwError() = throw IllegalArgumentException(this.message())

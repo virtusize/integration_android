@@ -562,9 +562,13 @@ class VirtusizeInPageStandard
             binding.privacyPolicyText.text =
                 configuredContext?.getText(R.string.virtusize_privacy_policy)
             binding.inpageLoadingText.text =
-                configuredContext?.getText(R.string.inpage_loading_text)
+                configuredContext?.getText(
+                    R.string.inpage_loading_text,
+                )
             binding.inpageErrorText.text =
-                configuredContext?.getText(R.string.inpage_long_error_text)
+                configuredContext?.getText(
+                    R.string.inpage_long_error_text,
+                )
 
             setConfiguredDimensions(configuredContext)
 

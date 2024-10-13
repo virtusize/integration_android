@@ -2,22 +2,22 @@ package com.virtusize.android.util
 
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.LocaleList
-import androidx.fragment.app.FragmentActivity
 import com.virtusize.android.data.local.ProductComparisonFitInfo
 import com.virtusize.android.data.local.SizeComparisonRecommendedSize
 import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeParams
 import com.virtusize.android.data.local.VirtusizeProduct
+import com.virtusize.android.data.local.VirtusizeWebViewInMemoryCache
 import com.virtusize.android.data.remote.Product
 import com.virtusize.android.data.remote.ProductSize
 import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.data.remote.Weight
-import com.virtusize.android.network.VirtusizeApi
-import com.virtusize.android.ui.VirtusizeWebViewFragment
+import com.virtusize.android.ui.VirtusizeWebViewActivity
 import java.util.Locale
 import kotlin.math.abs
 
@@ -160,28 +160,28 @@ internal object VirtusizeUtils {
     fun openVirtusizeWebView(
         context: Context,
         virtusizeParams: VirtusizeParams?,
-        virtusizeDialogFragment: VirtusizeWebViewFragment,
         product: VirtusizeProduct,
         messageHandler: VirtusizeMessageHandler,
     ) {
-        val fragmentTransaction =
-            (context as FragmentActivity).supportFragmentManager.beginTransaction()
-        val previousFragment = context.supportFragmentManager.findFragmentByTag(Constants.FRAG_TAG)
-        previousFragment?.let { fragment ->
-            fragmentTransaction.remove(fragment)
-        }
-        fragmentTransaction.addToBackStack(null)
-        val args = Bundle()
-        args.putString(Constants.URL_KEY, VirtusizeApi.virtusizeWebViewURL())
-        virtusizeParams?.let { params ->
-            args.putString(
-                Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY,
-                "javascript:vsParamsFromSDK(${params.vsParamsString(product)})",
-            )
-        }
-        args.putParcelable(Constants.VIRTUSIZE_PRODUCT_KEY, product)
-        virtusizeDialogFragment.arguments = args
-        virtusizeDialogFragment.setupMessageHandler(messageHandler)
-        virtusizeDialogFragment.show(fragmentTransaction, Constants.FRAG_TAG)
+        VirtusizeWebViewInMemoryCache.setupMessageHandler(messageHandler)
+        val intent =
+            Intent(context, VirtusizeWebViewActivity::class.java).apply {
+                putExtras(createBundle(virtusizeParams, product))
+            }
+        context.startActivity(intent)
     }
+
+    private fun createBundle(
+        virtusizeParams: VirtusizeParams?,
+        product: VirtusizeProduct,
+    ): Bundle =
+        Bundle().apply {
+            virtusizeParams?.let { params ->
+                putString(
+                    Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY,
+                    "javascript:vsParamsFromSDK(${params.vsParamsString(product)})",
+                )
+            }
+            putParcelable(Constants.VIRTUSIZE_PRODUCT_KEY, product)
+        }
 }
