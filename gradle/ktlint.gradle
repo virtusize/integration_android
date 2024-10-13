@@ -10,17 +10,17 @@ dependencies {
     }
 }
 
-tasks.register("ktlintCheck", JavaExec) {
+tasks.register("ktlint", JavaExec) {
     group = "verification"
     description = "Check Kotlin code style."
     classpath = configurations.ktlint
     mainClass = "com.pinterest.ktlint.Main"
     // see https://pinterest.github.io/ktlint/install/cli/#command-line-usage for more information
-    args "src/**/*.kt", "**.kts", "!**/build/**"
+    args "**/src/**/*.kt", "**.kts", "!**/build/**"
 }
 
 tasks.named("check") {
-    dependsOn tasks.named("ktlintCheck")
+    dependsOn tasks.named("ktlint")
 }
 
 tasks.register("ktlintFormat", JavaExec) {
@@ -30,5 +30,5 @@ tasks.register("ktlintFormat", JavaExec) {
     mainClass = "com.pinterest.ktlint.Main"
     jvmArgs "--add-opens=java.base/java.lang=ALL-UNNAMED"
     // see https://pinterest.github.io/ktlint/install/cli/#command-line-usage for more information
-    args "-F", "src/**/*.kt", "**.kts", "!**/build/**"
+    args "-F", "**/src/**/*.kt", "**.kts", "!**/build/**"
 }
