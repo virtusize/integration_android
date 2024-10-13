@@ -12,83 +12,97 @@ import org.json.JSONObject
  */
 internal class I18nLocalizationJsonParser(
     val context: Context,
-    private val virtusizeLanguage: VirtusizeLanguage?
+    private val virtusizeLanguage: VirtusizeLanguage?,
 ) : VirtusizeJsonParser<I18nLocalization> {
-
     override fun parse(json: JSONObject): I18nLocalization? {
-        val aoyamaJSONObject = json.optJSONObject(FIELD_KEYS)
-            ?.optJSONObject(FIELD_APPS)
-            ?.optJSONObject(FIELD_AOYAMA)
+        val aoyamaJSONObject =
+            json
+                .optJSONObject(FIELD_KEYS)
+                ?.optJSONObject(FIELD_APPS)
+                ?.optJSONObject(FIELD_AOYAMA)
         val inpageJSONObject = aoyamaJSONObject?.optJSONObject(FIELD_INPAGE)
         val oneSizeJSONObject = inpageJSONObject?.optJSONObject(FIELD_ONE_SIZE)
         val multiSizeJSONObject = inpageJSONObject?.optJSONObject(FIELD_MULTI_SIZE)
         val accessoryJSONObject = inpageJSONObject?.optJSONObject(FIELD_ACCESSORY)
 
         val configuredContext = VirtusizeUtils.getConfiguredContext(context, virtusizeLanguage)
-        val defaultAccessoryText = inpageJSONObject?.optString(
-            FIELD_DEFAULT_ACCESSORY_TEXT,
-            configuredContext?.getString(R.string.inpage_default_accessory_text) ?: ""
-        ) ?: ""
+        val defaultAccessoryText =
+            inpageJSONObject?.optString(
+                FIELD_DEFAULT_ACCESSORY_TEXT,
+                configuredContext?.getString(R.string.inpage_default_accessory_text) ?: "",
+            ) ?: ""
 
-        val hasProductAccessoryTopText = accessoryJSONObject?.optString(
-            FIELD_HAS_PRODUCT_LEAD,
-            configuredContext?.getString(R.string.inpage_has_product_top_text) ?: ""
-        ) ?: ""
+        val hasProductAccessoryTopText =
+            accessoryJSONObject?.optString(
+                FIELD_HAS_PRODUCT_LEAD,
+                configuredContext?.getString(R.string.inpage_has_product_top_text) ?: "",
+            ) ?: ""
 
-        val hasProductAccessoryBottomText = accessoryJSONObject?.optString(
-            FIELD_HAS_PRODUCT,
-            configuredContext?.getString(R.string.inpage_has_product_bottom_text) ?: ""
-        ) ?: ""
+        val hasProductAccessoryBottomText =
+            accessoryJSONObject?.optString(
+                FIELD_HAS_PRODUCT,
+                configuredContext?.getString(R.string.inpage_has_product_bottom_text) ?: "",
+            ) ?: ""
 
-        val oneSizeCloseTopText = oneSizeJSONObject?.optString(
-            FIELD_CLOSE_LEAD,
-            configuredContext?.getString(R.string.inpage_one_size_close_top_text) ?: ""
-        ) ?: ""
+        val oneSizeCloseTopText =
+            oneSizeJSONObject?.optString(
+                FIELD_CLOSE_LEAD,
+                configuredContext?.getString(R.string.inpage_one_size_close_top_text) ?: "",
+            ) ?: ""
 
-        val oneSizeSmallerTopText = oneSizeJSONObject?.optString(
-            FIELD_SMALLER_LEAD,
-            configuredContext?.getString(R.string.inpage_one_size_smaller_top_text) ?: ""
-        ) ?: ""
+        val oneSizeSmallerTopText =
+            oneSizeJSONObject?.optString(
+                FIELD_SMALLER_LEAD,
+                configuredContext?.getString(R.string.inpage_one_size_smaller_top_text) ?: "",
+            ) ?: ""
 
-        val oneSizeLargerTopText = oneSizeJSONObject?.optString(
-            FIELD_LARGER_LEAD,
-            configuredContext?.getString(R.string.inpage_one_size_larger_top_text) ?: ""
-        ) ?: ""
+        val oneSizeLargerTopText =
+            oneSizeJSONObject?.optString(
+                FIELD_LARGER_LEAD,
+                configuredContext?.getString(R.string.inpage_one_size_larger_top_text) ?: "",
+            ) ?: ""
 
-        val oneSizeCloseBottomText = oneSizeJSONObject?.optString(
-            FIELD_CLOSE,
-            configuredContext?.getString(R.string.inpage_one_size_close_bottom_text) ?: ""
-        ) ?: ""
+        val oneSizeCloseBottomText =
+            oneSizeJSONObject?.optString(
+                FIELD_CLOSE,
+                configuredContext?.getString(R.string.inpage_one_size_close_bottom_text) ?: "",
+            ) ?: ""
 
-        val oneSizeSmallerBottomText = oneSizeJSONObject?.optString(
-            FIELD_SMALLER,
-            configuredContext?.getString(R.string.inpage_one_size_smaller_bottom_text) ?: ""
-        ) ?: ""
+        val oneSizeSmallerBottomText =
+            oneSizeJSONObject?.optString(
+                FIELD_SMALLER,
+                configuredContext?.getString(R.string.inpage_one_size_smaller_bottom_text) ?: "",
+            ) ?: ""
 
-        val oneSizeLargerBottomText = oneSizeJSONObject?.optString(
-            FIELD_LARGER,
-            configuredContext?.getString(R.string.inpage_one_size_larger_bottom_text) ?: ""
-        ) ?: ""
+        val oneSizeLargerBottomText =
+            oneSizeJSONObject?.optString(
+                FIELD_LARGER,
+                configuredContext?.getString(R.string.inpage_one_size_larger_bottom_text) ?: "",
+            ) ?: ""
 
-        val bodyProfileOneSizeText = oneSizeJSONObject?.optString(
-            FIELD_BODY_PROFILE,
-            configuredContext?.getString(R.string.inpage_one_size_body_profile_text) ?: ""
-        ) ?: ""
+        val bodyProfileOneSizeText =
+            oneSizeJSONObject?.optString(
+                FIELD_BODY_PROFILE,
+                configuredContext?.getString(R.string.inpage_one_size_body_profile_text) ?: "",
+            ) ?: ""
 
-        val sizeComparisonMultiSizeText = multiSizeJSONObject?.optString(
-            FIELD_SIZE_COMPARISON,
-            configuredContext?.getString(R.string.inpage_multi_size_comparison_text) ?: ""
-        ) ?: ""
+        val sizeComparisonMultiSizeText =
+            multiSizeJSONObject?.optString(
+                FIELD_SIZE_COMPARISON,
+                configuredContext?.getString(R.string.inpage_multi_size_comparison_text) ?: "",
+            ) ?: ""
 
-        val bodyProfileMultiSizeText = multiSizeJSONObject?.optString(
-            FIELD_BODY_PROFILE,
-            configuredContext?.getString(R.string.inpage_multi_size_body_profile_text) ?: ""
-        ) ?: ""
+        val bodyProfileMultiSizeText =
+            multiSizeJSONObject?.optString(
+                FIELD_BODY_PROFILE,
+                configuredContext?.getString(R.string.inpage_multi_size_body_profile_text) ?: "",
+            ) ?: ""
 
-        val defaultNoDataText = inpageJSONObject?.optString(
-            FIELD_NO_DATA_TEXT,
-            configuredContext?.getString(R.string.inpage_no_data_text) ?: ""
-        ) ?: ""
+        val defaultNoDataText =
+            inpageJSONObject?.optString(
+                FIELD_NO_DATA_TEXT,
+                configuredContext?.getString(R.string.inpage_no_data_text) ?: "",
+            ) ?: ""
 
         return I18nLocalization(
             defaultAccessoryText,
@@ -103,7 +117,7 @@ internal class I18nLocalizationJsonParser(
             bodyProfileOneSizeText,
             sizeComparisonMultiSizeText,
             bodyProfileMultiSizeText,
-            defaultNoDataText
+            defaultNoDataText,
         )
     }
 

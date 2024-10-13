@@ -18,7 +18,9 @@ sealed interface VirtusizeEndpoint {
         override val path: String = "/a/aoyama/latest.txt"
     }
 
-    data class VirtusizeWebView(val version: String) : VirtusizeEndpoint {
+    data class VirtusizeWebView(
+        val version: String,
+    ) : VirtusizeEndpoint {
         override val path: String = "/a/aoyama/$version/sdk-webview.html"
     }
 

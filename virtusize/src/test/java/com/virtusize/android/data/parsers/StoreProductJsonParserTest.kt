@@ -9,7 +9,6 @@ import com.virtusize.android.fixtures.TestFixtures
 import org.junit.Test
 
 class StoreProductJsonParserTest {
-
     @Test
     fun parse_validJsonData_shouldReturnExpectedStoreProduct() {
         val actualStoreProduct =
@@ -23,18 +22,18 @@ class StoreProductJsonParserTest {
                     mutableSetOf(
                         Measurement("height", 760),
                         Measurement("bust", 660),
-                        Measurement("sleeve", 845)
-                    )
+                        Measurement("sleeve", 845),
+                    ),
                 ),
                 ProductSize(
                     "36",
                     mutableSetOf(
                         Measurement("height", 750),
                         Measurement("bust", 645),
-                        Measurement("sleeve", 825)
-                    )
-                )
-            )
+                        Measurement("sleeve", 825),
+                    ),
+                ),
+            ),
         )
         assertThat(actualStoreProduct?.externalId).isEqualTo("694")
         assertThat(actualStoreProduct?.productType).isEqualTo(8)
@@ -45,12 +44,16 @@ class StoreProductJsonParserTest {
         assertThat(actualStoreProduct?.storeProductMeta?.id).isEqualTo(1)
         assertThat(actualStoreProduct?.storeProductMeta?.brand).isEqualTo("Virtusize")
         assertThat(
-            actualStoreProduct?.storeProductMeta?.additionalInfo?.brand
+            actualStoreProduct?.storeProductMeta?.additionalInfo?.brand,
         ).isEqualTo(
-            "Virtusize"
+            "Virtusize",
         )
         assertThat(
-            actualStoreProduct?.storeProductMeta?.additionalInfo?.sizes?.toMutableSet()
+            actualStoreProduct
+                ?.storeProductMeta
+                ?.additionalInfo
+                ?.sizes
+                ?.toMutableSet(),
         ).isEqualTo(
             mutableSetOf(
                 ProductSize(
@@ -58,18 +61,18 @@ class StoreProductJsonParserTest {
                     mutableSetOf(
                         Measurement("height", 760),
                         Measurement("bust", 660),
-                        Measurement("sleeve", 845)
-                    )
+                        Measurement("sleeve", 845),
+                    ),
                 ),
                 ProductSize(
                     "36",
                     mutableSetOf(
                         Measurement("height", 750),
                         Measurement("bust", 645),
-                        Measurement("sleeve", 825)
-                    )
-                )
-            )
+                        Measurement("sleeve", 825),
+                    ),
+                ),
+            ),
         )
         assertThat(actualStoreProduct?.storeProductMeta?.additionalInfo?.modelInfo).isEqualTo(
             mutableMapOf(
@@ -77,17 +80,17 @@ class StoreProductJsonParserTest {
                 "size" to "38",
                 "waist" to 56,
                 "bust" to 78,
-                "height" to 165
-            )
+                "height" to 165,
+            ),
         )
         assertThat(
-            actualStoreProduct?.storeProductMeta?.additionalInfo?.fit
+            actualStoreProduct?.storeProductMeta?.additionalInfo?.fit,
         ).isEqualTo("regular")
         assertThat(
-            actualStoreProduct?.storeProductMeta?.additionalInfo?.style
+            actualStoreProduct?.storeProductMeta?.additionalInfo?.style,
         ).isEqualTo("fashionable")
         assertThat(actualStoreProduct?.storeProductMeta?.additionalInfo?.brandSizing).isEqualTo(
-            BrandSizing("large", false)
+            BrandSizing("large", false),
         )
     }
 

@@ -9,7 +9,6 @@ import kotlin.random.Random
  * This class is used to store and get the browser identifier and user auth data specific to this SDK
  */
 class SharedPreferencesHelper {
-
     companion object {
         private const val SHARED_PREFS_NAME = "VIRTUSIZE_SHARED_PREFS"
         private const val PREFS_BID_KEY = "BID_KEY_VIRTUSIZE"
@@ -22,10 +21,11 @@ class SharedPreferencesHelper {
 
         // Gets the instance of [SharedPreferencesHelper]
         fun getInstance(context: Context): SharedPreferencesHelper {
-            preferences = context.getSharedPreferences(
-                SHARED_PREFS_NAME,
-                Context.MODE_PRIVATE
-            )
+            preferences =
+                context.getSharedPreferences(
+                    SHARED_PREFS_NAME,
+                    Context.MODE_PRIVATE,
+                )
             if (sharedPreferenceHelper == null) {
                 sharedPreferenceHelper =
                     SharedPreferencesHelper()
@@ -48,9 +48,7 @@ class SharedPreferencesHelper {
      * Gets the auth token for the session API
      * @return the auth token as a string
      */
-    fun getAuthToken(): String? {
-        return preferences.getString(PREFS_AUTH_TOKEN_KEY, null)
-    }
+    fun getAuthToken(): String? = preferences.getString(PREFS_AUTH_TOKEN_KEY, null)
 
     /**
      * Stores the access token for the session API
@@ -63,9 +61,7 @@ class SharedPreferencesHelper {
      * Gets the access token for the session API
      * @return the access token as a string
      */
-    fun getAccessToken(): String? {
-        return preferences.getString(PREFS_ACCESS_TOKEN_KEY, null)
-    }
+    fun getAccessToken(): String? = preferences.getString(PREFS_ACCESS_TOKEN_KEY, null)
 
     /**
      * Stores the session data from the session API
@@ -78,17 +74,13 @@ class SharedPreferencesHelper {
      * Gets the session data from the session API
      * @return the session API response as a string
      */
-    fun getSessionData(): String? {
-        return preferences.getString(PREFS_SESSION_DATA_KEY, null)
-    }
+    fun getSessionData(): String? = preferences.getString(PREFS_SESSION_DATA_KEY, null)
 
     /**
      * Gets the browser identifier specific to this SDK
      * @return the browser identifier as String
      */
-    fun getBrowserId(): String {
-        return preferences.getString(PREFS_BID_KEY, null) ?: generateAndStoreBrowserId()
-    }
+    fun getBrowserId(): String = preferences.getString(PREFS_BID_KEY, null) ?: generateAndStoreBrowserId()
 
     /**
      * Generates and stores a browser identifier in application level shared preferences

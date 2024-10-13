@@ -9,7 +9,6 @@ import org.json.JSONObject
 import org.junit.Test
 
 class StoreProductMetaJsonParserTest {
-
     @Test
     fun parse_validJsonData_shouldReturnExpectedStoreProductMeta() {
         val actualStoreProductMeta =
@@ -24,18 +23,18 @@ class StoreProductMetaJsonParserTest {
                     mutableSetOf(
                         Measurement("height", 760),
                         Measurement("bust", 660),
-                        Measurement("sleeve", 845)
-                    )
+                        Measurement("sleeve", 845),
+                    ),
                 ),
                 ProductSize(
                     "36",
                     mutableSetOf(
                         Measurement("height", 750),
                         Measurement("bust", 645),
-                        Measurement("sleeve", 825)
-                    )
-                )
-            )
+                        Measurement("sleeve", 825),
+                    ),
+                ),
+            ),
         )
         assertThat(actualStoreProductMeta?.additionalInfo?.modelInfo).isEqualTo(
             mutableMapOf(
@@ -43,16 +42,16 @@ class StoreProductMetaJsonParserTest {
                 "size" to "38",
                 "waist" to 56,
                 "bust" to 78,
-                "height" to 165
-            )
+                "height" to 165,
+            ),
         )
         assertThat(actualStoreProductMeta?.additionalInfo?.fit).isEqualTo("loose")
         assertThat(actualStoreProductMeta?.additionalInfo?.style).isEqualTo("fashionable")
         assertThat(actualStoreProductMeta?.additionalInfo?.brandSizing).isEqualTo(
             BrandSizing(
                 "small",
-                true
-            )
+                true,
+            ),
         )
     }
 
@@ -65,8 +64,9 @@ class StoreProductMetaJsonParserTest {
     }
 
     companion object {
-        private val STORE_PRODUCT_META_JSON_DATA = JSONObject(
-            """
+        private val STORE_PRODUCT_META_JSON_DATA =
+            JSONObject(
+                """
                 {
                     "id":123,
                     "modelInfo":null,
@@ -123,7 +123,7 @@ class StoreProductMetaJsonParserTest {
                     "style":null,
                     "storeProduct":12345
                 }
-            """.trimIndent()
-        )
+                """.trimIndent(),
+            )
     }
 }

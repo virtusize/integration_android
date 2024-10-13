@@ -44,7 +44,7 @@ ext {
     constraint_layout_version = '2.1.4'
     coroutine_version = '1.6.4'
     junit_version = '4.13.2'
-    ktlint_version = '0.42.1'
+    ktlint_version = '1.2.1'
     lifecycle_version = '2.6.2'
 }
 

@@ -35,7 +35,6 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class VirtusizeWebViewFragment : DialogFragment() {
-
     private var virtusizeWebAppUrl =
         "https://static.api.virtusize.jp/a/aoyama/${VirtusizeApi.DEFAULT_AOYAMA_VERSION}/sdk-webview.html"
     private var vsParamsFromSDKScript = ""
@@ -59,7 +58,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
             VirtusizeAuth.handleVirtusizeSNSAuthResult(
                 binding.webView,
                 result.resultCode,
-                result.data
+                result.data,
             )
         }
 
@@ -77,17 +76,22 @@ class VirtusizeWebViewFragment : DialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = WebActivityBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         dialog?.window?.attributes?.windowAnimations = R.style.VirtusizeDialogFragmentAnimation
-        binding.webView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.virtusizeWhite))
+        binding.webView.setBackgroundColor(
+            ContextCompat.getColor(requireContext(), R.color.virtusizeWhite),
+        )
         // Enable JavaScript in the web view
         binding.webView.settings.javaScriptEnabled = true
         binding.webView.settings.domStorageEnabled = true
@@ -97,74 +101,87 @@ class VirtusizeWebViewFragment : DialogFragment() {
         // Add the Javascript interface to interface the web app with the web view
         binding.webView.addJavascriptInterface(WebAppInterface(), Constants.JS_BRIDGE_NAME)
         // Set up the web view client that adds JavaScript scripts for the interaction between the SDK and the web
-        binding.webView.webViewClient = object : WebViewClient() {
-            override fun onPageFinished(view: WebView?, url: String?) {
-                if (url != null && url.contains(virtusizeWebAppUrl)) {
-                    binding.webView.evaluateJavascript(vsParamsFromSDKScript, null)
-                    binding.webView.evaluateJavascript(
-                        "javascript:window.virtusizeSNSEnabled = true;",
-                        null
-                    )
-                    getBrowserIDFromCookies()?.let { bid ->
-                        if (bid != sharedPreferencesHelper.getBrowserId()) {
-                            sharedPreferencesHelper.storeBrowserId(bid)
+        binding.webView.webViewClient =
+            object : WebViewClient() {
+                override fun onPageFinished(
+                    view: WebView?,
+                    url: String?,
+                ) {
+                    if (url != null && url.contains(virtusizeWebAppUrl)) {
+                        binding.webView.evaluateJavascript(vsParamsFromSDKScript, null)
+                        binding.webView.evaluateJavascript(
+                            "javascript:window.virtusizeSNSEnabled = true;",
+                            null,
+                        )
+                        getBrowserIDFromCookies()?.let { bid ->
+                            if (bid != sharedPreferencesHelper.getBrowserId()) {
+                                sharedPreferencesHelper.storeBrowserId(bid)
+                            }
                         }
+                    }
+                }
+
+                override fun onLoadResource(
+                    view: WebView?,
+                    url: String?,
+                ) {
+                    super.onLoadResource(view, url)
+                    // To prevent multiple views in the WebView when a user selects a different display language
+                    if (url != null && url.contains("i18n")) {
+                        binding.webView.removeAllViews()
                     }
                 }
             }
 
-            override fun onLoadResource(view: WebView?, url: String?) {
-                super.onLoadResource(view, url)
-                // To prevent multiple views in the WebView when a user selects a different display language
-                if (url != null && url.contains("i18n")) {
-                    binding.webView.removeAllViews()
-                }
-            }
-        }
-
-        binding.webView.webChromeClient = object : WebChromeClient() {
-            override fun onCreateWindow(
-                view: WebView,
-                dialog: Boolean,
-                userGesture: Boolean,
-                resultMsg: Message
-            ): Boolean {
-                if (resultMsg.obj != null && resultMsg.obj is WebView.WebViewTransport) {
-                    val popupWebView = WebView(view.context)
-                    popupWebView.settings.javaScriptEnabled = true
-                    popupWebView.settings.javaScriptCanOpenWindowsAutomatically = true
-                    popupWebView.settings.setSupportMultipleWindows(true)
-                    popupWebView.settings.userAgentString = System.getProperty("http.agent")
-                    popupWebView.webViewClient = object : WebViewClient() {
-                        override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                            if (VirtusizeURLCheck.isExternalLinkFromVirtusize(url)) {
-                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                                try {
-                                    startActivity(intent)
-                                } finally {
-                                    return true
+        binding.webView.webChromeClient =
+            object : WebChromeClient() {
+                override fun onCreateWindow(
+                    view: WebView,
+                    dialog: Boolean,
+                    userGesture: Boolean,
+                    resultMsg: Message,
+                ): Boolean {
+                    if (resultMsg.obj != null && resultMsg.obj is WebView.WebViewTransport) {
+                        val popupWebView = WebView(view.context)
+                        popupWebView.settings.javaScriptEnabled = true
+                        popupWebView.settings.javaScriptCanOpenWindowsAutomatically = true
+                        popupWebView.settings.setSupportMultipleWindows(true)
+                        popupWebView.settings.userAgentString = System.getProperty("http.agent")
+                        popupWebView.webViewClient =
+                            object : WebViewClient() {
+                                override fun shouldOverrideUrlLoading(
+                                    view: WebView,
+                                    url: String,
+                                ): Boolean {
+                                    if (VirtusizeURLCheck.isExternalLinkFromVirtusize(url)) {
+                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                        try {
+                                            startActivity(intent)
+                                        } finally {
+                                            return true
+                                        }
+                                    }
+                                    return VirtusizeAuth.isSNSAuthUrl(
+                                        requireContext(),
+                                        virtusizeSNSAuthLauncher,
+                                        url,
+                                    )
                                 }
                             }
-                            return VirtusizeAuth.isSNSAuthUrl(
-                                requireContext(),
-                                virtusizeSNSAuthLauncher,
-                                url
-                            )
-                        }
+                        popupWebView.webChromeClient =
+                            object : WebChromeClient() {
+                                override fun onCloseWindow(window: WebView) {
+                                    binding.webView.removeAllViews()
+                                }
+                            }
+                        val transport = resultMsg.obj as WebView.WebViewTransport
+                        binding.webView.addView(popupWebView)
+                        transport.webView = popupWebView
+                        resultMsg.sendToTarget()
                     }
-                    popupWebView.webChromeClient = object : WebChromeClient() {
-                        override fun onCloseWindow(window: WebView) {
-                            binding.webView.removeAllViews()
-                        }
-                    }
-                    val transport = resultMsg.obj as WebView.WebViewTransport
-                    binding.webView.addView(popupWebView)
-                    transport.webView = popupWebView
-                    resultMsg.sendToTarget()
+                    return true
                 }
-                return true
             }
-        }
 
         binding.webView.setOnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP) {
@@ -174,9 +191,11 @@ class VirtusizeWebViewFragment : DialogFragment() {
                         binding.webView.removeAllViews()
                         binding.webView.reload()
                     }
-                    else -> binding.webView.evaluateJavascript(
-                        backButtonClickEventFromSDKScript, null
-                    )
+                    else ->
+                        binding.webView.evaluateJavascript(
+                            backButtonClickEventFromSDKScript,
+                            null,
+                        )
                 }
             }
             true
@@ -259,7 +278,6 @@ class VirtusizeWebViewFragment : DialogFragment() {
      * The JavaScript interface to interact the web app with the web view
      */
     private inner class WebAppInterface {
-
         /**
          * Receives any event information from the Virtusize web app
          * @param eventInfo The String value of the event info
@@ -281,7 +299,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
         binding.webView.post {
             binding.webView.evaluateJavascript(
                 "localStorage.setItem('acceptedPrivacyPolicy','true');",
-                null
+                null,
             )
         }
     }

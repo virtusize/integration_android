@@ -37,7 +37,7 @@ internal class VirtusizeApiTest {
         VirtusizeApi.init(
             env = VirtusizeEnvironment.STAGING,
             key = TestFixtures.API_KEY,
-            userId = TestFixtures.USER_ID
+            userId = TestFixtures.USER_ID,
         )
     }
 
@@ -45,10 +45,11 @@ internal class VirtusizeApiTest {
     fun productCheck_shouldReturnExpectedApiRequest() {
         val actualApiRequest = VirtusizeApi.productCheck(TestFixtures.VIRTUSIZE_PRODUCT)
 
-        val expectedUrl = "https://services.virtusize.com/stg/product/check" +
-            "?apiKey=${TestFixtures.API_KEY}" +
-            "&externalId=${TestFixtures.EXTERNAL_ID}" +
-            "&version=1"
+        val expectedUrl =
+            "https://services.virtusize.com/stg/product/check" +
+                "?apiKey=${TestFixtures.API_KEY}" +
+                "&externalId=${TestFixtures.EXTERNAL_ID}" +
+                "&version=1"
 
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
 
@@ -78,7 +79,7 @@ internal class VirtusizeApiTest {
         VirtusizeApi.init(
             VirtusizeEnvironment.JAPAN,
             TestFixtures.API_KEY,
-            TestFixtures.USER_ID
+            TestFixtures.USER_ID,
         )
         val actualUrl = VirtusizeApi.virtusizeWebViewURL(DEFAULT_AOYAMA_VERSION)
         val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/$DEFAULT_AOYAMA_VERSION/sdk-webview.html"
@@ -110,26 +111,28 @@ internal class VirtusizeApiTest {
     fun sendUserSawProductEventToAPI_shouldReturnExpectedApiRequest() {
         val eventName = VirtusizeEvents.UserSawProduct.getEventName()
         val event = VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName())
-        val actualApiRequest = VirtusizeApi.sendEventToAPI(
-            event,
-            TestFixtures.PRODUCT_CHECK,
-            TestFixtures.ORIENTATION,
-            resolution,
-            versionCode
-        )
+        val actualApiRequest =
+            VirtusizeApi.sendEventToAPI(
+                event,
+                TestFixtures.PRODUCT_CHECK,
+                TestFixtures.ORIENTATION,
+                resolution,
+                versionCode,
+            )
 
-        val expectedParams = mutableMapOf<String, Any>(
-            "name" to eventName,
-            "apiKey" to TestFixtures.API_KEY,
-            "type" to "user",
-            "source" to "integration-android",
-            "userCohort" to "direct",
-            "widgetType" to "mobile",
-            "browserOrientation" to TestFixtures.ORIENTATION,
-            "browserResolution" to resolution,
-            "integrationVersion" to versionCode.toString(),
-            "snippetVersion" to versionCode.toString()
-        )
+        val expectedParams =
+            mutableMapOf<String, Any>(
+                "name" to eventName,
+                "apiKey" to TestFixtures.API_KEY,
+                "type" to "user",
+                "source" to "integration-android",
+                "userCohort" to "direct",
+                "widgetType" to "mobile",
+                "browserOrientation" to TestFixtures.ORIENTATION,
+                "browserResolution" to resolution,
+                "integrationVersion" to versionCode.toString(),
+                "snippetVersion" to versionCode.toString(),
+            )
 
         TestFixtures.PRODUCT_CHECK?.let { productCheck ->
             expectedParams["storeProductExternalId"] = productCheck.productId
@@ -153,43 +156,46 @@ internal class VirtusizeApiTest {
     @Test
     fun sendOrder_shouldReturnExpectedApiRequest() {
         val order = VirtusizeOrder("888400111032")
-        order.items = mutableListOf(
-            VirtusizeOrderItem(
-                "P001",
-                "L",
-                "Large",
-                "P001_SIZEL_RED",
-                "http://images.example.com/products/P001/red/image1xl.jpg",
-                "Red",
-                "W",
-                5100.00,
-                "JPY",
-                1,
-                "http://example.com/products/P001"
+        order.items =
+            mutableListOf(
+                VirtusizeOrderItem(
+                    "P001",
+                    "L",
+                    "Large",
+                    "P001_SIZEL_RED",
+                    "http://images.example.com/products/P001/red/image1xl.jpg",
+                    "Red",
+                    "W",
+                    5100.00,
+                    "JPY",
+                    1,
+                    "http://example.com/products/P001",
+                ),
             )
-        )
         val actualApiRequest = VirtusizeApi.sendOrder(order)
 
-        val expectedParams = mutableMapOf(
-            "apiKey" to TestFixtures.API_KEY,
-            "externalOrderId" to "888400111032",
-            "externalUserId" to TestFixtures.USER_ID,
-            "items" to mutableListOf<MutableMap<String, Any>>(
-                mutableMapOf(
-                    "externalProductId" to "P001",
-                    "size" to "L",
-                    "sizeAlias" to "Large",
-                    "variantId" to "P001_SIZEL_RED",
-                    "imageUrl" to "http://images.example.com/products/P001/red/image1xl.jpg",
-                    "color" to "Red",
-                    "gender" to "W",
-                    "unitPrice" to 5100.00,
-                    "currency" to "JPY",
-                    "quantity" to 1,
-                    "url" to "http://example.com/products/P001"
-                )
+        val expectedParams =
+            mutableMapOf(
+                "apiKey" to TestFixtures.API_KEY,
+                "externalOrderId" to "888400111032",
+                "externalUserId" to TestFixtures.USER_ID,
+                "items" to
+                    mutableListOf<MutableMap<String, Any>>(
+                        mutableMapOf(
+                            "externalProductId" to "P001",
+                            "size" to "L",
+                            "sizeAlias" to "Large",
+                            "variantId" to "P001_SIZEL_RED",
+                            "imageUrl" to "http://images.example.com/products/P001/red/image1xl.jpg",
+                            "color" to "Red",
+                            "gender" to "W",
+                            "unitPrice" to 5100.00,
+                            "currency" to "JPY",
+                            "quantity" to 1,
+                            "url" to "http://example.com/products/P001",
+                        ),
+                    ),
             )
-        )
 
         assertThat(actualApiRequest.url).isEqualTo("https://staging.virtusize.com/a/api/v3/orders")
         assertThat(actualApiRequest.method).isEquivalentAccordingToCompareTo(HttpMethod.POST)
@@ -200,8 +206,9 @@ internal class VirtusizeApiTest {
     fun retrieveStoreInfo_shouldReturnExpectedApiRequest() {
         val actualApiRequest = VirtusizeApi.getStoreInfo()
 
-        val expectedUrl = "https://staging.virtusize.com/a/api/v3/stores/api-key/test_apiKey" +
-            "?format=json"
+        val expectedUrl =
+            "https://staging.virtusize.com/a/api/v3/stores/api-key/test_apiKey" +
+                "?format=json"
 
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
 
@@ -212,8 +219,9 @@ internal class VirtusizeApiTest {
     fun getStoreProductInfo_shouldReturnExpectedApiRequest() {
         val actualApiRequest = VirtusizeApi.getStoreProductInfo("16099122")
 
-        val expectedUrl = "https://staging.virtusize.com/a/api/v3/store-products/16099122" +
-            "?format=json"
+        val expectedUrl =
+            "https://staging.virtusize.com/a/api/v3/store-products/16099122" +
+                "?format=json"
 
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
 
@@ -277,11 +285,12 @@ internal class VirtusizeApiTest {
 
     @Test
     fun getSize_shouldReturnExpectedApiRequest() {
-        val actualApiRequest = VirtusizeApi.getSize(
-            ProductFixtures.productTypes(),
-            ProductFixtures.storeProduct(),
-            TestFixtures.userBodyProfile
-        )
+        val actualApiRequest =
+            VirtusizeApi.getSize(
+                ProductFixtures.productTypes(),
+                ProductFixtures.storeProduct(),
+                TestFixtures.userBodyProfile,
+            )
 
         val expectedUrl = "https://size-recommendation.staging.virtusize.jp/item"
 
@@ -293,95 +302,117 @@ internal class VirtusizeApiTest {
         assertThat(actualApiRequest.params["userWeight"]).isEqualTo(50)
         assertThat(actualApiRequest.params["bodyData"]).isEqualTo(
             mutableMapOf(
-                "waistWidth" to mutableMapOf(
-                    "value" to 225,
-                    "predicted" to true
-                ),
-                "chest" to mutableMapOf(
-                    "value" to 755,
-                    "predicted" to true
-                ),
-                "bustWidth" to mutableMapOf(
-                    "value" to 245,
-                    "predicted" to true
-                ),
-                "thigh" to mutableMapOf(
-                    "value" to 480,
-                    "predicted" to true
-                ),
-                "shoulderWidth" to mutableMapOf(
-                    "value" to 340,
-                    "predicted" to true
-                ),
-                "hipHeight" to mutableMapOf(
-                    "value" to 750,
-                    "predicted" to true
-                ),
-                "kneeHeight" to mutableMapOf(
-                    "value" to 395,
-                    "predicted" to true
-                ),
-                "neck" to mutableMapOf(
-                    "value" to 300,
-                    "predicted" to true
-                ),
-                "waistHeight" to mutableMapOf(
-                    "value" to 920,
-                    "predicted" to true
-                ),
-                "hip" to mutableMapOf(
-                    "value" to 830,
-                    "predicted" to true
-                ),
-                "armpitHeight" to mutableMapOf(
-                    "value" to 1130,
-                    "predicted" to true
-                ),
-                "bicep" to mutableMapOf(
-                    "value" to 220,
-                    "predicted" to true
-                ),
-                "inseam" to mutableMapOf(
-                    "value" to 700,
-                    "predicted" to true
-                ),
-                "headHeight" to mutableMapOf(
-                    "value" to 215,
-                    "predicted" to true
-                ),
-                "hipWidth" to mutableMapOf(
-                    "value" to 300,
-                    "predicted" to true
-                ),
-                "sleeve" to mutableMapOf(
-                    "value" to 720,
-                    "predicted" to true
-                ),
-                "bust" to mutableMapOf(
-                    "value" to 755,
-                    "predicted" to true
-                ),
-                "waist" to mutableMapOf(
-                    "value" to 630,
-                    "predicted" to true
-                ),
-                "sleeveLength" to mutableMapOf(
-                    "value" to 520,
-                    "predicted" to true
-                ),
-                "rise" to mutableMapOf(
-                    "value" to 215,
-                    "predicted" to true
-                ),
-                "shoulder" to mutableMapOf(
-                    "value" to 370,
-                    "predicted" to true
-                ),
-                "shoulderHeight" to mutableMapOf(
-                    "value" to 1240,
-                    "predicted" to true
-                )
-            )
+                "waistWidth" to
+                    mutableMapOf(
+                        "value" to 225,
+                        "predicted" to true,
+                    ),
+                "chest" to
+                    mutableMapOf(
+                        "value" to 755,
+                        "predicted" to true,
+                    ),
+                "bustWidth" to
+                    mutableMapOf(
+                        "value" to 245,
+                        "predicted" to true,
+                    ),
+                "thigh" to
+                    mutableMapOf(
+                        "value" to 480,
+                        "predicted" to true,
+                    ),
+                "shoulderWidth" to
+                    mutableMapOf(
+                        "value" to 340,
+                        "predicted" to true,
+                    ),
+                "hipHeight" to
+                    mutableMapOf(
+                        "value" to 750,
+                        "predicted" to true,
+                    ),
+                "kneeHeight" to
+                    mutableMapOf(
+                        "value" to 395,
+                        "predicted" to true,
+                    ),
+                "neck" to
+                    mutableMapOf(
+                        "value" to 300,
+                        "predicted" to true,
+                    ),
+                "waistHeight" to
+                    mutableMapOf(
+                        "value" to 920,
+                        "predicted" to true,
+                    ),
+                "hip" to
+                    mutableMapOf(
+                        "value" to 830,
+                        "predicted" to true,
+                    ),
+                "armpitHeight" to
+                    mutableMapOf(
+                        "value" to 1130,
+                        "predicted" to true,
+                    ),
+                "bicep" to
+                    mutableMapOf(
+                        "value" to 220,
+                        "predicted" to true,
+                    ),
+                "inseam" to
+                    mutableMapOf(
+                        "value" to 700,
+                        "predicted" to true,
+                    ),
+                "headHeight" to
+                    mutableMapOf(
+                        "value" to 215,
+                        "predicted" to true,
+                    ),
+                "hipWidth" to
+                    mutableMapOf(
+                        "value" to 300,
+                        "predicted" to true,
+                    ),
+                "sleeve" to
+                    mutableMapOf(
+                        "value" to 720,
+                        "predicted" to true,
+                    ),
+                "bust" to
+                    mutableMapOf(
+                        "value" to 755,
+                        "predicted" to true,
+                    ),
+                "waist" to
+                    mutableMapOf(
+                        "value" to 630,
+                        "predicted" to true,
+                    ),
+                "sleeveLength" to
+                    mutableMapOf(
+                        "value" to 520,
+                        "predicted" to true,
+                    ),
+                "rise" to
+                    mutableMapOf(
+                        "value" to 215,
+                        "predicted" to true,
+                    ),
+                "shoulder" to
+                    mutableMapOf(
+                        "value" to 370,
+                        "predicted" to true,
+                    ),
+                "shoulderHeight" to
+                    mutableMapOf(
+                        "value" to 1240,
+                        "predicted" to true,
+                    ),
+            ),
         )
         val items = actualApiRequest.params["items"] as Array<Map<String, Any>>
         for (item in items) {
@@ -389,43 +420,49 @@ internal class VirtusizeApiTest {
             assertThat(item["productType"]).isEqualTo("jacket")
             assertThat(item["itemSizesOrig"]).isEqualTo(
                 mutableMapOf(
-                    "38" to mutableMapOf(
-                        "bust" to 660,
-                        "sleeve" to 845,
-                        "height" to 760
-                    ),
-                    "36" to mutableMapOf(
-                        "bust" to 645,
-                        "sleeve" to 825,
-                        "height" to 750
-                    )
-                )
+                    "38" to
+                        mutableMapOf(
+                            "bust" to 660,
+                            "sleeve" to 845,
+                            "height" to 760,
+                        ),
+                    "36" to
+                        mutableMapOf(
+                            "bust" to 645,
+                            "sleeve" to 825,
+                            "height" to 750,
+                        ),
+                ),
             )
             assertThat(item["additionalInfo"]).isEqualTo(
                 mutableMapOf(
                     "fit" to "regular",
-                    "sizes" to mutableMapOf(
-                        "38" to mutableMapOf(
-                            "bust" to 660,
-                            "sleeve" to 845,
-                            "height" to 760
+                    "sizes" to
+                        mutableMapOf(
+                            "38" to
+                                mutableMapOf(
+                                    "bust" to 660,
+                                    "sleeve" to 845,
+                                    "height" to 760,
+                                ),
+                            "36" to
+                                mutableMapOf(
+                                    "bust" to 645,
+                                    "sleeve" to 825,
+                                    "height" to 750,
+                                ),
                         ),
-                        "36" to mutableMapOf(
-                            "bust" to 645,
-                            "sleeve" to 825,
-                            "height" to 750
-                        )
-                    ),
                     "gender" to "female",
                     "brand" to "Virtusize",
-                    "modelInfo" to mutableMapOf(
-                        "waist" to 56,
-                        "bust" to 78,
-                        "size" to "38",
-                        "hip" to 85,
-                        "height" to 165
-                    )
-                )
+                    "modelInfo" to
+                        mutableMapOf(
+                            "waist" to 56,
+                            "bust" to 78,
+                            "size" to "38",
+                            "hip" to 85,
+                            "height" to 165,
+                        ),
+                ),
             )
         }
     }

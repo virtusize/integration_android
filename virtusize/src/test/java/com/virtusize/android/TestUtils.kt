@@ -7,8 +7,8 @@ import java.io.IOException
 import java.io.InputStream
 
 internal object TestUtils {
-    fun readFileFromAssets(fileName: String): JSONObject {
-        return try {
+    fun readFileFromAssets(fileName: String): JSONObject =
+        try {
             val file = File(javaClass.getResource(fileName).path)
             val `is`: InputStream = file.inputStream()
             val size: Int = `is`.available()
@@ -20,5 +20,4 @@ internal object TestUtils {
             TestFixtures.EMPTY_JSON_DATA
             throw RuntimeException(e)
         }
-    }
 }

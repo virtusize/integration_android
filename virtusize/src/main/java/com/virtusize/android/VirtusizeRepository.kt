@@ -30,9 +30,8 @@ import java.net.HttpURLConnection
 internal class VirtusizeRepository(
     private val context: Context,
     private var messageHandler: VirtusizeMessageHandler,
-    private var presenter: VirtusizePresenter? = null
+    private var presenter: VirtusizePresenter? = null,
 ) {
-
     // This variable is the instance of VirtusizeAPIService to handle Virtusize API requests
     private var virtusizeAPIService = VirtusizeAPIService.getInstance(context, messageHandler)
 
@@ -71,11 +70,10 @@ internal class VirtusizeRepository(
      * Get the [Product] data by an external product ID
      * @param externalProductId the external product ID set by a client
      */
-    internal fun getProductBy(externalProductId: String): Product? {
-        return storeProductSet.firstOrNull { product ->
+    internal fun getProductBy(externalProductId: String): Product? =
+        storeProductSet.firstOrNull { product ->
             product.externalId == externalProductId
         }
-    }
 
     /**
      * Checks if the product is valid
@@ -91,7 +89,7 @@ internal class VirtusizeRepository(
             // Send API Event UserSawProduct
             sendEvent(
                 virtusizeProduct,
-                VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName())
+                VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()),
             )
 
             productCheck.data?.apply {
@@ -101,12 +99,12 @@ internal class VirtusizeRepository(
                             // If image URL is valid, send image URL to server
                             val sendProductImageResponse =
                                 virtusizeAPIService.sendProductImageToBackend(
-                                    product = virtusizeProduct
+                                    product = virtusizeProduct,
                                 )
                             if (!sendProductImageResponse.isSuccessful) {
                                 sendProductImageResponse.failureData?.let {
                                     messageHandler.onError(
-                                        it
+                                        it,
                                     )
                                 }
                             }
@@ -118,7 +116,7 @@ internal class VirtusizeRepository(
                     // Send API Event UserSawWidgetButton
                     sendEvent(
                         virtusizeProduct,
-                        VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName())
+                        VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName()),
                     )
 
                     presenter?.onValidProductDataCheck(virtusizeProduct)
@@ -126,8 +124,8 @@ internal class VirtusizeRepository(
                     presenter?.hasInPageError(
                         virtusizeProduct.externalId,
                         VirtusizeErrorType.InvalidProduct.virtusizeError(
-                            extraMessage = virtusizeProduct.externalId
-                        )
+                            extraMessage = virtusizeProduct.externalId,
+                        ),
                     )
                 }
             }
@@ -141,11 +139,15 @@ internal class VirtusizeRepository(
      * @param product the [VirtusizeProduct] data wit the product check data
      * @param vsEvent the [VirtusizeEvent]
      */
-    private suspend fun sendEvent(product: VirtusizeProduct, vsEvent: VirtusizeEvent) {
-        val sendEventResponse = virtusizeAPIService.sendEvent(
-            event = vsEvent,
-            withDataProduct = product.productCheckData
-        )
+    private suspend fun sendEvent(
+        product: VirtusizeProduct,
+        vsEvent: VirtusizeEvent,
+    ) {
+        val sendEventResponse =
+            virtusizeAPIService.sendEvent(
+                event = vsEvent,
+                withDataProduct = product.productCheckData,
+            )
         if (sendEventResponse.isSuccessful) {
             messageHandler.onEvent(product, vsEvent)
         }
@@ -158,7 +160,7 @@ internal class VirtusizeRepository(
      */
     internal suspend fun fetchInitialData(
         language: VirtusizeLanguage?,
-        product: VirtusizeProduct
+        product: VirtusizeProduct,
     ) {
         val productId = product.productCheckData!!.data!!.productDataId
         val externalProductId = product.externalId
@@ -193,19 +195,19 @@ internal class VirtusizeRepository(
      * @param externalProductId the external product ID set by a client
      */
     internal suspend fun updateUserSession(
-        externalProductId: String? = lastProductOnVirtusizeWebView?.externalId
+        externalProductId: String? = lastProductOnVirtusizeWebView?.externalId,
     ) {
         val userSessionInfoResponse = virtusizeAPIService.getUserSessionInfo()
         if (userSessionInfoResponse.isSuccessful) {
             sharedPreferencesHelper.storeSessionData(
-                userSessionInfoResponse.successData!!.userSessionResponse
+                userSessionInfoResponse.successData!!.userSessionResponse,
             )
             sharedPreferencesHelper.storeAccessToken(
-                userSessionInfoResponse.successData!!.accessToken
+                userSessionInfoResponse.successData!!.accessToken,
             )
             if (userSessionInfoResponse.successData!!.authToken.isNotBlank()) {
                 sharedPreferencesHelper.storeAuthToken(
-                    userSessionInfoResponse.successData!!.authToken
+                    userSessionInfoResponse.successData!!.authToken,
                 )
             }
         } else {
@@ -224,7 +226,7 @@ internal class VirtusizeRepository(
         externalProductId: String? = null,
         selectedUserProductId: Int? = null,
         shouldUpdateUserProducts: Boolean = true,
-        shouldUpdateBodyProfile: Boolean = true
+        shouldUpdateBodyProfile: Boolean = true,
     ) {
         var storeProduct = lastProductOnVirtusizeWebView
         externalProductId?.let {
@@ -239,7 +241,7 @@ internal class VirtusizeRepository(
             } else if (userProductsResponse.failureData?.code != HttpURLConnection.HTTP_NOT_FOUND) {
                 presenter?.hasInPageError(
                     storeProduct?.externalId,
-                    userProductsResponse.failureData
+                    userProductsResponse.failureData,
                 )
                 return
             }
@@ -249,15 +251,17 @@ internal class VirtusizeRepository(
             userBodyRecommendedSize = getUserBodyRecommendedSize(storeProduct, productTypes)
         }
 
-        userProductRecommendedSize = VirtusizeUtils.findBestFitProductSize(
-            userProducts =
-            if (selectedUserProductId != null)
-                userProducts?.filter { it.id == selectedUserProductId }
-            else
-                userProducts,
-            storeProduct = storeProduct,
-            productTypes = productTypes
-        )
+        userProductRecommendedSize =
+            VirtusizeUtils.findBestFitProductSize(
+                userProducts =
+                    if (selectedUserProductId != null) {
+                        userProducts?.filter { it.id == selectedUserProductId }
+                    } else {
+                        userProducts
+                    },
+                storeProduct = storeProduct,
+                productTypes = productTypes,
+            )
     }
 
     /**
@@ -283,29 +287,29 @@ internal class VirtusizeRepository(
      */
     internal fun updateInPageRecommendation(
         externalProductId: String? = null,
-        type: SizeRecommendationType? = null
+        type: SizeRecommendationType? = null,
     ) {
         (externalProductId ?: lastProductOnVirtusizeWebView?.externalId)?.let { externalProductId ->
             when (type) {
-                SizeRecommendationType.compareProduct -> {
+                SizeRecommendationType.CompareProduct -> {
                     presenter?.gotSizeRecommendations(
                         externalProductId,
                         userProductRecommendedSize,
-                        null
+                        null,
                     )
                 }
-                SizeRecommendationType.body -> {
+                SizeRecommendationType.Body -> {
                     presenter?.gotSizeRecommendations(
                         externalProductId,
                         null,
-                        userBodyRecommendedSize
+                        userBodyRecommendedSize,
                     )
                 }
                 else -> {
                     presenter?.gotSizeRecommendations(
                         externalProductId,
                         userProductRecommendedSize,
-                        userBodyRecommendedSize
+                        userBodyRecommendedSize,
                     )
                 }
             }
@@ -332,7 +336,7 @@ internal class VirtusizeRepository(
      */
     private suspend fun getUserBodyRecommendedSize(
         storeProduct: Product?,
-        productTypes: List<ProductType>?
+        productTypes: List<ProductType>?,
     ): String? {
         if (storeProduct == null || productTypes == null || storeProduct.isAccessory()) {
             return null
@@ -343,7 +347,7 @@ internal class VirtusizeRepository(
                 virtusizeAPIService.getBodyProfileRecommendedSize(
                     productTypes,
                     storeProduct,
-                    userBodyProfileResponse.successData!!
+                    userBodyProfileResponse.successData!!,
                 )
             return bodyProfileRecommendedSizeResponse.successData?.get(0)?.sizeName
         } else if (userBodyProfileResponse.failureData?.code != HttpURLConnection.HTTP_NOT_FOUND) {
@@ -365,7 +369,7 @@ internal class VirtusizeRepository(
         params: VirtusizeParams,
         order: VirtusizeOrder,
         onSuccess: ((Any?) -> Unit)?,
-        onError: ((VirtusizeError) -> Unit)?
+        onError: ((VirtusizeError) -> Unit)?,
     ) {
         // Throws the error if the user id is not set up or empty
         if (params.externalUserId.isNullOrEmpty()) {
@@ -405,8 +409,8 @@ internal class VirtusizeRepository(
         } catch (e: JSONException) {
             messageHandler.onError(
                 VirtusizeErrorType.JsonParsingError.virtusizeError(
-                    extraMessage = e.localizedMessage
-                )
+                    extraMessage = e.localizedMessage,
+                ),
             )
         }
     }

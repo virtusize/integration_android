@@ -8,5 +8,5 @@ package com.virtusize.android.data.remote
  */
 data class ProductSize(
     val name: String,
-    val measurements: Set<Measurement>
+    val measurements: Set<Measurement>,
 )

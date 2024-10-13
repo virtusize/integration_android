@@ -8,19 +8,19 @@ import org.json.JSONObject
 import org.junit.Test
 
 class ProductSizeJsonParserTest {
-
     @Test
     fun parse_validJsonData_shouldReturnExpectedObject() {
         val actualProductSize = ProductSizeJsonParser().parse(PRODUCT_SIZE_JSON_DATA)
 
-        val expectedProductSize = ProductSize(
-            " ",
-            mutableSetOf(
-                Measurement("width", 150),
-                Measurement("depth", 100),
-                Measurement("height", 160)
+        val expectedProductSize =
+            ProductSize(
+                " ",
+                mutableSetOf(
+                    Measurement("width", 150),
+                    Measurement("depth", 100),
+                    Measurement("height", 160),
+                ),
             )
-        )
 
         assertThat(actualProductSize).isEqualTo(expectedProductSize)
     }
@@ -29,14 +29,15 @@ class ProductSizeJsonParserTest {
     fun parse_withNullMeasurementData_shouldReturnExpectedObject() {
         val actualProductSize = ProductSizeJsonParser().parse(PRODUCT_SIZE_WITH_NULL_INFO)
 
-        val expectedProductSize = ProductSize(
-            "",
-            mutableSetOf(
-                Measurement("height", 560),
-                Measurement("bust", 450),
-                Measurement("sleeve", 730)
+        val expectedProductSize =
+            ProductSize(
+                "",
+                mutableSetOf(
+                    Measurement("height", 560),
+                    Measurement("bust", 450),
+                    Measurement("sleeve", 730),
+                ),
             )
-        )
 
         assertThat(actualProductSize).isEqualTo(expectedProductSize)
     }
@@ -49,8 +50,9 @@ class ProductSizeJsonParserTest {
     }
 
     companion object {
-        val PRODUCT_SIZE_JSON_DATA = JSONObject(
-            """
+        val PRODUCT_SIZE_JSON_DATA =
+            JSONObject(
+                """
                 {
                     "name": " ",
                     "measurements": {
@@ -59,11 +61,12 @@ class ProductSizeJsonParserTest {
                         "height": 160
                     }
                 }
-            """.trimIndent()
-        )
+                """.trimIndent(),
+            )
 
-        val PRODUCT_SIZE_WITH_NULL_INFO = JSONObject(
-            """
+        val PRODUCT_SIZE_WITH_NULL_INFO =
+            JSONObject(
+                """
                 {
                     "name": "",
                     "measurements": {
@@ -76,7 +79,7 @@ class ProductSizeJsonParserTest {
                         "bicep": null
                     }
                 }
-            """.trimIndent()
-        )
+                """.trimIndent(),
+            )
     }
 }

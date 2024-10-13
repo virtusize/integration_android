@@ -195,22 +195,21 @@ internal class VirtusizeApiTaskTest {
 
         val streamString =
             """
-                {
-                    "id":"test_access_token",
-                    "expiresAt":1619062232,
-                    "user":{
-                        "id":null,
-                        "bid":"test_bid",
-                        "authType":"EMPTY",
-                        "created":null,
-                        "lastLogin":null,
-                        "firstName":"Anonymous",
-                        "language":null
-                    },
-                    "x-vs-auth":""
-                }
-                """
-                .trimIndent()
+            {
+                "id":"test_access_token",
+                "expiresAt":1619062232,
+                "user":{
+                    "id":null,
+                    "bid":"test_bid",
+                    "authType":"EMPTY",
+                    "created":null,
+                    "lastLogin":null,
+                    "firstName":"Anonymous",
+                    "language":null
+                },
+                "x-vs-auth":""
+            }
+            """.trimIndent()
                 .replace(regex = "\\s+|[\\n]+".toRegex(), replacement = "")
 
         val returnValue =

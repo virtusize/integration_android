@@ -7,15 +7,15 @@ import org.json.JSONObject
 import org.junit.Test
 
 class BrandSizingJsonParserTest {
-
     @Test
     fun parse_validJsonData_shouldReturnExpectedObject() {
         val actualBrandSizing = BrandSizingJsonParser().parse(BRAND_SIZING_JSON_DATA)
 
-        val expectedBrandSizing = BrandSizing(
-            "small",
-            false
-        )
+        val expectedBrandSizing =
+            BrandSizing(
+                "small",
+                false,
+            )
 
         Truth.assertThat(actualBrandSizing).isEqualTo(expectedBrandSizing)
     }
@@ -29,13 +29,14 @@ class BrandSizingJsonParserTest {
     }
 
     companion object {
-        private val BRAND_SIZING_JSON_DATA = JSONObject(
-            """
+        private val BRAND_SIZING_JSON_DATA =
+            JSONObject(
+                """
                 {
                     "compare":"small",
                     "itemBrand":false
                 }
-            """.trimIndent()
-        )
+                """.trimIndent(),
+            )
     }
 }

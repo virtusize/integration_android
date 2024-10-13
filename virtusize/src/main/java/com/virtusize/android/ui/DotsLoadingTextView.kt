@@ -10,7 +10,6 @@ import androidx.appcompat.widget.AppCompatTextView
  * A custom TextView to display animated dots in a text
  */
 internal class DotsLoadingTextView : AppCompatTextView {
-
     private var originalText: CharSequence? = null
     private var dotsLoadingRunnable: Runnable? = null
     private var dotsLoadingHandler: Handler? = null
@@ -22,7 +21,7 @@ internal class DotsLoadingTextView : AppCompatTextView {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
         context,
         attrs,
-        defStyleAttr
+        defStyleAttr,
     )
 
     /**
@@ -31,18 +30,19 @@ internal class DotsLoadingTextView : AppCompatTextView {
     fun startAnimation() {
         originalText = text
         dotsLoadingHandler = Handler(Looper.getMainLooper())
-        dotsLoadingRunnable = object : Runnable {
-            override fun run() {
-                dotsLoadingHandler?.postDelayed(this, 500)
-                if (tempDots == maxDots) {
-                    tempDots = 0
-                    text = originalText
-                } else {
-                    text = "${originalText}${getDot(++tempDots)}"
+        dotsLoadingRunnable =
+            object : Runnable {
+                override fun run() {
+                    dotsLoadingHandler?.postDelayed(this, 500)
+                    if (tempDots == maxDots) {
+                        tempDots = 0
+                        text = originalText
+                    } else {
+                        text = "${originalText}${getDot(++tempDots)}"
+                    }
+                    invalidate()
                 }
-                invalidate()
             }
-        }
         dotsLoadingRunnable!!.run()
     }
 

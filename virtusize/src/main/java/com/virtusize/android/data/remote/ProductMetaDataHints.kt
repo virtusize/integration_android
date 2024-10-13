@@ -8,5 +8,5 @@ internal data class ProductMetaDataHints(
     val apiKey: String,
     val imageUrl: String,
     val cloudinaryPublicId: String,
-    val externalProductId: String
+    val externalProductId: String,
 )

@@ -16,14 +16,18 @@ sealed class VirtusizeApiResponse<out R> {
         get() = if (this is Error) error else null
 
     // The successful response with data of <T>
-    data class Success<out T>(val data: T) : VirtusizeApiResponse<T>()
-    // The error response with an error of [VirtusizeError]
-    data class Error(val error: VirtusizeError) : VirtusizeApiResponse<Nothing>()
+    data class Success<out T>(
+        val data: T,
+    ) : VirtusizeApiResponse<T>()
 
-    override fun toString(): String {
-        return when (this) {
+    // The error response with an error of [VirtusizeError]
+    data class Error(
+        val error: VirtusizeError,
+    ) : VirtusizeApiResponse<Nothing>()
+
+    override fun toString(): String =
+        when (this) {
             is Success<*> -> "Success[data=$data]"
             is Error -> "Error[error=$error]"
         }
-    }
 }

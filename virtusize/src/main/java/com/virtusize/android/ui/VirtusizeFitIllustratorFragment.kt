@@ -21,11 +21,13 @@ import com.virtusize.android.util.Constants
 import com.virtusize.android.util.getActivity
 
 class VirtusizeFitIllustratorFragment : DialogFragment() {
-
     companion object {
         private val TAG = VirtusizeFitIllustratorFragment::class.simpleName
 
-        fun launch(activity: Activity?, url: String) {
+        fun launch(
+            activity: Activity?,
+            url: String,
+        ) {
             var fragmentManager: FragmentManager? = null
             if (activity is AppCompatActivity) {
                 fragmentManager = activity.supportFragmentManager
@@ -49,7 +51,10 @@ class VirtusizeFitIllustratorFragment : DialogFragment() {
             }
         }
 
-        fun launch(context: Context, url: String) {
+        fun launch(
+            context: Context,
+            url: String,
+        ) {
             launch(context.getActivity(), url)
         }
     }
@@ -66,33 +71,40 @@ class VirtusizeFitIllustratorFragment : DialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = WebviewFitIllustratorBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     @SuppressLint("JavascriptInterface")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         binding.fitIllustratorWebView.enableWindowsSettings()
         // Set up the web view client that adds a JavaScript script for the click listener to close the button
-        binding.fitIllustratorWebView.webViewClient = object : WebViewClient() {
-            override fun onPageFinished(view: WebView?, url: String?) {
-                view?.loadUrl(
-                    "javascript:(function() { " +
-                        "var element = document.getElementsByClassName('global-close')[0];" +
-                        "element.onclick = function() { " +
-                        "${Constants.JS_BRIDGE_NAME}.userClosedWidget();" +
-                        " };" +
-                        "})()"
-                )
+        binding.fitIllustratorWebView.webViewClient =
+            object : WebViewClient() {
+                override fun onPageFinished(
+                    view: WebView?,
+                    url: String?,
+                ) {
+                    view?.loadUrl(
+                        "javascript:(function() { " +
+                            "var element = document.getElementsByClassName('global-close')[0];" +
+                            "element.onclick = function() { " +
+                            "${Constants.JS_BRIDGE_NAME}.userClosedWidget();" +
+                            " };" +
+                            "})()",
+                    )
+                }
             }
-        }
         // Add the Javascript interface to receive events from the web view
         binding.fitIllustratorWebView.addJavascriptInterface(
             JavaScriptInterface(),
-            Constants.JS_BRIDGE_NAME
+            Constants.JS_BRIDGE_NAME,
         )
         // Get the Fit Illustrator URL passed in fragment arguments
         arguments?.getString(Constants.URL_KEY)?.let {
@@ -105,7 +117,6 @@ class VirtusizeFitIllustratorFragment : DialogFragment() {
      * The Javascript interface to receive events from the web view
      */
     private inner class JavaScriptInterface {
-
         /**
          * This method is called when a user clicks on the close button in the Fit Illustrator window
          */

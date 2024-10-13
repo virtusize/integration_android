@@ -11,7 +11,6 @@ import kotlin.collections.HashMap
  * JSON parsing utility functions
  */
 object JsonUtils {
-
     /**
      * Returns the String value mapped by name. If it isn't present, return an empty string
      *
@@ -19,7 +18,10 @@ object JsonUtils {
      * @param name the optional field name
      * @return the value stored in the field. If it isn't present, it returns an empty string
      */
-    fun optString(jsonObject: JSONObject, name: String?): String {
+    fun optString(
+        jsonObject: JSONObject,
+        name: String?,
+    ): String {
         val stringValue = optNullableString(jsonObject, name)
         return stringValue ?: ""
     }
@@ -31,7 +33,10 @@ object JsonUtils {
      * @param name the optional field name
      * @return the value stored in the field. If it isn't present, it returns null
      */
-    fun optNullableString(jsonObject: JSONObject, name: String?): String? {
+    fun optNullableString(
+        jsonObject: JSONObject,
+        name: String?,
+    ): String? {
         val stringValue = jsonObject.optString(name)
         return if (stringValue == "null") null else stringValue
     }
@@ -48,21 +53,24 @@ object JsonUtils {
         while (keys.hasNext()) {
             val key = keys.next()
             jsonObject.opt(key)?.let { value ->
-                map[key] = when (value) {
-                    is JSONObject -> jsonObjectToMap(
-                        value
-                    )
-                    is JSONArray -> jsonArrayToList(
-                        value
-                    )
-                    else -> {
-                        if (value is BigDecimal) {
-                            value.toDouble()
-                        } else {
-                            value
+                map[key] =
+                    when (value) {
+                        is JSONObject ->
+                            jsonObjectToMap(
+                                value,
+                            )
+                        is JSONArray ->
+                            jsonArrayToList(
+                                value,
+                            )
+                        else -> {
+                            if (value is BigDecimal) {
+                                value.toDouble()
+                            } else {
+                                value
+                            }
                         }
                     }
-                }
             }
         }
         return map
@@ -74,14 +82,13 @@ object JsonUtils {
      * @param jsonObject a JSONObject to be converted
      * @return a Set representing the input
      */
-    fun jsonObjectToMeasurements(jsonObject: JSONObject): Set<Measurement> {
-        return jsonObjectToMap(jsonObject)
+    fun jsonObjectToMeasurements(jsonObject: JSONObject): Set<Measurement> =
+        jsonObjectToMap(jsonObject)
             .filter {
                 it.value as? Int != null
             }.map {
                 Measurement(it.key, it.value as Int)
             }.toSet()
-    }
 
     /**
      * Converts a JSONArray to a List
@@ -99,12 +106,12 @@ object JsonUtils {
             if (value is JSONArray) {
                 value =
                     jsonArrayToList(
-                        value
+                        value,
                     )
             } else if (value is JSONObject) {
                 value =
                     jsonObjectToMap(
-                        value
+                        value,
                     )
             }
             if (value is BigDecimal) {

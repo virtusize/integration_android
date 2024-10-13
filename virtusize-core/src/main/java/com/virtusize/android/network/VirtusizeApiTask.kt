@@ -28,9 +28,8 @@ import kotlin.jvm.Throws
 class VirtusizeApiTask(
     private var urlConnection: HttpsURLConnection?,
     private var sharedPreferencesHelper: SharedPreferencesHelper,
-    private var messageHandler: VirtusizeMessageHandler?
+    private var messageHandler: VirtusizeMessageHandler?,
 ) {
-
     companion object {
         // The read timeout to use for all the requests, which is 80 seconds
         private val READ_TIMEOUT = TimeUnit.SECONDS.toMillis(80).toInt()
@@ -82,53 +81,54 @@ class VirtusizeApiTask(
         try {
             if (urlConnection == null) {
                 val url = URL(apiRequest.url + getQueryString(apiRequest))
-                urlConnection = (url.openConnection() as HttpsURLConnection).apply {
-                    readTimeout = READ_TIMEOUT
-                    connectTimeout = CONNECT_TIMEOUT
-                    requestMethod = apiRequest.method.name
+                urlConnection =
+                    (url.openConnection() as HttpsURLConnection).apply {
+                        readTimeout = READ_TIMEOUT
+                        connectTimeout = CONNECT_TIMEOUT
+                        requestMethod = apiRequest.method.name
 
-                    setRequestProperty(
-                        HEADER_BROWSER_ID,
-                        sharedPreferencesHelper.getBrowserId()
-                    )
-
-                    // Set the access token in the header if the request needs authentication
-                    if (apiRequest.authorization) {
                         setRequestProperty(
-                            HEADER_AUTHORIZATION,
-                            "Token ${sharedPreferencesHelper.getAccessToken()}"
+                            HEADER_BROWSER_ID,
+                            sharedPreferencesHelper.getBrowserId(),
                         )
-                    }
 
-                    // Send the POST request
-                    if (apiRequest.method == HttpMethod.POST) {
-                        doOutput = true
-                        setRequestProperty(HEADER_CONTENT_TYPE, "application/json")
+                        // Set the access token in the header if the request needs authentication
+                        if (apiRequest.authorization) {
+                            setRequestProperty(
+                                HEADER_AUTHORIZATION,
+                                "Token ${sharedPreferencesHelper.getAccessToken()}",
+                            )
+                        }
 
                         // Send the POST request
                         if (apiRequest.method == HttpMethod.POST) {
                             doOutput = true
                             setRequestProperty(HEADER_CONTENT_TYPE, "application/json")
 
-                            // Set up the request header for the sessions API
-                            if (apiRequest.url.contains(VirtusizeEndpoint.Sessions.path)) {
-                                sharedPreferencesHelper.getAuthToken()?.let {
-                                    setRequestProperty(HEADER_AUTH, it)
-                                    setRequestProperty(HEADER_COOKIE, "")
+                            // Send the POST request
+                            if (apiRequest.method == HttpMethod.POST) {
+                                doOutput = true
+                                setRequestProperty(HEADER_CONTENT_TYPE, "application/json")
+
+                                // Set up the request header for the sessions API
+                                if (apiRequest.url.contains(VirtusizeEndpoint.Sessions.path)) {
+                                    sharedPreferencesHelper.getAuthToken()?.let {
+                                        setRequestProperty(HEADER_AUTH, it)
+                                        setRequestProperty(HEADER_COOKIE, "")
+                                    }
                                 }
                             }
-                        }
 
-                        // Write the byte array of the request body to the output stream
-                        if (apiRequest.params.isNotEmpty()) {
-                            val outStream = DataOutputStream(outputStream)
-                            outStream.write(
-                                JSONObject(apiRequest.params).toString().toByteArray()
-                            )
-                            outStream.close()
+                            // Write the byte array of the request body to the output stream
+                            if (apiRequest.params.isNotEmpty()) {
+                                val outStream = DataOutputStream(outputStream)
+                                outStream.write(
+                                    JSONObject(apiRequest.params).toString().toByteArray(),
+                                )
+                                outStream.close()
+                            }
                         }
                     }
-                }
             }
 
             when {
@@ -146,8 +146,8 @@ class VirtusizeApiTask(
                     } catch (e: JSONException) {
                         VirtusizeApiResponse.Error(
                             VirtusizeErrorType.JsonParsingError.virtusizeError(
-                                extraMessage = "${apiRequest.url} ${e.localizedMessage}"
-                            )
+                                extraMessage = "${apiRequest.url} ${e.localizedMessage}",
+                            ),
                         )
                     }
                 }
@@ -156,40 +156,41 @@ class VirtusizeApiTask(
                     errorStream = urlConnection.errorStream
                     val errorStreamString = readInputStreamAsString(errorStream)
                     val response = parseErrorStreamStringToObject(errorStreamString)
-                    val error = when (urlConnection.responseCode) {
-                        HttpURLConnection.HTTP_FORBIDDEN -> {
-                            // If the API key is empty or invalid
-                            VirtusizeErrorType.ApiKeyNullOrInvalid.virtusizeError()
-                        }
+                    val error =
+                        when (urlConnection.responseCode) {
+                            HttpURLConnection.HTTP_FORBIDDEN -> {
+                                // If the API key is empty or invalid
+                                VirtusizeErrorType.ApiKeyNullOrInvalid.virtusizeError()
+                            }
 
-                        HttpURLConnection.HTTP_NOT_FOUND -> {
-                            // If the product cannot be found in the Virtusize Server
-                            if (response is ProductCheck) {
-                                return VirtusizeApiResponse.Error(
-                                    VirtusizeErrorType.UnParsedProduct.virtusizeError(
-                                        extraMessage = response.productId
+                            HttpURLConnection.HTTP_NOT_FOUND -> {
+                                // If the product cannot be found in the Virtusize Server
+                                if (response is ProductCheck) {
+                                    return VirtusizeApiResponse.Error(
+                                        VirtusizeErrorType.UnParsedProduct.virtusizeError(
+                                            extraMessage = response.productId,
+                                        ),
                                     )
+                                }
+                                VirtusizeErrorType.APIError.virtusizeError(
+                                    urlConnection.responseCode,
+                                    getAPIErrorMessage(
+                                        urlConnection.url?.path,
+                                        response ?: urlConnection.responseMessage,
+                                    ),
                                 )
                             }
-                            VirtusizeErrorType.APIError.virtusizeError(
-                                urlConnection.responseCode,
-                                getAPIErrorMessage(
-                                    urlConnection.url?.path,
-                                    response ?: urlConnection.responseMessage
-                                )
-                            )
-                        }
 
-                        else -> {
-                            VirtusizeErrorType.APIError.virtusizeError(
-                                urlConnection.responseCode,
-                                getAPIErrorMessage(
-                                    urlConnection.url?.path,
-                                    response ?: urlConnection.responseMessage
+                            else -> {
+                                VirtusizeErrorType.APIError.virtusizeError(
+                                    urlConnection.responseCode,
+                                    getAPIErrorMessage(
+                                        urlConnection.url?.path,
+                                        response ?: urlConnection.responseMessage,
+                                    ),
                                 )
-                            )
+                            }
                         }
-                    }
                     return VirtusizeApiResponse.Error(error)
                 }
 
@@ -198,19 +199,20 @@ class VirtusizeApiTask(
                         urlConnection.responseCode,
                         getAPIErrorMessage(
                             urlConnection.url?.path,
-                            urlConnection.responseMessage
-                        )
-                    )
+                            urlConnection.responseMessage,
+                        ),
+                    ),
                 )
             }
         } catch (e: IOException) {
             return VirtusizeApiResponse.Error(
                 VirtusizeErrorType.APIError.virtusizeError(
-                    extraMessage = getAPIErrorMessage(
-                        urlConnection?.url?.path,
-                        e.localizedMessage
-                    )
-                )
+                    extraMessage =
+                        getAPIErrorMessage(
+                            urlConnection?.url?.path,
+                            e.localizedMessage,
+                        ),
+                ),
             )
         } finally {
             urlConnection?.disconnect()
@@ -228,9 +230,10 @@ class VirtusizeApiTask(
         var queryString = ""
         if (apiRequest.method == HttpMethod.GET) {
             if (apiRequest.params.isNotEmpty()) {
-                queryString += "?" + apiRequest.params
-                    .map { paramMapEntry -> "${paramMapEntry.key}=${paramMapEntry.value}" }
-                    .joinToString("&")
+                queryString += "?" +
+                    apiRequest.params
+                        .map { paramMapEntry -> "${paramMapEntry.key}=${paramMapEntry.value}" }
+                        .joinToString("&")
             }
         }
         return queryString
@@ -253,8 +256,8 @@ class VirtusizeApiTask(
             } catch (e: JSONException) {
                 messageHandler?.onError(
                     VirtusizeErrorType.JsonParsingError.virtusizeError(
-                        extraMessage = e.localizedMessage
-                    )
+                        extraMessage = e.localizedMessage,
+                    ),
                 )
                 null
             }
@@ -271,11 +274,12 @@ class VirtusizeApiTask(
     internal fun parseErrorStreamStringToObject(errorStreamString: String? = null): Any? {
         var result: Any? = null
         if (errorStreamString != null) {
-            result = try {
-                parseStringToObject(streamString = errorStreamString) ?: errorStreamString
-            } catch (e: JSONException) {
-                errorStreamString
-            }
+            result =
+                try {
+                    parseStringToObject(streamString = errorStreamString) ?: errorStreamString
+                } catch (e: JSONException) {
+                    errorStreamString
+                }
         }
         return result
     }
@@ -314,12 +318,12 @@ class VirtusizeApiTask(
      * @param apiRequestUrl The input stream of bytes
      * @return the boolean value to tell whether the response of the apiRequestUrl is a JSON array.
      */
-    private fun responseIsJsonArray(apiRequestUrl: String): Boolean {
-        return apiRequestUrl.contains(VirtusizeEndpoint.ProductType.path) ||
+    private fun responseIsJsonArray(apiRequestUrl: String): Boolean =
+        apiRequestUrl.contains(VirtusizeEndpoint.ProductType.path) ||
             apiRequestUrl.contains(
                 VirtusizeEndpoint.UserProducts.path,
-            ) || apiRequestUrl.contains(VirtusizeEndpoint.GetSize.path)
-    }
+            ) ||
+            apiRequestUrl.contains(VirtusizeEndpoint.GetSize.path)
 
     /**
      * Returns the contents of an [InputStream] as a String.
@@ -339,7 +343,8 @@ class VirtusizeApiTask(
      * @param response the response from an API request
      * @return the message with the info of the request's path and response
      */
-    private fun getAPIErrorMessage(requestPath: String?, response: Any?): String {
-        return "$requestPath - ${response?.toString()}"
-    }
+    private fun getAPIErrorMessage(
+        requestPath: String?,
+        response: Any?,
+    ): String = "$requestPath - ${response?.toString()}"
 }

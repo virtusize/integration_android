@@ -18,15 +18,15 @@ enum class VirtusizeEvents {
     UserAuthData,
     UserLoggedIn,
     UserLoggedOut,
-    UserDeletedData
+    UserDeletedData,
 }
 
 /**
  * Returns the name of the event that it is called upon
  * @return the name of the event
  */
-fun VirtusizeEvents.getEventName(): String {
-    return when (this) {
+fun VirtusizeEvents.getEventName(): String =
+    when (this) {
         VirtusizeEvents.UserSawProduct -> "user-saw-product"
         VirtusizeEvents.UserSawWidgetButton -> "user-saw-widget-button"
         VirtusizeEvents.UserOpenedWidget -> "user-opened-widget"
@@ -41,15 +41,14 @@ fun VirtusizeEvents.getEventName(): String {
         VirtusizeEvents.UserLoggedOut -> "user-logged-out"
         VirtusizeEvents.UserDeletedData -> "user-deleted-data"
     }
-}
 
 /**
  * This enum contains the size comparison types Virtusize provides
  * Based on a user's selection of the type in the web view, the SDK displays a corresponding InPage comparison
  */
 enum class SizeRecommendationType {
-    body,
-    compareProduct
+    Body,
+    CompareProduct,
 }
 
 /**
@@ -57,4 +56,7 @@ enum class SizeRecommendationType {
  * @param name the name of the event
  * @param data the additional data as JSONObject in the event
  */
-data class VirtusizeEvent(val name: String, val data: JSONObject? = null)
+data class VirtusizeEvent(
+    val name: String,
+    val data: JSONObject? = null,
+)

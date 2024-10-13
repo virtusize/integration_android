@@ -35,372 +35,446 @@ import com.virtusize.android.util.isFitIllustratorURL
 import com.virtusize.android.util.urlString
 
 @SuppressLint("SetJavaScriptEnabled")
-class VirtusizeFitIllustratorWebView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : WebView(context, attrs, defStyleAttr) {
+class VirtusizeFitIllustratorWebView
+    @JvmOverloads
+    constructor(
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0,
+    ) : WebView(context, attrs, defStyleAttr) {
+        private var internalWebChromeClient: WebChromeClient? = null
+        private var internalWebViewClient: WebViewClient? = null
 
-    private var _webChromeClient: WebChromeClient? = null
-    private var _webViewClient: WebViewClient? = null
+        override fun setWebChromeClient(client: WebChromeClient?) {
+            internalWebChromeClient = client
+        }
 
-    override fun setWebChromeClient(client: WebChromeClient?) {
-        _webChromeClient = client
-    }
+        override fun setWebViewClient(client: WebViewClient) {
+            internalWebViewClient = client
+        }
 
-    override fun setWebViewClient(client: WebViewClient) {
-        _webViewClient = client
-    }
+        internal val isMultipleWindowsSupported: Boolean
+            get() = settings.supportMultipleWindows()
 
-    internal val isMultipleWindowsSupported: Boolean
-        get() = settings.supportMultipleWindows()
+        internal fun enableWindowsSettings() {
+            settings.setSupportMultipleWindows(true)
+            settings.javaScriptCanOpenWindowsAutomatically = true
+        }
 
-    internal fun enableWindowsSettings() {
-        settings.setSupportMultipleWindows(true)
-        settings.javaScriptCanOpenWindowsAutomatically = true
-    }
+        init {
+            isFocusable = true
+            isFocusableInTouchMode = true
 
-    init {
-        isFocusable = true
-        isFocusableInTouchMode = true
+            settings.javaScriptEnabled = true
+            settings.domStorageEnabled = true
+            settings.databaseEnabled = true
 
-        settings.javaScriptEnabled = true
-        settings.domStorageEnabled = true
-        settings.databaseEnabled = true
-
-        super.setWebViewClient(object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-                url?.let {
-                    if (!isMultipleWindowsSupported && url.isFitIllustratorURL) {
-                        VirtusizeFitIllustratorFragment.launch(context, url)
-                        return true
-                    }
-                }
-                return _webViewClient?.shouldOverrideUrlLoading(view, url) ?: false
-            }
-
-            @RequiresApi(Build.VERSION_CODES.N)
-            override fun shouldOverrideUrlLoading(
-                view: WebView?,
-                request: WebResourceRequest?
-            ): Boolean {
-                request?.let {
-                    if (!isMultipleWindowsSupported && request.isFitIllustratorURL) {
-                        VirtusizeFitIllustratorFragment.launch(context, request.urlString)
-                        return true
-                    }
-                }
-                return _webViewClient?.shouldOverrideUrlLoading(view, request) ?: false
-            }
-
-            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                _webViewClient?.onPageStarted(view, url, favicon)
-            }
-
-            override fun onPageFinished(view: WebView?, url: String?) {
-                // This is to close any subviews when a user is successfully logged into Facebook
-                if (
-                    isMultipleWindowsSupported &&
-                    url?.contains("virtusize") == true &&
-                    url.contains("#compare")
-                ) {
-                    view?.removeAllViews()
-                }
-                _webViewClient?.onPageFinished(view, url)
-            }
-
-            override fun onLoadResource(view: WebView?, url: String?) {
-                _webViewClient?.onLoadResource(view, url)
-            }
-
-            @RequiresApi(Build.VERSION_CODES.M)
-            override fun onPageCommitVisible(view: WebView?, url: String?) {
-                _webViewClient?.onPageCommitVisible(view, url)
-            }
-
-            override fun shouldInterceptRequest(
-                view: WebView?,
-                url: String?
-            ): WebResourceResponse? {
-                return _webViewClient?.shouldInterceptRequest(view, url)
-            }
-
-            override fun shouldInterceptRequest(
-                view: WebView?,
-                request: WebResourceRequest?
-            ): WebResourceResponse? {
-                return _webViewClient?.shouldInterceptRequest(view, request)
-            }
-
-            override fun onReceivedError(
-                view: WebView?,
-                errorCode: Int,
-                description: String?,
-                failingUrl: String?
-            ) {
-                _webViewClient?.onReceivedError(view, errorCode, description, failingUrl)
-            }
-
-            @RequiresApi(Build.VERSION_CODES.M)
-            override fun onReceivedError(
-                view: WebView?,
-                request: WebResourceRequest?,
-                error: WebResourceError?
-            ) {
-                _webViewClient?.onReceivedError(view, request, error)
-            }
-
-            @RequiresApi(Build.VERSION_CODES.M)
-            override fun onReceivedHttpError(
-                view: WebView?,
-                request: WebResourceRequest?,
-                errorResponse: WebResourceResponse?
-            ) {
-                _webViewClient?.onReceivedHttpError(view, request, errorResponse)
-            }
-
-            override fun onFormResubmission(
-                view: WebView?,
-                dontResend: Message?,
-                resend: Message?
-            ) {
-                _webViewClient?.onFormResubmission(view, dontResend, resend)
-            }
-
-            override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
-                _webViewClient?.doUpdateVisitedHistory(view, url, isReload)
-            }
-
-            override fun onReceivedSslError(
-                view: WebView?,
-                handler: SslErrorHandler?,
-                error: SslError?
-            ) {
-                _webViewClient?.onReceivedSslError(view, handler, error)
-            }
-
-            override fun onReceivedClientCertRequest(view: WebView?, request: ClientCertRequest?) {
-                _webViewClient?.onReceivedClientCertRequest(view, request)
-            }
-
-            override fun onReceivedHttpAuthRequest(
-                view: WebView?,
-                handler: HttpAuthHandler?,
-                host: String?,
-                realm: String?
-            ) {
-                _webViewClient?.onReceivedHttpAuthRequest(view, handler, host, realm)
-            }
-
-            override fun shouldOverrideKeyEvent(view: WebView?, event: KeyEvent?): Boolean {
-                return _webViewClient?.shouldOverrideKeyEvent(view, event) ?: false
-            }
-
-            override fun onUnhandledKeyEvent(view: WebView?, event: KeyEvent?) {
-                _webViewClient?.onUnhandledKeyEvent(view, event)
-            }
-
-            override fun onScaleChanged(view: WebView?, oldScale: Float, newScale: Float) {
-                _webViewClient?.onScaleChanged(view, oldScale, newScale)
-            }
-
-            override fun onReceivedLoginRequest(
-                view: WebView?,
-                realm: String?,
-                account: String?,
-                args: String?
-            ) {
-                _webViewClient?.onReceivedLoginRequest(view, realm, account, args)
-            }
-
-            @RequiresApi(Build.VERSION_CODES.O)
-            override fun onRenderProcessGone(
-                view: WebView?,
-                detail: RenderProcessGoneDetail?
-            ): Boolean {
-                return _webViewClient?.onRenderProcessGone(view, detail) ?: false
-            }
-
-            @RequiresApi(Build.VERSION_CODES.O_MR1)
-            override fun onSafeBrowsingHit(
-                view: WebView?,
-                request: WebResourceRequest?,
-                threatType: Int,
-                callback: SafeBrowsingResponse?
-            ) {
-                _webViewClient?.onSafeBrowsingHit(view, request, threatType, callback)
-            }
-        })
-
-        super.setWebChromeClient(object : WebChromeClient() {
-            override fun onCreateWindow(
-                view: WebView,
-                dialog: Boolean,
-                userGesture: Boolean,
-                resultMsg: Message
-            ): Boolean {
-                if (resultMsg.obj != null && resultMsg.obj is WebView.WebViewTransport) {
-                    val popupWebView = VirtusizeFitIllustratorWebView(view.context)
-                    popupWebView.enableWindowsSettings()
-                    popupWebView.layoutParams = LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT
-                    )
-                    popupWebView.webViewClient = object : WebViewClient() {
-                        override fun onPageFinished(view: WebView?, url: String?) {
-                            // This is to scroll the webview to top when the fit illustrator is open
-                            url?.let {
-                                scrollTo(0, 0)
+            super.setWebViewClient(
+                object : WebViewClient() {
+                    override fun shouldOverrideUrlLoading(
+                        view: WebView?,
+                        url: String?,
+                    ): Boolean {
+                        url?.let {
+                            if (!isMultipleWindowsSupported && url.isFitIllustratorURL) {
+                                VirtusizeFitIllustratorFragment.launch(context, url)
+                                return true
                             }
                         }
+                        return internalWebViewClient?.shouldOverrideUrlLoading(view, url) ?: false
                     }
 
-                    popupWebView.webChromeClient = object : WebChromeClient() {
-                        override fun onCloseWindow(window: WebView) {
-                            removeAllViews()
+                    @RequiresApi(Build.VERSION_CODES.N)
+                    override fun shouldOverrideUrlLoading(
+                        view: WebView?,
+                        request: WebResourceRequest?,
+                    ): Boolean {
+                        request?.let {
+                            if (!isMultipleWindowsSupported && request.isFitIllustratorURL) {
+                                VirtusizeFitIllustratorFragment.launch(context, request.urlString)
+                                return true
+                            }
                         }
+                        return internalWebViewClient?.shouldOverrideUrlLoading(
+                            view,
+                            request,
+                        ) ?: false
                     }
-                    popupWebView.setOnKeyListener { v, keyCode, event ->
-                        if (keyCode == KeyEvent.KEYCODE_BACK &&
-                            event.action == MotionEvent.ACTION_UP &&
-                            popupWebView.canGoBack()
+
+                    override fun onPageStarted(
+                        view: WebView?,
+                        url: String?,
+                        favicon: Bitmap?,
+                    ) {
+                        internalWebViewClient?.onPageStarted(view, url, favicon)
+                    }
+
+                    override fun onPageFinished(
+                        view: WebView?,
+                        url: String?,
+                    ) {
+                        // This is to close any subviews when a user is successfully logged into Facebook
+                        if (
+                            isMultipleWindowsSupported &&
+                            url?.contains("virtusize") == true &&
+                            url.contains("#compare")
                         ) {
-                            popupWebView.goBack()
-                            return@setOnKeyListener true
+                            view?.removeAllViews()
                         }
-                        false
+                        internalWebViewClient?.onPageFinished(view, url)
                     }
-                    addView(popupWebView)
-                    val transport = resultMsg.obj as WebView.WebViewTransport
-                    transport.webView = popupWebView
-                    resultMsg.sendToTarget()
-                    return true
-                }
-                return _webChromeClient?.onCreateWindow(view, dialog, userGesture, resultMsg)
-                    ?: false
-            }
 
-            override fun onProgressChanged(view: WebView?, newProgress: Int) {
-                _webChromeClient?.onProgressChanged(view, newProgress)
-            }
+                    override fun onLoadResource(
+                        view: WebView?,
+                        url: String?,
+                    ) {
+                        internalWebViewClient?.onLoadResource(view, url)
+                    }
 
-            override fun onReceivedTitle(view: WebView?, title: String?) {
-                _webChromeClient?.onReceivedTitle(view, title)
-            }
+                    @RequiresApi(Build.VERSION_CODES.M)
+                    override fun onPageCommitVisible(
+                        view: WebView?,
+                        url: String?,
+                    ) {
+                        internalWebViewClient?.onPageCommitVisible(view, url)
+                    }
 
-            override fun onReceivedIcon(view: WebView?, icon: Bitmap?) {
-                _webChromeClient?.onReceivedIcon(view, icon)
-            }
+                    override fun shouldInterceptRequest(
+                        view: WebView?,
+                        url: String?,
+                    ): WebResourceResponse? =
+                        internalWebViewClient?.shouldInterceptRequest(view, url)
 
-            override fun onReceivedTouchIconUrl(
-                view: WebView?,
-                url: String?,
-                precomposed: Boolean
-            ) {
-                _webChromeClient?.onReceivedTouchIconUrl(view, url, precomposed)
-            }
+                    override fun shouldInterceptRequest(
+                        view: WebView?,
+                        request: WebResourceRequest?,
+                    ): WebResourceResponse? =
+                        internalWebViewClient?.shouldInterceptRequest(view, request)
 
-            override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
-                _webChromeClient?.onShowCustomView(view, callback)
-            }
+                    override fun onReceivedError(
+                        view: WebView?,
+                        errorCode: Int,
+                        description: String?,
+                        failingUrl: String?,
+                    ) {
+                        internalWebViewClient?.onReceivedError(
+                            view,
+                            errorCode,
+                            description,
+                            failingUrl,
+                        )
+                    }
 
-            override fun onHideCustomView() {
-                _webChromeClient?.onHideCustomView()
-            }
+                    @RequiresApi(Build.VERSION_CODES.M)
+                    override fun onReceivedError(
+                        view: WebView?,
+                        request: WebResourceRequest?,
+                        error: WebResourceError?,
+                    ) {
+                        internalWebViewClient?.onReceivedError(view, request, error)
+                    }
 
-            override fun onRequestFocus(view: WebView?) {
-                _webChromeClient?.onRequestFocus(view)
-            }
+                    @RequiresApi(Build.VERSION_CODES.M)
+                    override fun onReceivedHttpError(
+                        view: WebView?,
+                        request: WebResourceRequest?,
+                        errorResponse: WebResourceResponse?,
+                    ) {
+                        internalWebViewClient?.onReceivedHttpError(view, request, errorResponse)
+                    }
 
-            override fun onCloseWindow(window: WebView?) {
-                window?.removeAllViews()
-                _webChromeClient?.onCloseWindow(window)
-            }
+                    override fun onFormResubmission(
+                        view: WebView?,
+                        dontResend: Message?,
+                        resend: Message?,
+                    ) {
+                        internalWebViewClient?.onFormResubmission(view, dontResend, resend)
+                    }
 
-            override fun onJsAlert(
-                view: WebView?,
-                url: String?,
-                message: String?,
-                result: JsResult?
-            ): Boolean {
-                return _webChromeClient?.onJsAlert(view, url, message, result) ?: false
-            }
+                    override fun doUpdateVisitedHistory(
+                        view: WebView?,
+                        url: String?,
+                        isReload: Boolean,
+                    ) {
+                        internalWebViewClient?.doUpdateVisitedHistory(view, url, isReload)
+                    }
 
-            override fun onJsConfirm(
-                view: WebView?,
-                url: String?,
-                message: String?,
-                result: JsResult?
-            ): Boolean {
-                return _webChromeClient?.onJsConfirm(view, url, message, result) ?: false
-            }
+                    override fun onReceivedSslError(
+                        view: WebView?,
+                        handler: SslErrorHandler?,
+                        error: SslError?,
+                    ) {
+                        internalWebViewClient?.onReceivedSslError(view, handler, error)
+                    }
 
-            override fun onJsPrompt(
-                view: WebView?,
-                url: String?,
-                message: String?,
-                defaultValue: String?,
-                result: JsPromptResult?
-            ): Boolean {
-                return _webChromeClient?.onJsPrompt(view, url, message, defaultValue, result)
-                    ?: false
-            }
+                    override fun onReceivedClientCertRequest(
+                        view: WebView?,
+                        request: ClientCertRequest?,
+                    ) {
+                        internalWebViewClient?.onReceivedClientCertRequest(view, request)
+                    }
 
-            override fun onJsBeforeUnload(
-                view: WebView?,
-                url: String?,
-                message: String?,
-                result: JsResult?
-            ): Boolean {
-                return _webChromeClient?.onJsBeforeUnload(view, url, message, result) ?: false
-            }
+                    override fun onReceivedHttpAuthRequest(
+                        view: WebView?,
+                        handler: HttpAuthHandler?,
+                        host: String?,
+                        realm: String?,
+                    ) {
+                        internalWebViewClient?.onReceivedHttpAuthRequest(view, handler, host, realm)
+                    }
 
-            override fun onGeolocationPermissionsShowPrompt(
-                origin: String?,
-                callback: GeolocationPermissions.Callback?
-            ) {
-                _webChromeClient?.onGeolocationPermissionsShowPrompt(origin, callback)
-            }
+                    override fun shouldOverrideKeyEvent(
+                        view: WebView?,
+                        event: KeyEvent?,
+                    ): Boolean = internalWebViewClient?.shouldOverrideKeyEvent(view, event) ?: false
 
-            override fun onGeolocationPermissionsHidePrompt() {
-                _webChromeClient?.onGeolocationPermissionsHidePrompt()
-            }
+                    override fun onUnhandledKeyEvent(
+                        view: WebView?,
+                        event: KeyEvent?,
+                    ) {
+                        internalWebViewClient?.onUnhandledKeyEvent(view, event)
+                    }
 
-            override fun onPermissionRequest(request: PermissionRequest?) {
-                _webChromeClient?.onPermissionRequest(request)
-            }
+                    override fun onScaleChanged(
+                        view: WebView?,
+                        oldScale: Float,
+                        newScale: Float,
+                    ) {
+                        internalWebViewClient?.onScaleChanged(view, oldScale, newScale)
+                    }
 
-            override fun onPermissionRequestCanceled(request: PermissionRequest?) {
-                _webChromeClient?.onPermissionRequestCanceled(request)
-            }
+                    override fun onReceivedLoginRequest(
+                        view: WebView?,
+                        realm: String?,
+                        account: String?,
+                        args: String?,
+                    ) {
+                        internalWebViewClient?.onReceivedLoginRequest(view, realm, account, args)
+                    }
 
-            override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
-                return _webChromeClient?.onConsoleMessage(consoleMessage) ?: false
-            }
+                    @RequiresApi(Build.VERSION_CODES.O)
+                    override fun onRenderProcessGone(
+                        view: WebView?,
+                        detail: RenderProcessGoneDetail?,
+                    ): Boolean = internalWebViewClient?.onRenderProcessGone(view, detail) ?: false
 
-            override fun onShowFileChooser(
-                webView: WebView?,
-                filePathCallback: ValueCallback<Array<Uri>>?,
-                fileChooserParams: FileChooserParams?
-            ): Boolean {
-                return _webChromeClient?.onShowFileChooser(
-                    webView,
-                    filePathCallback,
-                    fileChooserParams
-                ) ?: false
-            }
+                    @RequiresApi(Build.VERSION_CODES.O_MR1)
+                    override fun onSafeBrowsingHit(
+                        view: WebView?,
+                        request: WebResourceRequest?,
+                        threatType: Int,
+                        callback: SafeBrowsingResponse?,
+                    ) {
+                        internalWebViewClient?.onSafeBrowsingHit(
+                            view,
+                            request,
+                            threatType,
+                            callback,
+                        )
+                    }
+                },
+            )
 
-            override fun getDefaultVideoPoster(): Bitmap? {
-                return _webChromeClient?.defaultVideoPoster
-            }
+            super.setWebChromeClient(
+                object : WebChromeClient() {
+                    override fun onCreateWindow(
+                        view: WebView,
+                        dialog: Boolean,
+                        userGesture: Boolean,
+                        resultMsg: Message,
+                    ): Boolean {
+                        if (resultMsg.obj != null && resultMsg.obj is WebView.WebViewTransport) {
+                            val popupWebView = VirtusizeFitIllustratorWebView(view.context)
+                            popupWebView.enableWindowsSettings()
+                            popupWebView.layoutParams =
+                                LayoutParams(
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                )
+                            popupWebView.webViewClient =
+                                object : WebViewClient() {
+                                    override fun onPageFinished(
+                                        view: WebView?,
+                                        url: String?,
+                                    ) {
+                                        // This is to scroll the webview to top when the fit illustrator is open
+                                        url?.let {
+                                            scrollTo(0, 0)
+                                        }
+                                    }
+                                }
 
-            override fun getVideoLoadingProgressView(): View? {
-                return _webChromeClient?.videoLoadingProgressView
-            }
+                            popupWebView.webChromeClient =
+                                object : WebChromeClient() {
+                                    override fun onCloseWindow(window: WebView) {
+                                        removeAllViews()
+                                    }
+                                }
+                            popupWebView.setOnKeyListener { v, keyCode, event ->
+                                if (keyCode == KeyEvent.KEYCODE_BACK &&
+                                    event.action == MotionEvent.ACTION_UP &&
+                                    popupWebView.canGoBack()
+                                ) {
+                                    popupWebView.goBack()
+                                    return@setOnKeyListener true
+                                }
+                                false
+                            }
+                            addView(popupWebView)
+                            val transport = resultMsg.obj as WebView.WebViewTransport
+                            transport.webView = popupWebView
+                            resultMsg.sendToTarget()
+                            return true
+                        }
+                        return internalWebChromeClient?.onCreateWindow(
+                            view,
+                            dialog,
+                            userGesture,
+                            resultMsg,
+                        )
+                            ?: false
+                    }
 
-            override fun getVisitedHistory(callback: ValueCallback<Array<String>>?) {
-                _webChromeClient?.getVisitedHistory(callback)
-            }
-        })
+                    override fun onProgressChanged(
+                        view: WebView?,
+                        newProgress: Int,
+                    ) {
+                        internalWebChromeClient?.onProgressChanged(view, newProgress)
+                    }
+
+                    override fun onReceivedTitle(
+                        view: WebView?,
+                        title: String?,
+                    ) {
+                        internalWebChromeClient?.onReceivedTitle(view, title)
+                    }
+
+                    override fun onReceivedIcon(
+                        view: WebView?,
+                        icon: Bitmap?,
+                    ) {
+                        internalWebChromeClient?.onReceivedIcon(view, icon)
+                    }
+
+                    override fun onReceivedTouchIconUrl(
+                        view: WebView?,
+                        url: String?,
+                        precomposed: Boolean,
+                    ) {
+                        internalWebChromeClient?.onReceivedTouchIconUrl(view, url, precomposed)
+                    }
+
+                    override fun onShowCustomView(
+                        view: View?,
+                        callback: CustomViewCallback?,
+                    ) {
+                        internalWebChromeClient?.onShowCustomView(view, callback)
+                    }
+
+                    override fun onHideCustomView() {
+                        internalWebChromeClient?.onHideCustomView()
+                    }
+
+                    override fun onRequestFocus(view: WebView?) {
+                        internalWebChromeClient?.onRequestFocus(view)
+                    }
+
+                    override fun onCloseWindow(window: WebView?) {
+                        window?.removeAllViews()
+                        internalWebChromeClient?.onCloseWindow(window)
+                    }
+
+                    override fun onJsAlert(
+                        view: WebView?,
+                        url: String?,
+                        message: String?,
+                        result: JsResult?,
+                    ): Boolean =
+                        internalWebChromeClient?.onJsAlert(view, url, message, result) ?: false
+
+                    override fun onJsConfirm(
+                        view: WebView?,
+                        url: String?,
+                        message: String?,
+                        result: JsResult?,
+                    ): Boolean =
+                        internalWebChromeClient?.onJsConfirm(view, url, message, result) ?: false
+
+                    override fun onJsPrompt(
+                        view: WebView?,
+                        url: String?,
+                        message: String?,
+                        defaultValue: String?,
+                        result: JsPromptResult?,
+                    ): Boolean =
+                        internalWebChromeClient?.onJsPrompt(
+                            view,
+                            url,
+                            message,
+                            defaultValue,
+                            result,
+                        )
+                            ?: false
+
+                    override fun onJsBeforeUnload(
+                        view: WebView?,
+                        url: String?,
+                        message: String?,
+                        result: JsResult?,
+                    ): Boolean =
+                        internalWebChromeClient?.onJsBeforeUnload(
+                            view,
+                            url,
+                            message,
+                            result,
+                        ) ?: false
+
+                    override fun onGeolocationPermissionsShowPrompt(
+                        origin: String?,
+                        callback: GeolocationPermissions.Callback?,
+                    ) {
+                        internalWebChromeClient?.onGeolocationPermissionsShowPrompt(
+                            origin,
+                            callback,
+                        )
+                    }
+
+                    override fun onGeolocationPermissionsHidePrompt() {
+                        internalWebChromeClient?.onGeolocationPermissionsHidePrompt()
+                    }
+
+                    override fun onPermissionRequest(request: PermissionRequest?) {
+                        internalWebChromeClient?.onPermissionRequest(request)
+                    }
+
+                    override fun onPermissionRequestCanceled(request: PermissionRequest?) {
+                        internalWebChromeClient?.onPermissionRequestCanceled(request)
+                    }
+
+                    override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean =
+                        internalWebChromeClient?.onConsoleMessage(consoleMessage) ?: false
+
+                    override fun onShowFileChooser(
+                        webView: WebView?,
+                        filePathCallback: ValueCallback<Array<Uri>>?,
+                        fileChooserParams: FileChooserParams?,
+                    ): Boolean =
+                        internalWebChromeClient?.onShowFileChooser(
+                            webView,
+                            filePathCallback,
+                            fileChooserParams,
+                        ) ?: false
+
+                    override fun getDefaultVideoPoster(): Bitmap? =
+                        internalWebChromeClient?.defaultVideoPoster
+
+                    override fun getVideoLoadingProgressView(): View? =
+                        internalWebChromeClient?.videoLoadingProgressView
+
+                    override fun getVisitedHistory(callback: ValueCallback<Array<String>>?) {
+                        internalWebChromeClient?.getVisitedHistory(callback)
+                    }
+                },
+            )
+        }
     }
-}

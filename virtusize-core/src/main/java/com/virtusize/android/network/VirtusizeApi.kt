@@ -25,7 +25,7 @@ import com.virtusize.android.data.remote.UserBodyProfile
 enum class HttpMethod {
     GET,
     POST,
-    DELETE
+    DELETE,
 }
 
 /**
@@ -39,7 +39,7 @@ data class ApiRequest(
     val url: String,
     val method: HttpMethod,
     val params: Map<String, Any> = mutableMapOf(),
-    val authorization: Boolean = false
+    val authorization: Boolean = false,
 )
 
 /**
@@ -64,7 +64,7 @@ object VirtusizeApi {
     fun init(
         env: VirtusizeEnvironment,
         key: String,
-        userId: String
+        userId: String,
     ) {
         environment = env
         apiKey = key
@@ -86,7 +86,8 @@ object VirtusizeApi {
      */
     fun productCheck(product: VirtusizeProduct): ApiRequest {
         val urlBuilder =
-            Uri.parse(environment.servicesApiUrl() + VirtusizeEndpoint.ProductCheck.path)
+            Uri
+                .parse(environment.servicesApiUrl() + VirtusizeEndpoint.ProductCheck.path)
                 .buildUpon()
                 .appendQueryParameter("apiKey", apiKey)
                 .appendQueryParameter("externalId", product.externalId)
@@ -97,7 +98,8 @@ object VirtusizeApi {
 
     fun fetchLatestAoyamaVersion(): ApiRequest {
         val url =
-            Uri.parse(environment.virtusizeUrl() + VirtusizeEndpoint.LatestAoyamaVersion.path)
+            Uri
+                .parse(environment.virtusizeUrl() + VirtusizeEndpoint.LatestAoyamaVersion.path)
                 .buildUpon()
                 .build()
                 .toString()
@@ -112,9 +114,10 @@ object VirtusizeApi {
      */
     fun virtusizeWebViewURL(version: String = DEFAULT_AOYAMA_VERSION): String {
         val urlBuilder =
-            Uri.parse(
-                environment.virtusizeUrl() + VirtusizeEndpoint.VirtusizeWebView(version = version).path,
-            ).buildUpon()
+            Uri
+                .parse(
+                    environment.virtusizeUrl() + VirtusizeEndpoint.VirtusizeWebView(version = version).path,
+                ).buildUpon()
         return urlBuilder.build().toString()
     }
 
@@ -125,11 +128,11 @@ object VirtusizeApi {
      */
     fun sendProductImageToBackend(product: VirtusizeProduct): ApiRequest {
         val url =
-            Uri.parse(
-                environment.defaultApiUrl() +
-                    VirtusizeEndpoint.ProductMetaDataHints.path,
-            )
-                .buildUpon()
+            Uri
+                .parse(
+                    environment.defaultApiUrl() +
+                        VirtusizeEndpoint.ProductMetaDataHints.path,
+                ).buildUpon()
                 .build()
                 .toString()
         val params = mutableMapOf<String, Any>()
@@ -159,19 +162,21 @@ object VirtusizeApi {
         productCheck: ProductCheck?,
         deviceOrientation: String,
         screenResolution: String,
-        versionName: String
+        versionName: String,
     ): ApiRequest {
-        val url = Uri.parse(environment.eventApiUrl())
-            .buildUpon()
-            .build()
-            .toString()
+        val url =
+            Uri
+                .parse(environment.eventApiUrl())
+                .buildUpon()
+                .build()
+                .toString()
         val params =
             buildEventPayload(
                 virtusizeEvent,
                 productCheck,
                 deviceOrientation,
                 screenResolution,
-                versionName
+                versionName,
             )
         return ApiRequest(url, HttpMethod.POST, params)
     }
@@ -193,7 +198,7 @@ object VirtusizeApi {
         productCheck: ProductCheck?,
         orientation: String,
         resolution: String,
-        versionName: String
+        versionName: String,
     ): MutableMap<String, Any> {
         val params = mutableMapOf<String, Any>()
         params["name"] = virtusizeEvent.name
@@ -223,11 +228,13 @@ object VirtusizeApi {
         }
 
         if (!virtusizeEvent.data?.toString().isNullOrEmpty()) {
-            virtusizeEvent.data?.optJSONObject("data")?.let {
-                JsonUtils.jsonObjectToMap(it)
-            }?.let {
-                for ((k, v) in it.iterator()) params[k] = v
-            }
+            virtusizeEvent.data
+                ?.optJSONObject("data")
+                ?.let {
+                    JsonUtils.jsonObjectToMap(it)
+                }?.let {
+                    for ((k, v) in it.iterator()) params[k] = v
+                }
         }
         return params
     }
@@ -239,7 +246,8 @@ object VirtusizeApi {
      */
     fun sendOrder(order: VirtusizeOrder): ApiRequest {
         val url =
-            Uri.parse(environment.defaultApiUrl() + VirtusizeEndpoint.Orders.path)
+            Uri
+                .parse(environment.defaultApiUrl() + VirtusizeEndpoint.Orders.path)
                 .buildUpon()
                 .build()
                 .toString()
@@ -253,12 +261,12 @@ object VirtusizeApi {
      */
     fun getStoreInfo(): ApiRequest {
         val url =
-            Uri.parse(
-                environment.defaultApiUrl() +
-                    VirtusizeEndpoint.StoreViewApiKey.path +
-                    apiKey,
-            )
-                .buildUpon()
+            Uri
+                .parse(
+                    environment.defaultApiUrl() +
+                        VirtusizeEndpoint.StoreViewApiKey.path +
+                        apiKey,
+                ).buildUpon()
                 .appendQueryParameter("format", "json")
                 .build()
                 .toString()
@@ -272,12 +280,12 @@ object VirtusizeApi {
      */
     fun getStoreProductInfo(productId: String): ApiRequest {
         val url =
-            Uri.parse(
-                environment.defaultApiUrl() +
-                    VirtusizeEndpoint.StoreProducts.path +
-                    productId,
-            )
-                .buildUpon()
+            Uri
+                .parse(
+                    environment.defaultApiUrl() +
+                        VirtusizeEndpoint.StoreProducts.path +
+                        productId,
+                ).buildUpon()
                 .appendQueryParameter("format", "json")
                 .build()
                 .toString()
@@ -290,7 +298,8 @@ object VirtusizeApi {
      */
     fun getProductTypes(): ApiRequest {
         val url =
-            Uri.parse(environment.defaultApiUrl() + VirtusizeEndpoint.ProductType.path)
+            Uri
+                .parse(environment.defaultApiUrl() + VirtusizeEndpoint.ProductType.path)
                 .buildUpon()
                 .build()
                 .toString()
@@ -303,7 +312,8 @@ object VirtusizeApi {
      */
     fun getI18n(language: VirtusizeLanguage): ApiRequest {
         val url =
-            Uri.parse(I18N_URL + VirtusizeEndpoint.I18N.path + language.value)
+            Uri
+                .parse(I18N_URL + VirtusizeEndpoint.I18N.path + language.value)
                 .buildUpon()
                 .build()
                 .toString()
@@ -312,7 +322,8 @@ object VirtusizeApi {
 
     fun getSessions(): ApiRequest {
         val url =
-            Uri.parse(environment.defaultApiUrl() + VirtusizeEndpoint.Sessions.path)
+            Uri
+                .parse(environment.defaultApiUrl() + VirtusizeEndpoint.Sessions.path)
                 .buildUpon()
                 .build()
                 .toString()
@@ -325,7 +336,8 @@ object VirtusizeApi {
      */
     fun deleteUser(): ApiRequest {
         val url =
-            Uri.parse(environment.defaultApiUrl() + VirtusizeEndpoint.User.path)
+            Uri
+                .parse(environment.defaultApiUrl() + VirtusizeEndpoint.User.path)
                 .buildUpon()
                 .build()
                 .toString()
@@ -338,10 +350,10 @@ object VirtusizeApi {
      */
     fun getUserProducts(): ApiRequest {
         val url =
-            Uri.parse(
-                environment.defaultApiUrl() + VirtusizeEndpoint.UserProducts.path,
-            )
-                .buildUpon()
+            Uri
+                .parse(
+                    environment.defaultApiUrl() + VirtusizeEndpoint.UserProducts.path,
+                ).buildUpon()
                 .build()
                 .toString()
         return ApiRequest(url, HttpMethod.GET, authorization = true)
@@ -353,10 +365,10 @@ object VirtusizeApi {
      */
     fun getUserBodyProfile(): ApiRequest {
         val url =
-            Uri.parse(
-                environment.defaultApiUrl() + VirtusizeEndpoint.UserBodyMeasurements.path,
-            )
-                .buildUpon()
+            Uri
+                .parse(
+                    environment.defaultApiUrl() + VirtusizeEndpoint.UserBodyMeasurements.path,
+                ).buildUpon()
                 .build()
                 .toString()
         return ApiRequest(url, HttpMethod.GET, authorization = true)
@@ -372,12 +384,13 @@ object VirtusizeApi {
     fun getSize(
         productTypes: List<ProductType>,
         storeProduct: Product,
-        userBodyProfile: UserBodyProfile
+        userBodyProfile: UserBodyProfile,
     ): ApiRequest {
         val bodyProfileRecommendedSizeParams =
             BodyProfileRecommendedSizeParams(productTypes, storeProduct, userBodyProfile)
         val url =
-            Uri.parse("${environment.sizeRecommendationApiBaseUrl()}${VirtusizeEndpoint.GetSize.path}")
+            Uri
+                .parse("${environment.sizeRecommendationApiBaseUrl()}${VirtusizeEndpoint.GetSize.path}")
                 .buildUpon()
                 .build()
                 .toString()

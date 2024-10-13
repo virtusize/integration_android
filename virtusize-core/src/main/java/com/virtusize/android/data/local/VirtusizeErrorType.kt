@@ -18,29 +18,29 @@ enum class VirtusizeErrorType {
     APIError,
     JsonParsingError,
     WardrobeNotFound,
-    PrivacyLinkNotOpen
+    PrivacyLinkNotOpen,
 }
 
 /**
  * Returns an error code for the VirtusizeErrorType that it is called on
  * @return the error code for the VirtusizeErrorType
  */
-fun VirtusizeErrorType.code(): Int? {
-    return when (this) {
+fun VirtusizeErrorType.code(): Int? =
+    when (this) {
         VirtusizeErrorType.ApiKeyNullOrInvalid -> HttpURLConnection.HTTP_FORBIDDEN
         VirtusizeErrorType.InvalidProduct,
         VirtusizeErrorType.UnParsedProduct,
-        VirtusizeErrorType.WardrobeNotFound -> HttpURLConnection.HTTP_NOT_FOUND
+        VirtusizeErrorType.WardrobeNotFound,
+        -> HttpURLConnection.HTTP_NOT_FOUND
         else -> null
     }
-}
 
 /**
  * Returns an error message for the VirtusizeErrorType that it is called on
  * @return the error message for the VirtusizeErrorType
  */
-fun VirtusizeErrorType.message(extraMessage: String? = null): String {
-    return when (this) {
+fun VirtusizeErrorType.message(extraMessage: String? = null): String =
+    when (this) {
         VirtusizeErrorType.NullVirtusizeViewError ->
             "The Virtusize view in the layout is null."
         VirtusizeErrorType.ApiKeyNullOrInvalid ->
@@ -66,7 +66,6 @@ fun VirtusizeErrorType.message(extraMessage: String? = null): String {
         VirtusizeErrorType.PrivacyLinkNotOpen ->
             "The privacy link can not be open. The error is: $extraMessage"
     }
-}
 
 /**
  * Returns the [VirtusizeError] corresponding to the VirtusizeErrorType
@@ -76,15 +75,11 @@ fun VirtusizeErrorType.message(extraMessage: String? = null): String {
  */
 fun VirtusizeErrorType.virtusizeError(
     code: Int? = null,
-    extraMessage: String? = null
-): VirtusizeError {
-    return VirtusizeError(this, code ?: this.code(), this.message(extraMessage))
-}
+    extraMessage: String? = null,
+): VirtusizeError = VirtusizeError(this, code ?: this.code(), this.message(extraMessage))
 
 /**
  * Throws error for the VirtusizeErrorType that it is called on
  * @throws IllegalArgumentException
  */
-fun VirtusizeErrorType.throwError() {
-    throw IllegalArgumentException(this.message())
-}
+fun VirtusizeErrorType.throwError() = throw IllegalArgumentException(this.message())

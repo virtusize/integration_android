@@ -52,10 +52,8 @@ fun Context.getTypefaceByName(fontFileName: String): Typeface? {
 /**
  * The String extension function to trim the text from i18n localization
  */
-fun String.trimI18nText(
-    trimType: I18nLocalization.TrimType = I18nLocalization.TrimType.ONELINE
-): String {
-    return when (trimType) {
+fun String.trimI18nText(trimType: I18nLocalization.TrimType = I18nLocalization.TrimType.ONELINE): String =
+    when (trimType) {
         I18nLocalization.TrimType.ONELINE ->
             replace(I18nConstants.BOLD_START_PLACEHOLDER, "")
                 .replace("<br>", "")
@@ -64,36 +62,39 @@ fun String.trimI18nText(
             replace(I18nConstants.BOLD_START_PLACEHOLDER, "<br>")
                 .replace(I18nConstants.BOLD_END_PLACEHOLDER, "")
     }
-}
 
 /**
  * The Enum extension function to convert a string to an enum type safely
  */
-inline fun <reified T : Enum<T>> valueOf(type: String): T? {
-    return try {
+inline fun <reified T : Enum<T>> valueOf(type: String): T? =
+    try {
         java.lang.Enum.valueOf(T::class.java, type)
     } catch (e: IllegalArgumentException) {
         null
     }
-}
 
 /**
  * The View extension function to get the latest size info when the view size gets changed
  */
-inline fun View.onSizeChanged(crossinline runnable: (Int, Int) -> Unit) = this.apply {
-    addOnLayoutChangeListener { _, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-        val rect = Rect(left, top, right, bottom)
-        val oldRect = Rect(oldLeft, oldTop, oldRight, oldBottom)
-        if (rect.width() != oldRect.width() || rect.height() != oldRect.height()) {
-            runnable(rect.width(), rect.height())
+inline fun View.onSizeChanged(crossinline runnable: (Int, Int) -> Unit) =
+    this.apply {
+        addOnLayoutChangeListener { _, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            val rect = Rect(left, top, right, bottom)
+            val oldRect = Rect(oldLeft, oldTop, oldRight, oldBottom)
+            if (rect.width() != oldRect.width() || rect.height() != oldRect.height()) {
+                runnable(rect.width(), rect.height())
+            }
         }
     }
-}
 
 /**
  * The TextView extension function to set the width and height for the right drawable of a Button
  */
-fun TextView.rightDrawable(@DrawableRes id: Int = 0, width: Float, height: Float) {
+fun TextView.rightDrawable(
+    @DrawableRes id: Int = 0,
+    width: Float,
+    height: Float,
+) {
     val drawable = ContextCompat.getDrawable(context, id)
     drawable?.setBounds(0, 0, width.toInt(), height.toInt())
     this.setCompoundDrawables(null, null, drawable, null)
@@ -109,20 +110,22 @@ val Int.dpInPx: Int
  * Float extension function to convert sp to px
 */
 val Float.spToPx: Float
-    get() = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_SP,
-        this,
-        Resources.getSystem().displayMetrics
-    )
+    get() =
+        TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_SP,
+            this,
+            Resources.getSystem().displayMetrics,
+        )
 
 /*
  * For the Fit Illustrator web view
  */
 val String.isFitIllustratorURL: Boolean
-    get() = this.contains("virtusize") &&
-        this.contains("fit-illustrator") &&
-        !this.contains("#") &&
-        !this.contains("oauth")
+    get() =
+        this.contains("virtusize") &&
+            this.contains("fit-illustrator") &&
+            !this.contains("#") &&
+            !this.contains("oauth")
 
 val WebResourceRequest.isFitIllustratorURL: Boolean
     get() = this.url.toString().isFitIllustratorURL

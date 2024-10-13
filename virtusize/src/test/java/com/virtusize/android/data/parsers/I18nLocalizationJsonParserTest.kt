@@ -19,14 +19,13 @@ import java.util.Locale
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.Q])
 class I18nLocalizationJsonParserTest {
-
     private val context: Context = ApplicationProvider.getApplicationContext()
 
     @Test
     fun parseI18N_englishLocalization_shouldReturnExpectedObject() {
         val actualI18nLocalization =
             I18nLocalizationJsonParser(context, VirtusizeLanguage.EN).parse(
-                TestUtils.readFileFromAssets("/i18n_en.json")
+                TestUtils.readFileFromAssets("/i18n_en.json"),
             )
 
         val expectedI18nLocalization = getExpectedI18nLocalization(context)
@@ -38,34 +37,36 @@ class I18nLocalizationJsonParserTest {
     fun parseI18N_emptyJsonData_shouldReturnExpectedObject() {
         val actualI18nLocalization =
             I18nLocalizationJsonParser(context, VirtusizeLanguage.EN).parse(
-                TestFixtures.EMPTY_JSON_DATA
+                TestFixtures.EMPTY_JSON_DATA,
             )
 
-        val expectedI18nLocalization = I18nLocalization(
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            ""
-        )
+        val expectedI18nLocalization =
+            I18nLocalization(
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+            )
 
         assertThat(actualI18nLocalization).isEqualTo(expectedI18nLocalization)
     }
 
     @Test
     fun parseI18NJP_japaneseLocalization_shouldReturnExpectedObject() {
-        val actualI18nLocalization = I18nLocalizationJsonParser(
-            context,
-            VirtusizeLanguage.JP
-        ).parse(TestUtils.readFileFromAssets("/i18n_jp.json"))
+        val actualI18nLocalization =
+            I18nLocalizationJsonParser(
+                context,
+                VirtusizeLanguage.JP,
+            ).parse(TestUtils.readFileFromAssets("/i18n_jp.json"))
 
         var conf: Configuration = context.resources.configuration
         conf = Configuration(conf)
@@ -78,10 +79,11 @@ class I18nLocalizationJsonParserTest {
 
     @Test
     fun parseI18NKO_koreanLocalization_shouldReturnExpectedObject() {
-        val actualI18nLocalization = I18nLocalizationJsonParser(
-            context,
-            VirtusizeLanguage.KR
-        ).parse(TestUtils.readFileFromAssets("/i18n_ko.json"))
+        val actualI18nLocalization =
+            I18nLocalizationJsonParser(
+                context,
+                VirtusizeLanguage.KR,
+            ).parse(TestUtils.readFileFromAssets("/i18n_ko.json"))
 
         var conf: Configuration = context.resources.configuration
         conf = Configuration(conf)
@@ -92,8 +94,8 @@ class I18nLocalizationJsonParserTest {
         assertThat(actualI18nLocalization).isEqualTo(expectedI18nLocalization)
     }
 
-    private fun getExpectedI18nLocalization(localizedContext: Context): I18nLocalization {
-        return I18nLocalization(
+    private fun getExpectedI18nLocalization(localizedContext: Context): I18nLocalization =
+        I18nLocalization(
             localizedContext.getString(R.string.inpage_default_accessory_text),
             localizedContext.getString(R.string.inpage_has_product_top_text),
             localizedContext.getString(R.string.inpage_has_product_bottom_text),
@@ -106,7 +108,6 @@ class I18nLocalizationJsonParserTest {
             localizedContext.getString(R.string.inpage_one_size_body_profile_text),
             localizedContext.getString(R.string.inpage_multi_size_comparison_text),
             localizedContext.getString(R.string.inpage_multi_size_body_profile_text),
-            localizedContext.getString(R.string.inpage_no_data_text)
+            localizedContext.getString(R.string.inpage_no_data_text),
         )
-    }
 }

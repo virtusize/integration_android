@@ -18,19 +18,18 @@ import com.virtusize.android.util.VirtusizeUtils
 import com.virtusize.android.util.trimI18nText
 
 object VirtusizeFlutterUtils {
-
     fun openVirtusizeView(
         activity: Activity,
         virtusize: Virtusize?,
         product: VirtusizeProduct,
-        messageHandler: VirtusizeMessageHandler
+        messageHandler: VirtusizeMessageHandler,
     ) {
         VirtusizeUtils.openVirtusizeWebView(
             activity,
             virtusize?.params,
             VirtusizeWebViewFragment(),
             product,
-            messageHandler
+            messageHandler,
         )
     }
 
@@ -38,15 +37,16 @@ object VirtusizeFlutterUtils {
         selectedRecommendedType: SizeRecommendationType? = null,
         userProducts: List<Product>?,
         storeProduct: Product,
-        productTypes: List<ProductType>
+        productTypes: List<ProductType>,
     ): SizeComparisonRecommendedSize? {
         var userProductRecommendedSize: SizeComparisonRecommendedSize? = null
-        if (selectedRecommendedType != SizeRecommendationType.body) {
-            userProductRecommendedSize = VirtusizeUtils.findBestFitProductSize(
-                userProducts = userProducts,
-                storeProduct = storeProduct,
-                productTypes = productTypes
-            )
+        if (selectedRecommendedType != SizeRecommendationType.Body) {
+            userProductRecommendedSize =
+                VirtusizeUtils.findBestFitProductSize(
+                    userProducts = userProducts,
+                    storeProduct = storeProduct,
+                    productTypes = productTypes,
+                )
         }
         return userProductRecommendedSize
     }
@@ -56,26 +56,31 @@ object VirtusizeFlutterUtils {
         storeProduct: Product,
         userProductRecommendedSize: SizeComparisonRecommendedSize?,
         bodyProfileRecommendedSize: BodyProfileRecommendedSize?,
-        i18nLocalization: I18nLocalization
+        i18nLocalization: I18nLocalization,
     ): String {
         var userBodyRecommendedSize: String? = null
 
-        if (selectedRecommendedType != SizeRecommendationType.compareProduct) {
+        if (selectedRecommendedType != SizeRecommendationType.CompareProduct) {
             userBodyRecommendedSize = bodyProfileRecommendedSize?.sizeName
         }
 
-        return storeProduct.getRecommendationText(
-            i18nLocalization,
-            userProductRecommendedSize,
-            userBodyRecommendedSize
-        ).trimI18nText(I18nLocalization.TrimType.MULTIPLELINES)
+        return storeProduct
+            .getRecommendationText(
+                i18nLocalization,
+                userProductRecommendedSize,
+                userBodyRecommendedSize,
+            ).trimI18nText(I18nLocalization.TrimType.MULTIPLELINES)
     }
 
-    fun getPrivacyPolicyLink(context: Context, language: VirtusizeLanguage?): String? {
-        val configuredContext = VirtusizeUtils.getConfiguredContext(
-            context,
-            language
-        )
+    fun getPrivacyPolicyLink(
+        context: Context,
+        language: VirtusizeLanguage?,
+    ): String? {
+        val configuredContext =
+            VirtusizeUtils.getConfiguredContext(
+                context,
+                language,
+            )
         return configuredContext?.getString(R.string.virtusize_privacy_policy_link)
     }
 }

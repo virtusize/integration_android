@@ -4,7 +4,6 @@ import com.virtusize.android.data.remote.UserAuthData
 import org.json.JSONObject
 
 internal class UserAuthDataJsonParser : VirtusizeJsonParser<UserAuthData> {
-
     override fun parse(json: JSONObject): UserAuthData? {
         val bid = json.optString(FIELD_VS_BID)
         val authHeader = json.optString(FIELD_VS_AUTH)

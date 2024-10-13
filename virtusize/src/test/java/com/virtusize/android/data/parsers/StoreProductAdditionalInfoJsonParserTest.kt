@@ -7,12 +7,12 @@ import org.json.JSONObject
 import org.junit.Test
 
 class StoreProductAdditionalInfoJsonParserTest {
-
     @Test
     fun parse_validJsonData_shouldReturnExpectedStoreProductAdditionalInfo() {
-        val actualAdditionalInfo = StoreProductAdditionalInfoJsonParser().parse(
-            ADDITIONAL_INFO_JSON_DATA
-        )
+        val actualAdditionalInfo =
+            StoreProductAdditionalInfoJsonParser().parse(
+                ADDITIONAL_INFO_JSON_DATA,
+            )
 
         assertThat(actualAdditionalInfo?.brand).isEqualTo("Virtusize")
         assertThat(actualAdditionalInfo?.sizes?.size).isEqualTo(0)
@@ -22,8 +22,8 @@ class StoreProductAdditionalInfoJsonParserTest {
         assertThat(actualAdditionalInfo?.brandSizing).isEqualTo(
             BrandSizing(
                 "true",
-                true
-            )
+                true,
+            ),
         )
     }
 
@@ -35,8 +35,9 @@ class StoreProductAdditionalInfoJsonParserTest {
     }
 
     companion object {
-        private val ADDITIONAL_INFO_JSON_DATA = JSONObject(
-            """
+        private val ADDITIONAL_INFO_JSON_DATA =
+            JSONObject(
+                """
                 {
                     "brand":"Virtusize",
                     "gender":"null",
@@ -50,7 +51,7 @@ class StoreProductAdditionalInfoJsonParserTest {
                         "itemBrand":true
                     }
                 }
-            """.trimIndent()
-        )
+                """.trimIndent(),
+            )
     }
 }

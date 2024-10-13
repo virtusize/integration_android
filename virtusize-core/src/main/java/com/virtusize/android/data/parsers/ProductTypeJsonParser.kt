@@ -13,9 +13,12 @@ class ProductTypeJsonParser : VirtusizeJsonParser<ProductType> {
         val name = json.optString(FIELD_NAME)
         var weights = setOf<Weight>()
         json.optJSONObject(FIELD_WEIGHTS)?.let { weightsJsonObject ->
-            weights = JsonUtils.jsonObjectToMap(weightsJsonObject).map {
-                Weight(it.key, it.value.toString().toFloatOrNull() ?: 0f)
-            }.toSet()
+            weights =
+                JsonUtils
+                    .jsonObjectToMap(weightsJsonObject)
+                    .map {
+                        Weight(it.key, it.value.toString().toFloatOrNull() ?: 0f)
+                    }.toSet()
         }
         val compatibleTypes =
             JsonUtils.jsonArrayToList(json.optJSONArray(FIELD_COMPATIBLE_WITH)) as? List<Int>
