@@ -25,4 +25,4 @@ jobs:
           distribution: 'adopt'
           cache: gradle
       - name: Deploy to OSSRH and publish to MavenCentral
-        run: ./gradlew publishMavenPublicationToSonatypeRepository --max-workers 1 closeAndReleaseSonatypeStagingRepository
+        run: ./gradlew publishReleasePublicationToSonatypeRepository --max-workers 1 closeAndReleaseSonatypeStagingRepository
