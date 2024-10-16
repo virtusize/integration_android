@@ -1,3 +1,6 @@
+## 2.5.7
+* Fix: Downgraded virtusize-auth to 1.0.5 to rollback to the previous compiler.
+
 ## 2.5.6
 * Refactor: Update the WebView URL to the following format: https://static.api.virtusize.jp/a/aoyama/${version}/sdk-webview.html
 * Feature: Add the client specific WebView URL. The format is as follows: https://static.api.virtusize.jp/a/aoyama/testing/privacy-policy-phase2-vue/sdk-webview.html
