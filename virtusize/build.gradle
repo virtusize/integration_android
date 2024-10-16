@@ -48,7 +48,9 @@ android {
 
 dependencies {
     api project(":virtusize-core")
-    api "com.virtusize.android:virtusize-auth:1.0.6" exclude(group: "com.virtusize.android", module: "virtusize-core")
+    api('com.virtusize.android:virtusize-auth:1.0.5') {
+        exclude group: 'com.virtusize.android', module: 'virtusize-core'
+    }
 
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation 'androidx.browser:browser:1.6.0'
