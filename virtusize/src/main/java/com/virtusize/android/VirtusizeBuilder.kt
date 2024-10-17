@@ -32,8 +32,7 @@ class VirtusizeBuilder {
     private var allowedLanguages: MutableList<VirtusizeLanguage> =
         VirtusizeLanguage.entries.toMutableList()
     private var showSGI: Boolean = false
-    private var detailsPanelCards: MutableList<VirtusizeInfoCategory> =
-        VirtusizeInfoCategory.entries.toMutableList()
+    private var detailsPanelCards: Set<VirtusizeInfoCategory> = VirtusizeInfoCategory.entries.toMutableSet()
 
     /**
      * This method is used to add the application context to the Virtusize builder
@@ -118,7 +117,7 @@ class VirtusizeBuilder {
      * @param detailsPanelCards the list of [VirtusizeInfoCategory]
      * @return VirtusizeBuilder
      */
-    fun setDetailsPanelCards(detailsPanelCards: MutableList<VirtusizeInfoCategory>): VirtusizeBuilder {
+    fun setDetailsPanelCards(detailsPanelCards: MutableSet<VirtusizeInfoCategory>): VirtusizeBuilder {
         this.detailsPanelCards = detailsPanelCards
         return this
     }
