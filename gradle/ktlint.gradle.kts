@@ -1,6 +1,6 @@
 private val ktlint: Configuration by configurations.creating
 
-private fun Project.dependencyFromLibs(name: String) = the<VersionCatalogsExtension>().named("libs").findLibrary(name).get()
+internal fun Project.dependencyFromLibs(name: String) = the<VersionCatalogsExtension>().named("libs").findLibrary(name).get()
 
 dependencies {
     ktlint(dependencyFromLibs("ktlint")) {
