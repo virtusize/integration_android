@@ -160,7 +160,7 @@ class VirtusizeBuilder {
                 externalUserId = userId,
                 showSGI = showSGI,
                 detailsPanelCards = detailsPanelCards,
-                showSNSButtons = showSNSButtons
+                showSNSButtons = showSNSButtons,
             )
         return Virtusize(context = context!!, params = params)
     }
