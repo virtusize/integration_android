@@ -30,10 +30,10 @@ class VirtusizeBuilder {
     private var region: VirtusizeRegion = VirtusizeRegion.JP
     private var language: VirtusizeLanguage? = null
     private var allowedLanguages: MutableList<VirtusizeLanguage> =
-        VirtusizeLanguage.entries.toMutableList()
+        VirtusizeLanguage.values().toMutableList()
     private var showSGI: Boolean = false
     private var detailsPanelCards: MutableList<VirtusizeInfoCategory> =
-        VirtusizeInfoCategory.entries.toMutableList()
+        VirtusizeInfoCategory.values().toMutableList()
     private var showSNSButtons: Boolean = false
 
     /**
