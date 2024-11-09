@@ -97,8 +97,8 @@ class VirtusizeBuilder {
      * @param allowedLanguages the list of [VirtusizeLanguage]
      * @return VirtusizeBuilder
      */
-    fun setAllowedLanguages(allowedLanguages: MutableList<VirtusizeLanguage>): VirtusizeBuilder {
-        this.allowedLanguages = allowedLanguages
+    fun setAllowedLanguages(allowedLanguages: List<VirtusizeLanguage>): VirtusizeBuilder {
+        this.allowedLanguages = allowedLanguages.toMutableList()
         return this
     }
 
