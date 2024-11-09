@@ -119,7 +119,7 @@ class VirtusizeBuilder {
      * @param detailsPanelCards the list of [VirtusizeInfoCategory]
      * @return [VirtusizeBuilder]
      */
-    fun setDetailsPanelCards(detailsPanelCards: MutableSet<VirtusizeInfoCategory>): VirtusizeBuilder {
+    fun setDetailsPanelCards(detailsPanelCards: Set<VirtusizeInfoCategory>): VirtusizeBuilder {
         this.detailsPanelCards = detailsPanelCards
         return this
     }

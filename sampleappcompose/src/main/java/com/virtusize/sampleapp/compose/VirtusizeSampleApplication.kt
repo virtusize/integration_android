@@ -24,7 +24,7 @@ internal class VirtusizeSampleApplication : Application() {
             // By default, Virtusize allows all the possible languages
             .setAllowedLanguages(listOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
             // By default, Virtusize displays all the possible info categories in the Product Details tab
-            .setDetailsPanelCards(mutableSetOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
+            .setDetailsPanelCards(setOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
             .build()
     }
 }
