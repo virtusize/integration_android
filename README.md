@@ -119,6 +119,7 @@ following table:
 | setShowSGI           | Boolean                           | setShowSGI(true)                                                                                                                                                                                                                               | Determines whether the integration will fetch SGI and use SGI flow for users to add user generated items to their wardrobe.                                                                                                                       | No. By default, ShowSGI is set to false                                                                                |
 | setAllowedLanguages  | A list of `VirtusizeLanguage`     | In Kotlin, setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))<br />In Java, setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP))                                                         | The languages which the user can switch to using the Language Selector                                                                                                                                                                            | No. By default, the integration allows all possible languages to be displayed, including English, Japanese and Korean. |
 | setDetailsPanelCards | A list of `VirtusizeInfoCategory` | In Kotlin, setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))<br />In Java, setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT)) | The info categories which will be display in the Product Details tab. Possible categories are: `VirtusizeInfoCategory.MODEL_INFO`, `VirtusizeInfoCategory.GENERAL_FIT`, `VirtusizeInfoCategory.BRAND_SIZING` and `VirtusizeInfoCategory.MATERIAL` | No. By default, the integration displays all the possible info categories in the Product Details tab.                  |
+| setShowSNSButtons    | Boolean                           | setShowSNSButtons(true)                                                                                                                                                                                                                        | Determines whether the integration will show the SNS buttons to the users                                                                                                                                                                         | No. By default, the integration disables the SNS buttons                                                               |
 
 - Kotlin
 
@@ -142,6 +143,8 @@ following table:
       .setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
       // By default, Virtusize displays all the possible info categories in the Product Details tab
       .setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
+      // By default, Virtusize disables the SNS buttons
+      .setShowSNSButtons(false)
       .build()
   }
   ```
@@ -171,6 +174,8 @@ following table:
         .setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
         // By default, Virtusize displays all the possible info categories in the Product Details tab
         .setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
+        // By default, Virtusize disables the SNS buttons
+        .setShowSNSButtons(false)
         .build();
   }
   ```
