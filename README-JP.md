@@ -96,8 +96,8 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
 
 **VirtusizeBuilder**
 
-| 項目 | データ形式 | 例 | 説明 | 要件 |
-|——--|————-—|——|——|———|
+| 項目                 | データ形式                          | 例                                                           | 説明                                                         | 要件                                                         |
+| -------------------- | ----------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | setApiKey | String | setApiKey("api_key") | 固有のAPIキーは各Virtusizeクライアントに提供されます。 | あり。 |
 | setUserId | String | setUserId("123") | ユーザーがクライアントのアプリにログインしている場合に、クライアントから渡されます。| あり。Order APIを使用する場合。 |
 | setEnv | VirtusizeEnvironment | setEnv(VirtusizeEnvironment.STAGING) | 環境は実装をしている環境を選択してください、`VirtusizeEnvironment.STAGING`,  `VirtusizeEnvironment.GLOBAL`, `VirtusizeEnvironment.JAPAN` or `VirtusizeEnvironment.KOREA`のいずれかです。 | 特になし。デフォルトでは、`VirtusizeEnvironment.GLOBAL`に設定されます。 |
