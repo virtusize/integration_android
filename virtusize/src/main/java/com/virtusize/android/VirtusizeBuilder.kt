@@ -21,6 +21,7 @@ import com.virtusize.android.data.local.virtusizeRegion
  * @param allowedLanguages the languages that the user can switch to using the Language Selector
  * @param showSGI the Boolean value to determine whether the Virtusize web app will fetch SGI and use SGI flow for users to add user generated items to their wardrobe
  * @param detailsPanelCards the info categories that will display in the Product Details tab
+ * @param showSNSButtons the Boolean value to determine whether the Virtusize web app will display the SNS buttons
  */
 class VirtusizeBuilder {
     private var userId: String? = null

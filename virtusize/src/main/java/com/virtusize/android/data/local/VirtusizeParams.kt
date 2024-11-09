@@ -14,6 +14,7 @@ import com.virtusize.android.SharedPreferencesHelper
  * @param externalUserId the unique user ID from the client system. It should be set during the initialization of the [Virtusize] class
  * @param showSGI the Boolean value to determine whether the Virtusize web app will fetch SGI and use SGI flow for users to add user generated items to their wardrobe
  * @param detailsPanelCards the info categories that will be displayed in the Product Details tab
+ * @param showSNSButtons the Boolean value to determine whether the Virtusize web app will display the SNS buttons
  */
 data class VirtusizeParams(
     internal val context: Context,
