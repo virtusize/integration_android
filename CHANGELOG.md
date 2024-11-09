@@ -1,3 +1,6 @@
+## 2.5.8
+* Feature: Allow the client to set the visibility of the SNS buttons.
+
 ## 2.5.7
 * Fix: Downgraded virtusize-auth to 1.0.5 to rollback to the previous compiler.
 

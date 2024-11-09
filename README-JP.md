@@ -74,7 +74,7 @@ In your appの`build.gradle`ファイルに下記のdependencyを追加
 
 ```groovy
 dependencies {
-  implementation 'com.virtusize.android:virtusize:2.5.7'
+  implementation 'com.virtusize.android:virtusize:2.5.8'
 }
 ```
 
@@ -98,13 +98,14 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
 
 | 項目                 | データ形式                          | 例                                                           | 説明                                                         | 要件                                                         |
 | -------------------- | ----------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| setApiKey            | String                              | setApiKey("api_key")                                         | 固有のAPIキーは各Virtusizeクライアントに提供されます。       | あり。                                                       |
-| setUserId            | String                              | setUserId("123")                                             | ユーザーがクライアントのアプリにログインしている場合に、クライアントから渡されます。 | あり。Order APIを使用する場合。                              |
-| setEnv               | VirtusizeEnvironment                | setEnv(VirtusizeEnvironment.STAGING)                         | 環境は実装をしている環境を選択してください、`VirtusizeEnvironment.STAGING`,  `VirtusizeEnvironment.GLOBAL`, `VirtusizeEnvironment.JAPAN` or `VirtusizeEnvironment.KOREA`のいずれかです。 | 特になし。デフォルトでは、`VirtusizeEnvironment.GLOBAL`に設定されます。 |
-| setLanguage          | VirtusizeLanguage                   | setLanguage(VirtusizeLanguage.EN)                            | インテグレーションをロードする際の初期言語を設定します。設定可能な値は以下：`VirtusizeLanguage.EN`, `VirtusizeLanguage.JP` および`VirtusizeLanguage.KR` | 特になし。デフォルトでは、初期言語はVirtusizeの環境に基づいて設定されます。 |
-| setShowSGI           | Boolean                             | setShowSGI(true)                                             | ユーザーが生成したアイテムをワードローブに追加するために、SGIを取得してSGIフローを使用するかどうかを決定します。 | 特になし。デフォルトではShowSGIはfalseに設定されています。   |
-| setAllowedLanguages  | `VirtusizeLanguage`列挙のリスト     | In Kotlin, setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))<br />In Java, setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP)) | ユーザーが言語選択ボタンより選択できる言語                   | 特になし。デフォルトでは、英語、日本語、韓国語など、表示可能なすべての言語が表示されるようになっています。 |
+| setApiKey | String | setApiKey("api_key") | 固有のAPIキーは各Virtusizeクライアントに提供されます。 | あり。 |
+| setUserId | String | setUserId("123") | ユーザーがクライアントのアプリにログインしている場合に、クライアントから渡されます。| あり。Order APIを使用する場合。 |
+| setEnv | VirtusizeEnvironment | setEnv(VirtusizeEnvironment.STAGING) | 環境は実装をしている環境を選択してください、`VirtusizeEnvironment.STAGING`,  `VirtusizeEnvironment.GLOBAL`, `VirtusizeEnvironment.JAPAN` or `VirtusizeEnvironment.KOREA`のいずれかです。 | 特になし。デフォルトでは、`VirtusizeEnvironment.GLOBAL`に設定されます。 |
+| setLanguage | VirtusizeLanguage | setLanguage(VirtusizeLanguage.EN) | インテグレーションをロードする際の初期言語を設定します。設定可能な値は以下：`VirtusizeLanguage.EN`, `VirtusizeLanguage.JP` および`VirtusizeLanguage.KR` | 特になし。デフォルトでは、初期言語はVirtusizeの環境に基づいて設定されます。  |
+| setShowSGI | Boolean | setShowSGI(true) | ユーザーが生成したアイテムをワードローブに追加するために、SGIを取得してSGIフローを使用するかどうかを決定します。 | 特になし。デフォルトではShowSGIはfalseに設定されています。 |
+| setAllowedLanguages  | `VirtusizeLanguage`列挙のリスト | In Kotlin, setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))<br />In Java, setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP)) | ユーザーが言語選択ボタンより選択できる言語 | 特になし。デフォルトでは、英語、日本語、韓国語など、表示可能なすべての言語が表示されるようになっています。|
 | setDetailsPanelCards | `VirtusizeInfoCategory`列挙のリスト | In Kotlin, setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))<br />In Java, setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT)) | 商品詳細タブに表示する情報のカテゴリ。表示可能カテゴリは以下：`VirtusizeInfoCategory.MODELINFO`, `VirtusizeInfoCategory.GENERALFIT`, `VirtusizeInfoCategory.BRANDSIZING` および `VirtusizeInfoCategory.MATERIAL` | 特になし。デフォルトでは、商品詳細タブに表示可能なすべての情報カテゴリが表示されます。 |
+| setShowSNSButtons | Boolean | setShowSNSButtons(true) | Determines whether the integration will show the SNS buttons to the users | No. By default, the integration disables the SNS buttons |
 
 - Kotlin
 
@@ -129,6 +130,8 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
       .setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
       // By default, Virtusize displays all the possible info categories in the Product Details tab
       .setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
+      // By default, Virtusize disables the SNS buttons
+      .setShowSNSButtons(false)
       .build()
   }
   ```
@@ -158,6 +161,8 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
         .setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
         // By default, Virtusize displays all the possible info categories in the Product Details tab
         .setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
+        // By default, Virtusize disables the SNS buttons
+        .setShowSNSButtons(false)
         .build();
   }
   ```

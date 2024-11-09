@@ -11,10 +11,10 @@ import com.virtusize.android.SharedPreferencesHelper
  * @param region the [VirtusizeRegion] that is used to set the region of the config url domains within the Virtusize web app
  * @param language the [VirtusizeLanguage] that sets the initial language the Virtusize web app will load in
  * @param allowedLanguages the languages that the user can switch to using the Language Selector
- * @param virtusizeProduct [VirtusizeProduct] that is used for the API endpoint Product Data Check
  * @param externalUserId the unique user ID from the client system. It should be set during the initialization of the [Virtusize] class
  * @param showSGI the Boolean value to determine whether the Virtusize web app will fetch SGI and use SGI flow for users to add user generated items to their wardrobe
  * @param detailsPanelCards the info categories that will be displayed in the Product Details tab
+ * @param showSNSButtons the Boolean value to determine whether the Virtusize web app will display the SNS buttons
  */
 data class VirtusizeParams(
     internal val context: Context,
@@ -26,6 +26,7 @@ data class VirtusizeParams(
     internal var externalUserId: String?,
     private val showSGI: Boolean,
     private val detailsPanelCards: MutableList<VirtusizeInfoCategory>,
+    private val showSNSButtons: Boolean,
 ) {
     /**
      * Returns the virtusize parameter string to be passed to the JavaScript function vsParamsFromSDK
