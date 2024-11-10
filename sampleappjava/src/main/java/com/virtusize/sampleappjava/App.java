@@ -9,6 +9,7 @@ import com.virtusize.android.data.local.VirtusizeInfoCategory;
 import com.virtusize.android.data.local.VirtusizeLanguage;
 
 import java.util.Arrays;
+import java.util.Set;
 
 public class App extends Application {
 
@@ -33,7 +34,9 @@ public class App extends Application {
                 // By default, Virtusize allows all the possible languages
                 .setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
                 // By default, Virtusize displays all the possible info categories in the Product Details tab
-                .setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
+                .setDetailsPanelCards(Set.of(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
+                // By default, Virtusize disables the SNS buttons
+                .setShowSNSButtons(false)
                 .build();
     }
 }

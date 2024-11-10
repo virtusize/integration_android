@@ -41,6 +41,7 @@ import org.json.JSONObject
 class VirtusizeWebViewFragment : DialogFragment() {
     private var virtusizeWebAppUrl: String = VirtusizeApi.getVirtusizeWebViewURL()
 
+    private var showSNSButtons: Boolean = false
     private var vsParamsFromSDKScript = ""
     private var backButtonClickEventFromSDKScript =
         "javascript:vsEventFromSDK({ name: 'sdk-back-button-tapped'})"
@@ -113,10 +114,12 @@ class VirtusizeWebViewFragment : DialogFragment() {
                 ) {
                     if (url != null && url.contains(virtusizeWebAppUrl)) {
                         binding.webView.evaluateJavascript(vsParamsFromSDKScript, null)
-                        binding.webView.evaluateJavascript(
-                            "javascript:window.virtusizeSNSEnabled = true;",
-                            null,
-                        )
+                        if (showSNSButtons) {
+                            binding.webView.evaluateJavascript(
+                                "javascript:window.virtusizeSNSEnabled = true;",
+                                null,
+                            )
+                        }
                         getBrowserIDFromCookies()?.let { bid ->
                             if (bid != sharedPreferencesHelper.getBrowserId()) {
                                 sharedPreferencesHelper.storeBrowserId(bid)
@@ -211,6 +214,8 @@ class VirtusizeWebViewFragment : DialogFragment() {
             dismiss()
             return
         }
+
+        showSNSButtons = arguments?.getBoolean(Constants.VIRTUSIZE_SHOW_SNS_BUTTONS) ?: false
 
         clientProduct = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             arguments?.getParcelable(Constants.VIRTUSIZE_PRODUCT_KEY, VirtusizeProduct::class.java)

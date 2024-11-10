@@ -21,6 +21,7 @@ import com.virtusize.android.data.local.virtusizeRegion
  * @param allowedLanguages the languages that the user can switch to using the Language Selector
  * @param showSGI the Boolean value to determine whether the Virtusize web app will fetch SGI and use SGI flow for users to add user generated items to their wardrobe
  * @param detailsPanelCards the info categories that will display in the Product Details tab
+ * @param showSNSButtons the Boolean value to determine whether the Virtusize web app will display the SNS buttons
  */
 class VirtusizeBuilder {
     private var userId: String? = null
@@ -32,8 +33,8 @@ class VirtusizeBuilder {
     private var allowedLanguages: MutableList<VirtusizeLanguage> =
         VirtusizeLanguage.entries.toMutableList()
     private var showSGI: Boolean = false
-    private var detailsPanelCards: MutableList<VirtusizeInfoCategory> =
-        VirtusizeInfoCategory.entries.toMutableList()
+    private var detailsPanelCards: Set<VirtusizeInfoCategory> = VirtusizeInfoCategory.entries.toMutableSet()
+    private var showSNSButtons: Boolean = false
 
     /**
      * This method is used to add the application context to the Virtusize builder
@@ -96,8 +97,8 @@ class VirtusizeBuilder {
      * @param allowedLanguages the list of [VirtusizeLanguage]
      * @return VirtusizeBuilder
      */
-    fun setAllowedLanguages(allowedLanguages: MutableList<VirtusizeLanguage>): VirtusizeBuilder {
-        this.allowedLanguages = allowedLanguages
+    fun setAllowedLanguages(allowedLanguages: List<VirtusizeLanguage>): VirtusizeBuilder {
+        this.allowedLanguages = allowedLanguages.toMutableList()
         return this
     }
 
@@ -116,10 +117,21 @@ class VirtusizeBuilder {
      * Sets up the info categories that will be displayed in the Product Details tab of the Virtusize web app
      * By default, the Virtusize web app display all the possible info categories
      * @param detailsPanelCards the list of [VirtusizeInfoCategory]
-     * @return VirtusizeBuilder
+     * @return [VirtusizeBuilder]
      */
-    fun setDetailsPanelCards(detailsPanelCards: MutableList<VirtusizeInfoCategory>): VirtusizeBuilder {
+    fun setDetailsPanelCards(detailsPanelCards: Set<VirtusizeInfoCategory>): VirtusizeBuilder {
         this.detailsPanelCards = detailsPanelCards
+        return this
+    }
+
+    /**
+     * Sets up whether the Virtusize web app will show the SNS buttons
+     * By default, showSNSButtons is false
+     * @param showSNSButtons the Boolean value
+     * @return [VirtusizeBuilder]
+     */
+    fun setShowSNSButtons(showSNSButtons: Boolean): VirtusizeBuilder {
+        this.showSNSButtons = showSNSButtons
         return this
     }
 
@@ -146,6 +158,7 @@ class VirtusizeBuilder {
                 externalUserId = userId,
                 showSGI = showSGI,
                 detailsPanelCards = detailsPanelCards,
+                showSNSButtons = showSNSButtons,
             )
         return Virtusize.init(context = context!!, params = params)
     }

@@ -78,7 +78,7 @@ In your appの`build.gradle`ファイルに下記のdependencyを追加
 
   ```groovy
   dependencies {
-    implementation 'com.virtusize.android:virtusize:2.7.0'
+    implementation 'com.virtusize.android:virtusize:2.7.1'
   }
   ```
 
@@ -86,7 +86,7 @@ In your appの`build.gradle`ファイルに下記のdependencyを追加
 
   ```kotlin
   dependencies {
-    implementation("com.virtusize.android:virtusize:2.7.0")
+    implementation("com.virtusize.android:virtusize:2.7.1")
   }
   ```
 
@@ -116,6 +116,7 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
 | setShowSGI           | Boolean                       | setShowSGI(true)                                                                                                                                                                                                                               | ユーザーが生成したアイテムをワードローブに追加するために、SGIを取得してSGIフローを使用するかどうかを決定します。                                                                                                                    | 特になし。デフォルトではShowSGIはfalseに設定されています。                   |
 | setAllowedLanguages  | `VirtusizeLanguage`列挙のリスト     | In Kotlin, setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))<br />In Java, setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP))                                                         | ユーザーが言語選択ボタンより選択できる言語                                                                                                                                                          | 特になし。デフォルトでは、英語、日本語、韓国語など、表示可能なすべての言語が表示されるようになっています。 |
 | setDetailsPanelCards | `VirtusizeInfoCategory`列挙のリスト | In Kotlin, setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))<br />In Java, setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT)) | 商品詳細タブに表示する情報のカテゴリ。表示可能カテゴリは以下：`VirtusizeInfoCategory.MODELINFO`, `VirtusizeInfoCategory.GENERALFIT`, `VirtusizeInfoCategory.BRANDSIZING` および `VirtusizeInfoCategory.MATERIAL` | 特になし。デフォルトでは、商品詳細タブに表示可能なすべての情報カテゴリが表示されます。           |
+| setShowSNSButtons | Boolean | setShowSNSButtons(true) | Determines whether the integration will show the SNS buttons to the users | No. By default, the integration disables the SNS buttons |
 
 - Kotlin
 
@@ -140,6 +141,8 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
       .setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
       // By default, Virtusize displays all the possible info categories in the Product Details tab
       .setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
+      // By default, Virtusize disables the SNS buttons
+      .setShowSNSButtons(false)
       .build()
   }
   ```
@@ -169,6 +172,8 @@ Proguardをお使いの場合、Proguardのルールファイルに下記のル�
         .setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
         // By default, Virtusize displays all the possible info categories in the Product Details tab
         .setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
+        // By default, Virtusize disables the SNS buttons
+        .setShowSNSButtons(false)
         .build();
   }
   ```
