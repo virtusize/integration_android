@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Message
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -308,6 +309,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
         fun eventHandler(eventInfo: String) {
             val event = VirtusizeEventJsonParser().parse(JSONObject(eventInfo))
             event?.let { virtusizeMessageHandler?.onEvent(clientProduct, it) }
+            Log.d("VirtusizeEvent", "event: $event")
             if (event?.name == "user-closed-widget") {
                 dismiss()
             }
