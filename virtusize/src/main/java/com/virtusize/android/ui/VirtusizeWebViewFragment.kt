@@ -309,7 +309,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
         fun eventHandler(eventInfo: String) {
             val event = VirtusizeEventJsonParser().parse(JSONObject(eventInfo))
             event?.let { virtusizeMessageHandler?.onEvent(clientProduct, it) }
-            Log.d("VirtusizeEvent", "event: $event")
+            Log.d("VirtusizeEvent", "$event")
             if (event?.name == "user-closed-widget") {
                 dismiss()
             }
