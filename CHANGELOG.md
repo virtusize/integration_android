@@ -1,3 +1,6 @@
+### 2.7.2
+* Fix: Fix the close button not working on the Virtusize login page.
+
 ### 2.7.1
 * Feature: Enable the configuration of the visibility of the SNS buttons on the Virtusize web app.
 
