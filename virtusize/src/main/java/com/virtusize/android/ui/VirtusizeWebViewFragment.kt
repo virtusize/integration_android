@@ -168,11 +168,14 @@ class VirtusizeWebViewFragment : DialogFragment() {
                                             return true
                                         }
                                     }
-                                    return VirtusizeAuth.isSNSAuthUrl(
-                                        requireContext(),
-                                        virtusizeSNSAuthLauncher,
-                                        url,
-                                    )
+                                    if (showSNSButtons) {
+                                        return VirtusizeAuth.isSNSAuthUrl(
+                                            requireContext(),
+                                            virtusizeSNSAuthLauncher,
+                                            url,
+                                        )
+                                    }
+                                    return false
                                 }
                             }
                         popupWebView.webChromeClient =
