@@ -160,7 +160,8 @@ internal class VirtusizeImpl(
                     is VirtusizeEvent.UserCreatedSilhouette,
                     is VirtusizeEvent.UserSawProduct,
                     is VirtusizeEvent.UserSawWidgetButton,
-                    is VirtusizeEvent.Undefined -> Unit
+                    is VirtusizeEvent.Undefined,
+                    -> Unit
                 }
             }
 

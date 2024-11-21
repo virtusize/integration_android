@@ -33,7 +33,8 @@ enum class EventName(val value: String) {
     UserAuthData("user-auth-data"),
     UserLoggedIn("user-logged-in"),
     UserLoggedOut("user-logged-out"),
-    UserDeletedData("user-deleted-data");
+    UserDeletedData("user-deleted-data"),
+    ;
 
     companion object {
         fun valueOf(value: String): EventName? = entries.find { it.value == value }
@@ -132,4 +133,3 @@ enum class SizeRecommendationType {
     Body,
     CompareProduct,
 }
-
