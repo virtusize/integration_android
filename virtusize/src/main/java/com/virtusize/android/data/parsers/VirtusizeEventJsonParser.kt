@@ -19,7 +19,7 @@ import com.virtusize.android.data.local.VirtusizeEvent.UserUpdatedBodyMeasuremen
 import org.json.JSONObject
 
 /**
- * This class parses a JSONObject to the [VirtusizeEvent] object
+ * This class parses a JSONObject to the [VirtusizeEvent]
  */
 internal class VirtusizeEventJsonParser : VirtusizeJsonParser<VirtusizeEvent> {
     override fun parse(json: JSONObject): VirtusizeEvent? {
