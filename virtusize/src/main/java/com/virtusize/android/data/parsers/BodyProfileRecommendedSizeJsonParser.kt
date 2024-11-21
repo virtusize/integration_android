@@ -1,6 +1,5 @@
 package com.virtusize.android.data.parsers
 
-import android.util.Log
 import com.virtusize.android.data.remote.BodyProfileRecommendedSize
 import com.virtusize.android.data.remote.Product
 import com.virtusize.android.data.remote.VirtualItem
