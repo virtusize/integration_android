@@ -32,19 +32,23 @@ internal class VirtusizeEventJsonParser : VirtusizeJsonParser<VirtusizeEvent> {
     }
 }
 
-private fun getVirtusizeEvent(name: String, json: JSONObject): VirtusizeEvent = when (EventName.get(name)) {
-    EventName.UserSawProduct -> UserSawProduct(data = json)
-    EventName.UserSawWidgetButton -> UserSawWidgetButton(data = json)
-    EventName.UserOpenedWidget -> UserOpenedWidget(data = json)
-    EventName.UserSelectedProduct -> UserSelectedProduct(data = json)
-    EventName.UserAddedProduct -> UserAddedProduct(data = json)
-    EventName.UserDeletedProduct -> UserDeletedProduct(data = json)
-    EventName.UserChangedRecommendationType -> UserChangedRecommendationType(data = json)
-    EventName.UserCreatedSilhouette -> UserCreatedSilhouette(data = json)
-    EventName.UserUpdatedBodyMeasurements -> UserUpdatedBodyMeasurements(data = json)
-    EventName.UserAuthData -> UserAuthData(data = json)
-    EventName.UserLoggedIn -> UserLoggedIn(data = json)
-    EventName.UserLoggedOut -> UserLoggedOut(data = json)
-    EventName.UserDeletedData -> UserDeletedData(data = json)
-    null -> Undefined(name = name, data = json)
-}
+private fun getVirtusizeEvent(
+    name: String,
+    json: JSONObject,
+): VirtusizeEvent =
+    when (EventName.get(name)) {
+        EventName.UserSawProduct -> UserSawProduct(data = json)
+        EventName.UserSawWidgetButton -> UserSawWidgetButton(data = json)
+        EventName.UserOpenedWidget -> UserOpenedWidget(data = json)
+        EventName.UserSelectedProduct -> UserSelectedProduct(data = json)
+        EventName.UserAddedProduct -> UserAddedProduct(data = json)
+        EventName.UserDeletedProduct -> UserDeletedProduct(data = json)
+        EventName.UserChangedRecommendationType -> UserChangedRecommendationType(data = json)
+        EventName.UserCreatedSilhouette -> UserCreatedSilhouette(data = json)
+        EventName.UserUpdatedBodyMeasurements -> UserUpdatedBodyMeasurements(data = json)
+        EventName.UserAuthData -> UserAuthData(data = json)
+        EventName.UserLoggedIn -> UserLoggedIn(data = json)
+        EventName.UserLoggedOut -> UserLoggedOut(data = json)
+        EventName.UserDeletedData -> UserDeletedData(data = json)
+        null -> Undefined(name = name, data = json)
+    }
