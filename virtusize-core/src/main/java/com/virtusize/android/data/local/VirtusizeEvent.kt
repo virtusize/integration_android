@@ -19,6 +19,7 @@ enum class VirtusizeEvents {
     UserLoggedIn,
     UserLoggedOut,
     UserDeletedData,
+    UserClosedWidget,
 }
 
 /**
@@ -40,6 +41,7 @@ fun VirtusizeEvents.getEventName(): String {
         VirtusizeEvents.UserLoggedIn -> "user-logged-in"
         VirtusizeEvents.UserLoggedOut -> "user-logged-out"
         VirtusizeEvents.UserDeletedData -> "user-deleted-data"
+        VirtusizeEvents.UserClosedWidget -> "user-closed-widget"
     }
 }
 

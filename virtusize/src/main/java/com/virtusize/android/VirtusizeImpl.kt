@@ -160,6 +160,12 @@ internal class VirtusizeImpl(
                             virtusizeRepository.updateInPageRecommendation()
                         }
                     }
+
+                    VirtusizeEvents.UserClosedWidget.getEventName() -> {
+                        scope.launch {
+                            virtusizeRepository.updateUserSession()
+                        }
+                    }
                 }
             }
 
