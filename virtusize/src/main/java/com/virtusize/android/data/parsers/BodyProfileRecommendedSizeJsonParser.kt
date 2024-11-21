@@ -13,39 +13,35 @@ import org.json.JSONObject
 internal class BodyProfileRecommendedSizeJsonParser(private val product: Product) :
     VirtusizeJsonParser<BodyProfileRecommendedSize> {
     override fun parse(json: JSONObject): BodyProfileRecommendedSize {
-        val sizeName = json.optString(FIELD_NAME)
         val extProductId = json.optString(EXT_PRODUCT_ID)
         val fitScore = json.optDouble(FIT_SCORE, 0.0)
         val fitScoreDifference = json.optDouble(FIT_SCORE_DIFFERENCE, 0.0)
         val scenario = json.optString(SCENARIO)
         val secondFitScore = json.optDouble(SECOND_FIT_SCORE, 0.0)
         val secondSize = json.optString(SECOND_SIZE)
+        val sizeName = json.optString(SIZE_NAME)
         val thresholdFitScore = json.optDouble(THRESHOLD_FIT_SCORE, 0.0)
-        val virtualItemJsonObj = json.optJSONObject(VIRTUAL_ITEM_JSON_OBJ)
-        val willFitForSizesJsonObj = json.optJSONObject(WILL_FIT_FOR_SIZES_JSON_OBJ)
         val willFit = json.optBoolean(WILL_FIT)
-        var virtualItem: VirtualItem? = null
-        virtualItemJsonObj?.let {
-            virtualItem =
+        val virtualItem =
+            json.optJSONObject(VIRTUAL_ITEM_JSON_OBJ)?.let { vitrutalItem ->
                 VirtualItem(
-                    bust = it.optDouble(BUST, 0.0),
-                    hip = it.optDouble(HIP, 0.0),
-                    inseam = it.optDouble(INSEAM, 0.0),
-                    sleeve = it.optDouble(SLEEVE, 0.0),
-                    waist = it.optDouble(WAIST, 0.0),
+                    bust = vitrutalItem.optDouble(BUST, 0.0),
+                    hip = vitrutalItem.optDouble(HIP, 0.0),
+                    inseam = vitrutalItem.optDouble(INSEAM, 0.0),
+                    sleeve = vitrutalItem.optDouble(SLEEVE, 0.0),
+                    waist = vitrutalItem.optDouble(WAIST, 0.0),
                 )
-        }
-        var willFitForSizes: WillFitForSizes? = null
-        willFitForSizesJsonObj?.let {
-            willFitForSizes =
+            }
+        val willFitForSizes =
+            json.optJSONObject(WILL_FIT_FOR_SIZES_JSON_OBJ)?.let { willFitForSize ->
                 WillFitForSizes(
-                    extraLarge = it.optBoolean(EXTRA_LARGE, false),
-                    extraSmall = it.optBoolean(EXTRA_SMALL, false),
-                    large = it.optBoolean(LARGE, false),
-                    medium = it.optBoolean(MEDIUM, false),
-                    small = it.optBoolean(SMALL, false),
+                    extraLarge = willFitForSize.optBoolean(EXTRA_LARGE),
+                    extraSmall = willFitForSize.optBoolean(EXTRA_SMALL),
+                    large = willFitForSize.optBoolean(LARGE),
+                    medium = willFitForSize.optBoolean(MEDIUM),
+                    small = willFitForSize.optBoolean(SMALL),
                 )
-        }
+            }
 
         return BodyProfileRecommendedSize(
             extProductId = extProductId,
@@ -56,14 +52,14 @@ internal class BodyProfileRecommendedSizeJsonParser(private val product: Product
             secondSize = secondSize,
             sizeName = sizeName,
             thresholdFitScore = thresholdFitScore,
-            willFit = willFit,
             virtualItem = virtualItem,
+            willFit = willFit,
             willFitForSizes = willFitForSizes,
         )
     }
 
     private companion object {
-        const val FIELD_NAME = "sizeName"
+        const val SIZE_NAME = "sizeName"
         const val EXT_PRODUCT_ID = "extProductId"
         const val FIT_SCORE = "fitScore"
         const val FIT_SCORE_DIFFERENCE = "fitScoreDifference"
