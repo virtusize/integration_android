@@ -2,6 +2,7 @@ package com.virtusize.android
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.util.Log
 import com.virtusize.android.data.local.SizeComparisonRecommendedSize
 import com.virtusize.android.data.local.SizeRecommendationType
 import com.virtusize.android.data.local.VirtusizeError
@@ -219,6 +220,7 @@ internal class VirtusizeRepository(
      */
     internal suspend fun updateUserSession(externalProductId: String? = lastProductOnVirtusizeWebView?.externalId) {
         val userSessionInfoResponse = virtusizeAPIService.getUserSessionInfo()
+        Log.d("VirtusizeRepository", "userSessionInfoResponse: $userSessionInfoResponse")
         if (userSessionInfoResponse.isSuccessful) {
             sharedPreferencesHelper.storeSessionData(
                 userSessionInfoResponse.successData!!.userSessionResponse,
@@ -432,6 +434,7 @@ internal class VirtusizeRepository(
     internal fun updateUserAuthData(eventJsonObject: JSONObject) {
         try {
             val userAutoData = UserAuthDataJsonParser().parse(eventJsonObject)
+            Log.d("VirtusizeRepository", "userAutoData: $userAutoData")
             sharedPreferencesHelper.storeBrowserId(userAutoData?.bid)
             sharedPreferencesHelper.storeAuthToken(userAutoData?.auth)
         } catch (e: JSONException) {
