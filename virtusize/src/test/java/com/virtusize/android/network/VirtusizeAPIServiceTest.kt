@@ -200,7 +200,7 @@ class VirtusizeAPIServiceTest {
             )
 
             val sendEventResponse =
-                virtusizeAPIService.sendEvent(VirtusizeEvent("user-saw-product", null))
+                virtusizeAPIService.sendEvent(VirtusizeEvent.UserSawProduct(data = null))
 
             assertThat(sendEventResponse.isSuccessful).isTrue()
         }
