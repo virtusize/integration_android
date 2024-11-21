@@ -332,7 +332,7 @@ internal class VirtusizeAPIService(
      * @param productTypes a list of product types
      * @param storeProduct the store product
      * @param userBodyProfile the user body profile
-     * @return the [VirtusizeApiResponse] with the data class [UserBodyProfile]
+     * @return the [VirtusizeApiResponse] with the a list of [BodyProfileRecommendedSize]
      */
     internal suspend fun getBodyProfileRecommendedSize(
         productTypes: List<ProductType>,
