@@ -8,11 +8,9 @@ import com.google.common.truth.Truth.assertThat
 import com.virtusize.android.core.BuildConfig
 import com.virtusize.android.data.local.VirtusizeEnvironment
 import com.virtusize.android.data.local.VirtusizeEvent
-import com.virtusize.android.data.local.VirtusizeEvents
 import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.VirtusizeOrder
 import com.virtusize.android.data.local.VirtusizeOrderItem
-import com.virtusize.android.data.local.getEventName
 import com.virtusize.android.data.parsers.JsonUtils
 import com.virtusize.android.fixtures.ProductFixtures
 import com.virtusize.android.fixtures.TestFixtures
@@ -115,8 +113,7 @@ internal class VirtusizeApiTest {
 
     @Test
     fun `test sendEventToAPI should return expected API request`() {
-        val eventName = VirtusizeEvents.UserSawProduct.getEventName()
-        val event = VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName())
+        val event = VirtusizeEvent.UserSawProduct()
         val actualApiRequest =
             VirtusizeApi.sendEventToAPI(
                 event,
@@ -128,7 +125,7 @@ internal class VirtusizeApiTest {
 
         val expectedParams =
             mutableMapOf<String, Any>(
-                "name" to eventName,
+                "name" to event.name,
                 "apiKey" to TestFixtures.API_KEY,
                 "type" to "user",
                 "source" to "integration-android",
