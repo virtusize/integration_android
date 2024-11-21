@@ -1,11 +1,15 @@
 package com.virtusize.android.data.remote
 
-/**
- * This class represents the response for the recommendation API based on the user body profile
- * @param product the store product that is associated with this recommendation
- * @param sizeName the recommended size name
- */
 data class BodyProfileRecommendedSize(
-    val product: Product,
-    internal val sizeName: String,
+    val extProductId: String,
+    val fitScore: Double,
+    val fitScoreDifference: Double,
+    val scenario: String,
+    val secondFitScore: Double,
+    val secondSize: String,
+    val sizeName: String,
+    val thresholdFitScore: Double,
+    val virtualItem: VirtualItem?,
+    val willFit: Boolean,
+    val willFitForSizes: WillFitForSizes?,
 )
