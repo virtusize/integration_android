@@ -149,7 +149,11 @@ class VirtusizeApiTask(
                 urlConnection.errorStream != null -> {
                     errorStream = urlConnection.errorStream
                     val errorStreamString = readInputStreamAsString(errorStream)
-                    val response = parseErrorStreamStringToObject(errorStreamString)
+                    val response =
+                        parseErrorStreamStringToObject(
+                            apiRequestUrl = apiRequest.url,
+                            errorStreamString = errorStreamString,
+                        )
                     val error =
                         when (urlConnection.responseCode) {
                             HttpURLConnection.HTTP_FORBIDDEN -> {
@@ -265,12 +269,15 @@ class VirtusizeApiTask(
      * @param errorStreamString the string of the error stream
      * @return either an object that contains the content of the string of the input stream, the string of the error stream, or null
      */
-    internal fun parseErrorStreamStringToObject(errorStreamString: String? = null): Any? {
+    internal fun parseErrorStreamStringToObject(
+        apiRequestUrl: String,
+        errorStreamString: String?,
+    ): Any? {
         var result: Any? = null
         if (errorStreamString != null) {
             result =
                 try {
-                    parseStringToObject(streamString = errorStreamString) ?: errorStreamString
+                    parseStringToObject(apiRequestUrl = apiRequestUrl, streamString = errorStreamString) ?: errorStreamString
                 } catch (e: JSONException) {
                     errorStreamString
                 }
@@ -287,7 +294,7 @@ class VirtusizeApiTask(
      */
     @Throws(JSONException::class)
     internal fun parseStringToObject(
-        apiRequestUrl: String = "",
+        apiRequestUrl: String,
         streamString: String,
     ): Any? =
         when {

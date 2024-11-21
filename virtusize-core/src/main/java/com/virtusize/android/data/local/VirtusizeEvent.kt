@@ -1,6 +1,5 @@
 package com.virtusize.android.data.local
 
-import androidx.annotation.Keep
 import org.json.JSONObject
 
 /**

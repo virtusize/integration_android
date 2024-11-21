@@ -141,7 +141,10 @@ internal class VirtusizeApiTaskTest {
             }
             """.trimIndent()
         val returnValue =
-            virtusizeApiTask.parseErrorStreamStringToObject(errorStreamString = pdcJsonString)
+            virtusizeApiTask.parseErrorStreamStringToObject(
+                apiRequestUrl = "https://staging.virtusize.jp/a/api/v3/product-check",
+                errorStreamString = pdcJsonString,
+            )
 
         val expectedProductCheck =
             ProductCheck(
@@ -169,6 +172,7 @@ internal class VirtusizeApiTaskTest {
 
         val returnValue =
             virtusizeApiTask.parseErrorStreamStringToObject(
+                apiRequestUrl = "https://staging.virtusize.jp/a/api/v3/user-products",
                 errorStreamString = "{\"detail\":\"No wardrobe found\"}",
             )
 
