@@ -39,8 +39,8 @@ internal class BodyProfileRecommendedSizeJsonParser(private val product: Product
         willFitForSizesJsonObj?.let {
             willFitForSizes =
                 WillFitForSizes(
-                    extra_large = it.optBoolean(EXTRA_LARGE, false),
-                    extra_small = it.optBoolean(EXTRA_SMALL, false),
+                    extraLarge = it.optBoolean(EXTRA_LARGE, false),
+                    extraSmall = it.optBoolean(EXTRA_SMALL, false),
                     large = it.optBoolean(LARGE, false),
                     medium = it.optBoolean(MEDIUM, false),
                     small = it.optBoolean(SMALL, false),
