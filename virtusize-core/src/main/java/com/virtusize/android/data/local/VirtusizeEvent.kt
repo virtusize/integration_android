@@ -32,7 +32,6 @@ enum class EventName(val value: String) {
  * @property name the name of the event
  * @property data the additional data as JSONObject in the event
  */
-@Keep
 sealed interface VirtusizeEvent {
     val name: String
     val data: JSONObject?
