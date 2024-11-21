@@ -5,10 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.virtusize.android.Virtusize
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeEvent
-import com.virtusize.android.data.local.VirtusizeEvents
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeProduct
-import com.virtusize.android.data.local.getEventName
 import com.virtusize.android.model.VirtusizeMessage
 import com.virtusize.android.ui.VirtusizeView
 import kotlinx.coroutines.channels.Channel
@@ -16,6 +14,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.shareIn
@@ -34,7 +33,8 @@ internal class VirtusizeComposeViewModel : ViewModel() {
 
     val isLoadedFlow: StateFlow<Boolean> =
         messageFlow
-            .filter { message -> message is VirtusizeMessage.Event && message.event.name == VirtusizeEvents.UserSawProduct.getEventName() }
+            .filterIsInstance<VirtusizeMessage.Event>()
+            .filter { messageEvent -> messageEvent.event is VirtusizeEvent.UserSawProduct }
             .map { true }
             .stateIn(
                 scope = viewModelScope,

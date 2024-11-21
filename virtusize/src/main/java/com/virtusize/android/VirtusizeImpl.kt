@@ -7,13 +7,11 @@ import com.virtusize.android.data.local.SizeRecommendationType
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeEvent
-import com.virtusize.android.data.local.VirtusizeEvents
 import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeOrder
 import com.virtusize.android.data.local.VirtusizeParams
 import com.virtusize.android.data.local.VirtusizeProduct
-import com.virtusize.android.data.local.getEventName
 import com.virtusize.android.data.local.throwError
 import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.network.VirtusizeApi
@@ -55,8 +53,75 @@ internal class VirtusizeImpl(
                     messageHandler.onEvent(product, event)
                 }
                 // Handle different user events from the web view
-                when (event.name) {
-                    VirtusizeEvents.UserOpenedWidget.getEventName() -> {
+                when (event) {
+                    is VirtusizeEvent.UserAddedProduct -> {
+                        scope.launch {
+                            virtusizeRepository.fetchDataForInPageRecommendation(
+                                shouldUpdateUserProducts = true,
+                                shouldUpdateBodyProfile = false,
+                            )
+                            virtusizeRepository.updateInPageRecommendation(
+                                type = SizeRecommendationType.CompareProduct,
+                            )
+                        }
+                    }
+
+                    is VirtusizeEvent.UserAuthData -> {
+                        event.data?.let { data ->
+                            virtusizeRepository.updateUserAuthData(data)
+                        }
+                    }
+
+                    is VirtusizeEvent.UserChangedRecommendationType -> {
+                        // Switches the view for InPage based on user selected size recommendation type
+                        var recommendationType: SizeRecommendationType? = null
+                        event.data?.optString("recommendationType")?.let {
+                            recommendationType = valueOf<SizeRecommendationType>(it)
+                        }
+                        scope.launch {
+                            virtusizeRepository.updateInPageRecommendation(
+                                type = recommendationType,
+                            )
+                        }
+                    }
+
+                    is VirtusizeEvent.UserLoggedOut, is VirtusizeEvent.UserDeletedData -> {
+                        // Clears user related data and updates the session,
+                        // and then re-fetches user products and body profile from the server
+                        scope.launch {
+                            virtusizeRepository.clearUserData()
+                            virtusizeRepository.updateUserSession()
+                            virtusizeRepository.fetchDataForInPageRecommendation(
+                                shouldUpdateUserProducts = false,
+                                shouldUpdateBodyProfile = false,
+                            )
+                            virtusizeRepository.updateInPageRecommendation()
+                        }
+                    }
+
+                    is VirtusizeEvent.UserDeletedProduct -> {
+                        event.data?.optInt("userProductId")?.let { userProductId ->
+                            virtusizeRepository.deleteUserProduct(userProductId)
+                        }
+                        scope.launch {
+                            virtusizeRepository.fetchDataForInPageRecommendation(
+                                shouldUpdateUserProducts = false,
+                                shouldUpdateBodyProfile = false,
+                            )
+                            virtusizeRepository.updateInPageRecommendation()
+                        }
+                    }
+
+                    is VirtusizeEvent.UserLoggedIn -> {
+                        // Updates the user session and fetches updated user products and body profile from the server
+                        scope.launch {
+                            virtusizeRepository.updateUserSession()
+                            virtusizeRepository.fetchDataForInPageRecommendation()
+                            virtusizeRepository.updateInPageRecommendation()
+                        }
+                    }
+
+                    is VirtusizeEvent.UserOpenedWidget -> {
                         virtusizeRepository.setLastProductOnVirtusizeWebView(product.externalId)
                         scope.launch {
                             virtusizeRepository.fetchDataForInPageRecommendation(
@@ -67,13 +132,7 @@ internal class VirtusizeImpl(
                         }
                     }
 
-                    VirtusizeEvents.UserAuthData.getEventName() -> {
-                        event.data?.let { data ->
-                            virtusizeRepository.updateUserAuthData(data)
-                        }
-                    }
-
-                    VirtusizeEvents.UserSelectedProduct.getEventName() -> {
+                    is VirtusizeEvent.UserSelectedProduct -> {
                         val userProductId = event.data?.optInt("userProductId")
                         scope.launch {
                             virtusizeRepository.fetchDataForInPageRecommendation(
@@ -87,45 +146,7 @@ internal class VirtusizeImpl(
                         }
                     }
 
-                    VirtusizeEvents.UserAddedProduct.getEventName() -> {
-                        scope.launch {
-                            virtusizeRepository.fetchDataForInPageRecommendation(
-                                shouldUpdateUserProducts = true,
-                                shouldUpdateBodyProfile = false,
-                            )
-                            virtusizeRepository.updateInPageRecommendation(
-                                type = SizeRecommendationType.CompareProduct,
-                            )
-                        }
-                    }
-
-                    VirtusizeEvents.UserDeletedProduct.getEventName() -> {
-                        event.data?.optInt("userProductId")?.let { userProductId ->
-                            virtusizeRepository.deleteUserProduct(userProductId)
-                        }
-                        scope.launch {
-                            virtusizeRepository.fetchDataForInPageRecommendation(
-                                shouldUpdateUserProducts = false,
-                                shouldUpdateBodyProfile = false,
-                            )
-                            virtusizeRepository.updateInPageRecommendation()
-                        }
-                    }
-
-                    VirtusizeEvents.UserChangedRecommendationType.getEventName() -> {
-                        // Switches the view for InPage based on user selected size recommendation type
-                        var recommendationType: SizeRecommendationType? = null
-                        event.data?.optString("recommendationType")?.let {
-                            recommendationType = valueOf<SizeRecommendationType>(it)
-                        }
-                        scope.launch {
-                            virtusizeRepository.updateInPageRecommendation(
-                                type = recommendationType,
-                            )
-                        }
-                    }
-
-                    VirtusizeEvents.UserUpdatedBodyMeasurements.getEventName() -> {
+                    is VirtusizeEvent.UserUpdatedBodyMeasurements -> {
                         // Updates the body recommendation size and switches the view to the body comparison
                         val sizeRecName = event.data?.optString("sizeRecName")
                         scope.launch {
@@ -136,30 +157,10 @@ internal class VirtusizeImpl(
                         }
                     }
 
-                    VirtusizeEvents.UserLoggedIn.getEventName() -> {
-                        // Updates the user session and fetches updated user products and body profile from the server
-                        scope.launch {
-                            virtusizeRepository.updateUserSession()
-                            virtusizeRepository.fetchDataForInPageRecommendation()
-                            virtusizeRepository.updateInPageRecommendation()
-                        }
-                    }
-
-                    VirtusizeEvents.UserLoggedOut.getEventName(),
-                    VirtusizeEvents.UserDeletedData.getEventName(),
-                    -> {
-                        // Clears user related data and updates the session,
-                        // and then re-fetches user products and body profile from the server
-                        scope.launch {
-                            virtusizeRepository.clearUserData()
-                            virtusizeRepository.updateUserSession()
-                            virtusizeRepository.fetchDataForInPageRecommendation(
-                                shouldUpdateUserProducts = false,
-                                shouldUpdateBodyProfile = false,
-                            )
-                            virtusizeRepository.updateInPageRecommendation()
-                        }
-                    }
+                    is VirtusizeEvent.UserCreatedSilhouette,
+                    is VirtusizeEvent.UserSawProduct,
+                    is VirtusizeEvent.UserSawWidgetButton,
+                    is VirtusizeEvent.Undefined -> Unit
                 }
             }
 

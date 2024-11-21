@@ -1,6 +1,8 @@
 package com.virtusize.android.data.parsers
 
+import com.virtusize.android.data.local.EventName
 import com.virtusize.android.data.local.VirtusizeEvent
+import com.virtusize.android.data.local.toVirtusizeEvent
 import org.json.JSONObject
 
 /**
@@ -8,8 +10,9 @@ import org.json.JSONObject
  */
 internal class VirtusizeEventJsonParser : VirtusizeJsonParser<VirtusizeEvent> {
     override fun parse(json: JSONObject): VirtusizeEvent? {
-        val name = JsonUtils.optString(json, FIELD_NAME)
-        return VirtusizeEvent(name, json)
+        val name = JsonUtils.optNullableString(json, FIELD_NAME) ?: return null
+        val eventName = EventName.valueOf(name)
+        return eventName.toVirtusizeEvent(json)
     }
 
     companion object {
