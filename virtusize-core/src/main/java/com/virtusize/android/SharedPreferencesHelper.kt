@@ -2,7 +2,6 @@ package com.virtusize.android
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import java.util.Calendar
 import kotlin.random.Random
 

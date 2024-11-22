@@ -26,8 +26,8 @@ import kotlin.jvm.Throws
  * @param messageHandler pass VirtusizeMessageHandler to listen to any Virtusize-related messages
  */
 class VirtusizeApiTask(
-    private var urlConnection: HttpsURLConnection?,
-    private var sharedPreferencesHelper: SharedPreferencesHelper,
+    private val urlConnection: HttpsURLConnection?,
+    private val sharedPreferencesHelper: SharedPreferencesHelper,
     private val messageHandler: VirtusizeMessageHandler?,
     private val userId: String?,
 ) {
@@ -98,14 +98,14 @@ class VirtusizeApiTask(
                         userId?.let {
                             setRequestProperty(
                                 HEADER_VS_EXTERNAL_USER_ID,
-                                userId
+                                userId,
                             )
                         }
 
                         sharedPreferencesHelper.getStoreId()?.let { storeId ->
                             setRequestProperty(
                                 HEADER_VS_STORE_ID,
-                                storeId
+                                storeId,
                             )
                         }
 
