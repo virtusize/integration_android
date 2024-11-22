@@ -48,8 +48,8 @@ import javax.net.ssl.HttpsURLConnection
  * @param messageHandler pass VirtusizeMessageHandler to listen to any Virtusize-related messages
  */
 internal class VirtusizeAPIService(
-    private var context: Context,
-    private var messageHandler: VirtusizeMessageHandler?,
+    private val context: Context,
+    private val messageHandler: VirtusizeMessageHandler?,
 ) {
     companion object {
         private var instance: VirtusizeAPIService? = null
