@@ -2,6 +2,7 @@ package com.virtusize.android
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import java.util.Calendar
 import kotlin.random.Random
 
@@ -12,6 +13,7 @@ class SharedPreferencesHelper {
     companion object {
         private const val SHARED_PREFS_NAME = "VIRTUSIZE_SHARED_PREFS"
         private const val PREFS_BID_KEY = "BID_KEY_VIRTUSIZE"
+        private const val PREFS_STORE_ID = "STORE_ID_VIRTUSIZE"
         private const val PREFS_AUTH_TOKEN_KEY = "AUTH_TOKEN_KEY_VIRTUSIZE"
         private const val PREFS_ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY_VIRTUSIZE"
         private const val PREFS_SESSION_DATA_KEY = "SESSION_DATA_KEY_VIRTUSIZE"
@@ -111,6 +113,14 @@ class SharedPreferencesHelper {
         editor.putString(PREFS_BID_KEY, bid)
         editor.apply()
     }
+
+    fun storeStoreId(storeId: Int) {
+        preferences.edit().apply {
+            putString(PREFS_STORE_ID, storeId.toString())
+        }.apply()
+    }
+
+    fun getStoreId(): String? = preferences.getString(PREFS_STORE_ID, null)
 
     /**
      * Generates a browser identifier

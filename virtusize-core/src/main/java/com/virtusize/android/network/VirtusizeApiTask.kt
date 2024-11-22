@@ -28,7 +28,8 @@ import kotlin.jvm.Throws
 class VirtusizeApiTask(
     private var urlConnection: HttpsURLConnection?,
     private var sharedPreferencesHelper: SharedPreferencesHelper,
-    private var messageHandler: VirtusizeMessageHandler?,
+    private val messageHandler: VirtusizeMessageHandler?,
+    private val userId: String?,
 ) {
     companion object {
         // The read timeout to use for all the requests, which is 80 seconds
@@ -38,8 +39,10 @@ class VirtusizeApiTask(
         private val CONNECT_TIMEOUT = TimeUnit.SECONDS.toMillis(60).toInt()
 
         // The request header keys
-        private const val HEADER_BROWSER_ID = "x-vs-bid"
-        private const val HEADER_AUTH = "x-vs-auth"
+        private const val HEADER_VS_BROWSER_ID = "x-vs-bid"
+        private const val HEADER_VS_AUTH = "x-vs-auth"
+        private const val HEADER_VS_EXTERNAL_USER_ID = "x-vs-external-user-id"
+        private const val HEADER_VS_STORE_ID = "x-vs-store-id"
         private const val HEADER_AUTHORIZATION = "Authorization"
         private const val HEADER_CONTENT_TYPE = "Content-Type"
         private const val HEADER_COOKIE = "Cookie"
@@ -88,9 +91,23 @@ class VirtusizeApiTask(
                         requestMethod = apiRequest.method.name
 
                         setRequestProperty(
-                            HEADER_BROWSER_ID,
+                            HEADER_VS_BROWSER_ID,
                             sharedPreferencesHelper.getBrowserId(),
                         )
+
+                        userId?.let {
+                            setRequestProperty(
+                                HEADER_VS_EXTERNAL_USER_ID,
+                                userId
+                            )
+                        }
+
+                        sharedPreferencesHelper.getStoreId()?.let { storeId ->
+                            setRequestProperty(
+                                HEADER_VS_STORE_ID,
+                                storeId
+                            )
+                        }
 
                         // Set the access token in the header if the request needs authentication
                         if (apiRequest.authorization) {
@@ -108,7 +125,7 @@ class VirtusizeApiTask(
                             // Set up the request header for the sessions API
                             if (apiRequest.url.contains(VirtusizeEndpoint.Sessions.path)) {
                                 sharedPreferencesHelper.getAuthToken()?.let {
-                                    setRequestProperty(HEADER_AUTH, it)
+                                    setRequestProperty(HEADER_VS_AUTH, it)
                                     setRequestProperty(HEADER_COOKIE, "")
                                 }
                             }
