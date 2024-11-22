@@ -309,7 +309,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
         fun eventHandler(eventInfo: String) {
             val event = VirtusizeEventJsonParser().parse(JSONObject(eventInfo))
             event?.let { virtusizeMessageHandler?.onEvent(clientProduct, it) }
-            when(event) {
+            when (event) {
                 is VirtusizeEvent.UserClosedWidget -> dismiss()
                 is VirtusizeEvent.UssrClickedStart -> userAcceptedPrivacyPolicy()
                 else -> Unit

@@ -39,5 +39,4 @@ private fun getVirtusizeEvent(
         EventName.UserClosedWidget -> VirtusizeEvent.UserClosedWidget(data = json)
         EventName.UssrClickedStart -> VirtusizeEvent.UssrClickedStart(data = json)
         null -> VirtusizeEvent.Undefined(name = name, data = json)
-
     }

@@ -157,9 +157,10 @@ internal class VirtusizeImpl(
                         }
                     }
 
-                    is VirtusizeEvent.UserClosedWidget -> scope.launch {
-                        virtusizeRepository.updateUserSession()
-                    }
+                    is VirtusizeEvent.UserClosedWidget ->
+                        scope.launch {
+                            virtusizeRepository.updateUserSession()
+                        }
 
                     is VirtusizeEvent.UserCreatedSilhouette,
                     is VirtusizeEvent.UserSawProduct,
