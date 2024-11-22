@@ -2,20 +2,6 @@ package com.virtusize.android.data.parsers
 
 import com.virtusize.android.data.local.EventName
 import com.virtusize.android.data.local.VirtusizeEvent
-import com.virtusize.android.data.local.VirtusizeEvent.Undefined
-import com.virtusize.android.data.local.VirtusizeEvent.UserAddedProduct
-import com.virtusize.android.data.local.VirtusizeEvent.UserAuthData
-import com.virtusize.android.data.local.VirtusizeEvent.UserChangedRecommendationType
-import com.virtusize.android.data.local.VirtusizeEvent.UserCreatedSilhouette
-import com.virtusize.android.data.local.VirtusizeEvent.UserDeletedData
-import com.virtusize.android.data.local.VirtusizeEvent.UserDeletedProduct
-import com.virtusize.android.data.local.VirtusizeEvent.UserLoggedIn
-import com.virtusize.android.data.local.VirtusizeEvent.UserLoggedOut
-import com.virtusize.android.data.local.VirtusizeEvent.UserOpenedWidget
-import com.virtusize.android.data.local.VirtusizeEvent.UserSawProduct
-import com.virtusize.android.data.local.VirtusizeEvent.UserSawWidgetButton
-import com.virtusize.android.data.local.VirtusizeEvent.UserSelectedProduct
-import com.virtusize.android.data.local.VirtusizeEvent.UserUpdatedBodyMeasurements
 import org.json.JSONObject
 
 /**
@@ -37,18 +23,21 @@ private fun getVirtusizeEvent(
     json: JSONObject,
 ): VirtusizeEvent =
     when (EventName.get(name)) {
-        EventName.UserSawProduct -> UserSawProduct(data = json)
-        EventName.UserSawWidgetButton -> UserSawWidgetButton(data = json)
-        EventName.UserOpenedWidget -> UserOpenedWidget(data = json)
-        EventName.UserSelectedProduct -> UserSelectedProduct(data = json)
-        EventName.UserAddedProduct -> UserAddedProduct(data = json)
-        EventName.UserDeletedProduct -> UserDeletedProduct(data = json)
-        EventName.UserChangedRecommendationType -> UserChangedRecommendationType(data = json)
-        EventName.UserCreatedSilhouette -> UserCreatedSilhouette(data = json)
-        EventName.UserUpdatedBodyMeasurements -> UserUpdatedBodyMeasurements(data = json)
-        EventName.UserAuthData -> UserAuthData(data = json)
-        EventName.UserLoggedIn -> UserLoggedIn(data = json)
-        EventName.UserLoggedOut -> UserLoggedOut(data = json)
-        EventName.UserDeletedData -> UserDeletedData(data = json)
-        null -> Undefined(name = name, data = json)
+        EventName.UserSawProduct -> VirtusizeEvent.UserSawProduct(data = json)
+        EventName.UserSawWidgetButton -> VirtusizeEvent.UserSawWidgetButton(data = json)
+        EventName.UserOpenedWidget -> VirtusizeEvent.UserOpenedWidget(data = json)
+        EventName.UserSelectedProduct -> VirtusizeEvent.UserSelectedProduct(data = json)
+        EventName.UserAddedProduct -> VirtusizeEvent.UserAddedProduct(data = json)
+        EventName.UserDeletedProduct -> VirtusizeEvent.UserDeletedProduct(data = json)
+        EventName.UserChangedRecommendationType -> VirtusizeEvent.UserChangedRecommendationType(data = json)
+        EventName.UserCreatedSilhouette -> VirtusizeEvent.UserCreatedSilhouette(data = json)
+        EventName.UserUpdatedBodyMeasurements -> VirtusizeEvent.UserUpdatedBodyMeasurements(data = json)
+        EventName.UserAuthData -> VirtusizeEvent.UserAuthData(data = json)
+        EventName.UserLoggedIn -> VirtusizeEvent.UserLoggedIn(data = json)
+        EventName.UserLoggedOut -> VirtusizeEvent.UserLoggedOut(data = json)
+        EventName.UserDeletedData -> VirtusizeEvent.UserDeletedData(data = json)
+        EventName.UserClosedWidget -> VirtusizeEvent.UserClosedWidget(data = json)
+        EventName.UssrClickedStart -> VirtusizeEvent.UssrClickedStart(data = json)
+        null -> VirtusizeEvent.Undefined(name = name, data = json)
+
     }

@@ -27,6 +27,7 @@ import com.virtusize.android.SharedPreferencesHelper
 import com.virtusize.android.auth.VirtusizeAuth
 import com.virtusize.android.auth.utils.VirtusizeURLCheck
 import com.virtusize.android.data.local.StoreName
+import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.VirtusizeStoreRepository
@@ -308,11 +309,10 @@ class VirtusizeWebViewFragment : DialogFragment() {
         fun eventHandler(eventInfo: String) {
             val event = VirtusizeEventJsonParser().parse(JSONObject(eventInfo))
             event?.let { virtusizeMessageHandler?.onEvent(clientProduct, it) }
-            if (event?.name == "user-closed-widget") {
-                dismiss()
-            }
-            if (event?.name == "user-clicked-start") {
-                userAcceptedPrivacyPolicy()
+            when(event) {
+                is VirtusizeEvent.UserClosedWidget -> dismiss()
+                is VirtusizeEvent.UssrClickedStart -> userAcceptedPrivacyPolicy()
+                else -> Unit
             }
         }
     }
