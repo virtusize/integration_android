@@ -53,7 +53,11 @@ object VirtusizeApi {
 
     private var environment = VirtusizeEnvironment.GLOBAL
     private lateinit var apiKey: String
-    private lateinit var userId: String
+
+    lateinit var currentUserId: String
+        private set
+    var currentStoreId: String? = null
+        private set
 
     /**
      * Initializes the VirtusizeApi
@@ -68,11 +72,15 @@ object VirtusizeApi {
     ) {
         environment = env
         apiKey = key
-        this.userId = userId
+        currentUserId = userId
     }
 
-    fun updateUserId(userId: String) {
-        this.userId = userId
+    fun setUserId(userId: String) {
+        currentUserId = userId
+    }
+
+    fun setStoreId(storeId: Int) {
+        currentStoreId = storeId.toString()
     }
 
     /**
@@ -254,7 +262,7 @@ object VirtusizeApi {
                 .buildUpon()
                 .build()
                 .toString()
-        return ApiRequest(url, HttpMethod.POST, order.paramsToMap(apiKey, userId).toMutableMap())
+        return ApiRequest(url, HttpMethod.POST, order.paramsToMap(apiKey, currentUserId).toMutableMap())
     }
 
     /**

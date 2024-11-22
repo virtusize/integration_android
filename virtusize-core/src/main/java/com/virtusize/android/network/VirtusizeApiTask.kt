@@ -29,7 +29,6 @@ class VirtusizeApiTask(
     private val urlConnection: HttpsURLConnection?,
     private val sharedPreferencesHelper: SharedPreferencesHelper,
     private val messageHandler: VirtusizeMessageHandler?,
-    private val userId: String?,
 ) {
     companion object {
         // The read timeout to use for all the requests, which is 80 seconds
@@ -95,14 +94,12 @@ class VirtusizeApiTask(
                             sharedPreferencesHelper.getBrowserId(),
                         )
 
-                        userId?.let {
-                            setRequestProperty(
-                                HEADER_VS_EXTERNAL_USER_ID,
-                                userId,
-                            )
-                        }
+                        setRequestProperty(
+                            HEADER_VS_EXTERNAL_USER_ID,
+                            VirtusizeApi.currentUserId,
+                        )
 
-                        sharedPreferencesHelper.getStoreId()?.let { storeId ->
+                        VirtusizeApi.currentStoreId?.let { storeId ->
                             setRequestProperty(
                                 HEADER_VS_STORE_ID,
                                 storeId,

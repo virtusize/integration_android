@@ -8,7 +8,6 @@ import android.view.WindowManager
 import com.virtusize.android.BuildConfig
 import com.virtusize.android.R
 import com.virtusize.android.SharedPreferencesHelper
-import com.virtusize.android.Virtusize
 import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeLanguage
@@ -70,9 +69,6 @@ internal class VirtusizeAPIService(
         }
     }
 
-    private val userId: String?
-        get() = Virtusize.getInstance().params?.externalUserId
-
     // The helper to store data locally using Shared Preferences
     private var sharedPreferencesHelper: SharedPreferencesHelper =
         SharedPreferencesHelper.getInstance(context)
@@ -109,7 +105,6 @@ internal class VirtusizeAPIService(
                 httpURLConnection,
                 sharedPreferencesHelper,
                 messageHandler,
-                userId,
             ).setResponseFormat(VirtusizeApiResponseFormat.STRING).execute(apiRequest)
         }
 
@@ -125,14 +120,13 @@ internal class VirtusizeAPIService(
                 httpURLConnection,
                 sharedPreferencesHelper,
                 messageHandler,
-                userId,
             )
                 .setJsonParser(ProductCheckJsonParser())
                 .execute<ProductCheck>(apiRequest)
                 .also { response ->
                     val storeId = response.successData?.data?.storeId
                     if (storeId != null) {
-                        sharedPreferencesHelper.storeStoreId(storeId)
+                        VirtusizeApi.setStoreId(storeId)
                     }
                 }
         }
@@ -149,7 +143,6 @@ internal class VirtusizeAPIService(
                 httpURLConnection,
                 sharedPreferencesHelper,
                 messageHandler,
-                userId,
             )
                 .setJsonParser(ProductMetaDataHintsJsonParser())
                 .execute(apiRequest)
@@ -187,7 +180,6 @@ internal class VirtusizeAPIService(
                 httpURLConnection,
                 sharedPreferencesHelper,
                 messageHandler,
-                userId,
             ).execute(apiRequest)
         }
 
@@ -207,7 +199,6 @@ internal class VirtusizeAPIService(
                 httpURLConnection,
                 sharedPreferencesHelper,
                 messageHandler,
-                userId,
             )
                 .execute(apiRequest)
         }
@@ -223,7 +214,6 @@ internal class VirtusizeAPIService(
                 httpURLConnection,
                 sharedPreferencesHelper,
                 messageHandler,
-                userId,
             )
                 .setJsonParser(StoreJsonParser())
                 .execute(apiRequest)
@@ -248,7 +238,6 @@ internal class VirtusizeAPIService(
                 httpURLConnection,
                 sharedPreferencesHelper,
                 messageHandler,
-                userId,
             )
                 .setJsonParser(StoreProductJsonParser())
                 .execute(apiRequest)
@@ -267,7 +256,6 @@ internal class VirtusizeAPIService(
                 httpURLConnection,
                 sharedPreferencesHelper,
                 messageHandler,
-                userId,
             )
                 .setJsonParser(ProductTypeJsonParser())
                 .execute(apiRequest)
@@ -286,7 +274,6 @@ internal class VirtusizeAPIService(
                 httpURLConnection,
                 sharedPreferencesHelper,
                 messageHandler,
-                userId,
             )
                 .setJsonParser(UserSessionInfoJsonParser())
                 .execute(apiRequest)
@@ -305,7 +292,6 @@ internal class VirtusizeAPIService(
                 httpURLConnection,
                 sharedPreferencesHelper,
                 messageHandler,
-                userId,
             )
                 .execute(apiRequest)
         }
@@ -323,7 +309,6 @@ internal class VirtusizeAPIService(
                 httpURLConnection,
                 sharedPreferencesHelper,
                 messageHandler,
-                userId,
             )
                 .setJsonParser(UserProductJsonParser())
                 .execute(apiRequest)
@@ -342,7 +327,6 @@ internal class VirtusizeAPIService(
                 httpURLConnection,
                 sharedPreferencesHelper,
                 messageHandler,
-                userId,
             )
                 .setJsonParser(UserBodyProfileJsonParser())
                 .execute(apiRequest)
@@ -366,7 +350,6 @@ internal class VirtusizeAPIService(
                 httpURLConnection,
                 sharedPreferencesHelper,
                 messageHandler,
-                userId,
             )
                 .setJsonParser(BodyProfileRecommendedSizeJsonParser(storeProduct))
                 .execute(apiRequest)
@@ -390,7 +373,6 @@ internal class VirtusizeAPIService(
                 httpURLConnection,
                 sharedPreferencesHelper,
                 messageHandler,
-                userId,
             )
                 .setJsonParser(I18nLocalizationJsonParser(context, language))
                 .execute(apiRequest)

@@ -272,7 +272,7 @@ internal class VirtusizeImpl(
      * @see Virtusize.setUserId
      */
     override fun setUserId(userId: String) {
-        VirtusizeApi.updateUserId(userId)
+        VirtusizeApi.setUserId(userId)
         for (virtusizeView in virtusizeViews) {
             virtusizeView.virtusizeParams.externalUserId = userId
         }
