@@ -40,7 +40,6 @@ class VirtusizeApiTask(
         // The request header keys
         private const val HEADER_VS_BROWSER_ID = "x-vs-bid"
         private const val HEADER_VS_AUTH = "x-vs-auth"
-        private const val HEADER_VS_EXTERNAL_USER_ID = "x-vs-external-user-id"
         private const val HEADER_VS_STORE_ID = "x-vs-store-id"
         private const val HEADER_AUTHORIZATION = "Authorization"
         private const val HEADER_CONTENT_TYPE = "Content-Type"
@@ -92,11 +91,6 @@ class VirtusizeApiTask(
                         setRequestProperty(
                             HEADER_VS_BROWSER_ID,
                             sharedPreferencesHelper.getBrowserId(),
-                        )
-
-                        setRequestProperty(
-                            HEADER_VS_EXTERNAL_USER_ID,
-                            VirtusizeApi.currentUserId,
                         )
 
                         VirtusizeApi.currentStoreId?.let { storeId ->
