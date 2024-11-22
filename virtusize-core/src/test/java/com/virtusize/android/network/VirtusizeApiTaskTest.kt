@@ -38,6 +38,7 @@ internal class VirtusizeApiTaskTest {
                 urlConnection = null,
                 sharedPreferencesHelper = SharedPreferencesHelper.getInstance(context),
                 messageHandler = null,
+                userId = null,
             )
     }
 
