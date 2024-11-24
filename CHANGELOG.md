@@ -1,3 +1,9 @@
+### Next Release
+* Fix: Inpage doesn’t recommend anything after coming back to PDP from Comparison screen
+* Fix: Inpage text for on-boarding user has 2 patterns at random
+* Fix: Inpage shows different size from that VS widget shows
+* Fix: Body data tuning is not saved once closing the widget
+
 ### 2.7.2
 * Fix: Fix the close button not working on the Virtusize login page.
 
