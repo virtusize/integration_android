@@ -91,10 +91,7 @@ internal class VirtusizeImpl(
                         scope.launch {
                             virtusizeRepository.clearUserData()
                             virtusizeRepository.updateUserSession()
-                            virtusizeRepository.fetchDataForInPageRecommendation(
-                                shouldUpdateUserProducts = false,
-                                shouldUpdateBodyProfile = false,
-                            )
+                            virtusizeRepository.fetchDataForInPageRecommendation()
                             virtusizeRepository.updateInPageRecommendation()
                         }
                     }
