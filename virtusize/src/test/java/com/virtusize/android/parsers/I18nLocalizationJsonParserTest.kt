@@ -27,7 +27,10 @@ class I18nLocalizationJsonParserTest {
                 TestUtils.readFileFromAssets("/i18n_en.json"),
             )
 
-        val expectedI18nLocalization = getExpectedI18nLocalization(context)
+        val expectedI18nLocalization = getExpectedI18nLocalization(
+            virtusizeLanguage = VirtusizeLanguage.EN,
+            localizedContext = context,
+        )
 
         assertThat(actualI18nLocalization).isEqualTo(expectedI18nLocalization)
     }
@@ -41,6 +44,8 @@ class I18nLocalizationJsonParserTest {
 
         val expectedI18nLocalization =
             I18nLocalization(
+                VirtusizeLanguage.EN,
+                "",
                 "",
                 "",
                 "",
@@ -71,7 +76,10 @@ class I18nLocalizationJsonParserTest {
         conf = Configuration(conf)
         conf.setLocale(Locale.JAPAN)
         val localizedContext = context.createConfigurationContext(conf)
-        val expectedI18nLocalization = getExpectedI18nLocalization(localizedContext)
+        val expectedI18nLocalization = getExpectedI18nLocalization(
+            virtusizeLanguage = VirtusizeLanguage.JP,
+            localizedContext = localizedContext,
+        )
 
         assertThat(actualI18nLocalization).isEqualTo(expectedI18nLocalization)
     }
@@ -88,52 +96,31 @@ class I18nLocalizationJsonParserTest {
         conf = Configuration(conf)
         conf.setLocale(Locale.KOREA)
         val localizedContext = context.createConfigurationContext(conf)
-        val expectedI18nLocalization = getExpectedI18nLocalization(localizedContext)
+        val expectedI18nLocalization = getExpectedI18nLocalization(
+            virtusizeLanguage = VirtusizeLanguage.KR,
+            localizedContext = localizedContext,
+        )
 
         assertThat(actualI18nLocalization).isEqualTo(expectedI18nLocalization)
     }
 
-    private fun getExpectedI18nLocalization(localizedContext: Context): I18nLocalization {
+    private fun getExpectedI18nLocalization(virtusizeLanguage: VirtusizeLanguage, localizedContext: Context): I18nLocalization {
         return I18nLocalization(
-            localizedContext.getString(
-                com.virtusize.android.core.R.string.inpage_default_accessory_text,
-            ),
-            localizedContext.getString(
-                com.virtusize.android.core.R.string.inpage_has_product_top_text,
-            ),
-            localizedContext.getString(
-                com.virtusize.android.core.R.string.inpage_has_product_bottom_text,
-            ),
-            localizedContext.getString(
-                com.virtusize.android.core.R.string.inpage_one_size_close_top_text,
-            ),
-            localizedContext.getString(
-                com.virtusize.android.core.R.string.inpage_one_size_smaller_top_text,
-            ),
-            localizedContext.getString(
-                com.virtusize.android.core.R.string.inpage_one_size_larger_top_text,
-            ),
-            localizedContext.getString(
-                com.virtusize.android.core.R.string.inpage_one_size_close_bottom_text,
-            ),
-            localizedContext.getString(
-                com.virtusize.android.core.R.string.inpage_one_size_smaller_bottom_text,
-            ),
-            localizedContext.getString(
-                com.virtusize.android.core.R.string.inpage_one_size_larger_bottom_text,
-            ),
-            localizedContext.getString(
-                com.virtusize.android.core.R.string.inpage_one_size_will_fit_result_text,
-            ),
-            localizedContext.getString(
-                com.virtusize.android.core.R.string.inpage_multi_size_comparison_text,
-            ),
-            localizedContext.getString(
-                com.virtusize.android.core.R.string.inpage_will_fit_result_text,
-            ),
-            localizedContext.getString(
-                com.virtusize.android.core.R.string.inpage_no_data_text,
-            ),
+            virtusizeLanguage,
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_default_accessory_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_has_product_top_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_has_product_bottom_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_one_size_close_top_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_one_size_smaller_top_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_one_size_larger_top_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_one_size_close_bottom_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_one_size_smaller_bottom_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_one_size_larger_bottom_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_one_size_will_fit_result_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_multi_size_comparison_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_will_fit_result_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_will_not_fit_result_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_no_data_text),
         )
     }
 }

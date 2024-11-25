@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.virtusize.android.core.R
 import com.virtusize.android.data.local.SizeComparisonRecommendedSize
+import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.fixtures.ProductFixtures
 import org.junit.Before
 import org.junit.Test
@@ -26,19 +27,21 @@ class ProductTest {
     fun setup() {
         i18nLocalization =
             I18nLocalization(
-                context.getString(R.string.inpage_default_accessory_text),
-                context.getString(R.string.inpage_has_product_top_text),
-                context.getString(R.string.inpage_has_product_bottom_text),
-                context.getString(R.string.inpage_one_size_close_top_text),
-                context.getString(R.string.inpage_one_size_smaller_top_text),
-                context.getString(R.string.inpage_one_size_larger_top_text),
-                context.getString(R.string.inpage_one_size_close_bottom_text),
-                context.getString(R.string.inpage_one_size_smaller_bottom_text),
-                context.getString(R.string.inpage_one_size_larger_bottom_text),
-                context.getString(R.string.inpage_one_size_will_fit_result_text),
-                context.getString(R.string.inpage_multi_size_comparison_text),
-                context.getString(R.string.inpage_will_fit_result_text),
-                context.getString(R.string.inpage_no_data_text),
+                language = VirtusizeLanguage.EN,
+                defaultAccessoryText = context.getString(R.string.inpage_default_accessory_text),
+                hasProductAccessoryTopText = context.getString(R.string.inpage_has_product_top_text),
+                hasProductAccessoryBottomText = context.getString(R.string.inpage_has_product_bottom_text),
+                oneSizeCloseTopText = context.getString(R.string.inpage_one_size_close_top_text),
+                oneSizeSmallerTopText = context.getString(R.string.inpage_one_size_smaller_top_text),
+                oneSizeLargerTopText = context.getString(R.string.inpage_one_size_larger_top_text),
+                oneSizeCloseBottomText = context.getString(R.string.inpage_one_size_close_bottom_text),
+                oneSizeSmallerBottomText = context.getString(R.string.inpage_one_size_smaller_bottom_text),
+                oneSizeLargerBottomText = context.getString(R.string.inpage_one_size_larger_bottom_text),
+                oneSizeWillFitResultText = context.getString(R.string.inpage_one_size_will_fit_result_text),
+                sizeComparisonMultiSizeText = context.getString(R.string.inpage_multi_size_comparison_text),
+                willFitResultText = context.getString(R.string.inpage_will_fit_result_text),
+                willNotFitResultText = context.getString(R.string.inpage_will_not_fit_result_text),
+                defaultNoDataText = context.getString(R.string.inpage_no_data_text),
             )
     }
 
@@ -47,30 +50,34 @@ class ProductTest {
         val defaultAccessoryText = context.getString(R.string.inpage_default_accessory_text)
         assertThat(
             ProductFixtures.storeProduct(18).getRecommendationText(
-                i18nLocalization,
-                sizeComparisonRecommendedSize,
-                bodyProfileRecommendedSizeName,
+                context = context,
+                i18nLocalization = i18nLocalization,
+                sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
         ).isEqualTo(defaultAccessoryText)
         assertThat(
             ProductFixtures.storeProduct(19).getRecommendationText(
-                i18nLocalization,
-                sizeComparisonRecommendedSize,
-                bodyProfileRecommendedSizeName,
+                context = context,
+                i18nLocalization = i18nLocalization,
+                sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
         ).isEqualTo(defaultAccessoryText)
         assertThat(
             ProductFixtures.storeProduct(25).getRecommendationText(
-                i18nLocalization,
-                sizeComparisonRecommendedSize,
-                bodyProfileRecommendedSizeName,
+                context = context,
+                i18nLocalization = i18nLocalization,
+                sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
         ).isEqualTo(defaultAccessoryText)
         assertThat(
             ProductFixtures.storeProduct(26).getRecommendationText(
-                i18nLocalization,
-                sizeComparisonRecommendedSize,
-                bodyProfileRecommendedSizeName,
+                context = context,
+                i18nLocalization = i18nLocalization,
+                sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
         ).isEqualTo(defaultAccessoryText)
     }
@@ -83,30 +90,34 @@ class ProductTest {
         val hasProductAccessoryTopText = context.getString(R.string.inpage_has_product_top_text)
         assertThat(
             ProductFixtures.storeProduct(18).getRecommendationText(
-                i18nLocalization,
-                sizeComparisonRecommendedSize,
-                bodyProfileRecommendedSizeName,
+                context = context,
+                i18nLocalization = i18nLocalization,
+                sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
         ).contains(hasProductAccessoryTopText)
         assertThat(
             ProductFixtures.storeProduct(19).getRecommendationText(
-                i18nLocalization,
-                sizeComparisonRecommendedSize,
-                bodyProfileRecommendedSizeName,
+                context = context,
+                i18nLocalization = i18nLocalization,
+                sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
         ).contains(hasProductAccessoryTopText)
         assertThat(
             ProductFixtures.storeProduct(25).getRecommendationText(
-                i18nLocalization,
-                sizeComparisonRecommendedSize,
-                bodyProfileRecommendedSizeName,
+                context = context,
+                i18nLocalization = i18nLocalization,
+                sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
         ).contains(hasProductAccessoryTopText)
         assertThat(
             ProductFixtures.storeProduct(26).getRecommendationText(
-                i18nLocalization,
-                sizeComparisonRecommendedSize,
-                bodyProfileRecommendedSizeName,
+                context = context,
+                i18nLocalization = i18nLocalization,
+                sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
         ).contains(hasProductAccessoryTopText)
     }
@@ -123,9 +134,10 @@ class ProductTest {
                         ProductSize("FREE", mutableSetOf()),
                     ),
             ).getRecommendationText(
-                i18nLocalization,
-                sizeComparisonRecommendedSize,
-                bodyProfileRecommendedSizeName,
+                context = context,
+                i18nLocalization = i18nLocalization,
+                sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
         ).contains(oneSizeCloseTopText)
     }
@@ -142,9 +154,10 @@ class ProductTest {
                         ProductSize("FREE", mutableSetOf()),
                     ),
             ).getRecommendationText(
-                i18nLocalization,
-                sizeComparisonRecommendedSize,
-                bodyProfileRecommendedSizeName,
+                context = context,
+                i18nLocalization = i18nLocalization,
+                sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
         ).contains(oneSizeSmallerTopText)
     }
@@ -162,9 +175,10 @@ class ProductTest {
                         ProductSize("FREE", mutableSetOf()),
                     ),
             ).getRecommendationText(
-                i18nLocalization,
-                sizeComparisonRecommendedSize,
-                bodyProfileRecommendedSizeName,
+                context = context,
+                i18nLocalization = i18nLocalization,
+                sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
         ).contains(oneSizeLargerTopText)
     }
@@ -180,9 +194,10 @@ class ProductTest {
                         ProductSize("FREE", mutableSetOf()),
                     ),
             ).getRecommendationText(
-                i18nLocalization,
-                sizeComparisonRecommendedSize,
-                bodyProfileRecommendedSizeName,
+                context = context,
+                i18nLocalization = i18nLocalization,
+                sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
         ).contains(oneSizeBodyProfileText)
     }
@@ -207,9 +222,10 @@ class ProductTest {
                         ProductSize("M", mutableSetOf()),
                     ),
             ).getRecommendationText(
-                i18nLocalization,
-                sizeComparisonRecommendedSize,
-                bodyProfileRecommendedSizeName,
+                context = context,
+                i18nLocalization = i18nLocalization,
+                sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
         ).contains(multiSizeComparisonText)
     }
@@ -227,16 +243,17 @@ class ProductTest {
                         ProductSize("M", mutableSetOf()),
                     ),
             ).getRecommendationText(
-                i18nLocalization,
-                sizeComparisonRecommendedSize,
-                bodyProfileRecommendedSizeName,
+                context = context,
+                i18nLocalization = i18nLocalization,
+                sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
         ).contains(multiSizeBodyProfileText)
     }
 
     @Test
-    fun getRecommendationText_multiSizeProduct_noRecommendedSizes_returnNoDataText() {
-        val noDataText = context.getString(R.string.inpage_no_data_text)
+    fun getRecommendationText_multiSizeProduct_noRecommendedSizes_returnWillNotFitResultText() {
+        val willNotFitResultText = context.getString(R.string.inpage_will_not_fit_result_text)
         assertThat(
             ProductFixtures.storeProduct(
                 sizeList =
@@ -245,36 +262,40 @@ class ProductTest {
                         ProductSize("M", mutableSetOf()),
                     ),
             ).getRecommendationText(
-                i18nLocalization,
-                sizeComparisonRecommendedSize,
-                bodyProfileRecommendedSizeName,
+                context = context,
+                i18nLocalization = i18nLocalization,
+                sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
-        ).contains(noDataText)
+        ).contains(willNotFitResultText)
     }
 
     @Test
-    fun getRecommendationText_productIsNotAnAccessory_returnNoDataText() {
-        val noDataText = context.getString(R.string.inpage_no_data_text)
+    fun getRecommendationText_productIsNotAnAccessory_returnWillNotFitResultText() {
+        val willNotFitResultText = context.getString(R.string.inpage_will_not_fit_result_text)
         assertThat(
             ProductFixtures.storeProduct(4).getRecommendationText(
-                i18nLocalization,
-                sizeComparisonRecommendedSize,
-                bodyProfileRecommendedSizeName,
+                context = context,
+                i18nLocalization = i18nLocalization,
+                sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
-        ).isEqualTo(noDataText)
+        ).isEqualTo(willNotFitResultText)
         assertThat(
             ProductFixtures.storeProduct(7).getRecommendationText(
-                i18nLocalization,
-                sizeComparisonRecommendedSize,
-                bodyProfileRecommendedSizeName,
+                context = context,
+                i18nLocalization = i18nLocalization,
+                sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
-        ).isEqualTo(noDataText)
+        ).isEqualTo(willNotFitResultText)
         assertThat(
             ProductFixtures.storeProduct(15).getRecommendationText(
-                i18nLocalization,
-                sizeComparisonRecommendedSize,
-                bodyProfileRecommendedSizeName,
+                context = context,
+                i18nLocalization = i18nLocalization,
+                sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
+                bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
-        ).isEqualTo(noDataText)
+        ).isEqualTo(willNotFitResultText)
     }
 }
