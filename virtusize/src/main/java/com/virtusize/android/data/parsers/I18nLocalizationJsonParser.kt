@@ -49,7 +49,7 @@ internal class I18nLocalizationJsonParser(
                 configuredContext.getString(
                     com.virtusize.android.core.R.string.inpage_one_size_close_top_text,
                 ),
-            ).orEmpty()
+            )?.trim().orEmpty()
 
         val oneSizeSmallerTopText =
             oneSizeJSONObject?.optString(
