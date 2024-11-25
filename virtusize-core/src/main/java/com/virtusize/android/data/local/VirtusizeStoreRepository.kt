@@ -18,6 +18,5 @@ object VirtusizeStoreRepository {
     fun getStoreId(storeName: StoreName): StoreId = storeMap[storeName] ?: throw UnsupportedOperationException("Store name not found")
 }
 
-fun StoreId?.isUnitedArrows(): Boolean {
-    return this?.value == VirtusizeStoreRepository.getStoreId(StoreName.UNITED_ARROWS).value
-}
+val StoreId?.isUnitedArrows: Boolean
+    get() = this?.value == VirtusizeStoreRepository.getStoreId(StoreName.UNITED_ARROWS).value

@@ -75,7 +75,7 @@ data class I18nLocalization(
         val configuredContext = ConfigurationUtils.getConfiguredContext(context, language)
         // Override the willFitResultText for United Arrows
         val adjustedWillFitResultText =
-            if (VirtusizeApi.currentStoreId.isUnitedArrows()) {
+            if (VirtusizeApi.currentStoreId.isUnitedArrows) {
                 configuredContext.getString(com.virtusize.android.core.R.string.inpage_will_fit_result_text_united_arrows)
             } else {
                 willFitResultText

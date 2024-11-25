@@ -230,7 +230,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
 
         val productStoreId = clientProduct.productCheckData?.data?.storeId
         when {
-            productStoreId != null && StoreId(productStoreId).isUnitedArrows() -> {
+            productStoreId != null && StoreId(productStoreId).isUnitedArrows -> {
                 virtusizeWebAppUrl = VirtusizeApi.getVirtusizeWebViewURLForSpecificClients()
                 binding.webView.loadUrl(virtusizeWebAppUrl)
             }
