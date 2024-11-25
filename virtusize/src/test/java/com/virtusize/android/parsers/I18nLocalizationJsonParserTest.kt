@@ -27,10 +27,11 @@ class I18nLocalizationJsonParserTest {
                 TestUtils.readFileFromAssets("/i18n_en.json"),
             )
 
-        val expectedI18nLocalization = getExpectedI18nLocalization(
-            virtusizeLanguage = VirtusizeLanguage.EN,
-            localizedContext = context,
-        )
+        val expectedI18nLocalization =
+            getExpectedI18nLocalization(
+                virtusizeLanguage = VirtusizeLanguage.EN,
+                localizedContext = context,
+            )
 
         assertThat(actualI18nLocalization).isEqualTo(expectedI18nLocalization)
     }
@@ -76,10 +77,11 @@ class I18nLocalizationJsonParserTest {
         conf = Configuration(conf)
         conf.setLocale(Locale.JAPAN)
         val localizedContext = context.createConfigurationContext(conf)
-        val expectedI18nLocalization = getExpectedI18nLocalization(
-            virtusizeLanguage = VirtusizeLanguage.JP,
-            localizedContext = localizedContext,
-        )
+        val expectedI18nLocalization =
+            getExpectedI18nLocalization(
+                virtusizeLanguage = VirtusizeLanguage.JP,
+                localizedContext = localizedContext,
+            )
 
         assertThat(actualI18nLocalization).isEqualTo(expectedI18nLocalization)
     }
@@ -96,15 +98,19 @@ class I18nLocalizationJsonParserTest {
         conf = Configuration(conf)
         conf.setLocale(Locale.KOREA)
         val localizedContext = context.createConfigurationContext(conf)
-        val expectedI18nLocalization = getExpectedI18nLocalization(
-            virtusizeLanguage = VirtusizeLanguage.KR,
-            localizedContext = localizedContext,
-        )
+        val expectedI18nLocalization =
+            getExpectedI18nLocalization(
+                virtusizeLanguage = VirtusizeLanguage.KR,
+                localizedContext = localizedContext,
+            )
 
         assertThat(actualI18nLocalization).isEqualTo(expectedI18nLocalization)
     }
 
-    private fun getExpectedI18nLocalization(virtusizeLanguage: VirtusizeLanguage, localizedContext: Context): I18nLocalization {
+    private fun getExpectedI18nLocalization(
+        virtusizeLanguage: VirtusizeLanguage,
+        localizedContext: Context,
+    ): I18nLocalization {
         return I18nLocalization(
             virtusizeLanguage,
             localizedContext.getString(com.virtusize.android.core.R.string.inpage_default_accessory_text),
