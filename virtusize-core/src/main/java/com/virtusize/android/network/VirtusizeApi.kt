@@ -54,7 +54,9 @@ object VirtusizeApi {
     private var environment = VirtusizeEnvironment.GLOBAL
     private lateinit var apiKey: String
 
-    private lateinit var currentUserId: String
+    var currentUserId: String? = null
+        private set
+
     var currentStoreId: String? = null
         private set
 

@@ -41,6 +41,7 @@ class VirtusizeApiTask(
         private const val HEADER_VS_BROWSER_ID = "x-vs-bid"
         private const val HEADER_VS_AUTH = "x-vs-auth"
         private const val HEADER_VS_STORE_ID = "x-vs-store-id"
+        private const val HEADER_VS_EXTERNAL_USER_ID = "x-vs-external-user-id"
         private const val HEADER_AUTHORIZATION = "Authorization"
         private const val HEADER_CONTENT_TYPE = "Content-Type"
         private const val HEADER_COOKIE = "Cookie"
@@ -97,6 +98,14 @@ class VirtusizeApiTask(
                             setRequestProperty(
                                 HEADER_VS_STORE_ID,
                                 storeId,
+                            )
+                        }
+
+                        val autoToken = sharedPreferencesHelper.getAuthToken()
+                        if (VirtusizeApi.currentUserId != null && !autoToken.isNullOrEmpty()) {
+                            setRequestProperty(
+                                HEADER_VS_EXTERNAL_USER_ID,
+                                VirtusizeApi.currentUserId,
                             )
                         }
 
