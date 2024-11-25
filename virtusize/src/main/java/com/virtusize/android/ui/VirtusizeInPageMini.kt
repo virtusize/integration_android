@@ -56,8 +56,7 @@ class VirtusizeInPageMini
             }
 
         // The background color for this InPage Mini view
-        var virtusizeBackgroundColor = 0
-            private set
+        private var virtusizeBackgroundColor = 0
 
         // The configured context for localization
         private var configuredContext: ContextWrapper? = null
@@ -79,7 +78,7 @@ class VirtusizeInPageMini
                     R.styleable.VirtusizeInPageMini_virtusizeInPageMiniStyle,
                     VirtusizeViewStyle.NONE.value,
                 )
-            virtusizeViewStyle = VirtusizeViewStyle.values().firstOrNull { it.value == buttonStyle }
+            virtusizeViewStyle = VirtusizeViewStyle.entries.firstOrNull { it.value == buttonStyle }
                 ?: VirtusizeViewStyle.NONE
             virtusizeBackgroundColor =
                 attrsArray.getColor(R.styleable.VirtusizeInPageMini_inPageMiniBackgroundColor, 0)
@@ -183,6 +182,7 @@ class VirtusizeInPageMini
             } else {
                 binding.inpageMiniLayout.setBackgroundColor(virtusizeBackgroundColor)
                 binding.inpageMiniLoadingText.stopAnimation()
+                setStyle()
             }
             FontUtils.setTypeFace(
                 context,
@@ -200,21 +200,36 @@ class VirtusizeInPageMini
          * Sets the InPage Mini style corresponding to [VirtusizeViewStyle]
          */
         override fun setStyle() {
-            if (virtusizeBackgroundColor != 0) {
-                binding.inpageMiniLayout.setBackgroundColor(virtusizeBackgroundColor)
-                binding.inpageMiniButton.setTextColor(virtusizeBackgroundColor)
-                setButtonRightArrowColor(virtusizeBackgroundColor)
-            } else if (virtusizeViewStyle == VirtusizeViewStyle.TEAL) {
-                binding.inpageMiniLayout.setBackgroundColor(
-                    ContextCompat.getColor(
-                        context,
-                        R.color.virtusizeTeal,
-                    ),
-                )
-                binding.inpageMiniButton.setTextColor(
-                    ContextCompat.getColor(context, R.color.virtusizeTeal),
-                )
-                setButtonRightArrowColor(ContextCompat.getColor(context, R.color.virtusizeTeal))
+            when {
+                virtusizeBackgroundColor != 0 -> {
+                    binding.inpageMiniLayout.setBackgroundColor(virtusizeBackgroundColor)
+                    binding.inpageMiniButton.setTextColor(virtusizeBackgroundColor)
+                    setButtonRightArrowColor(virtusizeBackgroundColor)
+                }
+                virtusizeViewStyle == VirtusizeViewStyle.TEAL -> {
+                    binding.inpageMiniLayout.setBackgroundColor(
+                        ContextCompat.getColor(
+                            context,
+                            R.color.virtusizeTeal,
+                        ),
+                    )
+                    binding.inpageMiniButton.setTextColor(
+                        ContextCompat.getColor(context, R.color.virtusizeTeal),
+                    )
+                    setButtonRightArrowColor(ContextCompat.getColor(context, R.color.virtusizeTeal))
+                }
+                else -> {
+                    binding.inpageMiniLayout.setBackgroundColor(
+                        ContextCompat.getColor(
+                            context,
+                            R.color.virtusizeBlack,
+                        ),
+                    )
+                    binding.inpageMiniButton.setTextColor(
+                        ContextCompat.getColor(context, R.color.virtusizeBlack),
+                    )
+                    setButtonRightArrowColor(ContextCompat.getColor(context, R.color.virtusizeBlack))
+                }
             }
         }
 
