@@ -5,7 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 /**
  * This class represents the response for the data field of ProductCheckResponse
- * @see ProductCheck
+ * @see ProductCheckData
  */
 @Parcelize
 data class Data(

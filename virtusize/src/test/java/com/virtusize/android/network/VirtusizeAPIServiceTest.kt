@@ -60,20 +60,20 @@ class VirtusizeAPIServiceTest {
     }
 
     @Test
-    fun testProductDataCheck_isValidProduct_hasExpectedData() =
+    fun testProductCheck_isValidProduct_hasExpectedData() =
         runBlocking {
             virtusizeAPIService.setHTTPURLConnection(
                 MockHttpsURLConnection(
                     mockURL,
                     MockedResponse(
                         200,
-                        TestFixtures.PRODUCT_DATA_CHECK.toString().byteInputStream(),
+                        TestFixtures.PRODUCT_CHECK_DATA.toString().byteInputStream(),
                     ),
                 ),
             )
 
             val actualProductCheck =
-                virtusizeAPIService.productDataCheck(TestFixtures.VIRTUSIZE_PRODUCT).successData
+                virtusizeAPIService.productCheck(TestFixtures.VIRTUSIZE_PRODUCT).successData
 
             assertThat(actualProductCheck?.name).isEqualTo("backend-checked-product")
             assertThat(actualProductCheck?.data?.productTypeName).isEqualTo("pants")
@@ -88,19 +88,19 @@ class VirtusizeAPIServiceTest {
         }
 
     @Test
-    fun testProductDataCheck_isInvalidProduct() =
+    fun testProductCheck_isInvalidProduct() =
         runBlocking {
             virtusizeAPIService.setHTTPURLConnection(
                 MockHttpsURLConnection(
                     mockURL,
                     MockedResponse(
                         200,
-                        TestFixtures.INVALID_PRODUCT_DATA_CHECK.toString().byteInputStream(),
+                        TestFixtures.INVALID_PRODUCT_CHECK_JSON_DATA.toString().byteInputStream(),
                     ),
                 ),
             )
             val actualProductCheck =
-                virtusizeAPIService.productDataCheck(TestFixtures.VIRTUSIZE_PRODUCT).successData
+                virtusizeAPIService.productCheck(TestFixtures.VIRTUSIZE_PRODUCT).successData
 
             assertThat(actualProductCheck?.name).isEqualTo("backend-checked-product")
             assertThat(actualProductCheck?.data?.validProduct).isFalse()
@@ -108,7 +108,7 @@ class VirtusizeAPIServiceTest {
         }
 
     @Test
-    fun testProductDataCheck_provideWrongAPIKey_hasNetworkError() =
+    fun testProductCheck_provideWrongAPIKey_hasNetworkError() =
         runBlocking {
             virtusizeAPIService.setHTTPURLConnection(
                 MockHttpsURLConnection(
@@ -122,7 +122,7 @@ class VirtusizeAPIServiceTest {
             )
 
             val actualError =
-                virtusizeAPIService.productDataCheck(TestFixtures.VIRTUSIZE_PRODUCT).failureData
+                virtusizeAPIService.productCheck(TestFixtures.VIRTUSIZE_PRODUCT).failureData
 
             assertThat(actualError?.code).isEqualTo(HttpURLConnection.HTTP_FORBIDDEN)
             assertThat(

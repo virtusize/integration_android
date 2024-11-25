@@ -1,7 +1,7 @@
 package com.virtusize.android.data.local
 
 import android.os.Parcelable
-import com.virtusize.android.data.remote.ProductCheck
+import com.virtusize.android.data.remote.ProductCheckData
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -17,5 +17,5 @@ data class VirtusizeProduct
     constructor(
         val externalId: String,
         var imageUrl: String? = null,
-        var productCheckData: ProductCheck? = null,
+        var productCheckData: ProductCheckData? = null,
     ) : Parcelable

@@ -188,18 +188,18 @@ internal class VirtusizeImpl(
      */
     private val virtusizePresenter =
         object : VirtusizePresenter {
-            override fun onValidProductDataCheck(productWithPDCData: VirtusizeProduct) {
+            override fun onValidProductCheck(productWithPCDData: VirtusizeProduct) {
                 // Update VirtusizeViews with product data
                 virtusizeViews.forEach { virtusizeView ->
-                    virtusizeView.setProductWithProductDataCheck(productWithPDCData)
+                    virtusizeView.setProductWithProductCheckData(productWithPCDData)
                 }
 
                 // Check if product ID has changed
-                val newExternalProductId = productWithPDCData.externalId
+                val newExternalProductId = productWithPCDData.externalId
                 if (currentProductExternalId.getAndSet(newExternalProductId) != newExternalProductId) {
                     if (virtusizeViewsContainInPage()) {
                         scope.launch {
-                            virtusizeRepository.fetchInitialData(params.language, productWithPDCData)
+                            virtusizeRepository.fetchInitialData(params.language, productWithPCDData)
                             virtusizeRepository.updateUserSession(newExternalProductId)
                             virtusizeRepository.fetchDataForInPageRecommendation(newExternalProductId)
                             virtusizeRepository.updateInPageRecommendation(newExternalProductId)
@@ -303,15 +303,15 @@ internal class VirtusizeImpl(
      */
     override fun load(virtusizeProduct: VirtusizeProduct) {
         scope.launch {
-            productDataCheck(virtusizeProduct)
+            productCheck(virtusizeProduct)
         }
     }
 
     /**
-     * @see Virtusize.productDataCheck
+     * @see Virtusize.productCheck
      */
-    override suspend fun productDataCheck(virtusizeProduct: VirtusizeProduct): Boolean =
-        virtusizeRepository.productDataCheck(virtusizeProduct)
+    override suspend fun productCheck(virtusizeProduct: VirtusizeProduct): Boolean =
+        virtusizeRepository.productCheck(virtusizeProduct)
 
     /**
      * @see Virtusize.setupVirtusizeView

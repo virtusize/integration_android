@@ -17,7 +17,7 @@ import com.virtusize.android.data.local.virtusizeError
 import com.virtusize.android.data.parsers.UserAuthDataJsonParser
 import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.data.remote.Product
-import com.virtusize.android.data.remote.ProductCheck
+import com.virtusize.android.data.remote.ProductCheckData
 import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.network.VirtusizeAPIService
 import com.virtusize.android.network.VirtusizeApiResponse
@@ -49,7 +49,7 @@ internal class VirtusizeRepository(
     private var productTypes: List<ProductType>? = null
 
     // A map to cache the product data check data of all the visited products
-    private val virtusizeProductCheckResponseMap: MutableMap<ExternalProductId, VirtusizeApiResponse<ProductCheck>> =
+    private val virtusizeProductCheckResponseMap: MutableMap<ExternalProductId, VirtusizeApiResponse<ProductCheckData>> =
         mutableMapOf()
 
     // A set to cache the store product information of all the visited products
@@ -84,10 +84,10 @@ internal class VirtusizeRepository(
      * @param virtusizeProduct the product info set by a client
      * @return true if the product is valid, false otherwise
      */
-    internal suspend fun productDataCheck(virtusizeProduct: VirtusizeProduct): Boolean {
+    internal suspend fun productCheck(virtusizeProduct: VirtusizeProduct): Boolean {
         val productCheckResponse =
             virtusizeProductCheckResponseMap.getOrPut(virtusizeProduct.externalId) {
-                virtusizeAPIService.productDataCheck(virtusizeProduct)
+                virtusizeAPIService.productCheck(virtusizeProduct)
             }
         if (productCheckResponse.isSuccessful) {
             val productCheck = productCheckResponse.successData!!
@@ -127,7 +127,7 @@ internal class VirtusizeRepository(
                     )
 
                     withContext(Dispatchers.Main) {
-                        presenter?.onValidProductDataCheck(virtusizeProduct)
+                        presenter?.onValidProductCheck(virtusizeProduct)
                     }
                     return true
                 } else {

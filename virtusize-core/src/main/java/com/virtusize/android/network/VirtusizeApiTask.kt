@@ -5,7 +5,7 @@ import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.virtusizeError
 import com.virtusize.android.data.parsers.VirtusizeJsonParser
-import com.virtusize.android.data.remote.ProductCheck
+import com.virtusize.android.data.remote.ProductCheckData
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -171,7 +171,7 @@ class VirtusizeApiTask(
 
                             HttpURLConnection.HTTP_NOT_FOUND -> {
                                 // If the product cannot be found in the Virtusize Server
-                                if (response is ProductCheck) {
+                                if (response is ProductCheckData) {
                                     return VirtusizeApiResponse.Error(
                                         VirtusizeErrorType.UnParsedProduct.virtusizeError(
                                             extraMessage = response.productId,

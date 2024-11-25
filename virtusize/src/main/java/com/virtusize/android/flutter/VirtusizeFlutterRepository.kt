@@ -14,7 +14,7 @@ import com.virtusize.android.data.local.throwError
 import com.virtusize.android.data.local.virtusizeError
 import com.virtusize.android.data.parsers.UserAuthDataJsonParser
 import com.virtusize.android.data.remote.Product
-import com.virtusize.android.data.remote.ProductCheck
+import com.virtusize.android.data.remote.ProductCheckData
 import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.data.remote.UserBodyProfile
 import com.virtusize.android.network.VirtusizeAPIService
@@ -32,15 +32,15 @@ class VirtusizeFlutterRepository(
     private val sharedPreferencesHelper: SharedPreferencesHelper =
         SharedPreferencesHelper.getInstance(context)
 
-    suspend fun productDataCheck(product: VirtusizeProduct): ProductCheck? {
-        val productCheckResponse = apiService.productDataCheck(product)
+    suspend fun productCheck(product: VirtusizeProduct): ProductCheckData? {
+        val productCheckResponse = apiService.productCheck(product)
         sendEventsAndProductImage(product, productCheckResponse)
         return productCheckResponse.successData
     }
 
     private suspend fun sendEventsAndProductImage(
         product: VirtusizeProduct,
-        pdcResponse: VirtusizeApiResponse<ProductCheck>,
+        pdcResponse: VirtusizeApiResponse<ProductCheckData>,
     ) {
         if (pdcResponse.isSuccessful) {
             product.productCheckData = pdcResponse.successData

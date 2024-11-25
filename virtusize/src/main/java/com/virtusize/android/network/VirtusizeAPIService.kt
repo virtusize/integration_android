@@ -17,7 +17,7 @@ import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.virtusizeError
 import com.virtusize.android.data.parsers.BodyProfileRecommendedSizeJsonParser
 import com.virtusize.android.data.parsers.I18nLocalizationJsonParser
-import com.virtusize.android.data.parsers.ProductCheckJsonParser
+import com.virtusize.android.data.parsers.ProductCheckDataJsonParser
 import com.virtusize.android.data.parsers.ProductMetaDataHintsJsonParser
 import com.virtusize.android.data.parsers.ProductTypeJsonParser
 import com.virtusize.android.data.parsers.StoreJsonParser
@@ -28,7 +28,7 @@ import com.virtusize.android.data.parsers.UserSessionInfoJsonParser
 import com.virtusize.android.data.remote.BodyProfileRecommendedSize
 import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.data.remote.Product
-import com.virtusize.android.data.remote.ProductCheck
+import com.virtusize.android.data.remote.ProductCheckData
 import com.virtusize.android.data.remote.ProductMetaDataHints
 import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.data.remote.Store
@@ -111,9 +111,9 @@ internal class VirtusizeAPIService(
     /**
      * Executes the API task to make a network request for Product Check
      * @param product [VirtusizeProduct]
-     * @return the [VirtusizeApiResponse] with the data class [ProductCheck]
+     * @return the [VirtusizeApiResponse] with the data class [ProductCheckData]
      */
-    internal suspend fun productDataCheck(product: VirtusizeProduct): VirtusizeApiResponse<ProductCheck> =
+    internal suspend fun productCheck(product: VirtusizeProduct): VirtusizeApiResponse<ProductCheckData> =
         withContext(Dispatchers.IO) {
             val apiRequest = VirtusizeApi.productCheck(product)
             VirtusizeApiTask(
@@ -121,8 +121,8 @@ internal class VirtusizeAPIService(
                 sharedPreferencesHelper,
                 messageHandler,
             )
-                .setJsonParser(ProductCheckJsonParser())
-                .execute<ProductCheck>(apiRequest)
+                .setJsonParser(ProductCheckDataJsonParser())
+                .execute<ProductCheckData>(apiRequest)
                 .also { response ->
                     val storeId = response.successData?.data?.storeId
                     if (storeId != null) {
@@ -156,7 +156,7 @@ internal class VirtusizeAPIService(
      */
     internal suspend fun sendEvent(
         event: VirtusizeEvent,
-        withDataProduct: ProductCheck? = null,
+        withDataProduct: ProductCheckData? = null,
     ): VirtusizeApiResponse<Any> =
         withContext(Dispatchers.IO) {
             val defaultDisplay =
@@ -166,7 +166,7 @@ internal class VirtusizeAPIService(
             val apiRequest =
                 VirtusizeApi.sendEventToAPI(
                     virtusizeEvent = event,
-                    productCheck = withDataProduct,
+                    productCheckData = withDataProduct,
                     deviceOrientation =
                         if (context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                             context.getString(R.string.landscape)
