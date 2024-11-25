@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.AtomicReference
 import com.virtusize.android.data.local.SizeComparisonRecommendedSize
 import com.virtusize.android.data.local.SizeRecommendationType
+import com.virtusize.android.data.local.StoreId
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeEvent
@@ -218,6 +219,7 @@ internal class VirtusizeImpl(
             }
 
             override fun gotSizeRecommendations(
+                storeId: StoreId?,
                 externalProductId: String,
                 userProductRecommendedSize: SizeComparisonRecommendedSize?,
                 userBodyRecommendedSize: String?,
@@ -235,9 +237,10 @@ internal class VirtusizeImpl(
                                     }
                                 val recommendationText =
                                     getRecommendationText(
-                                        i18nLocalization,
-                                        userProductRecommendedSize,
-                                        userBodyRecommendedSize,
+                                        context = context,
+                                        i18nLocalization = i18nLocalization,
+                                        sizeComparisonRecommendedSize = userProductRecommendedSize,
+                                        bodyProfileRecommendedSizeName = userBodyRecommendedSize,
                                     ).trimI18nText(trimType)
                                 virtusizeView.setRecommendationText(
                                     externalProductId,

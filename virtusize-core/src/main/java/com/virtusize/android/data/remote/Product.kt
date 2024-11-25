@@ -1,6 +1,11 @@
 package com.virtusize.android.data.remote
 
+import android.content.Context
 import com.virtusize.android.data.local.SizeComparisonRecommendedSize
+import com.virtusize.android.data.local.StoreName
+import com.virtusize.android.data.local.VirtusizeStoreRepository
+import com.virtusize.android.network.VirtusizeApi
+import com.virtusize.android.util.ConfigurationUtils
 import com.virtusize.android.util.dpInPx
 
 /**
@@ -36,6 +41,7 @@ data class Product(
      * @return the InPage text
      */
     fun getRecommendationText(
+        context: Context,
         i18nLocalization: I18nLocalization,
         sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?,
         bodyProfileRecommendedSizeName: String?,
@@ -44,12 +50,13 @@ data class Product(
             isAccessory() -> accessoryText(i18nLocalization, sizeComparisonRecommendedSize)
             sizes.size == 1 ->
                 oneSizeText(
-                    i18nLocalization,
-                    sizeComparisonRecommendedSize,
-                    bodyProfileRecommendedSizeName,
+                    i18nLocalization = i18nLocalization,
+                    sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
+                    bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
                 )
             else ->
                 multiSizeText(
+                    context = context,
                     i18nLocalization,
                     sizeComparisonRecommendedSize,
                     bodyProfileRecommendedSizeName,
@@ -88,29 +95,33 @@ data class Product(
         bodyProfileRecommendedSizeName: String?,
     ): String {
         bodyProfileRecommendedSizeName?.let {
-            return i18nLocalization.bodyProfileOneSizeText
+            return i18nLocalization.oneSizeWillFitResultText
         }
         sizeComparisonRecommendedSize?.let {
             return i18nLocalization.getOneSizeProductComparisonText(it)
         }
-        return i18nLocalization.defaultNoDataText
+        return i18nLocalization.willNotFitResultText
     }
 
     /**
      * Gets the text for a multi-size product
      */
     private fun multiSizeText(
+        context: Context,
         i18nLocalization: I18nLocalization,
         sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?,
         bodyProfileRecommendedSizeName: String?,
     ): String {
         bodyProfileRecommendedSizeName?.let {
-            return i18nLocalization.getMultiSizeBodyProfileText(it)
+            return i18nLocalization.getMultiSizeBodyProfileText(
+                context = context,
+                bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
+            )
         }
         sizeComparisonRecommendedSize?.bestStoreProductSize?.name?.let {
             return i18nLocalization.getMultiSizeProductComparisonText(it)
         }
-        return i18nLocalization.defaultNoDataText
+        return i18nLocalization.willNotFitResultText
     }
 
     /**

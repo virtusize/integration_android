@@ -1,6 +1,7 @@
 package com.virtusize.android
 
 import com.virtusize.android.data.local.SizeComparisonRecommendedSize
+import com.virtusize.android.data.local.StoreId
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeProduct
 
@@ -9,6 +10,7 @@ internal interface VirtusizePresenter {
     fun onValidProductCheck(productWithPCDData: VirtusizeProduct)
 
     fun gotSizeRecommendations(
+        storeId: StoreId?,
         externalProductId: String,
         userProductRecommendedSize: SizeComparisonRecommendedSize?,
         userBodyRecommendedSize: String?,

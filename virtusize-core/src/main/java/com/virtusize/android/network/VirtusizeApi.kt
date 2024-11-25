@@ -3,6 +3,7 @@ package com.virtusize.android.network
 import android.net.Uri
 import com.virtusize.android.data.local.BodyProfileRecommendedSizeParams
 import com.virtusize.android.data.local.I18N_URL
+import com.virtusize.android.data.local.StoreId
 import com.virtusize.android.data.local.VirtusizeEnvironment
 import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeLanguage
@@ -57,7 +58,7 @@ object VirtusizeApi {
     var currentUserId: String? = null
         private set
 
-    var currentStoreId: String? = null
+    var currentStoreId: StoreId? = null
         private set
 
     /**
@@ -80,8 +81,8 @@ object VirtusizeApi {
         currentUserId = userId
     }
 
-    fun setStoreId(storeId: Int) {
-        currentStoreId = storeId.toString()
+    fun setStoreId(storeId: StoreId) {
+        currentStoreId = storeId
     }
 
     /**

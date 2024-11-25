@@ -31,6 +31,7 @@ import com.virtusize.android.data.local.VirtusizeViewStyle
 import com.virtusize.android.data.local.virtusizeError
 import com.virtusize.android.data.remote.Product
 import com.virtusize.android.databinding.ViewInpageStandardBinding
+import com.virtusize.android.util.ConfigurationUtils
 import com.virtusize.android.util.FontUtils
 import com.virtusize.android.util.VirtusizeUtils
 import com.virtusize.android.util.dpInPx
@@ -548,19 +549,19 @@ class VirtusizeInPageStandard
             )
 
             val configuredContext =
-                VirtusizeUtils.getConfiguredContext(
+                ConfigurationUtils.getConfiguredContext(
                     context,
                     virtusizeParams.language,
                 )
-            binding.inpageButton.text = configuredContext?.getText(R.string.virtusize_button_text)
+            binding.inpageButton.text = configuredContext.getText(R.string.virtusize_button_text)
             binding.privacyPolicyText.text =
-                configuredContext?.getText(R.string.virtusize_privacy_policy)
+                configuredContext.getText(R.string.virtusize_privacy_policy)
             binding.inpageLoadingText.text =
-                configuredContext?.getText(
+                configuredContext.getText(
                     R.string.inpage_loading_text,
                 )
             binding.inpageErrorText.text =
-                configuredContext?.getText(
+                configuredContext.getText(
                     R.string.inpage_long_error_text,
                 )
 
@@ -575,7 +576,7 @@ class VirtusizeInPageStandard
                     Intent(
                         Intent.ACTION_VIEW,
                         Uri.parse(
-                            configuredContext?.getString(R.string.virtusize_privacy_policy_link),
+                            configuredContext.getString(R.string.virtusize_privacy_policy_link),
                         ),
                     )
                 try {

@@ -35,9 +35,9 @@ class ProductTest {
                 context.getString(R.string.inpage_one_size_close_bottom_text),
                 context.getString(R.string.inpage_one_size_smaller_bottom_text),
                 context.getString(R.string.inpage_one_size_larger_bottom_text),
-                context.getString(R.string.inpage_one_size_body_profile_text),
+                context.getString(R.string.inpage_one_size_will_fit_result_text),
                 context.getString(R.string.inpage_multi_size_comparison_text),
-                context.getString(R.string.inpage_multi_size_body_profile_text),
+                context.getString(R.string.inpage_will_fit_result_text),
                 context.getString(R.string.inpage_no_data_text),
             )
     }
@@ -172,7 +172,7 @@ class ProductTest {
     @Test
     fun getRecText_oneSizeProduct_onlyHasBodyProfileRecommendedSize_returnOneSizeBodyProfileText() {
         bodyProfileRecommendedSizeName = "Small"
-        val oneSizeBodyProfileText = context.getString(R.string.inpage_one_size_body_profile_text)
+        val oneSizeBodyProfileText = context.getString(R.string.inpage_one_size_will_fit_result_text)
         assertThat(
             ProductFixtures.storeProduct(
                 sizeList =
@@ -218,7 +218,7 @@ class ProductTest {
     fun getRecText_multiSizeProduct_hasBodyProfileRecommendedSize_returnMultiSizeBodyProfileText() {
         bodyProfileRecommendedSizeName = "S"
         val multiSizeBodyProfileText =
-            context.getString(R.string.inpage_multi_size_body_profile_text)
+            context.getString(R.string.inpage_will_fit_result_text)
         assertThat(
             ProductFixtures.storeProduct(
                 sizeList =

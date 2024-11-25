@@ -5,7 +5,6 @@ import android.content.res.Configuration
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
-import com.virtusize.android.R
 import com.virtusize.android.TestUtils
 import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.remote.I18nLocalization
@@ -124,13 +123,13 @@ class I18nLocalizationJsonParserTest {
                 com.virtusize.android.core.R.string.inpage_one_size_larger_bottom_text,
             ),
             localizedContext.getString(
-                com.virtusize.android.core.R.string.inpage_one_size_body_profile_text,
+                com.virtusize.android.core.R.string.inpage_one_size_will_fit_result_text,
             ),
             localizedContext.getString(
                 com.virtusize.android.core.R.string.inpage_multi_size_comparison_text,
             ),
             localizedContext.getString(
-                com.virtusize.android.core.R.string.inpage_multi_size_body_profile_text,
+                com.virtusize.android.core.R.string.inpage_will_fit_result_text,
             ),
             localizedContext.getString(
                 com.virtusize.android.core.R.string.inpage_no_data_text,

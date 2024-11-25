@@ -20,6 +20,7 @@ import com.virtusize.android.data.remote.Product
 import com.virtusize.android.data.remote.ProductCheckData
 import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.network.VirtusizeAPIService
+import com.virtusize.android.network.VirtusizeApi
 import com.virtusize.android.network.VirtusizeApiResponse
 import com.virtusize.android.util.VirtusizeUtils
 import kotlinx.coroutines.Dispatchers
@@ -317,6 +318,7 @@ internal class VirtusizeRepository(
                 when (type) {
                     SizeRecommendationType.CompareProduct -> {
                         presenter?.gotSizeRecommendations(
+                            storeId = VirtusizeApi.currentStoreId,
                             externalProductId = productId,
                             userProductRecommendedSize = userProductRecommendedSize,
                             userBodyRecommendedSize = null,
@@ -325,6 +327,7 @@ internal class VirtusizeRepository(
 
                     SizeRecommendationType.Body -> {
                         presenter?.gotSizeRecommendations(
+                            storeId = VirtusizeApi.currentStoreId,
                             externalProductId = productId,
                             userProductRecommendedSize = null,
                             userBodyRecommendedSize = userBodyRecommendedSize,
@@ -333,6 +336,7 @@ internal class VirtusizeRepository(
 
                     else -> {
                         presenter?.gotSizeRecommendations(
+                            storeId = VirtusizeApi.currentStoreId,
                             externalProductId = productId,
                             userProductRecommendedSize = userProductRecommendedSize,
                             userBodyRecommendedSize = userBodyRecommendedSize,
