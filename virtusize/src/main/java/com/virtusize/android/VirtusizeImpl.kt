@@ -310,8 +310,7 @@ internal class VirtusizeImpl(
     /**
      * @see Virtusize.productCheck
      */
-    override suspend fun productCheck(virtusizeProduct: VirtusizeProduct): Boolean =
-        virtusizeRepository.productCheck(virtusizeProduct)
+    override suspend fun productCheck(virtusizeProduct: VirtusizeProduct): Boolean = virtusizeRepository.productCheck(virtusizeProduct)
 
     /**
      * @see Virtusize.setupVirtusizeView
