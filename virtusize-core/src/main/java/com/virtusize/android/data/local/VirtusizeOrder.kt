@@ -25,25 +25,17 @@ data class VirtusizeOrder
          */
         fun paramsToMap(
             apiKey: String,
-            externalUserId: String,
-        ): Map<String, Any> {
-            return emptyMap<String, Any>()
-                .plus(
-                    mapOf(PARAM_API_KEY to apiKey),
-                )
-                .plus(
-                    mapOf(PARAM_EXTERNAL_ORDER_ID to externalOrderId),
-                )
-                .plus(
-                    mapOf(PARAM_EXTERNAL_USER_ID to externalUserId),
-                )
-                .plus(
-                    region?.let { mapOf(PARAM_REGION to it) }.orEmpty(),
-                )
-                .plus(
-                    mapOf(PARAM_ITEMS to items.map { it.paramsToMap() }),
-                )
-        }
+            externalUserId: String?,
+        ): Map<String, Any> =
+            buildMap {
+                put(PARAM_API_KEY, apiKey)
+                put(PARAM_EXTERNAL_ORDER_ID, externalOrderId)
+                externalUserId?.let {
+                    put(PARAM_EXTERNAL_USER_ID, it)
+                }
+                region?.let { put(PARAM_REGION, it) }
+                put(PARAM_ITEMS, items.map { it.paramsToMap() })
+            }
 
         /**
          * Sets the string value of the region
