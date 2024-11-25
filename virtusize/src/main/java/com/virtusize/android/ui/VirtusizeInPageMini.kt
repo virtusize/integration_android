@@ -18,7 +18,6 @@ import com.virtusize.android.data.local.VirtusizeViewStyle
 import com.virtusize.android.databinding.ViewInpageMiniBinding
 import com.virtusize.android.util.ConfigurationUtils
 import com.virtusize.android.util.FontUtils
-import com.virtusize.android.util.VirtusizeUtils
 import com.virtusize.android.util.rightDrawable
 import com.virtusize.android.util.spToPx
 

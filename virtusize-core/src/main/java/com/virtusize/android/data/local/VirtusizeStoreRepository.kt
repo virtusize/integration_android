@@ -10,13 +10,12 @@ enum class StoreName(val value: String) {
 }
 
 object VirtusizeStoreRepository {
-
     private val storeMap: Map<StoreName, StoreId> =
         mapOf(
             StoreName.UNITED_ARROWS to StoreId(99),
         )
 
-    fun getStoreId(storeName: StoreName): StoreId =  storeMap[storeName] ?: throw UnsupportedOperationException("Store name not found")
+    fun getStoreId(storeName: StoreName): StoreId = storeMap[storeName] ?: throw UnsupportedOperationException("Store name not found")
 }
 
 fun StoreId?.isUnitedArrows(): Boolean {

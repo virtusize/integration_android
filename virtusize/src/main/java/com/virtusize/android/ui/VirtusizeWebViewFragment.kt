@@ -27,11 +27,9 @@ import com.virtusize.android.SharedPreferencesHelper
 import com.virtusize.android.auth.VirtusizeAuth
 import com.virtusize.android.auth.utils.VirtusizeURLCheck
 import com.virtusize.android.data.local.StoreId
-import com.virtusize.android.data.local.StoreName
 import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeProduct
-import com.virtusize.android.data.local.VirtusizeStoreRepository
 import com.virtusize.android.data.local.isUnitedArrows
 import com.virtusize.android.data.parsers.VirtusizeEventJsonParser
 import com.virtusize.android.databinding.FragmentVirtusizeWebviewBinding

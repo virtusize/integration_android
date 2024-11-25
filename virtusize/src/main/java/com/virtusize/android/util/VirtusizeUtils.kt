@@ -1,14 +1,10 @@
 package com.virtusize.android.util
 
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.os.LocaleList
 import com.virtusize.android.data.local.ProductComparisonFitInfo
 import com.virtusize.android.data.local.SizeComparisonRecommendedSize
-import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeParams
 import com.virtusize.android.data.local.VirtusizeProduct
@@ -18,7 +14,6 @@ import com.virtusize.android.data.remote.ProductSize
 import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.data.remote.Weight
 import com.virtusize.android.ui.VirtusizeWebViewActivity
-import java.util.Locale
 import kotlin.math.abs
 
 // The object that wraps Virtusize utility functions

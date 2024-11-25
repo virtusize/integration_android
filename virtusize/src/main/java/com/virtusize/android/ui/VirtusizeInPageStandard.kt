@@ -33,7 +33,6 @@ import com.virtusize.android.data.remote.Product
 import com.virtusize.android.databinding.ViewInpageStandardBinding
 import com.virtusize.android.util.ConfigurationUtils
 import com.virtusize.android.util.FontUtils
-import com.virtusize.android.util.VirtusizeUtils
 import com.virtusize.android.util.dpInPx
 import com.virtusize.android.util.onSizeChanged
 import com.virtusize.android.util.rightDrawable

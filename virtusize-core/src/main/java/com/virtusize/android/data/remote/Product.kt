@@ -2,10 +2,6 @@ package com.virtusize.android.data.remote
 
 import android.content.Context
 import com.virtusize.android.data.local.SizeComparisonRecommendedSize
-import com.virtusize.android.data.local.StoreName
-import com.virtusize.android.data.local.VirtusizeStoreRepository
-import com.virtusize.android.network.VirtusizeApi
-import com.virtusize.android.util.ConfigurationUtils
 import com.virtusize.android.util.dpInPx
 
 /**

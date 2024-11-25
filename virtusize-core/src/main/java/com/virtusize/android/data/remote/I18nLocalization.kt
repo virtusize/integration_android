@@ -70,7 +70,7 @@ data class I18nLocalization(
      */
     internal fun getMultiSizeBodyProfileText(
         context: Context,
-        bodyProfileRecommendedSizeName: String
+        bodyProfileRecommendedSizeName: String,
     ): String {
         val configuredContext = ConfigurationUtils.getConfiguredContext(context, language)
         // Override the willFitResultText for United Arrows
@@ -81,6 +81,6 @@ data class I18nLocalization(
                 willFitResultText
             }
         return "$adjustedWillFitResultText ${I18nConstants.BOLD_START_PLACEHOLDER}" +
-                "$bodyProfileRecommendedSizeName${I18nConstants.BOLD_END_PLACEHOLDER}"
+            "$bodyProfileRecommendedSizeName${I18nConstants.BOLD_END_PLACEHOLDER}"
     }
 }

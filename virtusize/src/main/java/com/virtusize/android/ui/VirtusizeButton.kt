@@ -13,7 +13,6 @@ import com.virtusize.android.data.local.VirtusizeParams
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.VirtusizeViewStyle
 import com.virtusize.android.util.ConfigurationUtils
-import com.virtusize.android.util.VirtusizeUtils
 
 class VirtusizeButton
     @JvmOverloads
