@@ -25,7 +25,7 @@ internal class I18nLocalizationJsonParser(
             inpageJSONObject?.optString(
                 FIELD_DEFAULT_ACCESSORY_TEXT,
                 configuredContext.getString(com.virtusize.android.core.R.string.inpage_default_accessory_text),
-            ).orEmpty()
+            )?.trim().orEmpty()
 
         val hasProductAccessoryTopText =
             accessoryJSONObject?.optString(
@@ -33,7 +33,7 @@ internal class I18nLocalizationJsonParser(
                 configuredContext.getString(
                     com.virtusize.android.core.R.string.inpage_has_product_top_text,
                 ),
-            ).orEmpty()
+            )?.trim().orEmpty()
 
         val hasProductAccessoryBottomText =
             accessoryJSONObject?.optString(
@@ -41,7 +41,7 @@ internal class I18nLocalizationJsonParser(
                 configuredContext.getString(
                     com.virtusize.android.core.R.string.inpage_has_product_bottom_text,
                 ),
-            ).orEmpty()
+            )?.trim().orEmpty()
 
         val oneSizeCloseTopText =
             oneSizeJSONObject?.optString(
@@ -57,7 +57,7 @@ internal class I18nLocalizationJsonParser(
                 configuredContext.getString(
                     com.virtusize.android.core.R.string.inpage_one_size_smaller_top_text,
                 ),
-            ).orEmpty()
+            )?.trim().orEmpty()
 
         val oneSizeLargerTopText =
             oneSizeJSONObject?.optString(
@@ -65,7 +65,7 @@ internal class I18nLocalizationJsonParser(
                 configuredContext.getString(
                     com.virtusize.android.core.R.string.inpage_one_size_larger_top_text,
                 ),
-            ).orEmpty()
+            )?.trim().orEmpty()
 
         val oneSizeCloseBottomText =
             oneSizeJSONObject?.optString(
@@ -73,7 +73,7 @@ internal class I18nLocalizationJsonParser(
                 configuredContext.getString(
                     com.virtusize.android.core.R.string.inpage_one_size_close_bottom_text,
                 ),
-            ).orEmpty()
+            )?.trim().orEmpty()
 
         val oneSizeSmallerBottomText =
             oneSizeJSONObject?.optString(
@@ -81,7 +81,7 @@ internal class I18nLocalizationJsonParser(
                 configuredContext.getString(
                     com.virtusize.android.core.R.string.inpage_one_size_smaller_bottom_text,
                 ),
-            ).orEmpty()
+            )?.trim().orEmpty()
 
         val oneSizeLargerBottomText =
             oneSizeJSONObject?.optString(
@@ -89,7 +89,7 @@ internal class I18nLocalizationJsonParser(
                 configuredContext.getString(
                     com.virtusize.android.core.R.string.inpage_one_size_larger_bottom_text,
                 ),
-            ).orEmpty()
+            )?.trim().orEmpty()
 
         val oneSizeWillFitResultText =
             inpageJSONObject?.optString(
@@ -97,7 +97,7 @@ internal class I18nLocalizationJsonParser(
                 configuredContext.getString(
                     com.virtusize.android.core.R.string.inpage_one_size_will_fit_result_text,
                 ),
-            ).orEmpty()
+            )?.trim().orEmpty()
 
         val sizeComparisonMultiSizeText =
             multiSizeJSONObject?.optString(
@@ -105,7 +105,7 @@ internal class I18nLocalizationJsonParser(
                 configuredContext.getString(
                     com.virtusize.android.core.R.string.inpage_multi_size_comparison_text,
                 ),
-            ).orEmpty()
+            )?.trim().orEmpty()
 
         val willFitResultText =
             inpageJSONObject?.optString(
@@ -113,7 +113,7 @@ internal class I18nLocalizationJsonParser(
                 configuredContext.getString(
                     com.virtusize.android.core.R.string.inpage_will_fit_result_text,
                 ),
-            ).orEmpty()
+            )?.trim().orEmpty()
 
         val willNotFitResultText =
             inpageJSONObject?.optString(
@@ -121,7 +121,7 @@ internal class I18nLocalizationJsonParser(
                 configuredContext.getString(
                     com.virtusize.android.core.R.string.inpage_will_not_fit_result_text,
                 ),
-            ).orEmpty()
+            )?.trim().orEmpty()
 
         val defaultNoDataText =
             inpageJSONObject?.optString(
@@ -129,7 +129,7 @@ internal class I18nLocalizationJsonParser(
                 configuredContext.getString(
                     com.virtusize.android.core.R.string.inpage_no_data_text,
                 ),
-            ).orEmpty()
+            )?.trim().orEmpty()
 
         return I18nLocalization(
             language = virtusizeLanguage,
