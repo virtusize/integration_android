@@ -10,7 +10,6 @@ internal interface VirtusizePresenter {
     fun onValidProductCheck(productWithPCDData: VirtusizeProduct)
 
     fun gotSizeRecommendations(
-        storeId: StoreId?,
         externalProductId: String,
         userProductRecommendedSize: SizeComparisonRecommendedSize?,
         userBodyRecommendedSize: String?,

@@ -219,7 +219,6 @@ internal class VirtusizeImpl(
             }
 
             override fun gotSizeRecommendations(
-                storeId: StoreId?,
                 externalProductId: String,
                 userProductRecommendedSize: SizeComparisonRecommendedSize?,
                 userBodyRecommendedSize: String?,

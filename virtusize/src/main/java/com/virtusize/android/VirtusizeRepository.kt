@@ -318,7 +318,6 @@ internal class VirtusizeRepository(
                 when (type) {
                     SizeRecommendationType.CompareProduct -> {
                         presenter?.gotSizeRecommendations(
-                            storeId = VirtusizeApi.currentStoreId,
                             externalProductId = productId,
                             userProductRecommendedSize = userProductRecommendedSize,
                             userBodyRecommendedSize = null,
@@ -327,7 +326,6 @@ internal class VirtusizeRepository(
 
                     SizeRecommendationType.Body -> {
                         presenter?.gotSizeRecommendations(
-                            storeId = VirtusizeApi.currentStoreId,
                             externalProductId = productId,
                             userProductRecommendedSize = null,
                             userBodyRecommendedSize = userBodyRecommendedSize,
@@ -336,7 +334,6 @@ internal class VirtusizeRepository(
 
                     else -> {
                         presenter?.gotSizeRecommendations(
-                            storeId = VirtusizeApi.currentStoreId,
                             externalProductId = productId,
                             userProductRecommendedSize = userProductRecommendedSize,
                             userBodyRecommendedSize = userBodyRecommendedSize,
