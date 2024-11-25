@@ -5,14 +5,14 @@ import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.virtusize.android.SharedPreferencesHelper
-import com.virtusize.android.data.parsers.ProductCheckJsonParser
+import com.virtusize.android.data.parsers.ProductCheckDataJsonParser
 import com.virtusize.android.data.parsers.ProductTypeJsonParser
 import com.virtusize.android.data.parsers.UserBodyProfileJsonParser
 import com.virtusize.android.data.parsers.UserProductJsonParser
 import com.virtusize.android.data.parsers.UserSessionInfoJsonParser
 import com.virtusize.android.data.remote.Data
 import com.virtusize.android.data.remote.Measurement
-import com.virtusize.android.data.remote.ProductCheck
+import com.virtusize.android.data.remote.ProductCheckData
 import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.data.remote.UserBodyProfile
 import com.virtusize.android.data.remote.UserSessionInfo
@@ -123,7 +123,7 @@ internal class VirtusizeApiTaskTest {
 
     @Test
     fun `test product-check endpoint with ProductCheckJsonParser should return expected ProductCheck`() {
-        virtusizeApiTask.setJsonParser(ProductCheckJsonParser())
+        virtusizeApiTask.setJsonParser(ProductCheckDataJsonParser())
 
         val pdcJsonString =
             """
@@ -141,10 +141,13 @@ internal class VirtusizeApiTaskTest {
             }
             """.trimIndent()
         val returnValue =
-            virtusizeApiTask.parseErrorStreamStringToObject(errorStreamString = pdcJsonString)
+            virtusizeApiTask.parseErrorStreamStringToObject(
+                apiRequestUrl = "https://staging.virtusize.jp/a/api/v3/product-check",
+                errorStreamString = pdcJsonString,
+            )
 
         val expectedProductCheck =
-            ProductCheck(
+            ProductCheckData(
                 Data(
                     validProduct = false,
                     fetchMetaData = false,
@@ -169,6 +172,7 @@ internal class VirtusizeApiTaskTest {
 
         val returnValue =
             virtusizeApiTask.parseErrorStreamStringToObject(
+                apiRequestUrl = "https://staging.virtusize.jp/a/api/v3/user-products",
                 errorStreamString = "{\"detail\":\"No wardrobe found\"}",
             )
 

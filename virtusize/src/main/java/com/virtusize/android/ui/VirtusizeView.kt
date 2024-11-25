@@ -46,7 +46,7 @@ interface VirtusizeView {
      * Sets the product with the product data check response to this Virtusize view
      * @param productWithPDC the [VirtusizeProduct] with the product data check response received from Virtusize API
      */
-    fun setProductWithProductDataCheck(productWithPDC: VirtusizeProduct) {
+    fun setProductWithProductCheckData(productWithPDC: VirtusizeProduct) {
         if (clientProduct == null) {
             virtusizeMessageHandler.onError(VirtusizeErrorType.NullProduct.virtusizeError())
             VirtusizeErrorType.NullProduct.throwError()

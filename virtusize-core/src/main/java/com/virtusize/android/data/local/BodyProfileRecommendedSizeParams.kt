@@ -15,7 +15,7 @@ import org.json.JSONObject
  * @see Product
  * @see UserBodyProfile
  */
-internal data class BodyProfileRecommendedSizeParams constructor(
+internal data class BodyProfileRecommendedSizeParams(
     private val productTypes: List<ProductType>,
     private val storeProduct: Product,
     private val userBodyProfile: UserBodyProfile,

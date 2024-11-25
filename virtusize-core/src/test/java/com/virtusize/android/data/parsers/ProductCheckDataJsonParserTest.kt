@@ -2,14 +2,14 @@ package com.virtusize.android.data.parsers
 
 import com.google.common.truth.Truth.assertThat
 import com.virtusize.android.data.remote.Data
-import com.virtusize.android.data.remote.ProductCheck
+import com.virtusize.android.data.remote.ProductCheckData
 import com.virtusize.android.fixtures.TestFixtures
 import org.junit.Test
 
-class ProductCheckJsonParserTest {
+class ProductCheckDataJsonParserTest {
     @Test
     fun parse_shouldReturnExpectedObject() {
-        val actualProductCheck = ProductCheckJsonParser().parse(TestFixtures.PRODUCT_DATA_CHECK)
+        val actualProductCheck = ProductCheckDataJsonParser().parse(TestFixtures.PRODUCT_CHECK_DATA)
 
         val expectedData =
             Data(
@@ -23,11 +23,11 @@ class ProductCheckJsonParserTest {
                 5,
             )
         val expectedProductCheck =
-            ProductCheck(
+            ProductCheckData(
                 expectedData,
                 "694",
                 "backend-checked-product",
-                TestFixtures.PRODUCT_DATA_CHECK.toString(),
+                TestFixtures.PRODUCT_CHECK_DATA.toString(),
             )
 
         assertThat(actualProductCheck).isEqualTo(expectedProductCheck)

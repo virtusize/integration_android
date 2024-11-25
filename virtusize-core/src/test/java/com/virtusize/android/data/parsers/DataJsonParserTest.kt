@@ -8,7 +8,7 @@ import org.junit.Test
 class DataJsonParserTest {
     @Test
     fun parse_shouldReturnExpectedObject() {
-        val actualData = DataJsonParser().parse(TestFixtures.PRODUCT_DATA_CHECK_DATA)
+        val actualData = DataJsonParser().parse(TestFixtures.PRODUCT_CHECK_JSON_DATA)
         val expectedData =
             Data(
                 true,

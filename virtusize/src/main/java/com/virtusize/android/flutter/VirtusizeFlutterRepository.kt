@@ -6,17 +6,15 @@ import com.virtusize.android.Virtusize
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeEvent
-import com.virtusize.android.data.local.VirtusizeEvents
 import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeOrder
 import com.virtusize.android.data.local.VirtusizeProduct
-import com.virtusize.android.data.local.getEventName
 import com.virtusize.android.data.local.throwError
 import com.virtusize.android.data.local.virtusizeError
 import com.virtusize.android.data.parsers.UserAuthDataJsonParser
 import com.virtusize.android.data.remote.Product
-import com.virtusize.android.data.remote.ProductCheck
+import com.virtusize.android.data.remote.ProductCheckData
 import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.data.remote.UserBodyProfile
 import com.virtusize.android.network.VirtusizeAPIService
@@ -34,21 +32,21 @@ class VirtusizeFlutterRepository(
     private val sharedPreferencesHelper: SharedPreferencesHelper =
         SharedPreferencesHelper.getInstance(context)
 
-    suspend fun productDataCheck(product: VirtusizeProduct): ProductCheck? {
-        val productCheckResponse = apiService.productDataCheck(product)
+    suspend fun productCheck(product: VirtusizeProduct): ProductCheckData? {
+        val productCheckResponse = apiService.productCheck(product)
         sendEventsAndProductImage(product, productCheckResponse)
         return productCheckResponse.successData
     }
 
     private suspend fun sendEventsAndProductImage(
         product: VirtusizeProduct,
-        pdcResponse: VirtusizeApiResponse<ProductCheck>,
+        pdcResponse: VirtusizeApiResponse<ProductCheckData>,
     ) {
         if (pdcResponse.isSuccessful) {
             product.productCheckData = pdcResponse.successData
             sendEvent(
                 product,
-                VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()),
+                VirtusizeEvent.UserSawProduct(),
             )
             val productCheck = pdcResponse.successData
             productCheck?.data?.apply {
@@ -72,7 +70,7 @@ class VirtusizeFlutterRepository(
 
                     sendEvent(
                         product,
-                        VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName()),
+                        VirtusizeEvent.UserSawWidgetButton(),
                     )
                 }
             }

@@ -7,19 +7,17 @@ import com.virtusize.android.data.local.SizeRecommendationType
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeEvent
-import com.virtusize.android.data.local.VirtusizeEvents
 import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeOrder
 import com.virtusize.android.data.local.VirtusizeParams
 import com.virtusize.android.data.local.VirtusizeProduct
-import com.virtusize.android.data.local.getEventName
 import com.virtusize.android.data.local.throwError
 import com.virtusize.android.data.local.virtusizeError
 import com.virtusize.android.data.parsers.UserAuthDataJsonParser
 import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.data.remote.Product
-import com.virtusize.android.data.remote.ProductCheck
+import com.virtusize.android.data.remote.ProductCheckData
 import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.network.VirtusizeAPIService
 import com.virtusize.android.network.VirtusizeApiResponse
@@ -51,7 +49,7 @@ internal class VirtusizeRepository(
     private var productTypes: List<ProductType>? = null
 
     // A map to cache the product data check data of all the visited products
-    private val virtusizeProductCheckResponseMap: MutableMap<ProductExternalId, VirtusizeApiResponse<ProductCheck>> =
+    private val virtusizeProductCheckResponseMap: MutableMap<ExternalProductId, VirtusizeApiResponse<ProductCheckData>> =
         mutableMapOf()
 
     // A set to cache the store product information of all the visited products
@@ -67,7 +65,7 @@ internal class VirtusizeRepository(
      * Sets the last visited store product on the Virtusize web view
      * @param externalProductId the external product ID set by a client
      */
-    internal fun setLastProductOnVirtusizeWebView(externalProductId: String) {
+    internal fun setLastProductOnVirtusizeWebView(externalProductId: ExternalProductId) {
         lastProductOnVirtusizeWebView = getProductBy(externalProductId)
     }
 
@@ -75,7 +73,7 @@ internal class VirtusizeRepository(
      * Get the [Product] data by an external product ID
      * @param externalProductId the external product ID set by a client
      */
-    internal fun getProductBy(externalProductId: String): Product? {
+    internal fun getProductBy(externalProductId: ExternalProductId): Product? {
         return storeProductSet.firstOrNull { product ->
             product.externalId == externalProductId
         }
@@ -86,10 +84,10 @@ internal class VirtusizeRepository(
      * @param virtusizeProduct the product info set by a client
      * @return true if the product is valid, false otherwise
      */
-    internal suspend fun productDataCheck(virtusizeProduct: VirtusizeProduct): Boolean {
+    internal suspend fun productCheck(virtusizeProduct: VirtusizeProduct): Boolean {
         val productCheckResponse =
             virtusizeProductCheckResponseMap.getOrPut(virtusizeProduct.externalId) {
-                virtusizeAPIService.productDataCheck(virtusizeProduct)
+                virtusizeAPIService.productCheck(virtusizeProduct)
             }
         if (productCheckResponse.isSuccessful) {
             val productCheck = productCheckResponse.successData!!
@@ -98,7 +96,7 @@ internal class VirtusizeRepository(
             // Send API Event UserSawProduct
             sendEvent(
                 virtusizeProduct,
-                VirtusizeEvent(VirtusizeEvents.UserSawProduct.getEventName()),
+                VirtusizeEvent.UserSawProduct(),
             )
 
             productCheck.data?.let { productCheckData ->
@@ -125,11 +123,11 @@ internal class VirtusizeRepository(
                     // Send API Event UserSawWidgetButton
                     sendEvent(
                         virtusizeProduct,
-                        VirtusizeEvent(VirtusizeEvents.UserSawWidgetButton.getEventName()),
+                        VirtusizeEvent.UserSawWidgetButton(),
                     )
 
                     withContext(Dispatchers.Main) {
-                        presenter?.onValidProductDataCheck(virtusizeProduct)
+                        presenter?.onValidProductCheck(virtusizeProduct)
                     }
                     return true
                 } else {
@@ -217,7 +215,7 @@ internal class VirtusizeRepository(
      * Updates the user session by calling the session API
      * @param externalProductId the external product ID set by a client
      */
-    internal suspend fun updateUserSession(externalProductId: String? = lastProductOnVirtusizeWebView?.externalId) {
+    internal suspend fun updateUserSession(externalProductId: ExternalProductId? = lastProductOnVirtusizeWebView?.externalId) {
         val userSessionInfoResponse = virtusizeAPIService.getUserSessionInfo()
         if (userSessionInfoResponse.isSuccessful) {
             sharedPreferencesHelper.storeSessionData(
@@ -246,7 +244,7 @@ internal class VirtusizeRepository(
      * @param shouldUpdateBodyProfile determines whether to update a user's body profile from the Virtusize API
      */
     internal suspend fun fetchDataForInPageRecommendation(
-        externalProductId: String? = null,
+        externalProductId: ExternalProductId? = null,
         selectedUserProductId: Int? = null,
         shouldUpdateUserProducts: Boolean = true,
         shouldUpdateBodyProfile: Boolean = true,
@@ -311,33 +309,33 @@ internal class VirtusizeRepository(
      * @param type the selected recommendation compare view type
      */
     internal suspend fun updateInPageRecommendation(
-        externalProductId: String? = null,
+        externalProductId: ExternalProductId? = null,
         type: SizeRecommendationType? = null,
     ) {
-        (externalProductId ?: lastProductOnVirtusizeWebView?.externalId)?.let { externalProductId ->
+        (externalProductId ?: lastProductOnVirtusizeWebView?.externalId)?.let { productId ->
             withContext(Dispatchers.Main) {
                 when (type) {
                     SizeRecommendationType.CompareProduct -> {
                         presenter?.gotSizeRecommendations(
-                            externalProductId,
-                            userProductRecommendedSize,
-                            null,
+                            externalProductId = productId,
+                            userProductRecommendedSize = userProductRecommendedSize,
+                            userBodyRecommendedSize = null,
                         )
                     }
 
                     SizeRecommendationType.Body -> {
                         presenter?.gotSizeRecommendations(
-                            externalProductId,
-                            null,
-                            userBodyRecommendedSize,
+                            externalProductId = productId,
+                            userProductRecommendedSize = null,
+                            userBodyRecommendedSize = userBodyRecommendedSize,
                         )
                     }
 
                     else -> {
                         presenter?.gotSizeRecommendations(
-                            externalProductId,
-                            userProductRecommendedSize,
-                            userBodyRecommendedSize,
+                            externalProductId = productId,
+                            userProductRecommendedSize = userProductRecommendedSize,
+                            userBodyRecommendedSize = userBodyRecommendedSize,
                         )
                     }
                 }
@@ -444,4 +442,4 @@ internal class VirtusizeRepository(
     }
 }
 
-private typealias ProductExternalId = String
+private typealias ExternalProductId = String

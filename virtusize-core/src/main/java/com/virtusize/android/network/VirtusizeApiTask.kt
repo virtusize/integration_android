@@ -5,7 +5,7 @@ import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.virtusizeError
 import com.virtusize.android.data.parsers.VirtusizeJsonParser
-import com.virtusize.android.data.remote.ProductCheck
+import com.virtusize.android.data.remote.ProductCheckData
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -26,9 +26,9 @@ import kotlin.jvm.Throws
  * @param messageHandler pass VirtusizeMessageHandler to listen to any Virtusize-related messages
  */
 class VirtusizeApiTask(
-    private var urlConnection: HttpsURLConnection?,
-    private var sharedPreferencesHelper: SharedPreferencesHelper,
-    private var messageHandler: VirtusizeMessageHandler?,
+    private val urlConnection: HttpsURLConnection?,
+    private val sharedPreferencesHelper: SharedPreferencesHelper,
+    private val messageHandler: VirtusizeMessageHandler?,
 ) {
     companion object {
         // The read timeout to use for all the requests, which is 80 seconds
@@ -38,8 +38,9 @@ class VirtusizeApiTask(
         private val CONNECT_TIMEOUT = TimeUnit.SECONDS.toMillis(60).toInt()
 
         // The request header keys
-        private const val HEADER_BROWSER_ID = "x-vs-bid"
-        private const val HEADER_AUTH = "x-vs-auth"
+        private const val HEADER_VS_BROWSER_ID = "x-vs-bid"
+        private const val HEADER_VS_AUTH = "x-vs-auth"
+        private const val HEADER_VS_STORE_ID = "x-vs-store-id"
         private const val HEADER_AUTHORIZATION = "Authorization"
         private const val HEADER_CONTENT_TYPE = "Content-Type"
         private const val HEADER_COOKIE = "Cookie"
@@ -88,9 +89,16 @@ class VirtusizeApiTask(
                         requestMethod = apiRequest.method.name
 
                         setRequestProperty(
-                            HEADER_BROWSER_ID,
+                            HEADER_VS_BROWSER_ID,
                             sharedPreferencesHelper.getBrowserId(),
                         )
+
+                        VirtusizeApi.currentStoreId?.let { storeId ->
+                            setRequestProperty(
+                                HEADER_VS_STORE_ID,
+                                storeId,
+                            )
+                        }
 
                         // Set the access token in the header if the request needs authentication
                         if (apiRequest.authorization) {
@@ -108,7 +116,7 @@ class VirtusizeApiTask(
                             // Set up the request header for the sessions API
                             if (apiRequest.url.contains(VirtusizeEndpoint.Sessions.path)) {
                                 sharedPreferencesHelper.getAuthToken()?.let {
-                                    setRequestProperty(HEADER_AUTH, it)
+                                    setRequestProperty(HEADER_VS_AUTH, it)
                                     setRequestProperty(HEADER_COOKIE, "")
                                 }
                             }
@@ -149,7 +157,11 @@ class VirtusizeApiTask(
                 urlConnection.errorStream != null -> {
                     errorStream = urlConnection.errorStream
                     val errorStreamString = readInputStreamAsString(errorStream)
-                    val response = parseErrorStreamStringToObject(errorStreamString)
+                    val response =
+                        parseErrorStreamStringToObject(
+                            apiRequestUrl = apiRequest.url,
+                            errorStreamString = errorStreamString,
+                        )
                     val error =
                         when (urlConnection.responseCode) {
                             HttpURLConnection.HTTP_FORBIDDEN -> {
@@ -159,7 +171,7 @@ class VirtusizeApiTask(
 
                             HttpURLConnection.HTTP_NOT_FOUND -> {
                                 // If the product cannot be found in the Virtusize Server
-                                if (response is ProductCheck) {
+                                if (response is ProductCheckData) {
                                     return VirtusizeApiResponse.Error(
                                         VirtusizeErrorType.UnParsedProduct.virtusizeError(
                                             extraMessage = response.productId,
@@ -265,12 +277,15 @@ class VirtusizeApiTask(
      * @param errorStreamString the string of the error stream
      * @return either an object that contains the content of the string of the input stream, the string of the error stream, or null
      */
-    internal fun parseErrorStreamStringToObject(errorStreamString: String? = null): Any? {
+    internal fun parseErrorStreamStringToObject(
+        apiRequestUrl: String,
+        errorStreamString: String?,
+    ): Any? {
         var result: Any? = null
         if (errorStreamString != null) {
             result =
                 try {
-                    parseStringToObject(streamString = errorStreamString) ?: errorStreamString
+                    parseStringToObject(apiRequestUrl = apiRequestUrl, streamString = errorStreamString) ?: errorStreamString
                 } catch (e: JSONException) {
                     errorStreamString
                 }
@@ -287,7 +302,7 @@ class VirtusizeApiTask(
      */
     @Throws(JSONException::class)
     internal fun parseStringToObject(
-        apiRequestUrl: String = "",
+        apiRequestUrl: String,
         streamString: String,
     ): Any? =
         when {

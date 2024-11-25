@@ -118,11 +118,11 @@ class VirtusizeButton
         }
 
         /**
-         * @see VirtusizeView.setProductWithProductDataCheck
+         * @see VirtusizeView.setProductWithProductCheckData
          * @throws VirtusizeErrorType.NullProduct error
          */
-        override fun setProductWithProductDataCheck(productWithPDC: VirtusizeProduct) {
-            super.setProductWithProductDataCheck(productWithPDC)
+        override fun setProductWithProductCheckData(productWithPDC: VirtusizeProduct) {
+            super.setProductWithProductCheckData(productWithPDC)
             if (clientProduct!!.externalId == productWithPDC.externalId) {
                 clientProduct!!.productCheckData = productWithPDC.productCheckData
                 visibility = View.VISIBLE

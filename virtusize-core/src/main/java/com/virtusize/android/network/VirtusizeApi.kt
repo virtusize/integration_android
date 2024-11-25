@@ -15,7 +15,7 @@ import com.virtusize.android.data.local.sizeRecommendationApiBaseUrl
 import com.virtusize.android.data.local.virtusizeUrl
 import com.virtusize.android.data.parsers.JsonUtils
 import com.virtusize.android.data.remote.Product
-import com.virtusize.android.data.remote.ProductCheck
+import com.virtusize.android.data.remote.ProductCheckData
 import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.data.remote.UserBodyProfile
 
@@ -53,7 +53,10 @@ object VirtusizeApi {
 
     private var environment = VirtusizeEnvironment.GLOBAL
     private lateinit var apiKey: String
-    private lateinit var userId: String
+
+    private lateinit var currentUserId: String
+    var currentStoreId: String? = null
+        private set
 
     /**
      * Initializes the VirtusizeApi
@@ -68,11 +71,15 @@ object VirtusizeApi {
     ) {
         environment = env
         apiKey = key
-        this.userId = userId
+        currentUserId = userId
     }
 
-    fun updateUserId(userId: String) {
-        this.userId = userId
+    fun setUserId(userId: String) {
+        currentUserId = userId
+    }
+
+    fun setStoreId(storeId: Int) {
+        currentStoreId = storeId.toString()
     }
 
     /**
@@ -155,18 +162,18 @@ object VirtusizeApi {
     /**
      * Gets a API request for logging and sending a Virtusize event to the server
      * @param virtusizeEvent the event to be sent to Virtusize server
-     * @param productCheck ProductCheckResponse as the additional payload to be sent to the server along with the event
+     * @param productCheckData ProductCheckResponse as the additional payload to be sent to the server along with the event
      * @param deviceOrientation the screen orientation of the device
      * @param screenResolution the screen resolution of the device
      * @param versionName the Virtusize SDK version
      * @return ApiRequest
      * @see VirtusizeEvent
-     * @see ProductCheck
+     * @see ProductCheckData
      * @see ApiRequest
      */
     fun sendEventToAPI(
         virtusizeEvent: VirtusizeEvent,
-        productCheck: ProductCheck?,
+        productCheckData: ProductCheckData?,
         deviceOrientation: String,
         screenResolution: String,
         versionName: String,
@@ -179,7 +186,7 @@ object VirtusizeApi {
         val params =
             buildEventPayload(
                 virtusizeEvent,
-                productCheck,
+                productCheckData,
                 deviceOrientation,
                 screenResolution,
                 versionName,
@@ -190,18 +197,18 @@ object VirtusizeApi {
     /**
      * Builds the additional payload to be sent when sending an event to the server
      * @param virtusizeEvent the event to be sent to the Virtusize server
-     * @param productCheck ProductCheckResponse as the additional payload to be sent to the server along with the event
+     * @param productCheckData ProductCheckResponse as the additional payload to be sent to the server along with the event
      * @param orientation the screen orientation of the device
      * @param resolution the screen resolution of the device
      * @param versionName the Virtusize SDK version
      * @return the MutableMap that holds pairs of keys and values for the payload
      * @see VirtusizeEvent
-     * @see ProductCheck
+     * @see ProductCheckData
      * @see MutableMap
      */
     private fun buildEventPayload(
         virtusizeEvent: VirtusizeEvent,
-        productCheck: ProductCheck?,
+        productCheckData: ProductCheckData?,
         orientation: String,
         resolution: String,
         versionName: String,
@@ -218,17 +225,17 @@ object VirtusizeApi {
         params["integrationVersion"] = "$versionName"
         params["snippetVersion"] = "$versionName"
 
-        if (productCheck != null) {
-            productCheck.data?.storeId?.let {
+        if (productCheckData != null) {
+            productCheckData.data?.storeId?.let {
                 params["storeId"] = it.toString()
             }
-            productCheck.data?.storeName?.let {
+            productCheckData.data?.storeName?.let {
                 params["storeName"] = it
             }
-            productCheck.data?.productTypeName?.let {
+            productCheckData.data?.productTypeName?.let {
                 params["storeProductType"] = it
             }
-            productCheck.productId.let {
+            productCheckData.productId.let {
                 params["storeProductExternalId"] = it
             }
         }
@@ -254,7 +261,7 @@ object VirtusizeApi {
                 .buildUpon()
                 .build()
                 .toString()
-        return ApiRequest(url, HttpMethod.POST, order.paramsToMap(apiKey, userId).toMutableMap())
+        return ApiRequest(url, HttpMethod.POST, order.paramsToMap(apiKey, currentUserId).toMutableMap())
     }
 
     /**

@@ -6,7 +6,7 @@ import com.virtusize.android.data.local.VirtusizeProduct
 
 //  An interface to pass the data from the actions of VirtusizeRepository
 internal interface VirtusizePresenter {
-    fun onValidProductDataCheck(productWithPDCData: VirtusizeProduct)
+    fun onValidProductCheck(productWithPCDData: VirtusizeProduct)
 
     fun gotSizeRecommendations(
         externalProductId: String,

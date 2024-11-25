@@ -87,11 +87,11 @@ data class Product(
         sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?,
         bodyProfileRecommendedSizeName: String?,
     ): String {
-        sizeComparisonRecommendedSize?.let {
-            return i18nLocalization.getOneSizeProductComparisonText(it)
-        }
         bodyProfileRecommendedSizeName?.let {
             return i18nLocalization.bodyProfileOneSizeText
+        }
+        sizeComparisonRecommendedSize?.let {
+            return i18nLocalization.getOneSizeProductComparisonText(it)
         }
         return i18nLocalization.defaultNoDataText
     }
@@ -104,11 +104,11 @@ data class Product(
         sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?,
         bodyProfileRecommendedSizeName: String?,
     ): String {
-        sizeComparisonRecommendedSize?.bestStoreProductSize?.name?.let {
-            return i18nLocalization.getMultiSizeProductComparisonText(it)
-        }
         bodyProfileRecommendedSizeName?.let {
             return i18nLocalization.getMultiSizeBodyProfileText(it)
+        }
+        sizeComparisonRecommendedSize?.bestStoreProductSize?.name?.let {
+            return i18nLocalization.getMultiSizeProductComparisonText(it)
         }
         return i18nLocalization.defaultNoDataText
     }

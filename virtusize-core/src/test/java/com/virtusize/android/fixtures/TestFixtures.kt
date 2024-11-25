@@ -1,7 +1,7 @@
 package com.virtusize.android.fixtures
 
 import com.virtusize.android.data.local.VirtusizeProduct
-import com.virtusize.android.data.parsers.ProductCheckJsonParser
+import com.virtusize.android.data.parsers.ProductCheckDataJsonParser
 import com.virtusize.android.data.remote.Measurement
 import com.virtusize.android.data.remote.UserBodyProfile
 import org.json.JSONObject
@@ -14,7 +14,7 @@ internal object TestFixtures {
 
     val EMPTY_JSON_DATA = JSONObject("{}")
 
-    val PRODUCT_DATA_CHECK =
+    val PRODUCT_CHECK_DATA =
         JSONObject(
             """
             {
@@ -36,11 +36,11 @@ internal object TestFixtures {
             """.trimIndent(),
         )
 
-    val PRODUCT_CHECK = ProductCheckJsonParser().parse(PRODUCT_DATA_CHECK)
+    val PRODUCT_CHECK = ProductCheckDataJsonParser().parse(PRODUCT_CHECK_DATA)
 
     val VIRTUSIZE_PRODUCT = VirtusizeProduct(EXTERNAL_ID, "http://image.com/xxx.jpg", PRODUCT_CHECK)
 
-    val PRODUCT_DATA_CHECK_DATA =
+    val PRODUCT_CHECK_JSON_DATA =
         JSONObject(
             """
             {

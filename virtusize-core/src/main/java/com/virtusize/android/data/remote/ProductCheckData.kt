@@ -5,10 +5,9 @@ import kotlinx.android.parcel.Parcelize
 
 /**
  * This class represents the response for the API request ProductCheck
- * @see VirtusizeEndpoint.ProductCheck
  */
 @Parcelize
-data class ProductCheck(
+data class ProductCheckData(
     val data: Data?,
     val productId: String,
     val name: String,
