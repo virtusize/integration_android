@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.AtomicReference
 import com.virtusize.android.data.local.SizeComparisonRecommendedSize
 import com.virtusize.android.data.local.SizeRecommendationType
-import com.virtusize.android.data.local.StoreId
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeEvent

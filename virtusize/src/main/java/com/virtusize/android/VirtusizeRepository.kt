@@ -20,7 +20,6 @@ import com.virtusize.android.data.remote.Product
 import com.virtusize.android.data.remote.ProductCheckData
 import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.network.VirtusizeAPIService
-import com.virtusize.android.network.VirtusizeApi
 import com.virtusize.android.network.VirtusizeApiResponse
 import com.virtusize.android.util.VirtusizeUtils
 import kotlinx.coroutines.Dispatchers

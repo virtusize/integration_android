@@ -1,7 +1,6 @@
 package com.virtusize.android
 
 import com.virtusize.android.data.local.SizeComparisonRecommendedSize
-import com.virtusize.android.data.local.StoreId
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeProduct
 
