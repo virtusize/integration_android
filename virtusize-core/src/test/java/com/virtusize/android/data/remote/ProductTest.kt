@@ -252,8 +252,8 @@ class ProductTest {
     }
 
     @Test
-    fun getRecommendationText_multiSizeProduct_noRecommendedSizes_returnWillNotFitResultText() {
-        val willNotFitResultText = context.getString(R.string.inpage_will_not_fit_result_text)
+    fun getRecommendationText_multiSizeProduct_noRecommendedSizes_returnBodyDataEmptyText() {
+        val bodyDataEmptyText = context.getString(R.string.inpage_body_data_empty_text)
         assertThat(
             ProductFixtures.storeProduct(
                 sizeList =
@@ -267,12 +267,12 @@ class ProductTest {
                 sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
                 bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
-        ).contains(willNotFitResultText)
+        ).contains(bodyDataEmptyText)
     }
 
     @Test
-    fun getRecommendationText_productIsNotAnAccessory_returnWillNotFitResultText() {
-        val willNotFitResultText = context.getString(R.string.inpage_will_not_fit_result_text)
+    fun getRecommendationText_productIsNotAnAccessory_returnBodyDataEmptyText() {
+        val bodyDataEmptyText = context.getString(R.string.inpage_body_data_empty_text)
         assertThat(
             ProductFixtures.storeProduct(4).getRecommendationText(
                 context = context,
@@ -280,7 +280,7 @@ class ProductTest {
                 sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
                 bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
-        ).isEqualTo(willNotFitResultText)
+        ).isEqualTo(bodyDataEmptyText)
         assertThat(
             ProductFixtures.storeProduct(7).getRecommendationText(
                 context = context,
@@ -288,7 +288,7 @@ class ProductTest {
                 sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
                 bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
-        ).isEqualTo(willNotFitResultText)
+        ).isEqualTo(bodyDataEmptyText)
         assertThat(
             ProductFixtures.storeProduct(15).getRecommendationText(
                 context = context,
@@ -296,6 +296,6 @@ class ProductTest {
                 sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
                 bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             ),
-        ).isEqualTo(willNotFitResultText)
+        ).isEqualTo(bodyDataEmptyText)
     }
 }
