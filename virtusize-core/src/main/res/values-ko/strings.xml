@@ -12,5 +12,5 @@
     <string name="inpage_multi_size_comparison_text">가장 유사한 상품은</string>
     <string name="inpage_will_fit_result_text">추천하는 사이즈는</string>
     <string name="inpage_will_not_fit_result_text">당신에게 잘 맞는지 확인해 보세요</string>
-    <string name="inpage_no_data_text">당신에게 맞는\n사이즈를 찾아보세요.</string>
+    <string name="inpage_body_data_empty_text">당신에게 맞는 사이즈를 찾아보세요</string>
 </resources>

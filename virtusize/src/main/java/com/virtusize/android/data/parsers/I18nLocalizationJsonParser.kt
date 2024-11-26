@@ -123,11 +123,11 @@ internal class I18nLocalizationJsonParser(
                 ),
             )?.trim().orEmpty()
 
-        val defaultNoDataText =
+        val bodyDataEmptyText =
             inpageJSONObject?.optString(
-                FIELD_NO_DATA_TEXT,
+                FIELD_BODY_DATA_EMPTY,
                 configuredContext.getString(
-                    com.virtusize.android.core.R.string.inpage_no_data_text,
+                    com.virtusize.android.core.R.string.inpage_body_data_empty_text,
                 ),
             )?.trim().orEmpty()
 
@@ -146,7 +146,7 @@ internal class I18nLocalizationJsonParser(
             sizeComparisonMultiSizeText = sizeComparisonMultiSizeText,
             willFitResultText = willFitResultText,
             willNotFitResultText = willNotFitResultText,
-            defaultNoDataText = defaultNoDataText,
+            bodyDataEmptyText = bodyDataEmptyText,
         )
     }
 
@@ -171,6 +171,6 @@ internal class I18nLocalizationJsonParser(
         private const val FIELD_WILL_NOT_FIT_RESULT = "willNotFitResult"
         private const val FIELD_SIZE_COMPARISON = "sizeComparison"
         private const val FIELD_DEFAULT_ACCESSORY_TEXT = "defaultAccessoryText"
-        private const val FIELD_NO_DATA_TEXT = "noDataText"
+        private const val FIELD_BODY_DATA_EMPTY = "bodydataEmpty"
     }
 }

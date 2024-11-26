@@ -32,7 +32,7 @@
         android:layout_toEndOf="@+id/inpageMiniImageView"
         android:layout_toRightOf="@+id/inpageMiniImageView"
         android:textColor="@color/virtusizeWhite"
-        tools:text="@string/inpage_no_data_text" />
+        tools:text="@string/inpage_body_data_empty_text" />
 
     <com.virtusize.android.ui.DotsLoadingTextView
         android:id="@+id/inpageMiniLoadingText"

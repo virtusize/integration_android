@@ -126,7 +126,7 @@ class I18nLocalizationJsonParserTest {
             localizedContext.getString(com.virtusize.android.core.R.string.inpage_multi_size_comparison_text),
             localizedContext.getString(com.virtusize.android.core.R.string.inpage_will_fit_result_text),
             localizedContext.getString(com.virtusize.android.core.R.string.inpage_will_not_fit_result_text),
-            localizedContext.getString(com.virtusize.android.core.R.string.inpage_no_data_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_body_data_empty_text),
         )
     }
 }

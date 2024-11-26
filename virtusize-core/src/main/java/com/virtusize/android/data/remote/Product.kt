@@ -96,7 +96,7 @@ data class Product(
         sizeComparisonRecommendedSize?.let {
             return i18nLocalization.getOneSizeProductComparisonText(it)
         }
-        return i18nLocalization.willNotFitResultText
+        return i18nLocalization.bodyDataEmptyText
     }
 
     /**
@@ -117,7 +117,7 @@ data class Product(
         sizeComparisonRecommendedSize?.bestStoreProductSize?.name?.let {
             return i18nLocalization.getMultiSizeProductComparisonText(it)
         }
-        return i18nLocalization.willNotFitResultText
+        return i18nLocalization.bodyDataEmptyText
     }
 
     /**
