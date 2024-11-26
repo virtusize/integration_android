@@ -26,11 +26,11 @@ import com.virtusize.android.R
 import com.virtusize.android.SharedPreferencesHelper
 import com.virtusize.android.auth.VirtusizeAuth
 import com.virtusize.android.auth.utils.VirtusizeURLCheck
-import com.virtusize.android.data.local.StoreName
+import com.virtusize.android.data.local.StoreId
 import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeProduct
-import com.virtusize.android.data.local.VirtusizeStoreRepository
+import com.virtusize.android.data.local.isUnitedArrows
 import com.virtusize.android.data.parsers.VirtusizeEventJsonParser
 import com.virtusize.android.databinding.FragmentVirtusizeWebviewBinding
 import com.virtusize.android.network.VirtusizeAPIService
@@ -52,8 +52,6 @@ class VirtusizeWebViewFragment : DialogFragment() {
     private val apiService: VirtusizeAPIService by lazy {
         VirtusizeAPIService.getInstance(requireContext(), virtusizeMessageHandler)
     }
-
-    private val storeRepository by lazy { VirtusizeStoreRepository() }
 
     private lateinit var clientProduct: VirtusizeProduct
 
@@ -232,7 +230,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
 
         val productStoreId = clientProduct.productCheckData?.data?.storeId
         when {
-            productStoreId == storeRepository.getStoreId(StoreName.UNITED_ARROWS) -> {
+            productStoreId != null && StoreId(productStoreId).isUnitedArrows -> {
                 virtusizeWebAppUrl = VirtusizeApi.getVirtusizeWebViewURLForSpecificClients()
                 binding.webView.loadUrl(virtusizeWebAppUrl)
             }

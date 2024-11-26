@@ -578,14 +578,14 @@ class VirtusizeAPIServiceTest {
                 ).successData
 
             assertThat(
-                actualI18nLocalization?.defaultNoDataText,
+                actualI18nLocalization?.bodyDataEmptyText,
             ).isEqualTo(
-                "Find the right size before purchasing",
+                "Find your right size",
             )
             assertThat(
                 actualI18nLocalization?.defaultAccessoryText,
             ).isEqualTo(
-                "See how everyday items fit",
+                "See what fits inside",
             )
         }
 

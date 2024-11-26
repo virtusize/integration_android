@@ -235,9 +235,10 @@ internal class VirtusizeImpl(
                                     }
                                 val recommendationText =
                                     getRecommendationText(
-                                        i18nLocalization,
-                                        userProductRecommendedSize,
-                                        userBodyRecommendedSize,
+                                        context = context,
+                                        i18nLocalization = i18nLocalization,
+                                        sizeComparisonRecommendedSize = userProductRecommendedSize,
+                                        bodyProfileRecommendedSizeName = userBodyRecommendedSize,
                                     ).trimI18nText(trimType)
                                 virtusizeView.setRecommendationText(
                                     externalProductId,

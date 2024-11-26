@@ -1,12 +1,18 @@
 package com.virtusize.android.data.remote
 
+import android.content.Context
 import com.virtusize.android.data.local.SizeComparisonRecommendedSize
+import com.virtusize.android.data.local.VirtusizeLanguage
+import com.virtusize.android.data.local.isUnitedArrows
+import com.virtusize.android.network.VirtusizeApi
+import com.virtusize.android.util.ConfigurationUtils
 import com.virtusize.android.util.I18nConstants
 
 /**
  * This class wraps the i18n localization texts
  */
 data class I18nLocalization(
+    val language: VirtusizeLanguage?,
     val defaultAccessoryText: String,
     val hasProductAccessoryTopText: String,
     val hasProductAccessoryBottomText: String,
@@ -16,10 +22,11 @@ data class I18nLocalization(
     val oneSizeCloseBottomText: String,
     val oneSizeSmallerBottomText: String,
     val oneSizeLargerBottomText: String,
-    val bodyProfileOneSizeText: String,
+    val oneSizeWillFitResultText: String,
     val sizeComparisonMultiSizeText: String,
-    val bodyProfileMultiSizeText: String,
-    val defaultNoDataText: String,
+    val willFitResultText: String,
+    val willNotFitResultText: String,
+    val bodyDataEmptyText: String,
 ) {
     enum class TrimType {
         ONELINE,
@@ -61,8 +68,19 @@ data class I18nLocalization(
     /**
      * Gets the recommendation text for a multi-size product based on a user body profile
      */
-    internal fun getMultiSizeBodyProfileText(bodyProfileRecommendedSizeName: String): String {
-        return "$bodyProfileMultiSizeText ${I18nConstants.BOLD_START_PLACEHOLDER}" +
+    internal fun getMultiSizeBodyProfileText(
+        context: Context,
+        bodyProfileRecommendedSizeName: String,
+    ): String {
+        val configuredContext = ConfigurationUtils.getConfiguredContext(context, language)
+        // Override the willFitResultText for United Arrows
+        val adjustedWillFitResultText =
+            if (VirtusizeApi.currentStoreId.isUnitedArrows) {
+                configuredContext.getString(com.virtusize.android.core.R.string.inpage_will_fit_result_text_united_arrows)
+            } else {
+                willFitResultText
+            }
+        return "$adjustedWillFitResultText ${I18nConstants.BOLD_START_PLACEHOLDER}" +
             "$bodyProfileRecommendedSizeName${I18nConstants.BOLD_END_PLACEHOLDER}"
     }
 }

@@ -1,31 +1,61 @@
 {
+  "language": "ja",
+  "apiVersion": "1.0.0",
   "bundle": "aoyama",
   "id": "aoyama.ja",
-  "language": "ja",
   "keys": {
     "apps": {
       "aoyama": {
         "inpage": {
-          "defaultAccessoryText": "日用品と比較する",
-          "noDataText": "購入前に簡単サイズチェック",
-          "oneSize": {
-            "closeLead": "持っている服と",
-            "smallerLead": "持っている服より",
-            "largerLead": "持っている服より",
-            "close": "近いサイズ感です",
-            "smaller": "小さめです",
-            "larger": "大きめです",
-            "bodyProfile": "あなたの体で\nサイズを簡単チェック",
-            "bodyProfileMini": "あなたの体でサイズを簡単チェック"
-          },
+          "bodydataEmpty": "簡単サイズチェック",
+          "defaultAccessoryText": "サイズ感を確認する",
+          "noDataFirstLineText": "購入前に",
+          "errorTextLong": "現在バーチャサイズは使えませんが、\nそのままお買い物をお楽しみください。",
+          "sizeCheck": "試す",
+          "willFitResult": "あなたにフィットするサイズ",
+          "oneSizeWillFitResult": "あなたにフィットします",
+          "accessoriesResult2": "大きさを比較",
+          "accessoriesResult1": "あなたのアイテムと",
           "multiSize": {
-            "sizeComparison": "あなたのアイテムに近いサイズ",
-            "bodyProfile": "あなたにおすすめのサイズ"
+            "sizeComparison": "あなたの服に近いサイズ",
+            "bodyProfile": "あなたにフィットするサイズ"
           },
+          "errorTextShort": "現在バーチャサイズは使えません。",
+          "oneSizeText": "サイズは %{value} のみ",
+          "details": "詳細",
+          "willNotFitResult": "試着をおすすめします",
+          "tryItOn": "試着する",
+          "accessoriesEmpty": "サイズ感を確認する",
+          "hasProductAccessoryText": "あなたのアイテムと%{boldStart}大きさを比較%{boldEnd}",
+          "oneSizeTitleResult": "サイズ: ",
+          "oneSizeFirstLineText": "ワンサイズ商品です",
+          "noDataText": "簡単サイズチェック",
+          "oneSizeBodydataEmpty": "サイズ感を確認できます",
+          "closestSizeToItem": "あなたのアイテムに近いサイズ: %{value}",
+          "noRecommendedSize": "おすすめできるサイズがありません",
+          "noDataSecondLineText": "簡単サイズチェック",
+          "oneSize": {
+            "larger": "大きめです",
+            "sizeComparisonLeadClose": "持っている服と",
+            "smaller": "小さめです",
+            "smallerLead": "持っている服より",
+            "bodyProfileSecondLineText": "サイズを簡単チェック",
+            "largerLead": "持っている服より",
+            "bodyProfileRecommend": "あなたにフィットするサイズ",
+            "bodyProfileFirstLineText": "あなたの体で",
+            "closeLead": "持っている服と",
+            "bodyProfile": "あなたの体で\nサイズを簡単チェック",
+            "bodyProfileMini": "あなたの体でサイズを簡単チェック",
+            "sizeComparisonClose": "近いサイズ感です",
+            "sizeComparisonNotClose": "近いサイズ感の服はありません",
+            "sizeComparisonLeadNotClose": "あなたのクローゼットに",
+            "close": "近いサイズ感です"
+          },
+          "privacyLink": "プライバシーポリシー",
           "accessory": {
-            "hasProductLead": "あなたのアイテムと",
             "hasProduct": "大きさを比較",
-            "noData": "日用品と比較する"
+            "noData": "サイズ感を確認する",
+            "hasProductLead": "あなたのアイテムと"
           }
         }
       }

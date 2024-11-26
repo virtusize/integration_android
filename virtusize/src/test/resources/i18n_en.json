@@ -1,31 +1,61 @@
 {
+  "language": "en",
+  "apiVersion": "1.0.0",
   "bundle": "aoyama",
   "id": "aoyama.en",
-  "language": "en",
   "keys": {
     "apps": {
       "aoyama": {
         "inpage": {
-          "defaultAccessoryText": "See how everyday items fit",
-          "noDataText": "Find the right size before purchasing",
-          "oneSize": {
-            "closeLead": "This item size is",
-            "smallerLead": "This item size is",
-            "largerLead": "This item size is",
-            "close": "close to your item",
-            "smaller": "smaller than your item",
-            "larger": "larger than your item",
-            "bodyProfile": "Try it on and find your size",
-            "bodyProfileMini": "Try it on and find your size"
-          },
+          "bodydataEmpty": "Find your right size",
+          "defaultAccessoryText": "See what fits inside",
+          "noDataFirstLineText": null,
+          "errorTextLong": "Virtusize is not available at the moment.\nPlease enjoy shopping without us.",
+          "sizeCheck": "Show me",
+          "willFitResult": "Your recommended size is ",
+          "oneSizeWillFitResult": "This item should fit you",
+          "accessoriesResult2": "your own item",
+          "accessoriesResult1": "See the difference from ",
           "multiSize": {
             "sizeComparison": "The closest size to your item is",
             "bodyProfile": "Your recommended size is"
           },
+          "errorTextShort": "Virtusize is not available at the moment.",
+          "oneSizeText": "There is only size %{value}",
+          "details": "Details",
+          "willNotFitResult": "Check how it fits you",
+          "tryItOn": "Try it on",
+          "accessoriesEmpty": "See what fits inside",
+          "hasProductAccessoryText": "See the size difference from %{boldStart}your own item%{boldEnd}",
+          "oneSizeTitleResult": "Size: ",
+          "oneSizeFirstLineText": "There is only size",
+          "noDataText": "Find your right size",
+          "oneSizeBodydataEmpty": "See how it fits you",
+          "closestSizeToItem": "The closest size to your item is %{value}",
+          "noRecommendedSize": "This product might not fit you",
+          "noDataSecondLineText": "Find the right size before purchasing",
+          "oneSize": {
+            "larger": "larger than your item",
+            "sizeComparisonLeadClose": "This item size is",
+            "smaller": "smaller than your item",
+            "smallerLead": "This item size is",
+            "bodyProfileSecondLineText": "Try it on and find your size",
+            "largerLead": "This item size is",
+            "bodyProfileRecommend": "Your recommended size is",
+            "bodyProfileFirstLineText": null,
+            "closeLead": "This item size is",
+            "bodyProfile": "Try it on and find your size",
+            "bodyProfileMini": "Try it on and find your size",
+            "sizeComparisonClose": "close to your own item",
+            "sizeComparisonNotClose": "no sizes close to your item",
+            "sizeComparisonLeadNotClose": "There are",
+            "close": "close to your item"
+          },
+          "privacyLink": "Privacy policy",
           "accessory": {
-            "hasProductLead": "See the size difference from",
             "hasProduct": "your own item",
-            "noData": "See how everyday items fit"
+            "noData": "See what fits inside",
+            "hasProductLead": "See the size difference from"
           }
         }
       }

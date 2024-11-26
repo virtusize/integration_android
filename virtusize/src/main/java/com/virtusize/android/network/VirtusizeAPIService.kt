@@ -8,6 +8,7 @@ import android.view.WindowManager
 import com.virtusize.android.BuildConfig
 import com.virtusize.android.R
 import com.virtusize.android.SharedPreferencesHelper
+import com.virtusize.android.data.local.StoreId
 import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeLanguage
@@ -126,7 +127,7 @@ internal class VirtusizeAPIService(
                 .also { response ->
                     val storeId = response.successData?.data?.storeId
                     if (storeId != null) {
-                        VirtusizeApi.setStoreId(storeId)
+                        VirtusizeApi.setStoreId(StoreId(storeId))
                     }
                 }
         }
@@ -357,7 +358,7 @@ internal class VirtusizeAPIService(
 
     /**
      * Gets the API response for fetching the i18n localization texts
-     * @param params [VirtusizeParams] to get the language that is set by a client
+     * @param language [VirtusizeLanguage] that is set by a client
      * @return the [VirtusizeApiResponse] with the data class [I18nLocalization]
      */
     internal suspend fun getI18n(language: VirtusizeLanguage?): VirtusizeApiResponse<I18nLocalization> =
@@ -365,7 +366,7 @@ internal class VirtusizeAPIService(
             val apiRequest =
                 VirtusizeApi.getI18n(
                     language ?: (
-                        VirtusizeLanguage.values()
+                        VirtusizeLanguage.entries
                             .find { it.value == Locale.getDefault().language } ?: VirtusizeLanguage.EN
                     ),
                 )
