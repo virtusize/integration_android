@@ -97,7 +97,7 @@ class VirtusizeApiTask(
                         VirtusizeApi.currentStoreId?.let { storeId ->
                             setRequestProperty(
                                 HEADER_VS_STORE_ID,
-                                storeId,
+                                storeId.value.toString(),
                             )
                         }
 

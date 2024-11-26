@@ -12,7 +12,7 @@ import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeParams
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.VirtusizeViewStyle
-import com.virtusize.android.util.VirtusizeUtils
+import com.virtusize.android.util.ConfigurationUtils
 
 class VirtusizeButton
     @JvmOverloads
@@ -138,10 +138,10 @@ class VirtusizeButton
          */
         private fun setupButtonTextConfiguredLocalization() {
             val configuredContext =
-                VirtusizeUtils.getConfiguredContext(context, virtusizeParams.language)
+                ConfigurationUtils.getConfiguredContext(context, virtusizeParams.language)
             if (text.isNullOrEmpty()) {
-                text = configuredContext?.getText(R.string.virtusize_button_text)
-                configuredContext?.resources?.getDimension(R.dimen.virtusize_button_textSize)?.let {
+                text = configuredContext.getText(R.string.virtusize_button_text)
+                configuredContext.resources?.getDimension(R.dimen.virtusize_button_textSize)?.let {
                     setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
                 }
             }

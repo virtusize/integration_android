@@ -1,5 +1,5 @@
 <resources>
-    <string name="inpage_default_accessory_text">See how everyday items fit</string>
+    <string name="inpage_default_accessory_text">See what fits inside</string>
     <string name="inpage_has_product_top_text">See the size difference from</string>
     <string name="inpage_has_product_bottom_text">your own item</string>
     <string name="inpage_one_size_close_top_text">This item size is</string>
@@ -8,8 +8,9 @@
     <string name="inpage_one_size_close_bottom_text">close to your item</string>
     <string name="inpage_one_size_smaller_bottom_text">smaller than your item</string>
     <string name="inpage_one_size_larger_bottom_text">larger than your item</string>
-    <string name="inpage_one_size_body_profile_text">Try it on and find your size</string>
+    <string name="inpage_one_size_will_fit_result_text">This item should fit you</string>
     <string name="inpage_multi_size_comparison_text">The closest size to your item is</string>
-    <string name="inpage_multi_size_body_profile_text">Your recommended size is</string>
-    <string name="inpage_no_data_text">Find the right size before purchasing</string>
+    <string name="inpage_will_fit_result_text">Your recommended size is</string>
+    <string name="inpage_will_not_fit_result_text">Check how it fits you</string>
+    <string name="inpage_body_data_empty_text">Find your right size</string>
 </resources>

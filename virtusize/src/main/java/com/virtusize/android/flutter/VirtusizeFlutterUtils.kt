@@ -13,6 +13,7 @@ import com.virtusize.android.data.remote.BodyProfileRecommendedSize
 import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.data.remote.Product
 import com.virtusize.android.data.remote.ProductType
+import com.virtusize.android.util.ConfigurationUtils
 import com.virtusize.android.util.VirtusizeUtils
 import com.virtusize.android.util.trimI18nText
 
@@ -50,6 +51,7 @@ object VirtusizeFlutterUtils {
     }
 
     fun getRecommendationText(
+        context: Context,
         selectedRecommendedType: SizeRecommendationType? = null,
         storeProduct: Product,
         userProductRecommendedSize: SizeComparisonRecommendedSize?,
@@ -63,9 +65,10 @@ object VirtusizeFlutterUtils {
         }
 
         return storeProduct.getRecommendationText(
-            i18nLocalization,
-            userProductRecommendedSize,
-            userBodyRecommendedSize,
+            context = context,
+            i18nLocalization = i18nLocalization,
+            sizeComparisonRecommendedSize = userProductRecommendedSize,
+            bodyProfileRecommendedSizeName = userBodyRecommendedSize,
         ).trimI18nText(I18nLocalization.TrimType.MULTIPLELINES)
     }
 
@@ -74,10 +77,10 @@ object VirtusizeFlutterUtils {
         language: VirtusizeLanguage?,
     ): String? {
         val configuredContext =
-            VirtusizeUtils.getConfiguredContext(
+            ConfigurationUtils.getConfiguredContext(
                 context,
                 language,
             )
-        return configuredContext?.getString(R.string.virtusize_privacy_policy_link)
+        return configuredContext.getString(R.string.virtusize_privacy_policy_link)
     }
 }
