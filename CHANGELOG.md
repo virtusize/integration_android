@@ -1,4 +1,4 @@
-### Next Release
+### 2.7.4
 * Fix: Inpage text is not appropriate when the size is recommended
 * Fix: Inpage text for on-boarding user has 2 patterns at random
 
