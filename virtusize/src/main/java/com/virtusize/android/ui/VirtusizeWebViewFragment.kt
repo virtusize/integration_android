@@ -160,6 +160,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
                                 settings.javaScriptEnabled = true
                                 settings.javaScriptCanOpenWindowsAutomatically = true
                                 settings.setSupportMultipleWindows(true)
+                                settings.setDomStorageEnabled(true)
                                 settings.userAgentString = System.getProperty("http.agent")
                                 webViewClient =
                                     object : WebViewClient() {
