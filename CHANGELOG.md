@@ -1,5 +1,6 @@
 ### Next Release
 * Fix: Password Reset button doesn’t work
+* Fix: After the login is succeeded, you can never go back to the app automatically
 
 ### 2.7.4
 * Fix: Inpage text is not appropriate when the size is recommended
