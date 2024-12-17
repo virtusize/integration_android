@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -148,41 +149,48 @@ class VirtusizeWebViewFragment : DialogFragment() {
                     resultMsg: Message,
                 ): Boolean {
                     if (resultMsg.obj != null && resultMsg.obj is WebView.WebViewTransport) {
-                        val popupWebView = WebView(view.context)
-                        popupWebView.settings.javaScriptEnabled = true
-                        popupWebView.settings.javaScriptCanOpenWindowsAutomatically = true
-                        popupWebView.settings.setSupportMultipleWindows(true)
-                        popupWebView.settings.userAgentString = System.getProperty("http.agent")
-                        popupWebView.webViewClient =
-                            object : WebViewClient() {
-                                override fun shouldOverrideUrlLoading(
-                                    view: WebView,
-                                    url: String,
-                                ): Boolean {
-                                    if (VirtusizeURLCheck.isExternalLinkFromVirtusize(url)) {
-                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                                        try {
-                                            startActivity(intent)
-                                        } finally {
-                                            return true
+                        val popupWebView = WebView(view.context).apply {
+                            setBackgroundColor(Color.TRANSPARENT)
+                            layoutParams = ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                            )
+                            settings.javaScriptEnabled = true
+                            settings.javaScriptCanOpenWindowsAutomatically = true
+                            settings.setSupportMultipleWindows(true)
+                            settings.userAgentString = System.getProperty("http.agent")
+                            webViewClient =
+                                object : WebViewClient() {
+                                    override fun shouldOverrideUrlLoading(
+                                        view: WebView,
+                                        url: String,
+                                    ): Boolean {
+                                        if (VirtusizeURLCheck.isExternalLinkFromVirtusize(url)) {
+                                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                            try {
+                                                startActivity(intent)
+                                            } finally {
+                                                return true
+                                            }
                                         }
+                                        if (showSNSButtons) {
+                                            return VirtusizeAuth.isSNSAuthUrl(
+                                                requireContext(),
+                                                virtusizeSNSAuthLauncher,
+                                                url,
+                                            )
+                                        }
+                                        return false
                                     }
-                                    if (showSNSButtons) {
-                                        return VirtusizeAuth.isSNSAuthUrl(
-                                            requireContext(),
-                                            virtusizeSNSAuthLauncher,
-                                            url,
-                                        )
+                                }
+                            webChromeClient =
+                                object : WebChromeClient() {
+                                    override fun onCloseWindow(window: WebView) {
+                                        binding.webView.removeAllViews()
                                     }
-                                    return false
                                 }
-                            }
-                        popupWebView.webChromeClient =
-                            object : WebChromeClient() {
-                                override fun onCloseWindow(window: WebView) {
-                                    binding.webView.removeAllViews()
-                                }
-                            }
+                        }
+
                         val transport = resultMsg.obj as WebView.WebViewTransport
                         binding.webView.addView(popupWebView)
                         transport.webView = popupWebView
