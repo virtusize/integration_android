@@ -1,6 +1,6 @@
 # Virtusize Android Integration
 
-[![](https://jitpack.io/v/virtusize/integration_android.svg)](https://jitpack.io/#virtusize/integration_android) [![](https://img.shields.io/maven-central/v/com.virtusize.android/virtusize)](https://search.maven.org/search?q=g:%22com.virtusize.android%22%20AND%20a:%22virtusize%22)
+[![](https://jitpack.io/v/virtusize/integration_android.svg)](https://jitpack.io/#virtusize/integration_android) [![](https://img.shields.io/maven-central/v/com.virtusize.android/virtusize)](https://central.sonatype.com/artifact/com.virtusize.android/virtusize)
 
 [日本語](https://github.com/virtusize/integration_android/blob/master/README-JP.md)
 
@@ -58,6 +58,8 @@ customers. [Contact our sales team](mailto:sales@virtusize.com) to become a cust
 - [Enable SNS Login in Virtusize for native Webview apps](#enable-sns-login-in-virtusize-for-native-webview-apps)
 
 - [Examples](#examples)
+
+- [Contributing](#contributing)
 
 - [License](#license)
 
@@ -856,6 +858,25 @@ Use the [Virtusize Auth SDK](https://github.com/virtusize/virtusize_auth_android
 
 1. Kotlin example https://github.com/virtusize/integration_android/tree/master/sampleAppKotlin
 2. Java example https://github.com/virtusize/integration_android/tree/master/sampleAppJava
+
+## Contributing
+
+### Linter
+
+We use [ktlint](https://github.com/pinterest/ktlint?tab=readme-ov-file) for formatting. Run linter check or format when needed:
+```sh
+./gradlew ktlint
+./gradlew ktlintFormat
+```
+
+### Git Hooks
+
+Ensure to setup the `per-push` git hooks after cloning the repo.  
+Git hook will run `ktlint` and tests on every push automatically.
+```sh
+./gradlew installGitHooks
+```
+
 
 ## License
 
