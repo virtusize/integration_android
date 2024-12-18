@@ -871,7 +871,7 @@ We use [ktlint](https://github.com/pinterest/ktlint?tab=readme-ov-file) for form
 
 ### Git Hooks
 
-Ensure to setup the `per-push` git hooks after cloning the repo.  
+Ensure to setup the `pre-push` git hooks after cloning the repo.  
 Git hook will run `ktlint` and tests on every push automatically.
 ```sh
 ./gradlew installGitHooks
