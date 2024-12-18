@@ -1,4 +1,4 @@
-### Next Release
+### 2.7.5
 * Fix: Password Reset button doesn’t work
 * Fix: After the login is succeeded, you can never go back to the app automatically
 
