@@ -655,11 +655,11 @@ for layouts where customers are browsing product images and size tables.
 - ##### Default Fonts
 
     - Japanese
-        - Noto Sans CJK JP
+        - Noto Sans JP
         - 12sp (Message)
         - 10sp (Button)
     - Korean
-        - Noto Sans CJK KR
+        - Noto Sans KR
         - 12sp (Message)
         - 10sp (Button)
     - English
@@ -875,6 +875,19 @@ Ensure to setup the `pre-push` git hooks after cloning the repo.
 Git hook will run `ktlint` and tests on every push automatically.
 ```sh
 ./gradlew installGitHooks
+```
+
+### Fonts & Localisation
+
+We use subset fonts to reduce the overal SDK size.  
+The subset glyphs limited to the characters used in the localization files.
+
+Whenever you update the localization files ensure to regenerate the subset fonts of the SDK.
+```sh
+# Ensure to install FontTools
+pip install --upgrade fonttools
+
+./gradlew generateSubsetFonts
 ```
 
 
