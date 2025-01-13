@@ -1,3 +1,4 @@
+import org.gradle.process.ExecOperations
 import java.io.File
 
 // Directories for fonts and localization
@@ -5,14 +6,24 @@ val sourceFontDir = file("./Fonts")
 val sdkFontDir = file("./virtusize/src/main/res/font")
 val localizationDir = file("./virtusize/src/main/res")
 
+// Access ExecOperations
+interface InjectedExecOps {
+    @get:Inject
+    val execOperations: ExecOperations
+}
+
 // Function to rename font file and its metadata
-fun renameFont(fontDir: File, font: File) {
+fun renameFont(
+    execOps: ExecOperations,
+    fontDir: File,
+    font: File,
+) {
     val fontName = font.nameWithoutExtension
     val newName = "subset_$fontName"
     val ttxFile = File(fontDir, "$fontName.ttx")
 
     // Step 1: Extract TTX XML
-    exec {
+    execOps.exec {
         commandLine("ttx", font.absolutePath)
     }
 
@@ -21,7 +32,7 @@ fun renameFont(fontDir: File, font: File) {
     ttxFile.writeText(updatedTtxContent)
 
     // Step 3: Regenerate font
-    exec {
+    execOps.exec {
         commandLine("ttx", "-o", "${fontDir.path}/$newName.ttf", ttxFile.absolutePath)
     }
 
@@ -33,37 +44,44 @@ fun renameFont(fontDir: File, font: File) {
 }
 
 // Function to subset font
-fun generateSubsetFont(font: String, language: String) {
+fun generateSubsetFont(
+    execOps: ExecOperations,
+    font: String,
+    language: String,
+) {
     val fontPath = File(sourceFontDir, font).absolutePath
     val outputPath = File(sdkFontDir, font).absolutePath
     val localizationFile = File(localizationDir, "values-$language/strings.xml").absolutePath
 
     // Subset the font using pyftsubset
-    exec {
+    execOps.exec {
         commandLine(
             "pyftsubset",
             fontPath,
             "--output-file=$outputPath",
             "--unicodes=U+0020-007E",
-            "--text-file=$localizationFile"
+            "--text-file=$localizationFile",
         )
     }
 
     // Rename the subset font
-    renameFont(sdkFontDir, File(sdkFontDir, font))
+    renameFont(execOps, sdkFontDir, File(sdkFontDir, font))
 }
 
 // Gradle task for generating subset fonts
 tasks.register("generateSubsetFonts") {
+    val injected = project.objects.newInstance<InjectedExecOps>()
+    val execOps = injected.execOperations
+
     // Japanese Regular
-    generateSubsetFont("noto_sans_jp_regular.ttf", "ja")
+    generateSubsetFont(execOps, "noto_sans_jp_regular.ttf", "ja")
 
     // Japanese Bold
-    generateSubsetFont("noto_sans_jp_bold.ttf", "ja")
+    generateSubsetFont(execOps, "noto_sans_jp_bold.ttf", "ja")
 
     // Korean Regular
-    generateSubsetFont("noto_sans_kr_regular.ttf", "ko")
+    generateSubsetFont(execOps, "noto_sans_kr_regular.ttf", "ko")
 
     // Korean Bold
-    generateSubsetFont("noto_sans_kr_bold.ttf", "ko")
+    generateSubsetFont(execOps, "noto_sans_kr_bold.ttf", "ko")
 }
