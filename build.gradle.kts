@@ -13,6 +13,7 @@ plugins {
 
 apply(from = "${project.rootDir}/gradle/githooks.gradle.kts")
 apply(from = "${project.rootDir}/gradle/ktlint.gradle.kts")
+apply(from = "${project.rootDir}/gradle/font.gradle.kts")
 
 allprojects {
     group = Constants.GROUP_ID
