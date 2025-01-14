@@ -1,5 +1,5 @@
 ### Next Release
-- Change: `InPageMini` and `InPageStandard` controls now use `NotoSans` font instead of `NotoSansCJK` for Japanese and Korean languages
+- Change: `InPageMini` and `InPageStandard` now use `NotoSans` font instead of `NotoSansCJK` for Japanese and Korean languages
 - Refactor: Reduce SDK binary size by using minimal-required subset of `NotoSans` fonts
 
 ### 2.7.5
