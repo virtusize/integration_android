@@ -5,7 +5,10 @@
 
 SOURCE_FONT_DIR=./fonts
 SDK_FONT_DIR=./virtusize/src/main/res/font
-LOCALIZATION_DIR=./virtusize/src/main/res
+LOCALIZATION_DIRS=(
+  ./virtusize/src/main/res
+  ./virtusize-core/src/main/res
+)
 
 # Rename the font file name and it's metadata to ensure they match.
 # The inner font name change is important, so it can be loaded as:
@@ -36,6 +39,30 @@ rename_font() {
   echo "Font renamed: $new_name"
 }
 
+# Compbine multiple localization files into one file.
+# The file is stored into a single 
+# Return file path
+combine_localization_files() {
+  local language=$1
+  local tmp_dir=./build/tmp/font
+
+  # Output file
+  mkdir -p $tmp_dir
+  local output_file=$tmp_dir/combined_strings_$language.xml
+
+  # Clear the output file if it exists
+  > $output_file
+
+  # Loop through each directory in the array
+  for dir in "${LOCALIZATION_DIRS[@]}"; do
+    file=$dir/values-$language/strings.xml
+    cat $file >> $output_file
+    echo "\n" >> "$output_file"  # Add a newline for separation
+  done
+
+  echo $output_file
+}
+
 # Reduce font size by using only the characters from the localization files.
 # The font is copied into the Virtusize Resources directory
 # The font is also renamed (file and metadata), to ensure it's properly loaded by the iOS
@@ -45,11 +72,13 @@ generate_subset_font() {
   
   echo "Processing '$font' ..."
 
+  local text_file=$(combine_localization_files $language)
+
   # create subset font
   pyftsubset ${SOURCE_FONT_DIR}/${font} \
     --output-file=${SDK_FONT_DIR}/${font} \
     --unicodes=U+0020-007E \
-    --text-file=${LOCALIZATION_DIR}/values-${language}/strings.xml
+    --text-file=$text_file
 
   # rename font
   rename_font ${SDK_FONT_DIR} ${font}
