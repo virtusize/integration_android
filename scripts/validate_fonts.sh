@@ -1,7 +1,10 @@
 #!/bin/bash
 
 FONTS_DIR=./virtusize/src/main/res/font
-LOCALIZATION_DIR=./virtusize/src/main/res
+LOCALIZATION_DIRS=(
+    ./virtusize/src/main/res
+    ./virtusize-core/src/main/res
+)
 
 # Strategy:
 #   1. Fetch all the glyphs from the font file
@@ -21,10 +24,7 @@ LOCALIZATION_DIR=./virtusize/src/main/res
 validate_font_symbols() {
     local font_file=$1
     local text_file=$2
-    local tmp_dir=./build/tmp/font
-
-    # Make TMP directory to save intermidiate files
-    mkdir -p $tmp_dir
+    local tmp_dir=$3
 
     # Prepare the unicode lists from both, localization file and font subset
     {
@@ -67,17 +67,34 @@ validate_font_symbols() {
             exit 1
         fi    
     }
-
-    # Clean up tmp directory
-    rm -r $tmp_dir
 }
 
 # Wrapper function 
 validate_font() {
-  local font=$1
-  local language=$2
+    local font=$1
+    local language=$2
+    local tmp_dir="./build/tmp/font"
+    local combined_text_file="$tmp_dir/combined_strings_$language.xml"
 
-  validate_font_symbols "$FONTS_DIR/$font" "$LOCALIZATION_DIR/values-$language/strings.xml"
+    # Prepare temp directory
+    mkdir -p $tmp_dir
+
+    # Combine multiple localization files into a single
+    {
+        > $combined_text_file # Clear the output file if it exists
+
+        # Loop through each directory in the array
+        for dir in "${LOCALIZATION_DIRS[@]}"; do
+            file=$dir/values-$language/strings.xml
+            cat $file >> $combined_text_file
+            echo "\n" >> "$combined_text_file"  # Add a newline for separation
+        done
+    }
+
+    validate_font_symbols $FONTS_DIR/$font $combined_text_file $tmp_dir
+
+    # Clean up temp directory
+    rm -r $tmp_dir
 }
 
 
