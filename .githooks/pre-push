@@ -1,5 +1,14 @@
 #!/bin/sh
 
+# Validate fonts
+echo "Validating fonts..."
+sh ./scripts/validate_fonts.sh
+
+if [ ! "$?" = 0 ] ; then
+    exit 1
+fi
+
+# Lint
 echo "Running ktlint check..."
 
 ./gradlew ktlint --daemon
@@ -14,6 +23,7 @@ else
     exit 1
 fi
 
+# Run Tests
 echo "Running unit tests..."
 
 ./gradlew testDebugUnitTest --daemon
