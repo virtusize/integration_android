@@ -872,7 +872,7 @@ We use [ktlint](https://github.com/pinterest/ktlint?tab=readme-ov-file) for form
 ### Git Hooks
 
 Ensure to setup the `pre-push` git hooks after cloning the repo.  
-Git hook will run `ktlint` and tests on every push automatically.
+Git hook will run `ktlint`, validate fonts and run tests on every push automatically.
 ```sh
 ./gradlew installGitHooks
 ```
@@ -887,7 +887,7 @@ Whenever you update the localization files, ensure to regenerate the subset font
 # Ensure to install FontTools
 pip install --upgrade fonttools
 
-./gradlew generateSubsetFonts
+sh ./scripts/build_fonts.sh
 ```
 
 
