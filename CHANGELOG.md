@@ -1,3 +1,7 @@
+### Next Release
+- Change: `InPageMini` and `InPageStandard` now use `NotoSans` font instead of `NotoSansCJK` for Japanese and Korean languages
+- Refactor: Reduce SDK binary size by using minimal-required subset of `NotoSans` fonts
+
 ### 2.7.5
 * Fix: Password Reset button doesn’t work
 * Fix: After the login is succeeded, you can never go back to the app automatically
