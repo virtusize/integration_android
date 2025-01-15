@@ -53,7 +53,7 @@ jobs:
       - name: Validate Fonts
         run: |
           pip install --upgrade fonttools
-          sh ./scripts/validate_fonts.sh
+          bash ./scripts/validate_fonts.sh
       - name: Unit tests
         run: ./gradlew testDebugUnitTest
       - uses: actions/upload-artifact@v4
