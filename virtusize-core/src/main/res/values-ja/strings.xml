@@ -13,4 +13,6 @@
     <string name="inpage_will_fit_result_text">あなたにフィットするサイズ</string>
     <string name="inpage_will_not_fit_result_text">試着をおすすめします</string>
     <string name="inpage_body_data_empty_text">簡単サイズチェック</string>
+    <!-- United Arrow specific -->
+    <string name="inpage_will_fit_result_text_united_arrows">あなたの体型に人気のサイズ</string>
 </resources>
