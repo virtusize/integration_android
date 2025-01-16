@@ -11,8 +11,8 @@ internal object FontUtils {
      */
     enum class FontName(val value: String) {
         ROBOTO("roboto"),
-        NOTO_SANS_CJK_JP("noto_sans_cjk_jp"),
-        NOTO_SANS_CJK_KR("noto_sans_cjk_kr"),
+        NOTO_SANS_JP("subset_noto_sans_jp"),
+        NOTO_SANS_KR("subset_noto_sans_kr"),
     }
 
     /**
@@ -49,10 +49,10 @@ internal object FontUtils {
                 setTypeFace(context, textViews, FontName.ROBOTO, fontType)
             }
             VirtusizeLanguage.JP -> {
-                setTypeFace(context, textViews, FontName.NOTO_SANS_CJK_JP, fontType)
+                setTypeFace(context, textViews, FontName.NOTO_SANS_JP, fontType)
             }
             VirtusizeLanguage.KR -> {
-                setTypeFace(context, textViews, FontName.NOTO_SANS_CJK_KR, fontType)
+                setTypeFace(context, textViews, FontName.NOTO_SANS_KR, fontType)
             }
 
             else -> {}

@@ -82,7 +82,7 @@ In your app `build.gradle` file, add the following dependencies:
 
   ```groovy
   dependencies {
-    implementation 'com.virtusize.android:virtusize:2.7.5'
+    implementation 'com.virtusize.android:virtusize:2.8.0'
   }
   ```
 
@@ -90,7 +90,7 @@ In your app `build.gradle` file, add the following dependencies:
 
   ```kotlin
   dependencies {
-    implementation("com.virtusize.android:virtusize:2.7.5")
+    implementation("com.virtusize.android:virtusize:2.8.0")
   }
   ```
 
@@ -655,11 +655,11 @@ for layouts where customers are browsing product images and size tables.
 - ##### Default Fonts
 
     - Japanese
-        - Noto Sans CJK JP
+        - Noto Sans JP
         - 12sp (Message)
         - 10sp (Button)
     - Korean
-        - Noto Sans CJK KR
+        - Noto Sans KR
         - 12sp (Message)
         - 10sp (Button)
     - English
@@ -872,9 +872,22 @@ We use [ktlint](https://github.com/pinterest/ktlint?tab=readme-ov-file) for form
 ### Git Hooks
 
 Ensure to setup the `pre-push` git hooks after cloning the repo.  
-Git hook will run `ktlint` and tests on every push automatically.
+Git hook will run `ktlint`, validate fonts and run tests on every push automatically.
 ```sh
 ./gradlew installGitHooks
+```
+
+### Fonts & Localisation
+
+We use subset fonts to reduce the overall SDK size.  
+The subset glyphs are limited to the characters used in the localization files.
+
+Whenever you update the localization files, ensure to regenerate the subset fonts of the SDK.
+```sh
+# Ensure to install FontTools
+pip install --upgrade fonttools
+
+sh ./scripts/build_fonts.sh
 ```
 
 

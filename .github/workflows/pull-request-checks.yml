@@ -50,6 +50,10 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
           cache: gradle
+      - name: Validate Fonts
+        run: |
+          pip install --upgrade fonttools
+          bash ./scripts/validate_fonts.sh
       - name: Unit tests
         run: ./gradlew testDebugUnitTest
       - uses: actions/upload-artifact@v4
