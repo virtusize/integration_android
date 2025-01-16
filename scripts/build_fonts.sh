@@ -39,7 +39,7 @@ rename_font() {
   echo "Font renamed: $new_name"
 }
 
-# Compbine multiple localization files into one file.
+# Combine multiple localization files into one file.
 # The file is stored into a single 
 # Return file path
 combine_localization_files() {
