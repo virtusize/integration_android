@@ -1,4 +1,4 @@
-### Next Release
+### 2.8.0
 - Change: `InPageMini` and `InPageStandard` now use `NotoSans` font instead of `NotoSansCJK` for Japanese and Korean languages
 - Refactor: Reduce SDK binary size by using minimal-required subset of `NotoSans` fonts
 - Feature: Validate fonts support all the localization texts during PR checks
