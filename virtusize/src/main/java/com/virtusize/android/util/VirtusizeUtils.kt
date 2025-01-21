@@ -130,6 +130,7 @@ internal object VirtusizeUtils {
                     Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY,
                     "javascript:vsParamsFromSDK(${params.vsParamsString(product)})",
                 )
+                putBoolean(Constants.VIRTUSIZE_SHOW_SNS_BUTTONS, virtusizeParams.showSNSButtons)
             }
             putParcelable(Constants.VIRTUSIZE_PRODUCT_KEY, product)
         }
