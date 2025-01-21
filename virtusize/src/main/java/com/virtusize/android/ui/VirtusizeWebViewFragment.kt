@@ -103,6 +103,9 @@ class VirtusizeWebViewFragment : DialogFragment() {
         binding.webView.settings.databaseEnabled = true
         binding.webView.settings.setSupportMultipleWindows(true)
         binding.webView.settings.javaScriptCanOpenWindowsAutomatically = true
+        // It's necessary for update WKWebView customUserAgent
+        // to make Google SDK work inside WebView. See https://stackoverflow.com/a/73152331
+        binding.webView.settings.userAgentString = "Mozilla/5.0 AppleWebKit/605.1.15 Mobile/15E148 Safari/604.1"
         // Add the Javascript interface to interface the web app with the web view
         binding.webView.addJavascriptInterface(WebAppInterface(), Constants.JS_BRIDGE_NAME)
         // Set up the web view client that adds JavaScript scripts for the interaction between the SDK and the web
