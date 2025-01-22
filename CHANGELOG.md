@@ -1,4 +1,4 @@
-### Next Release
+### 2.9.0
 - Refactor: Fix SNS authentication for Facebook, Google and LINE providers.
 
 ### 2.8.0
