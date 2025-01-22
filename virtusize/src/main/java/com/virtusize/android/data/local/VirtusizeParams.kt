@@ -26,7 +26,7 @@ data class VirtusizeParams(
     internal var externalUserId: String?,
     private val showSGI: Boolean,
     private val detailsPanelCards: Set<VirtusizeInfoCategory>,
-    private val showSNSButtons: Boolean,
+    internal val showSNSButtons: Boolean,
 ) {
     /**
      * Returns the virtusize parameter string to be passed to the JavaScript function vsParamsFromSDK

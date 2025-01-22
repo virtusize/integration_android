@@ -1,3 +1,6 @@
+### Next Release
+- Refactor: Fix SNS authentication for Facebook, Google and LINE providers.
+
 ### 2.8.0
 - Change: `InPageMini` and `InPageStandard` now use `NotoSans` font instead of `NotoSansCJK` for Japanese and Korean languages
 - Refactor: Reduce SDK binary size by using minimal-required subset of `NotoSans` fonts
