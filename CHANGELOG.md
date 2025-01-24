@@ -1,3 +1,6 @@
+### 2.10.0
+- Refactor: Optimize product load time by using async coroutines
+
 ### 2.9.0
 - Refactor: Fix SNS authentication for Facebook, Google and LINE providers.
 

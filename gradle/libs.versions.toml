@@ -9,6 +9,7 @@ fragment = "1.8.2"
 json = "20230227"
 junit = "4.13.2"
 kotlin = "2.0.0"
+kotlinxCoroutinesAndroid = "1.8.1"
 kotlinxCoroutinesTest = "1.8.1"
 ktlint = "1.2.1"
 lifecycleViewmodel = "2.8.4"
@@ -34,6 +35,7 @@ androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifec
 androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
 json = { module = "org.json:json", version.ref = "json" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 ktlint = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }

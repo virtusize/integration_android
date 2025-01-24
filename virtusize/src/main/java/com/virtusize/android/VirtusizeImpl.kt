@@ -23,6 +23,8 @@ import com.virtusize.android.util.valueOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 /**
@@ -196,8 +198,12 @@ internal class VirtusizeImpl(
                 if (currentProductExternalId.getAndSet(newExternalProductId) != newExternalProductId) {
                     if (virtusizeViewsContainInPage()) {
                         scope.launch {
-                            virtusizeRepository.fetchInitialData(params.language, productWithPCDData)
-                            virtusizeRepository.updateUserSession(newExternalProductId)
+                            // Those two data fetches are independent and can be run in parallel
+                            awaitAll(
+                                async { virtusizeRepository.fetchInitialData(params.language, productWithPCDData) },
+                                async { virtusizeRepository.updateUserSession(newExternalProductId) },
+                            )
+
                             virtusizeRepository.fetchDataForInPageRecommendation(newExternalProductId)
                             virtusizeRepository.updateInPageRecommendation(newExternalProductId)
                         }
