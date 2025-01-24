@@ -189,13 +189,13 @@ internal class VirtusizeRepository(
         val externalProductId = product.externalId
 
         // Those API requests are independent and can be run in parallel
-        val storeJob = async { virtusizeAPIService.getStoreProduct(productId) }
-        val productTypesJob = async { virtusizeAPIService.getProductTypes() }
-        val languageJob = async { virtusizeAPIService.getI18n(language) }
+        val storeDeferred = async { virtusizeAPIService.getStoreProduct(productId) }
+        val productTypesDeferred = async { virtusizeAPIService.getProductTypes() }
+        val languageDeferred = async { virtusizeAPIService.getI18n(language) }
 
-        val storeProductResponse = storeJob.await()
-        val productTypesResponse = productTypesJob.await()
-        val i18nResponse = languageJob.await()
+        val storeProductResponse = storeDeferred.await()
+        val productTypesResponse = productTypesDeferred.await()
+        val i18nResponse = languageDeferred.await()
 
         if (storeProductResponse.successData == null) {
             withContext(Dispatchers.Main) {
@@ -271,22 +271,22 @@ internal class VirtusizeRepository(
             }
         }
 
-        val userProductsJob =
+        val userProductsDeferred =
             if (shouldUpdateUserProducts) {
                 async { virtusizeAPIService.getUserProducts() }
             } else {
                 null
             }
 
-        val recommendedSizeJob =
+        val recommendedSizeDeferred =
             if (shouldUpdateBodyProfile) {
                 async { getUserBodyRecommendedSize(storeProduct, productTypes) }
             } else {
                 null
             }
 
-        val userProductsResponse = userProductsJob?.await()
-        userBodyRecommendedSize = recommendedSizeJob?.await()
+        val userProductsResponse = userProductsDeferred?.await()
+        userBodyRecommendedSize = recommendedSizeDeferred?.await()
 
         if (userProductsResponse != null) {
             if (userProductsResponse.isSuccessful) {
