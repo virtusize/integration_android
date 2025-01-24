@@ -93,66 +93,66 @@ internal class VirtusizeRepository(
                 virtusizeProductCheckResponseMap.getOrPut(virtusizeProduct.externalId) {
                     virtusizeAPIService.productCheck(virtusizeProduct)
                 }
-            if (productCheckResponse.isSuccessful) {
-                val productCheck = productCheckResponse.successData!!
-                virtusizeProduct.productCheckData = productCheck
+            if (!productCheckResponse.isSuccessful) {
+                productCheckResponse.failureData?.let { error -> messageHandler.onError(error) }
+                return@coroutineScope false
+            }
 
-                // Send API Event UserSawProduct as non-blocking
+            val productCheck = productCheckResponse.successData!!
+            virtusizeProduct.productCheckData = productCheck
+
+            // Send API Event UserSawProduct as non-blocking
+            launch {
+                sendEvent(
+                    virtusizeProduct,
+                    VirtusizeEvent.UserSawProduct(),
+                )
+            }
+
+            val productCheckData = productCheck.data ?: return@coroutineScope false
+
+            if (productCheckData.validProduct) {
+                if (productCheckData.fetchMetaData) {
+                    if (virtusizeProduct.imageUrl != null) {
+                        // If image URL is valid, send image URL to server
+                        val sendProductImageResponse =
+                            virtusizeAPIService.sendProductImageToBackend(
+                                product = virtusizeProduct,
+                            )
+                        if (!sendProductImageResponse.isSuccessful) {
+                            sendProductImageResponse.failureData?.let {
+                                messageHandler.onError(
+                                    it,
+                                )
+                            }
+                        }
+                    } else {
+                        VirtusizeErrorType.ImageUrlNotValid.throwError()
+                    }
+                }
+
+                // Send API Event UserSawWidgetButton as non-blocking
                 launch {
                     sendEvent(
                         virtusizeProduct,
-                        VirtusizeEvent.UserSawProduct(),
+                        VirtusizeEvent.UserSawWidgetButton(),
                     )
                 }
 
-                productCheck.data?.let { productCheckData ->
-                    if (productCheckData.validProduct) {
-                        if (productCheckData.fetchMetaData) {
-                            if (virtusizeProduct.imageUrl != null) {
-                                // If image URL is valid, send image URL to server
-                                val sendProductImageResponse =
-                                    virtusizeAPIService.sendProductImageToBackend(
-                                        product = virtusizeProduct,
-                                    )
-                                if (!sendProductImageResponse.isSuccessful) {
-                                    sendProductImageResponse.failureData?.let {
-                                        messageHandler.onError(
-                                            it,
-                                        )
-                                    }
-                                }
-                            } else {
-                                VirtusizeErrorType.ImageUrlNotValid.throwError()
-                            }
-                        }
-
-                        // Send API Event UserSawWidgetButton as non-blocking
-                        launch {
-                            sendEvent(
-                                virtusizeProduct,
-                                VirtusizeEvent.UserSawWidgetButton(),
-                            )
-                        }
-
-                        withContext(Dispatchers.Main) {
-                            presenter?.onValidProductCheck(virtusizeProduct)
-                        }
-                        return@coroutineScope true
-                    } else {
-                        withContext(Dispatchers.Main) {
-                            presenter?.hasInPageError(
-                                externalProductId = virtusizeProduct.externalId,
-                                error =
-                                    VirtusizeErrorType.InvalidProduct.virtusizeError(
-                                        extraMessage = virtusizeProduct.externalId,
-                                    ),
-                            )
-                        }
-                        return@coroutineScope false
-                    }
-                } ?: return@coroutineScope false
+                withContext(Dispatchers.Main) {
+                    presenter?.onValidProductCheck(virtusizeProduct)
+                }
+                return@coroutineScope true
             } else {
-                productCheckResponse.failureData?.let { error -> messageHandler.onError(error) }
+                withContext(Dispatchers.Main) {
+                    presenter?.hasInPageError(
+                        externalProductId = virtusizeProduct.externalId,
+                        error =
+                            VirtusizeErrorType.InvalidProduct.virtusizeError(
+                                extraMessage = virtusizeProduct.externalId,
+                            ),
+                    )
+                }
                 return@coroutineScope false
             }
         }
