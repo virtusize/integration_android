@@ -31,8 +31,9 @@
         app:virtusizeInPageMiniStyle="virtusize_black"
         app:inPageMiniBackgroundColor="@color/ocean_blue"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/openWebAppButton"
+        android:text="@string/show_web_app"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
