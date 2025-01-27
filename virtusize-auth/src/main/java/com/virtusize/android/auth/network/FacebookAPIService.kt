@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class FacebookAPIService {
-
     companion object {
         private const val BASE_URL = "https://graph.facebook.com/v2.9"
 
@@ -40,18 +39,19 @@ class FacebookAPIService {
      */
     suspend fun getUserInfo(accessToken: String): VirtusizeApiResponse<FacebookUser> =
         withContext(Dispatchers.IO) {
-            val apiRequest = ApiRequest(
-                "$BASE_URL/me",
-                HttpMethod.GET,
-                mutableMapOf(
-                    "fields" to "email,first_name,last_name,name,timezone,verified",
-                    SNS_ACCESS_TOKEN_KEY to accessToken
+            val apiRequest =
+                ApiRequest(
+                    "$BASE_URL/me",
+                    HttpMethod.GET,
+                    mutableMapOf(
+                        "fields" to "email,first_name,last_name,name,timezone,verified",
+                        SNS_ACCESS_TOKEN_KEY to accessToken,
+                    ),
                 )
-            )
             VirtusizeApiTask(
                 null,
                 sharedPreferencesHelper,
-                null
+                null,
             )
                 .setJsonParser(FacebookUserJsonParser())
                 .execute(apiRequest)

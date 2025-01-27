@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class GoogleAPIService {
-
     companion object {
         private const val BASE_URL = "https://www.googleapis.com/oauth2/v3"
 
@@ -40,18 +39,19 @@ class GoogleAPIService {
      */
     suspend fun getUserInfo(accessToken: String): VirtusizeApiResponse<GoogleUser> =
         withContext(Dispatchers.IO) {
-            val apiRequest = ApiRequest(
-                "$BASE_URL/userinfo",
-                HttpMethod.GET,
-                mutableMapOf(
-                    "alt" to "json",
-                    VirtusizeAuthConstants.SNS_ACCESS_TOKEN_KEY to accessToken
+            val apiRequest =
+                ApiRequest(
+                    "$BASE_URL/userinfo",
+                    HttpMethod.GET,
+                    mutableMapOf(
+                        "alt" to "json",
+                        VirtusizeAuthConstants.SNS_ACCESS_TOKEN_KEY to accessToken,
+                    ),
                 )
-            )
             VirtusizeApiTask(
                 null,
                 sharedPreferencesHelper,
-                null
+                null,
             )
                 .setJsonParser(GoogleUserJsonParser())
                 .execute(apiRequest)

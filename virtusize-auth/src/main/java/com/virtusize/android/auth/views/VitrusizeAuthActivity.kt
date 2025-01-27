@@ -3,33 +3,30 @@ package com.virtusize.android.auth.views
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION
 import com.virtusize.android.auth.data.SnsType
-import com.virtusize.android.auth.utils.VirtusizeAuthConstants.EXTRA_NAME_AUTH_URL
-import com.virtusize.android.auth.utils.VirtusizeAuthConstants.EXTRA_NAME_SNS_SCRIPT
-import com.virtusize.android.auth.network.FacebookAPIService
 import com.virtusize.android.auth.data.VirtusizeUser
+import com.virtusize.android.auth.network.FacebookAPIService
 import com.virtusize.android.auth.network.GoogleAPIService
 import com.virtusize.android.auth.repositories.FacebookRepository
 import com.virtusize.android.auth.repositories.GoogleRepository
-import com.virtusize.android.auth.utils.VirtusizeAuthConstants.SNS_ACCESS_TOKEN_KEY
+import com.virtusize.android.auth.utils.VirtusizeAuthConstants.EXTRA_NAME_AUTH_URL
+import com.virtusize.android.auth.utils.VirtusizeAuthConstants.EXTRA_NAME_SNS_SCRIPT
 import com.virtusize.android.auth.utils.VirtusizeAuthConstants.NATIVE_APP_ID_KEY
-import com.virtusize.android.data.parsers.JsonUtils
-import com.virtusize.android.util.valueOf
-import org.json.JSONObject
-import androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION
-import android.content.pm.ResolveInfo
-import android.content.pm.PackageManager
-import android.util.Log
+import com.virtusize.android.auth.utils.VirtusizeAuthConstants.SNS_ACCESS_TOKEN_KEY
 import com.virtusize.android.auth.utils.VirtusizeAuthConstants.SNS_CODE_KEY
 import com.virtusize.android.auth.utils.VirtusizeAuthConstants.SNS_ENV_KEY
 import com.virtusize.android.auth.utils.VirtusizeAuthConstants.SNS_REGION_KEY
 import com.virtusize.android.auth.utils.VirtusizeAuthConstants.SNS_TYPE_KEY
 import com.virtusize.android.auth.utils.VirtusizeUriHelper
 import com.virtusize.android.auth.utils.isVirtusizeSNSAuthURL
+import com.virtusize.android.util.valueOf
 import java.net.URLDecoder
 
 class VitrusizeAuthActivity : AppCompatActivity() {
@@ -44,10 +41,11 @@ class VitrusizeAuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = VirtusizeAuthViewModel(
-            FacebookRepository(FacebookAPIService.getInstance(context = this)),
-            GoogleRepository(GoogleAPIService.getInstance(context = this))
-        )
+        viewModel =
+            VirtusizeAuthViewModel(
+                FacebookRepository(FacebookAPIService.getInstance(context = this)),
+                GoogleRepository(GoogleAPIService.getInstance(context = this)),
+            )
 
         val appId = intent.getStringExtra(NATIVE_APP_ID_KEY)
         var authUrl = intent.getStringExtra(EXTRA_NAME_AUTH_URL)
@@ -61,18 +59,20 @@ class VitrusizeAuthActivity : AppCompatActivity() {
                     originalRedirectUri
                         .substringAfter("virtusize.", "")
                         .substringBefore("/", "com")
-                val env = if (originalRedirectUri.isVirtusizeSNSAuthURL()) {
-                    originalRedirectUri
-                        .substringAfter("sns-proxy/", "")
-                        .substringBefore("/", "staging")
-                } else {
-                    "production"
-                }
+                val env =
+                    if (originalRedirectUri.isVirtusizeSNSAuthURL()) {
+                        originalRedirectUri
+                            .substringAfter("sns-proxy/", "")
+                            .substringBefore("/", "staging")
+                    } else {
+                        "production"
+                    }
 
-                authUrl = authUrl.replace(
-                    originalRedirectUri,
-                    VirtusizeUriHelper.getRedirectUrl(region, env)
-                )
+                authUrl =
+                    authUrl.replace(
+                        originalRedirectUri,
+                        VirtusizeUriHelper.getRedirectUrl(region, env),
+                    )
 
                 // remove `channel_url` parameters as it breaks Facebook login and its outdated
                 if (authUrl.indexOf("$QUERY_CHANNEL_URL_KEY=") >= 0) {
@@ -83,30 +83,36 @@ class VitrusizeAuthActivity : AppCompatActivity() {
 
                 // Append the application ID to the value of the `state` query parameter
                 var uri = Uri.parse(authUrl)
-                uri = VirtusizeUriHelper.updateStateWithValue(
-                    uri,
-                    NATIVE_APP_ID_KEY,
-                    appId?.lowercase().toString())
+                uri =
+                    VirtusizeUriHelper.updateStateWithValue(
+                        uri,
+                        NATIVE_APP_ID_KEY,
+                        appId?.lowercase().toString(),
+                    )
 
                 val snsType = SnsType.fromHost(uri)
                 if (snsType != null) {
-                    uri = VirtusizeUriHelper.updateStateWithValue(
-                        uri,
-                        SNS_TYPE_KEY,
-                        snsType.value
-                    )
+                    uri =
+                        VirtusizeUriHelper.updateStateWithValue(
+                            uri,
+                            SNS_TYPE_KEY,
+                            snsType.value,
+                        )
                 }
 
-                uri = VirtusizeUriHelper.updateStateWithValue(
-                    uri,
-                    SNS_REGION_KEY,
-                    region.lowercase())
+                uri =
+                    VirtusizeUriHelper.updateStateWithValue(
+                        uri,
+                        SNS_REGION_KEY,
+                        region.lowercase(),
+                    )
 
-                uri = VirtusizeUriHelper.updateStateWithValue(
-                    uri,
-                    SNS_ENV_KEY,
-                    env.lowercase())
-
+                uri =
+                    VirtusizeUriHelper.updateStateWithValue(
+                        uri,
+                        SNS_ENV_KEY,
+                        env.lowercase(),
+                    )
 
                 if (deviceSupportsChromeCustomTabs(this)) {
                     val customTabsIntent = CustomTabsIntent.Builder().build()
@@ -133,10 +139,11 @@ class VitrusizeAuthActivity : AppCompatActivity() {
     private fun deviceSupportsChromeCustomTabs(context: Context): Boolean {
         val pm: PackageManager = context.packageManager
         // Get default VIEW intent handler.
-        val activityIntent = Intent()
-            .setAction(Intent.ACTION_VIEW)
-            .addCategory(Intent.CATEGORY_BROWSABLE)
-            .setData(Uri.parse("https://"))
+        val activityIntent =
+            Intent()
+                .setAction(Intent.ACTION_VIEW)
+                .addCategory(Intent.CATEGORY_BROWSABLE)
+                .setData(Uri.parse("https://"))
 
         // Get all apps that can handle VIEW intents.
         val resolvedActivityList = pm.queryIntentActivities(activityIntent, 0)
@@ -161,8 +168,9 @@ class VitrusizeAuthActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         val redirectURL = intent.data
-        val accessToken = redirectURL?.getQueryParameter(SNS_ACCESS_TOKEN_KEY)
-                        ?: redirectURL?.getQueryParameter(SNS_CODE_KEY)
+        val accessToken =
+            redirectURL?.getQueryParameter(SNS_ACCESS_TOKEN_KEY)
+                ?: redirectURL?.getQueryParameter(SNS_CODE_KEY)
         if (redirectURL == null || accessToken == null) {
             handleCustomTabToggleAndFinish()
             return
@@ -186,7 +194,7 @@ class VitrusizeAuthActivity : AppCompatActivity() {
                 val data = Intent()
                 data.putExtra(
                     EXTRA_NAME_SNS_SCRIPT,
-                    getSNSLoginScript(accessToken, redirectUrl)
+                    getSNSLoginScript(accessToken, redirectUrl),
                 )
                 setResult(Activity.RESULT_OK, data)
                 finish()
@@ -210,7 +218,7 @@ class VitrusizeAuthActivity : AppCompatActivity() {
                 val data = Intent()
                 data.putExtra(
                     EXTRA_NAME_SNS_SCRIPT,
-                    getSNSAuthScript(user)
+                    getSNSAuthScript(user),
                 )
                 setResult(Activity.RESULT_OK, data)
             }
@@ -228,16 +236,19 @@ class VitrusizeAuthActivity : AppCompatActivity() {
                     email: '${user.email}'
                 }
             )
-        """.trimIndent()
+            """.trimIndent()
     }
 
-    private fun getSNSLoginScript(accessToken: String, redirectUri: String): String {
+    private fun getSNSLoginScript(
+        accessToken: String,
+        redirectUri: String,
+    ): String {
         return """
             sdkSnsLogin({
-                code: '${accessToken}',
+                code: '$accessToken',
                 snsType: 'line',
-                redirectUri: '${redirectUri}'
+                redirectUri: '$redirectUri'
             })
-        """.trimIndent()
+            """.trimIndent()
     }
 }

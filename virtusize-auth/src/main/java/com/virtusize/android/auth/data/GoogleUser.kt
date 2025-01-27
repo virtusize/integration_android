@@ -16,8 +16,8 @@ data class GoogleUser(
     override val name: String,
     override val email: String,
     val locale: String,
-    val pictureUrl: String
-): VirtusizeUser {
+    val pictureUrl: String,
+) : VirtusizeUser {
     override val id: String
         get() = sub
     override val snsType: String

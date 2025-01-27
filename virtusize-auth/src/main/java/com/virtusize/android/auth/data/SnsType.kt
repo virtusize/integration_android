@@ -8,11 +8,11 @@ import android.net.Uri
 enum class SnsType(val value: String, val title: String, val host: String) {
     FACEBOOK("facebook", "Facebook", "facebook.com"),
     GOOGLE("google", "Google", "google.com"),
-    LINE("line", "LINE", "line.me");
+    LINE("line", "LINE", "line.me"),
+    ;
 
     companion object {
-        fun containsTitle(title: String): Boolean =
-            values().map { it.title }.any { title.contains(it) }
+        fun containsTitle(title: String): Boolean = values().map { it.title }.any { title.contains(it) }
 
         fun fromHost(uri: Uri): SnsType? =
             uri.host?.let { host ->

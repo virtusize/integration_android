@@ -11,8 +11,8 @@ data class FacebookUser(
     val firstName: String,
     val lastName: String,
     override val name: String,
-    override val email: String
-): VirtusizeUser {
+    override val email: String,
+) : VirtusizeUser {
     override val snsType: String
         get() = SnsType.FACEBOOK.value
 }

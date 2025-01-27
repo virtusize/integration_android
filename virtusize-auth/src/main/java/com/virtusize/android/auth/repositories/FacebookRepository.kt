@@ -1,10 +1,10 @@
 package com.virtusize.android.auth.repositories
 
-import com.virtusize.android.auth.network.FacebookAPIService
 import com.virtusize.android.auth.data.FacebookUser
+import com.virtusize.android.auth.network.FacebookAPIService
 
 class FacebookRepository(
-    private val facebookAPIService: FacebookAPIService
+    private val facebookAPIService: FacebookAPIService,
 ) {
     /**
      * Get the user's Facebook profile

@@ -6,7 +6,7 @@ import org.json.JSONObject
 /**
  * Parses the JSON response from Google API's endpoint to retrieve the user's data.
  */
-class GoogleUserJsonParser: VirtusizeJsonParser<GoogleUser> {
+class GoogleUserJsonParser : VirtusizeJsonParser<GoogleUser> {
     override fun parse(json: JSONObject): GoogleUser {
         return GoogleUser(
             json.optString(FIELD_SUB),
@@ -15,7 +15,7 @@ class GoogleUserJsonParser: VirtusizeJsonParser<GoogleUser> {
             json.optString(FIELD_NAME),
             json.optString(FIELD_EMAIL),
             json.optString(FIELD_LOCALE),
-            json.optString(FIELD_PICTURE)
+            json.optString(FIELD_PICTURE),
         )
     }
 

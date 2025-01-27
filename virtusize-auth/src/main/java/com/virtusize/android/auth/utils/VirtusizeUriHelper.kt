@@ -12,31 +12,40 @@ object VirtusizeUriHelper {
     /**
      * Checks if the URL is a Virtusize external link to be opened with a browser app
      */
-    fun updateStateWithValue(uri: Uri, key: String, value: String): Uri {
+    fun updateStateWithValue(
+        uri: Uri,
+        key: String,
+        value: String,
+    ): Uri {
         var stateQueryString = uri.getQueryParameter(QUERY_STATE_KEY) ?: "{}"
         if (stateQueryString.isNotEmpty() && !stateQueryString.startsWith("{")) {
             stateQueryString = "{\"state\":\"${stateQueryString}\"}"
         }
 
-        val stateMap =  JsonUtils.jsonObjectToMap(JSONObject(stateQueryString))
+        val stateMap = JsonUtils.jsonObjectToMap(JSONObject(stateQueryString))
 
         stateMap[key] = value
         val updatedStateQueryString = JSONObject(stateMap.toMap()).toString()
 
-        val newUri = updateUriParameter(
-            uri,
-            QUERY_STATE_KEY,
-            updatedStateQueryString
-        )
+        val newUri =
+            updateUriParameter(
+                uri,
+                QUERY_STATE_KEY,
+                updatedStateQueryString,
+            )
 
         return newUri
     }
 
-    fun getStateMap(uri: Uri): Map<String, Any> = uri.getQueryParameter(QUERY_STATE_KEY)
-        ?.let { JsonUtils.jsonObjectToMap(JSONObject(it)) }
-        ?: emptyMap()
+    fun getStateMap(uri: Uri): Map<String, Any> =
+        uri.getQueryParameter(QUERY_STATE_KEY)
+            ?.let { JsonUtils.jsonObjectToMap(JSONObject(it)) }
+            ?: emptyMap()
 
-    fun getRedirectUrl(region: String?, env: String?): String {
+    fun getRedirectUrl(
+        region: String?,
+        env: String?,
+    ): String {
         return "https://static.api.virtusize.${region ?: "com"}/a/sns-proxy/${env ?: "production"}/sns-auth.html"
     }
 
@@ -45,13 +54,17 @@ object VirtusizeUriHelper {
      *
      * @return updated URI
      */
-    private fun updateUriParameter(uri: Uri, key: String, newValue: String): Uri {
+    private fun updateUriParameter(
+        uri: Uri,
+        key: String,
+        newValue: String,
+    ): Uri {
         val params = uri.queryParameterNames
         return uri.buildUpon().clearQuery().apply {
             params.forEach { param ->
                 appendQueryParameter(
                     param,
-                    if (param == key) newValue else uri.getQueryParameter(param)
+                    if (param == key) newValue else uri.getQueryParameter(param),
                 )
             }
             if (!params.contains(key)) {

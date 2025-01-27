@@ -6,9 +6,9 @@ import android.content.Intent
 import android.webkit.WebView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.Keep
-import com.virtusize.android.auth.utils.VirtusizeAuthConstants.NATIVE_APP_ID_KEY
 import com.virtusize.android.auth.utils.VirtusizeAuthConstants.EXTRA_NAME_AUTH_URL
 import com.virtusize.android.auth.utils.VirtusizeAuthConstants.EXTRA_NAME_SNS_SCRIPT
+import com.virtusize.android.auth.utils.VirtusizeAuthConstants.NATIVE_APP_ID_KEY
 import com.virtusize.android.auth.utils.isVirtusizeAuthAppURL
 import com.virtusize.android.auth.utils.isVirtusizeSNSAuthURL
 import com.virtusize.android.auth.views.VirtusizeAuthAppActivity
@@ -26,27 +26,28 @@ object VirtusizeAuth {
     fun isSNSAuthUrl(
         context: Context,
         activityResultLauncher: ActivityResultLauncher<Intent>?,
-        url: String
-    ): Boolean = when {
-        url.isVirtusizeSNSAuthURL() -> {
-            Intent(context, VitrusizeAuthActivity::class.java).apply {
-                putExtra(EXTRA_NAME_AUTH_URL, url)
-                putExtra(NATIVE_APP_ID_KEY, context.packageName)
-            }.let { intent ->
-                activityResultLauncher?.launch(intent)
+        url: String,
+    ): Boolean =
+        when {
+            url.isVirtusizeSNSAuthURL() -> {
+                Intent(context, VitrusizeAuthActivity::class.java).apply {
+                    putExtra(EXTRA_NAME_AUTH_URL, url)
+                    putExtra(NATIVE_APP_ID_KEY, context.packageName)
+                }.let { intent ->
+                    activityResultLauncher?.launch(intent)
+                }
+                true
             }
-            true
-        }
-        url.isVirtusizeAuthAppURL() -> {
-            Intent(context, VirtusizeAuthAppActivity::class.java).apply {
-                putExtra(EXTRA_NAME_AUTH_URL, url)
-            }.let { intent ->
-                activityResultLauncher?.launch(intent)
+            url.isVirtusizeAuthAppURL() -> {
+                Intent(context, VirtusizeAuthAppActivity::class.java).apply {
+                    putExtra(EXTRA_NAME_AUTH_URL, url)
+                }.let { intent ->
+                    activityResultLauncher?.launch(intent)
+                }
+                true
             }
-            true
+            else -> false
         }
-        else -> false
-    }
 
     /**
      * Handles the result of the SNS auth flow.
@@ -55,7 +56,11 @@ object VirtusizeAuth {
      * @param resultCode The result code passed from the VirtusizeAuthActivity.
      * @param data The data passed from the VirtusizeAuthActivity.
      */
-    fun handleVirtusizeSNSAuthResult(view: WebView, resultCode: Int, data: Intent?) {
+    fun handleVirtusizeSNSAuthResult(
+        view: WebView,
+        resultCode: Int,
+        data: Intent?,
+    ) {
         if (resultCode == Activity.RESULT_OK) {
             data?.getStringExtra(EXTRA_NAME_SNS_SCRIPT)?.let { snsScript ->
                 view.evaluateJavascript(snsScript, null)

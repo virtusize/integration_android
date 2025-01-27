@@ -4,7 +4,7 @@ import com.virtusize.android.auth.data.GoogleUser
 import com.virtusize.android.auth.network.GoogleAPIService
 
 class GoogleRepository(
-    private val googleAPIService: GoogleAPIService
+    private val googleAPIService: GoogleAPIService,
 ) {
     /**
      * Get the user's Google profile
