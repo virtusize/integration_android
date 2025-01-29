@@ -3,7 +3,7 @@ package com.virtusize.android.auth.repositories
 import com.virtusize.android.auth.data.GoogleUser
 import com.virtusize.android.auth.network.GoogleAPIService
 
-class GoogleRepository(
+internal class GoogleRepository(
     private val googleAPIService: GoogleAPIService,
 ) {
     /**

@@ -11,7 +11,7 @@ import com.virtusize.android.auth.VirtusizeWebView
 import com.virtusize.android.auth.utils.VirtusizeAuthConstants.EXTRA_NAME_AUTH_URL
 import kotlin.time.Duration.Companion.seconds
 
-class VirtusizeAuthAppActivity : AppCompatActivity() {
+internal class VirtusizeAuthAppActivity : AppCompatActivity() {
     private lateinit var webView: VirtusizeWebView
     private val virtusizeSNSAuthLauncher =
         registerForActivityResult(

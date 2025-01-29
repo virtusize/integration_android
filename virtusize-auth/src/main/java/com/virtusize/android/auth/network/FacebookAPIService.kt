@@ -12,7 +12,7 @@ import com.virtusize.android.network.VirtusizeApiTask
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class FacebookAPIService {
+internal class FacebookAPIService {
     companion object {
         private const val BASE_URL = "https://graph.facebook.com/v2.9"
 

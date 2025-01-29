@@ -6,7 +6,7 @@ package com.virtusize.android.auth.data
  * @property lastName The user's last name.
  * @property email The user's email.
  */
-data class FacebookUser(
+internal data class FacebookUser(
     override val id: String,
     val firstName: String,
     val lastName: String,

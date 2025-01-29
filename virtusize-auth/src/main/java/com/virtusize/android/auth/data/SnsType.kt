@@ -5,7 +5,7 @@ import android.net.Uri
 /**
  * An enum class for the supported social networks.
  */
-enum class SnsType(val value: String, val title: String, val host: String) {
+internal enum class SnsType(val value: String, val title: String, val host: String) {
     FACEBOOK("facebook", "Facebook", "facebook.com"),
     GOOGLE("google", "Google", "google.com"),
     LINE("line", "LINE", "line.me"),

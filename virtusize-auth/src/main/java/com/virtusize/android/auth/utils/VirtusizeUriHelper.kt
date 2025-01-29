@@ -6,7 +6,7 @@ import com.virtusize.android.data.parsers.JsonUtils
 import org.json.JSONObject
 
 @Keep
-object VirtusizeUriHelper {
+internal object VirtusizeUriHelper {
     private const val QUERY_STATE_KEY = "state"
 
     /**

@@ -3,7 +3,7 @@ package com.virtusize.android.auth.repositories
 import com.virtusize.android.auth.data.FacebookUser
 import com.virtusize.android.auth.network.FacebookAPIService
 
-class FacebookRepository(
+internal class FacebookRepository(
     private val facebookAPIService: FacebookAPIService,
 ) {
     /**

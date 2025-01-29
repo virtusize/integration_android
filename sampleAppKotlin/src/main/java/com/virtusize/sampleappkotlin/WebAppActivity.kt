@@ -39,7 +39,6 @@ class WebAppActivity : AppCompatActivity() {
         // Method 2: Use WebView
         // webViewImplementation()
         webView.loadUrl("https://demo.virtusize.com")
-//        webView.loadUrl("https://www.underarmour.co.jp/f/dsg-1007074?vs-branch=sns-line-refactor")
     }
 
     /*

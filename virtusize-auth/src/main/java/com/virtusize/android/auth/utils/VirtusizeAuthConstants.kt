@@ -1,6 +1,6 @@
 package com.virtusize.android.auth.utils
 
-object VirtusizeAuthConstants {
+internal object VirtusizeAuthConstants {
     internal const val EXTRA_NAME_AUTH_URL = "auth_url"
     internal const val EXTRA_NAME_SNS_SCRIPT = "sns_script"
 

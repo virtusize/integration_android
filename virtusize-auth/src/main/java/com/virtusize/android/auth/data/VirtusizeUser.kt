@@ -7,7 +7,7 @@ package com.virtusize.android.auth.data
  * @property snsType The user's social network type.
  * @property name The user's name.
  */
-interface VirtusizeUser {
+internal interface VirtusizeUser {
     val id: String
     val snsType: String
     val name: String

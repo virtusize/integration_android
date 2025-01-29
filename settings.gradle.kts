@@ -16,7 +16,6 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url = uri("https://github.com/virtusize/virtusize_auth_android/raw/main") }
         maven { url = uri("https://jitpack.io") }
     }
 }

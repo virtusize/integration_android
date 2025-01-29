@@ -12,7 +12,7 @@ import com.virtusize.android.network.VirtusizeApiTask
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class GoogleAPIService {
+internal class GoogleAPIService {
     companion object {
         private const val BASE_URL = "https://www.googleapis.com/oauth2/v3"
 

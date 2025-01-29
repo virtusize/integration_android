@@ -9,7 +9,7 @@ package com.virtusize.android.auth.data
  * @property locale The user's locale.
  * @property pictureUrl The user's profile picture URL.
  */
-data class GoogleUser(
+internal data class GoogleUser(
     val sub: String,
     val givenName: String,
     val familyName: String,

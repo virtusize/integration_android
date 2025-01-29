@@ -3,7 +3,7 @@ package com.virtusize.android.auth.data
 import com.virtusize.android.data.parsers.VirtusizeJsonParser
 import org.json.JSONObject
 
-class FacebookUserJsonParser : VirtusizeJsonParser<FacebookUser> {
+internal class FacebookUserJsonParser : VirtusizeJsonParser<FacebookUser> {
     override fun parse(json: JSONObject): FacebookUser {
         return FacebookUser(
             json.optString(FIELD_ID),

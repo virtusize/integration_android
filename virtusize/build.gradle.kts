@@ -71,9 +71,7 @@ android {
 
 dependencies {
     api(project(":virtusize-core"))
-    api(project(":virtusize-auth")) {
-        exclude(group = "com.virtusize.android", module = "virtusize-core")
-    }
+    api(project(":virtusize-auth"))
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
