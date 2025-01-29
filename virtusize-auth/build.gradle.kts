@@ -64,7 +64,7 @@ android {
 }
 
 dependencies {
-    api(project(":virtusize-core"))
+    implementation(project(":virtusize-core"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
