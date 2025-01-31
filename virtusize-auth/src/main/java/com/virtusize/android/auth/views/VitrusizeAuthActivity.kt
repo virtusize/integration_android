@@ -29,7 +29,7 @@ import com.virtusize.android.auth.utils.isVirtusizeSNSAuthURL
 import com.virtusize.android.util.valueOf
 import java.net.URLDecoder
 
-class VitrusizeAuthActivity : AppCompatActivity() {
+internal class VitrusizeAuthActivity : AppCompatActivity() {
     companion object {
         private const val QUERY_REDIRECT_URI_KEY = "redirect_uri"
         private const val QUERY_CHANNEL_URL_KEY = "channel_url"
