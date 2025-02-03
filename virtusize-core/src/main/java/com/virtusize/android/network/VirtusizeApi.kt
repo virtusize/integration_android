@@ -54,6 +54,7 @@ object VirtusizeApi {
 
     private var environment = VirtusizeEnvironment.GLOBAL
     private lateinit var apiKey: String
+    private var testingBranch: String? = null
 
     var currentUserId: String? = null
         private set
@@ -66,15 +67,18 @@ object VirtusizeApi {
      * @param env the Virtusize environment that is used in network requests
      * @param key the API key that is unique for every Virtusize client
      * @param userId the user ID that is unique from the client system
+     * @param testingBranch the testing environment branch name
      */
     fun init(
         env: VirtusizeEnvironment,
         key: String,
         userId: String,
+        branch: String?,
     ) {
         environment = env
         apiKey = key
         currentUserId = userId
+        testingBranch = branch
     }
 
     fun setUserId(userId: String) {
@@ -122,8 +126,8 @@ object VirtusizeApi {
      */
     fun getVirtusizeWebViewURL(version: String = DEFAULT_AOYAMA_VERSION): String {
         val urlBuilder =
-            Uri.parse(
-                environment.virtusizeUrl() + VirtusizeEndpoint.VirtusizeWebView(version = version).path,
+            Uri.parse(environment.virtusizeUrl()
+                    + VirtusizeEndpoint.VirtusizeWebView(version = version, branch = testingBranch).path,
             ).buildUpon()
         return urlBuilder.build().toString()
     }
@@ -133,8 +137,9 @@ object VirtusizeApi {
      */
     fun getVirtusizeWebViewURLForSpecificClients(): String {
         val urlBuilder =
-            Uri.parse(environment.virtusizeUrl() + VirtusizeEndpoint.VirtusizeWebViewForSpecificClients.path)
-                .buildUpon()
+            Uri.parse(environment.virtusizeUrl()
+                    + VirtusizeEndpoint.VirtusizeWebViewForSpecificClients(branch = testingBranch).path
+            ).buildUpon()
         return urlBuilder.build().toString()
     }
 

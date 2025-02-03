@@ -18,12 +18,16 @@ sealed interface VirtusizeEndpoint {
         override val path: String = "/a/aoyama/latest.txt"
     }
 
-    data class VirtusizeWebView(val version: String) : VirtusizeEndpoint {
-        override val path: String = "/a/aoyama/$version/sdk-webview.html"
+    data class VirtusizeWebView(val version: String, val branch: String?) : VirtusizeEndpoint {
+        override val path: String =
+            if (branch == null) "/a/aoyama/$version/sdk-webview.html"
+            else "/a/aoyama/testing/$branch/sdk-webview.html"
     }
 
-    data object VirtusizeWebViewForSpecificClients : VirtusizeEndpoint {
-        override val path: String = "/a/aoyama/testing/privacy-policy-phase2-vue/sdk-webview.html"
+    data class VirtusizeWebViewForSpecificClients(val branch: String?) : VirtusizeEndpoint {
+        override val path: String =
+            if (branch == null) "/a/aoyama/testing/privacy-policy-phase2-vue/sdk-webview.html"
+            else "/a/aoyama/testing/$branch/sdk-webview.html"
     }
 
     data object ProductMetaDataHints : VirtusizeEndpoint {
