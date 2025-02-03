@@ -1,5 +1,6 @@
 ### Next Release
 - Refactor: merge `virtusize-auth` into the main SDK repository
+- Fix: Ensure SNS buttons are hidden when configured to do so
 
 ### 2.10.0
 - Refactor: Optimize product load time by using async coroutines
