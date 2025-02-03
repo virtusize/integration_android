@@ -20,14 +20,20 @@ sealed interface VirtusizeEndpoint {
 
     data class VirtusizeWebView(val version: String, val branch: String?) : VirtusizeEndpoint {
         override val path: String =
-            if (branch == null) "/a/aoyama/$version/sdk-webview.html"
-            else "/a/aoyama/testing/$branch/sdk-webview.html"
+            if (branch == null) {
+                "/a/aoyama/$version/sdk-webview.html"
+            } else {
+                "/a/aoyama/testing/$branch/sdk-webview.html"
+            }
     }
 
     data class VirtusizeWebViewForSpecificClients(val branch: String?) : VirtusizeEndpoint {
         override val path: String =
-            if (branch == null) "/a/aoyama/testing/privacy-policy-phase2-vue/sdk-webview.html"
-            else "/a/aoyama/testing/$branch/sdk-webview.html"
+            if (branch == null) {
+                "/a/aoyama/testing/privacy-policy-phase2-vue/sdk-webview.html"
+            } else {
+                "/a/aoyama/testing/$branch/sdk-webview.html"
+            }
     }
 
     data object ProductMetaDataHints : VirtusizeEndpoint {

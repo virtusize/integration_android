@@ -172,7 +172,7 @@ class VirtusizeBuilder {
                 showSGI = showSGI,
                 detailsPanelCards = detailsPanelCards,
                 showSNSButtons = showSNSButtons,
-                testingBranch = testingBranch
+                testingBranch = testingBranch,
             )
         return Virtusize.init(context = context!!, params = params)
     }

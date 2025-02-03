@@ -126,8 +126,9 @@ object VirtusizeApi {
      */
     fun getVirtusizeWebViewURL(version: String = DEFAULT_AOYAMA_VERSION): String {
         val urlBuilder =
-            Uri.parse(environment.virtusizeUrl()
-                    + VirtusizeEndpoint.VirtusizeWebView(version = version, branch = testingBranch).path,
+            Uri.parse(
+                environment.virtusizeUrl() +
+                    VirtusizeEndpoint.VirtusizeWebView(version = version, branch = testingBranch).path,
             ).buildUpon()
         return urlBuilder.build().toString()
     }
@@ -137,8 +138,9 @@ object VirtusizeApi {
      */
     fun getVirtusizeWebViewURLForSpecificClients(): String {
         val urlBuilder =
-            Uri.parse(environment.virtusizeUrl()
-                    + VirtusizeEndpoint.VirtusizeWebViewForSpecificClients(branch = testingBranch).path
+            Uri.parse(
+                environment.virtusizeUrl() +
+                    VirtusizeEndpoint.VirtusizeWebViewForSpecificClients(branch = testingBranch).path,
             ).buildUpon()
         return urlBuilder.build().toString()
     }
