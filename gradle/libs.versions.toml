@@ -1,6 +1,6 @@
 [versions]
 activityCompose = "1.9.1"
-agp = "8.5.1"
+agp = "8.6.0"
 androidxComposeBom = "2024.06.00"
 androidxTestCore = "1.6.1"
 appcompat = "1.7.0"
@@ -19,6 +19,7 @@ robolectric = "4.13"
 truth = "1.4.4"
 virtusize = "2.9.0"
 virtusizeAuth = "1.1.1"
+browser = "1.8.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
@@ -43,6 +44,7 @@ robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 virtusize = { group = "com.virtusize.android", name = "virtusize", version.ref = "virtusize" }
 virtusize-auth = { module = "com.virtusize.android:virtusize-auth", version.ref = "virtusizeAuth" }
+androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application>
+        <activity
+            android:name=".views.VitrusizeAuthActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
+        <activity
+            android:name=".views.VirtusizeAuthAppActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+    </application>
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
+        </intent>
+    </queries>
+
+</manifest>

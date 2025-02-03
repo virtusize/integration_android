@@ -3,14 +3,14 @@ import com.virtusize.android.extensions.publish
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.parcelize)
     `maven-publish`
     signing
 }
 
 android {
-    namespace = Constants.GROUP_ID
+    namespace = "${Constants.GROUP_ID}.auth"
     compileSdk = Constants.COMPILE_SDK
 
     defaultConfig {
@@ -45,8 +45,6 @@ android {
 
     buildFeatures {
         buildConfig = true
-        viewBinding = true
-        compose = true
     }
 
     testOptions {
@@ -63,42 +61,27 @@ android {
             // withJavadocJar()
         }
     }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
 }
 
 dependencies {
-    api(project(":virtusize-core"))
-    api(project(":virtusize-auth"))
+    implementation(project(":virtusize-core"))
 
-    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.material)
-
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.foundation)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.kotlinx.coroutines.android)
-
-    debugImplementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.browser)
 
     testImplementation(libs.androidx.test.core)
     testImplementation(libs.junit)
     testImplementation(libs.json)
-    testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.robolectric)
     testImplementation(libs.truth)
 }
 
 publish(
-    publishId = "virtusize",
-    publishName = "virtusize",
-    publishDescription = "Virtusize Android SDK",
+    publishId = "virtusize-auth",
+    publishName = "virtusize-auth",
+    publishDescription = "Virtusize Authentication Android SDK",
     publication = publishing,
 )
