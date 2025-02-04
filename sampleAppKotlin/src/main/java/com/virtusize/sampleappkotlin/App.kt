@@ -29,7 +29,7 @@ class App : Application() {
             // By default, Virtusize disables the SNS buttons
             .setShowSNSButtons(true)
             // By default, no testing environment branch is used
-            //.setTestingBranch("branch-name")
+            // .setTestingBranch("branch-name")
             .build()
     }
 }
