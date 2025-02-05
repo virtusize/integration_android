@@ -1,5 +1,6 @@
 ### Next Release
 - Refactor: merge `virtusize-auth` into the main SDK repository
+- Fix: apply remote i18n strings to build and validate fonts
 
 ### 2.10.0
 - Refactor: Optimize product load time by using async coroutines
