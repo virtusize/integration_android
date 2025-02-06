@@ -311,7 +311,7 @@ object VirtusizeApi {
      */
     fun getProductTypes(): ApiRequest {
         val url =
-            Uri.parse(environment.defaultApiUrl() + VirtusizeEndpoint.ProductType.path)
+            Uri.parse(environment.servicesApiUrl() + VirtusizeEndpoint.ProductType.path)
                 .buildUpon()
                 .build()
                 .toString()
