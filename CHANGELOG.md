@@ -1,5 +1,6 @@
 ### Next Release
 - Refactor: merge `virtusize-auth` into the main SDK repository
+- Fix: apply remote i18n strings to build and validate fonts
 - Fix: use cache-friendly endpoints for faster loading time
 - Fix: Ensure SNS buttons are hidden when configured to do so
 
