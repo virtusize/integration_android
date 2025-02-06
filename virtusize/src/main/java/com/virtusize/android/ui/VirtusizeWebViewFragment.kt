@@ -117,12 +117,10 @@ class VirtusizeWebViewFragment : DialogFragment() {
                 ) {
                     if (url != null && url.contains(virtusizeWebAppUrl)) {
                         binding.webView.evaluateJavascript(vsParamsFromSDKScript, null)
-                        if (showSNSButtons) {
-                            binding.webView.evaluateJavascript(
-                                "javascript:window.virtusizeSNSEnabled = true;",
-                                null,
-                            )
-                        }
+                        binding.webView.evaluateJavascript(
+                            "javascript:window.virtusizeSNSEnabled = $showSNSButtons;",
+                            null,
+                        )
                         getBrowserIDFromCookies()?.let { bid ->
                             if (bid != sharedPreferencesHelper.getBrowserId()) {
                                 sharedPreferencesHelper.storeBrowserId(bid)

@@ -5,6 +5,7 @@ LOCALIZATION_DIRS=(
     ./virtusize/src/main/res
     ./virtusize-core/src/main/res
 )
+SKIP_CHARS=("0000c6d0") # skip '%' symbol, as it breaks the parsing
 
 # Strategy:
 #   1. Fetch all the glyphs from the font file
@@ -43,6 +44,10 @@ validate_font_symbols() {
         # Convert Text characters into list of unicodes in a UTF-32 format: \U12345678
         while IFS= read -r char; do
             hex="$(printf "$char" | iconv -f UTF-8 -t UTF-32BE | xxd -p)"
+            # Skip some characters
+            if [[ " ${SKIP_CHARS[@]} " =~ " $hex " ]]; then
+                continue
+            fi
             echo "\\U$hex"
         done < $tmp_dir/text_chars.txt | tee > $tmp_dir/text_unicodes.txt
     }
@@ -91,6 +96,10 @@ validate_font() {
         done
     }
 
+    # Merge remote i18n strings into the local localization file
+    curl "https://i18n.virtusize.com/stg/bundle-payloads/aoyama/${language}" >> $combined_text_file
+
+    # Validate font
     validate_font_symbols $FONTS_DIR/$font $combined_text_file $tmp_dir
 
     # Clean up temp directory

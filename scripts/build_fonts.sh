@@ -60,6 +60,9 @@ combine_localization_files() {
     echo "\n" >> "$output_file"  # Add a newline for separation
   done
 
+  # Merge remote i18n strings into the local localization file
+  curl "https://i18n.virtusize.com/stg/bundle-payloads/aoyama/${language}" >> $output_file
+
   echo $output_file
 }
 
