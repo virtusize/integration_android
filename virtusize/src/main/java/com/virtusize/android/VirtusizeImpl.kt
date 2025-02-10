@@ -146,6 +146,7 @@ internal class VirtusizeImpl(
                     }
 
                     is VirtusizeEvent.UserUpdatedBodyMeasurements -> {
+                        invalidateCurrentProduct()
                         // Updates the body recommendation size and switches the view to the body comparison
                         val sizeRecName = event.data?.optString("sizeRecName")
                         scope.launch {
@@ -182,6 +183,10 @@ internal class VirtusizeImpl(
      */
     private var currentProductExternalId: AtomicReference<String?> = AtomicReference()
 
+    private fun invalidateCurrentProduct() {
+        currentProductExternalId.set(null)
+    }
+
     /**
      * The VirtusizePresenter handles the data passed from the actions of VirtusizeRepository
      */
@@ -195,9 +200,10 @@ internal class VirtusizeImpl(
 
                 // Check if product ID has changed
                 val newExternalProductId = productWithPCDData.externalId
-                if (currentProductExternalId.getAndSet(newExternalProductId) != newExternalProductId) {
-                    if (virtusizeViewsContainInPage()) {
-                        scope.launch {
+                val shouldReloadProduct = currentProductExternalId.getAndSet(newExternalProductId) != newExternalProductId
+                if (virtusizeViewsContainInPage()) {
+                    scope.launch {
+                        if (shouldReloadProduct) {
                             // Those two data fetches are independent and can be run in parallel
                             awaitAll(
                                 async { virtusizeRepository.fetchInitialData(params.language, productWithPCDData) },
@@ -205,8 +211,9 @@ internal class VirtusizeImpl(
                             )
 
                             virtusizeRepository.fetchDataForInPageRecommendation(newExternalProductId)
-                            virtusizeRepository.updateInPageRecommendation(newExternalProductId)
                         }
+                        // update recommendations anyway
+                        virtusizeRepository.updateInPageRecommendation(newExternalProductId)
                     }
                 }
             }
@@ -215,6 +222,7 @@ internal class VirtusizeImpl(
                 externalProductId: String?,
                 error: VirtusizeError?,
             ) {
+                invalidateCurrentProduct()
                 error?.let { messageHandler.onError(it) }
                 for (virtusizeView in virtusizeViews) {
                     if (virtusizeView is VirtusizeInPageView) {
