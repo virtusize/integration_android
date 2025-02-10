@@ -28,8 +28,8 @@ class App : Application() {
             .setDetailsPanelCards(setOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
             // By default, Virtusize disables the SNS buttons
             .setShowSNSButtons(true)
-            // By default, no testing environment branch is used
-            // .setTestingBranch("branch-name")
+            // By default, branch is empty and `production` is used
+            // .setBranch("branch-name")
             .build()
     }
 }

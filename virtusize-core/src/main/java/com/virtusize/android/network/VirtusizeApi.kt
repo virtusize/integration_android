@@ -54,7 +54,7 @@ object VirtusizeApi {
 
     private var environment = VirtusizeEnvironment.GLOBAL
     private lateinit var apiKey: String
-    private var testingBranch: String? = null
+    private var branch: String? = null
 
     var currentUserId: String? = null
         private set
@@ -67,7 +67,7 @@ object VirtusizeApi {
      * @param env the Virtusize environment that is used in network requests
      * @param key the API key that is unique for every Virtusize client
      * @param userId the user ID that is unique from the client system
-     * @param testingBranch the testing environment branch name
+     * @param branch the testing environment branch name
      */
     fun init(
         env: VirtusizeEnvironment,
@@ -78,7 +78,7 @@ object VirtusizeApi {
         environment = env
         apiKey = key
         currentUserId = userId
-        testingBranch = branch
+        this.branch = branch
     }
 
     fun setUserId(userId: String) {
@@ -128,7 +128,7 @@ object VirtusizeApi {
         val urlBuilder =
             Uri.parse(
                 environment.virtusizeUrl() +
-                    VirtusizeEndpoint.VirtusizeWebView(version = version, branch = testingBranch).path,
+                    VirtusizeEndpoint.VirtusizeWebView(version = version, branch = branch).path,
             ).buildUpon()
         return urlBuilder.build().toString()
     }
@@ -140,7 +140,7 @@ object VirtusizeApi {
         val urlBuilder =
             Uri.parse(
                 environment.virtusizeUrl() +
-                    VirtusizeEndpoint.VirtusizeWebViewForSpecificClients(branch = testingBranch).path,
+                    VirtusizeEndpoint.VirtusizeWebViewForSpecificClients(branch = branch).path,
             ).buildUpon()
         return urlBuilder.build().toString()
     }
