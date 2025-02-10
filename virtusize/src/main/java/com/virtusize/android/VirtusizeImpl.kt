@@ -224,11 +224,11 @@ internal class VirtusizeImpl(
             ) {
                 invalidateCurrentProduct()
                 error?.let { messageHandler.onError(it) }
-                for (virtusizeView in virtusizeViews) {
-                    if (virtusizeView is VirtusizeInPageView) {
+                virtusizeViews
+                    .filterIsInstance<VirtusizeInPageView>()
+                    .forEach { virtusizeView ->
                         virtusizeView.showInPageError(externalProductId)
                     }
-                }
             }
 
             override fun gotSizeRecommendations(
@@ -237,8 +237,9 @@ internal class VirtusizeImpl(
                 userBodyRecommendedSize: String?,
             ) {
                 val storeProduct = virtusizeRepository.getProductBy(externalProductId)
-                for (virtusizeView in virtusizeViews) {
-                    if (virtusizeView is VirtusizeInPageView) {
+                virtusizeViews
+                    .filterIsInstance<VirtusizeInPageView>()
+                    .forEach { virtusizeView ->
                         storeProduct?.apply {
                             virtusizeRepository.i18nLocalization?.let { i18nLocalization ->
                                 val trimType =
@@ -267,7 +268,6 @@ internal class VirtusizeImpl(
                             }
                         }
                     }
-                }
             }
         }
 
@@ -291,7 +291,7 @@ internal class VirtusizeImpl(
      */
     override fun setUserId(userId: String) {
         VirtusizeApi.setUserId(userId)
-        for (virtusizeView in virtusizeViews) {
+        virtusizeViews.forEach { virtusizeView ->
             virtusizeView.virtusizeParams.externalUserId = userId
         }
     }
