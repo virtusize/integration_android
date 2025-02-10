@@ -278,15 +278,11 @@ internal class VirtusizeRepository(
                 null
             }
 
-        val recommendedSizeDeferred =
-            if (shouldUpdateBodyProfile) {
-                async { getUserBodyRecommendedSize(storeProduct, productTypes) }
-            } else {
-                null
-            }
+        if (shouldUpdateBodyProfile) {
+            userBodyRecommendedSize = getUserBodyRecommendedSize(storeProduct, productTypes)
+        }
 
         val userProductsResponse = userProductsDeferred?.await()
-        userBodyRecommendedSize = recommendedSizeDeferred?.await()
 
         if (userProductsResponse != null) {
             if (userProductsResponse.isSuccessful) {
