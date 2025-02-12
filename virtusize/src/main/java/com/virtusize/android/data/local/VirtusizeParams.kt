@@ -15,6 +15,7 @@ import com.virtusize.android.SharedPreferencesHelper
  * @param showSGI the Boolean value to determine whether the Virtusize web app will fetch SGI and use SGI flow for users to add user generated items to their wardrobe
  * @param detailsPanelCards the info categories that will be displayed in the Product Details tab
  * @param showSNSButtons the Boolean value to determine whether the Virtusize web app will display the SNS buttons
+ * @param branch the branch name of targeted Virtusize testing environment when specified
  */
 data class VirtusizeParams(
     internal val context: Context,
@@ -27,6 +28,7 @@ data class VirtusizeParams(
     private val showSGI: Boolean,
     private val detailsPanelCards: Set<VirtusizeInfoCategory>,
     internal val showSNSButtons: Boolean,
+    internal val branch: String?,
 ) {
     /**
      * Returns the virtusize parameter string to be passed to the JavaScript function vsParamsFromSDK

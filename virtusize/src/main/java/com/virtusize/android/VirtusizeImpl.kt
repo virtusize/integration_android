@@ -275,6 +275,7 @@ internal class VirtusizeImpl(
             env = params.environment,
             key = params.apiKey!!,
             userId = params.externalUserId ?: "",
+            branch = params.branch,
         )
     }
 
