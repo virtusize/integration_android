@@ -278,11 +278,18 @@ internal class VirtusizeRepository(
                 null
             }
 
-        if (shouldUpdateBodyProfile) {
-            userBodyRecommendedSize = getUserBodyRecommendedSize(storeProduct, productTypes)
-        }
+        val recommendedSizeDeferred =
+            if (shouldUpdateBodyProfile) {
+                async { getUserBodyRecommendedSize(storeProduct, productTypes) }
+            } else {
+                null
+            }
 
         val userProductsResponse = userProductsDeferred?.await()
+        // set `userBodyRecommendedSize` only when update is requested
+        if (recommendedSizeDeferred != null) {
+            userBodyRecommendedSize = recommendedSizeDeferred.await()
+        }
 
         if (userProductsResponse != null) {
             if (userProductsResponse.isSuccessful) {
