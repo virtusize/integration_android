@@ -5,6 +5,7 @@
 - Fix: Use cache-friendly endpoints for faster loading time
 - Fix: Ensure SNS buttons are hidden when configured to do so
 - Fix: Refresh InPage recommendations when measurements changed
+- Refactor: Optimize product loading time for cases when body measurements are not specified
 
 ### 2.10.0
 - Refactor: Optimize product load time by using async coroutines
