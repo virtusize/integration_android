@@ -6,6 +6,7 @@ LOCALIZATION_DIRS=(
     ./virtusize-core/src/main/res
 )
 SKIP_CHARS=("0000c6d0") # skip '%' symbol, as it breaks the parsing
+BYPASS_CACHE=$RANDOM
 
 # Strategy:
 #   1. Fetch all the glyphs from the font file
@@ -97,7 +98,7 @@ validate_font() {
     }
 
     # Merge remote i18n strings into the local localization file
-    curl "https://i18n.virtusize.com/stg/bundle-payloads/aoyama/${language}" >> $combined_text_file
+    curl "https://i18n.virtusize.com/stg/bundle-payloads/aoyama/${language}?random=$BYPASS_CACHE" >> $combined_text_file
 
     # Validate font
     validate_font_symbols $FONTS_DIR/$font $combined_text_file $tmp_dir

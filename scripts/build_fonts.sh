@@ -9,6 +9,7 @@ LOCALIZATION_DIRS=(
   ./virtusize/src/main/res
   ./virtusize-core/src/main/res
 )
+BYPASS_CACHE=$RANDOM
 
 # Rename the font file name and it's metadata to ensure they match.
 # The inner font name change is important, so it can be loaded as:
@@ -61,7 +62,7 @@ combine_localization_files() {
   done
 
   # Merge remote i18n strings into the local localization file
-  curl "https://i18n.virtusize.com/stg/bundle-payloads/aoyama/${language}" >> $output_file
+  curl "https://i18n.virtusize.com/stg/bundle-payloads/aoyama/${language}?random=$BYPASS_CACHE" >> $output_file
 
   echo $output_file
 }
