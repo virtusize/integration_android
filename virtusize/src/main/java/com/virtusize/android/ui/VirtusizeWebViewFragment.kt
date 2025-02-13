@@ -163,6 +163,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
                                 settings.setSupportMultipleWindows(true)
                                 settings.setDomStorageEnabled(true)
                                 settings.userAgentString = System.getProperty("http.agent")
+                                addJavascriptInterface(WebAppInterface(), Constants.JS_BRIDGE_NAME)
                                 webViewClient =
                                     object : WebViewClient() {
                                         override fun shouldOverrideUrlLoading(
