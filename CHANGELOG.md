@@ -5,6 +5,7 @@
 - Fix: Use cache-friendly endpoints for faster loading time
 - Fix: Ensure SNS buttons are hidden when configured to do so
 - Fix: Refresh InPage recommendations when measurements changed
+- Fix: Refresh InPage recommendations for _specific clients_ when user logged in
 
 ### 2.10.0
 - Refactor: Optimize product load time by using async coroutines
