@@ -1,4 +1,5 @@
-### Next Release
+### 2.10.0
+- Refactor: Optimize product load time by using async coroutines
 - Refactor: Merge `virtusize-auth` into the main SDK repository
 - Feature: Allow to target specific testing environment by branch name
 - Fix: Apply remote i18n strings to build and validate fonts
@@ -6,9 +7,6 @@
 - Fix: Ensure SNS buttons are hidden when configured to do so
 - Fix: Refresh InPage recommendations when measurements changed
 - Refactor: Optimize product loading time for cases when body measurements are not specified
-
-### 2.10.0
-- Refactor: Optimize product load time by using async coroutines
 
 ### 2.9.0
 - Refactor: Fix SNS authentication for Facebook, Google and LINE providers.
