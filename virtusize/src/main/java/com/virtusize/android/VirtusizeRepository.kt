@@ -64,6 +64,9 @@ internal class VirtusizeRepository(
     // / The last visited store product on the Virtusize web view
     private var lastProductOnVirtusizeWebView: Product? = null
 
+    // A cached flag from user-session, to see if there is a need to fetch user-measurements
+    private var hasSessionBodyMeasurement: Boolean = false
+
     /**
      * Sets the last visited store product on the Virtusize web view
      * @param externalProductId the external product ID set by a client
@@ -233,16 +236,13 @@ internal class VirtusizeRepository(
     internal suspend fun updateUserSession(externalProductId: ExternalProductId? = lastProductOnVirtusizeWebView?.externalId) {
         val userSessionInfoResponse = virtusizeAPIService.getUserSessionInfo()
         if (userSessionInfoResponse.isSuccessful) {
-            sharedPreferencesHelper.storeSessionData(
-                userSessionInfoResponse.successData!!.userSessionResponse,
-            )
-            sharedPreferencesHelper.storeAccessToken(
-                userSessionInfoResponse.successData!!.accessToken,
-            )
-            if (userSessionInfoResponse.successData!!.authToken.isNotBlank()) {
-                sharedPreferencesHelper.storeAuthToken(
-                    userSessionInfoResponse.successData!!.authToken,
-                )
+            userSessionInfoResponse.successData?.apply {
+                sharedPreferencesHelper.storeSessionData(userSessionResponse)
+                sharedPreferencesHelper.storeAccessToken(accessToken)
+                if (accessToken.isNotBlank()) {
+                    sharedPreferencesHelper.storeAuthToken(accessToken)
+                }
+                hasSessionBodyMeasurement = hasBodyMeasurement
             }
         } else {
             withContext(Dispatchers.Main) {
@@ -279,7 +279,7 @@ internal class VirtusizeRepository(
             }
 
         val recommendedSizeDeferred =
-            if (shouldUpdateBodyProfile) {
+            if (shouldUpdateBodyProfile && hasSessionBodyMeasurement) {
                 async { getUserBodyRecommendedSize(storeProduct, productTypes) }
             } else {
                 null
@@ -287,8 +287,9 @@ internal class VirtusizeRepository(
 
         val userProductsResponse = userProductsDeferred?.await()
         // set `userBodyRecommendedSize` only when update is requested
-        if (recommendedSizeDeferred != null) {
-            userBodyRecommendedSize = recommendedSizeDeferred.await()
+        if (shouldUpdateBodyProfile) {
+            // reset userBodyRecommendedSize if update is requested but hasSessionBodyMeasurement is false
+            userBodyRecommendedSize = recommendedSizeDeferred?.await()
         }
 
         if (userProductsResponse != null) {
