@@ -6,6 +6,6 @@ object Constants {
     const val TARGET_SDK = 34
 
     // Update versionName when publishing a new release
-    const val VERSION_NAME = "2.9.0"
+    const val VERSION_NAME = "2.10.0"
     const val GROUP_ID = "com.virtusize.android"
 }

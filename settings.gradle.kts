@@ -16,7 +16,6 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url = uri("https://github.com/virtusize/virtusize_auth_android/raw/main") }
         maven { url = uri("https://jitpack.io") }
     }
 }
@@ -25,6 +24,7 @@ rootProject.name = "integration_android"
 
 include(":virtusize")
 include(":virtusize-core")
+include(":virtusize-auth")
 include(":sampleAppCompose")
 include(":sampleAppJava")
 include(":sampleAppKotlin")

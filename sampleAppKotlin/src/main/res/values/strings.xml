@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">Sample App Kotlin</string>
     <string name="next_product" translatable="false">Next product</string>
+    <string name="show_web_app">Show Web App</string>
 </resources>

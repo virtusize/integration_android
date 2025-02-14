@@ -22,6 +22,7 @@ import com.virtusize.android.data.local.virtusizeRegion
  * @param showSGI the Boolean value to determine whether the Virtusize web app will fetch SGI and use SGI flow for users to add user generated items to their wardrobe
  * @param detailsPanelCards the info categories that will display in the Product Details tab
  * @param showSNSButtons the Boolean value to determine whether the Virtusize web app will display the SNS buttons
+ * @param branch the branch name of targeted Virtusize environment when specified
  */
 class VirtusizeBuilder {
     private var userId: String? = null
@@ -35,6 +36,7 @@ class VirtusizeBuilder {
     private var showSGI: Boolean = false
     private var detailsPanelCards: Set<VirtusizeInfoCategory> = VirtusizeInfoCategory.entries.toMutableSet()
     private var showSNSButtons: Boolean = false
+    private var branch: String? = null
 
     /**
      * This method is used to add the application context to the Virtusize builder
@@ -136,6 +138,17 @@ class VirtusizeBuilder {
     }
 
     /**
+     * Sets up an environment branch name
+     * By default, branch is null
+     * @param branch the String value
+     * @return [VirtusizeBuilder]
+     */
+    fun setBranch(branchName: String): VirtusizeBuilder {
+        this.branch = branchName
+        return this
+    }
+
+    /**
      * Builds the Virtusize object from the passed data and returns the Virtusize object
      * @return Virtusize
      * @see Virtusize
@@ -159,6 +172,7 @@ class VirtusizeBuilder {
                 showSGI = showSGI,
                 detailsPanelCards = detailsPanelCards,
                 showSNSButtons = showSNSButtons,
+                branch = branch,
             )
         return Virtusize.init(context = context!!, params = params)
     }

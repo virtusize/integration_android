@@ -1,5 +1,6 @@
 package com.virtusize.sampleappkotlin
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -104,6 +105,13 @@ class MainActivity : AppCompatActivity() {
 
         // The sample function to send an order to the Virtusize server
         sendOrderSample()
+
+        /*
+         * Open WebApp
+         */
+        binding.openWebAppButton.setOnClickListener {
+            startActivity(Intent(this, WebAppActivity::class.java))
+        }
     }
 
     /**

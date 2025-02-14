@@ -35,6 +35,7 @@ internal class VirtusizeApiTest {
             env = VirtusizeEnvironment.STAGING,
             key = TestFixtures.API_KEY,
             userId = TestFixtures.USER_ID,
+            branch = null,
         )
     }
 
@@ -77,6 +78,7 @@ internal class VirtusizeApiTest {
             VirtusizeEnvironment.JAPAN,
             TestFixtures.API_KEY,
             TestFixtures.USER_ID,
+            null,
         )
         val actualUrl = VirtusizeApi.getVirtusizeWebViewURL(DEFAULT_AOYAMA_VERSION)
         val expectedUrl = "https://static.api.virtusize.jp/a/aoyama/$DEFAULT_AOYAMA_VERSION/sdk-webview.html"
@@ -234,7 +236,7 @@ internal class VirtusizeApiTest {
     fun `test getProductTypes should return expected API request`() {
         val actualApiRequest = VirtusizeApi.getProductTypes()
 
-        val expectedUrl = "https://staging.virtusize.com/a/api/v3/product-types"
+        val expectedUrl = "https://services.virtusize.com/stg/a/api/v3/product-types"
 
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET)
 

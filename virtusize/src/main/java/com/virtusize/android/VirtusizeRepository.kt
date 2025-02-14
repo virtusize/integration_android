@@ -23,6 +23,9 @@ import com.virtusize.android.network.VirtusizeAPIService
 import com.virtusize.android.network.VirtusizeApiResponse
 import com.virtusize.android.util.VirtusizeUtils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONException
 import org.json.JSONObject
@@ -84,70 +87,75 @@ internal class VirtusizeRepository(
      * @param virtusizeProduct the product info set by a client
      * @return true if the product is valid, false otherwise
      */
-    internal suspend fun productCheck(virtusizeProduct: VirtusizeProduct): Boolean {
-        val productCheckResponse =
-            virtusizeProductCheckResponseMap.getOrPut(virtusizeProduct.externalId) {
-                virtusizeAPIService.productCheck(virtusizeProduct)
+    internal suspend fun productCheck(virtusizeProduct: VirtusizeProduct): Boolean =
+        coroutineScope {
+            val productCheckResponse =
+                virtusizeProductCheckResponseMap.getOrPut(virtusizeProduct.externalId) {
+                    virtusizeAPIService.productCheck(virtusizeProduct)
+                }
+            if (!productCheckResponse.isSuccessful) {
+                productCheckResponse.failureData?.let { error -> messageHandler.onError(error) }
+                return@coroutineScope false
             }
-        if (productCheckResponse.isSuccessful) {
+
             val productCheck = productCheckResponse.successData!!
             virtusizeProduct.productCheckData = productCheck
 
-            // Send API Event UserSawProduct
-            sendEvent(
-                virtusizeProduct,
-                VirtusizeEvent.UserSawProduct(),
-            )
+            // Send API Event UserSawProduct as non-blocking
+            launch {
+                sendEvent(
+                    virtusizeProduct,
+                    VirtusizeEvent.UserSawProduct(),
+                )
+            }
 
-            productCheck.data?.let { productCheckData ->
-                if (productCheckData.validProduct) {
-                    if (productCheckData.fetchMetaData) {
-                        if (virtusizeProduct.imageUrl != null) {
-                            // If image URL is valid, send image URL to server
-                            val sendProductImageResponse =
-                                virtusizeAPIService.sendProductImageToBackend(
-                                    product = virtusizeProduct,
+            val productCheckData = productCheck.data ?: return@coroutineScope false
+
+            if (productCheckData.validProduct) {
+                if (productCheckData.fetchMetaData) {
+                    if (virtusizeProduct.imageUrl != null) {
+                        // If image URL is valid, send image URL to server
+                        val sendProductImageResponse =
+                            virtusizeAPIService.sendProductImageToBackend(
+                                product = virtusizeProduct,
+                            )
+                        if (!sendProductImageResponse.isSuccessful) {
+                            sendProductImageResponse.failureData?.let {
+                                messageHandler.onError(
+                                    it,
                                 )
-                            if (!sendProductImageResponse.isSuccessful) {
-                                sendProductImageResponse.failureData?.let {
-                                    messageHandler.onError(
-                                        it,
-                                    )
-                                }
                             }
-                        } else {
-                            VirtusizeErrorType.ImageUrlNotValid.throwError()
                         }
+                    } else {
+                        VirtusizeErrorType.ImageUrlNotValid.throwError()
                     }
+                }
 
-                    // Send API Event UserSawWidgetButton
+                // Send API Event UserSawWidgetButton as non-blocking
+                launch {
                     sendEvent(
                         virtusizeProduct,
                         VirtusizeEvent.UserSawWidgetButton(),
                     )
-
-                    withContext(Dispatchers.Main) {
-                        presenter?.onValidProductCheck(virtusizeProduct)
-                    }
-                    return true
-                } else {
-                    withContext(Dispatchers.Main) {
-                        presenter?.hasInPageError(
-                            externalProductId = virtusizeProduct.externalId,
-                            error =
-                                VirtusizeErrorType.InvalidProduct.virtusizeError(
-                                    extraMessage = virtusizeProduct.externalId,
-                                ),
-                        )
-                    }
-                    return false
                 }
-            } ?: return false
-        } else {
-            productCheckResponse.failureData?.let { error -> messageHandler.onError(error) }
-            return false
+
+                withContext(Dispatchers.Main) {
+                    presenter?.onValidProductCheck(virtusizeProduct)
+                }
+                return@coroutineScope true
+            } else {
+                withContext(Dispatchers.Main) {
+                    presenter?.hasInPageError(
+                        externalProductId = virtusizeProduct.externalId,
+                        error =
+                            VirtusizeErrorType.InvalidProduct.virtusizeError(
+                                extraMessage = virtusizeProduct.externalId,
+                            ),
+                    )
+                }
+                return@coroutineScope false
+            }
         }
-    }
 
     /**
      * Sends a Virtusize event with the product data check data to the Virtusize API
@@ -176,35 +184,42 @@ internal class VirtusizeRepository(
     internal suspend fun fetchInitialData(
         language: VirtusizeLanguage?,
         product: VirtusizeProduct,
-    ) {
+    ) = coroutineScope {
         val productId = product.productCheckData!!.data!!.productDataId
         val externalProductId = product.externalId
-        val storeProductResponse = virtusizeAPIService.getStoreProduct(productId)
+
+        // Those API requests are independent and can be run in parallel
+        val storeDeferred = async { virtusizeAPIService.getStoreProduct(productId) }
+        val productTypesDeferred = async { virtusizeAPIService.getProductTypes() }
+        val languageDeferred = async { virtusizeAPIService.getI18n(language) }
+
+        val storeProductResponse = storeDeferred.await()
+        val productTypesResponse = productTypesDeferred.await()
+        val i18nResponse = languageDeferred.await()
+
         if (storeProductResponse.successData == null) {
             withContext(Dispatchers.Main) {
                 presenter?.hasInPageError(externalProductId, storeProductResponse.failureData)
             }
-            return
+            return@coroutineScope
         }
 
         val storeProduct = storeProductResponse.successData!!
         storeProduct.clientProductImageURL = product.imageUrl
         storeProductSet.add(storeProduct)
 
-        val productTypesResponse = virtusizeAPIService.getProductTypes()
         if (productTypesResponse.successData == null) {
             withContext(Dispatchers.Main) {
                 presenter?.hasInPageError(externalProductId, productTypesResponse.failureData)
             }
-            return
+            return@coroutineScope
         }
 
-        val i18nResponse = virtusizeAPIService.getI18n(language)
         if (i18nResponse.successData == null) {
             withContext(Dispatchers.Main) {
                 presenter?.hasInPageError(externalProductId, i18nResponse.failureData)
             }
-            return
+            return@coroutineScope
         }
 
         productTypes = productTypesResponse.successData!!
@@ -248,15 +263,35 @@ internal class VirtusizeRepository(
         selectedUserProductId: Int? = null,
         shouldUpdateUserProducts: Boolean = true,
         shouldUpdateBodyProfile: Boolean = true,
-    ) {
+    ) = coroutineScope {
         var storeProduct = lastProductOnVirtusizeWebView
         externalProductId?.let {
             getProductBy(it)?.let { product ->
                 storeProduct = product
             }
         }
-        if (shouldUpdateUserProducts) {
-            val userProductsResponse = virtusizeAPIService.getUserProducts()
+
+        val userProductsDeferred =
+            if (shouldUpdateUserProducts) {
+                async { virtusizeAPIService.getUserProducts() }
+            } else {
+                null
+            }
+
+        val recommendedSizeDeferred =
+            if (shouldUpdateBodyProfile) {
+                async { getUserBodyRecommendedSize(storeProduct, productTypes) }
+            } else {
+                null
+            }
+
+        val userProductsResponse = userProductsDeferred?.await()
+        // set `userBodyRecommendedSize` only when update is requested
+        if (recommendedSizeDeferred != null) {
+            userBodyRecommendedSize = recommendedSizeDeferred.await()
+        }
+
+        if (userProductsResponse != null) {
             if (userProductsResponse.isSuccessful) {
                 userProducts = userProductsResponse.successData
             } else if (userProductsResponse.failureData?.code != HttpURLConnection.HTTP_NOT_FOUND) {
@@ -266,12 +301,8 @@ internal class VirtusizeRepository(
                         userProductsResponse.failureData,
                     )
                 }
-                return
+                return@coroutineScope
             }
-        }
-
-        if (shouldUpdateBodyProfile) {
-            userBodyRecommendedSize = getUserBodyRecommendedSize(storeProduct, productTypes)
         }
 
         userProductRecommendedSize =

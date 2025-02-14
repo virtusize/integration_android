@@ -1,6 +1,6 @@
 [versions]
 activityCompose = "1.9.1"
-agp = "8.5.1"
+agp = "8.6.0"
 androidxComposeBom = "2024.06.00"
 androidxTestCore = "1.6.1"
 appcompat = "1.7.0"
@@ -9,6 +9,7 @@ fragment = "1.8.2"
 json = "20230227"
 junit = "4.13.2"
 kotlin = "2.0.0"
+kotlinxCoroutinesAndroid = "1.8.1"
 kotlinxCoroutinesTest = "1.8.1"
 ktlint = "1.2.1"
 lifecycleViewmodel = "2.8.4"
@@ -16,8 +17,9 @@ material = "1.12.0"
 nextPublish = "1.1.0"
 robolectric = "4.13"
 truth = "1.4.4"
-virtusize = "2.9.0"
+virtusize = "2.10.0"
 virtusizeAuth = "1.1.1"
+browser = "1.8.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
@@ -34,6 +36,7 @@ androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifec
 androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
 json = { module = "org.json:json", version.ref = "json" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 ktlint = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
@@ -41,6 +44,7 @@ robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 virtusize = { group = "com.virtusize.android", name = "virtusize", version.ref = "virtusize" }
 virtusize-auth = { module = "com.virtusize.android:virtusize-auth", version.ref = "virtusizeAuth" }
+androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

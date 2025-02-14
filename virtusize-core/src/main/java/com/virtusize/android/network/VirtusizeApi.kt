@@ -54,6 +54,7 @@ object VirtusizeApi {
 
     private var environment = VirtusizeEnvironment.GLOBAL
     private lateinit var apiKey: String
+    private var branch: String? = null
 
     var currentUserId: String? = null
         private set
@@ -66,15 +67,18 @@ object VirtusizeApi {
      * @param env the Virtusize environment that is used in network requests
      * @param key the API key that is unique for every Virtusize client
      * @param userId the user ID that is unique from the client system
+     * @param branch the testing environment branch name
      */
     fun init(
         env: VirtusizeEnvironment,
         key: String,
         userId: String,
+        branch: String?,
     ) {
         environment = env
         apiKey = key
         currentUserId = userId
+        this.branch = branch
     }
 
     fun setUserId(userId: String) {
@@ -123,7 +127,8 @@ object VirtusizeApi {
     fun getVirtusizeWebViewURL(version: String = DEFAULT_AOYAMA_VERSION): String {
         val urlBuilder =
             Uri.parse(
-                environment.virtusizeUrl() + VirtusizeEndpoint.VirtusizeWebView(version = version).path,
+                environment.virtusizeUrl() +
+                    VirtusizeEndpoint.VirtusizeWebView(version = version, branch = branch).path,
             ).buildUpon()
         return urlBuilder.build().toString()
     }
@@ -133,8 +138,10 @@ object VirtusizeApi {
      */
     fun getVirtusizeWebViewURLForSpecificClients(): String {
         val urlBuilder =
-            Uri.parse(environment.virtusizeUrl() + VirtusizeEndpoint.VirtusizeWebViewForSpecificClients.path)
-                .buildUpon()
+            Uri.parse(
+                environment.virtusizeUrl() +
+                    VirtusizeEndpoint.VirtusizeWebViewForSpecificClients(branch = branch).path,
+            ).buildUpon()
         return urlBuilder.build().toString()
     }
 
@@ -311,7 +318,7 @@ object VirtusizeApi {
      */
     fun getProductTypes(): ApiRequest {
         val url =
-            Uri.parse(environment.defaultApiUrl() + VirtusizeEndpoint.ProductType.path)
+            Uri.parse(environment.servicesApiUrl() + VirtusizeEndpoint.ProductType.path)
                 .buildUpon()
                 .build()
                 .toString()
