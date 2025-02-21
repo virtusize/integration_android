@@ -17,7 +17,6 @@ import com.virtusize.android.data.local.VirtusizeOrder
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.virtusizeError
 import com.virtusize.android.data.parsers.BodyProfileRecommendedSizeJsonParser
-import com.virtusize.android.data.parsers.I18nLocalizationJsonParser
 import com.virtusize.android.data.parsers.ProductCheckDataJsonParser
 import com.virtusize.android.data.parsers.ProductMetaDataHintsJsonParser
 import com.virtusize.android.data.parsers.ProductTypeJsonParser
@@ -38,6 +37,7 @@ import com.virtusize.android.data.remote.UserSessionInfo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import java.net.URL
 import java.util.Locale
 import javax.net.ssl.HttpsURLConnection
@@ -359,9 +359,9 @@ internal class VirtusizeAPIService(
     /**
      * Gets the API response for fetching the i18n localization texts
      * @param language [VirtusizeLanguage] that is set by a client
-     * @return the [VirtusizeApiResponse] with the data class [I18nLocalization]
+     * @return the [VirtusizeApiResponse] with the JSON data
      */
-    internal suspend fun getI18n(language: VirtusizeLanguage?): VirtusizeApiResponse<I18nLocalization> =
+    internal suspend fun getI18n(language: VirtusizeLanguage?): VirtusizeApiResponse<JSONObject> =
         withContext(Dispatchers.IO) {
             val apiRequest =
                 VirtusizeApi.getI18n(
@@ -375,7 +375,23 @@ internal class VirtusizeAPIService(
                 sharedPreferencesHelper,
                 messageHandler,
             )
-                .setJsonParser(I18nLocalizationJsonParser(context, language))
+                .execute(apiRequest)
+        }
+
+    /**
+     * Gets the API response for fetching the custom i18n texts for specific store
+     * @param storeName the name of the store
+     * @return the [VirtusizeApiResponse] with the JSON data
+     */
+    internal suspend fun getStoreSpecificI18n(storeName: String): VirtusizeApiResponse<JSONObject> =
+        withContext(Dispatchers.IO) {
+            val apiRequest =
+                VirtusizeApi.getStoreSpecificI18n(storeName)
+            VirtusizeApiTask(
+                httpURLConnection,
+                sharedPreferencesHelper,
+                messageHandler,
+            )
                 .execute(apiRequest)
         }
 

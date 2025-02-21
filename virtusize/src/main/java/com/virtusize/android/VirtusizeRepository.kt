@@ -14,14 +14,17 @@ import com.virtusize.android.data.local.VirtusizeParams
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.throwError
 import com.virtusize.android.data.local.virtusizeError
+import com.virtusize.android.data.parsers.I18nLocalizationJsonParser
 import com.virtusize.android.data.parsers.UserAuthDataJsonParser
 import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.data.remote.Product
 import com.virtusize.android.data.remote.ProductCheckData
 import com.virtusize.android.data.remote.ProductType
+import com.virtusize.android.data.remote.Store
 import com.virtusize.android.network.VirtusizeAPIService
 import com.virtusize.android.network.VirtusizeApiResponse
 import com.virtusize.android.util.VirtusizeUtils
+import com.virtusize.android.util.deepMerge
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -66,6 +69,15 @@ internal class VirtusizeRepository(
 
     // A cached flag from user-session, to see if there is a need to fetch user-measurements
     private var hasSessionBodyMeasurement: Boolean = false
+
+    // A store info to be able to load store specific i18n texts
+    // The Store is persistent for the app and never changes
+    private var storeInfo: Store? = null
+
+    // A flag indicating if the store specific i18n texts should be reloaded
+    // `true` for the first time and if the i18n texts are ever being successfully loaded
+    // `false` if the i18n texts do not exist for the store (API returns 403 status code)
+    private var shouldReloadStoreSpecificI18n: Boolean = true
 
     /**
      * Sets the last visited store product on the Virtusize web view
@@ -194,7 +206,7 @@ internal class VirtusizeRepository(
         // Those API requests are independent and can be run in parallel
         val storeDeferred = async { virtusizeAPIService.getStoreProduct(productId) }
         val productTypesDeferred = async { virtusizeAPIService.getProductTypes() }
-        val languageDeferred = async { virtusizeAPIService.getI18n(language) }
+        val languageDeferred = async { fetchLanguage(language) }
 
         val storeProductResponse = storeDeferred.await()
         val productTypesResponse = productTypesDeferred.await()
@@ -471,6 +483,55 @@ internal class VirtusizeRepository(
                 ),
             )
         }
+    }
+
+    private suspend fun fetchLanguage(
+        language: VirtusizeLanguage?
+    ): I18nLocalization? = coroutineScope {
+        // load common and specific localizations concurrently
+        val languageDeferred = async { virtusizeAPIService.getI18n(language) }
+        val storeLangDeferred = async {
+            // fetch Store to be able to load specific i18n by store name
+            if (storeInfo == null) {
+                val storeResponse = virtusizeAPIService.getStoreInfo()
+                storeInfo = storeResponse.successData
+            }
+
+            // skip loading if specific i18n does not exist for current store
+            if (!shouldReloadStoreSpecificI18n) {
+                return@async null
+            }
+
+            // load specific i18n
+            storeInfo?.let {
+                virtusizeAPIService.getStoreSpecificI18n(it.shortName)
+            }
+        }
+
+        // await for both loadings
+        val i18nResponse = languageDeferred.await()
+        val storeI18nResponse = storeLangDeferred.await()
+
+        // prepare common i18n and i18n JSON parser
+        val i18nJson = i18nResponse.successData ?: return@coroutineScope null
+        val i18nParser = I18nLocalizationJsonParser(context, language)
+
+        // if the i18n texts does not exist for specific store - never load it again
+        if (storeI18nResponse?.failureData?.code == 403) {
+            shouldReloadStoreSpecificI18n = false
+            // i18n for the store does not exists, move on with default i18n
+            return@coroutineScope i18nParser.parse(i18nJson)
+        }
+
+        // merge `storeI18n` over `i18n`
+        val storeI18n = storeI18nResponse?.successData?.getJSONObject("mobile")
+        storeI18n?.let {
+            val lang = language?.value ?: "en"
+            if (storeI18n.has(lang)) {
+                i18nJson.getJSONObject("keys").deepMerge(it.getJSONObject(lang))
+            }
+        }
+        return@coroutineScope i18nParser.parse(i18nJson)
     }
 }
 
