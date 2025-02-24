@@ -4,7 +4,6 @@ import android.net.Uri
 import com.virtusize.android.data.local.BodyProfileRecommendedSizeParams
 import com.virtusize.android.data.local.I18N_URL
 import com.virtusize.android.data.local.StoreId
-import com.virtusize.android.data.local.StoreName
 import com.virtusize.android.data.local.VirtusizeEnvironment
 import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeLanguage
@@ -346,8 +345,10 @@ object VirtusizeApi {
      */
     fun getStoreSpecificI18n(storeName: String): ApiRequest {
         val url =
-            Uri.parse(environment.integrationApiUrl() +
-                    VirtusizeEndpoint.StoreI18N(storeName).path)
+            Uri.parse(
+                environment.integrationApiUrl() +
+                    VirtusizeEndpoint.StoreI18N(storeName).path,
+            )
                 .buildUpon()
                 .build()
                 .toString()

@@ -26,7 +26,6 @@ import com.virtusize.android.data.parsers.UserBodyProfileJsonParser
 import com.virtusize.android.data.parsers.UserProductJsonParser
 import com.virtusize.android.data.parsers.UserSessionInfoJsonParser
 import com.virtusize.android.data.remote.BodyProfileRecommendedSize
-import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.data.remote.Product
 import com.virtusize.android.data.remote.ProductCheckData
 import com.virtusize.android.data.remote.ProductMetaDataHints
@@ -47,7 +46,7 @@ import javax.net.ssl.HttpsURLConnection
  * @param context the application context
  * @param messageHandler pass VirtusizeMessageHandler to listen to any Virtusize-related messages
  */
-internal class VirtusizeAPIService(
+internal open class VirtusizeAPIService(
     private val context: Context,
     private val messageHandler: VirtusizeMessageHandler?,
 ) {
@@ -208,7 +207,7 @@ internal class VirtusizeAPIService(
      * Gets the API response for retrieving the specific store info
      * @return the [VirtusizeApiResponse] with the data class [Store]
      */
-    internal suspend fun getStoreInfo(): VirtusizeApiResponse<Store> =
+    internal open suspend fun getStoreInfo(): VirtusizeApiResponse<Store> =
         withContext(Dispatchers.IO) {
             val apiRequest = VirtusizeApi.getStoreInfo()
             VirtusizeApiTask(
@@ -361,7 +360,7 @@ internal class VirtusizeAPIService(
      * @param language [VirtusizeLanguage] that is set by a client
      * @return the [VirtusizeApiResponse] with the JSON data
      */
-    internal suspend fun getI18n(language: VirtusizeLanguage?): VirtusizeApiResponse<JSONObject> =
+    internal open suspend fun getI18n(language: VirtusizeLanguage?): VirtusizeApiResponse<JSONObject> =
         withContext(Dispatchers.IO) {
             val apiRequest =
                 VirtusizeApi.getI18n(
@@ -383,7 +382,7 @@ internal class VirtusizeAPIService(
      * @param storeName the name of the store
      * @return the [VirtusizeApiResponse] with the JSON data
      */
-    internal suspend fun getStoreSpecificI18n(storeName: String): VirtusizeApiResponse<JSONObject> =
+    internal open suspend fun getStoreSpecificI18n(storeName: String): VirtusizeApiResponse<JSONObject> =
         withContext(Dispatchers.IO) {
             val apiRequest =
                 VirtusizeApi.getStoreSpecificI18n(storeName)

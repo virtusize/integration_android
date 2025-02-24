@@ -38,11 +38,9 @@ import java.net.HttpURLConnection
 internal class VirtusizeRepository(
     private val context: Context,
     private var messageHandler: VirtusizeMessageHandler,
+    private var virtusizeAPIService: VirtusizeAPIService,
     private var presenter: VirtusizePresenter? = null,
 ) {
-    // This variable is the instance of VirtusizeAPIService to handle Virtusize API requests
-    private var virtusizeAPIService = VirtusizeAPIService.getInstance(context, messageHandler)
-
     // The helper to store data locally using Shared Preferences
     private var sharedPreferencesHelper: SharedPreferencesHelper =
         SharedPreferencesHelper.getInstance(context)
@@ -210,7 +208,7 @@ internal class VirtusizeRepository(
 
         val storeProductResponse = storeDeferred.await()
         val productTypesResponse = productTypesDeferred.await()
-        val i18nResponse = languageDeferred.await()
+        val i18n = languageDeferred.await()
 
         if (storeProductResponse.successData == null) {
             withContext(Dispatchers.Main) {
@@ -230,15 +228,15 @@ internal class VirtusizeRepository(
             return@coroutineScope
         }
 
-        if (i18nResponse.successData == null) {
+        if (i18n == null) {
             withContext(Dispatchers.Main) {
-                presenter?.hasInPageError(externalProductId, i18nResponse.failureData)
+                presenter?.hasInPageError(externalProductId, null)
             }
             return@coroutineScope
         }
 
         productTypes = productTypesResponse.successData!!
-        i18nLocalization = i18nResponse.successData!!
+        i18nLocalization = i18n
     }
 
     /**
@@ -485,54 +483,54 @@ internal class VirtusizeRepository(
         }
     }
 
-    private suspend fun fetchLanguage(
-        language: VirtusizeLanguage?
-    ): I18nLocalization? = coroutineScope {
-        // load common and specific localizations concurrently
-        val languageDeferred = async { virtusizeAPIService.getI18n(language) }
-        val storeLangDeferred = async {
-            // fetch Store to be able to load specific i18n by store name
-            if (storeInfo == null) {
-                val storeResponse = virtusizeAPIService.getStoreInfo()
-                storeInfo = storeResponse.successData
+    internal suspend fun fetchLanguage(language: VirtusizeLanguage?): I18nLocalization? =
+        coroutineScope {
+            // load common and specific localizations concurrently
+            val languageDeferred = async { virtusizeAPIService.getI18n(language) }
+            val storeLangDeferred =
+                async {
+                    // fetch Store to be able to load specific i18n by store name
+                    if (storeInfo == null) {
+                        val storeResponse = virtusizeAPIService.getStoreInfo()
+                        storeInfo = storeResponse.successData
+                    }
+
+                    // skip loading if specific i18n does not exist for current store
+                    if (!shouldReloadStoreSpecificI18n) {
+                        return@async null
+                    }
+
+                    // load specific i18n
+                    storeInfo?.let {
+                        virtusizeAPIService.getStoreSpecificI18n(it.shortName)
+                    }
+                }
+
+            // await for both loadings
+            val i18nResponse = languageDeferred.await()
+            val storeI18nResponse = storeLangDeferred.await()
+
+            // prepare common i18n and i18n JSON parser
+            val i18nJson = i18nResponse.successData ?: return@coroutineScope null
+            val i18nParser = I18nLocalizationJsonParser(context, language)
+
+            // if the i18n texts does not exist for specific store - never load it again
+            if (storeI18nResponse?.failureData?.code == 403) {
+                shouldReloadStoreSpecificI18n = false
+                // i18n for the store does not exists, move on with default i18n
+                return@coroutineScope i18nParser.parse(i18nJson)
             }
 
-            // skip loading if specific i18n does not exist for current store
-            if (!shouldReloadStoreSpecificI18n) {
-                return@async null
+            // merge `storeI18n` over `i18n`
+            val storeI18n = storeI18nResponse?.successData?.getJSONObject("mobile")
+            storeI18n?.let {
+                val lang = language?.value ?: "en"
+                if (storeI18n.has(lang)) {
+                    i18nJson.getJSONObject("keys").deepMerge(it.getJSONObject(lang))
+                }
             }
-
-            // load specific i18n
-            storeInfo?.let {
-                virtusizeAPIService.getStoreSpecificI18n(it.shortName)
-            }
-        }
-
-        // await for both loadings
-        val i18nResponse = languageDeferred.await()
-        val storeI18nResponse = storeLangDeferred.await()
-
-        // prepare common i18n and i18n JSON parser
-        val i18nJson = i18nResponse.successData ?: return@coroutineScope null
-        val i18nParser = I18nLocalizationJsonParser(context, language)
-
-        // if the i18n texts does not exist for specific store - never load it again
-        if (storeI18nResponse?.failureData?.code == 403) {
-            shouldReloadStoreSpecificI18n = false
-            // i18n for the store does not exists, move on with default i18n
             return@coroutineScope i18nParser.parse(i18nJson)
         }
-
-        // merge `storeI18n` over `i18n`
-        val storeI18n = storeI18nResponse?.successData?.getJSONObject("mobile")
-        storeI18n?.let {
-            val lang = language?.value ?: "en"
-            if (storeI18n.has(lang)) {
-                i18nJson.getJSONObject("keys").deepMerge(it.getJSONObject(lang))
-            }
-        }
-        return@coroutineScope i18nParser.parse(i18nJson)
-    }
 }
 
 private typealias ExternalProductId = String

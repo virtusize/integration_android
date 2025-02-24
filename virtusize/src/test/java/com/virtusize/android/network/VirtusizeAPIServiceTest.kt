@@ -12,6 +12,7 @@ import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.message
+import com.virtusize.android.data.parsers.I18nLocalizationJsonParser
 import com.virtusize.android.data.remote.BrandSizing
 import com.virtusize.android.data.remote.Measurement
 import com.virtusize.android.data.remote.ProductSize
@@ -44,7 +45,7 @@ class VirtusizeAPIServiceTest {
 
     private val testDispatcher = TestCoroutineDispatcher()
 
-    private var virtusizeAPIService = VirtusizeAPIService.getInstance(context, null)
+    private var virtusizeAPIService = VirtusizeAPIService(context, null)
 
     private var mockURL: URL = URL("https://www.mockurl.com/")
 
@@ -399,8 +400,8 @@ class VirtusizeAPIServiceTest {
                 ),
             )
 
-            val actualSuccessfulResponse = virtusizeAPIService.deleteUser().successData
-            assertThat(actualSuccessfulResponse).isNull()
+            val isSuccess = virtusizeAPIService.deleteUser().isSuccessful
+            assertThat(isSuccess).isTrue()
         }
 
     @Test
@@ -572,18 +573,23 @@ class VirtusizeAPIServiceTest {
                 ),
             )
 
-            val actualI18nLocalization =
+            val actualI18nAsJson =
                 virtusizeAPIService.getI18n(
                     VirtusizeLanguage.EN,
                 ).successData
 
+            assertThat(actualI18nAsJson).isNotNull()
+
+            val i18nParser = I18nLocalizationJsonParser(context, VirtusizeLanguage.EN)
+            val actualI18nLocalization = i18nParser.parse(actualI18nAsJson!!)
+
             assertThat(
-                actualI18nLocalization?.bodyDataEmptyText,
+                actualI18nLocalization.bodyDataEmptyText,
             ).isEqualTo(
                 "Find your right size",
             )
             assertThat(
-                actualI18nLocalization?.defaultAccessoryText,
+                actualI18nLocalization.defaultAccessoryText,
             ).isEqualTo(
                 "See what fits inside",
             )

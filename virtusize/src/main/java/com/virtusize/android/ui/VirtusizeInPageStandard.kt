@@ -21,7 +21,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.virtusize.android.R
-import com.virtusize.android.VirtusizeRepository
+import com.virtusize.android.Virtusize
+import com.virtusize.android.VirtusizeImpl
 import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.VirtusizeMessageHandler
@@ -173,10 +174,7 @@ class VirtusizeInPageStandard
                 object : ViewModelProvider.Factory {
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
                         return VirtusizeInPageStandardViewModel(
-                            VirtusizeRepository(
-                                context,
-                                virtusizeMessageHandler,
-                            ),
+                            (Virtusize.getInstance() as VirtusizeImpl).virtusizeRepository,
                         ) as T
                     }
                 }

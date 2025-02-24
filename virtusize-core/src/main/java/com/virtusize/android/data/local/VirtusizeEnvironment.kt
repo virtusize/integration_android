@@ -67,7 +67,6 @@ fun VirtusizeEnvironment.integrationApiUrl(): String {
     }
 }
 
-
 fun VirtusizeEnvironment.sizeRecommendationApiBaseUrl(): String {
     return when (this) {
         VirtusizeEnvironment.TESTING -> "https://size-recommendation.staging.virtusize.jp"
