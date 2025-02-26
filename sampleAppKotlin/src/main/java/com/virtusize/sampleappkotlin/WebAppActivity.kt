@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.virtusize.android.auth.VirtusizeAuth
 import com.virtusize.android.auth.VirtusizeWebView
 import com.virtusize.android.auth.utils.VirtusizeURLCheck
+import com.virtusize.android.auth.utils.withBranch
 
 class WebAppActivity : AppCompatActivity() {
     // Method 1: Use the VirtusizeWebView
@@ -38,7 +39,9 @@ class WebAppActivity : AppCompatActivity() {
         webView.setVirtusizeSNSAuthLauncher(virtusizeSNSAuthLauncher)
         // Method 2: Use WebView
         // webViewImplementation()
-        webView.loadUrl("https://demo.virtusize.com")
+        val uri = Uri.parse("https://demo.virtusize.com")
+                     .withBranch("staging")
+        webView.loadUrl(uri.toString())
     }
 
     /*
