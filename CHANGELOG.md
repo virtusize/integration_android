@@ -1,3 +1,6 @@
+### Next Release
+- Feature: Allow to specify custom branch for WebView-native apps
+
 ### 2.10.0
 - Refactor: Optimize product load time by using async coroutines
 - Refactor: Merge `virtusize-auth` into the main SDK repository

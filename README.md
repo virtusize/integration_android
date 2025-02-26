@@ -338,6 +338,33 @@ same guidelines in the case of fragment as well.
   }
   ```
 
+### 6. Configure custom branch for WebView-native apps (Optional)
+
+You can test custom environment branch by updating the URL loaded by a WebView:
+
+- Kotlin
+
+  ```kotlin
+  override fun onCreate() {
+      // ...
+      val uri = Uri.parse("https://demo.virtusize.com")
+                   .withBranch("staging")
+      webView.loadUrl(uri.toString())
+  }
+  ```
+
+- Java
+
+  ```java
+  @Override
+  protected void onCreate() {
+      // ...
+      Uri uri = Uri.parse("https://demo.virtusize.com")
+                  .withBranch("staging");
+      webView.loadUrl(uri.toString());
+  }
+  ```
+
 ## Virtusize Views
 
 After setting up the SDK, add a `VirtusizeView` to allow your customers to find their ideal size.
