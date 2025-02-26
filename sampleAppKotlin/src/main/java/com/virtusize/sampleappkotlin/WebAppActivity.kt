@@ -39,8 +39,9 @@ class WebAppActivity : AppCompatActivity() {
         webView.setVirtusizeSNSAuthLauncher(virtusizeSNSAuthLauncher)
         // Method 2: Use WebView
         // webViewImplementation()
-        val uri = Uri.parse("https://demo.virtusize.com")
-                     .withBranch("staging")
+        val uri =
+            Uri.parse("https://demo.virtusize.com")
+                .withBranch("staging")
         webView.loadUrl(uri.toString())
     }
 
