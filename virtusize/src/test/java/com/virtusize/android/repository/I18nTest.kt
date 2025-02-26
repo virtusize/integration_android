@@ -42,7 +42,7 @@ class I18nTest {
     @Test
     fun no_specific_texts() =
         runTest {
-            val apiService = MockVirtusizeApiService(context)
+            val apiService = MockVirtusizeApiService()
             val repo = VirtusizeRepository(context, messageHandler, apiService)
 
             apiService.mockStoreInfo = { ProductFixtures.store() }
@@ -57,7 +57,7 @@ class I18nTest {
     @Test
     fun handle_specific_texts_no_override() =
         runTest {
-            val apiService = MockVirtusizeApiService(context)
+            val apiService = MockVirtusizeApiService()
             val repo = VirtusizeRepository(context, messageHandler, apiService)
 
             apiService.mockStoreInfo = { ProductFixtures.store() }
@@ -72,7 +72,7 @@ class I18nTest {
     @Test
     fun handle_specific_texts_with_override() =
         runTest {
-            val apiService = MockVirtusizeApiService(context)
+            val apiService = MockVirtusizeApiService()
             val repo = VirtusizeRepository(context, messageHandler, apiService)
 
             apiService.mockStoreInfo = { ProductFixtures.store() }

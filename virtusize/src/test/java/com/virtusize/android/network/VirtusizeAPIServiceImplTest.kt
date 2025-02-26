@@ -37,7 +37,7 @@ import java.net.URL
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.Q])
 @ExperimentalCoroutinesApi
-class VirtusizeAPIServiceTest {
+class VirtusizeAPIServiceImplTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
@@ -45,7 +45,7 @@ class VirtusizeAPIServiceTest {
 
     private val testDispatcher = TestCoroutineDispatcher()
 
-    private var virtusizeAPIService = VirtusizeAPIService(context, null)
+    private var virtusizeAPIService = VirtusizeAPIServiceImpl(context, null)
 
     private var mockURL: URL = URL("https://www.mockurl.com/")
 
