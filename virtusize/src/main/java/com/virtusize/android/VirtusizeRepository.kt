@@ -35,7 +35,7 @@ import org.json.JSONObject
 import java.net.HttpURLConnection
 
 // This class is used to handle the logic required to access remote and local data sources
-internal class VirtusizeRepository(
+class VirtusizeRepository internal constructor(
     private val context: Context,
     private var messageHandler: VirtusizeMessageHandler,
     private var virtusizeAPIService: VirtusizeAPIService,

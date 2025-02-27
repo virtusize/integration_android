@@ -272,7 +272,7 @@ internal class VirtusizeImpl(
             }
         }
 
-    internal val virtusizeRepository: VirtusizeRepository =
+    override val virtusizeRepository: VirtusizeRepository =
         VirtusizeRepository(
             context,
             messageHandler,
