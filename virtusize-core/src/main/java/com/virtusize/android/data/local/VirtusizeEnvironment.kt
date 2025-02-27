@@ -53,6 +53,20 @@ fun VirtusizeEnvironment.servicesApiUrl(): String {
     }
 }
 
+/**
+ * Gets the integration API URL corresponding to the Virtusize Environment
+ * @return A String value of the services API URL
+ */
+fun VirtusizeEnvironment.integrationApiUrl(): String {
+    return when (this) {
+        VirtusizeEnvironment.TESTING -> "https://integration.virtusize.jp/staging"
+        VirtusizeEnvironment.STAGING -> "https://integration.virtusize.com/staging"
+        VirtusizeEnvironment.GLOBAL -> "https://integration.virtusize.com/production"
+        VirtusizeEnvironment.JAPAN -> "https://integration.virtusize.jp/production"
+        VirtusizeEnvironment.KOREA -> "https://integration.virtusize.kr/production"
+    }
+}
+
 fun VirtusizeEnvironment.sizeRecommendationApiBaseUrl(): String {
     return when (this) {
         VirtusizeEnvironment.TESTING -> "https://size-recommendation.staging.virtusize.jp"

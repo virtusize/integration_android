@@ -1,3 +1,7 @@
+### Next Release
+- Feature: Load and apply store specific i18n texts runtime
+- Feature: Build and validate fonts taking into account store specific i18n texts
+
 ### 2.10.0
 - Refactor: Optimize product load time by using async coroutines
 - Refactor: Merge `virtusize-auth` into the main SDK repository

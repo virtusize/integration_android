@@ -7,6 +7,7 @@ LOCALIZATION_DIRS=(
 )
 SKIP_CHARS=("0000c6d0") # skip '%' symbol, as it breaks the parsing
 BYPASS_CACHE=$RANDOM
+SUPPORTED_STORE_NAMES=("united_arrows")
 
 # Strategy:
 #   1. Fetch all the glyphs from the font file
@@ -71,8 +72,34 @@ validate_font_symbols() {
         else
             echo "ERROR: Localization file '$text_file' is NOT fully supported by the font '$(basename "$font_file")'. See missing characters above."
             exit 1
-        fi    
+        fi
     }
+}
+
+# Merge local strings with remote json-strings and use this merged file for validation
+prepare_strings() {
+    local language=$1
+    local text_file=$2
+
+     # Combine multiple localization files into a single
+    {
+        > $text_file # Clear the output file if it exists
+
+        # Loop through each directory in the array
+        for dir in "${LOCALIZATION_DIRS[@]}"; do
+            file=$dir/values-$language/strings.xml
+            cat $file >> $text_file
+            echo "\n" >> "$text_file"  # Add a newline for separation
+        done
+    }
+
+    # shared remote i18n texts
+    curl "https://i18n.virtusize.com/stg/bundle-payloads/aoyama/${language}?random=$BYPASS_CACHE" >> $text_file
+
+    # remote store specific texts
+    for store_name in "${SUPPORTED_STORE_NAMES[@]}"; do
+        curl "https://integration.virtusize.jp/staging/$store_name/customText.json" >> $text_file
+    done
 }
 
 # Wrapper function 
@@ -85,20 +112,8 @@ validate_font() {
     # Prepare temp directory
     mkdir -p $tmp_dir
 
-    # Combine multiple localization files into a single
-    {
-        > $combined_text_file # Clear the output file if it exists
-
-        # Loop through each directory in the array
-        for dir in "${LOCALIZATION_DIRS[@]}"; do
-            file=$dir/values-$language/strings.xml
-            cat $file >> $combined_text_file
-            echo "\n" >> "$combined_text_file"  # Add a newline for separation
-        done
-    }
-
     # Merge remote i18n strings into the local localization file
-    curl "https://i18n.virtusize.com/stg/bundle-payloads/aoyama/${language}?random=$BYPASS_CACHE" >> $combined_text_file
+    prepare_strings $language $combined_text_file
 
     # Validate font
     validate_font_symbols $FONTS_DIR/$font $combined_text_file $tmp_dir

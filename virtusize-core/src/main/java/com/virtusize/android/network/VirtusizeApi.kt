@@ -11,6 +11,7 @@ import com.virtusize.android.data.local.VirtusizeOrder
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.defaultApiUrl
 import com.virtusize.android.data.local.eventApiUrl
+import com.virtusize.android.data.local.integrationApiUrl
 import com.virtusize.android.data.local.servicesApiUrl
 import com.virtusize.android.data.local.sizeRecommendationApiBaseUrl
 import com.virtusize.android.data.local.virtusizeUrl
@@ -332,6 +333,22 @@ object VirtusizeApi {
     fun getI18n(language: VirtusizeLanguage): ApiRequest {
         val url =
             Uri.parse(I18N_URL + VirtusizeEndpoint.I18N.path + language.value)
+                .buildUpon()
+                .build()
+                .toString()
+        return ApiRequest(url, HttpMethod.GET)
+    }
+
+    /**
+     * Gets a API request for retrieving custom i18n texts for specific store
+     * @see ApiRequest
+     */
+    fun getStoreSpecificI18n(storeName: String): ApiRequest {
+        val url =
+            Uri.parse(
+                environment.integrationApiUrl() +
+                    VirtusizeEndpoint.StoreI18N(storeName).path,
+            )
                 .buildUpon()
                 .build()
                 .toString()
