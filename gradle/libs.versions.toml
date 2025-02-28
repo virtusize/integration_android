@@ -17,7 +17,7 @@ material = "1.12.0"
 nextPublish = "1.1.0"
 robolectric = "4.13"
 truth = "1.4.4"
-virtusize = "2.10.0"
+virtusize = "2.11.0"
 virtusizeAuth = "1.1.1"
 browser = "1.8.0"
 

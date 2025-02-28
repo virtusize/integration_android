@@ -64,6 +64,11 @@ interface Virtusize {
     val displayLanguage: VirtusizeLanguage
 
     /**
+     * The [VirtusizeRepository] instance
+     */
+    val virtusizeRepository: VirtusizeRepository
+
+    /**
      * Use this function to set up the user ID in the app when the user is logged in/out
      * @param userId the user ID that is unique from the client system
      */

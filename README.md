@@ -82,7 +82,7 @@ In your app `build.gradle` file, add the following dependencies:
 
   ```groovy
   dependencies {
-    implementation 'com.virtusize.android:virtusize:2.10.0'
+    implementation 'com.virtusize.android:virtusize:2.11.0'
   }
   ```
 
@@ -90,7 +90,7 @@ In your app `build.gradle` file, add the following dependencies:
 
   ```kotlin
   dependencies {
-    implementation("com.virtusize.android:virtusize:2.10.0")
+    implementation("com.virtusize.android:virtusize:2.11.0")
   }
   ```
 

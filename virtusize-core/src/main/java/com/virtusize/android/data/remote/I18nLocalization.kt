@@ -1,11 +1,7 @@
 package com.virtusize.android.data.remote
 
-import android.content.Context
 import com.virtusize.android.data.local.SizeComparisonRecommendedSize
 import com.virtusize.android.data.local.VirtusizeLanguage
-import com.virtusize.android.data.local.isUnitedArrows
-import com.virtusize.android.network.VirtusizeApi
-import com.virtusize.android.util.ConfigurationUtils
 import com.virtusize.android.util.I18nConstants
 
 /**
@@ -68,19 +64,8 @@ data class I18nLocalization(
     /**
      * Gets the recommendation text for a multi-size product based on a user body profile
      */
-    internal fun getMultiSizeBodyProfileText(
-        context: Context,
-        bodyProfileRecommendedSizeName: String,
-    ): String {
-        val configuredContext = ConfigurationUtils.getConfiguredContext(context, language)
-        // Override the willFitResultText for United Arrows
-        val adjustedWillFitResultText =
-            if (VirtusizeApi.currentStoreId.isUnitedArrows) {
-                configuredContext.getString(com.virtusize.android.core.R.string.inpage_will_fit_result_text_united_arrows)
-            } else {
-                willFitResultText
-            }
-        return "$adjustedWillFitResultText ${I18nConstants.BOLD_START_PLACEHOLDER}" +
+    internal fun getMultiSizeBodyProfileText(bodyProfileRecommendedSizeName: String): String {
+        return "$willFitResultText ${I18nConstants.BOLD_START_PLACEHOLDER}" +
             "$bodyProfileRecommendedSizeName${I18nConstants.BOLD_END_PLACEHOLDER}"
     }
 }

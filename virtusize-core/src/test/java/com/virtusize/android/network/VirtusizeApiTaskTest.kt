@@ -211,6 +211,9 @@ internal class VirtusizeApiTaskTest {
                         "firstName":"Anonymous",
                         "language":null
                     },
+                    "status":{
+                        "hasBodyMeasurement":true
+                    },
                     "x-vs-auth":""
                 }
                 """
@@ -229,6 +232,7 @@ internal class VirtusizeApiTaskTest {
                 bid = "test_bid",
                 authToken = "",
                 userSessionResponse = streamString,
+                hasBodyMeasurement = true,
             )
 
         assertThat(returnValue).isEqualTo(expectedUserSessionInfo)

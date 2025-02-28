@@ -14,6 +14,7 @@ import com.virtusize.android.data.local.VirtusizeParams
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.throwError
 import com.virtusize.android.data.remote.I18nLocalization
+import com.virtusize.android.network.VirtusizeAPIService
 import com.virtusize.android.network.VirtusizeApi
 import com.virtusize.android.ui.VirtusizeInPageStandard
 import com.virtusize.android.ui.VirtusizeInPageView
@@ -271,7 +272,13 @@ internal class VirtusizeImpl(
             }
         }
 
-    private val virtusizeRepository: VirtusizeRepository = VirtusizeRepository(context, messageHandler, virtusizePresenter)
+    override val virtusizeRepository: VirtusizeRepository =
+        VirtusizeRepository(
+            context,
+            messageHandler,
+            VirtusizeAPIService.getInstance(context, messageHandler),
+            virtusizePresenter,
+        )
 
     // TODO: Remove the array and find a way to have callbacks inside the VirtusizeView
     // This variable holds the Virtusize view that clients use on their application

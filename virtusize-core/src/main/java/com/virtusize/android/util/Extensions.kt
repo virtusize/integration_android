@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.virtusize.android.data.remote.I18nLocalization
+import org.json.JSONException
+import org.json.JSONObject
 
 /**
  * The Context extension function to get the string by the string resource name
@@ -144,4 +146,28 @@ fun Context.getActivity(): AppCompatActivity? {
         currentContext = currentContext.baseContext
     }
     return null
+}
+
+/**
+ * Merge "source" into "current". If fields have equal name, merge them recursively.
+ * @return the merged object.
+ */
+@Throws(JSONException::class)
+fun JSONObject.deepMerge(source: JSONObject): JSONObject {
+    val target = this
+    for (key in source.keys()) {
+        val value = source[key]
+        if (!target.has(key)) {
+            // new value for "key":
+            target.put(key, value)
+        } else {
+            // existing value for "key" - recursively deep merge:
+            if (value is JSONObject) {
+                target.getJSONObject(key).deepMerge(value)
+            } else {
+                target.put(key, value)
+            }
+        }
+    }
+    return target
 }

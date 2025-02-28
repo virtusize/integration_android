@@ -75,4 +75,8 @@ sealed interface VirtusizeEndpoint {
     data object I18N : VirtusizeEndpoint {
         override val path: String = "/bundle-payloads/aoyama/"
     }
+
+    data class StoreI18N(val storeName: String) : VirtusizeEndpoint {
+        override val path: String = "/$storeName/customText.json"
+    }
 }

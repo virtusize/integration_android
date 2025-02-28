@@ -52,7 +52,6 @@ data class Product(
                 )
             else ->
                 multiSizeText(
-                    context = context,
                     i18nLocalization,
                     sizeComparisonRecommendedSize,
                     bodyProfileRecommendedSizeName,
@@ -103,14 +102,12 @@ data class Product(
      * Gets the text for a multi-size product
      */
     private fun multiSizeText(
-        context: Context,
         i18nLocalization: I18nLocalization,
         sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?,
         bodyProfileRecommendedSizeName: String?,
     ): String {
         bodyProfileRecommendedSizeName?.let {
             return i18nLocalization.getMultiSizeBodyProfileText(
-                context = context,
                 bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
             )
         }

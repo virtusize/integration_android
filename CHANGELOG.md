@@ -1,3 +1,7 @@
+### 2.11.0
+- Feature: Load and apply store specific i18n texts runtime
+- Feature: Build and validate fonts taking into account store specific i18n texts
+
 ### 2.10.0
 - Refactor: Optimize product load time by using async coroutines
 - Refactor: Merge `virtusize-auth` into the main SDK repository
@@ -6,6 +10,7 @@
 - Fix: Use cache-friendly endpoints for faster loading time
 - Fix: Ensure SNS buttons are hidden when configured to do so
 - Fix: Refresh InPage recommendations when measurements changed
+- Refactor: Optimize product loading time for cases when body measurements are not specified
 
 ### 2.9.0
 - Refactor: Fix SNS authentication for Facebook, Google and LINE providers.
