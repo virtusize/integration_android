@@ -1,3 +1,6 @@
+### Next Release
+- Feature: Allow to specify custom branch for WebView-native apps
+
 ### 2.11.0
 - Feature: Load and apply store specific i18n texts runtime
 - Feature: Build and validate fonts taking into account store specific i18n texts
