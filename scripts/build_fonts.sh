@@ -10,6 +10,7 @@ LOCALIZATION_DIRS=(
   ./virtusize-core/src/main/res
 )
 BYPASS_CACHE=$RANDOM
+SUPPORTED_STORE_NAMES=("united_arrows")
 
 # Rename the font file name and it's metadata to ensure they match.
 # The inner font name change is important, so it can be loaded as:
@@ -40,6 +41,32 @@ rename_font() {
   echo "Font renamed: $new_name"
 }
 
+# Merge local strings with remote json-strings and use this merged file for validation
+prepare_strings() {
+    local language=$1
+    local text_file=$2
+
+     # Combine multiple localization files into a single
+    {
+        > $text_file # Clear the output file if it exists
+
+        # Loop through each directory in the array
+        for dir in "${LOCALIZATION_DIRS[@]}"; do
+            file=$dir/values-$language/strings.xml
+            cat $file >> $text_file
+            echo "\n" >> "$text_file"  # Add a newline for separation
+        done
+    }
+
+    # shared remote i18n texts
+    curl "https://i18n.virtusize.com/stg/bundle-payloads/aoyama/${language}?random=$BYPASS_CACHE" >> $text_file
+
+    # remote store specific texts
+    for store_name in "${SUPPORTED_STORE_NAMES[@]}"; do
+        curl "https://integration.virtusize.jp/staging/$store_name/customText.json" >> $text_file
+    done
+}
+
 # Combine multiple localization files into one file.
 # The file is stored into a single 
 # Return file path
@@ -51,18 +78,7 @@ combine_localization_files() {
   mkdir -p $tmp_dir
   local output_file=$tmp_dir/combined_strings_$language.xml
 
-  # Clear the output file if it exists
-  > $output_file
-
-  # Loop through each directory in the array
-  for dir in "${LOCALIZATION_DIRS[@]}"; do
-    file=$dir/values-$language/strings.xml
-    cat $file >> $output_file
-    echo "\n" >> "$output_file"  # Add a newline for separation
-  done
-
-  # Merge remote i18n strings into the local localization file
-  curl "https://i18n.virtusize.com/stg/bundle-payloads/aoyama/${language}?random=$BYPASS_CACHE" >> $output_file
+  prepare_strings $language $output_file
 
   echo $output_file
 }

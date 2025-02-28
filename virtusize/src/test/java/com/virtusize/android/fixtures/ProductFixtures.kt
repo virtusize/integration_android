@@ -6,6 +6,7 @@ import com.virtusize.android.data.remote.Measurement
 import com.virtusize.android.data.remote.Product
 import com.virtusize.android.data.remote.ProductSize
 import com.virtusize.android.data.remote.ProductType
+import com.virtusize.android.data.remote.Store
 import com.virtusize.android.data.remote.StoreProductAdditionalInfo
 import com.virtusize.android.data.remote.StoreProductMeta
 import org.json.JSONArray
@@ -161,6 +162,21 @@ internal object ProductFixtures {
             ),
         )
     }
+
+    fun store(): Store =
+        Store(
+            1,
+            "survey.com/1",
+            "Virtusize",
+            "virtusize",
+            0,
+            "test",
+            "",
+            "",
+            "",
+            false,
+            "com",
+        )
 
     val STORE_PRODUCT_INFO_JSON_DATA =
         JSONObject(

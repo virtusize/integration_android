@@ -326,7 +326,7 @@ class VirtusizeApiTask(
 
             else -> {
                 val jsonObject = JSONObject(streamString)
-                jsonParser?.parse(jsonObject)
+                if (jsonParser == null) jsonObject else jsonParser?.parse(jsonObject)
             }
         }
 
