@@ -182,8 +182,10 @@ class VirtusizeWebViewFragment : DialogFragment() {
                                                     requireContext(),
                                                     virtusizeSNSAuthLauncher,
                                                     url,
-                                                ).also {
-                                                    binding.webView.removeAllViews()
+                                                ).also { isSNSAuthUrl ->
+                                                    if (isSNSAuthUrl) {
+                                                        binding.webView.removeAllViews()
+                                                    }
                                                 }
                                             }
                                             return false
