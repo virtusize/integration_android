@@ -1,5 +1,6 @@
 ### Next Release
 - Feature: Allow to specify custom branch for WebView-native apps
+- Fix: After navigating to the login screen, pressing X button doesn't leave the blank screen 
 
 ### 2.11.0
 - Feature: Load and apply store specific i18n texts runtime
