@@ -44,7 +44,7 @@ object VirtusizeAuth {
                 }.let { intent ->
                     activityResultLauncher?.launch(intent)
                 }
-                true
+                false
             }
             else -> false
         }

@@ -161,7 +161,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
                                 settings.javaScriptEnabled = true
                                 settings.javaScriptCanOpenWindowsAutomatically = true
                                 settings.setSupportMultipleWindows(true)
-                                settings.setDomStorageEnabled(true)
+                                settings.domStorageEnabled = true
                                 settings.userAgentString = System.getProperty("http.agent")
                                 webViewClient =
                                     object : WebViewClient() {
@@ -182,7 +182,9 @@ class VirtusizeWebViewFragment : DialogFragment() {
                                                     requireContext(),
                                                     virtusizeSNSAuthLauncher,
                                                     url,
-                                                )
+                                                ).also {
+                                                    binding.webView.removeAllViews()
+                                                }
                                             }
                                             return false
                                         }
