@@ -54,7 +54,7 @@ internal object VirtusizeUriHelper {
      *
      * @return updated URI
      */
-    private fun updateUriParameter(
+    internal fun updateUriParameter(
         uri: Uri,
         key: String,
         newValue: String,

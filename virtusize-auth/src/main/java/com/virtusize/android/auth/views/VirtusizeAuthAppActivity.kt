@@ -18,14 +18,18 @@ internal class VirtusizeAuthAppActivity : AppCompatActivity() {
             ActivityResultContracts.StartActivityForResult(),
         ) { result ->
             VirtusizeAuth.handleVirtusizeSNSAuthResult(webView, result.resultCode, result.data)
-            Handler(Looper.getMainLooper())
-                .postDelayed(
-                    {
-                        finish()
-                    },
-                    // Delay dismissing the activity to ensure the SNS authentication is completed
-                    3.seconds.inWholeMilliseconds,
-                )
+            when (result.resultCode) {
+                RESULT_OK ->
+                    Handler(Looper.getMainLooper())
+                        .postDelayed(
+                            {
+                                finish()
+                            },
+                            // Delay dismissing the activity to ensure the SNS authentication is completed
+                            3.seconds.inWholeMilliseconds,
+                        )
+                RESULT_CANCELED -> finish()
+            }
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
