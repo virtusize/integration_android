@@ -1,3 +1,6 @@
+### Next Release
+- Feature: Update Flutter SDK implementation to be compatible with latest changes
+
 ### 2.11.1
 - Feature: Allow to specify custom branch for WebView-native apps
 - Fix: After navigating to the login screen, pressing X button doesn't leave the blank screen 
