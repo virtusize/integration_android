@@ -189,7 +189,7 @@ class VirtusizeFlutterBuilder {
         return VirtusizeFlutter.init(
             context = context!!,
             params = params,
-            virtusizeFlutterPresenter = virtusizeFlutterPresenter
+            virtusizeFlutterPresenter = virtusizeFlutterPresenter,
         )
     }
 }

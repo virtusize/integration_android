@@ -204,7 +204,7 @@ internal class VirtusizeFlutterImpl(
         object : VirtusizePresenter {
             override fun onValidProductCheck(productWithPCDData: VirtusizeProduct) {
                 virtusizeProductSet.add(productWithPCDData)
-                virtusizeFlutterPresenter?.onValidProductCheck(productWithPCDData);
+                virtusizeFlutterPresenter?.onValidProductCheck(productWithPCDData)
 
                 // Check if product ID has changed
                 val newExternalProductId = productWithPCDData.externalId
@@ -255,12 +255,13 @@ internal class VirtusizeFlutterImpl(
                     return
                 }
 
-                val recommendationText = storeProduct.getRecommendationText(
-                    context = context,
-                    i18nLocalization = i18nLocalization,
-                    sizeComparisonRecommendedSize = userProductRecommendedSize,
-                    bodyProfileRecommendedSizeName = userBodyRecommendedSize
-                ).trimI18nText(I18nLocalization.TrimType.MULTIPLELINES)
+                val recommendationText =
+                    storeProduct.getRecommendationText(
+                        context = context,
+                        i18nLocalization = i18nLocalization,
+                        sizeComparisonRecommendedSize = userProductRecommendedSize,
+                        bodyProfileRecommendedSizeName = userBodyRecommendedSize,
+                    ).trimI18nText(I18nLocalization.TrimType.MULTIPLELINES)
 
                 virtusizeFlutterPresenter?.gotSizeRecommendations(
                     storeProduct,
@@ -369,7 +370,7 @@ internal class VirtusizeFlutterImpl(
      */
     override fun openVirtusizeWebView(
         activity: Activity,
-        externalProductId: String
+        externalProductId: String,
     ) {
         val product = virtusizeProductSet.find { it.externalId == externalProductId }
         if (product == null) {

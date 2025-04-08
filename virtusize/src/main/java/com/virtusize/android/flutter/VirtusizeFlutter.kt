@@ -3,7 +3,6 @@ package com.virtusize.android.flutter
 import android.app.Activity
 import android.content.Context
 import com.virtusize.android.ErrorResponseHandler
-import com.virtusize.android.R
 import com.virtusize.android.SuccessResponseHandler
 import com.virtusize.android.VirtusizeRepository
 import com.virtusize.android.data.local.VirtusizeError
@@ -13,9 +12,6 @@ import com.virtusize.android.data.local.VirtusizeOrder
 import com.virtusize.android.data.local.VirtusizeParams
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.network.VirtusizeApiTask
-import com.virtusize.android.ui.VirtusizeView
-import com.virtusize.android.util.ConfigurationUtils
-import com.virtusize.android.util.VirtusizeUtils
 import kotlin.jvm.Throws
 
 /**
@@ -42,7 +38,7 @@ interface VirtusizeFlutter {
                     VirtusizeFlutterImpl(
                         context = context,
                         params = params,
-                        virtusizeFlutterPresenter = virtusizeFlutterPresenter
+                        virtusizeFlutterPresenter = virtusizeFlutterPresenter,
                     ).also { instance = it }
                 } else {
                     instance
@@ -146,7 +142,7 @@ interface VirtusizeFlutter {
 
     fun openVirtusizeWebView(
         activity: Activity,
-        externalProductId: String
+        externalProductId: String,
     )
 
     fun getPrivacyPolicyLink(context: Context): String

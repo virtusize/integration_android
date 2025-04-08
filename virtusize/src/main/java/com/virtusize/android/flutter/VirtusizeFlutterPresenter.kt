@@ -1,6 +1,5 @@
 package com.virtusize.android.flutter
 
-import com.virtusize.android.data.local.SizeComparisonRecommendedSize
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.remote.Product
