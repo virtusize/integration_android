@@ -264,7 +264,9 @@ internal class VirtusizeFlutterImpl(
                     ).trimI18nText(I18nLocalization.TrimType.MULTIPLELINES)
 
                 virtusizeFlutterPresenter?.gotSizeRecommendations(
+                    externalProductId,
                     storeProduct,
+                    userProductRecommendedSize?.bestUserProduct,
                     recommendationText,
                 )
             }

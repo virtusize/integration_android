@@ -9,6 +9,8 @@ interface VirtusizeFlutterPresenter {
     fun onValidProductCheck(productWithPCDData: VirtusizeProduct)
 
     fun gotSizeRecommendations(
+        externalProductId: String,
+        storeProduct: Product?,
         bestUserProduct: Product?,
         recommendationText: String?,
     )
