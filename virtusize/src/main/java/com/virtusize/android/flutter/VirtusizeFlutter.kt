@@ -55,7 +55,7 @@ interface VirtusizeFlutter {
         @Throws(IllegalStateException::class)
         fun getInstance(): VirtusizeFlutter =
             if (!Companion::instance.isInitialized) {
-                throw IllegalStateException("Virtusize is not initialized")
+                throw IllegalStateException("VirtusizeFlutter is not initialized")
             } else {
                 instance
             }
