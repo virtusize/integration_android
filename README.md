@@ -255,6 +255,7 @@ URL scheme.
 1. The URL host has to be `sns-auth`
 2. The URL scheme must begin with your app's package ID (com.your-company.your-app) and **end with
    .virtusize**, and the scheme which you define must use all **lowercase** letters.
+3. The underscores in your app's package ID must be replaced with hyphens. For example `com.your_company.your_app` must be changed to `com.your-company.your-app`.
 
 ### 4. Register Virtusize Message Handler (Optional)
 
