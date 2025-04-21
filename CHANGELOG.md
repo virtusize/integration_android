@@ -1,3 +1,6 @@
+### Next Release
+- Fix: Replace underscores with hyphens in package name when creating SNS-auth redirect url
+
 ### 2.11.1
 - Feature: Allow to specify custom branch for WebView-native apps
 - Fix: After navigating to the login screen, pressing X button doesn't leave the blank screen 

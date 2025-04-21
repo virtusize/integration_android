@@ -47,7 +47,7 @@ internal class VitrusizeAuthActivity : AppCompatActivity() {
                 GoogleRepository(GoogleAPIService.getInstance(context = this)),
             )
 
-        val appId = intent.getStringExtra(NATIVE_APP_ID_KEY)
+        val appId = intent.getStringExtra(NATIVE_APP_ID_KEY)?.replace("_", "-")
         var authUrl = intent.getStringExtra(EXTRA_NAME_AUTH_URL)
         when {
             authUrl != null -> {
