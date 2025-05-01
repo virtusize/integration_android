@@ -5,7 +5,7 @@ on: [pull_request]
 jobs:
   build:
     name: Gradle build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -23,7 +23,7 @@ jobs:
 
   lint:
     name: Lint checks
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -40,7 +40,7 @@ jobs:
 
   test:
     name: Unit tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out code
         uses: actions/checkout@v4
