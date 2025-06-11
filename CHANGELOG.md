@@ -1,6 +1,7 @@
 ### Next Release
 - Feature: Update Flutter SDK implementation to be compatible with latest changes
 - Fix: Replace underscores with hyphens in package name when creating SNS-auth redirect url
+- Fix: memory leak with Virtusize composables
 
 ### 2.11.1
 - Feature: Allow to specify custom branch for WebView-native apps

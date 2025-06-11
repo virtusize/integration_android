@@ -354,6 +354,10 @@ internal class VirtusizeImpl(
         virtusizeViews.add(virtusizeView)
     }
 
+    override fun cleanupVirtusizeView(virtusizeView: VirtusizeView) {
+        virtusizeViews.remove(virtusizeView)
+    }
+
     /**
      * @see Virtusize.sendOrder
      */

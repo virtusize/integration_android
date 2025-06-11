@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.viewinterop.NoOpUpdate
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.virtusize.android.Virtusize
 import com.virtusize.android.compose.theme.VirtusizeColors
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeEvent
@@ -80,6 +81,9 @@ private fun VirtusizeInPageStandard(
             }
         },
         update = update,
+        onRelease = { virtusizeView ->
+            Virtusize.getInstanceOrNull()?.cleanupVirtusizeView(virtusizeView)
+        },
     )
 }
 
