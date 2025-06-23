@@ -20,6 +20,7 @@ import androidx.core.view.ViewCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.virtusize.android.R
 import com.virtusize.android.Virtusize
 import com.virtusize.android.data.local.VirtusizeErrorType
@@ -180,7 +181,7 @@ class VirtusizeInPageStandard
 
             viewModel = viewModelFactory.create(VirtusizeInPageStandardViewModel::class.java)
 
-            (context as? LifecycleOwner)?.apply {
+            this.findViewTreeLifecycleOwner()?.apply {
                 viewModel?.productNetworkImageLiveData?.observe(this, { productImageViewBitMapPair ->
                     productImageViewBitMapPair.first.setProductImage(
                         productImageViewBitMapPair.second,
