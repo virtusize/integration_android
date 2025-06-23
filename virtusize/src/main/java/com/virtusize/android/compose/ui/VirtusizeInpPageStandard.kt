@@ -3,6 +3,7 @@ package com.virtusize.android.compose.ui
 import android.view.View
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -78,6 +79,7 @@ private fun VirtusizeInPageStandard(
         factory = { context ->
             VirtusizeInPageStandard(context).apply {
                 horizontalMargin = 0
+                clipChildren = false
             }
         },
         update = update,
@@ -87,17 +89,19 @@ private fun VirtusizeInPageStandard(
     )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun VirtusizeInPageStandardPreview() {
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         VirtusizeInPageStandard(
+            modifier = Modifier.padding(16.dp),
             update = { virtusizeInPageStandard ->
                 virtusizeInPageStandard.visibility = View.VISIBLE
                 virtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
             },
         )
         VirtusizeInPageStandard(
+            modifier = Modifier.padding(16.dp),
             update = { virtusizeInPageStandard ->
                 virtusizeInPageStandard.visibility = View.VISIBLE
                 virtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.BLACK
