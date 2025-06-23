@@ -17,7 +17,6 @@ import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.ViewCompat
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.findViewTreeLifecycleOwner
