@@ -30,7 +30,7 @@
                 android:layout_height="match_parent"
                 android:padding="@dimen/virtusize_inpage_standard_product_image_padding"
                 android:scaleType="centerInside"
-                tools:srcCompat="@drawable/ic_product_type_1" />
+                tools:srcCompat="@drawable/ic_virtusize_product_type_1" />
 
         </androidx.cardview.widget.CardView>
 

@@ -512,7 +512,7 @@ class VirtusizeInPageStandard
          * Sets the background color of the size check button
          */
         private fun setSizeCheckButtonBackgroundTint(color: Int) {
-            var drawable = ContextCompat.getDrawable(context, R.drawable.button_background_white)
+            var drawable = ContextCompat.getDrawable(context, R.drawable.virtusize_button_background_white)
             drawable = DrawableCompat.wrap(drawable!!)
             DrawableCompat.setTint(drawable, color)
             ViewCompat.setBackground(
@@ -646,7 +646,7 @@ class VirtusizeInPageStandard
                 val size = buttonTextSize + additionalSize
                 binding.inpageButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
                 binding.inpageButton.rightDrawable(
-                    R.drawable.ic_arrow_right_white,
+                    R.drawable.ic_virtusize_arrow_right_white,
                     0.8f * size / 2,
                     0.8f * size,
                 )
