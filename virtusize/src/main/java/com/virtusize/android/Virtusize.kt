@@ -50,11 +50,12 @@ interface Virtusize {
         /**
          * Get the [Virtusize] instance or return `null`, if [Virtusize] has not been yet initialized
          */
-        fun getInstanceOrNull(): Virtusize? = if (!Companion::instance.isInitialized) {
-            null
-        } else {
-            instance
-        }
+        fun getInstanceOrNull(): Virtusize? =
+            if (!Companion::instance.isInitialized) {
+                null
+            } else {
+                instance
+            }
     }
 
     /**
@@ -126,9 +127,7 @@ interface Virtusize {
     /**
      * Cleanup [virtusizeView] once it's no longer needed (e.g. leaves the composition)
      */
-    fun cleanupVirtusizeView(
-        virtusizeView: VirtusizeView,
-    )
+    fun cleanupVirtusizeView(virtusizeView: VirtusizeView)
 
     /**
      * Sends an order to the Virtusize server for Kotlin apps
