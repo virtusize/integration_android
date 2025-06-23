@@ -1,4 +1,4 @@
-### Next Release
+### 2.12.0
 - Feature: Update Flutter SDK implementation to be compatible with latest changes
 - Fix: Replace underscores with hyphens in package name when creating SNS-auth redirect url
 - Fix: memory leak with Virtusize composables
