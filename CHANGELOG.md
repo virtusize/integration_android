@@ -1,6 +1,7 @@
 ### Next Release
 - Feature: Update Flutter SDK implementation to be compatible with latest changes
 - Fix: Replace underscores with hyphens in package name when creating SNS-auth redirect url
+- Fix: memory leak with Virtusize composables
 - Fix: Shadow is clipped in compose version of VirtusizeInPageStandard
 
 ### 2.11.1

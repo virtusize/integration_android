@@ -21,6 +21,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.viewinterop.NoOpUpdate
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.virtusize.android.R
+import com.virtusize.android.Virtusize
 import com.virtusize.android.compose.theme.VirtusizeColors
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeEvent
@@ -92,6 +93,9 @@ private fun VirtusizeButton(
         update = { virtusizeButton ->
             virtusizeButton.virtusizeViewStyle = style
             update(virtusizeButton)
+        },
+        onRelease = { virtusizeView ->
+            Virtusize.getInstanceOrNull()?.cleanupVirtusizeView(virtusizeView)
         },
     )
 }
