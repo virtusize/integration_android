@@ -28,7 +28,7 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/ic_error_hanger" />
+                android:src="@drawable/ic_virtusize_error_hanger" />
 
             <TextView
                 android:id="@+id/inpageErrorText"
@@ -145,7 +145,7 @@
             <Button
                 android:id="@+id/inpageButton"
                 style="@style/VirtusizeInPageButtonStyle"
-                android:drawableEnd="@drawable/ic_arrow_right_white"
+                android:drawableEnd="@drawable/ic_virtusize_arrow_right_white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -155,7 +155,7 @@
                 android:layout_marginEnd="@dimen/virtusize_inpage_standard_button_horizontal_margin"
                 android:layout_marginRight="@dimen/virtusize_inpage_standard_button_horizontal_margin"
                 android:layout_marginBottom="@dimen/virtusize_inpage_standard_button_vertical_margin"
-                android:background="@drawable/button_background_black"
+                android:background="@drawable/virtusize_button_background_black"
                 android:includeFontPadding="false"
                 android:minWidth="0dp"
                 android:minHeight="0dp"

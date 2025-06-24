@@ -149,7 +149,7 @@ class VirtusizeInPageMini
             binding.inpageMiniImageView.setImageDrawable(
                 ContextCompat.getDrawable(
                     context,
-                    R.drawable.ic_error_hanger,
+                    R.drawable.ic_virtusize_error_hanger,
                 ),
             )
             setOnClickListener {}
@@ -237,7 +237,7 @@ class VirtusizeInPageMini
          * Sets up the color of the right arrow in the button
          */
         private fun setButtonRightArrowColor(color: Int) {
-            var drawable = ContextCompat.getDrawable(context, R.drawable.ic_arrow_right_black)
+            var drawable = ContextCompat.getDrawable(context, R.drawable.ic_virtusize_arrow_right_black)
             drawable = DrawableCompat.wrap(drawable!!)
             drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
             DrawableCompat.setTint(drawable, color)
@@ -302,7 +302,7 @@ class VirtusizeInPageMini
                 val size = buttonTextSize + additionalSize
                 binding.inpageMiniButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
                 binding.inpageMiniButton.rightDrawable(
-                    R.drawable.ic_arrow_right_black,
+                    R.drawable.ic_virtusize_arrow_right_black,
                     0.8f * size / 2,
                     0.8f * size,
                 )

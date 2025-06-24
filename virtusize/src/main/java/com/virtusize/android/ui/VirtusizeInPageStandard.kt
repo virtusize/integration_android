@@ -17,9 +17,9 @@ import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.ViewCompat
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.virtusize.android.R
 import com.virtusize.android.Virtusize
 import com.virtusize.android.data.local.VirtusizeErrorType
@@ -180,7 +180,7 @@ class VirtusizeInPageStandard
 
             viewModel = viewModelFactory.create(VirtusizeInPageStandardViewModel::class.java)
 
-            (context as? LifecycleOwner)?.apply {
+            this.findViewTreeLifecycleOwner()?.apply {
                 viewModel?.productNetworkImageLiveData?.observe(this, { productImageViewBitMapPair ->
                     productImageViewBitMapPair.first.setProductImage(
                         productImageViewBitMapPair.second,
@@ -511,7 +511,7 @@ class VirtusizeInPageStandard
          * Sets the background color of the size check button
          */
         private fun setSizeCheckButtonBackgroundTint(color: Int) {
-            var drawable = ContextCompat.getDrawable(context, R.drawable.button_background_white)
+            var drawable = ContextCompat.getDrawable(context, R.drawable.virtusize_button_background_white)
             drawable = DrawableCompat.wrap(drawable!!)
             DrawableCompat.setTint(drawable, color)
             ViewCompat.setBackground(
@@ -645,7 +645,7 @@ class VirtusizeInPageStandard
                 val size = buttonTextSize + additionalSize
                 binding.inpageButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
                 binding.inpageButton.rightDrawable(
-                    R.drawable.ic_arrow_right_white,
+                    R.drawable.ic_virtusize_arrow_right_white,
                     0.8f * size / 2,
                     0.8f * size,
                 )
