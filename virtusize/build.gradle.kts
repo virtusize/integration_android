@@ -87,7 +87,8 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.lifecycle.runtime)
 
-    implementation("com.github.bumptech.glide:glide:4.15.0")
+    implementation(libs.coil)
+    implementation(libs.coil.gif)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
 

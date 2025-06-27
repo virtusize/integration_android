@@ -9,7 +9,9 @@ import android.view.View
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import com.bumptech.glide.Glide
+import coil.ImageLoader
+import coil.decode.GifDecoder
+import coil.request.ImageRequest
 import com.virtusize.android.R
 import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.VirtusizeMessageHandler
@@ -95,10 +97,19 @@ class VirtusizeInPageMini
                 )
             attrsArray.recycle()
             setStyle()
-            Glide.with(this)
-                .asGif() // Indicates we want to load a GIF
-                .load(R.drawable.virtusize_loading) // Load from drawable resource
-                .into(binding.gifImageView) // Load into the ImageView
+            // Coil GIF loading
+            val imageLoader =
+                ImageLoader.Builder(context)
+                    .components {
+                        add(GifDecoder.Factory())
+                    }
+                    .build()
+            val request =
+                ImageRequest.Builder(context)
+                    .data(R.drawable.virtusize_loading)
+                    .target(binding.gifImageView)
+                    .build()
+            imageLoader.enqueue(request)
         }
 
         /**
