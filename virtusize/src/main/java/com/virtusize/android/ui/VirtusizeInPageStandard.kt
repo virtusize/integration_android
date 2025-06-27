@@ -12,7 +12,6 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
@@ -161,9 +160,9 @@ class VirtusizeInPageStandard
             setStyle()
 
             Glide.with(this)
-                .asGif()  // Indicates we want to load a GIF
-                .load(R.drawable.virtusize_loading)  // Load from drawable resource
-                .into(binding.gifImageView)  // Load into the ImageView
+                .asGif() // Indicates we want to load a GIF
+                .load(R.drawable.virtusize_loading) // Load from drawable resource
+                .into(binding.gifImageView) // Load into the ImageView
         }
 
         /**

@@ -96,9 +96,9 @@ class VirtusizeInPageMini
             attrsArray.recycle()
             setStyle()
             Glide.with(this)
-                .asGif()  // Indicates we want to load a GIF
-                .load(R.drawable.virtusize_loading)  // Load from drawable resource
-                .into(binding.gifImageView)  // Load into the ImageView
+                .asGif() // Indicates we want to load a GIF
+                .load(R.drawable.virtusize_loading) // Load from drawable resource
+                .into(binding.gifImageView) // Load into the ImageView
         }
 
         /**
