@@ -9,6 +9,7 @@ import android.view.View
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import com.bumptech.glide.Glide
 import com.virtusize.android.R
 import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.VirtusizeMessageHandler
@@ -69,7 +70,7 @@ class VirtusizeInPageMini
                 if (visibility == View.GONE) {
                     View.GONE
                 } else {
-                    View.INVISIBLE
+                    View.VISIBLE
                 }
             val attrsArray =
                 context.obtainStyledAttributes(attrs, R.styleable.VirtusizeInPageMini, 0, 0)
@@ -94,6 +95,10 @@ class VirtusizeInPageMini
                 )
             attrsArray.recycle()
             setStyle()
+            Glide.with(this)
+                .asGif()  // Indicates we want to load a GIF
+                .load(R.drawable.virtusize_loading)  // Load from drawable resource
+                .into(binding.gifImageView)  // Load into the ImageView
         }
 
         /**
@@ -105,6 +110,8 @@ class VirtusizeInPageMini
             if (clientProduct!!.externalId == productWithPDC.externalId) {
                 clientProduct!!.productCheckData = productWithPDC.productCheckData
                 visibility = View.VISIBLE
+                binding.gifImageLayout.visibility = View.GONE
+                binding.inpageMiniLayout.visibility = View.VISIBLE
                 setupConfiguredLocalization()
                 setLoadingScreen(true)
                 setOnClickListener {
@@ -137,6 +144,8 @@ class VirtusizeInPageMini
             if (clientProduct!!.externalId != externalProductId) {
                 return
             }
+            binding.gifImageLayout.visibility = View.GONE
+            binding.inpageMiniLayout.visibility = View.VISIBLE
             binding.inpageMiniLoadingText.visibility = View.GONE
             binding.inpageMiniText.visibility = View.VISIBLE
             binding.inpageMiniText.text =

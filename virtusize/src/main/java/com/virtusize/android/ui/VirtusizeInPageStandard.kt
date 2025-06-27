@@ -12,6 +12,7 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
@@ -20,6 +21,7 @@ import androidx.core.view.ViewCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.findViewTreeLifecycleOwner
+import com.bumptech.glide.Glide
 import com.virtusize.android.R
 import com.virtusize.android.Virtusize
 import com.virtusize.android.data.local.VirtusizeErrorType
@@ -110,7 +112,7 @@ class VirtusizeInPageStandard
                 if (visibility == View.GONE) {
                     View.GONE
                 } else {
-                    View.INVISIBLE
+                    View.VISIBLE
                 }
 
             val attrsArray =
@@ -157,6 +159,11 @@ class VirtusizeInPageStandard
             }
 
             setStyle()
+
+            Glide.with(this)
+                .asGif()  // Indicates we want to load a GIF
+                .load(R.drawable.virtusize_loading)  // Load from drawable resource
+                .into(binding.gifImageView)  // Load into the ImageView
         }
 
         /**
@@ -211,6 +218,9 @@ class VirtusizeInPageStandard
             if (clientProduct!!.externalId == productWithPDC.externalId) {
                 clientProduct!!.productCheckData = productWithPDC.productCheckData
                 visibility = View.VISIBLE
+                binding.gifImageLayout.visibility = View.GONE
+                binding.inpageCardView.visibility = View.VISIBLE
+                binding.inpageFooter.visibility = View.VISIBLE
                 setupConfiguredLocalization()
                 setLoadingScreen(true)
                 binding.inpageCardView.setOnClickListener {
@@ -291,6 +301,11 @@ class VirtusizeInPageStandard
             if (clientProduct!!.externalId != externalProductId) {
                 return
             }
+
+            binding.gifImageLayout.visibility = View.GONE
+            binding.inpageCardView.visibility = View.VISIBLE
+            binding.inpageFooter.visibility = View.VISIBLE
+
             binding.inpageErrorScreenLayout.visibility = View.VISIBLE
             binding.inpageLayout.visibility = View.GONE
             binding.inpageCardView.cardElevation = 0f
