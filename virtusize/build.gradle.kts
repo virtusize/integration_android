@@ -87,6 +87,9 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.lifecycle.runtime)
 
+    implementation(libs.coil)
+    implementation(libs.coil.gif)
+
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     testImplementation(libs.androidx.test.core)

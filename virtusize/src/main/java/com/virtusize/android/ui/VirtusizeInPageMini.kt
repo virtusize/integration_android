@@ -9,6 +9,9 @@ import android.view.View
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import coil.ImageLoader
+import coil.decode.GifDecoder
+import coil.request.ImageRequest
 import com.virtusize.android.R
 import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.VirtusizeMessageHandler
@@ -69,7 +72,7 @@ class VirtusizeInPageMini
                 if (visibility == View.GONE) {
                     View.GONE
                 } else {
-                    View.INVISIBLE
+                    View.VISIBLE
                 }
             val attrsArray =
                 context.obtainStyledAttributes(attrs, R.styleable.VirtusizeInPageMini, 0, 0)
@@ -94,6 +97,19 @@ class VirtusizeInPageMini
                 )
             attrsArray.recycle()
             setStyle()
+            // Coil GIF loading
+            val imageLoader =
+                ImageLoader.Builder(context)
+                    .components {
+                        add(GifDecoder.Factory())
+                    }
+                    .build()
+            val request =
+                ImageRequest.Builder(context)
+                    .data(R.drawable.virtusize_loading)
+                    .target(binding.gifImageView)
+                    .build()
+            imageLoader.enqueue(request)
         }
 
         /**
@@ -105,6 +121,8 @@ class VirtusizeInPageMini
             if (clientProduct!!.externalId == productWithPDC.externalId) {
                 clientProduct!!.productCheckData = productWithPDC.productCheckData
                 visibility = View.VISIBLE
+                binding.gifImageLayout.visibility = View.GONE
+                binding.inpageMiniLayout.visibility = View.VISIBLE
                 setupConfiguredLocalization()
                 setLoadingScreen(true)
                 setOnClickListener {
@@ -137,6 +155,8 @@ class VirtusizeInPageMini
             if (clientProduct!!.externalId != externalProductId) {
                 return
             }
+            binding.gifImageLayout.visibility = View.GONE
+            binding.inpageMiniLayout.visibility = View.VISIBLE
             binding.inpageMiniLoadingText.visibility = View.GONE
             binding.inpageMiniText.visibility = View.VISIBLE
             binding.inpageMiniText.text =
