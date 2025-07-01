@@ -35,7 +35,7 @@ class VirtusizeFlutterBuilder {
         VirtusizeLanguage.entries.toMutableList()
     private var showSGI: Boolean = false
     private var detailsPanelCards: Set<VirtusizeInfoCategory> = VirtusizeInfoCategory.entries.toMutableSet()
-    private var showSNSButtons: Boolean = false
+    private var showSNSButtons: Boolean = true
     private var branch: String? = null
     private var virtusizeFlutterPresenter: VirtusizeFlutterPresenter? = null
 
@@ -129,7 +129,7 @@ class VirtusizeFlutterBuilder {
 
     /**
      * Sets up whether the Virtusize web app will show the SNS buttons
-     * By default, showSNSButtons is false
+     * By default, showSNSButtons is true
      * @param showSNSButtons the Boolean value
      * @return [VirtusizeFlutterBuilder]
      */
