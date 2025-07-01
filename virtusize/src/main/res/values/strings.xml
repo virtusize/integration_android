@@ -2,7 +2,7 @@
     <string name="virtusize_name">Virtusize</string>
     <string name="landscape" translatable="false">landscape</string>
     <string name="portrait" translatable="false">portrait</string>
-    <string name="virtusize_button_text">Check size</string>
+    <string name="virtusize_button_text">Try it on</string>
     <string name="virtusize_privacy_policy">Privacy Policy</string>
     <string name="virtusize_privacy_policy_link">https://www.virtusize.com/site/privacy-policy</string>
     <string name="inpage_loading_text">Analyzing the size</string>
