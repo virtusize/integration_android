@@ -147,7 +147,7 @@ following table:
       // By default, Virtusize displays all the possible info categories in the Product Details tab
       .setDetailsPanelCards(setOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
       // By default, Virtusize enables the SNS buttons
-      .setShowSNSButtons(false)
+      .setShowSNSButtons(true)
       // Target the specific branch environment by its name
       .setBranch("branch-name")  
       .build()
@@ -180,7 +180,7 @@ following table:
         // By default, Virtusize displays all the possible info categories in the Product Details tab
         .setDetailsPanelCards(Set.of(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
         // By default, Virtusize enables the SNS buttons
-        .setShowSNSButtons(false)
+        .setShowSNSButtons(true)
         // Target the specific environment branch by its name
         .setBranch("branch-name")    
         .build();

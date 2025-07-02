@@ -26,7 +26,7 @@ internal class VirtusizeSampleApplication : Application() {
             // By default, Virtusize displays all the possible info categories in the Product Details tab
             .setDetailsPanelCards(setOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
             // By default, Virtusize enables the SNS buttons
-            .setShowSNSButtons(false)
+            .setShowSNSButtons(true)
             .build()
     }
 }
