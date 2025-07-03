@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="virtusize_name">버츄사이즈</string>
-    <string name="virtusize_button_text">사이즈 확인</string>
+    <string name="virtusize_button_text">입어보기</string>
     <string name="virtusize_privacy_policy">개인정보 처리방침</string>
     <string name="virtusize_privacy_policy_link">https://www.virtusize.kr/privacy-policy</string>
     <string name="inpage_loading_text">사이즈 분석 중</string>
