@@ -6,6 +6,7 @@
 - Fix: Fix user auth data storing
 - Fix: Add loading animation for VirtusizeInPageViews
 - Fix: Change inpage buttons text to be the same as in web version
+- Fix: Make sns buttons shown by default
 
 ### 2.12.0
 - Feature: Update Flutter SDK implementation to be compatible with latest changes

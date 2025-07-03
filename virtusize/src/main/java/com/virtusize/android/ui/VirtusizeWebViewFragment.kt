@@ -43,7 +43,7 @@ import org.json.JSONObject
 class VirtusizeWebViewFragment : DialogFragment() {
     private var virtusizeWebAppUrl: String = VirtusizeApi.getVirtusizeWebViewURL()
 
-    private var showSNSButtons: Boolean = false
+    private var showSNSButtons: Boolean = true
     private var vsParamsFromSDKScript = ""
     private var backButtonClickEventFromSDKScript =
         "javascript:vsEventFromSDK({ name: 'sdk-back-button-tapped'})"
