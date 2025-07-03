@@ -6,6 +6,21 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:id="@+id/gifImageLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:id="@+id/gifImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:src="@drawable/virtusize_loading" /> 
+
+    </LinearLayout>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/inpageCardView"
         android:layout_width="match_parent"
@@ -13,7 +28,8 @@
         android:layout_margin="@dimen/virtusize_inpage_standard_layout_margin"
         android:background="@color/virtusizeWhite"
         app:cardCornerRadius="0dp"
-        app:cardElevation="@dimen/virtusize_inpage_standard_layout_card_elevation">
+        app:cardElevation="@dimen/virtusize_inpage_standard_layout_card_elevation"
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/inpageErrorScreenLayout"
@@ -28,7 +44,7 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/ic_error_hanger" />
+                android:src="@drawable/ic_virtusize_error_hanger" />
 
             <TextView
                 android:id="@+id/inpageErrorText"
@@ -145,7 +161,7 @@
             <Button
                 android:id="@+id/inpageButton"
                 style="@style/VirtusizeInPageButtonStyle"
-                android:drawableEnd="@drawable/ic_arrow_right_white"
+                android:drawableEnd="@drawable/ic_virtusize_arrow_right_white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -155,7 +171,7 @@
                 android:layout_marginEnd="@dimen/virtusize_inpage_standard_button_horizontal_margin"
                 android:layout_marginRight="@dimen/virtusize_inpage_standard_button_horizontal_margin"
                 android:layout_marginBottom="@dimen/virtusize_inpage_standard_button_vertical_margin"
-                android:background="@drawable/button_background_black"
+                android:background="@drawable/virtusize_button_background_black"
                 android:includeFontPadding="false"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
@@ -175,7 +191,8 @@
         android:layout_marginLeft="@dimen/virtusize_inpage_standard_footer_horizontal_margin"
         android:layout_marginTop="@dimen/virtusize_inpage_standard_footer_marginTop"
         android:layout_marginEnd="@dimen/virtusize_inpage_standard_footer_horizontal_margin"
-        android:layout_marginRight="@dimen/virtusize_inpage_standard_footer_horizontal_margin">
+        android:layout_marginRight="@dimen/virtusize_inpage_standard_footer_horizontal_margin"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/vsSignatureImageView"

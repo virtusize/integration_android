@@ -250,7 +250,7 @@ class VirtusizeRepository internal constructor(
                 sharedPreferencesHelper.storeSessionData(userSessionResponse)
                 sharedPreferencesHelper.storeAccessToken(accessToken)
                 if (accessToken.isNotBlank()) {
-                    sharedPreferencesHelper.storeAuthToken(accessToken)
+                    sharedPreferencesHelper.storeAuthToken(authToken)
                 }
                 hasSessionBodyMeasurement = hasBodyMeasurement
             }

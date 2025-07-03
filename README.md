@@ -82,7 +82,7 @@ In your app `build.gradle` file, add the following dependencies:
 
   ```groovy
   dependencies {
-    implementation 'com.virtusize.android:virtusize:2.12.0'
+    implementation 'com.virtusize.android:virtusize:2.12.1'
   }
   ```
 
@@ -90,7 +90,7 @@ In your app `build.gradle` file, add the following dependencies:
 
   ```kotlin
   dependencies {
-    implementation("com.virtusize.android:virtusize:2.12.0")
+    implementation("com.virtusize.android:virtusize:2.12.1")
   }
   ```
 
@@ -121,7 +121,7 @@ following table:
 | setShowSGI           | Boolean                           | setShowSGI(true)                                                                                                                                                                                                                               | Determines whether the integration will fetch SGI and use SGI flow for users to add user generated items to their wardrobe.                                                                                                                       | No. By default, ShowSGI is set to false                                                                                |
 | setAllowedLanguages  | A list of `VirtusizeLanguage`     | In Kotlin, setAllowedLanguages(mutableListOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))<br />In Java, setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP))                                                         | The languages which the user can switch to using the Language Selector                                                                                                                                                                            | No. By default, the integration allows all possible languages to be displayed, including English, Japanese and Korean. |
 | setDetailsPanelCards | A list of `VirtusizeInfoCategory` | In Kotlin, setDetailsPanelCards(mutableListOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))<br />In Java, setDetailsPanelCards(Arrays.asList(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT)) | The info categories which will be display in the Product Details tab. Possible categories are: `VirtusizeInfoCategory.MODEL_INFO`, `VirtusizeInfoCategory.GENERAL_FIT`, `VirtusizeInfoCategory.BRAND_SIZING` and `VirtusizeInfoCategory.MATERIAL` | No. By default, the integration displays all the possible info categories in the Product Details tab.                  |
-| setShowSNSButtons    | Boolean                           | setShowSNSButtons(true)                                                                                                                                                                                                                        | Determines whether the integration will show the SNS buttons to the users                                                                                                                                                                         | No. By default, the integration disables the SNS buttons                                                               |
+| setShowSNSButtons    | Boolean                           | setShowSNSButtons(true)                                                                                                                                                                                                                        | Determines whether the integration will show the SNS buttons to the users                                                                                                                                                                         | No. By default, the integration enables the SNS buttons                                                               |
 | setBranch     | String                            | setBranch("branch-name")                                                                                                                                                                                                                | Targets specific environment branch                                                                                                                                                                                         | No. By default, production environment is targeted. `staging` targets staging environment. `<branch-name>` targets a specific branch                                                                     |
 
 - Kotlin
@@ -146,8 +146,8 @@ following table:
       .setAllowedLanguages(listOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
       // By default, Virtusize displays all the possible info categories in the Product Details tab
       .setDetailsPanelCards(setOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
-      // By default, Virtusize disables the SNS buttons
-      .setShowSNSButtons(false)
+      // By default, Virtusize enables the SNS buttons
+      .setShowSNSButtons(true)
       // Target the specific branch environment by its name
       .setBranch("branch-name")  
       .build()
@@ -179,8 +179,8 @@ following table:
         .setAllowedLanguages(Arrays.asList(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
         // By default, Virtusize displays all the possible info categories in the Product Details tab
         .setDetailsPanelCards(Set.of(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
-        // By default, Virtusize disables the SNS buttons
-        .setShowSNSButtons(false)
+        // By default, Virtusize enables the SNS buttons
+        .setShowSNSButtons(true)
         // Target the specific environment branch by its name
         .setBranch("branch-name")    
         .build();
@@ -256,6 +256,164 @@ URL scheme.
 2. The URL scheme must begin with your app's package ID (com.your-company.your-app) and **end with
    .virtusize**, and the scheme which you define must use all **lowercase** letters.
 3. The underscores in your app's package ID must be replaced with hyphens. For example `com.your_company.your_app` must be changed to `com.your-company.your-app`.
+
+### Enable Virtusize SNS Login for your WebView app
+
+Use either of the following methods to enable Virtusize SNS login
+
+### Method 1: Use the VirtusizeWebView
+
+##### **Step 1: Replace your `WebView` with `VirtusizeWebView`**
+
+To enable users to sign up or log in with the web version of Virtusize integration in your webview,
+please replace your `WebView` with **`VirtusizeWebView`** in your Kotlin or Java file and XML file
+to fix and enable SNS login in Virtusize.
+
+- Kotlin/Java
+
+  ```diff
+  // Kotlin
+  - var webView: WebView
+  + var webView: VirtusizeWebView
+  
+  // Java
+  - WebView webView;
+  + VirtusizeWebView webView;
+  ```
+
+and
+
+- XML
+
+  ```diff
+  - <WebView
+  + <com.virtusize.libsource.VirtusizeWebView
+      android:id="@+id/webView"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+  ```
+
+##### Step 2: Set the Virtusize SNS auth activity result launcher to `VirtusizeWebView`
+
+- Kotlin
+
+  ```kotlin
+  // Register the Virtusize SNS auth activity result launcher
+  private val virtusizeSNSAuthLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+      // Handle the SNS auth result of the VirtusizeAuthActivity by passing the webview and the result to the `VirtusizeAuth.handleVirtusizeSNSAuthResult` function                                                                                                
+      VirtusizeAuth.handleVirtusizeSNSAuthResult(webView, result.resultCode, result.data)
+  }
+  
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+      super.onViewCreated(view, savedInstanceState)
+      // ... other code
+    
+      // Set the activity result launcher to the webView
+      webView.setVirtusizeSNSAuthLauncher(virtusizeSNSAuthLauncher)
+  }
+  ```
+
+- Java
+
+  ```java
+  // Register the Virtusize SNS auth activity result launcher
+  private ActivityResultLauncher<Intent> mLauncher = 
+      registerForActivityResult(
+          new ActivityResultContracts.StartActivityForResult(), 
+          (ActivityResultCallback<ActivityResult>) result ->
+              VirtusizeAuth.INSTANCE.handleVirtusizeSNSAuthResult(webView, result.getResultCode(), result.getData())
+  );
+  
+  
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+      super.onViewCreated(view, savedInstanceState)
+      // ... other code
+    
+      // Set the activity result launcher to the webView
+      webView.setVirtusizeSNSAuthLauncher(virtusizeSNSAuthLauncher)
+  }
+  ```
+
+### or
+
+### Method 2: Use WebView
+
+##### Step 1: Make sure your WebView enables the following settings:
+
+```kotlin
+webView.settings.javaScriptEnabled = true
+webView.settings.domStorageEnabled = true
+webView.settings.databaseEnabled = true
+webView.settings.setSupportMultipleWindows(true)
+```
+
+##### Step 2: Add the following code
+
+```kotlin
+// Register the Virtusize SNS auth activity result launcher
+private val virtusizeSNSAuthLauncher =
+    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        VirtusizeAuth.handleVirtusizeSNSAuthResult(webView, result.resultCode, result.data)
+    }
+
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+
+    webView.webViewClient = object : WebViewClient() {
+        override fun onPageFinished(view: WebView?, url: String?) {
+            // Enable SNS buttons in Virtusize
+            webView.evaluateJavascript("javascript:window.virtusizeSNSEnabled = true;", null)
+
+            // The rest of your code ..... 
+        }
+    }
+
+    webView.webChromeClient = object : WebChromeClient() {
+        override fun onCreateWindow(
+            view: WebView,
+            dialog: Boolean,
+            userGesture: Boolean,
+            resultMsg: Message
+        ): Boolean {
+            // Obtain the popup window link or link title
+            val message = view.handler.obtainMessage()
+            view.requestFocusNodeHref(message)
+            val url = message.data.getString("url")
+            val title = message.data.getString("title")
+            if (resultMsg.obj != null && resultMsg.obj is WebView.WebViewTransport && VirtusizeURLCheck.isLinkFromVirtusize(url, title)) {
+                val popupWebView = WebView(view.context)
+                popupWebView.settings.javaScriptEnabled = true
+                popupWebView.webViewClient = object : WebViewClient() {
+                    override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+			if (VirtusizeURLCheck.isExternalLinkFromVirtusize(url)) {
+                            runCatching {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                startActivity(intent)
+                                return true
+                            }
+                        }
+                        return VirtusizeAuth.isSNSAuthUrl(context, virtusizeSNSAuthLauncher, url)
+                    }
+                }
+                popupWebView.webChromeClient = object : WebChromeClient() {
+                    override fun onCloseWindow(window: WebView) {
+                        webView.removeAllViews()
+                    }
+                }
+                val transport = resultMsg.obj as WebView.WebViewTransport
+                view.addView(popupWebView)
+                transport.webView = popupWebView
+                resultMsg.sendToTarget()
+                return true
+            }
+
+            // The rest of your code ..... 
+
+            return super.onCreateWindow(view, dialog, userGesture, resultMsg)
+        }
+    }
+}
+```
 
 ### 4. Register Virtusize Message Handler (Optional)
 

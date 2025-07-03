@@ -15,8 +15,8 @@
     </style>
 
     <style name="VirtusizeDialogFragmentAnimation">
-        <item name="android:windowEnterAnimation">@anim/slide_in_right</item>
-        <item name="android:windowExitAnimation">@anim/slide_out_right</item>
+        <item name="android:windowEnterAnimation">@anim/virtusize_slide_in_right</item>
+        <item name="android:windowExitAnimation">@anim/virtusize_slide_out_right</item>
     </style>
 
     <style name="VirtusizeDialogFragmentAnimation.Null">

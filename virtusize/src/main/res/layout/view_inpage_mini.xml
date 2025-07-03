@@ -1,66 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/inpageMiniLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/color_gray_900"
-    android:orientation="vertical"
-    android:paddingStart="@dimen/virtusizeDp8"
-    android:paddingLeft="@dimen/virtusizeDp8"
-    android:paddingTop="@dimen/virtusize_inpage_mini_padding_vertical"
-    android:paddingEnd="@dimen/virtusizeDp8"
-    android:paddingRight="@dimen/virtusizeDp8"
-    android:paddingBottom="@dimen/virtusize_inpage_mini_padding_vertical">
+    android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/inpageMiniImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/virtusize_inpage_mini_image_height"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="@dimen/virtusize_inpage_mini_image_marginEnd"
-        android:layout_marginRight="@dimen/virtusize_inpage_mini_image_marginEnd"
-        android:src="@drawable/ic_vs_icon_black"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/inpageMiniText"
-        style="@style/VirtusizeInPageMiniTextStyle"
-        android:layout_toStartOf="@+id/inpageMiniButton"
-        android:layout_toLeftOf="@+id/inpageMiniButton"
-        android:layout_toEndOf="@+id/inpageMiniImageView"
-        android:layout_toRightOf="@+id/inpageMiniImageView"
-        android:textColor="@color/virtusizeWhite"
-        tools:text="@string/inpage_body_data_empty_text" />
-
-    <com.virtusize.android.ui.DotsLoadingTextView
-        android:id="@+id/inpageMiniLoadingText"
-        style="@style/VirtusizeInPageMiniTextStyle"
-        android:layout_toStartOf="@+id/inpageMiniButton"
-        android:layout_toLeftOf="@+id/inpageMiniButton"
-        android:layout_toEndOf="@+id/inpageMiniImageView"
-        android:layout_toRightOf="@+id/inpageMiniImageView"
-        android:textColor="@color/color_gray_900"
-        android:visibility="gone"
-        tools:text="@string/inpage_loading_text" />
-
-    <Button
-        android:id="@+id/inpageMiniButton"
-        style="@style/VirtusizeInPageButtonStyle"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/gifImageLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="@dimen/virtusize_inpage_mini_margin_between_message_button"
-        android:layout_marginLeft="@dimen/virtusize_inpage_mini_margin_between_message_button"
-        android:background="@drawable/button_background_white"
-        android:drawableEnd="@drawable/ic_arrow_right_black"
-        android:includeFontPadding="false"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:textAllCaps="false"
-        android:textSize="@dimen/virtusize_inpage_default_textSize"
-        app:backgroundTint="@color/virtusizeWhite" />
-</RelativeLayout>
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+        
+        <ImageView
+            android:id="@+id/gifImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:src="@drawable/virtusize_loading" /> 
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/inpageMiniLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_gray_900"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/virtusizeDp8"
+        android:paddingLeft="@dimen/virtusizeDp8"
+        android:paddingTop="@dimen/virtusize_inpage_mini_padding_vertical"
+        android:paddingEnd="@dimen/virtusizeDp8"
+        android:paddingRight="@dimen/virtusizeDp8"
+        android:paddingBottom="@dimen/virtusize_inpage_mini_padding_vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/inpageMiniImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/virtusize_inpage_mini_image_height"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/virtusize_inpage_mini_image_marginEnd"
+            android:layout_marginRight="@dimen/virtusize_inpage_mini_image_marginEnd"
+            android:src="@drawable/ic_vs_icon_black"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/inpageMiniText"
+            style="@style/VirtusizeInPageMiniTextStyle"
+            android:layout_toStartOf="@+id/inpageMiniButton"
+            android:layout_toLeftOf="@+id/inpageMiniButton"
+            android:layout_toEndOf="@+id/inpageMiniImageView"
+            android:layout_toRightOf="@+id/inpageMiniImageView"
+            android:textColor="@color/virtusizeWhite"
+            tools:text="@string/inpage_body_data_empty_text" />
+
+        <com.virtusize.android.ui.DotsLoadingTextView
+            android:id="@+id/inpageMiniLoadingText"
+            style="@style/VirtusizeInPageMiniTextStyle"
+            android:layout_toStartOf="@+id/inpageMiniButton"
+            android:layout_toLeftOf="@+id/inpageMiniButton"
+            android:layout_toEndOf="@+id/inpageMiniImageView"
+            android:layout_toRightOf="@+id/inpageMiniImageView"
+            android:textColor="@color/color_gray_900"
+            android:visibility="gone"
+            tools:text="@string/inpage_loading_text" />
+
+        <Button
+            android:id="@+id/inpageMiniButton"
+            style="@style/VirtusizeInPageButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/virtusize_inpage_mini_margin_between_message_button"
+            android:layout_marginLeft="@dimen/virtusize_inpage_mini_margin_between_message_button"
+            android:background="@drawable/virtusize_button_background_white"
+            android:drawableEnd="@drawable/ic_virtusize_arrow_right_black"
+            android:includeFontPadding="false"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/virtusize_inpage_default_textSize"
+            app:backgroundTint="@color/virtusizeWhite" />
+    </RelativeLayout>
+</LinearLayout>

@@ -45,9 +45,14 @@ interface Virtusize {
          * @throws IllegalStateException if the [Virtusize] instance is not initialized
          */
         @Throws(IllegalStateException::class)
-        fun getInstance(): Virtusize =
+        fun getInstance(): Virtusize = getInstanceOrNull() ?: throw IllegalStateException("Virtusize is not initialized")
+
+        /**
+         * Get the [Virtusize] instance or return `null`, if [Virtusize] has not been yet initialized
+         */
+        fun getInstanceOrNull(): Virtusize? =
             if (!Companion::instance.isInitialized) {
-                throw IllegalStateException("Virtusize is not initialized")
+                null
             } else {
                 instance
             }
@@ -118,6 +123,11 @@ interface Virtusize {
         virtusizeView: VirtusizeView?,
         product: VirtusizeProduct,
     )
+
+    /**
+     * Cleanup [virtusizeView] once it's no longer needed (e.g. leaves the composition)
+     */
+    fun cleanupVirtusizeView(virtusizeView: VirtusizeView)
 
     /**
      * Sends an order to the Virtusize server for Kotlin apps

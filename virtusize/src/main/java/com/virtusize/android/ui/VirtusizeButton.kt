@@ -89,9 +89,9 @@ class VirtusizeButton
             minimumHeight = resources.getDimension(R.dimen.virtusize_button_corner_radius).toInt()
 
             if (virtusizeViewStyle == VirtusizeViewStyle.TEAL) {
-                setBackgroundResource(R.drawable.button_background_teal)
+                setBackgroundResource(R.drawable.virtusize_button_background_teal)
             } else {
-                setBackgroundResource(R.drawable.button_background_black)
+                setBackgroundResource(R.drawable.virtusize_button_background_black)
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

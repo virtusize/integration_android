@@ -25,8 +25,8 @@ internal class VirtusizeSampleApplication : Application() {
             .setAllowedLanguages(listOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP))
             // By default, Virtusize displays all the possible info categories in the Product Details tab
             .setDetailsPanelCards(setOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
-            // By default, Virtusize disables the SNS buttons
-            .setShowSNSButtons(false)
+            // By default, Virtusize enables the SNS buttons
+            .setShowSNSButtons(true)
             .build()
     }
 }

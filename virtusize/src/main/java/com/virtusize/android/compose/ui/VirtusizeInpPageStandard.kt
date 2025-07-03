@@ -3,6 +3,7 @@ package com.virtusize.android.compose.ui
 import android.view.View
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -14,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.viewinterop.NoOpUpdate
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.virtusize.android.Virtusize
 import com.virtusize.android.compose.theme.VirtusizeColors
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeEvent
@@ -77,23 +79,29 @@ private fun VirtusizeInPageStandard(
         factory = { context ->
             VirtusizeInPageStandard(context).apply {
                 horizontalMargin = 0
+                clipChildren = false
             }
         },
         update = update,
+        onRelease = { virtusizeView ->
+            Virtusize.getInstanceOrNull()?.cleanupVirtusizeView(virtusizeView)
+        },
     )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun VirtusizeInPageStandardPreview() {
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         VirtusizeInPageStandard(
+            modifier = Modifier.padding(16.dp),
             update = { virtusizeInPageStandard ->
                 virtusizeInPageStandard.visibility = View.VISIBLE
                 virtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
             },
         )
         VirtusizeInPageStandard(
+            modifier = Modifier.padding(16.dp),
             update = { virtusizeInPageStandard ->
                 virtusizeInPageStandard.visibility = View.VISIBLE
                 virtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.BLACK
