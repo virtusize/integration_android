@@ -1,4 +1,4 @@
-### Next Release
+### 2.12.1
 - Fix: Memory leak with Virtusize composables
 - Fix: Shadow is clipped in compose version of VirtusizeInPageStandard
 - Fix: Replace LifecycleOwner with ViewTreeLifecycleOwner in VirtusizeInPageStandart to prevent an infinite loading in fragments
