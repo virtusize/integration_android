@@ -17,10 +17,11 @@ private fun Project.configureRepositories() {
         publications {
             repositories {
                 maven {
+                    name = "ossrh-staging-api"
                     val releasesRepoUrl =
-                        "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                        "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
                     val snapshotsRepoUrl =
-                        "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                        "https://central.sonatype.com/repository/maven-snapshots/"
                     url =
                         uri(if (isSnapshot) snapshotsRepoUrl else releasesRepoUrl)
                     credentials {
