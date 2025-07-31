@@ -1,4 +1,4 @@
-### Next release
+### 2.12.2
 - Fix: Display proper size recommendation text
 
 ### 2.12.1
