@@ -30,6 +30,7 @@ internal class BodyProfileRecommendedSizeParamsTests {
             """
             {
                 "fit": "regular",
+                "style": "fashionable",
                 "sizes": {
                     "38": {
                         "bust": 660,
@@ -75,6 +76,7 @@ internal class BodyProfileRecommendedSizeParamsTests {
             """
             {
                 "fit": "regular",
+                "style": "fashionable",
                 "sizes": {},
                 "modelInfo": null,
                 "gender": "female",
@@ -390,6 +392,7 @@ internal class BodyProfileRecommendedSizeParamsTests {
                             "hip" to 85,
                             "height" to 165,
                         ),
+                    "style" to "fashionable",
                 ),
             )
         }
