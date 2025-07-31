@@ -1,3 +1,6 @@
+### Next release
+- Fix: Display proper size recommendation text
+
 ### 2.12.1
 - Fix: Memory leak with Virtusize composables
 - Fix: Shadow is clipped in compose version of VirtusizeInPageStandard
