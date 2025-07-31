@@ -466,6 +466,7 @@ internal class VirtusizeApiTest {
                             "hip" to 85,
                             "height" to 165,
                         ),
+                    "style" to "fashionable",
                 ),
             )
         }
