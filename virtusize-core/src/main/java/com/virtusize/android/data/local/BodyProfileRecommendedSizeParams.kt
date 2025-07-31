@@ -40,6 +40,9 @@ internal data class BodyProfileRecommendedSizeParams(
                     .orEmpty(),
             )
             .plus(
+                mapOf(PARAM_USER_AGE to userBodyProfile.age),
+            )
+            .plus(
                 mapOf(PARAM_ITEMS to arrayOf(createItemsParams())),
             )
     }
@@ -98,6 +101,11 @@ internal data class BodyProfileRecommendedSizeParams(
             .plus(
                 mapOf(PARAM_GENDER to userBodyProfile.gender),
             )
+            .plus(
+                mapOf(
+                    PARAM_STYLE to (storeProduct.storeProductMeta?.additionalInfo?.style ?: "regular"),
+                ),
+            )
     }
 
     /**
@@ -155,6 +163,7 @@ internal data class BodyProfileRecommendedSizeParams(
         const val PARAM_USER_GENDER = "userGender"
         const val PARAM_USER_HEIGHT = "userHeight"
         const val PARAM_USER_WEIGHT = "userWeight"
+        const val PARAM_USER_AGE = "userAge"
         const val PARAM_EXTERNAL_PRODUCT_ID = "extProductId"
 
         const val PARAM_BRAND = "brand"
@@ -162,6 +171,7 @@ internal data class BodyProfileRecommendedSizeParams(
         const val PARAM_SIZES = "sizes"
         const val PARAM_MODEL_INFO = "modelInfo"
         const val PARAM_GENDER = "gender"
+        const val PARAM_STYLE = "style"
 
         const val PARAM_BODY_MEASUREMENT_VALUE = "value"
         const val PARAM_BODY_MEASUREMENT_PREDICTED = "predicted"
