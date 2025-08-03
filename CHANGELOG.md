@@ -1,3 +1,6 @@
+### Next release
+- Fix: Align mobile SDK size recommendation API requests with web implementation
+
 ### 2.12.2
 - Fix: Display proper size recommendation text
 
