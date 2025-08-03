@@ -301,12 +301,12 @@ internal class VirtusizeApiTest {
         assertThat(actualApiRequest.url).isEqualTo(expectedUrl)
         assertThat(actualApiRequest.method).isEqualTo(HttpMethod.POST)
         assertThat(actualApiRequest.authorization).isEqualTo(false)
-        assertThat(actualApiRequest.params["userGender"]).isEqualTo("female")
-        assertThat(actualApiRequest.params["userHeight"]).isEqualTo(1630)
-        assertThat(actualApiRequest.params["userWeight"]).isEqualTo(50)
-        assertThat(actualApiRequest.params["bodyData"]).isEqualTo(
+        assertThat(actualApiRequest.params["user_gender"]).isEqualTo("female")
+        assertThat(actualApiRequest.params["user_height"]).isEqualTo(1630)
+        assertThat(actualApiRequest.params["user_weight"]).isEqualTo(50)
+        assertThat(actualApiRequest.params["body_data"]).isEqualTo(
             mutableMapOf(
-                "waistWidth" to
+                "waist_width" to
                     mutableMapOf(
                         "value" to 225,
                         "predicted" to true,
@@ -316,7 +316,7 @@ internal class VirtusizeApiTest {
                         "value" to 755,
                         "predicted" to true,
                     ),
-                "bustWidth" to
+                "bust_width" to
                     mutableMapOf(
                         "value" to 245,
                         "predicted" to true,
@@ -326,17 +326,17 @@ internal class VirtusizeApiTest {
                         "value" to 480,
                         "predicted" to true,
                     ),
-                "shoulderWidth" to
+                "shoulder_width" to
                     mutableMapOf(
                         "value" to 340,
                         "predicted" to true,
                     ),
-                "hipHeight" to
+                "hip_height" to
                     mutableMapOf(
                         "value" to 750,
                         "predicted" to true,
                     ),
-                "kneeHeight" to
+                "knee_height" to
                     mutableMapOf(
                         "value" to 395,
                         "predicted" to true,
@@ -346,7 +346,7 @@ internal class VirtusizeApiTest {
                         "value" to 300,
                         "predicted" to true,
                     ),
-                "waistHeight" to
+                "waist_height" to
                     mutableMapOf(
                         "value" to 920,
                         "predicted" to true,
@@ -356,7 +356,7 @@ internal class VirtusizeApiTest {
                         "value" to 830,
                         "predicted" to true,
                     ),
-                "armpitHeight" to
+                "armpit_height" to
                     mutableMapOf(
                         "value" to 1130,
                         "predicted" to true,
@@ -371,12 +371,12 @@ internal class VirtusizeApiTest {
                         "value" to 700,
                         "predicted" to true,
                     ),
-                "headHeight" to
+                "head_height" to
                     mutableMapOf(
                         "value" to 215,
                         "predicted" to true,
                     ),
-                "hipWidth" to
+                "hip_width" to
                     mutableMapOf(
                         "value" to 300,
                         "predicted" to true,
@@ -396,7 +396,7 @@ internal class VirtusizeApiTest {
                         "value" to 630,
                         "predicted" to true,
                     ),
-                "sleeveLength" to
+                "sleeve_length" to
                     mutableMapOf(
                         "value" to 520,
                         "predicted" to true,
@@ -411,7 +411,7 @@ internal class VirtusizeApiTest {
                         "value" to 370,
                         "predicted" to true,
                     ),
-                "shoulderHeight" to
+                "shoulder_height" to
                     mutableMapOf(
                         "value" to 1240,
                         "predicted" to true,
@@ -420,9 +420,9 @@ internal class VirtusizeApiTest {
         )
         val items = actualApiRequest.params["items"] as Array<Map<String, Any>>
         for (item in items) {
-            assertThat(item["extProductId"]).isEqualTo("694")
-            assertThat(item["productType"]).isEqualTo("jacket")
-            assertThat(item["itemSizesOrig"]).isEqualTo(
+            assertThat(item["ext_product_id"]).isEqualTo("694")
+            assertThat(item["product_type"]).isEqualTo("jacket")
+            assertThat(item["item_sizes_orig"]).isEqualTo(
                 mutableMapOf(
                     "38" to
                         mutableMapOf(
@@ -438,7 +438,7 @@ internal class VirtusizeApiTest {
                         ),
                 ),
             )
-            assertThat(item["additionalInfo"]).isEqualTo(
+            assertThat(item["additional_info"]).isEqualTo(
                 mutableMapOf(
                     "fit" to "regular",
                     "sizes" to
@@ -458,7 +458,7 @@ internal class VirtusizeApiTest {
                         ),
                     "gender" to "female",
                     "brand" to "Virtusize",
-                    "modelInfo" to
+                    "model_info" to
                         mutableMapOf(
                             "waist" to 56,
                             "bust" to 78,

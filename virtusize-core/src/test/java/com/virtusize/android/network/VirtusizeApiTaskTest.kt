@@ -81,6 +81,15 @@ internal class VirtusizeApiTaskTest {
                 Measurement("shoulderHeight", 1240),
             ),
         )
+        assertThat(actualUserBodyProfile?.footwearData).isEqualTo(
+            mapOf(
+                "toeShape" to "greek",
+                "size" to "30.5",
+                "type" to "sneakers",
+                "brand" to "Virtusize",
+                "footWidth" to "regular"
+            )
+        )
     }
 
     @Test
