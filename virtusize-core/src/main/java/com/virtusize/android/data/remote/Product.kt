@@ -125,4 +125,11 @@ data class Product(
     fun isAccessory(): Boolean {
         return productType == 18 || productType == 19 || productType == 25 || productType == 26
     }
+
+    /**
+     * Checks if the product is a shoe
+     */
+    fun isShoe(): Boolean {
+        return productType == 17;
+    }
 }

@@ -263,8 +263,6 @@ internal class VirtusizeAPIServiceImpl(
     ): VirtusizeApiResponse<ArrayList<BodyProfileRecommendedSize>?> =
         withContext(Dispatchers.IO) {
             val apiRequest = VirtusizeApi.getSize(productTypes, storeProduct, userBodyProfile)
-            val jsn = JSONObject(apiRequest.params).toString();
-            print(jsn);
             VirtusizeApiTask(
                 httpURLConnection,
                 sharedPreferencesHelper,
@@ -281,8 +279,6 @@ internal class VirtusizeAPIServiceImpl(
     ): VirtusizeApiResponse<BodyProfileRecommendedSize?> =
         withContext(Dispatchers.IO) {
             val apiRequest = VirtusizeApi.getShoeSize(productTypes, storeProduct, userBodyProfile)
-            val jsn = JSONObject(apiRequest.params).toString();
-            print(jsn);
             VirtusizeApiTask(
                 httpURLConnection,
                 sharedPreferencesHelper,

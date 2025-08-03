@@ -412,7 +412,7 @@ class VirtusizeRepository internal constructor(
         }
         val userBodyProfileResponse = virtusizeAPIService.getUserBodyProfile()
         if (userBodyProfileResponse.successData != null) {
-            if (storeProduct.productType == 17) {
+            if (storeProduct.isShoe()) {
                 val bodyProfileRecommendedSizeResponse =
                     virtusizeAPIService.getBodyProfileRecommendedShoeSize(
                         productTypes,
