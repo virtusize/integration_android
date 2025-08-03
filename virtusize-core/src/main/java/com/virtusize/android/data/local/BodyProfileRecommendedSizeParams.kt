@@ -27,6 +27,9 @@ internal data class BodyProfileRecommendedSizeParams(
     fun paramsToMap(): Map<String, Any> {
         return emptyMap<String, Any>()
             .plus(
+                mapOf("app_origin" to 2),
+            )
+            .plus(
                 mapOf(PARAM_BODY_DATA to createBodyDataParams()),
             )
             .plus(
@@ -47,8 +50,40 @@ internal data class BodyProfileRecommendedSizeParams(
             )
     }
 
-    private fun createItemsParams(): Map<String, Any?> {
-        return emptyMap<String, Any?>()
+    fun paramsToMapShoe(): Map<String, Any> {
+        return emptyMap<String, Any>()
+            .plus(
+                mapOf(PARAM_BODY_DATA to createBodyDataParams()),
+            )
+            .plus(
+                mapOf(PARAM_USER_GENDER to userBodyProfile.gender),
+            )
+            .plus(
+                mapOf(PARAM_USER_HEIGHT to userBodyProfile.height),
+            )
+            .plus(
+                userBodyProfile.weight.toFloatOrNull()?.let { mapOf(PARAM_USER_WEIGHT to it) }
+                    .orEmpty(),
+            )
+            .plus(
+                mapOf(PARAM_USER_AGE to userBodyProfile.age),
+            )
+            .plus(
+                createItemsParams()
+            )
+            .plus(
+                mapOf(PARAM_FOOTWEAR_DATA to userBodyProfile.footwearData),
+            )
+            .plus(
+                mapOf(PARAM_ADDITIONAL_INFO to createAdditionalInfoParams()),
+            )
+            .plus(
+                mapOf(PARAM_PRODUCT_NAME to storeProduct.name),
+            )
+    }
+
+    private fun createItemsParams(): Map<String, Any> {
+        return emptyMap<String, Any>()
             .plus(
                 mapOf(PARAM_ITEM_SIZES to createItemSizesParams()),
             )
@@ -80,6 +115,12 @@ internal data class BodyProfileRecommendedSizeParams(
                         measurement.name to measurement.millimeter
                     }
             }
+        val modelInfo = storeProduct.storeProductMeta?.additionalInfo?.modelInfo
+            // Convert all keys in the map to snake_case
+            ?.mapKeys { (key, _) ->
+                key.replace(Regex("([a-z])([A-Z])"), "$1_$2").lowercase()
+            } ?: JSONObject.NULL
+
         return emptyMap<String, Any?>()
             .plus(
                 mapOf(PARAM_BRAND to (brand ?: "")),
@@ -93,13 +134,10 @@ internal data class BodyProfileRecommendedSizeParams(
                 mapOf(PARAM_SIZES to (sizeHashMap ?: mutableMapOf())),
             )
             .plus(
-                mapOf(
-                    PARAM_MODEL_INFO to
-                        (storeProduct.storeProductMeta?.additionalInfo?.modelInfo ?: JSONObject.NULL),
-                ),
+                mapOf(PARAM_MODEL_INFO to modelInfo),
             )
             .plus(
-                mapOf(PARAM_GENDER to userBodyProfile.gender),
+                mapOf(PARAM_GENDER to (storeProduct.storeProductMeta?.additionalInfo?.gender ?: "male"),),
             )
             .plus(
                 mapOf(
@@ -137,6 +175,10 @@ internal data class BodyProfileRecommendedSizeParams(
                     )
                 }.orEmpty(),
             )
+            // Convert all keys in the map to snake_case
+            .mapKeys { (key, _) ->
+                key.replace(Regex("([a-z])([A-Z])"), "$1_$2").lowercase()
+            }
     }
 
     /**
@@ -155,21 +197,23 @@ internal data class BodyProfileRecommendedSizeParams(
     }
 
     private companion object {
-        const val PARAM_ADDITIONAL_INFO = "additionalInfo"
-        const val PARAM_BODY_DATA = "bodyData"
-        const val PARAM_ITEM_SIZES = "itemSizesOrig"
+        const val PARAM_ADDITIONAL_INFO = "additional_info"
+        const val PARAM_BODY_DATA = "body_data"
+        const val PARAM_ITEM_SIZES = "item_sizes_orig"
         const val PARAM_ITEMS = "items"
-        const val PARAM_PRODUCT_TYPE = "productType"
-        const val PARAM_USER_GENDER = "userGender"
-        const val PARAM_USER_HEIGHT = "userHeight"
-        const val PARAM_USER_WEIGHT = "userWeight"
-        const val PARAM_USER_AGE = "userAge"
-        const val PARAM_EXTERNAL_PRODUCT_ID = "extProductId"
+        const val PARAM_PRODUCT_TYPE = "product_type"
+        const val PARAM_USER_GENDER = "user_gender"
+        const val PARAM_USER_HEIGHT = "user_height"
+        const val PARAM_USER_WEIGHT = "user_weight"
+        const val PARAM_USER_AGE = "user_age"
+        const val PARAM_EXTERNAL_PRODUCT_ID = "ext_product_id"
+        const val PARAM_FOOTWEAR_DATA = "footwear_data"
+        const val PARAM_PRODUCT_NAME = "product_name"
 
         const val PARAM_BRAND = "brand"
         const val PARAM_FIT = "fit"
         const val PARAM_SIZES = "sizes"
-        const val PARAM_MODEL_INFO = "modelInfo"
+        const val PARAM_MODEL_INFO = "model_info"
         const val PARAM_GENDER = "gender"
         const val PARAM_STYLE = "style"
 
