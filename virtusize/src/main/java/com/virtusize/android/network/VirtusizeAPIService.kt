@@ -142,7 +142,7 @@ internal interface VirtusizeAPIService {
         storeProduct: Product,
         userBodyProfile: UserBodyProfile,
     ): VirtusizeApiResponse<ArrayList<BodyProfileRecommendedSize>?>
-    
+
     /**
      * Gets the API response for retrieving the recommended shoe size based on the user body profile
      * @param productTypes a list of product types

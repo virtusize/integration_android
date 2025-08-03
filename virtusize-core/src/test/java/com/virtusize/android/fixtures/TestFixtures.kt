@@ -153,7 +153,7 @@ internal object TestFixtures {
                 "size" to "30.5",
                 "type" to "sneakers",
                 "brand" to "Virtusize",
-                "footWidth" to "regular"
-            )
+                "footWidth" to "regular",
+            ),
         )
 }

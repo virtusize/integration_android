@@ -130,6 +130,6 @@ data class Product(
      * Checks if the product is a shoe
      */
     fun isShoe(): Boolean {
-        return productType == 17;
+        return productType == 17
     }
 }

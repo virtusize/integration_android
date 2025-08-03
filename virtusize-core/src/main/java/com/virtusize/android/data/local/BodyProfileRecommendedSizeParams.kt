@@ -69,7 +69,7 @@ internal data class BodyProfileRecommendedSizeParams(
                 mapOf(PARAM_USER_AGE to userBodyProfile.age),
             )
             .plus(
-                createItemsParams()
+                createItemsParams(),
             )
             .plus(
                 mapOf(PARAM_FOOTWEAR_DATA to userBodyProfile.footwearData),
@@ -115,11 +115,9 @@ internal data class BodyProfileRecommendedSizeParams(
                         measurement.name to measurement.millimeter
                     }
             }
-        val modelInfo = storeProduct.storeProductMeta?.additionalInfo?.modelInfo
-            // Convert all keys in the map to snake_case
-            ?.mapKeys { (key, _) ->
-                key.replace(Regex("([a-z])([A-Z])"), "$1_$2").lowercase()
-            } ?: JSONObject.NULL
+        val modelInfo =
+            storeProduct.storeProductMeta?.additionalInfo?.modelInfo
+                ?.mapKeys { (key, _) -> toSnakeCase(key) } ?: JSONObject.NULL
 
         return emptyMap<String, Any?>()
             .plus(
@@ -137,7 +135,7 @@ internal data class BodyProfileRecommendedSizeParams(
                 mapOf(PARAM_MODEL_INFO to modelInfo),
             )
             .plus(
-                mapOf(PARAM_GENDER to (storeProduct.storeProductMeta?.additionalInfo?.gender ?: "male"),),
+                mapOf(PARAM_GENDER to (storeProduct.storeProductMeta?.additionalInfo?.gender ?: "male")),
             )
             .plus(
                 mapOf(
@@ -176,9 +174,7 @@ internal data class BodyProfileRecommendedSizeParams(
                 }.orEmpty(),
             )
             // Convert all keys in the map to snake_case
-            .mapKeys { (key, _) ->
-                key.replace(Regex("([a-z])([A-Z])"), "$1_$2").lowercase()
-            }
+            .mapKeys { (key, _) -> toSnakeCase(key) }
     }
 
     /**
@@ -221,5 +217,14 @@ internal data class BodyProfileRecommendedSizeParams(
         const val PARAM_BODY_MEASUREMENT_PREDICTED = "predicted"
         const val PARAM_BODY_BUST = "bust"
         const val PARAM_BODY_CHEST = "chest"
+    }
+
+    /**
+     * Converts a camelCase or PascalCase string to snake_case
+     */
+    private fun toSnakeCase(input: String): String {
+        return input.replace(Regex("([a-z])([A-Z])"), "$1_$2")
+            .replace(Regex("([A-Z])([A-Z][a-z])"), "$1_$2")
+            .lowercase()
     }
 }
