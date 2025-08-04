@@ -256,13 +256,29 @@ internal class VirtusizeAPIServiceImpl(
                 .execute(apiRequest)
         }
 
-    override suspend fun getBodyProfileRecommendedSize(
+    override suspend fun getBodyProfileRecommendedItemSize(
         productTypes: List<ProductType>,
         storeProduct: Product,
         userBodyProfile: UserBodyProfile,
     ): VirtusizeApiResponse<ArrayList<BodyProfileRecommendedSize>?> =
         withContext(Dispatchers.IO) {
-            val apiRequest = VirtusizeApi.getSize(productTypes, storeProduct, userBodyProfile)
+            val apiRequest = VirtusizeApi.getItemSizeRecommendationRequest(productTypes, storeProduct, userBodyProfile)
+            VirtusizeApiTask(
+                httpURLConnection,
+                sharedPreferencesHelper,
+                messageHandler,
+            )
+                .setJsonParser(BodyProfileRecommendedSizeJsonParser(storeProduct))
+                .execute(apiRequest)
+        }
+
+    override suspend fun getBodyProfileRecommendedShoeSize(
+        productTypes: List<ProductType>,
+        storeProduct: Product,
+        userBodyProfile: UserBodyProfile,
+    ): VirtusizeApiResponse<BodyProfileRecommendedSize?> =
+        withContext(Dispatchers.IO) {
+            val apiRequest = VirtusizeApi.getShoeSizeRecommendationRequest(productTypes, storeProduct, userBodyProfile)
             VirtusizeApiTask(
                 httpURLConnection,
                 sharedPreferencesHelper,

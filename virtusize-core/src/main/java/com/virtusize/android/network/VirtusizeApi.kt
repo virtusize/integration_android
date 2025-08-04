@@ -414,7 +414,7 @@ object VirtusizeApi {
      * @param userBodyProfile [UserBodyProfile]
      * @see ApiRequest
      */
-    fun getSize(
+    fun getItemSizeRecommendationRequest(
         productTypes: List<ProductType>,
         storeProduct: Product,
         userBodyProfile: UserBodyProfile,
@@ -427,5 +427,27 @@ object VirtusizeApi {
                 .build()
                 .toString()
         return ApiRequest(url, HttpMethod.POST, bodyProfileRecommendedSizeParams.paramsToMap())
+    }
+
+    /**
+     * Gets a API request for getting the recommended shoe size based on the user's body profile
+     * @param productTypes the list of available [ProductType]
+     * @param storeProduct [Product]
+     * @param userBodyProfile [UserBodyProfile]
+     * @see ApiRequest
+     */
+    fun getShoeSizeRecommendationRequest(
+        productTypes: List<ProductType>,
+        storeProduct: Product,
+        userBodyProfile: UserBodyProfile,
+    ): ApiRequest {
+        val bodyProfileRecommendedSizeParams =
+            BodyProfileRecommendedSizeParams(productTypes, storeProduct, userBodyProfile)
+        val url =
+            Uri.parse("${environment.sizeRecommendationApiBaseUrl()}${VirtusizeEndpoint.GetShoeSize.path}")
+                .buildUpon()
+                .build()
+                .toString()
+        return ApiRequest(url, HttpMethod.POST, bodyProfileRecommendedSizeParams.paramsToMapShoe())
     }
 }

@@ -43,15 +43,15 @@ internal class BodyProfileRecommendedSizeParamsTests {
                         "height": 750
                     }
                 },
-                "modelInfo": {
+                "gender": "female",
+                "brand": "Virtusize",
+                "model_info": {
                     "waist": 56,
                     "bust": 78,
                     "size": "38",
                     "hip": 85,
                     "height": 165
-                },
-                "gender": "female",
-                "brand": "Virtusize"
+                }
             }
             """.trimIndent().replace("\\s+|[\\n]+".toRegex(), ""),
         )
@@ -78,9 +78,9 @@ internal class BodyProfileRecommendedSizeParamsTests {
                 "fit": "regular",
                 "style": "fashionable",
                 "sizes": {},
-                "modelInfo": null,
-                "gender": "female",
-                "brand": ""
+                "gender": "male",
+                "brand": "",
+                "model_info": null
             }
             """.trimIndent().replace("\\s+|[\\n]+".toRegex(), ""),
         )
@@ -98,94 +98,94 @@ internal class BodyProfileRecommendedSizeParamsTests {
         assertThat(JSONObject(bodyDataParams).toString()).isEqualTo(
             """
             {
-                "waistWidth": {
-                    "value": 225,
-                    "predicted": true
-                },
-                "chest": {
-                    "value": 755,
-                    "predicted": true
-                },
-                "bustWidth": {
-                    "value": 245,
-                    "predicted": true
-                },
-                "thigh": {
-                    "value": 480,
-                    "predicted": true
-                },
-                "shoulderWidth": {
-                    "value": 340,
-                    "predicted": true
-                },
-                "hipHeight": {
-                    "value": 750,
-                    "predicted": true
-                },
-                "kneeHeight": {
-                    "value": 395,
-                    "predicted": true
-                },
-                "neck": {
-                    "value": 300,
-                    "predicted": true
-                },
-                "waistHeight": {
-                    "value": 920,
-                    "predicted": true
-                },
-                "hip": {
-                    "value": 830,
-                    "predicted": true
-                },
-                "armpitHeight": {
-                    "value": 1130,
-                    "predicted": true
-                },
-                "bicep": {
-                    "value": 220,
-                    "predicted": true
-                },
-                "inseam": {
-                    "value": 700,
-                    "predicted": true
-                },
-                "headHeight": {
-                    "value": 215,
-                    "predicted": true
-                },
-                "hipWidth": {
-                    "value": 300,
-                    "predicted": true
-                },
-                "sleeve": {
-                    "value": 720,
-                    "predicted": true
-                },
-                "bust": {
-                    "value": 755,
-                    "predicted": true
-                },
-                "waist": {
-                    "value": 630,
-                    "predicted": true
-                },
-                "sleeveLength": {
-                    "value": 520,
-                    "predicted": true
-                },
-                "rise": {
-                    "value": 215,
-                    "predicted": true
-                },
-                "shoulder": {
-                    "value": 370,
-                    "predicted": true
-                },
-                "shoulderHeight": {
-                    "value": 1240,
-                    "predicted": true
-                }
+              "armpit_height": {
+                "value": 1130,
+                "predicted": true
+              },
+              "shoulder_height": {
+                "value": 1240,
+                "predicted": true
+              },
+              "chest": {
+                "value": 755,
+                "predicted": true
+              },
+              "bust_width": {
+                "value": 245,
+                "predicted": true
+              },
+              "hip_height": {
+                "value": 750,
+                "predicted": true
+              },
+              "thigh": {
+                "value": 480,
+                "predicted": true
+              },
+              "knee_height": {
+                "value": 395,
+                "predicted": true
+              },
+              "head_height": {
+                "value": 215,
+                "predicted": true
+              },
+              "hip_width": {
+                "value": 300,
+                "predicted": true
+              },
+              "neck": {
+                "value": 300,
+                "predicted": true
+              },
+              "hip": {
+                "value": 830,
+                "predicted": true
+              },
+              "waist_width": {
+                "value": 225,
+                "predicted": true
+              },
+              "waist_height": {
+                "value": 920,
+                "predicted": true
+              },
+              "shoulder_width": {
+                "value": 340,
+                "predicted": true
+              },
+              "bicep": {
+                "value": 220,
+                "predicted": true
+              },
+              "inseam": {
+                "value": 700,
+                "predicted": true
+              },
+              "sleeve": {
+                "value": 720,
+                "predicted": true
+              },
+              "bust": {
+                "value": 755,
+                "predicted": true
+              },
+              "waist": {
+                "value": 630,
+                "predicted": true
+              },
+              "rise": {
+                "value": 215,
+                "predicted": true
+              },
+              "shoulder": {
+                "value": 370,
+                "predicted": true
+              },
+              "sleeve_length": {
+                "value": 520,
+                "predicted": true
+              }
             }
             """.trimIndent().replace("\\s+|[\\n]+".toRegex(), ""),
         )
@@ -227,12 +227,12 @@ internal class BodyProfileRecommendedSizeParamsTests {
                 TestFixtures.userBodyProfile,
             )
         val bodyProfileRecommendedSizeParamsMap = bodyProfileRecommendedSizeParams.paramsToMap()
-        assertThat(bodyProfileRecommendedSizeParamsMap["userGender"]).isEqualTo("female")
-        assertThat(bodyProfileRecommendedSizeParamsMap["userWeight"]).isEqualTo(50)
-        assertThat(bodyProfileRecommendedSizeParamsMap["userHeight"]).isEqualTo(1630)
-        assertThat(bodyProfileRecommendedSizeParamsMap["bodyData"]).isEqualTo(
+        assertThat(bodyProfileRecommendedSizeParamsMap["user_gender"]).isEqualTo("female")
+        assertThat(bodyProfileRecommendedSizeParamsMap["user_weight"]).isEqualTo(50)
+        assertThat(bodyProfileRecommendedSizeParamsMap["user_height"]).isEqualTo(1630)
+        assertThat(bodyProfileRecommendedSizeParamsMap["body_data"]).isEqualTo(
             mutableMapOf(
-                "waistWidth" to
+                "waist_width" to
                     mutableMapOf(
                         "value" to 225,
                         "predicted" to true,
@@ -242,7 +242,7 @@ internal class BodyProfileRecommendedSizeParamsTests {
                         "value" to 755,
                         "predicted" to true,
                     ),
-                "bustWidth" to
+                "bust_width" to
                     mutableMapOf(
                         "value" to 245,
                         "predicted" to true,
@@ -252,17 +252,17 @@ internal class BodyProfileRecommendedSizeParamsTests {
                         "value" to 480,
                         "predicted" to true,
                     ),
-                "shoulderWidth" to
+                "shoulder_width" to
                     mutableMapOf(
                         "value" to 340,
                         "predicted" to true,
                     ),
-                "hipHeight" to
+                "hip_height" to
                     mutableMapOf(
                         "value" to 750,
                         "predicted" to true,
                     ),
-                "kneeHeight" to
+                "knee_height" to
                     mutableMapOf(
                         "value" to 395,
                         "predicted" to true,
@@ -272,7 +272,7 @@ internal class BodyProfileRecommendedSizeParamsTests {
                         "value" to 300,
                         "predicted" to true,
                     ),
-                "waistHeight" to
+                "waist_height" to
                     mutableMapOf(
                         "value" to 920,
                         "predicted" to true,
@@ -282,7 +282,7 @@ internal class BodyProfileRecommendedSizeParamsTests {
                         "value" to 830,
                         "predicted" to true,
                     ),
-                "armpitHeight" to
+                "armpit_height" to
                     mutableMapOf(
                         "value" to 1130,
                         "predicted" to true,
@@ -297,12 +297,12 @@ internal class BodyProfileRecommendedSizeParamsTests {
                         "value" to 700,
                         "predicted" to true,
                     ),
-                "headHeight" to
+                "head_height" to
                     mutableMapOf(
                         "value" to 215,
                         "predicted" to true,
                     ),
-                "hipWidth" to
+                "hip_width" to
                     mutableMapOf(
                         "value" to 300,
                         "predicted" to true,
@@ -322,7 +322,7 @@ internal class BodyProfileRecommendedSizeParamsTests {
                         "value" to 630,
                         "predicted" to true,
                     ),
-                "sleeveLength" to
+                "sleeve_length" to
                     mutableMapOf(
                         "value" to 520,
                         "predicted" to true,
@@ -337,7 +337,7 @@ internal class BodyProfileRecommendedSizeParamsTests {
                         "value" to 370,
                         "predicted" to true,
                     ),
-                "shoulderHeight" to
+                "shoulder_height" to
                     mutableMapOf(
                         "value" to 1240,
                         "predicted" to true,
@@ -346,9 +346,9 @@ internal class BodyProfileRecommendedSizeParamsTests {
         )
         val items = bodyProfileRecommendedSizeParamsMap["items"] as Array<Map<String, Any>>
         for (item in items) {
-            assertThat(item["extProductId"]).isEqualTo("694")
-            assertThat(item["productType"]).isEqualTo("jacket")
-            assertThat(item["itemSizesOrig"]).isEqualTo(
+            assertThat(item["ext_product_id"]).isEqualTo("694")
+            assertThat(item["product_type"]).isEqualTo("jacket")
+            assertThat(item["item_sizes_orig"]).isEqualTo(
                 mutableMapOf(
                     "38" to
                         mutableMapOf(
@@ -364,7 +364,7 @@ internal class BodyProfileRecommendedSizeParamsTests {
                         ),
                 ),
             )
-            assertThat(item["additionalInfo"]).isEqualTo(
+            assertThat(item["additional_info"]).isEqualTo(
                 mutableMapOf(
                     "fit" to "regular",
                     "sizes" to
@@ -384,7 +384,7 @@ internal class BodyProfileRecommendedSizeParamsTests {
                         ),
                     "gender" to "female",
                     "brand" to "Virtusize",
-                    "modelInfo" to
+                    "model_info" to
                         mutableMapOf(
                             "waist" to 56,
                             "bust" to 78,

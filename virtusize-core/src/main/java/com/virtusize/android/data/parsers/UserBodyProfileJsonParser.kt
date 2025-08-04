@@ -11,13 +11,17 @@ class UserBodyProfileJsonParser : VirtusizeJsonParser<UserBodyProfile> {
         val height = json.optInt(FIELD_HEIGHT)
         val weight = json.optString(FIELD_WEIGHT)
         var bodyData = setOf<Measurement>()
+        var footwearData = mapOf<String, Any>()
         json.optJSONObject(FIELD_BODY_DATA)?.let { bodyDataJsonObject ->
             bodyData = JsonUtils.jsonObjectToMeasurements(bodyDataJsonObject)
+        }
+        json.optJSONObject(FIELD_FOOTWEAR_DATA)?.let { footwearDataJsonObject ->
+            footwearData = JsonUtils.jsonObjectToMap(footwearDataJsonObject)
         }
         if (age == 0 || height == 0 || weight.isBlank() || bodyData.isEmpty()) {
             return null
         }
-        return UserBodyProfile(gender, age, height, weight, bodyData)
+        return UserBodyProfile(gender, age, height, weight, bodyData, footwearData)
     }
 
     companion object {
@@ -26,5 +30,6 @@ class UserBodyProfileJsonParser : VirtusizeJsonParser<UserBodyProfile> {
         private const val FIELD_HEIGHT = "height"
         private const val FIELD_WEIGHT = "weight"
         private const val FIELD_BODY_DATA = "bodyData"
+        private const val FIELD_FOOTWEAR_DATA = "footwearData"
     }
 }

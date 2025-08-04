@@ -131,17 +131,30 @@ internal interface VirtusizeAPIService {
     suspend fun getUserBodyProfile(): VirtusizeApiResponse<UserBodyProfile>
 
     /**
-     * Gets the API response for retrieving the recommended size based on the user body profile
+     * Gets the API response for retrieving the recommended item size based on the user body profile
      * @param productTypes a list of product types
      * @param storeProduct the store product
      * @param userBodyProfile the user body profile
      * @return the [VirtusizeApiResponse] with the a list of [BodyProfileRecommendedSize]
      */
-    suspend fun getBodyProfileRecommendedSize(
+    suspend fun getBodyProfileRecommendedItemSize(
         productTypes: List<ProductType>,
         storeProduct: Product,
         userBodyProfile: UserBodyProfile,
     ): VirtusizeApiResponse<ArrayList<BodyProfileRecommendedSize>?>
+
+    /**
+     * Gets the API response for retrieving the recommended shoe size based on the user body profile
+     * @param productTypes a list of product types
+     * @param storeProduct the store product
+     * @param userBodyProfile the user body profile
+     * @return the [VirtusizeApiResponse] with the a list of [BodyProfileRecommendedSize]
+     */
+    suspend fun getBodyProfileRecommendedShoeSize(
+        productTypes: List<ProductType>,
+        storeProduct: Product,
+        userBodyProfile: UserBodyProfile,
+    ): VirtusizeApiResponse<BodyProfileRecommendedSize?>
 
     /**
      * Loads an image URL and returns the bitmap of the image

@@ -19,7 +19,11 @@ internal class BodyProfileRecommendedSizeJsonParser(private val product: Product
         val scenario = json.optString(SCENARIO)
         val secondFitScore = json.optDouble(SECOND_FIT_SCORE, 0.0)
         val secondSize = json.optString(SECOND_SIZE)
-        val sizeName = json.optString(SIZE_NAME)
+        var sizeName = json.optString(SIZE_NAME)
+        if (sizeName.isBlank()) {
+            val size = json.optString(SIZE_NAME_SHOE) // Fallback for shoe size
+            sizeName = size.replace("&#46;", ".")
+        }
         val thresholdFitScore = json.optDouble(THRESHOLD_FIT_SCORE, 0.0)
         val willFit = json.optBoolean(WILL_FIT)
         val virtualItem =
@@ -60,6 +64,7 @@ internal class BodyProfileRecommendedSizeJsonParser(private val product: Product
 
     private companion object {
         const val SIZE_NAME = "sizeName"
+        const val SIZE_NAME_SHOE = "size"
         const val EXT_PRODUCT_ID = "extProductId"
         const val FIT_SCORE = "fitScore"
         const val FIT_SCORE_DIFFERENCE = "fitScoreDifference"

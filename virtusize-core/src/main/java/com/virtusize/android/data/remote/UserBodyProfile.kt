@@ -14,4 +14,5 @@ data class UserBodyProfile(
     val height: Int,
     val weight: String,
     val bodyData: Set<Measurement>,
+    val footwearData: Map<String, Any>,
 )
