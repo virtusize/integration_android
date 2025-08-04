@@ -412,13 +412,23 @@ class VirtusizeRepository internal constructor(
         }
         val userBodyProfileResponse = virtusizeAPIService.getUserBodyProfile()
         if (userBodyProfileResponse.successData != null) {
-            val bodyProfileRecommendedSizeResponse =
-                virtusizeAPIService.getBodyProfileRecommendedSize(
-                    productTypes,
-                    storeProduct,
-                    userBodyProfileResponse.successData!!,
-                )
-            return bodyProfileRecommendedSizeResponse.successData?.get(0)?.sizeName
+            if (storeProduct.isShoe()) {
+                val bodyProfileRecommendedSizeResponse =
+                    virtusizeAPIService.getBodyProfileRecommendedShoeSize(
+                        productTypes,
+                        storeProduct,
+                        userBodyProfileResponse.successData!!,
+                    )
+                return bodyProfileRecommendedSizeResponse.successData?.sizeName
+            } else {
+                val bodyProfileRecommendedSizeResponse =
+                    virtusizeAPIService.getBodyProfileRecommendedItemSize(
+                        productTypes,
+                        storeProduct,
+                        userBodyProfileResponse.successData!!,
+                    )
+                return bodyProfileRecommendedSizeResponse.successData?.get(0)?.sizeName
+            }
         } else if (userBodyProfileResponse.failureData?.code != HttpURLConnection.HTTP_NOT_FOUND) {
             userBodyProfileResponse.failureData?.let {
                 messageHandler.onError(it)

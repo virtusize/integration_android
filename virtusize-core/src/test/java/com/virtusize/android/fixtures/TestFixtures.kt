@@ -91,6 +91,13 @@ internal object TestFixtures {
                 "sleeveLength": 520,
                 "shoulderWidth": 340,
                 "shoulderHeight": 1240
+              },
+              "footwearData": {
+                "toeShape":"greek",
+                "size":"30.5",
+                "type":"sneakers",
+                "brand":"Virtusize",
+                "footWidth":"regular"
               }
             }
             """.trimIndent(),
@@ -140,6 +147,13 @@ internal object TestFixtures {
                 Measurement("sleeveLength", 520),
                 Measurement("shoulderWidth", 340),
                 Measurement("shoulderHeight", 1240),
+            ),
+            mapOf(
+                "toeShape" to "greek",
+                "size" to "30.5",
+                "type" to "sneakers",
+                "brand" to "Virtusize",
+                "footWidth" to "regular",
             ),
         )
 }

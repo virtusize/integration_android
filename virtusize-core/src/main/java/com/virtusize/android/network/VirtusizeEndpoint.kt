@@ -14,6 +14,10 @@ sealed interface VirtusizeEndpoint {
         override val path: String = "/item"
     }
 
+    data object GetShoeSize : VirtusizeEndpoint {
+        override val path: String = "/shoe"
+    }
+
     data object LatestAoyamaVersion : VirtusizeEndpoint {
         override val path: String = "/a/aoyama/latest.txt"
     }
