@@ -1,4 +1,4 @@
-### Next release
+### 2.12.3
 - Fix: Align mobile SDK size recommendation API requests with web implementation
 
 ### 2.12.2
