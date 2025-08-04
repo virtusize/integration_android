@@ -288,9 +288,9 @@ internal class VirtusizeApiTest {
     }
 
     @Test
-    fun `test getSize should return expected API request`() {
+    fun `test getItemSizeRecommendationRequest should return expected API request`() {
         val actualApiRequest =
-            VirtusizeApi.getSize(
+            VirtusizeApi.getItemSizeRecommendationRequest(
                 ProductFixtures.productTypes(),
                 ProductFixtures.storeProduct(),
                 TestFixtures.userBodyProfile,

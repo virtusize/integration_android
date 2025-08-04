@@ -277,7 +277,7 @@ internal object TestFixtures {
                 "toeShape" to "greek",
                 "size" to "30.5",
                 "type" to "sneakers",
-                "brand" to "virtusize",
+                "brand" to "Virtusize",
                 "footWidth" to "regular",
             ),
         )

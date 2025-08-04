@@ -262,7 +262,7 @@ internal class VirtusizeAPIServiceImpl(
         userBodyProfile: UserBodyProfile,
     ): VirtusizeApiResponse<ArrayList<BodyProfileRecommendedSize>?> =
         withContext(Dispatchers.IO) {
-            val apiRequest = VirtusizeApi.getSize(productTypes, storeProduct, userBodyProfile)
+            val apiRequest = VirtusizeApi.getItemSizeRecommendationRequest(productTypes, storeProduct, userBodyProfile)
             VirtusizeApiTask(
                 httpURLConnection,
                 sharedPreferencesHelper,
@@ -278,7 +278,7 @@ internal class VirtusizeAPIServiceImpl(
         userBodyProfile: UserBodyProfile,
     ): VirtusizeApiResponse<BodyProfileRecommendedSize?> =
         withContext(Dispatchers.IO) {
-            val apiRequest = VirtusizeApi.getShoeSize(productTypes, storeProduct, userBodyProfile)
+            val apiRequest = VirtusizeApi.getShoeSizeRecommendationRequest(productTypes, storeProduct, userBodyProfile)
             VirtusizeApiTask(
                 httpURLConnection,
                 sharedPreferencesHelper,

@@ -27,7 +27,7 @@ internal data class BodyProfileRecommendedSizeParams(
     fun paramsToMap(): Map<String, Any> {
         return emptyMap<String, Any>()
             .plus(
-                mapOf("app_origin" to 2),
+                mapOf("app_origin" to APP_ORIGIN_ANDROID),
             )
             .plus(
                 mapOf(PARAM_BODY_DATA to createBodyDataParams()),
@@ -217,6 +217,8 @@ internal data class BodyProfileRecommendedSizeParams(
         const val PARAM_BODY_MEASUREMENT_PREDICTED = "predicted"
         const val PARAM_BODY_BUST = "bust"
         const val PARAM_BODY_CHEST = "chest"
+
+        const val APP_ORIGIN_ANDROID = 2
     }
 
     /**

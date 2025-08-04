@@ -414,7 +414,7 @@ object VirtusizeApi {
      * @param userBodyProfile [UserBodyProfile]
      * @see ApiRequest
      */
-    fun getSize(
+    fun getItemSizeRecommendationRequest(
         productTypes: List<ProductType>,
         storeProduct: Product,
         userBodyProfile: UserBodyProfile,
@@ -436,7 +436,7 @@ object VirtusizeApi {
      * @param userBodyProfile [UserBodyProfile]
      * @see ApiRequest
      */
-    fun getShoeSize(
+    fun getShoeSizeRecommendationRequest(
         productTypes: List<ProductType>,
         storeProduct: Product,
         userBodyProfile: UserBodyProfile,
