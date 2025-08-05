@@ -152,4 +152,10 @@ interface Virtusize {
         onSuccess: SuccessResponseHandler? = null,
         onError: ErrorResponseHandler? = null,
     )
+
+    /**
+     * Sets the display language for the Virtusize widgets
+     * @param language the [VirtusizeLanguage] to be set
+     */
+    fun setDisplayLanguage(language: VirtusizeLanguage)
 }
