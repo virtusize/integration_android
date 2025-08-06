@@ -1,5 +1,5 @@
 ### Next release
-- Feature: Add event listener to handle of language change on web in Virtusize widgets
+- Feature: Add event listener to handle language change on web in Virtusize widgets
 
 ### 2.12.3
 - Fix: Align mobile SDK size recommendation API requests with web implementation
