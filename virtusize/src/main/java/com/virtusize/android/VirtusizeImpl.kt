@@ -16,6 +16,7 @@ import com.virtusize.android.data.local.throwError
 import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.network.VirtusizeAPIService
 import com.virtusize.android.network.VirtusizeApi
+import com.virtusize.android.ui.VirtusizeButton
 import com.virtusize.android.ui.VirtusizeInPageStandard
 import com.virtusize.android.ui.VirtusizeInPageView
 import com.virtusize.android.ui.VirtusizeView
@@ -163,10 +164,19 @@ internal class VirtusizeImpl(
                             virtusizeRepository.updateUserSession()
                         }
 
+                    is VirtusizeEvent.UserClickedLanguageSelector -> {
+                        event.data?.optString("language")?.let { language ->
+                            val virtusizeLanguage = VirtusizeLanguage.entries.firstOrNull { it.value == language }
+                            if (virtusizeLanguage != null) {
+                                setVsWidgetLanguage(virtusizeLanguage)
+                            }
+                        }
+                    }
+
                     is VirtusizeEvent.UserCreatedSilhouette,
                     is VirtusizeEvent.UserSawProduct,
                     is VirtusizeEvent.UserSawWidgetButton,
-                    is VirtusizeEvent.UssrClickedStart,
+                    is VirtusizeEvent.UserClickedStart,
                     is VirtusizeEvent.Undefined,
                     -> Unit
                 }
@@ -389,6 +399,32 @@ internal class VirtusizeImpl(
             }, { error ->
                 onError?.onError(error)
             })
+        }
+    }
+
+    /**
+     * @see Virtusize.setVsWidgetLanguage
+     */
+    override fun setVsWidgetLanguage(language: VirtusizeLanguage) {
+        virtusizeViews
+            .filterIsInstance<VirtusizeButton>()
+            .forEach { virtusizeView ->
+                virtusizeView.setLanguage(language)
+            }
+
+        virtusizeViews
+            .filterIsInstance<VirtusizeInPageView>()
+            .forEach { virtusizeView ->
+                virtusizeView.setLanguage(language)
+            }
+
+        scope.launch {
+            virtusizeRepository.setVsWidgetLanguage(language)
+            virtusizeRepository.fetchDataForInPageRecommendation(
+                shouldUpdateUserProducts = false,
+                shouldUpdateBodyProfile = true,
+            )
+            virtusizeRepository.updateInPageRecommendation()
         }
     }
 

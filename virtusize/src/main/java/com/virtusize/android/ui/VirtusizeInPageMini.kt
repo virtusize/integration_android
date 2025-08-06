@@ -135,6 +135,24 @@ class VirtusizeInPageMini
         }
 
         /**
+         * @see VirtusizeInPageView.setLanguage
+         */
+        override fun setLanguage(language: VirtusizeLanguage) {
+            configuredContext = ConfigurationUtils.getConfiguredContext(context, language)
+            binding.inpageMiniButton.text = configuredContext?.getText(R.string.virtusize_button_text)
+            binding.inpageMiniLoadingText.text = configuredContext?.getText(R.string.inpage_loading_text)
+            setConfiguredDimensions()
+            binding.inpageMiniText.includeFontPadding = language == VirtusizeLanguage.JP
+            // Optionally update error text if visible
+            if (
+                binding.inpageMiniText.visibility == View.VISIBLE &&
+                binding.inpageMiniText.text == configuredContext?.getText(R.string.inpage_short_error_text)
+            ) {
+                binding.inpageMiniText.text = configuredContext?.getText(R.string.inpage_short_error_text)
+            }
+        }
+
+        /**
          * @see VirtusizeInPageView.setRecommendationText
          */
         override fun setRecommendationText(

@@ -219,6 +219,23 @@ class VirtusizeInPageStandard
         }
 
         /**
+         * @see VirtusizeInPageView.setLanguage
+         */
+        override fun setLanguage(language: VirtusizeLanguage) {
+            val configuredContext = ConfigurationUtils.getConfiguredContext(context, language)
+            binding.inpageButton.text =
+                configuredContext.getText(R.string.virtusize_button_text)
+            binding.privacyPolicyText.text =
+                configuredContext.getText(R.string.virtusize_privacy_policy)
+            binding.inpageLoadingText.text =
+                configuredContext.getText(R.string.inpage_loading_text)
+            binding.inpageErrorText.text =
+                configuredContext.getText(R.string.inpage_long_error_text)
+            setConfiguredDimensions(configuredContext)
+            binding.inpageBottomText.includeFontPadding = language == VirtusizeLanguage.JP
+        }
+
+        /**
          * @see VirtusizeView.setProductWithProductCheckData
          * @throws VirtusizeErrorType.NullProduct error
          */

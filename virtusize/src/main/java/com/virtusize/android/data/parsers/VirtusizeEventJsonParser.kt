@@ -37,6 +37,7 @@ private fun getVirtusizeEvent(
         EventName.UserLoggedOut -> VirtusizeEvent.UserLoggedOut(data = json)
         EventName.UserDeletedData -> VirtusizeEvent.UserDeletedData(data = json)
         EventName.UserClosedWidget -> VirtusizeEvent.UserClosedWidget(data = json)
-        EventName.UssrClickedStart -> VirtusizeEvent.UssrClickedStart(data = json)
+        EventName.UserClickedStart -> VirtusizeEvent.UserClickedStart(data = json)
+        EventName.UserClickedLanguageSelector -> VirtusizeEvent.UserClickedLanguageSelector(data = json)
         null -> VirtusizeEvent.Undefined(name = name, data = json)
     }
