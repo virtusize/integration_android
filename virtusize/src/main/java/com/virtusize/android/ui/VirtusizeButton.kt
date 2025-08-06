@@ -8,6 +8,7 @@ import android.view.View
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import com.virtusize.android.R
+import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeParams
 import com.virtusize.android.data.local.VirtusizeProduct
@@ -126,7 +127,7 @@ class VirtusizeButton
             if (clientProduct!!.externalId == productWithPDC.externalId) {
                 clientProduct!!.productCheckData = productWithPDC.productCheckData
                 visibility = View.VISIBLE
-                setupButtonTextConfiguredLocalization()
+                setupButtonTextConfiguredLocalization(virtusizeParams.language)
                 setOnClickListener {
                     openVirtusizeWebView(context, clientProduct!!)
                 }
@@ -134,16 +135,22 @@ class VirtusizeButton
         }
 
         /**
+         * Sets the language for the view and updates all texts accordingly
+         * @param language the selected VirtusizeLanguage
+         */
+        internal fun setLanguage(language: VirtusizeLanguage) {
+            setupButtonTextConfiguredLocalization(language)
+        }
+
+        /**
          * Sets up the button text style based on the language that clients set using the [VirtusizeBuilder] in the application
          */
-        private fun setupButtonTextConfiguredLocalization() {
+        private fun setupButtonTextConfiguredLocalization(language: VirtusizeLanguage) {
             val configuredContext =
-                ConfigurationUtils.getConfiguredContext(context, virtusizeParams.language)
-            if (text.isNullOrEmpty()) {
-                text = configuredContext.getText(R.string.virtusize_button_text)
-                configuredContext.resources?.getDimension(R.dimen.virtusize_button_textSize)?.let {
-                    setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
-                }
+                ConfigurationUtils.getConfiguredContext(context, language)
+            text = configuredContext.getText(R.string.virtusize_button_text)
+            configuredContext.resources?.getDimension(R.dimen.virtusize_button_textSize)?.let {
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
             }
         }
     }

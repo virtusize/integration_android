@@ -3,6 +3,7 @@ package com.virtusize.android.ui
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.RelativeLayout
+import com.virtusize.android.data.local.VirtusizeLanguage
 
 /**
  * An abstract class representing the VirtusizeView that is a RelativeLayout
@@ -42,4 +43,10 @@ abstract class VirtusizeInPageView
          * An abstract function to show the InPage error screen with the associated external product ID
          */
         internal abstract fun showInPageError(externalProductId: String?)
+
+        /**
+         * Sets the language for the view and updates all texts accordingly
+         * @param language the selected VirtusizeLanguage
+         */
+        internal abstract fun setLanguage(language: VirtusizeLanguage)
     }

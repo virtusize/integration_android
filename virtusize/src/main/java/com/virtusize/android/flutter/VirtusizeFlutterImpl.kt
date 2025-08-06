@@ -175,8 +175,9 @@ internal class VirtusizeFlutterImpl(
                     is VirtusizeEvent.UserCreatedSilhouette,
                     is VirtusizeEvent.UserSawProduct,
                     is VirtusizeEvent.UserSawWidgetButton,
-                    is VirtusizeEvent.UssrClickedStart,
+                    is VirtusizeEvent.UserClickedStart,
                     is VirtusizeEvent.Undefined,
+                    is VirtusizeEvent.UserClickedLanguageSelector,
                     -> Unit
                 }
             }

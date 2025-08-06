@@ -325,7 +325,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
             event?.let { virtusizeMessageHandler?.onEvent(clientProduct, it) }
             when (event) {
                 is VirtusizeEvent.UserClosedWidget -> dismiss()
-                is VirtusizeEvent.UssrClickedStart -> userAcceptedPrivacyPolicy()
+                is VirtusizeEvent.UserClickedStart -> userAcceptedPrivacyPolicy()
                 else -> Unit
             }
         }
