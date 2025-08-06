@@ -243,7 +243,7 @@ class VirtusizeRepository internal constructor(
      * Sets the display language for the Virtusize widgets
      * @param language the display language set by a client
      */
-    internal suspend fun setDisplayLanguage(language: VirtusizeLanguage) =
+    internal suspend fun setVsWidgetLanguage(language: VirtusizeLanguage) =
         coroutineScope {
             val languageDeferred = async { fetchLanguage(language) }
             val i18n = languageDeferred.await() ?: return@coroutineScope

@@ -168,7 +168,7 @@ internal class VirtusizeImpl(
                         event.data?.optString("language")?.let { language ->
                             val virtusizeLanguage = VirtusizeLanguage.entries.firstOrNull { it.value == language }
                             if (virtusizeLanguage != null) {
-                                setDisplayLanguage(virtusizeLanguage)
+                                setVsWidgetLanguage(virtusizeLanguage)
                             }
                         }
                     }
@@ -403,9 +403,9 @@ internal class VirtusizeImpl(
     }
 
     /**
-     * @see Virtusize.setDisplayLanguage
+     * @see Virtusize.setVsWidgetLanguage
      */
-    override fun setDisplayLanguage(language: VirtusizeLanguage) {
+    override fun setVsWidgetLanguage(language: VirtusizeLanguage) {
         virtusizeViews
             .filterIsInstance<VirtusizeButton>()
             .forEach { virtusizeView ->
@@ -419,7 +419,7 @@ internal class VirtusizeImpl(
             }
 
         scope.launch {
-            virtusizeRepository.setDisplayLanguage(language)
+            virtusizeRepository.setVsWidgetLanguage(language)
             virtusizeRepository.fetchDataForInPageRecommendation(
                 shouldUpdateUserProducts = false,
                 shouldUpdateBodyProfile = true,

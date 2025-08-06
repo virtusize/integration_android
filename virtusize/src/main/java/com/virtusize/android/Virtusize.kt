@@ -157,5 +157,5 @@ interface Virtusize {
      * Sets the display language for the Virtusize widgets
      * @param language the [VirtusizeLanguage] to be set
      */
-    fun setDisplayLanguage(language: VirtusizeLanguage)
+    fun setVsWidgetLanguage(language: VirtusizeLanguage)
 }
