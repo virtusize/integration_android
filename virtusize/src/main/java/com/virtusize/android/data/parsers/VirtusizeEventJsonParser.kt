@@ -38,6 +38,6 @@ private fun getVirtusizeEvent(
         EventName.UserDeletedData -> VirtusizeEvent.UserDeletedData(data = json)
         EventName.UserClosedWidget -> VirtusizeEvent.UserClosedWidget(data = json)
         EventName.UserClickedStart -> VirtusizeEvent.UserClickedStart(data = json)
-        EventName.UserClickedLanguage -> VirtusizeEvent.UserClickedLanguage(data = json)
+        EventName.UserClickedLanguageSelector -> VirtusizeEvent.UserClickedLanguageSelector(data = json)
         null -> VirtusizeEvent.Undefined(name = name, data = json)
     }

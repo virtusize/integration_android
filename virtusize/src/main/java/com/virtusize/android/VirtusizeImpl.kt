@@ -164,7 +164,7 @@ internal class VirtusizeImpl(
                             virtusizeRepository.updateUserSession()
                         }
 
-                    is VirtusizeEvent.UserClickedLanguage -> {
+                    is VirtusizeEvent.UserClickedLanguageSelector -> {
                         event.data?.optString("language")?.let { language ->
                             val virtusizeLanguage = VirtusizeLanguage.entries.firstOrNull { it.value == language }
                             if (virtusizeLanguage != null) {

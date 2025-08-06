@@ -21,7 +21,7 @@ enum class EventName(val value: String) {
     UserDeletedData("user-deleted-data"),
     UserClosedWidget("user-closed-widget"),
     UserClickedStart("user-clicked-start"),
-    UserClickedLanguage("user-clicked-language"),
+    UserClickedLanguageSelector("user-clicked-language"),
     ;
 
     companion object {
@@ -98,8 +98,8 @@ sealed interface VirtusizeEvent {
         override val name: String = EventName.UserClickedStart.value
     }
 
-    data class UserClickedLanguage(override val data: JSONObject? = null) : VirtusizeEvent {
-        override val name: String = EventName.UserClickedLanguage.value
+    data class UserClickedLanguageSelector(override val data: JSONObject? = null) : VirtusizeEvent {
+        override val name: String = EventName.UserClickedLanguageSelector.value
     }
 
     data class Undefined(override val name: String, override val data: JSONObject? = null) : VirtusizeEvent
