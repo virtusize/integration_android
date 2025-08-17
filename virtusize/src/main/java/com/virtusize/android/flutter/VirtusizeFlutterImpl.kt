@@ -172,12 +172,20 @@ internal class VirtusizeFlutterImpl(
                             virtusizeRepository.updateUserSession()
                         }
 
+                    is VirtusizeEvent.UserClickedLanguageSelector -> {
+                        event.data?.optString("language")?.let { language ->
+                            val virtusizeLanguage = VirtusizeLanguage.entries.firstOrNull { it.value == language }
+                            if (virtusizeLanguage != null) {
+                                setVsWidgetLanguage(virtusizeLanguage)
+                            }
+                        }
+                    }
+
                     is VirtusizeEvent.UserCreatedSilhouette,
                     is VirtusizeEvent.UserSawProduct,
                     is VirtusizeEvent.UserSawWidgetButton,
                     is VirtusizeEvent.UserClickedStart,
                     is VirtusizeEvent.Undefined,
-                    is VirtusizeEvent.UserClickedLanguageSelector,
                     -> Unit
                 }
             }
@@ -365,6 +373,21 @@ internal class VirtusizeFlutterImpl(
             }, { error ->
                 onError?.onError(error)
             })
+        }
+    }
+
+    /**
+     * @see VirtusizeFlutter.setVsWidgetLanguage
+     */
+    override fun setVsWidgetLanguage(language: VirtusizeLanguage) {
+        virtusizeFlutterPresenter?.onLangugeClick(language)
+        scope.launch {
+            virtusizeRepository.setVsWidgetLanguage(language)
+            virtusizeRepository.fetchDataForInPageRecommendation(
+                shouldUpdateUserProducts = false,
+                shouldUpdateBodyProfile = true,
+            )
+            virtusizeRepository.updateInPageRecommendation()
         }
     }
 

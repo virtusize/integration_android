@@ -146,4 +146,10 @@ interface VirtusizeFlutter {
     )
 
     fun getPrivacyPolicyLink(context: Context): String
+
+    /**
+     * Sets the display language for the Virtusize widgets
+     * @param language the [VirtusizeLanguage] to be set
+     */
+    fun setVsWidgetLanguage(language: VirtusizeLanguage)
 }
