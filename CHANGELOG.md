@@ -1,4 +1,4 @@
-### Next release
+### 2.12.5
 - Feature: Update Flutter SDK implementation to be compatible with latest changes
 
 ### 2.12.4
