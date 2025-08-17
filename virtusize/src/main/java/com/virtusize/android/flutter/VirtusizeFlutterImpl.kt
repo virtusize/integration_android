@@ -21,6 +21,7 @@ import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.network.VirtusizeAPIService
 import com.virtusize.android.network.VirtusizeApi
 import com.virtusize.android.ui.VirtusizeView
+import com.virtusize.android.util.ConfigurationUtils
 import com.virtusize.android.util.VirtusizeUtils
 import com.virtusize.android.util.trimI18nText
 import com.virtusize.android.util.valueOf
