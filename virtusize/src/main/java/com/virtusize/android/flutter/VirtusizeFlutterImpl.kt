@@ -6,6 +6,7 @@ import androidx.lifecycle.AtomicReference
 import com.virtusize.android.ErrorResponseHandler
 import com.virtusize.android.R
 import com.virtusize.android.SuccessResponseHandler
+import com.virtusize.android.Virtusize
 import com.virtusize.android.VirtusizePresenter
 import com.virtusize.android.VirtusizeRepository
 import com.virtusize.android.data.local.SizeComparisonRecommendedSize
@@ -20,6 +21,8 @@ import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.network.VirtusizeAPIService
 import com.virtusize.android.network.VirtusizeApi
+import com.virtusize.android.ui.VirtusizeButton
+import com.virtusize.android.ui.VirtusizeInPageView
 import com.virtusize.android.ui.VirtusizeView
 import com.virtusize.android.util.ConfigurationUtils
 import com.virtusize.android.util.VirtusizeUtils
@@ -172,12 +175,20 @@ internal class VirtusizeFlutterImpl(
                             virtusizeRepository.updateUserSession()
                         }
 
+                    is VirtusizeEvent.UserClickedLanguageSelector -> {
+                        event.data?.optString("language")?.let { language ->
+                            val virtusizeLanguage = VirtusizeLanguage.entries.firstOrNull { it.value == language }
+                            if (virtusizeLanguage != null) {
+                                setVsWidgetLanguage(virtusizeLanguage)
+                            }
+                        }
+                    }
+
                     is VirtusizeEvent.UserCreatedSilhouette,
                     is VirtusizeEvent.UserSawProduct,
                     is VirtusizeEvent.UserSawWidgetButton,
                     is VirtusizeEvent.UserClickedStart,
                     is VirtusizeEvent.Undefined,
-                    is VirtusizeEvent.UserClickedLanguageSelector,
                     -> Unit
                 }
             }
@@ -365,6 +376,21 @@ internal class VirtusizeFlutterImpl(
             }, { error ->
                 onError?.onError(error)
             })
+        }
+    }
+
+    /**
+     * @see VirtusizeFlutter.setVsWidgetLanguage
+     */
+    override fun setVsWidgetLanguage(language: VirtusizeLanguage) {
+        virtusizeFlutterPresenter?.onLangugeClick(language)
+        scope.launch {
+            virtusizeRepository.setVsWidgetLanguage(language)
+            virtusizeRepository.fetchDataForInPageRecommendation(
+                shouldUpdateUserProducts = false,
+                shouldUpdateBodyProfile = true,
+            )
+            virtusizeRepository.updateInPageRecommendation()
         }
     }
 

@@ -1,6 +1,7 @@
 package com.virtusize.android.flutter
 
 import com.virtusize.android.data.local.VirtusizeError
+import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.remote.Product
 
@@ -14,6 +15,8 @@ interface VirtusizeFlutterPresenter {
         bestUserProduct: Product?,
         recommendationText: String?,
     )
+
+    fun onLangugeClick(language: VirtusizeLanguage)
 
     fun hasInPageError(
         externalProductId: String?,
