@@ -1,6 +1,7 @@
 package com.virtusize.android.data.local
 
 import android.content.Context
+import com.virtusize.android.BuildConfig
 import com.virtusize.android.SharedPreferencesHelper
 
 /**
@@ -46,6 +47,8 @@ data class VirtusizeParams(
             "${allowedLanguages.map { "{label: \"${it.label}\", value: \"${it.value}\"}" }}, " +
             "$PARAM_DETAILS_PANEL_CARDS: ${detailsPanelCards.map { "\"${it.value}\"" }}, " +
             "$PARAM_REGION: '${region.value}', " +
+            "$PARAM_SDK_VERSION: '${BuildConfig.VERSION_NANE}', " +
+            "$PARAM_SDK_PLATFORM: 'android', " +
             "$PARAM_ENVIRONMENT: '${environment.virtusizeWebViewEnv()}'}"
     }
 
@@ -61,5 +64,7 @@ data class VirtusizeParams(
         private const val PARAM_EXTERNAL_USER_ID = "externalUserId"
         private const val PARAM_SHOW_SGI = "showSGI"
         private const val PARAM_DETAILS_PANEL_CARDS = "detailsPanelCards"
+        private const val PARAM_SDK_VERSION = "sdkVersion"
+        private const val PARAM_SDK_PLATFORM = "sdkPlatform"
     }
 }
