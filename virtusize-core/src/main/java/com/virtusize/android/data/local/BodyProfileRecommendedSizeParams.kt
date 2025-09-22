@@ -99,6 +99,9 @@ internal data class BodyProfileRecommendedSizeParams(
             .plus(
                 mapOf(PARAM_EXTERNAL_PRODUCT_ID to (storeProduct.externalId ?: "")),
             )
+            .plus(
+                mapOf(PARAM_CLIENT_SIZE_ORDER to createClientSizeOrderParams()),
+            )
     }
 
     /**
@@ -192,6 +195,15 @@ internal data class BodyProfileRecommendedSizeParams(
             )
     }
 
+    /**
+     * Creates the list that represents the client size order
+     */
+    fun createClientSizeOrderParams(): List<String> {
+        return storeProduct.sizes.map { productSize ->
+            productSize.name
+        }
+    }
+
     private companion object {
         const val PARAM_ADDITIONAL_INFO = "additional_info"
         const val PARAM_BODY_DATA = "body_data"
@@ -205,6 +217,7 @@ internal data class BodyProfileRecommendedSizeParams(
         const val PARAM_EXTERNAL_PRODUCT_ID = "ext_product_id"
         const val PARAM_FOOTWEAR_DATA = "footwear_data"
         const val PARAM_PRODUCT_NAME = "product_name"
+        const val PARAM_CLIENT_SIZE_ORDER = "client_size_order"
 
         const val PARAM_BRAND = "brand"
         const val PARAM_FIT = "fit"
