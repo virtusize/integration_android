@@ -1,8 +1,8 @@
-### Next release
-- Feature: Update Flutter SDK implementation to be compatible with latest changes
-
 ### 2.12.6
 - Feature: Add Android 15+ support a memory page size of 16KB.
+
+### 2.12.5
+- Feature: Update Flutter SDK implementation to be compatible with latest changes
 
 ### 2.12.4
 - Feature: Add event listener to handle language change on web in Virtusize widgets
