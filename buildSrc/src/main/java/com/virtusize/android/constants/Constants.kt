@@ -3,9 +3,9 @@ package com.virtusize.android.constants
 object Constants {
     const val COMPILE_SDK = 34
     const val MIN_SDK = 21
-    const val TARGET_SDK = 34
+    const val TARGET_SDK = 35
 
     // Update versionName when publishing a new release
-    const val VERSION_NAME = "2.12.4"
+    const val VERSION_NAME = "2.12.6"
     const val GROUP_ID = "com.virtusize.android"
 }
