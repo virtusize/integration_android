@@ -1,3 +1,6 @@
+### 2.12.6
+- Feature: Add Android 15+ support a memory page size of 16KB.
+
 ### 2.12.5
 - Feature: Update Flutter SDK implementation to be compatible with latest changes
 
