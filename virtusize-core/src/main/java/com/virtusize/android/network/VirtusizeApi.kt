@@ -439,12 +439,13 @@ object VirtusizeApi {
         params["footwear_data"] = userBodyProfile.footwearData
 
         // Add concern_areas (default to zeros)
-        params["concern_areas"] = mapOf(
-            "shoulder" to 0,
-            "bust" to 0,
-            "waist" to 0,
-            "hip" to 0
-        )
+        params["concern_areas"] =
+            mapOf(
+                "shoulder" to 0,
+                "bust" to 0,
+                "waist" to 0,
+                "hip" to 0,
+            )
 
         // Add other profile fields
         params["gender"] = userBodyProfile.gender
