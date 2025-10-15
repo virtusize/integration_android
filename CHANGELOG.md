@@ -1,3 +1,6 @@
+#### Fixes
+- Fix: bra body measurements - suggested size issue fixed
+
 ### 2.12.6
 - Feature: Add Android 15+ support a memory page size of 16KB.
 

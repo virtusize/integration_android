@@ -26,4 +26,32 @@ class UserBodyProfileJsonParserTest {
 
         assertThat(actualUserBodyProfile).isNull()
     }
+
+    @Test
+    fun test_parseValidUserBodyResponseWithBraSize_returnExpectedUserBodyProfile() {
+        val actualUserBodyProfile =
+            UserBodyProfileJsonParser().parse(TestFixtures.USER_BODY_WITH_BRA_SIZE_JSONObject)
+        assertThat(actualUserBodyProfile).isEqualTo(TestFixtures.userBodyProfileWithBraSize)
+    }
+
+    @Test
+    fun test_parseUserBodyWithBraSize_braSizeIsCorrectlyParsed() {
+        val actualUserBodyProfile =
+            UserBodyProfileJsonParser().parse(TestFixtures.USER_BODY_WITH_BRA_SIZE_JSONObject)
+
+        assertThat(actualUserBodyProfile).isNotNull()
+        assertThat(actualUserBodyProfile?.braSize).isNotNull()
+        assertThat(actualUserBodyProfile?.braSize).containsEntry("country", "US")
+        assertThat(actualUserBodyProfile?.braSize).containsEntry("cup", "B")
+        assertThat(actualUserBodyProfile?.braSize).containsEntry("band", 34)
+    }
+
+    @Test
+    fun test_parseUserBodyWithoutBraSize_braSizeIsNull() {
+        val actualUserBodyProfile =
+            UserBodyProfileJsonParser().parse(TestFixtures.USER_BODY_JSONObject)
+
+        assertThat(actualUserBodyProfile).isNotNull()
+        assertThat(actualUserBodyProfile?.braSize).isNull()
+    }
 }

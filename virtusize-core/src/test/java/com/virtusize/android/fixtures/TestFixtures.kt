@@ -155,5 +155,99 @@ internal object TestFixtures {
                 "brand" to "Virtusize",
                 "footWidth" to "regular",
             ),
+            null,
+        )
+
+    val USER_BODY_WITH_BRA_SIZE_JSONObject =
+        JSONObject(
+            """
+            {
+              "wardrobe": "1234567",
+              "gender": "female",
+              "age": 32,
+              "height": 1630,
+              "weight": "50.00",
+              "braSize": {
+                "country": "US",
+                "cup": "B",
+                "band": 34
+              },
+              "concernAreas": {},
+              "bodyData": {
+                "hip": 830,
+                "bust": 755,
+                "neck": 300,
+                "rise": 215,
+                "bicep": 220,
+                "thigh": 480,
+                "waist": 630,
+                "inseam": 700,
+                "sleeve": 720,
+                "shoulder": 370,
+                "hipWidth": 300,
+                "bustWidth": 245,
+                "hipHeight": 750,
+                "headHeight": 215,
+                "kneeHeight": 395,
+                "waistWidth": 225,
+                "waistHeight": 920,
+                "armpitHeight": 1130,
+                "sleeveLength": 520,
+                "shoulderWidth": 340,
+                "shoulderHeight": 1240
+              },
+              "footwearData": {
+                "toeShape":"greek",
+                "size":"30.5",
+                "type":"sneakers",
+                "brand":"Virtusize",
+                "footWidth":"regular"
+              }
+            }
+            """.trimIndent(),
+        )
+
+    val userBodyProfileWithBraSize =
+        UserBodyProfile(
+            "female",
+            32,
+            1630,
+            "50.00",
+            mutableSetOf(
+                Measurement("hip", 830),
+                Measurement("hip", 830),
+                Measurement("bust", 755),
+                Measurement("neck", 300),
+                Measurement("rise", 215),
+                Measurement("bicep", 220),
+                Measurement("thigh", 480),
+                Measurement("waist", 630),
+                Measurement("inseam", 700),
+                Measurement("sleeve", 720),
+                Measurement("shoulder", 370),
+                Measurement("hipWidth", 300),
+                Measurement("bustWidth", 245),
+                Measurement("hipHeight", 750),
+                Measurement("headHeight", 215),
+                Measurement("kneeHeight", 395),
+                Measurement("waistWidth", 225),
+                Measurement("waistHeight", 920),
+                Measurement("armpitHeight", 1130),
+                Measurement("sleeveLength", 520),
+                Measurement("shoulderWidth", 340),
+                Measurement("shoulderHeight", 1240),
+            ),
+            mapOf(
+                "toeShape" to "greek",
+                "size" to "30.5",
+                "type" to "sneakers",
+                "brand" to "Virtusize",
+                "footWidth" to "regular",
+            ),
+            mapOf(
+                "country" to "US",
+                "cup" to "B",
+                "band" to 34,
+            ),
         )
 }
