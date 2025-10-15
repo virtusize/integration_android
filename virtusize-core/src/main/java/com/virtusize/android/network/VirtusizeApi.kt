@@ -27,6 +27,7 @@ import com.virtusize.android.data.remote.UserBodyProfile
 enum class HttpMethod {
     GET,
     POST,
+    PUT,
     DELETE,
 }
 
@@ -405,6 +406,53 @@ object VirtusizeApi {
                 .build()
                 .toString()
         return ApiRequest(url, HttpMethod.GET, authorization = true)
+    }
+
+    /**
+     * Gets a API request for updating the user body profile
+     * @param userBodyProfile the user body profile to update
+     * @see ApiRequest
+     */
+    fun updateUserBodyProfile(userBodyProfile: UserBodyProfile): ApiRequest {
+        val url =
+            Uri.parse(
+                environment.defaultApiUrl() + VirtusizeEndpoint.UserBodyMeasurements.path,
+            )
+                .buildUpon()
+                .build()
+                .toString()
+        val params = mutableMapOf<String, Any>()
+
+        // Add bra_size if available
+        userBodyProfile.braSize?.let {
+            params["bra_size"] = it
+        }
+
+        // Add body_data
+        val bodyDataMap = mutableMapOf<String, Int>()
+        userBodyProfile.bodyData.forEach { measurement ->
+            bodyDataMap[measurement.name] = measurement.millimeter
+        }
+        params["body_data"] = bodyDataMap
+
+        // Add footwear_data
+        params["footwear_data"] = userBodyProfile.footwearData
+
+        // Add concern_areas (default to zeros)
+        params["concern_areas"] = mapOf(
+            "shoulder" to 0,
+            "bust" to 0,
+            "waist" to 0,
+            "hip" to 0
+        )
+
+        // Add other profile fields
+        params["gender"] = userBodyProfile.gender
+        params["age"] = userBodyProfile.age
+        params["height"] = userBodyProfile.height
+        params["weight"] = userBodyProfile.weight
+
+        return ApiRequest(url, HttpMethod.PUT, params, authorization = true)
     }
 
     /**

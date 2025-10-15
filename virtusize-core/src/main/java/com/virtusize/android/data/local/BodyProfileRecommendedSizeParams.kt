@@ -173,8 +173,43 @@ internal data class BodyProfileRecommendedSizeParams(
                     )
                 }.orEmpty(),
             )
+            .plus(
+                createBraSizeParams(),
+            )
             // Convert all keys in the map to snake_case
             .mapKeys { (key, _) -> toSnakeCase(key) }
+    }
+
+    /**
+     * Creates the map that represents the bra size data in body_data format
+     * Matches iOS implementation: multiplies band value by 10, prefixes keys with "bra_"
+     */
+    private fun createBraSizeParams(): Map<String, Any> {
+        val braSize = userBodyProfile.braSize ?: return emptyMap()
+        val braSizeParams = mutableMapOf<String, Any>()
+
+        for ((key, value) in braSize) {
+            val snakeKey = toSnakeCase(key)
+            if (snakeKey == "band") {
+                // Multiply band value by 10, matching iOS implementation
+                val bandValue = when (value) {
+                    is Int -> value * 10
+                    is Number -> value.toInt() * 10
+                    else -> value
+                }
+                braSizeParams["bra_$snakeKey"] = mutableMapOf(
+                    PARAM_BODY_MEASUREMENT_VALUE to bandValue,
+                    PARAM_BODY_MEASUREMENT_PREDICTED to true,
+                )
+            } else {
+                braSizeParams["bra_$snakeKey"] = mutableMapOf(
+                    PARAM_BODY_MEASUREMENT_VALUE to value,
+                    PARAM_BODY_MEASUREMENT_PREDICTED to true,
+                )
+            }
+        }
+
+        return braSizeParams
     }
 
     /**
