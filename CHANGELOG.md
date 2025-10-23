@@ -1,5 +1,8 @@
+#### Fixes
+- Fix: SDK version and SDK platform parameters added
+
 ### 2.12.7
-- Feature: SDK version and SDK platform parameters added
+- Fix: bra body measurements - suggested size issue fixed
 
 ### 2.12.6
 - Feature: Add Android 15+ support a memory page size of 16KB.

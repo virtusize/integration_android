@@ -7,6 +7,8 @@ package com.virtusize.android.data.remote
  * @param height the user's height
  * @param weight the user's weight
  * @param bodyData the user's body measurement data, such as hip, bust, waist and so on.
+ * @param footwearData the user's footwear data, such as shoe size and width
+ * @param braSize the user's bra size information (country, cup, band)
  */
 data class UserBodyProfile(
     val gender: String,
@@ -15,4 +17,5 @@ data class UserBodyProfile(
     val weight: String,
     val bodyData: Set<Measurement>,
     val footwearData: Map<String, Any>,
+    val braSize: Map<String, Any>? = null,
 )
