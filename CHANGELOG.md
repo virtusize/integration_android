@@ -1,4 +1,7 @@
 #### Fixes
+- Fix: Added close button on error loading webview
+
+### 2.12.7
 - Fix: bra body measurements - suggested size issue fixed
 
 ### 2.12.6
