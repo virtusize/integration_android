@@ -235,7 +235,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
             }
             true
         }
-        
+
         binding.closeButton.setOnClickListener {
             stopCloseButtonTimer()
             dismiss()
@@ -367,9 +367,10 @@ class VirtusizeWebViewFragment : DialogFragment() {
 
     private fun startCloseButtonTimer() {
         closeButtonHandler = Handler(Looper.getMainLooper())
-        closeButtonRunnable = Runnable {
-            showCloseButton()
-        }
+        closeButtonRunnable =
+            Runnable {
+                showCloseButton()
+            }
         closeButtonHandler?.postDelayed(closeButtonRunnable!!, CLOSE_BUTTON_TIMER_DELAY)
     }
 
@@ -382,19 +383,21 @@ class VirtusizeWebViewFragment : DialogFragment() {
     }
 
     private fun showCloseButton() {
-        val fadeIn = AlphaAnimation(0f, 1f).apply {
-            duration = 300
-            fillAfter = true
-        }
+        val fadeIn =
+            AlphaAnimation(0f, 1f).apply {
+                duration = 300
+                fillAfter = true
+            }
         binding.closeButton.visibility = View.VISIBLE
         binding.closeButton.startAnimation(fadeIn)
     }
 
     private fun hideCloseButton() {
-        val fadeOut = AlphaAnimation(1f, 0f).apply {
-            duration = 300
-            fillAfter = true
-        }
+        val fadeOut =
+            AlphaAnimation(1f, 0f).apply {
+                duration = 300
+                fillAfter = true
+            }
         binding.closeButton.startAnimation(fadeOut)
         binding.closeButton.visibility = View.GONE
     }
