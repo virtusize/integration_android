@@ -8,12 +8,15 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
 import android.webkit.CookieManager
 import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
@@ -41,6 +44,10 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class VirtusizeWebViewFragment : DialogFragment() {
+    companion object {
+        private const val CLOSE_BUTTON_TIMER_DELAY = 6000L // 6 seconds
+    }
+
     private var virtusizeWebAppUrl: String = VirtusizeApi.getVirtusizeWebViewURL()
 
     private var showSNSButtons: Boolean = true
@@ -49,6 +56,9 @@ class VirtusizeWebViewFragment : DialogFragment() {
         "javascript:vsEventFromSDK({ name: 'sdk-back-button-tapped'})"
 
     private var virtusizeMessageHandler: VirtusizeMessageHandler? = null
+
+    private var closeButtonHandler: Handler? = null
+    private var closeButtonRunnable: Runnable? = null
 
     private val apiService: VirtusizeAPIService by lazy {
         VirtusizeAPIService.getInstance(requireContext(), virtusizeMessageHandler)
@@ -225,6 +235,11 @@ class VirtusizeWebViewFragment : DialogFragment() {
             }
             true
         }
+        
+        binding.closeButton.setOnClickListener {
+            stopCloseButtonTimer()
+            dismiss()
+        }
 
         // Get the Virtusize params script passed in fragment arguments.
         // If the script is not passed, we dismiss this dialog fragment.
@@ -264,6 +279,8 @@ class VirtusizeWebViewFragment : DialogFragment() {
                     binding.webView.loadUrl(virtusizeWebAppUrl)
                 }
         }
+
+        startCloseButtonTimer()
     }
 
     override fun onStop() {
@@ -274,6 +291,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        stopCloseButtonTimer()
         binding.webView.stopLoading()
         binding.webView.destroy()
     }
@@ -324,7 +342,14 @@ class VirtusizeWebViewFragment : DialogFragment() {
             val event = VirtusizeEventJsonParser().parse(JSONObject(eventInfo))
             event?.let { virtusizeMessageHandler?.onEvent(clientProduct, it) }
             when (event) {
-                is VirtusizeEvent.UserClosedWidget -> dismiss()
+                is VirtusizeEvent.UserClosedWidget -> {
+                    stopCloseButtonTimer()
+                    dismiss()
+                }
+                is VirtusizeEvent.WidgetReady -> {
+                    stopCloseButtonTimer()
+                    hideCloseButton()
+                }
                 is VirtusizeEvent.UserClickedStart -> userAcceptedPrivacyPolicy()
                 else -> Unit
             }
@@ -338,5 +363,39 @@ class VirtusizeWebViewFragment : DialogFragment() {
                 null,
             )
         }
+    }
+
+    private fun startCloseButtonTimer() {
+        closeButtonHandler = Handler(Looper.getMainLooper())
+        closeButtonRunnable = Runnable {
+            showCloseButton()
+        }
+        closeButtonHandler?.postDelayed(closeButtonRunnable!!, CLOSE_BUTTON_TIMER_DELAY)
+    }
+
+    private fun stopCloseButtonTimer() {
+        closeButtonRunnable?.let {
+            closeButtonHandler?.removeCallbacks(it)
+        }
+        closeButtonHandler = null
+        closeButtonRunnable = null
+    }
+
+    private fun showCloseButton() {
+        val fadeIn = AlphaAnimation(0f, 1f).apply {
+            duration = 300
+            fillAfter = true
+        }
+        binding.closeButton.visibility = View.VISIBLE
+        binding.closeButton.startAnimation(fadeIn)
+    }
+
+    private fun hideCloseButton() {
+        val fadeOut = AlphaAnimation(1f, 0f).apply {
+            duration = 300
+            fillAfter = true
+        }
+        binding.closeButton.startAnimation(fadeOut)
+        binding.closeButton.visibility = View.GONE
     }
 }
