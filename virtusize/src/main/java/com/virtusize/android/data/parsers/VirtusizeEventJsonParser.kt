@@ -39,5 +39,6 @@ private fun getVirtusizeEvent(
         EventName.UserClosedWidget -> VirtusizeEvent.UserClosedWidget(data = json)
         EventName.UserClickedStart -> VirtusizeEvent.UserClickedStart(data = json)
         EventName.UserClickedLanguageSelector -> VirtusizeEvent.UserClickedLanguageSelector(data = json)
+        EventName.WidgetReady -> VirtusizeEvent.WidgetReady(data = json)
         null -> VirtusizeEvent.Undefined(name = name, data = json)
     }
