@@ -7,4 +7,5 @@
     <string name="inpage_loading_text">사이즈 분석 중</string>
     <string name="inpage_long_error_text">현재 버츄사이즈 서비스를 이용할 수 없습니다.\n 즐거운 쇼핑되세요.</string>
     <string name="inpage_short_error_text">현재 버츄사이즈 서비스를 이용할 수 없습니다.</string>
+    <string name="close_button_description">닫기</string>
 </resources>

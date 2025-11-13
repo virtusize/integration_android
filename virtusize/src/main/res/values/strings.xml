@@ -8,5 +8,6 @@
     <string name="inpage_loading_text">Analyzing the size</string>
     <string name="inpage_long_error_text">Virtusize is not available at the moment.\nPlease enjoy shopping without us.</string>
     <string name="inpage_short_error_text">Virtusize is not available at the moment.</string>
+    <string name="close_button_description">Close</string>
 
 </resources>

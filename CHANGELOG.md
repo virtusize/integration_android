@@ -1,5 +1,5 @@
 #### Fixes
-- Fix: SDK version and SDK platform parameters added
+- Fix: Added close button on error loading webview
 
 ### 2.12.7
 - Fix: bra body measurements - suggested size issue fixed

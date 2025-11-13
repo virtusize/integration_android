@@ -7,4 +7,5 @@
     <string name="inpage_loading_text">サイズを分析中</string>
     <string name="inpage_long_error_text">現在バーチャサイズは使えませんが、\nそのままお買い物をお楽しみください。</string>
     <string name="inpage_short_error_text">現在バーチャサイズは使えません。</string>
+    <string name="close_button_description">閉じる</string>
 </resources>
