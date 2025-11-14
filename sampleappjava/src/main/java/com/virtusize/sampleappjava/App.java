@@ -37,6 +37,8 @@ public class App extends Application {
                 .setDetailsPanelCards(Set.of(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
                 // By default, Virtusize enables the SNS buttons
                 .setShowSNSButtons(true)
+                // By default, Virtusize shows Privacy Policy
+                .setShowPrivacyPolicy(true)
                 .build();
     }
 }

@@ -23,6 +23,7 @@ import com.virtusize.android.data.local.virtusizeRegion
  * @param detailsPanelCards the info categories that will display in the Product Details tab
  * @param showSNSButtons the Boolean value to determine whether the Virtusize web app will display the SNS buttons
  * @param branch the branch name of targeted Virtusize environment when specified
+ * @param showPrivacyPolicy the Boolean value to determine whether to show or hide the privacy policy
  */
 class VirtusizeFlutterBuilder {
     private var userId: String? = null
@@ -38,6 +39,7 @@ class VirtusizeFlutterBuilder {
     private var showSNSButtons: Boolean = true
     private var branch: String? = null
     private var virtusizeFlutterPresenter: VirtusizeFlutterPresenter? = null
+    private var showPrivacyPolicy: Boolean = true
 
     /**
      * This method is used to add the application context to the Virtusize builder
@@ -161,6 +163,17 @@ class VirtusizeFlutterBuilder {
     }
 
     /**
+     * Sets up whether the Virtusize will show the Privacy Policy
+     * By default value set to TRUE
+     * @param showPrivacyPolicy the Boolean value
+     * @return [VirtusizeFlutterBuilder]
+     */
+    fun setShowPrivacyPolicy(showPrivacyPolicy: Boolean): VirtusizeFlutterBuilder {
+        this.showPrivacyPolicy = showPrivacyPolicy
+        return this
+    }
+
+    /**
      * Builds the VirtusizeFlutter object from the passed data and returns the VirtusizeFlutter object
      * @return VirtusizeFlutter
      * @see VirtusizeFlutter
@@ -185,6 +198,7 @@ class VirtusizeFlutterBuilder {
                 detailsPanelCards = detailsPanelCards,
                 showSNSButtons = showSNSButtons,
                 branch = branch,
+                showPrivacyPolicy = showPrivacyPolicy,
             )
         return VirtusizeFlutter.init(
             context = context!!,
