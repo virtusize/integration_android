@@ -239,7 +239,7 @@ internal class VirtusizeImpl(
                 virtusizeViews
                     .filterIsInstance<VirtusizeInPageView>()
                     .forEach { virtusizeView ->
-                        virtusizeView.showInPageError(externalProductId)
+                        virtusizeView.showInPageError(externalProductId, error)
                     }
             }
 

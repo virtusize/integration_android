@@ -13,6 +13,8 @@ import coil.ImageLoader
 import coil.decode.GifDecoder
 import coil.request.ImageRequest
 import com.virtusize.android.R
+import com.virtusize.android.data.local.VirtusizeError
+import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeParams
@@ -169,10 +171,19 @@ class VirtusizeInPageMini
         /**
          * @see VirtusizeInPageView.showInPageError
          */
-        override fun showInPageError(externalProductId: String?) {
+        override fun showInPageError(
+            externalProductId: String?,
+            error: VirtusizeError?,
+        ) {
             if (clientProduct!!.externalId != externalProductId) {
                 return
             }
+
+            if (error?.type == VirtusizeErrorType.InvalidProduct) {
+                binding.root.visibility = View.GONE
+                return
+            }
+
             binding.gifImageLayout.visibility = View.GONE
             binding.inpageMiniLayout.visibility = View.VISIBLE
             binding.inpageMiniLoadingText.visibility = View.GONE

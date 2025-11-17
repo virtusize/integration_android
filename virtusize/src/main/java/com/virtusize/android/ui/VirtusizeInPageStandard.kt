@@ -25,6 +25,7 @@ import coil.decode.GifDecoder
 import coil.request.ImageRequest
 import com.virtusize.android.R
 import com.virtusize.android.Virtusize
+import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.VirtusizeMessageHandler
@@ -324,8 +325,16 @@ class VirtusizeInPageStandard
         /**
          * @see VirtusizeInPageView.showInPageError
          */
-        override fun showInPageError(externalProductId: String?) {
+        override fun showInPageError(
+            externalProductId: String?,
+            error: VirtusizeError?,
+        ) {
             if (clientProduct!!.externalId != externalProductId) {
+                return
+            }
+
+            if (error?.type == VirtusizeErrorType.InvalidProduct) {
+                binding.root.visibility = View.GONE
                 return
             }
 

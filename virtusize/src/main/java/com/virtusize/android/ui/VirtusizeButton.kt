@@ -126,7 +126,9 @@ class VirtusizeButton
             super.setProductWithProductCheckData(productWithPDC)
             if (clientProduct!!.externalId == productWithPDC.externalId) {
                 clientProduct!!.productCheckData = productWithPDC.productCheckData
-                visibility = View.VISIBLE
+                if (clientProduct?.productCheckData?.data?.validProduct == true) {
+                    visibility = View.VISIBLE
+                }
                 setupButtonTextConfiguredLocalization(virtusizeParams.language)
                 setOnClickListener {
                     openVirtusizeWebView(context, clientProduct!!)
