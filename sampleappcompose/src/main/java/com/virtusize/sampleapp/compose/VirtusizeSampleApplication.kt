@@ -27,6 +27,8 @@ internal class VirtusizeSampleApplication : Application() {
             .setDetailsPanelCards(setOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
             // By default, Virtusize enables the SNS buttons
             .setShowSNSButtons(true)
+            // By default, Virtusize shows Privacy Policy
+            .setShowPrivacyPolicy(true)
             .build()
     }
 }

@@ -16,6 +16,7 @@ import com.virtusize.android.SharedPreferencesHelper
  * @param detailsPanelCards the info categories that will be displayed in the Product Details tab
  * @param showSNSButtons the Boolean value to determine whether the Virtusize web app will display the SNS buttons
  * @param branch the branch name of targeted Virtusize testing environment when specified
+ * @param showPrivacyPolicy the Boolean value to determine whether to show or hide the privacy policy
  */
 data class VirtusizeParams(
     internal val context: Context,
@@ -29,6 +30,7 @@ data class VirtusizeParams(
     private val detailsPanelCards: Set<VirtusizeInfoCategory>,
     internal val showSNSButtons: Boolean,
     internal val branch: String?,
+    internal val showPrivacyPolicy: Boolean,
 ) {
     /**
      * Returns the virtusize parameter string to be passed to the JavaScript function vsParamsFromSDK

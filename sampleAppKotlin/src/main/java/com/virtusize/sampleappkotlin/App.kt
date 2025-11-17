@@ -30,6 +30,8 @@ class App : Application() {
             .setShowSNSButtons(true)
             // By default, branch is empty and `production` is used
             // .setBranch("branch-name")
+            // By default, Virtusize shows Privacy Policy
+            .setShowPrivacyPolicy(true)
             .build()
     }
 }

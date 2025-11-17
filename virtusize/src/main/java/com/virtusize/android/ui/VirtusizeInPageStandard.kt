@@ -216,6 +216,7 @@ class VirtusizeInPageStandard
                     }
                 })
             }
+            binding.privacyPolicyText.visibility = showPrivacyPolicy()
         }
 
         /**
@@ -272,7 +273,7 @@ class VirtusizeInPageStandard
             binding.inpageUserProductImageView.visibility =
                 if (userBestFitProduct == null) View.GONE else View.VISIBLE
             binding.vsSignatureImageView.visibility = if (loading) View.INVISIBLE else View.VISIBLE
-            binding.privacyPolicyText.visibility = if (loading) View.INVISIBLE else View.VISIBLE
+            binding.privacyPolicyText.visibility = if (loading) View.INVISIBLE else showPrivacyPolicy()
             binding.inpageVSIconImageView.visibility = if (loading) View.VISIBLE else View.GONE
             binding.inpageLoadingText.visibility = if (loading) View.VISIBLE else View.GONE
             if (loading) {
@@ -739,4 +740,6 @@ class VirtusizeInPageStandard
             layoutParams.setMargins(left, top, right, bottom)
             binding.inpageFooter.layoutParams = layoutParams
         }
+
+        private fun showPrivacyPolicy() = if (virtusizeParams.showPrivacyPolicy) View.VISIBLE else View.GONE
     }

@@ -23,6 +23,7 @@ import com.virtusize.android.data.local.virtusizeRegion
  * @param detailsPanelCards the info categories that will display in the Product Details tab
  * @param showSNSButtons the Boolean value to determine whether the Virtusize web app will display the SNS buttons
  * @param branch the branch name of targeted Virtusize environment when specified
+ * @param showPrivacyPolicy the Boolean value to determine whether to show or hide the privacy policy
  */
 class VirtusizeBuilder {
     private var userId: String? = null
@@ -37,6 +38,7 @@ class VirtusizeBuilder {
     private var detailsPanelCards: Set<VirtusizeInfoCategory> = VirtusizeInfoCategory.entries.toMutableSet()
     private var showSNSButtons: Boolean = true
     private var branch: String? = null
+    private var showPrivacyPolicy: Boolean = true
 
     /**
      * This method is used to add the application context to the Virtusize builder
@@ -149,6 +151,17 @@ class VirtusizeBuilder {
     }
 
     /**
+     * Sets up whether the Virtusize will show the Privacy Policy
+     * By default value set to TRUE
+     * @param showPrivacyPolicy the Boolean value
+     * @return [VirtusizeBuilder]
+     */
+    fun setShowPrivacyPolicy(showPrivacyPolicy: Boolean): VirtusizeBuilder {
+        this.showPrivacyPolicy = showPrivacyPolicy
+        return this
+    }
+
+    /**
      * Builds the Virtusize object from the passed data and returns the Virtusize object
      * @return Virtusize
      * @see Virtusize
@@ -173,6 +186,7 @@ class VirtusizeBuilder {
                 detailsPanelCards = detailsPanelCards,
                 showSNSButtons = showSNSButtons,
                 branch = branch,
+                showPrivacyPolicy = showPrivacyPolicy,
             )
         return Virtusize.init(context = context!!, params = params)
     }
