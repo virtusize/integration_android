@@ -301,6 +301,7 @@ internal class VirtusizeFlutterImpl(
             key = params.apiKey!!,
             userId = params.externalUserId ?: "",
             branch = params.branch,
+            serviceEnv = params.serviceEnvironment,
         )
     }
 
