@@ -18,6 +18,7 @@ import com.virtusize.android.SharedPreferencesHelper
  * @param showSNSButtons the Boolean value to determine whether the Virtusize web app will display the SNS buttons
  * @param branch the branch name of targeted Virtusize testing environment when specified
  * @param showPrivacyPolicy the Boolean value to determine whether to show or hide the privacy policy
+ * @param serviceEnvironment the Boolean value to determine whether to use or not services.virtusize.com url
  */
 data class VirtusizeParams(
     internal val context: Context,
@@ -32,6 +33,7 @@ data class VirtusizeParams(
     internal val showSNSButtons: Boolean,
     internal val branch: String?,
     internal val showPrivacyPolicy: Boolean,
+    internal val serviceEnvironment: Boolean,
 ) {
     /**
      * Returns the virtusize parameter string to be passed to the JavaScript function vsParamsFromSDK

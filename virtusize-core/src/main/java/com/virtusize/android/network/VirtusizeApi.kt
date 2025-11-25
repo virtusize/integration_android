@@ -50,6 +50,7 @@ data class ApiRequest(
  * @param environment the Virtusize environment that is used in network requests
  * @param apiKey the API key that is unique for every Virtusize client
  * @param userId the user ID that is unique from the client system
+ * @param serviceEnvironment the Boolean value to determine whether to use or not services.virtusize.com url
  */
 object VirtusizeApi {
     const val DEFAULT_AOYAMA_VERSION = "3.4.2"
@@ -57,6 +58,7 @@ object VirtusizeApi {
     private var environment = VirtusizeEnvironment.GLOBAL
     private lateinit var apiKey: String
     private var branch: String? = null
+    private var serviceEnvironment: Boolean = true
 
     var currentUserId: String? = null
         private set
@@ -70,17 +72,20 @@ object VirtusizeApi {
      * @param key the API key that is unique for every Virtusize client
      * @param userId the user ID that is unique from the client system
      * @param branch the testing environment branch name
+     * @param serviceEnv the Boolean value to determine whether to use or not services.virtusize.com url
      */
     fun init(
         env: VirtusizeEnvironment,
         key: String,
         userId: String,
         branch: String?,
+        serviceEnv: Boolean = true,
     ) {
         environment = env
         apiKey = key
         currentUserId = userId
         this.branch = branch
+        this.serviceEnvironment = serviceEnv
     }
 
     fun setUserId(userId: String) {
@@ -301,9 +306,15 @@ object VirtusizeApi {
      * @see ApiRequest
      */
     fun getStoreProductInfo(productId: String): ApiRequest {
+        val baseUrl =
+            if (serviceEnvironment) {
+                environment.servicesApiUrl()
+            } else {
+                environment.defaultApiUrl()
+            }
         val url =
             Uri.parse(
-                environment.defaultApiUrl() +
+                baseUrl +
                     VirtusizeEndpoint.StoreProducts.path +
                     productId,
             )
@@ -319,8 +330,14 @@ object VirtusizeApi {
      * @see ApiRequest
      */
     fun getProductTypes(): ApiRequest {
+        val baseUrl =
+            if (serviceEnvironment) {
+                environment.servicesApiUrl()
+            } else {
+                environment.defaultApiUrl()
+            }
         val url =
-            Uri.parse(environment.servicesApiUrl() + VirtusizeEndpoint.ProductType.path)
+            Uri.parse(baseUrl + VirtusizeEndpoint.ProductType.path)
                 .buildUpon()
                 .build()
                 .toString()
