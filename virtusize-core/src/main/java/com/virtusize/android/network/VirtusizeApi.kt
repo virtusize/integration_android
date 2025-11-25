@@ -306,11 +306,12 @@ object VirtusizeApi {
      * @see ApiRequest
      */
     fun getStoreProductInfo(productId: String): ApiRequest {
-        val baseUrl = if (serviceEnvironment) {
-            environment.servicesApiUrl()
-        } else {
-            environment.defaultApiUrl()
-        }
+        val baseUrl =
+            if (serviceEnvironment) {
+                environment.servicesApiUrl()
+            } else {
+                environment.defaultApiUrl()
+            }
         val url =
             Uri.parse(
                 baseUrl +
@@ -329,11 +330,12 @@ object VirtusizeApi {
      * @see ApiRequest
      */
     fun getProductTypes(): ApiRequest {
-        val baseUrl = if (serviceEnvironment) {
-            environment.servicesApiUrl()
-        } else {
-            environment.defaultApiUrl()
-        }
+        val baseUrl =
+            if (serviceEnvironment) {
+                environment.servicesApiUrl()
+            } else {
+                environment.defaultApiUrl()
+            }
         val url =
             Uri.parse(baseUrl + VirtusizeEndpoint.ProductType.path)
                 .buildUpon()
