@@ -203,7 +203,7 @@ class VirtusizeRepository internal constructor(
 
         // Those API requests are independent and can be run in parallel
         val storeDeferred = async { virtusizeAPIService.getStoreProduct(productId) }
-        val productTypesDeferred = async { virtusizeAPIService.getProductTypes() }
+        val productTypesDeferred = async { virtusizeAPIService.getProductTypesLocal(context) }
         val languageDeferred = async { fetchLanguage(language) }
 
         val storeProductResponse = storeDeferred.await()

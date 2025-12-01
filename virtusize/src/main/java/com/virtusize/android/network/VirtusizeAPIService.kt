@@ -107,6 +107,14 @@ internal interface VirtusizeAPIService {
     suspend fun getProductTypes(): VirtusizeApiResponse<List<ProductType>>
 
     /**
+     * Retrieves the list of product types from the local JSON resource file.
+     *
+     * @param context the Android context used to access the raw resource
+     * @return a [VirtusizeApiResponse] wrapping a list of [ProductType] parsed from the local JSON
+     */
+    suspend fun getProductTypesLocal(context: Context): VirtusizeApiResponse<List<ProductType>>
+
+    /**
      * Gets the API response for getting the user session data
      * @return the [VirtusizeApiResponse] with [UserSessionInfo]
      */
