@@ -1,8 +1,15 @@
-#### Changes
+### 2.12.11
+- Fix: Migrate product types implementation locally
+- Fix: LINE authorization redirect for staging environment
+
+### 2.12.10
+- Feature: Added Service Environment configurations
+- Feature: Hide component when product check returns invalid product state
+
+### 2.12.9
 - Feature: Add optional configuration for show/hide privacy policy in inpage standard
 - Hide component when product check returns invalid product state
 - Fix: Fixed sendOrder VirtusizeOrder API key parameter
-- Fix: Migrate product types implementation locally
 
 ### 2.12.8
 - Fix: Added close button on error loading webview
