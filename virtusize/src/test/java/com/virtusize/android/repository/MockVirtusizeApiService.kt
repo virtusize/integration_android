@@ -1,5 +1,6 @@
 package com.virtusize.android.repository
 
+import android.content.Context
 import android.graphics.Bitmap
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeEvent
@@ -66,6 +67,10 @@ internal class MockVirtusizeApiService : VirtusizeAPIService {
     }
 
     override suspend fun getProductTypes(): VirtusizeApiResponse<List<ProductType>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getProductTypesLocal(context: Context): VirtusizeApiResponse<List<ProductType>> {
         TODO("Not yet implemented")
     }
 

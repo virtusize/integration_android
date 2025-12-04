@@ -2,6 +2,7 @@
 - Feature: Add optional configuration for show/hide privacy policy in inpage standard
 - Hide component when product check returns invalid product state
 - Fix: Fixed sendOrder VirtusizeOrder API key parameter
+- Fix: Migrate product types implementation locally
 
 ### 2.12.8
 - Fix: Added close button on error loading webview

@@ -36,6 +36,7 @@ import com.virtusize.android.data.remote.UserSessionInfo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
 import org.json.JSONObject
 import java.net.URL
 import java.util.Locale
@@ -199,6 +200,33 @@ internal class VirtusizeAPIServiceImpl(
             )
                 .setJsonParser(ProductTypeJsonParser())
                 .execute(apiRequest)
+        }
+
+    override suspend fun getProductTypesLocal(context: Context): VirtusizeApiResponse<List<ProductType>> =
+        withContext(Dispatchers.IO) {
+            try {
+                val jsonText =
+                    context.resources.openRawResource(
+                        com.virtusize.android.core.R.raw.product_types,
+                    )
+                        .bufferedReader().use { it.readText() }
+                val jsonArray = JSONArray(jsonText)
+                val jsonParser = ProductTypeJsonParser()
+                val productTypes: MutableList<ProductType> = mutableListOf()
+                for (i in 0 until jsonArray.length()) {
+                    jsonParser.parse(jsonArray.getJSONObject(i))?.let {
+                        productTypes.add(it)
+                    }
+                }
+
+                VirtusizeApiResponse.Success(productTypes)
+            } catch (e: Exception) {
+                VirtusizeApiResponse.Error(
+                    VirtusizeErrorType.JsonParsingError.virtusizeError(
+                        extraMessage = e.localizedMessage,
+                    ),
+                )
+            }
         }
 
     override suspend fun getUserSessionInfo(): VirtusizeApiResponse<UserSessionInfo> =

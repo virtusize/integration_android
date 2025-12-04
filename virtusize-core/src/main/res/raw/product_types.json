@@ -1,0 +1,1585 @@
+[
+  {
+    "id": 1,
+    "name": "dress",
+    "optionalMeasurements": [
+      "hip",
+      "sleeveOpening",
+      "hem",
+      "waistHeight",
+      "type"
+    ],
+    "priority": [
+      "bust",
+      "waist",
+      "height"
+    ],
+    "requiredMeasurements": [
+      "height",
+      "bust",
+      "waist"
+    ],
+    "supportsLengthComparison": true,
+    "weights": {
+      "bust": 1,
+      "waist": 1,
+      "height": 0.25
+    },
+    "anchorPoint": "shoulders",
+    "compatibleWith": [
+      1,
+      16
+    ],
+    "defaultMeasurements": {
+      "hem": 470,
+      "hip": 440,
+      "bust": 430,
+      "waist": 395,
+      "height": 900,
+      "waistHeight": 410,
+      "sleeveOpening": 200
+    },
+    "displayMode": "portrait",
+    "isDraggable": false,
+    "isReserved": false,
+    "maxMeasurements": {
+      "hem": 2000,
+      "hip": 1500,
+      "bust": 1200,
+      "waist": 1200,
+      "height": 2500,
+      "waistHeight": 750,
+      "sleeveOpening": 400
+    },
+    "minMeasurements": {
+      "hem": 200,
+      "hip": 150,
+      "bust": 150,
+      "waist": 100,
+      "height": 500,
+      "waistHeight": 150,
+      "sleeveOpening": 50
+    },
+    "sgiGenders": [
+      "female"
+    ],
+    "sgiStyles": [
+      "regular"
+    ],
+    "sgiTypes": [
+      "short",
+      "medium",
+      "regular",
+      "long"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "shirt",
+    "optionalMeasurements": [
+      "collar",
+      "shoulder",
+      "waist",
+      "hem",
+      "bicep",
+      "type"
+    ],
+    "priority": [
+      "collar",
+      "bust",
+      "sleeve"
+    ],
+    "requiredMeasurements": [
+      "height",
+      "bust",
+      "sleeve"
+    ],
+    "supportsLengthComparison": true,
+    "weights": {
+      "bust": 2,
+      "height": 0.5,
+      "sleeve": 1
+    },
+    "anchorPoint": "shoulders",
+    "compatibleWith": [
+      2
+    ],
+    "defaultMeasurements": {
+      "hem": 540,
+      "bust": 520,
+      "bicep": 210,
+      "waist": 490,
+      "collar": 400,
+      "height": 820,
+      "sleeve": 930,
+      "shoulder": 470
+    },
+    "displayMode": "portrait",
+    "isDraggable": false,
+    "isReserved": false,
+    "maxMeasurements": {
+      "hem": 1500,
+      "bust": 1500,
+      "bicep": 600,
+      "waist": 1500,
+      "collar": 700,
+      "height": 2000,
+      "sleeve": 1500,
+      "shoulder": 1500
+    },
+    "minMeasurements": {
+      "hem": 250,
+      "bust": 250,
+      "bicep": 60,
+      "waist": 200,
+      "collar": 200,
+      "height": 250,
+      "sleeve": 250,
+      "shoulder": 200
+    },
+    "sgiGenders": [
+      "unisex",
+      "female",
+      "male"
+    ],
+    "sgiStyles": [
+      "casual",
+      "business",
+      "regular",
+      "blouse",
+      "button_down"
+    ],
+    "sgiTypes": [
+      "long_sleeved",
+      "short_sleeved",
+      "regular"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "sweater",
+    "optionalMeasurements": [
+      "shoulder",
+      "waist",
+      "hem",
+      "bicep",
+      "type"
+    ],
+    "priority": [
+      "bust",
+      "sleeve"
+    ],
+    "requiredMeasurements": [
+      "height",
+      "bust",
+      "sleeve"
+    ],
+    "supportsLengthComparison": true,
+    "weights": {
+      "bust": 2,
+      "height": 0.5,
+      "sleeve": 1
+    },
+    "anchorPoint": "shoulders",
+    "compatibleWith": [
+      3,
+      4
+    ],
+    "defaultMeasurements": {
+      "hem": 420,
+      "bust": 540,
+      "bicep": 210,
+      "waist": 500,
+      "height": 680,
+      "sleeve": 920,
+      "shoulder": 510
+    },
+    "displayMode": "portrait",
+    "isDraggable": false,
+    "isReserved": false,
+    "maxMeasurements": {
+      "hem": 1500,
+      "bust": 1500,
+      "bicep": 600,
+      "waist": 1500,
+      "height": 2000,
+      "sleeve": 1500,
+      "shoulder": 1500
+    },
+    "minMeasurements": {
+      "hem": 150,
+      "bust": 150,
+      "bicep": 50,
+      "waist": 150,
+      "height": 200,
+      "sleeve": 200,
+      "shoulder": 150
+    },
+    "sgiGenders": [
+      "unisex",
+      "female",
+      "male"
+    ],
+    "sgiStyles": [
+      "casual",
+      "pullover",
+      "regular",
+      "cardigan"
+    ],
+    "sgiTypes": [
+      "short",
+      "regular",
+      "long"
+    ]
+  },
+  {
+    "id": 4,
+    "name": "tShirt",
+    "optionalMeasurements": [
+      "shoulder",
+      "waist",
+      "hem",
+      "bicep",
+      "type"
+    ],
+    "priority": [
+      "bust",
+      "height",
+      "sleeve"
+    ],
+    "requiredMeasurements": [
+      "height",
+      "bust",
+      "sleeve"
+    ],
+    "supportsLengthComparison": true,
+    "weights": {
+      "bust": 2,
+      "height": 1,
+      "sleeve": 1
+    },
+    "anchorPoint": "shoulders",
+    "compatibleWith": [
+      4,
+      3,
+      12
+    ],
+    "defaultMeasurements": {
+      "hem": 540,
+      "bust": 540,
+      "bicep": 210,
+      "waist": 540,
+      "height": 700,
+      "sleeve": 470,
+      "shoulder": 490
+    },
+    "displayMode": "portrait",
+    "isDraggable": false,
+    "isReserved": false,
+    "maxMeasurements": {
+      "hem": 1500,
+      "bust": 1500,
+      "bicep": 600,
+      "waist": 1500,
+      "height": 1800,
+      "sleeve": 1600,
+      "shoulder": 1500
+    },
+    "minMeasurements": {
+      "hem": 150,
+      "bust": 150,
+      "bicep": 50,
+      "waist": 150,
+      "height": 200,
+      "sleeve": 150,
+      "shoulder": 150
+    },
+    "sgiGenders": [
+      "unisex",
+      "female",
+      "male"
+    ],
+    "sgiStyles": [
+      "regular"
+    ],
+    "sgiTypes": [
+      "regular"
+    ]
+  },
+  {
+    "id": 5,
+    "name": "pants",
+    "optionalMeasurements": [
+      "knee",
+      "legOpening",
+      "frontRise",
+      "backRise",
+      "type"
+    ],
+    "priority": [
+      "waist",
+      "inseam"
+    ],
+    "requiredMeasurements": [
+      "inseam",
+      "waist",
+      "hip",
+      "thigh"
+    ],
+    "supportsLengthComparison": true,
+    "weights": {
+      "hip": 0.5,
+      "thigh": 0.5,
+      "waist": 1,
+      "inseam": 1
+    },
+    "anchorPoint": "hips",
+    "compatibleWith": [
+      5,
+      13
+    ],
+    "defaultMeasurements": {
+      "hip": 550,
+      "knee": 240,
+      "thigh": 310,
+      "waist": 440,
+      "inseam": 880,
+      "backRise": 420,
+      "frontRise": 260,
+      "legOpening": 220
+    },
+    "displayMode": "portrait",
+    "isDraggable": true,
+    "isReserved": false,
+    "maxMeasurements": {
+      "hip": 1500,
+      "knee": 700,
+      "thigh": 1000,
+      "waist": 1200,
+      "inseam": 1500,
+      "backRise": 800,
+      "frontRise": 700,
+      "legOpening": 700
+    },
+    "minMeasurements": {
+      "hip": 250,
+      "knee": 100,
+      "thigh": 100,
+      "waist": 200,
+      "inseam": 20,
+      "backRise": 100,
+      "frontRise": 100,
+      "legOpening": 70
+    },
+    "sgiGenders": [
+      "female",
+      "male"
+    ],
+    "sgiStyles": [
+      "regular"
+    ],
+    "sgiTypes": [
+      "slim",
+      "wide",
+      "regular"
+    ]
+  },
+  {
+    "id": 6,
+    "name": "panties",
+    "optionalMeasurements": [
+      "hip",
+      "type"
+    ],
+    "priority": [
+      "waist",
+      "height"
+    ],
+    "requiredMeasurements": [
+      "height",
+      "waist"
+    ],
+    "supportsLengthComparison": false,
+    "weights": {
+      "waist": 2,
+      "height": 1
+    },
+    "anchorPoint": "hips",
+    "compatibleWith": [
+      6
+    ],
+    "defaultMeasurements": {
+      "hip": 320,
+      "waist": 300,
+      "height": 210
+    },
+    "displayMode": "portrait",
+    "isDraggable": false,
+    "isReserved": false,
+    "maxMeasurements": {
+      "hip": 650,
+      "waist": 600,
+      "height": 600
+    },
+    "minMeasurements": {
+      "hip": 100,
+      "waist": 100,
+      "height": 60
+    },
+    "sgiGenders": [
+      "unisex",
+      "female",
+      "male"
+    ],
+    "sgiStyles": [],
+    "sgiTypes": []
+  },
+  {
+    "id": 7,
+    "name": "skirt",
+    "optionalMeasurements": [
+      "hip",
+      "hem",
+      "type"
+    ],
+    "priority": [
+      "waist",
+      "height"
+    ],
+    "requiredMeasurements": [
+      "height",
+      "waist"
+    ],
+    "supportsLengthComparison": true,
+    "weights": {
+      "waist": 2,
+      "height": 1
+    },
+    "anchorPoint": "hips",
+    "compatibleWith": [
+      7
+    ],
+    "defaultMeasurements": {
+      "hem": 540,
+      "hip": 450,
+      "waist": 330,
+      "height": 470
+    },
+    "displayMode": "portrait",
+    "isDraggable": true,
+    "isReserved": false,
+    "maxMeasurements": {
+      "hem": 1500,
+      "hip": 1500,
+      "waist": 1000,
+      "height": 2000
+    },
+    "minMeasurements": {
+      "hem": 250,
+      "hip": 200,
+      "waist": 150,
+      "height": 70
+    },
+    "sgiGenders": [
+      "female"
+    ],
+    "sgiStyles": [
+      "tight",
+      "flared"
+    ],
+    "sgiTypes": [
+      "maxi",
+      "midi",
+      "mini"
+    ]
+  },
+  {
+    "id": 8,
+    "name": "jacket",
+    "optionalMeasurements": [
+      "shoulder",
+      "waist",
+      "hem",
+      "bicep",
+      "type"
+    ],
+    "priority": [
+      "bust",
+      "sleeve"
+    ],
+    "requiredMeasurements": [
+      "height",
+      "bust",
+      "sleeve"
+    ],
+    "supportsLengthComparison": true,
+    "weights": {
+      "bust": 2,
+      "height": 1,
+      "sleeve": 1
+    },
+    "anchorPoint": "shoulders",
+    "compatibleWith": [
+      8,
+      14
+    ],
+    "defaultMeasurements": {
+      "hem": 560,
+      "bust": 540,
+      "bicep": 180,
+      "waist": 480,
+      "height": 810,
+      "sleeve": 900,
+      "shoulder": 470
+    },
+    "displayMode": "portrait",
+    "isDraggable": false,
+    "isReserved": false,
+    "maxMeasurements": {
+      "hem": 1300,
+      "bust": 1300,
+      "bicep": 450,
+      "waist": 1300,
+      "height": 2000,
+      "sleeve": 1300,
+      "shoulder": 1100
+    },
+    "minMeasurements": {
+      "hem": 300,
+      "bust": 300,
+      "bicep": 70,
+      "waist": 200,
+      "height": 350,
+      "sleeve": 200,
+      "shoulder": 250
+    },
+    "sgiGenders": [
+      "unisex",
+      "female",
+      "male"
+    ],
+    "sgiStyles": [
+      "fashionable",
+      "formal",
+      "protective",
+      "regular"
+    ],
+    "sgiTypes": [
+      "regular"
+    ]
+  },
+  {
+    "id": 11,
+    "name": "dressStrapless",
+    "optionalMeasurements": [
+      "hip",
+      "hem",
+      "waistHeight",
+      "type"
+    ],
+    "priority": [
+      "bust",
+      "waist",
+      "height"
+    ],
+    "requiredMeasurements": [
+      "height",
+      "bust",
+      "waist"
+    ],
+    "supportsLengthComparison": true,
+    "weights": {
+      "bust": 2,
+      "waist": 1,
+      "height": 1
+    },
+    "anchorPoint": "shoulders",
+    "compatibleWith": [
+      11
+    ],
+    "defaultMeasurements": {
+      "hem": 420,
+      "hip": 440,
+      "bust": 400,
+      "waist": 340,
+      "height": 1000,
+      "waistHeight": 190
+    },
+    "displayMode": "portrait",
+    "isDraggable": true,
+    "isReserved": false,
+    "maxMeasurements": {
+      "hem": 3000,
+      "hip": 2000,
+      "bust": 2000,
+      "waist": 2000,
+      "height": 3000,
+      "waistHeight": 1000
+    },
+    "minMeasurements": {
+      "hem": 50,
+      "hip": 50,
+      "bust": 50,
+      "waist": 50,
+      "height": 50,
+      "waistHeight": 20
+    },
+    "sgiGenders": [
+      "unisex",
+      "female",
+      "male"
+    ],
+    "sgiStyles": [],
+    "sgiTypes": []
+  },
+  {
+    "id": 12,
+    "name": "top",
+    "optionalMeasurements": [
+      "armOpening",
+      "shoulder",
+      "waist",
+      "hem",
+      "type"
+    ],
+    "priority": [
+      "bust",
+      "height"
+    ],
+    "requiredMeasurements": [
+      "height",
+      "bust"
+    ],
+    "supportsLengthComparison": true,
+    "weights": {
+      "bust": 2,
+      "height": 1
+    },
+    "anchorPoint": "shoulders",
+    "compatibleWith": [
+      12,
+      4
+    ],
+    "defaultMeasurements": {
+      "hem": 500,
+      "bust": 500,
+      "waist": 500,
+      "height": 600,
+      "shoulder": 400,
+      "armOpening": 200
+    },
+    "displayMode": "portrait",
+    "isDraggable": false,
+    "isReserved": false,
+    "maxMeasurements": {
+      "hem": 1000,
+      "bust": 1000,
+      "waist": 1000,
+      "height": 2000,
+      "shoulder": 1000,
+      "armOpening": 500
+    },
+    "minMeasurements": {
+      "hem": 100,
+      "bust": 100,
+      "waist": 100,
+      "height": 200,
+      "shoulder": 100,
+      "armOpening": 50
+    },
+    "sgiGenders": [
+      "female"
+    ],
+    "sgiStyles": [
+      "regular"
+    ],
+    "sgiTypes": [
+      "regular"
+    ]
+  },
+  {
+    "id": 13,
+    "name": "shorts",
+    "optionalMeasurements": [
+      "thigh",
+      "legOpening",
+      "frontRise",
+      "backRise",
+      "type"
+    ],
+    "priority": [
+      "waist",
+      "inseam"
+    ],
+    "requiredMeasurements": [
+      "inseam",
+      "waist",
+      "hip"
+    ],
+    "supportsLengthComparison": true,
+    "weights": {
+      "hip": 1,
+      "waist": 2,
+      "inseam": 1
+    },
+    "anchorPoint": "hips",
+    "compatibleWith": [
+      13,
+      5
+    ],
+    "defaultMeasurements": {
+      "hip": 550,
+      "thigh": 300,
+      "waist": 450,
+      "inseam": 200,
+      "backRise": 400,
+      "frontRise": 250,
+      "legOpening": 300
+    },
+    "displayMode": "portrait",
+    "isDraggable": true,
+    "isReserved": false,
+    "maxMeasurements": {
+      "hip": 1500,
+      "thigh": 1000,
+      "waist": 1200,
+      "inseam": 700,
+      "backRise": 800,
+      "frontRise": 600,
+      "legOpening": 1000
+    },
+    "minMeasurements": {
+      "hip": 150,
+      "thigh": 50,
+      "waist": 100,
+      "inseam": 0,
+      "backRise": 50,
+      "frontRise": 50,
+      "legOpening": 50
+    },
+    "sgiGenders": [
+      "unisex",
+      "female",
+      "male"
+    ],
+    "sgiStyles": [],
+    "sgiTypes": []
+  },
+  {
+    "id": 14,
+    "name": "coat",
+    "optionalMeasurements": [
+      "shoulder",
+      "waist",
+      "hem",
+      "bicep",
+      "type"
+    ],
+    "priority": [
+      "bust",
+      "sleeve"
+    ],
+    "requiredMeasurements": [
+      "height",
+      "bust",
+      "sleeve"
+    ],
+    "supportsLengthComparison": true,
+    "weights": {
+      "bust": 2,
+      "height": 0.5,
+      "sleeve": 1
+    },
+    "anchorPoint": "shoulders",
+    "compatibleWith": [
+      14,
+      8
+    ],
+    "defaultMeasurements": {
+      "hem": 620,
+      "bust": 590,
+      "bicep": 220,
+      "waist": 530,
+      "height": 1000,
+      "sleeve": 920,
+      "shoulder": 520
+    },
+    "displayMode": "portrait",
+    "isDraggable": false,
+    "isReserved": false,
+    "maxMeasurements": {
+      "hem": 1300,
+      "bust": 1300,
+      "bicep": 800,
+      "waist": 1300,
+      "height": 2200,
+      "sleeve": 1200,
+      "shoulder": 1300
+    },
+    "minMeasurements": {
+      "hem": 150,
+      "bust": 150,
+      "bicep": 50,
+      "waist": 150,
+      "height": 410,
+      "sleeve": 150,
+      "shoulder": 150
+    },
+    "sgiGenders": [
+      "unisex",
+      "female",
+      "male"
+    ],
+    "sgiStyles": [
+      "regular"
+    ],
+    "sgiTypes": [
+      "short",
+      "medium",
+      "regular",
+      "long"
+    ]
+  },
+  {
+    "id": 15,
+    "name": "dressALine",
+    "optionalMeasurements": [
+      "waist",
+      "hem",
+      "sleeveOpening",
+      "type"
+    ],
+    "priority": [
+      "bust",
+      "height"
+    ],
+    "requiredMeasurements": [
+      "height",
+      "bust"
+    ],
+    "supportsLengthComparison": true,
+    "weights": {
+      "bust": 2,
+      "height": 1
+    },
+    "anchorPoint": "shoulders",
+    "compatibleWith": [
+      15,
+      20
+    ],
+    "defaultMeasurements": {
+      "hem": 800,
+      "bust": 510,
+      "waist": 480,
+      "height": 900,
+      "sleeveOpening": 200
+    },
+    "displayMode": "portrait",
+    "isDraggable": false,
+    "isReserved": false,
+    "maxMeasurements": {
+      "hem": 3000,
+      "bust": 2000,
+      "waist": 2000,
+      "height": 3000,
+      "sleeveOpening": 400
+    },
+    "minMeasurements": {
+      "hem": 50,
+      "bust": 50,
+      "waist": 50,
+      "height": 50,
+      "sleeveOpening": 50
+    },
+    "sgiGenders": [
+      "female"
+    ],
+    "sgiStyles": [
+      "regular"
+    ],
+    "sgiTypes": [
+      "short",
+      "medium",
+      "long"
+    ]
+  },
+  {
+    "id": 16,
+    "name": "dressSleeve",
+    "optionalMeasurements": [
+      "hip",
+      "hem",
+      "waistHeight",
+      "bicep",
+      "type"
+    ],
+    "priority": [
+      "bust",
+      "waist",
+      "height",
+      "sleeve"
+    ],
+    "requiredMeasurements": [
+      "height",
+      "bust",
+      "waist",
+      "sleeve"
+    ],
+    "supportsLengthComparison": true,
+    "weights": {
+      "bust": 2,
+      "waist": 1,
+      "height": 1,
+      "sleeve": 1
+    },
+    "anchorPoint": "shoulders",
+    "compatibleWith": [
+      16,
+      1
+    ],
+    "defaultMeasurements": {
+      "hem": 470,
+      "hip": 440,
+      "bust": 430,
+      "bicep": 210,
+      "waist": 395,
+      "height": 900,
+      "sleeve": 400,
+      "waistHeight": 410
+    },
+    "displayMode": "portrait",
+    "isDraggable": false,
+    "isReserved": false,
+    "maxMeasurements": {
+      "hem": 2000,
+      "hip": 1500,
+      "bust": 1200,
+      "bicep": 600,
+      "waist": 1200,
+      "height": 2500,
+      "sleeve": 1200,
+      "waistHeight": 750
+    },
+    "minMeasurements": {
+      "hem": 200,
+      "hip": 150,
+      "bust": 150,
+      "bicep": 60,
+      "waist": 100,
+      "height": 500,
+      "sleeve": 0,
+      "waistHeight": 150
+    },
+    "sgiGenders": [
+      "female"
+    ],
+    "sgiStyles": [
+      "regular"
+    ],
+    "sgiTypes": [
+      "short",
+      "medium",
+      "long"
+    ]
+  },
+  {
+    "id": 17,
+    "name": "shoe",
+    "optionalMeasurements": [
+      "type"
+    ],
+    "priority": [
+      "height",
+      "width"
+    ],
+    "requiredMeasurements": [
+      "height",
+      "width"
+    ],
+    "supportsLengthComparison": false,
+    "weights": {
+      "width": 1,
+      "height": 2
+    },
+    "anchorPoint": "shoulders",
+    "compatibleWith": [
+      17
+    ],
+    "defaultMeasurements": {
+      "width": 88,
+      "height": 280
+    },
+    "displayMode": "landscape",
+    "isDraggable": false,
+    "isReserved": false,
+    "maxMeasurements": {
+      "width": 200,
+      "height": 600
+    },
+    "minMeasurements": {
+      "width": 20,
+      "height": 60
+    },
+    "sgiGenders": [
+      "unisex",
+      "female",
+      "male"
+    ],
+    "sgiStyles": [],
+    "sgiTypes": []
+  },
+  {
+    "id": 18,
+    "name": "bag",
+    "optionalMeasurements": [
+      "topWidth",
+      "handleDrop",
+      "handleWidth",
+      "type",
+      "handleDropShoulder",
+      "handleDropLength",
+      "handleDropShoulderRound"
+    ],
+    "priority": [
+      "width",
+      "height"
+    ],
+    "requiredMeasurements": [
+      "height",
+      "width"
+    ],
+    "supportsLengthComparison": true,
+    "weights": {
+      "width": 2,
+      "height": 1
+    },
+    "anchorPoint": "shoulders",
+    "compatibleWith": [
+      18,
+      19,
+      25,
+      26
+    ],
+    "defaultMeasurements": {
+      "depth": 70,
+      "width": 340,
+      "height": 190,
+      "topWidth": 300,
+      "handleDrop": 100,
+      "handleWidth": 140
+    },
+    "displayMode": "landscape",
+    "isDraggable": true,
+    "isReserved": false,
+    "maxMeasurements": {
+      "depth": 1000,
+      "width": 1000,
+      "height": 1000,
+      "topWidth": 1000,
+      "handleDrop": 1000,
+      "handleWidth": 1000,
+      "handleDropLength": 1000,
+      "handleDropShoulder": 1000,
+      "handleDropShoulderRound": 1000
+    },
+    "minMeasurements": {
+      "depth": 10,
+      "width": 50,
+      "height": 50,
+      "topWidth": 50,
+      "handleDrop": 10,
+      "handleWidth": 10,
+      "handleDropLength": 10,
+      "handleDropShoulder": 10,
+      "handleDropShoulderRound": 10
+    },
+    "sgiGenders": [
+      "unisex",
+      "female",
+      "male"
+    ],
+    "sgiStyles": [],
+    "sgiTypes": []
+  },
+  {
+    "id": 19,
+    "name": "clutch",
+    "optionalMeasurements": [
+      "depth",
+      "topWidth",
+      "type"
+    ],
+    "priority": [
+      "width",
+      "height"
+    ],
+    "requiredMeasurements": [
+      "height",
+      "width"
+    ],
+    "supportsLengthComparison": false,
+    "weights": {
+      "width": 2,
+      "height": 1
+    },
+    "anchorPoint": "shoulders",
+    "compatibleWith": [
+      19,
+      18,
+      25,
+      26
+    ],
+    "defaultMeasurements": {
+      "depth": 40,
+      "width": 300,
+      "height": 200,
+      "topWidth": 300
+    },
+    "displayMode": "landscape",
+    "isDraggable": false,
+    "isReserved": false,
+    "maxMeasurements": {
+      "depth": 1000,
+      "width": 1000,
+      "height": 1000,
+      "topWidth": 1000
+    },
+    "minMeasurements": {
+      "depth": 10,
+      "width": 50,
+      "height": 50,
+      "topWidth": 50
+    },
+    "sgiGenders": [
+      "unisex",
+      "female",
+      "male"
+    ],
+    "sgiStyles": [],
+    "sgiTypes": []
+  },
+  {
+    "id": 20,
+    "name": "tunicSleeve",
+    "optionalMeasurements": [
+      "waist",
+      "hem",
+      "bicep",
+      "type"
+    ],
+    "priority": [
+      "bust",
+      "waist",
+      "height",
+      "sleeve"
+    ],
+    "requiredMeasurements": [
+      "height",
+      "bust",
+      "sleeve"
+    ],
+    "supportsLengthComparison": true,
+    "weights": {
+      "bust": 2,
+      "height": 1,
+      "sleeve": 1
+    },
+    "anchorPoint": "shoulders",
+    "compatibleWith": [
+      20,
+      15
+    ],
+    "defaultMeasurements": {
+      "hem": 800,
+      "bust": 510,
+      "bicep": 210,
+      "waist": 480,
+      "height": 900,
+      "sleeve": 400
+    },
+    "displayMode": "portrait",
+    "isDraggable": false,
+    "isReserved": false,
+    "maxMeasurements": {
+      "hem": 3000,
+      "bust": 2000,
+      "bicep": 600,
+      "waist": 2000,
+      "height": 3000,
+      "sleeve": 1200
+    },
+    "minMeasurements": {
+      "hem": 50,
+      "bust": 50,
+      "bicep": 60,
+      "waist": 50,
+      "height": 50,
+      "sleeve": 0
+    },
+    "sgiGenders": [
+      "female"
+    ],
+    "sgiStyles": [
+      "regular"
+    ],
+    "sgiTypes": [
+      "short",
+      "medium",
+      "long"
+    ]
+  },
+  {
+    "id": 21,
+    "name": "glassesWellington",
+    "optionalMeasurements": [
+      "height",
+      "frameWidth",
+      "type"
+    ],
+    "priority": [
+      "lensWidth",
+      "bridge",
+      "temple"
+    ],
+    "requiredMeasurements": [
+      "lensWidth",
+      "bridge",
+      "temple"
+    ],
+    "supportsLengthComparison": false,
+    "weights": {
+      "bridge": 1,
+      "temple": 1,
+      "lensWidth": 1
+    },
+    "anchorPoint": "shoulders",
+    "compatibleWith": [
+      21,
+      22,
+      23,
+      24
+    ],
+    "defaultMeasurements": {
+      "bridge": 17,
+      "height": 35,
+      "temple": 150,
+      "lensWidth": 53,
+      "frameWidth": 140
+    },
+    "displayMode": "landscape",
+    "isDraggable": false,
+    "isReserved": false,
+    "maxMeasurements": {
+      "bridge": 30,
+      "height": 70,
+      "temple": 160,
+      "lensWidth": 70,
+      "frameWidth": 180
+    },
+    "minMeasurements": {
+      "bridge": 10,
+      "height": 10,
+      "temple": 110,
+      "lensWidth": 30,
+      "frameWidth": 70
+    },
+    "sgiGenders": [
+      "unisex",
+      "female",
+      "male"
+    ],
+    "sgiStyles": [],
+    "sgiTypes": []
+  },
+  {
+    "id": 22,
+    "name": "glassesSquare",
+    "optionalMeasurements": [
+      "height",
+      "frameWidth",
+      "type"
+    ],
+    "priority": [
+      "lensWidth",
+      "bridge",
+      "temple"
+    ],
+    "requiredMeasurements": [
+      "lensWidth",
+      "bridge",
+      "temple"
+    ],
+    "supportsLengthComparison": false,
+    "weights": {
+      "bridge": 1,
+      "temple": 1,
+      "lensWidth": 1
+    },
+    "anchorPoint": "shoulders",
+    "compatibleWith": [
+      22,
+      21,
+      23,
+      24
+    ],
+    "defaultMeasurements": {
+      "bridge": 17,
+      "height": 35,
+      "temple": 150,
+      "lensWidth": 53,
+      "frameWidth": 140
+    },
+    "displayMode": "landscape",
+    "isDraggable": false,
+    "isReserved": false,
+    "maxMeasurements": {
+      "bridge": 30,
+      "height": 70,
+      "temple": 160,
+      "lensWidth": 70,
+      "frameWidth": 180
+    },
+    "minMeasurements": {
+      "bridge": 10,
+      "height": 10,
+      "temple": 110,
+      "lensWidth": 30,
+      "frameWidth": 70
+    },
+    "sgiGenders": [
+      "unisex",
+      "female",
+      "male"
+    ],
+    "sgiStyles": [],
+    "sgiTypes": []
+  },
+  {
+    "id": 23,
+    "name": "glassesOval",
+    "optionalMeasurements": [
+      "height",
+      "frameWidth",
+      "type"
+    ],
+    "priority": [
+      "lensWidth",
+      "bridge",
+      "temple"
+    ],
+    "requiredMeasurements": [
+      "lensWidth",
+      "bridge",
+      "temple"
+    ],
+    "supportsLengthComparison": false,
+    "weights": {
+      "bridge": 1,
+      "temple": 1,
+      "lensWidth": 1
+    },
+    "anchorPoint": "shoulders",
+    "compatibleWith": [
+      23,
+      21,
+      22,
+      24
+    ],
+    "defaultMeasurements": {
+      "bridge": 17,
+      "height": 35,
+      "temple": 150,
+      "lensWidth": 53,
+      "frameWidth": 140
+    },
+    "displayMode": "landscape",
+    "isDraggable": false,
+    "isReserved": false,
+    "maxMeasurements": {
+      "bridge": 30,
+      "height": 70,
+      "temple": 160,
+      "lensWidth": 70,
+      "frameWidth": 180
+    },
+    "minMeasurements": {
+      "bridge": 10,
+      "height": 10,
+      "temple": 110,
+      "lensWidth": 30,
+      "frameWidth": 70
+    },
+    "sgiGenders": [
+      "unisex",
+      "female",
+      "male"
+    ],
+    "sgiStyles": [],
+    "sgiTypes": []
+  },
+  {
+    "id": 24,
+    "name": "glassesBoston",
+    "optionalMeasurements": [
+      "height",
+      "frameWidth",
+      "type"
+    ],
+    "priority": [
+      "lensWidth",
+      "bridge",
+      "temple"
+    ],
+    "requiredMeasurements": [
+      "lensWidth",
+      "bridge",
+      "temple"
+    ],
+    "supportsLengthComparison": false,
+    "weights": {
+      "bridge": 1,
+      "temple": 1,
+      "lensWidth": 1
+    },
+    "anchorPoint": "shoulders",
+    "compatibleWith": [
+      24,
+      21,
+      22,
+      23
+    ],
+    "defaultMeasurements": {
+      "bridge": 21,
+      "height": 40,
+      "temple": 150,
+      "lensWidth": 48,
+      "frameWidth": 138
+    },
+    "displayMode": "landscape",
+    "isDraggable": false,
+    "isReserved": false,
+    "maxMeasurements": {
+      "bridge": 30,
+      "height": 70,
+      "temple": 160,
+      "lensWidth": 70,
+      "frameWidth": 180
+    },
+    "minMeasurements": {
+      "bridge": 10,
+      "height": 10,
+      "temple": 110,
+      "lensWidth": 30,
+      "frameWidth": 70
+    },
+    "sgiGenders": [
+      "unisex",
+      "female",
+      "male"
+    ],
+    "sgiStyles": [],
+    "sgiTypes": []
+  },
+  {
+    "id": 25,
+    "name": "wallet",
+    "optionalMeasurements": [
+      "depth",
+      "type"
+    ],
+    "priority": [
+      "width",
+      "height"
+    ],
+    "requiredMeasurements": [
+      "height",
+      "width"
+    ],
+    "supportsLengthComparison": false,
+    "weights": {
+      "width": 2,
+      "height": 1
+    },
+    "anchorPoint": "shoulders",
+    "compatibleWith": [
+      25,
+      18,
+      19,
+      26
+    ],
+    "defaultMeasurements": {
+      "depth": 25,
+      "width": 120,
+      "height": 90
+    },
+    "displayMode": "landscape",
+    "isDraggable": false,
+    "isReserved": false,
+    "maxMeasurements": {
+      "depth": 1000,
+      "width": 1000,
+      "height": 1000
+    },
+    "minMeasurements": {
+      "depth": 5,
+      "width": 50,
+      "height": 50
+    },
+    "sgiGenders": [
+      "unisex",
+      "female",
+      "male"
+    ],
+    "sgiStyles": [],
+    "sgiTypes": []
+  },
+  {
+    "id": 26,
+    "name": "props",
+    "optionalMeasurements": [
+      "type"
+    ],
+    "priority": [
+      "width",
+      "height"
+    ],
+    "requiredMeasurements": [
+      "height",
+      "width"
+    ],
+    "supportsLengthComparison": false,
+    "weights": {
+      "width": 2,
+      "height": 1
+    },
+    "anchorPoint": "shoulders",
+    "compatibleWith": [
+      26,
+      25,
+      18,
+      19
+    ],
+    "defaultMeasurements": {
+      "width": 210,
+      "height": 297
+    },
+    "displayMode": "landscape",
+    "isDraggable": false,
+    "isReserved": true,
+    "maxMeasurements": {
+      "width": 1000,
+      "height": 1000
+    },
+    "minMeasurements": {
+      "width": 50,
+      "height": 50
+    },
+    "sgiGenders": [
+      "unisex",
+      "female",
+      "male"
+    ],
+    "sgiStyles": [],
+    "sgiTypes": []
+  }
+]
