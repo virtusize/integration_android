@@ -60,7 +60,7 @@ internal class VitrusizeAuthActivity : AppCompatActivity() {
                         .substringAfter("virtusize.", "")
                         .substringBefore("/", "com")
                 val env =
-                    if (originalRedirectUri.isVirtusizeSNSAuthURL()) {
+                    if (authUrl.isVirtusizeSNSAuthURL()) {
                         originalRedirectUri
                             .substringAfter("sns-proxy/", "")
                             .substringBefore("/", "staging")
