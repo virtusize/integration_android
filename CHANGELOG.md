@@ -1,4 +1,4 @@
-### Changes
+### 2.12.12
 - Bugfix: VirtusizeWebView redirect url for FAQ page
 
 ### 2.12.11
