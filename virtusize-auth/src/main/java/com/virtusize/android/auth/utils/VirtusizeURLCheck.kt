@@ -10,7 +10,7 @@ object VirtusizeURLCheck {
      */
     fun isExternalLinkFromVirtusize(url: String?): Boolean {
         return (url?.contains("virtusize") == true && url.contains("privacy")) ||
-            url?.contains("surveymonkey") == true
+            url?.contains("surveymonkey") == true || url?.contains("notion") == true
     }
 
     /**

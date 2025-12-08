@@ -1,3 +1,6 @@
+### Changes
+- Bugfix: VirtusizeWebView redirect url for FAQ page
+
 ### 2.12.11
 - Fix: Migrate product types implementation locally
 - Fix: LINE authorization redirect for staging environment
