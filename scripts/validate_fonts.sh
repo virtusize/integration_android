@@ -47,7 +47,15 @@ validate_font_symbols() {
         while IFS= read -r char; do
             hex="$(printf "$char" | iconv -f UTF-8 -t UTF-32BE | xxd -p)"
             # Skip some characters
-            if [[ " ${SKIP_CHARS[@]} " =~ " $hex " ]]; then
+            skip=false
+            for c in "${SKIP_CHARS[@]}"; do
+                if [[ "$hex" == "$c" ]]; then
+                    skip=true
+                    break
+                fi
+            done
+
+            if $skip; then
                 continue
             fi
             echo "\\U$hex"
