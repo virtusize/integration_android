@@ -13,11 +13,11 @@ class App : Application() {
         // Initialize Virtusize instance for your application
         VirtusizeBuilder().init(this)
             // Only the API key is required
-            .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
+            .setApiKey("f47e670dabb372b6a0cd5cde1719bebed427b30d")
             // For using the Order API, a user ID is required
             .setUserId("123")
             // By default, the Virtusize environment will be set to GLOBAL
-            .setEnv(VirtusizeEnvironment.JAPAN)
+            .setEnv(VirtusizeEnvironment.STAGING)
             // By default, the initial language will be set based on the Virtusize environment
             .setLanguage(VirtusizeLanguage.EN)
             // By default, ShowSGI is false
@@ -28,10 +28,11 @@ class App : Application() {
             .setDetailsPanelCards(setOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
             // By default, Virtusize enables the SNS buttons
             .setShowSNSButtons(true)
-            // By default, branch is empty and `production` is used
-            // .setBranch("branch-name")
+            // By default, branch is empty and `production` is
+            .setBranch("snkrdnk-line-quick-fix")
             // By default, Virtusize shows Privacy Policy
             .setShowPrivacyPolicy(true)
+            .setServiceEnvironment(false)
             .build()
     }
 }

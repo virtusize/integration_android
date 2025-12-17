@@ -21,6 +21,24 @@ class MainActivity : AppCompatActivity() {
         const val TAG = "MAIN_ACTIVITY"
     }
 
+    val product1 =
+        VirtusizeProduct(
+            externalId = "50898",
+            imageUrl = "http://www.image.com/goods/12345.jpg",
+        )
+
+    val product2 =
+        VirtusizeProduct(
+            externalId = "50900",
+            imageUrl = "http://www.image.com/goods/12345.jpg",
+        )
+
+    val product3 =
+        VirtusizeProduct(
+            externalId = "50901",
+            imageUrl = "http://www.image.com/goods/12345.jpg",
+        )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,32 +53,29 @@ class MainActivity : AppCompatActivity() {
         /*
          * Set up Virtusize product for all the Virtusize views
          */
-        val product =
-            VirtusizeProduct(
-                externalId = "vs_dress",
-                imageUrl = "http://www.image.com/goods/12345.jpg",
-            )
-        Virtusize.getInstance().load(product)
+
+        Virtusize.getInstance().load(product1)
 
         /*
          * Set up Virtusize button
          */
 
-        // Virtusize opens automatically when button is clicked
-        Virtusize.getInstance().setupVirtusizeView(
-            virtusizeView = binding.exampleVirtusizeButton,
-            product = product,
-        )
-        // Set up the Virtusize view style programmatically
-        binding.exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.TEAL
+//        // Virtusize opens automatically when button is clicked
+//        Virtusize.getInstance().setupVirtusizeView(
+//            virtusizeView = binding.exampleVirtusizeButton,
+//            product = product1,
+//        )
+//        // Set up the Virtusize view style programmatically
+//        binding.exampleVirtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.TEAL
 
         /*
          * Set up Virtusize InPage Standard
          */
         Virtusize.getInstance().setupVirtusizeView(
             virtusizeView = binding.exampleVirtusizeInPageStandard,
-            product = product,
+            product = product1,
         )
+
         binding.exampleVirtusizeInPageStandard.virtusizeViewStyle = VirtusizeViewStyle.TEAL
         // If you like, you can set up the horizontal margins between the edges of the app screen and the InPage Standard view
         // Note: Use the helper extension function `dpInPx` if you like
@@ -73,17 +88,18 @@ class MainActivity : AppCompatActivity() {
          */
 
         // If you like, you can change the text sizes of the InPage message and the Check Size button
-        binding.exampleVirtusizeInPageStandard.messageTextSize = 10f.spToPx
-        binding.exampleVirtusizeInPageStandard.buttonTextSize = 10f.spToPx
+//        binding.exampleVirtusizeInPageStandard.messageTextSize = 10f.spToPx
+//        binding.exampleVirtusizeInPageStandard.buttonTextSize = 10f.spToPx
 
         /*
          * Set up Virtusize InPage Mini
          */
         Virtusize.getInstance().setupVirtusizeView(
             virtusizeView = binding.exampleVirtusizeInPageMini,
-            product = product,
+            product = product1,
         )
-        binding.exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.TEAL
+
+        binding.exampleVirtusizeInPageMini.virtusizeViewStyle = VirtusizeViewStyle.BLACK
 
         /*
          * If you like, you can set up the background of InPage Mini view as long as it passes WebAIM contrast test.
@@ -104,7 +120,46 @@ class MainActivity : AppCompatActivity() {
          */
 
         // The sample function to send an order to the Virtusize server
-        sendOrderSample()
+        //sendOrderSample()
+
+        /*
+         * Product buttons to load different products
+         */
+        binding.product1Button.setOnClickListener {
+            Virtusize.getInstance().load(product1)
+            Virtusize.getInstance().setupVirtusizeView(
+                virtusizeView = binding.exampleVirtusizeInPageMini,
+                product = product1,
+            )
+            Virtusize.getInstance().setupVirtusizeView(
+                virtusizeView = binding.exampleVirtusizeInPageStandard,
+                product = product1,
+            )
+        }
+
+        binding.product2Button.setOnClickListener {
+            Virtusize.getInstance().load(product2)
+            Virtusize.getInstance().setupVirtusizeView(
+                virtusizeView = binding.exampleVirtusizeInPageMini,
+                product = product2,
+            )
+            Virtusize.getInstance().setupVirtusizeView(
+                virtusizeView = binding.exampleVirtusizeInPageStandard,
+                product = product2,
+            )
+        }
+
+        binding.product3Button.setOnClickListener {
+            Virtusize.getInstance().load(product3)
+            Virtusize.getInstance().setupVirtusizeView(
+                virtusizeView = binding.exampleVirtusizeInPageMini,
+                product = product3,
+            )
+            Virtusize.getInstance().setupVirtusizeView(
+                virtusizeView = binding.exampleVirtusizeInPageStandard,
+                product = product3,
+            )
+        }
 
         /*
          * Open WebApp
@@ -122,11 +177,11 @@ class MainActivity : AppCompatActivity() {
      * 2. If the item quantity is not provided, it will be set to 1 on its own
      */
     private fun sendOrderSample() {
-        val order = VirtusizeOrder("888400111032")
+        val order = VirtusizeOrder("flutter-android-123456789")
         order.items =
             mutableListOf(
                 VirtusizeOrderItem(
-                    "P001",
+                    "93756",
                     "L",
                     "Large",
                     "P001_SIZEL_RED",

@@ -110,7 +110,7 @@ internal class VirtusizeProductImageView(context: Context, attrs: AttributeSet) 
     ): Drawable? {
         var productPlaceholderImage =
             context.getDrawableResourceByName(
-                "ic_product_type_$productType",
+                "body",
             )
         val productTypeImageWithStyle =
             context.getDrawableResourceByName(
