@@ -45,7 +45,7 @@ validate_font_symbols() {
 
         # Convert Text characters into list of unicodes in a UTF-32 format: \U12345678
         while IFS= read -r char; do
-            hex="$(printf "$char" | iconv -f UTF-8 -t UTF-32BE | xxd -p)"
+            hex="$(printf "%s" "$char" | iconv -f UTF-8 -t UTF-32BE | xxd -p)"
             # Skip some characters
             if [[ " ${SKIP_CHARS[@]} " =~ " $hex " ]]; then
                 continue
