@@ -1,3 +1,6 @@
+### 2.12.13
+- Fix: External Link redirect issue
+
 ### 2.12.12
 - Bugfix: VirtusizeWebView redirect url for FAQ page
 
