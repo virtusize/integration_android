@@ -210,7 +210,6 @@ class VirtusizeWebViewFragment : DialogFragment() {
                             }
 
                         val transport = resultMsg.obj as WebView.WebViewTransport
-                        binding.webView.addView(popupWebView)
                         transport.webView = popupWebView
                         resultMsg.sendToTarget()
                     }
