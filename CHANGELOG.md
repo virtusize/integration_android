@@ -1,3 +1,6 @@
+### Changes
+- Fix: issue with no size found text
+
 ### 2.12.13
 - Fix: External Link redirect issue
 
