@@ -247,6 +247,7 @@ internal class VirtusizeImpl(
                 externalProductId: String,
                 userProductRecommendedSize: SizeComparisonRecommendedSize?,
                 userBodyRecommendedSize: String?,
+                userBodyWillFit: Boolean?,
             ) {
                 val storeProduct = virtusizeRepository.getProductBy(externalProductId)
                 virtusizeViews
@@ -266,6 +267,7 @@ internal class VirtusizeImpl(
                                         i18nLocalization = i18nLocalization,
                                         sizeComparisonRecommendedSize = userProductRecommendedSize,
                                         bodyProfileRecommendedSizeName = userBodyRecommendedSize,
+                                        bodyProfileWillFit = userBodyWillFit,
                                     ).trimI18nText(trimType)
                                 virtusizeView.setRecommendationText(
                                     externalProductId,

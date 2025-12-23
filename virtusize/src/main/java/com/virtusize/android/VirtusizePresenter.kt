@@ -12,6 +12,7 @@ internal interface VirtusizePresenter {
         externalProductId: String,
         userProductRecommendedSize: SizeComparisonRecommendedSize?,
         userBodyRecommendedSize: String?,
+        userBodyWillFit: Boolean?,
     )
 
     fun hasInPageError(

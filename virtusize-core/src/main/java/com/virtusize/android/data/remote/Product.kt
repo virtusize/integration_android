@@ -41,6 +41,7 @@ data class Product(
         i18nLocalization: I18nLocalization,
         sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?,
         bodyProfileRecommendedSizeName: String?,
+        bodyProfileWillFit: Boolean? = null,
     ): String {
         return when {
             isAccessory() -> accessoryText(i18nLocalization, sizeComparisonRecommendedSize)
@@ -49,12 +50,14 @@ data class Product(
                     i18nLocalization = i18nLocalization,
                     sizeComparisonRecommendedSize = sizeComparisonRecommendedSize,
                     bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
+                    bodyProfileWillFit = bodyProfileWillFit,
                 )
             else ->
                 multiSizeText(
                     i18nLocalization,
                     sizeComparisonRecommendedSize,
                     bodyProfileRecommendedSizeName,
+                    bodyProfileWillFit,
                 )
         }
     }
@@ -88,13 +91,27 @@ data class Product(
         i18nLocalization: I18nLocalization,
         sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?,
         bodyProfileRecommendedSizeName: String?,
+        bodyProfileWillFit: Boolean?,
     ): String {
-        bodyProfileRecommendedSizeName?.let {
-            return i18nLocalization.oneSizeWillFitResultText
+        // Check if body data is provided (bodyProfileRecommendedSizeName is not null means body data was provided)
+        val hasBodyData = bodyProfileRecommendedSizeName != null
+
+        // For one-size products with body data provided
+        if (hasBodyData) {
+            // If willFit is true and we have a recommended size, show the will fit message
+            if (bodyProfileWillFit == true) {
+                return i18nLocalization.oneSizeWillFitResultText
+            }
+            // If willFit is false or no recommended size, show "Your size not found"
+            return i18nLocalization.willNotFitResultText
         }
+
+        // No body data provided, check for product comparison
         sizeComparisonRecommendedSize?.let {
             return i18nLocalization.getOneSizeProductComparisonText(it)
         }
+
+        // No data at all, show body data empty message
         return i18nLocalization.bodyDataEmptyText
     }
 
@@ -105,15 +122,29 @@ data class Product(
         i18nLocalization: I18nLocalization,
         sizeComparisonRecommendedSize: SizeComparisonRecommendedSize?,
         bodyProfileRecommendedSizeName: String?,
+        bodyProfileWillFit: Boolean?,
     ): String {
-        bodyProfileRecommendedSizeName?.let {
-            return i18nLocalization.getMultiSizeBodyProfileText(
-                bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
-            )
+        // Check if body data is provided
+        val hasBodyData = bodyProfileRecommendedSizeName != null
+
+        // For multi-size products with body data provided
+        if (hasBodyData) {
+            // If willFit is true and we have a recommended size, show it
+            if (bodyProfileWillFit == true && bodyProfileRecommendedSizeName.isNotEmpty()) {
+                return i18nLocalization.getMultiSizeBodyProfileText(
+                    bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
+                )
+            }
+            // If willFit is false or no recommended size, show "Your size not found"
+            return i18nLocalization.willNotFitResultText
         }
+
+        // No body data provided, check for product comparison
         sizeComparisonRecommendedSize?.bestStoreProductSize?.name?.let {
             return i18nLocalization.getMultiSizeProductComparisonText(it)
         }
+
+        // No data at all, show body data empty message
         return i18nLocalization.bodyDataEmptyText
     }
 

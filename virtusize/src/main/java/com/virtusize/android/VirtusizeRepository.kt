@@ -48,6 +48,7 @@ class VirtusizeRepository internal constructor(
     private var userProducts: List<Product>? = null
     private var userProductRecommendedSize: SizeComparisonRecommendedSize? = null
     private var userBodyRecommendedSize: String? = null
+    private var userBodyWillFit: Boolean? = null
 
     // This variable holds the list of product types from the Virtusize API
     private var productTypes: List<ProductType>? = null
@@ -373,6 +374,7 @@ class VirtusizeRepository internal constructor(
                             externalProductId = productId,
                             userProductRecommendedSize = userProductRecommendedSize,
                             userBodyRecommendedSize = null,
+                            userBodyWillFit = null,
                         )
                     }
 
@@ -381,6 +383,7 @@ class VirtusizeRepository internal constructor(
                             externalProductId = productId,
                             userProductRecommendedSize = null,
                             userBodyRecommendedSize = userBodyRecommendedSize,
+                            userBodyWillFit = userBodyWillFit,
                         )
                     }
 
@@ -389,6 +392,7 @@ class VirtusizeRepository internal constructor(
                             externalProductId = productId,
                             userProductRecommendedSize = userProductRecommendedSize,
                             userBodyRecommendedSize = userBodyRecommendedSize,
+                            userBodyWillFit = userBodyWillFit,
                         )
                     }
                 }
@@ -406,6 +410,7 @@ class VirtusizeRepository internal constructor(
         userProducts = null
         userProductRecommendedSize = null
         userBodyRecommendedSize = null
+        userBodyWillFit = null
     }
 
     /**
@@ -419,6 +424,7 @@ class VirtusizeRepository internal constructor(
         productTypes: List<ProductType>?,
     ): String? {
         if (storeProduct == null || productTypes == null || storeProduct.isAccessory()) {
+            userBodyWillFit = null
             return null
         }
         val userBodyProfileResponse = virtusizeAPIService.getUserBodyProfile()
@@ -430,6 +436,7 @@ class VirtusizeRepository internal constructor(
                         storeProduct,
                         userBodyProfileResponse.successData!!,
                     )
+                userBodyWillFit = bodyProfileRecommendedSizeResponse.successData?.willFit
                 return bodyProfileRecommendedSizeResponse.successData?.sizeName
             } else {
                 val bodyProfileRecommendedSizeResponse =
@@ -438,6 +445,7 @@ class VirtusizeRepository internal constructor(
                         storeProduct,
                         userBodyProfileResponse.successData!!,
                     )
+                userBodyWillFit = bodyProfileRecommendedSizeResponse.successData?.get(0)?.willFit
                 return bodyProfileRecommendedSizeResponse.successData?.get(0)?.sizeName
             }
         } else if (userBodyProfileResponse.failureData?.code != HttpURLConnection.HTTP_NOT_FOUND) {
@@ -445,6 +453,7 @@ class VirtusizeRepository internal constructor(
                 messageHandler.onError(it)
             }
         }
+        userBodyWillFit = null
         return null
     }
 

@@ -14,6 +14,7 @@ interface VirtusizeFlutterPresenter {
         storeProduct: Product?,
         bestUserProduct: Product?,
         recommendationText: String?,
+        willFit: Boolean?,
     )
 
     fun onLangugeClick(language: VirtusizeLanguage)
