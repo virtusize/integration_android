@@ -23,7 +23,7 @@
           "errorTextShort": "Virtusize is not available at the moment.",
           "oneSizeText": "There is only size %{value}",
           "details": "Details",
-          "willNotFitResult": "Check how it fits you",
+          "willNotFitResult": "Your size not found",
           "tryItOn": "Try it on",
           "accessoriesEmpty": "See what fits inside",
           "hasProductAccessoryText": "See the size difference from %{boldStart}your own item%{boldEnd}",

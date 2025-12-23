@@ -115,13 +115,9 @@ internal class I18nLocalizationJsonParser(
                 ),
             )?.trim().orEmpty()
 
-        val willNotFitResultText =
-            inpageJSONObject?.optString(
-                FIELD_WILL_NOT_FIT_RESULT,
-                configuredContext.getString(
-                    com.virtusize.android.core.R.string.inpage_will_not_fit_result_text,
-                ),
-            )?.trim().orEmpty()
+        val willNotFitResultText = configuredContext.getString(
+            com.virtusize.android.core.R.string.inpage_will_not_fit_result_text,
+        )
 
         val bodyDataEmptyText =
             inpageJSONObject?.optString(
