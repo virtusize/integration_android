@@ -22,6 +22,7 @@ data class I18nLocalization(
     val sizeComparisonMultiSizeText: String,
     val willFitResultText: String,
     val willNotFitResultText: String,
+    val willNotFitResultDefaultText: String,
     val bodyDataEmptyText: String,
 ) {
     enum class TrimType {

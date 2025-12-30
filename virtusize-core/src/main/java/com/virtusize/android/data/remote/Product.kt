@@ -103,7 +103,7 @@ data class Product(
                 return i18nLocalization.oneSizeWillFitResultText
             }
             // If willFit is false or no recommended size, show "Your size not found"
-            return i18nLocalization.willNotFitResultText
+            return i18nLocalization.willNotFitResultDefaultText
         }
 
         // No body data provided, check for product comparison
@@ -136,7 +136,7 @@ data class Product(
                 )
             }
             // If willFit is false or no recommended size, show "Your size not found"
-            return i18nLocalization.willNotFitResultText
+            return i18nLocalization.willNotFitResultDefaultText
         }
 
         // No body data provided, check for product comparison

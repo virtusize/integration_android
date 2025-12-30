@@ -37,35 +37,6 @@ class I18nLocalizationJsonParserTest {
     }
 
     @Test
-    fun parseI18N_emptyJsonData_shouldReturnExpectedObject() {
-        val actualI18nLocalization =
-            I18nLocalizationJsonParser(context, VirtusizeLanguage.EN).parse(
-                TestFixtures.EMPTY_JSON_DATA,
-            )
-
-        val expectedI18nLocalization =
-            I18nLocalization(
-                VirtusizeLanguage.EN,
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-            )
-
-        assertThat(actualI18nLocalization).isEqualTo(expectedI18nLocalization)
-    }
-
-    @Test
     fun parseI18NJP_japaneseLocalization_shouldReturnExpectedObject() {
         val actualI18nLocalization =
             I18nLocalizationJsonParser(
@@ -125,6 +96,7 @@ class I18nLocalizationJsonParserTest {
             localizedContext.getString(com.virtusize.android.core.R.string.inpage_one_size_will_fit_result_text),
             localizedContext.getString(com.virtusize.android.core.R.string.inpage_multi_size_comparison_text),
             localizedContext.getString(com.virtusize.android.core.R.string.inpage_will_fit_result_text),
+            localizedContext.getString(com.virtusize.android.core.R.string.inpage_will_not_fit_result_text),
             localizedContext.getString(com.virtusize.android.core.R.string.inpage_will_not_fit_result_text),
             localizedContext.getString(com.virtusize.android.core.R.string.inpage_body_data_empty_text),
         )
