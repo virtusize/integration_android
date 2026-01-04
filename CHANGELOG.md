@@ -1,5 +1,6 @@
 ### Changes
 - Fix: issue with no size found text
+- Fix: Virtusize button state when loading a new product
 
 ### 2.12.13
 - Fix: External Link redirect issue
