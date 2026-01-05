@@ -250,6 +250,7 @@ internal class VirtusizeFlutterImpl(
                 externalProductId: String,
                 userProductRecommendedSize: SizeComparisonRecommendedSize?,
                 userBodyRecommendedSize: String?,
+                userBodyWillFit: Boolean?,
             ) {
                 val storeProduct = virtusizeRepository.getProductBy(externalProductId)
                 val i18nLocalization = virtusizeRepository.i18nLocalization
@@ -271,6 +272,7 @@ internal class VirtusizeFlutterImpl(
                         i18nLocalization = i18nLocalization,
                         sizeComparisonRecommendedSize = userProductRecommendedSize,
                         bodyProfileRecommendedSizeName = userBodyRecommendedSize,
+                        bodyProfileWillFit = userBodyWillFit,
                     ).trimI18nText(I18nLocalization.TrimType.MULTIPLELINES)
 
                 virtusizeFlutterPresenter?.gotSizeRecommendations(
@@ -278,6 +280,7 @@ internal class VirtusizeFlutterImpl(
                     storeProduct,
                     userProductRecommendedSize?.bestUserProduct,
                     recommendationText,
+                    userBodyWillFit,
                 )
             }
         }

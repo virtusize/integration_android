@@ -115,6 +115,21 @@ class VirtusizeInPageMini
         }
 
         /**
+         * @see VirtusizeView.initialSetup
+         */
+        override fun initialSetup(
+            product: VirtusizeProduct,
+            params: VirtusizeParams,
+            messageHandler: VirtusizeMessageHandler,
+        ) {
+            super.initialSetup(product, params, messageHandler)
+
+            // Reset root visibility when setting up a new product
+            // This ensures the view shows properly after switching from an invalid product
+            binding.root.visibility = View.VISIBLE
+        }
+
+        /**
          * @see VirtusizeView.setProductWithProductCheckData
          * @throws VirtusizeErrorType.NullProduct error
          */

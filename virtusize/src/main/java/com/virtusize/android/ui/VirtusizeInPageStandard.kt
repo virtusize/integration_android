@@ -218,6 +218,10 @@ class VirtusizeInPageStandard
                 })
             }
             binding.privacyPolicyText.visibility = showPrivacyPolicy()
+
+            // Reset root visibility when setting up a new product
+            // This ensures the view shows properly after switching from an invalid product
+            binding.root.visibility = View.VISIBLE
         }
 
         /**
