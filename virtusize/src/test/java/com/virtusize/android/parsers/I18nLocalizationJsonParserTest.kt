@@ -8,7 +8,6 @@ import com.google.common.truth.Truth.assertThat
 import com.virtusize.android.TestUtils
 import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.remote.I18nLocalization
-import com.virtusize.android.fixtures.TestFixtures
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
