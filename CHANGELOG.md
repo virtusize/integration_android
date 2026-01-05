@@ -1,4 +1,4 @@
-### Changes
+### 2.12.14
 - Fix: issue with no size found text
 - Fix: Virtusize button state when loading a new product
 

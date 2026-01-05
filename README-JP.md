@@ -75,7 +75,7 @@ appの`build.gradle`ファイルに下記のdependencyを追加
 
   ```groovy
   dependencies {
-    implementation 'com.virtusize.android:virtusize:2.12.13'
+    implementation 'com.virtusize.android:virtusize:2.12.14'
   }
   ```
 
@@ -83,7 +83,7 @@ appの`build.gradle`ファイルに下記のdependencyを追加
 
   ```kotlin
   dependencies {
-    implementation("com.virtusize.android:virtusize:2.12.13")
+    implementation("com.virtusize.android:virtusize:2.12.14")
   }
   ```
 
