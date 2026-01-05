@@ -98,8 +98,8 @@ data class Product(
 
         // For one-size products with body data provided
         if (hasBodyData) {
-            // If willFit is true and we have a recommended size, show the will fit message
-            if (bodyProfileWillFit == true) {
+            // If willFit is not explicitly false and we have a recommended size, show the will fit message
+            if (bodyProfileWillFit != false) {
                 return i18nLocalization.oneSizeWillFitResultText
             }
             // If willFit is false or no recommended size, show "Your size not found"
@@ -129,8 +129,8 @@ data class Product(
 
         // For multi-size products with body data provided
         if (hasBodyData) {
-            // If willFit is true and we have a recommended size, show it
-            if (bodyProfileWillFit == true && bodyProfileRecommendedSizeName.isNotEmpty()) {
+            // If willFit is not explicitly false and we have a recommended size, show it
+            if (bodyProfileWillFit != false && bodyProfileRecommendedSizeName.isNotEmpty()) {
                 return i18nLocalization.getMultiSizeBodyProfileText(
                     bodyProfileRecommendedSizeName = bodyProfileRecommendedSizeName,
                 )

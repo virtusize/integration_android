@@ -41,6 +41,7 @@ class ProductTest {
                 sizeComparisonMultiSizeText = context.getString(R.string.inpage_multi_size_comparison_text),
                 willFitResultText = context.getString(R.string.inpage_will_fit_result_text),
                 willNotFitResultText = context.getString(R.string.inpage_will_not_fit_result_text),
+                willNotFitResultDefaultText = context.getString(R.string.inpage_will_not_fit_result_default_text),
                 bodyDataEmptyText = context.getString(R.string.inpage_body_data_empty_text),
             )
     }
