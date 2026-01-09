@@ -423,6 +423,7 @@ internal class VirtusizeImpl(
             }
 
         scope.launch {
+            params.language = language
             virtusizeRepository.setVsWidgetLanguage(language)
             virtusizeRepository.fetchDataForInPageRecommendation(
                 shouldUpdateUserProducts = false,
