@@ -25,7 +25,7 @@ data class VirtusizeParams(
     internal var apiKey: String?,
     internal var environment: VirtusizeEnvironment,
     private var region: VirtusizeRegion,
-    internal val language: VirtusizeLanguage,
+    internal var language: VirtusizeLanguage,
     private val allowedLanguages: MutableList<VirtusizeLanguage>,
     internal var externalUserId: String?,
     private val showSGI: Boolean,
