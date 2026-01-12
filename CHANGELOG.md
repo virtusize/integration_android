@@ -1,3 +1,6 @@
+### 2.12.16
+- Fix: view text issue when orientation change after language change
+
 ### 2.12.15
 - Fix: Virtusize branch hotfix
 
