@@ -387,6 +387,7 @@ internal class VirtusizeFlutterImpl(
     override fun setVsWidgetLanguage(language: VirtusizeLanguage) {
         virtusizeFlutterPresenter?.onLangugeClick(language)
         scope.launch {
+            params.language = language
             virtusizeRepository.setVsWidgetLanguage(language)
             virtusizeRepository.fetchDataForInPageRecommendation(
                 shouldUpdateUserProducts = false,
