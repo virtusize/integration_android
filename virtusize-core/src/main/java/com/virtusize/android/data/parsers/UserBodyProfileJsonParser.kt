@@ -23,9 +23,6 @@ class UserBodyProfileJsonParser : VirtusizeJsonParser<UserBodyProfile> {
             val braSizeMap = JsonUtils.jsonObjectToMap(braSizeJsonObject)
             braSize = if (braSizeMap.isEmpty()) null else braSizeMap
         }
-        if (age == 0 || height == 0 || weight.isBlank() || bodyData.isEmpty()) {
-            return null
-        }
         return UserBodyProfile(gender, age, height, weight, bodyData, footwearData, braSize)
     }
 
