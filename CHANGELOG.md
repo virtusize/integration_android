@@ -1,3 +1,6 @@
+### Changes:
+- Fix: fixed issue with shoe item recommended size
+
 ### 2.12.16
 - Fix: view text issue when orientation change after language change
 
