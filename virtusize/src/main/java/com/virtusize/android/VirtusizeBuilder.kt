@@ -198,7 +198,7 @@ class VirtusizeBuilder {
                 showSGI = showSGI,
                 detailsPanelCards = detailsPanelCards,
                 showSNSButtons = showSNSButtons,
-                branch = branch ?: "snkrdnk-line-quick-fix",
+                branch = branch,
                 showPrivacyPolicy = showPrivacyPolicy,
                 serviceEnvironment = serviceEnvironment,
             )
