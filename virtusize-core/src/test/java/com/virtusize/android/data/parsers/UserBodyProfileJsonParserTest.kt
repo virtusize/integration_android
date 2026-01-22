@@ -17,14 +17,14 @@ class UserBodyProfileJsonParserTest {
         val actualUserBodyProfile =
             UserBodyProfileJsonParser().parse(TestFixtures.NULL_USER_BODY_PROFILE)
 
-        assertThat(actualUserBodyProfile).isNull()
+        assertThat(actualUserBodyProfile).isEqualTo(TestFixtures.emptyUserBodyProfile)
     }
 
     @Test
     fun test_parseNotFoundResponse() {
         val actualUserBodyProfile = UserBodyProfileJsonParser().parse(TestFixtures.EMPTY_JSON_DATA)
 
-        assertThat(actualUserBodyProfile).isNull()
+        assertThat(actualUserBodyProfile).isEqualTo(TestFixtures.emptyUserBodyProfile)
     }
 
     @Test
