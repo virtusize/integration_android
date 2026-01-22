@@ -1,4 +1,4 @@
-### Changes:
+### 2.12.17
 - Fix: fixed issue with shoe item recommended size
 
 ### 2.12.16
