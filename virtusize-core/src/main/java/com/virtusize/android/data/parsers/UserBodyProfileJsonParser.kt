@@ -9,7 +9,7 @@ class UserBodyProfileJsonParser : VirtusizeJsonParser<UserBodyProfile> {
         val gender = JsonUtils.optString(json, FIELD_GENDER)
         val age = json.optInt(FIELD_AGE)
         val height = json.optInt(FIELD_HEIGHT)
-        val weight = json.optString(FIELD_WEIGHT)
+        val weight = JsonUtils.optString(json, FIELD_WEIGHT)
         var bodyData = setOf<Measurement>()
         var footwearData = mapOf<String, Any>()
         var braSize: Map<String, Any>? = null
