@@ -106,7 +106,7 @@ internal object TestFixtures {
     val NULL_USER_BODY_PROFILE =
         JSONObject(
             """
-            {   
+            {
                 "gender": "",
                 "age": null,
                 "height": null,
@@ -116,6 +116,17 @@ internal object TestFixtures {
                 "bodyData": null
             }
             """.trimIndent(),
+        )
+
+    val emptyUserBodyProfile =
+        UserBodyProfile(
+            "",
+            0,
+            0,
+            "",
+            emptySet(),
+            emptyMap(),
+            null,
         )
 
     val userBodyProfile =

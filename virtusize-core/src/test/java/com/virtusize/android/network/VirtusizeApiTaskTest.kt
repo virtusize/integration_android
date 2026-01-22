@@ -93,7 +93,7 @@ internal class VirtusizeApiTaskTest {
     }
 
     @Test
-    fun testParseInputStreamStringToUserBodyProfile_return_null() {
+    fun testParseInputStreamStringToUserBodyProfile_return_emptyProfile() {
         virtusizeApiTask.setJsonParser(UserBodyProfileJsonParser())
 
         val returnValue =
@@ -103,11 +103,11 @@ internal class VirtusizeApiTaskTest {
                         "\"concernAreas\":null,\"bodyData\":null}",
             )
 
-        assertThat(returnValue).isNull()
+        assertThat(returnValue).isEqualTo(TestFixtures.emptyUserBodyProfile)
     }
 
     @Test
-    fun `test user-body-measurements endpoint with UserBodyProfileJsonParser returning null`() {
+    fun `test user-body-measurements endpoint with UserBodyProfileJsonParser returning emptyProfile`() {
         virtusizeApiTask.setJsonParser(UserBodyProfileJsonParser())
 
         val returnValue =
@@ -127,7 +127,7 @@ internal class VirtusizeApiTaskTest {
                     """.trimIndent(),
             )
 
-        assertThat(returnValue).isNull()
+        assertThat(returnValue).isEqualTo(TestFixtures.emptyUserBodyProfile)
     }
 
     @Test

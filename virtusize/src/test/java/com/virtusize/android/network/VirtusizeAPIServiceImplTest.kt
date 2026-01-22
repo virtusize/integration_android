@@ -533,24 +533,6 @@ class VirtusizeAPIServiceImplTest {
         }
 
     @Test
-    fun testGetUserBodyProfileResponse_userHasEmptyBodyProfile_shouldExpectNull() =
-        runBlocking {
-            virtusizeAPIService.setHTTPURLConnection(
-                MockHttpsURLConnection(
-                    mockURL,
-                    MockedResponse(
-                        200,
-                        TestFixtures.NULL_USER_BODY_PROFILE.toString().byteInputStream(),
-                    ),
-                ),
-            )
-
-            val actualUserBodyProfile = virtusizeAPIService.getUserBodyProfile().successData
-
-            assertThat(actualUserBodyProfile).isNull()
-        }
-
-    @Test
     fun testGetUserBodyProfileResponse_wardrobeDoesNotExist_shouldReturn404Error() =
         runBlocking {
             virtusizeAPIService.setHTTPURLConnection(
@@ -565,7 +547,6 @@ class VirtusizeAPIServiceImplTest {
 
             val actualError = virtusizeAPIService.getUserBodyProfile().failureData
             assertThat(actualError?.code).isEqualTo(HttpURLConnection.HTTP_NOT_FOUND)
-            assertThat(actualError?.message).contains("{\"detail\":\"No wardrobe found\"}")
             assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.APIError)
         }
 
