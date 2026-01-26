@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.AtomicReference
 import com.virtusize.android.data.local.SizeComparisonRecommendedSize
 import com.virtusize.android.data.local.SizeRecommendationType
+import com.virtusize.android.data.local.VirtusizeEnvironment
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeEvent
@@ -315,6 +316,26 @@ internal class VirtusizeImpl(
         VirtusizeApi.setUserId(userId)
         virtusizeViews.forEach { virtusizeView ->
             virtusizeView.virtusizeParams.externalUserId = userId
+        }
+    }
+
+    /**
+     * @see Virtusize.setApiKey
+     */
+    override fun setApiKey(apiKey: String) {
+        VirtusizeApi.setApiKey(apiKey)
+        virtusizeViews.forEach { virtusizeView ->
+            virtusizeView.virtusizeParams.apiKey = apiKey
+        }
+    }
+
+    /**
+     * @see Virtusize.setEnvironment
+     */
+    override fun setEnvironment(env: VirtusizeEnvironment) {
+        VirtusizeApi.setEnvironment(env)
+        virtusizeViews.forEach { virtusizeView ->
+            virtusizeView.virtusizeParams.environment = env
         }
     }
 

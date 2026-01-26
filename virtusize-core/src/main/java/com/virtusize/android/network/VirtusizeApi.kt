@@ -92,6 +92,14 @@ object VirtusizeApi {
         currentUserId = userId
     }
 
+    fun setApiKey(newApiKey: String) {
+        apiKey = newApiKey
+    }
+
+    fun setEnvironment(env: VirtusizeEnvironment) {
+        environment = env
+    }
+
     fun setStoreId(storeId: StoreId) {
         currentStoreId = storeId
     }
