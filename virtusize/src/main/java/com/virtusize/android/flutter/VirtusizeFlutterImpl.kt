@@ -313,7 +313,7 @@ internal class VirtusizeFlutterImpl(
      */
     override fun setUserId(userId: String) {
         VirtusizeApi.setUserId(userId)
-//        params.externalUserId = userId
+        params.externalUserId = userId
         virtusizeViews.forEach { virtusizeView ->
             virtusizeView.virtusizeParams.externalUserId = userId
         }
