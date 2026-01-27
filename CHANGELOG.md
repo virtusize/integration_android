@@ -1,3 +1,6 @@
+### Changes:
+- Fix: Added configurable ApiKey and Environment parameters
+- 
 ### 2.12.17
 - Fix: fixed issue with shoe item recommended size
 

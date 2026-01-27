@@ -1,6 +1,7 @@
 package com.virtusize.android
 
 import android.content.Context
+import com.virtusize.android.data.local.VirtusizeEnvironment
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.VirtusizeMessageHandler
@@ -78,6 +79,18 @@ interface Virtusize {
      * @param userId the user ID that is unique from the client system
      */
     fun setUserId(userId: String)
+
+    /**
+     * Use this function to set up the apiKey in the app when the user changes country
+     * @param apiKey unique store Api Key
+     */
+    fun setApiKey(newApiKey: String)
+
+    /**
+     * Use this function to change API environment
+     * @param env unique API environment
+     */
+    fun setEnvironment(env: VirtusizeEnvironment)
 
     /**
      * Registers a message handler.
