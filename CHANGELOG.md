@@ -1,4 +1,4 @@
-### Changes:
+### 2.12.18
 - Fix: Added configurable ApiKey and Environment parameters
 - 
 ### 2.12.17
