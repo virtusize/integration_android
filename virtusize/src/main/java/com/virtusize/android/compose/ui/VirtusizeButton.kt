@@ -11,7 +11,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -29,8 +30,6 @@ import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.VirtusizeViewStyle
 import com.virtusize.android.model.VirtusizeMessage
 import com.virtusize.android.ui.VirtusizeButton
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 /**
  * A composable that displays the VirtusizeButton
@@ -49,25 +48,30 @@ fun VirtusizeButton(
     onError: (error: VirtusizeError) -> Unit = { _ -> },
 ) {
     val viewModel: VirtusizeComposeViewModel = viewModel<VirtusizeComposeViewModel>()
-    val coroutineScope = rememberCoroutineScope()
+    val viewRef = remember { mutableStateOf<VirtusizeButton?>(null) }
+
     VirtusizeButton(
         modifier = modifier,
         update = { virtusizeButton ->
-            viewModel.isLoadedFlow
-                .onEach { isLoaded ->
-                    if (isLoaded) {
-                        virtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.BLACK
-                        virtusizeButton.setRoundedCornerBackground(colors.containerColor.toArgb())
-                        colors.contentColor.toArgb().apply {
-                            virtusizeButton.setVirtusizeLogoTint(this)
-                            virtusizeButton.setTextColor(this)
-                        }
-                    }
-                }
-                .launchIn(coroutineScope)
+            viewRef.value = virtusizeButton
             viewModel.load(product = product, virtusizeView = virtusizeButton)
         },
     )
+
+    LaunchedEffect(Unit) {
+        viewModel.isLoadedFlow.collect { isLoaded ->
+            if (isLoaded) {
+                viewRef.value?.let { virtusizeButton ->
+                    virtusizeButton.virtusizeViewStyle = VirtusizeViewStyle.BLACK
+                    virtusizeButton.setRoundedCornerBackground(colors.containerColor.toArgb())
+                    colors.contentColor.toArgb().apply {
+                        virtusizeButton.setVirtusizeLogoTint(this)
+                        virtusizeButton.setTextColor(this)
+                    }
+                }
+            }
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.messageFlow.collect { message ->
