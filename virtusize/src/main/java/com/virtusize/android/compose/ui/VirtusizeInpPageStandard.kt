@@ -6,7 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -23,8 +24,6 @@ import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.VirtusizeViewStyle
 import com.virtusize.android.model.VirtusizeMessage
 import com.virtusize.android.ui.VirtusizeInPageStandard
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 /**
  * A composable that displays the VirtusizeInPageStandard
@@ -43,21 +42,23 @@ fun VirtusizeInPageStandard(
     onError: (error: VirtusizeError) -> Unit = { _ -> },
 ) {
     val viewModel: VirtusizeComposeViewModel = viewModel<VirtusizeComposeViewModel>()
-    val coroutineScope = rememberCoroutineScope()
+    val viewRef = remember { mutableStateOf<VirtusizeInPageStandard?>(null) }
 
     VirtusizeInPageStandard(
         modifier = modifier,
         update = { virtusizeInPageStandard ->
-            viewModel.isLoadedFlow
-                .onEach { isLoaded ->
-                    if (isLoaded) {
-                        virtusizeInPageStandard.setButtonBackgroundColor(backgroundColor.toArgb())
-                    }
-                }
-                .launchIn(coroutineScope)
+            viewRef.value = virtusizeInPageStandard
             viewModel.load(product = product, virtusizeView = virtusizeInPageStandard)
         },
     )
+
+    LaunchedEffect(Unit) {
+        viewModel.isLoadedFlow.collect { isLoaded ->
+            if (isLoaded) {
+                viewRef.value?.setButtonBackgroundColor(backgroundColor.toArgb())
+            }
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.messageFlow.collect { message ->
@@ -68,6 +69,7 @@ fun VirtusizeInPageStandard(
         }
     }
 }
+
 
 @Composable
 private fun VirtusizeInPageStandard(
