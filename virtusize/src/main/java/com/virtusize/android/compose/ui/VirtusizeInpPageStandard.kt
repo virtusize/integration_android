@@ -70,7 +70,6 @@ fun VirtusizeInPageStandard(
     }
 }
 
-
 @Composable
 private fun VirtusizeInPageStandard(
     modifier: Modifier = Modifier,
