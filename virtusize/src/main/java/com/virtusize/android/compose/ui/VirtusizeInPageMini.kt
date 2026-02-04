@@ -5,7 +5,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -22,8 +23,6 @@ import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.VirtusizeViewStyle
 import com.virtusize.android.model.VirtusizeMessage
 import com.virtusize.android.ui.VirtusizeInPageMini
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 /**
  * A composable that displays the VirtusizeInPageMini
@@ -42,20 +41,23 @@ fun VirtusizeInPageMini(
     onError: (error: VirtusizeError) -> Unit = { _ -> },
 ) {
     val viewModel: VirtusizeComposeViewModel = viewModel<VirtusizeComposeViewModel>()
-    val coroutineScope = rememberCoroutineScope()
+    val viewRef = remember { mutableStateOf<VirtusizeInPageMini?>(null) }
+
     VirtusizeInPageMini(
         modifier = modifier,
         update = { virtusizeInPageMini ->
-            viewModel.isLoadedFlow
-                .onEach { isLoaded ->
-                    if (isLoaded) {
-                        virtusizeInPageMini.setInPageMiniBackgroundColor(backgroundColor.toArgb())
-                    }
-                }
-                .launchIn(coroutineScope)
+            viewRef.value = virtusizeInPageMini
             viewModel.load(product = product, virtusizeView = virtusizeInPageMini)
         },
     )
+
+    LaunchedEffect(Unit) {
+        viewModel.isLoadedFlow.collect { isLoaded ->
+            if (isLoaded) {
+                viewRef.value?.setInPageMiniBackgroundColor(backgroundColor.toArgb())
+            }
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.messageFlow.collect { message ->

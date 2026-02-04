@@ -1,3 +1,6 @@
+### Changes
+- Fix: Compose UI components reload event changes
+
 ### 2.12.18
 - Fix: Added configurable ApiKey and Environment parameters
 - 

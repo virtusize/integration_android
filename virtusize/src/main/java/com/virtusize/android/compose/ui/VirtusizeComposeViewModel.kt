@@ -60,12 +60,17 @@ internal class VirtusizeComposeViewModel : ViewModel() {
         virtusize.registerMessageHandler(messageHandler)
     }
 
+    private var lastLoadedProductId: String? = null
+
     fun load(
         product: VirtusizeProduct,
         virtusizeView: VirtusizeView,
     ) {
-        virtusize.load(product)
         virtusize.setupVirtusizeView(product = product, virtusizeView = virtusizeView)
+        if (lastLoadedProductId != product.externalId) {
+            lastLoadedProductId = product.externalId
+            virtusize.load(product)
+        }
     }
 
     override fun onCleared() {
