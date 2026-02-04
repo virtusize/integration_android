@@ -1,4 +1,4 @@
-### Changes
+### 2.12.19
 - Fix: Compose UI components reload event changes
 
 ### 2.12.18
