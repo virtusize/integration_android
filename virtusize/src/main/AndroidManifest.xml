@@ -9,6 +9,9 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:name=".ui.VirtusizeWebViewActivity" />
 
+        <meta-data
+            android:name="io.sentry.dsn"
+            android:value="https://fc419e92ef1a49b9cef57d1c6f207e75@o903.ingest.us.sentry.io/4510877744562176" />
     </application>
 
 </manifest>
