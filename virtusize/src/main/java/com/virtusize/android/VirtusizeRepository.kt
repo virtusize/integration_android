@@ -60,6 +60,9 @@ class VirtusizeRepository internal constructor(
     // A set to cache the store product information of all the visited products
     private val storeProductSet = mutableSetOf<Product>()
 
+    // The external product ID of the last product for which UserSawProduct was sent
+    private var lastUserSawProductExternalId: ExternalProductId? = null
+
     // This variable holds the i18n localization texts
     internal var i18nLocalization: I18nLocalization? = null
 
@@ -115,15 +118,20 @@ class VirtusizeRepository internal constructor(
             val productCheck = productCheckResponse.successData!!
             virtusizeProduct.productCheckData = productCheck
 
-            // Send API Event UserSawProduct as non-blocking
-            launch {
-                sendEvent(
-                    virtusizeProduct,
-                    VirtusizeEvent.UserSawProduct(),
-                )
-            }
+            val isNewProduct = virtusizeProduct.externalId != lastUserSawProductExternalId
 
             val productCheckData = productCheck.data ?: return@coroutineScope false
+
+            // Send API Events as non-blocking (only for new valid products)
+            if (isNewProduct && productCheckData.validProduct) {
+                lastUserSawProductExternalId = virtusizeProduct.externalId
+                launch {
+                    sendEvent(virtusizeProduct, VirtusizeEvent.UserSawProduct())
+                }
+                launch {
+                    sendEvent(virtusizeProduct, VirtusizeEvent.UserSawWidgetButton())
+                }
+            }
 
             if (productCheckData.validProduct) {
                 if (productCheckData.fetchMetaData) {
@@ -143,14 +151,6 @@ class VirtusizeRepository internal constructor(
                     } else {
                         VirtusizeErrorType.ImageUrlNotValid.throwError()
                     }
-                }
-
-                // Send API Event UserSawWidgetButton as non-blocking
-                launch {
-                    sendEvent(
-                        virtusizeProduct,
-                        VirtusizeEvent.UserSawWidgetButton(),
-                    )
                 }
 
                 withContext(Dispatchers.Main) {
