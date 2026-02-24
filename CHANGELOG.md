@@ -1,3 +1,6 @@
+### Changes:
+- Fix: Prevent send event userSawProduct when productValid = false or repeated product load
+
 ### 2.12.19
 - Fix: Compose UI components reload event changes
 
