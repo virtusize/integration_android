@@ -1,4 +1,4 @@
-### Changes:
+### 2.12.20
 - Fix: Prevent send event userSawProduct when productValid = false or repeated product load
 
 ### 2.12.19
