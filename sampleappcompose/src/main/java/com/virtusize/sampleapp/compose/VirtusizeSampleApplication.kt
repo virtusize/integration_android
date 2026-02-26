@@ -12,7 +12,7 @@ internal class VirtusizeSampleApplication : Application() {
 
         VirtusizeBuilder().init(this)
             // Only the API key is required
-            .setApiKey("15cc36e1d7dad62b8e11722ce1a245cb6c5e6692")
+            .setApiKey("fc3165757dadee62df86f7a6a260bda855efc704")
             // For using the Order API, a user ID is required
             .setUserId("123")
             // By default, the Virtusize environment will be set to GLOBAL
