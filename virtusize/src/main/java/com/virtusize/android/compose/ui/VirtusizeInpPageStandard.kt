@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -13,13 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.viewinterop.NoOpUpdate
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.virtusize.android.Virtusize
 import com.virtusize.android.compose.theme.VirtusizeColors
@@ -54,7 +50,7 @@ fun VirtusizeInPageStandard(
         modifier = modifier,
         update = { virtusizeInPageStandard ->
             viewRef.value = virtusizeInPageStandard
-               viewModel.load(product = product, virtusizeView = virtusizeInPageStandard, orientation)
+            viewModel.load(product = product, virtusizeView = virtusizeInPageStandard, orientation)
         },
     )
 
@@ -81,7 +77,6 @@ private fun VirtusizeInPageStandard(
     modifier: Modifier = Modifier,
     update: (VirtusizeInPageStandard) -> Unit = NoOpUpdate,
 ) {
-
     AndroidView(
         modifier = modifier,
         factory = { context ->
