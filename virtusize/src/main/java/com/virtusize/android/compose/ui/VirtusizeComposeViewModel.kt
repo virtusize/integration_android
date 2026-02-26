@@ -70,8 +70,7 @@ internal class VirtusizeComposeViewModel : ViewModel() {
     ) {
         virtusize.setupVirtusizeView(product = product, virtusizeView = virtusizeView)
         if (lastLoadedProductId != product.externalId ||
-            lastOrientation != orientation
-        ) {
+            lastOrientation != orientation) {
             lastLoadedProductId = product.externalId
             lastOrientation = orientation
             virtusize.load(product)
