@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -42,12 +43,13 @@ fun VirtusizeInPageMini(
 ) {
     val viewModel: VirtusizeComposeViewModel = viewModel<VirtusizeComposeViewModel>()
     val viewRef = remember { mutableStateOf<VirtusizeInPageMini?>(null) }
+    val orientation = LocalConfiguration.current.orientation
 
     VirtusizeInPageMini(
         modifier = modifier,
         update = { virtusizeInPageMini ->
             viewRef.value = virtusizeInPageMini
-            viewModel.load(product = product, virtusizeView = virtusizeInPageMini)
+            viewModel.load(product = product, virtusizeView = virtusizeInPageMini, orientation)
         },
     )
 

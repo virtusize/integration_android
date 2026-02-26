@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -49,12 +50,13 @@ fun VirtusizeButton(
 ) {
     val viewModel: VirtusizeComposeViewModel = viewModel<VirtusizeComposeViewModel>()
     val viewRef = remember { mutableStateOf<VirtusizeButton?>(null) }
+    val orientation = LocalConfiguration.current.orientation
 
     VirtusizeButton(
         modifier = modifier,
         update = { virtusizeButton ->
             viewRef.value = virtusizeButton
-            viewModel.load(product = product, virtusizeView = virtusizeButton)
+            viewModel.load(product = product, virtusizeView = virtusizeButton, orientation)
         },
     )
 

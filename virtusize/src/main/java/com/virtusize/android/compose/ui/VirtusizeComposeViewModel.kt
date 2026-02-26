@@ -61,14 +61,18 @@ internal class VirtusizeComposeViewModel : ViewModel() {
     }
 
     private var lastLoadedProductId: String? = null
+    private var lastOrientation: Int? = null
 
     fun load(
         product: VirtusizeProduct,
         virtusizeView: VirtusizeView,
+        orientation: Int,
     ) {
         virtusize.setupVirtusizeView(product = product, virtusizeView = virtusizeView)
-        if (lastLoadedProductId != product.externalId) {
+        if (lastLoadedProductId != product.externalId ||
+            lastOrientation != orientation) {
             lastLoadedProductId = product.externalId
+            lastOrientation = orientation
             virtusize.load(product)
         }
     }
