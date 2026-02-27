@@ -45,9 +45,12 @@ fun VirtusizeInPageMini(
 
     VirtusizeInPageMini(
         modifier = modifier,
+        create = { virtusizeInPageMini ->
+            viewModel.load(product = product, virtusizeView = virtusizeInPageMini, force = true)
+        },
         update = { virtusizeInPageMini ->
             viewRef.value = virtusizeInPageMini
-            viewModel.load(product = product, virtusizeView = virtusizeInPageMini)
+            viewModel.load(product = product, virtusizeView = virtusizeInPageMini, force = false)
         },
     )
 
@@ -72,11 +75,12 @@ fun VirtusizeInPageMini(
 @Composable
 private fun VirtusizeInPageMini(
     modifier: Modifier = Modifier,
+    create: (VirtusizeInPageMini) -> Unit = {},
     update: (VirtusizeInPageMini) -> Unit = NoOpUpdate,
 ) {
     AndroidView(
         modifier = modifier,
-        factory = { context -> VirtusizeInPageMini(context) },
+        factory = { context -> VirtusizeInPageMini(context).also { create(it) } },
         update = update,
         onRelease = { virtusizeView ->
             Virtusize.getInstanceOrNull()?.cleanupVirtusizeView(virtusizeView)

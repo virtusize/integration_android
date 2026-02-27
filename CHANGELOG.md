@@ -1,3 +1,6 @@
+### Changes:
+- Fix: Compose VirtusizeInPageMini VirtusizeInPageStandard update fix
+
 ### 2.12.20
 - Fix: Prevent send event userSawProduct when productValid = false or repeated product load
 

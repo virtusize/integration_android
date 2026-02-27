@@ -7,11 +7,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,45 +47,55 @@ internal fun VirtusizeSampleApp() {
                 )
             }
 
-            VirtusizeButton(
-                product = product,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                colors =
-                    VirtusizeButtonDefaults.colors(
-                        containerColor = VirtusizeColors.Teal,
-                        contentColor = VirtusizeColors.White,
-                    ),
-                onEvent = { event ->
-                    Log.i(VIRTUSIZE_BUTTON_TAG, event.name)
-                },
-                onError = { error ->
-                    Log.e(VIRTUSIZE_BUTTON_TAG, error.message)
-                },
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            VirtusizeInPageStandard(
-                product = product,
-                modifier = Modifier.padding(horizontal = 16.dp),
-                backgroundColor = VirtusizeColors.Black,
-                onEvent = { event ->
-                    Log.i(VIRTUSIZE_INPAGE_STANDARD_TAG, event.name)
-                },
-                onError = { error ->
-                    Log.e(VIRTUSIZE_INPAGE_STANDARD_TAG, error.message)
-                },
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            VirtusizeInPageMini(
-                product = product,
-                modifier = Modifier.padding(horizontal = 16.dp),
-                backgroundColor = VirtusizeColors.Teal,
-                onEvent = { event ->
-                    Log.i(VIRTUSIZE_INPAGE_MINI_TAG, event.name)
-                },
-                onError = { error ->
-                    Log.e(VIRTUSIZE_INPAGE_MINI_TAG, error.message)
-                },
-            )
+            var someKey by remember { mutableStateOf(true) }
+            Button({ someKey = !someKey }) {
+                Text("Reenter composition")
+            }
+
+            key(someKey) {
+                VirtusizeButton(
+                    product = product,
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    colors =
+                        VirtusizeButtonDefaults.colors(
+                            containerColor = VirtusizeColors.Teal,
+                            contentColor = VirtusizeColors.White,
+                        ),
+                    onEvent = { event ->
+                        Log.i(VIRTUSIZE_BUTTON_TAG, event.name)
+                    },
+                    onError = { error ->
+                        Log.e(VIRTUSIZE_BUTTON_TAG, error.message)
+                    },
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                VirtusizeInPageStandard(
+                    product = product,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    backgroundColor = VirtusizeColors.Black,
+                    onEvent = { event ->
+                        Log.i(VIRTUSIZE_INPAGE_STANDARD_TAG, event.name)
+                    },
+                    onError = { error ->
+                        Log.e(VIRTUSIZE_INPAGE_STANDARD_TAG, error.message)
+                    },
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+                VirtusizeInPageMini(
+                    product = product,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    backgroundColor = VirtusizeColors.Teal,
+                    onEvent = { event ->
+                        Log.i(VIRTUSIZE_INPAGE_MINI_TAG, event.name)
+                    },
+                    onError = { error ->
+                        Log.e(VIRTUSIZE_INPAGE_MINI_TAG, error.message)
+                    },
+                )
+            }
         }
     }
 }
