@@ -65,9 +65,10 @@ internal class VirtusizeComposeViewModel : ViewModel() {
     fun load(
         product: VirtusizeProduct,
         virtusizeView: VirtusizeView,
+        force: Boolean = false,
     ) {
         virtusize.setupVirtusizeView(product = product, virtusizeView = virtusizeView)
-        if (lastLoadedProductId != product.externalId) {
+        if (force || lastLoadedProductId != product.externalId) {
             lastLoadedProductId = product.externalId
             virtusize.load(product)
         }

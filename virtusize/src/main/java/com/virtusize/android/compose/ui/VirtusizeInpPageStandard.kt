@@ -46,9 +46,12 @@ fun VirtusizeInPageStandard(
 
     VirtusizeInPageStandard(
         modifier = modifier,
+        create = { virtusizeInPageStandard ->
+            viewModel.load(product = product, virtusizeView = virtusizeInPageStandard, force = true)
+        },
         update = { virtusizeInPageStandard ->
             viewRef.value = virtusizeInPageStandard
-            viewModel.load(product = product, virtusizeView = virtusizeInPageStandard)
+            viewModel.load(product = product, virtusizeView = virtusizeInPageStandard, force = false)
         },
     )
 
@@ -73,6 +76,7 @@ fun VirtusizeInPageStandard(
 @Composable
 private fun VirtusizeInPageStandard(
     modifier: Modifier = Modifier,
+    create: (VirtusizeInPageStandard) -> Unit = {},
     update: (VirtusizeInPageStandard) -> Unit = NoOpUpdate,
 ) {
     AndroidView(
@@ -81,7 +85,7 @@ private fun VirtusizeInPageStandard(
             VirtusizeInPageStandard(context).apply {
                 horizontalMargin = 0
                 clipChildren = false
-            }
+            }.also { create(it) }
         },
         update = update,
         onRelease = { virtusizeView ->
