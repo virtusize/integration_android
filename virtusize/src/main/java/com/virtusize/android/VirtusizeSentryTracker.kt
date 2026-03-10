@@ -1,10 +1,7 @@
 package com.virtusize.android
 
-import com.virtusize.android.BuildConfig
 import com.virtusize.android.data.local.VirtusizeOrder
 import io.sentry.Sentry
-import io.sentry.SentryLevel
-import io.sentry.metrics.SentryMetricsParameters
 import java.util.UUID
 
 /**
@@ -14,7 +11,6 @@ import java.util.UUID
  * Configured via AndroidManifest.xml meta-data (DSN, logs, traces sample rate, environment).
  */
 internal object VirtusizeSentryTracker {
-
     // MARK: - Session Management
 
     /** The current active session ID, set by Virtusize.load. */
@@ -53,21 +49,33 @@ internal object VirtusizeSentryTracker {
 
     // MARK: - Metrics (Counters)
 
-    fun increment(key: String, tags: Map<String, String> = emptyMap()) {
+    fun increment(
+        key: String,
+        tags: Map<String, String> = emptyMap(),
+    ) {
         Sentry.metrics().count(key, 1.0)
     }
 
     // MARK: - Logs
 
-    fun logInfo(message: String, attributes: Map<String, String> = emptyMap()) {
+    fun logInfo(
+        message: String,
+        attributes: Map<String, String> = emptyMap(),
+    ) {
         Sentry.logger().info(message, attributes)
     }
 
-    fun logWarning(message: String, attributes: Map<String, String> = emptyMap()) {
+    fun logWarning(
+        message: String,
+        attributes: Map<String, String> = emptyMap(),
+    ) {
         Sentry.logger().warn(message, attributes)
     }
 
-    fun logError(message: String, attributes: Map<String, String> = emptyMap()) {
+    fun logError(
+        message: String,
+        attributes: Map<String, String> = emptyMap(),
+    ) {
         Sentry.logger().error(message, attributes)
     }
 
@@ -94,21 +102,34 @@ internal object VirtusizeSentryTracker {
 
     // MARK: - Product Check
 
-    fun trackProductCheck(externalProductId: String, isValid: Boolean, storeId: String? = null) {
-        val tags = buildTags(storeId = storeId) +
-            mapOf("external_product_id" to externalProductId, "is_valid" to isValid.toString())
+    fun trackProductCheck(
+        externalProductId: String,
+        isValid: Boolean,
+        storeId: String? = null,
+    ) {
+        val tags =
+            buildTags(storeId = storeId) +
+                mapOf("external_product_id" to externalProductId, "is_valid" to isValid.toString())
         logInfo("product-check", tags)
     }
 
-    fun trackLoadCancelled(step: String, externalProductId: String, storeId: String? = null) {
-        val tags = buildTags(storeId = storeId) +
-            mapOf("external_product_id" to externalProductId, "step" to step)
+    fun trackLoadCancelled(
+        step: String,
+        externalProductId: String,
+        storeId: String? = null,
+    ) {
+        val tags =
+            buildTags(storeId = storeId) +
+                mapOf("external_product_id" to externalProductId, "step" to step)
         logWarning("load-cancelled", tags)
     }
 
     // MARK: - Order
 
-    fun trackSendOrder(order: VirtusizeOrder, storeId: String? = null) {
+    fun trackSendOrder(
+        order: VirtusizeOrder,
+        storeId: String? = null,
+    ) {
         val externalProductIds = order.items.mapNotNull { it.paramsToMap()["externalProductId"] as? String }
         if (externalProductIds.isEmpty()) {
             val tags = buildTags(storeId = storeId)
@@ -129,8 +150,9 @@ internal object VirtusizeSentryTracker {
         throwable: Throwable,
         storeId: String? = null,
     ) {
-        val tags = buildTags(storeId = storeId) +
-            mapOf("error_type" to throwable::class.java.simpleName)
+        val tags =
+            buildTags(storeId = storeId) +
+                mapOf("error_type" to throwable::class.java.simpleName)
         increment("error", tags)
         logError(throwable.localizedMessage ?: throwable.message ?: throwable::class.java.simpleName, tags)
     }

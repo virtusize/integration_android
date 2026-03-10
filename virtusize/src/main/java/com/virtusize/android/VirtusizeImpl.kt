@@ -399,35 +399,44 @@ internal class VirtusizeImpl(
             VirtusizeSentryTracker.generateSessionId()
         }
         loadJob?.cancel()
-        loadJob = scope.launch {
-            if (!isActive) {
-                VirtusizeSentryTracker.trackLoadCancelled(step = "start", externalProductId = virtusizeProduct.externalId, storeId = sentryStoreId)
-                return@launch
-            }
-            val success = productCheck(virtusizeProduct)
-            if (!isActive) {
-                VirtusizeSentryTracker.trackLoadCancelled(step = "product-check", externalProductId = virtusizeProduct.externalId, storeId = sentryStoreId)
-                return@launch
-            }
-            // productCheckData is set only when the API call itself succeeded (valid or invalid product)
-            val apiSucceeded = virtusizeProduct.productCheckData != null
-            VirtusizeSentryTracker.trackProductCheck(
-                externalProductId = virtusizeProduct.externalId,
-                isValid = success,
-                storeId = if (apiSucceeded) sentryStoreId else null,
-            )
-            if (apiSucceeded) {
-                VirtusizeSentryTracker.trackUserSawProduct(
+        loadJob =
+            scope.launch {
+                if (!isActive) {
+                    VirtusizeSentryTracker.trackLoadCancelled(
+                        step = "start",
+                        externalProductId = virtusizeProduct.externalId,
+                        storeId = sentryStoreId,
+                    )
+                    return@launch
+                }
+                val success = productCheck(virtusizeProduct)
+                if (!isActive) {
+                    VirtusizeSentryTracker.trackLoadCancelled(
+                        step = "product-check",
+                        externalProductId = virtusizeProduct.externalId,
+                        storeId = sentryStoreId,
+                    )
+                    return@launch
+                }
+                // productCheckData is set only when the API call itself succeeded (valid or invalid product)
+                val apiSucceeded = virtusizeProduct.productCheckData != null
+                VirtusizeSentryTracker.trackProductCheck(
                     externalProductId = virtusizeProduct.externalId,
-                    storeId = sentryStoreId,
+                    isValid = success,
+                    storeId = if (apiSucceeded) sentryStoreId else null,
                 )
-            } else {
-                VirtusizeSentryTracker.trackError(
-                    throwable = Exception("Product check failed"),
-                    storeId = null,
-                )
+                if (apiSucceeded) {
+                    VirtusizeSentryTracker.trackUserSawProduct(
+                        externalProductId = virtusizeProduct.externalId,
+                        storeId = sentryStoreId,
+                    )
+                } else {
+                    VirtusizeSentryTracker.trackError(
+                        throwable = Exception("Product check failed"),
+                        storeId = null,
+                    )
+                }
             }
-        }
     }
 
     /**
