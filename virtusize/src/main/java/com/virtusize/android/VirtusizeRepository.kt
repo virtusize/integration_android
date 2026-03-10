@@ -16,6 +16,7 @@ import com.virtusize.android.data.local.throwError
 import com.virtusize.android.data.local.virtusizeError
 import com.virtusize.android.data.parsers.I18nLocalizationJsonParser
 import com.virtusize.android.data.parsers.UserAuthDataJsonParser
+import com.virtusize.android.data.remote.BodyProfileRecommendedSize
 import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.data.remote.Product
 import com.virtusize.android.data.remote.ProductCheckData
@@ -48,7 +49,7 @@ class VirtusizeRepository internal constructor(
     private var userProducts: List<Product>? = null
     private var userProductRecommendedSize: SizeComparisonRecommendedSize? = null
     private var userBodyRecommendedSize: String? = null
-    private var userBodyWillFit: Boolean? = null
+    private var userBodyProfileRecommendedSize: BodyProfileRecommendedSize? = null
 
     // This variable holds the list of product types from the Virtusize API
     private var productTypes: List<ProductType>? = null
@@ -311,7 +312,9 @@ class VirtusizeRepository internal constructor(
         // set `userBodyRecommendedSize` only when update is requested
         if (shouldUpdateBodyProfile) {
             // reset userBodyRecommendedSize if update is requested but hasSessionBodyMeasurement is false
-            userBodyRecommendedSize = recommendedSizeDeferred?.await()
+            val bodyProfileResult = recommendedSizeDeferred?.await()
+            userBodyProfileRecommendedSize = bodyProfileResult
+            userBodyRecommendedSize = bodyProfileResult?.sizeName
         }
 
         if (userProductsResponse != null) {
@@ -383,7 +386,7 @@ class VirtusizeRepository internal constructor(
                             externalProductId = productId,
                             userProductRecommendedSize = null,
                             userBodyRecommendedSize = userBodyRecommendedSize,
-                            userBodyWillFit = userBodyWillFit,
+                            userBodyWillFit = userBodyProfileRecommendedSize?.willFit,
                         )
                     }
 
@@ -392,7 +395,7 @@ class VirtusizeRepository internal constructor(
                             externalProductId = productId,
                             userProductRecommendedSize = userProductRecommendedSize,
                             userBodyRecommendedSize = userBodyRecommendedSize,
-                            userBodyWillFit = userBodyWillFit,
+                            userBodyWillFit = userBodyProfileRecommendedSize?.willFit,
                         )
                     }
                 }
@@ -410,21 +413,20 @@ class VirtusizeRepository internal constructor(
         userProducts = null
         userProductRecommendedSize = null
         userBodyRecommendedSize = null
-        userBodyWillFit = null
+        userBodyProfileRecommendedSize = null
     }
 
     /**
      * Gets size recommendation for a store product that would best fit a user's body.
      * @param storeProduct the store product
      * @param productTypes a list of product types
-     * @return recommended size name. If it's not available, return null
+     * @return [BodyProfileRecommendedSize] containing the size name and willFit flag, or null if not available
      */
     private suspend fun getUserBodyRecommendedSize(
         storeProduct: Product?,
         productTypes: List<ProductType>?,
-    ): String? {
+    ): BodyProfileRecommendedSize? {
         if (storeProduct == null || productTypes == null || storeProduct.isAccessory()) {
-            userBodyWillFit = null
             return null
         }
         val userBodyProfileResponse = virtusizeAPIService.getUserBodyProfile()
@@ -436,8 +438,7 @@ class VirtusizeRepository internal constructor(
                         storeProduct,
                         userBodyProfileResponse.successData!!,
                     )
-                userBodyWillFit = bodyProfileRecommendedSizeResponse.successData?.willFit
-                return bodyProfileRecommendedSizeResponse.successData?.sizeName
+                return bodyProfileRecommendedSizeResponse.successData
             } else {
                 val bodyProfileRecommendedSizeResponse =
                     virtusizeAPIService.getBodyProfileRecommendedItemSize(
@@ -445,15 +446,13 @@ class VirtusizeRepository internal constructor(
                         storeProduct,
                         userBodyProfileResponse.successData!!,
                     )
-                userBodyWillFit = bodyProfileRecommendedSizeResponse.successData?.get(0)?.willFit
-                return bodyProfileRecommendedSizeResponse.successData?.get(0)?.sizeName
+                return bodyProfileRecommendedSizeResponse.successData?.get(0)
             }
         } else if (userBodyProfileResponse.failureData?.code != HttpURLConnection.HTTP_NOT_FOUND) {
             userBodyProfileResponse.failureData?.let {
                 messageHandler.onError(it)
             }
         }
-        userBodyWillFit = null
         return null
     }
 

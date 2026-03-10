@@ -81,16 +81,14 @@ interface Virtusize {
     fun setUserId(userId: String)
 
     /**
-     * Use this function to set up the apiKey in the app when the user changes country
+     * Use this function to switch the store when the user changes country
      * @param apiKey unique store Api Key
+     * @param env the [VirtusizeEnvironment] for the new store
      */
-    fun setApiKey(newApiKey: String)
-
-    /**
-     * Use this function to change API environment
-     * @param env unique API environment
-     */
-    fun setEnvironment(env: VirtusizeEnvironment)
+    fun changeStore(
+        apiKey: String,
+        env: VirtusizeEnvironment,
+    )
 
     /**
      * Registers a message handler.

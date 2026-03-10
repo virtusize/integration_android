@@ -25,6 +25,7 @@ import com.virtusize.android.util.trimI18nText
 import com.virtusize.android.util.valueOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -46,6 +47,12 @@ internal class VirtusizeImpl(
 
     // Registered message handlers
     private val messageHandlers = mutableListOf<VirtusizeMessageHandler>()
+
+    // Job to track and cancel the previous load operation
+    private var loadJob: Job? = null
+
+    // Tracks the last product loaded to detect product changes and allow re-loading on config changes
+    private var lastLoadedProduct: VirtusizeProduct? = null
 
     // The Virtusize message handler passes received errors and events to registered message handlers
     val messageHandler =
@@ -150,13 +157,19 @@ internal class VirtusizeImpl(
 
                     is VirtusizeEvent.UserUpdatedBodyMeasurements -> {
                         invalidateCurrentProduct()
-                        // Updates the body recommendation size and switches the view to the body comparison
+                        // Updates the body recommendation size and switches the view to the body comparison,
+                        // then re-fetches the body profile and updates the recommendation again
                         val sizeRecName = event.data?.optString("sizeRecName")
                         scope.launch {
                             virtusizeRepository.updateUserBodyRecommendedSize(sizeRecName)
                             virtusizeRepository.updateInPageRecommendation(
                                 type = SizeRecommendationType.Body,
                             )
+                            virtusizeRepository.fetchDataForInPageRecommendation(
+                                shouldUpdateUserProducts = false,
+                                shouldUpdateBodyProfile = true,
+                            )
+                            virtusizeRepository.updateInPageRecommendation()
                         }
                     }
 
@@ -320,22 +333,21 @@ internal class VirtusizeImpl(
     }
 
     /**
-     * @see Virtusize.setApiKey
+     * @see Virtusize.changeStore
      */
-    override fun setApiKey(apiKey: String) {
+    override fun changeStore(
+        apiKey: String,
+        env: VirtusizeEnvironment,
+    ) {
         VirtusizeApi.setApiKey(apiKey)
-        virtusizeViews.forEach { virtusizeView ->
-            virtusizeView.virtusizeParams.apiKey = apiKey
-        }
-    }
-
-    /**
-     * @see Virtusize.setEnvironment
-     */
-    override fun setEnvironment(env: VirtusizeEnvironment) {
         VirtusizeApi.setEnvironment(env)
         virtusizeViews.forEach { virtusizeView ->
+            virtusizeView.virtusizeParams.apiKey = apiKey
             virtusizeView.virtusizeParams.environment = env
+        }
+        lastLoadedProduct?.let { product ->
+            invalidateCurrentProduct()
+            load(product)
         }
     }
 
@@ -357,7 +369,12 @@ internal class VirtusizeImpl(
      * @see Virtusize.load
      */
     override fun load(virtusizeProduct: VirtusizeProduct) {
-        scope.launch {
+        if (lastLoadedProduct?.externalId != virtusizeProduct.externalId) {
+            invalidateCurrentProduct()
+        }
+        lastLoadedProduct = virtusizeProduct
+        loadJob?.cancel()
+        loadJob = scope.launch {
             productCheck(virtusizeProduct)
         }
     }

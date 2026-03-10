@@ -1,3 +1,7 @@
+### Changes:
+- Fix: Align iOS and Android willFit parameter for recommended text
+- Fix: Reload recommended size on change store
+
 ### 2.12.21
 - Fix: Compose VirtusizeInPageMini VirtusizeInPageStandard update fix
 
