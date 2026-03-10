@@ -1,5 +1,6 @@
 package com.virtusize.android
 
+import com.virtusize.android.BuildConfig
 import com.virtusize.android.data.local.VirtusizeOrder
 import io.sentry.Sentry
 import io.sentry.SentryLevel
@@ -19,6 +20,13 @@ internal object VirtusizeSentryTracker {
     /** The current active session ID, set by Virtusize.load. */
     var currentSessionId: String = ""
 
+    init {
+        Sentry.configureScope { scope ->
+            scope.setTag("sdk_version", BuildConfig.VERSION_NANE)
+            scope.setTag("sdk_platform", "android")
+        }
+    }
+
     /**
      * Generates a new UUID session ID, stores it as the current session, and returns it.
      * Also configures the Sentry scope so all subsequent logs are tagged with the new session ID.
@@ -29,6 +37,18 @@ internal object VirtusizeSentryTracker {
             scope.setTag("session_id", currentSessionId)
         }
         return currentSessionId
+    }
+
+    // MARK: - Platform Override
+
+    /**
+     * Overrides the `sdk_platform` Sentry scope tag. Call this when the SDK is running inside a
+     * wrapper (e.g. Flutter) so that the tag reflects the actual integration platform.
+     */
+    fun setSDKPlatform(platform: String) {
+        Sentry.configureScope { scope ->
+            scope.setTag("sdk_platform", platform)
+        }
     }
 
     // MARK: - Metrics (Counters)
