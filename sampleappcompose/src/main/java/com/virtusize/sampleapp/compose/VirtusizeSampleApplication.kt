@@ -18,7 +18,7 @@ internal class VirtusizeSampleApplication : Application() {
             .setApiKey(KeyJp)
             // For using the Order API, a user ID is required
             .setUserId("123")
-            // By default, the Virtusize environment will be set to GLOBAL
+            // By default, the Virtusize environment will be set to GalLOBAL
             .setEnv(VirtusizeEnvironment.JAPAN)
             // By default, the initial language will be set based on the Virtusize environment
             .setLanguage(VirtusizeLanguage.EN)
@@ -32,6 +32,7 @@ internal class VirtusizeSampleApplication : Application() {
             .setShowSNSButtons(true)
             // By default, Virtusize shows Privacy Policy
             .setShowPrivacyPolicy(true)
+            .setBranch("nsdk-412-market-aware-body-measurements-idb-cache")
             .build()
     }
 }

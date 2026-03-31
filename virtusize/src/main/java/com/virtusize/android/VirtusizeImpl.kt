@@ -12,6 +12,7 @@ import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeOrder
 import com.virtusize.android.data.local.VirtusizeParams
+import com.virtusize.android.data.local.virtusizeRegion
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.throwError
 import com.virtusize.android.data.remote.I18nLocalization
@@ -344,6 +345,7 @@ internal class VirtusizeImpl(
         virtusizeViews.forEach { virtusizeView ->
             virtusizeView.virtusizeParams.apiKey = apiKey
             virtusizeView.virtusizeParams.environment = env
+            virtusizeView.virtusizeParams.region = env.virtusizeRegion()
         }
         lastLoadedProduct?.let { product ->
             invalidateCurrentProduct()

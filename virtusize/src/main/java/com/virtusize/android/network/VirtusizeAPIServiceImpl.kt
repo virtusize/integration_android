@@ -2,6 +2,7 @@ package com.virtusize.android.network
 
 import android.content.Context
 import android.content.res.Configuration
+import android.util.Log
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.WindowManager
@@ -275,13 +276,17 @@ internal class VirtusizeAPIServiceImpl(
             Dispatchers.IO,
         ) {
             val apiRequest = VirtusizeApi.getUserBodyProfile()
+            Log.d("[Aoyama-mobile]", "User body profile request: ${apiRequest.url}")
             VirtusizeApiTask(
                 httpURLConnection,
                 sharedPreferencesHelper,
                 messageHandler,
             )
                 .setJsonParser(UserBodyProfileJsonParser())
-                .execute(apiRequest)
+                .execute<UserBodyProfile>(apiRequest)
+                .also { response ->
+                    Log.d("[Aoyama-mobile]", "User body profile response: $response")
+                }
         }
 
     override suspend fun getBodyProfileRecommendedItemSize(
@@ -291,13 +296,17 @@ internal class VirtusizeAPIServiceImpl(
     ): VirtusizeApiResponse<ArrayList<BodyProfileRecommendedSize>?> =
         withContext(Dispatchers.IO) {
             val apiRequest = VirtusizeApi.getItemSizeRecommendationRequest(productTypes, storeProduct, userBodyProfile)
+            Log.d("[Aoyama-mobile]", "Recommended item size request: ${apiRequest.url}, body: ${JSONObject(apiRequest.params)}")
             VirtusizeApiTask(
                 httpURLConnection,
                 sharedPreferencesHelper,
                 messageHandler,
             )
                 .setJsonParser(BodyProfileRecommendedSizeJsonParser(storeProduct))
-                .execute(apiRequest)
+                .execute<ArrayList<BodyProfileRecommendedSize>?>(apiRequest)
+                .also { response ->
+                    Log.d("[Aoyama-mobile]", "Recommended item size response: $response")
+                }
         }
 
     override suspend fun getBodyProfileRecommendedShoeSize(
@@ -307,13 +316,17 @@ internal class VirtusizeAPIServiceImpl(
     ): VirtusizeApiResponse<BodyProfileRecommendedSize?> =
         withContext(Dispatchers.IO) {
             val apiRequest = VirtusizeApi.getShoeSizeRecommendationRequest(productTypes, storeProduct, userBodyProfile)
+            Log.d("[Aoyama-mobile]", "Recommended shoe size request: ${apiRequest.url}, body: ${JSONObject(apiRequest.params)}")
             VirtusizeApiTask(
                 httpURLConnection,
                 sharedPreferencesHelper,
                 messageHandler,
             )
                 .setJsonParser(BodyProfileRecommendedSizeJsonParser(storeProduct))
-                .execute(apiRequest)
+                .execute<BodyProfileRecommendedSize?>(apiRequest)
+                .also { response ->
+                    Log.d("[Aoyama-mobile]", "Recommended shoe size response: $response")
+                }
         }
 
     override suspend fun getI18n(language: VirtusizeLanguage?): VirtusizeApiResponse<JSONObject> =

@@ -24,7 +24,7 @@ data class VirtusizeParams(
     internal val context: Context,
     internal var apiKey: String?,
     internal var environment: VirtusizeEnvironment,
-    private var region: VirtusizeRegion,
+    internal var region: VirtusizeRegion,
     internal var language: VirtusizeLanguage,
     private val allowedLanguages: MutableList<VirtusizeLanguage>,
     internal var externalUserId: String?,
@@ -45,6 +45,7 @@ data class VirtusizeParams(
             "$PARAM_BID: '$bid', " +
             (if (sessionData != null) "$PARAM_SESSION_DATA: $sessionData, " else "") +
             "$PARAM_STORE_PRODUCT_ID: '${product.productCheckData?.productId}', " +
+            (if (externalUserId != null) "$PARAM_EXTERNAL_USER_ID: '$externalUserId', " else "") +
             "$PARAM_LANGUAGE: '${language.value}', " +
             "$PARAM_SHOW_SGI: $showSGI, " +
             "$PARAM_ALLOW_LANGUAGES: " +

@@ -2,6 +2,7 @@ package com.virtusize.android.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
@@ -126,6 +127,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
                     url: String?,
                 ) {
                     if (url != null && url.contains(virtusizeWebAppUrl)) {
+                        Log.d("[Aoyama-mobile]", "Evaluating vsParamsFromSDKScript: $vsParamsFromSDKScript")
                         binding.webView.evaluateJavascript(vsParamsFromSDKScript, null)
                         binding.webView.evaluateJavascript(
                             "javascript:window.virtusizeSNSEnabled = $showSNSButtons;",
@@ -246,6 +248,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
             dismiss()
             return
         }
+        Log.d("[Aoyama-mobile]", "vsParamsFromSDKScript: $vsParamsFromSDKScript")
 
         showSNSButtons = arguments?.getBoolean(Constants.VIRTUSIZE_SHOW_SNS_BUTTONS) ?: false
 
