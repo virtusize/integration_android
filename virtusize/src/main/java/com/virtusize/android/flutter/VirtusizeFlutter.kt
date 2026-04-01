@@ -5,6 +5,7 @@ import android.content.Context
 import com.virtusize.android.ErrorResponseHandler
 import com.virtusize.android.SuccessResponseHandler
 import com.virtusize.android.VirtusizeRepository
+import com.virtusize.android.VirtusizeSentryTracker
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.VirtusizeMessageHandler
@@ -35,6 +36,7 @@ interface VirtusizeFlutter {
         ) = if (!Companion::instance.isInitialized) {
             synchronized(this) {
                 if (!Companion::instance.isInitialized) {
+                    VirtusizeSentryTracker.setSDKPlatform("flutter-android")
                     VirtusizeFlutterImpl(
                         context = context,
                         params = params,

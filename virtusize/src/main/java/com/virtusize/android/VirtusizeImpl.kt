@@ -12,7 +12,6 @@ import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeOrder
 import com.virtusize.android.data.local.VirtusizeParams
-import com.virtusize.android.data.local.virtusizeRegion
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.throwError
 import com.virtusize.android.data.remote.I18nLocalization
@@ -30,6 +29,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 /**
@@ -49,11 +49,15 @@ internal class VirtusizeImpl(
     // Registered message handlers
     private val messageHandlers = mutableListOf<VirtusizeMessageHandler>()
 
-    // Job to track and cancel the previous load operation
+    // Sentry store ID helper
+    private val sentryStoreId: String?
+        get() = VirtusizeApi.currentStoreId?.value?.toString()
+
+    // Job to track and cancel previous load operation
     private var loadJob: Job? = null
 
-    // Tracks the last product loaded to detect product changes and allow re-loading on config changes
-    private var lastLoadedProduct: VirtusizeProduct? = null
+    // Tracks the last product ID loaded to detect product changes for session tracking
+    private var lastLoadedProductExternalId: String? = null
 
     // The Virtusize message handler passes received errors and events to registered message handlers
     val messageHandler =
@@ -68,6 +72,7 @@ internal class VirtusizeImpl(
                 // Handle different user events from the web view
                 when (event) {
                     is VirtusizeEvent.UserAddedProduct -> {
+                        VirtusizeSentryTracker.trackWebViewEvent(event.name, sentryStoreId)
                         scope.launch {
                             virtusizeRepository.fetchDataForInPageRecommendation(
                                 shouldUpdateUserProducts = true,
@@ -80,12 +85,14 @@ internal class VirtusizeImpl(
                     }
 
                     is VirtusizeEvent.UserAuthData -> {
+                        VirtusizeSentryTracker.trackWebViewEvent(event.name, sentryStoreId)
                         event.data?.let { data ->
                             virtusizeRepository.updateUserAuthData(data)
                         }
                     }
 
                     is VirtusizeEvent.UserChangedRecommendationType -> {
+                        VirtusizeSentryTracker.trackWebViewEvent(event.name, sentryStoreId)
                         // Switches the view for InPage based on user selected size recommendation type
                         var recommendationType: SizeRecommendationType? = null
                         event.data?.optString("recommendationType")?.let {
@@ -99,6 +106,7 @@ internal class VirtusizeImpl(
                     }
 
                     is VirtusizeEvent.UserLoggedOut, is VirtusizeEvent.UserDeletedData -> {
+                        VirtusizeSentryTracker.trackWebViewEvent(event.name, sentryStoreId)
                         // Clears user related data and updates the session,
                         // and then re-fetches user products and body profile from the server
                         scope.launch {
@@ -110,6 +118,7 @@ internal class VirtusizeImpl(
                     }
 
                     is VirtusizeEvent.UserDeletedProduct -> {
+                        VirtusizeSentryTracker.trackWebViewEvent(event.name, sentryStoreId)
                         event.data?.optInt("userProductId")?.let { userProductId ->
                             virtusizeRepository.deleteUserProduct(userProductId)
                         }
@@ -123,6 +132,7 @@ internal class VirtusizeImpl(
                     }
 
                     is VirtusizeEvent.UserLoggedIn -> {
+                        VirtusizeSentryTracker.trackWebViewEvent(event.name, sentryStoreId)
                         // Updates the user session and fetches updated user products and body profile from the server
                         scope.launch {
                             virtusizeRepository.updateUserSession()
@@ -132,6 +142,10 @@ internal class VirtusizeImpl(
                     }
 
                     is VirtusizeEvent.UserOpenedWidget -> {
+                        VirtusizeSentryTracker.trackWebViewEvent(
+                            eventName = event.name,
+                            storeId = sentryStoreId,
+                        )
                         virtusizeRepository.setLastProductOnVirtusizeWebView(product.externalId)
                         scope.launch {
                             virtusizeRepository.fetchDataForInPageRecommendation(
@@ -143,6 +157,7 @@ internal class VirtusizeImpl(
                     }
 
                     is VirtusizeEvent.UserSelectedProduct -> {
+                        VirtusizeSentryTracker.trackWebViewEvent(event.name, sentryStoreId)
                         val userProductId = event.data?.optInt("userProductId")
                         scope.launch {
                             virtusizeRepository.fetchDataForInPageRecommendation(
@@ -157,29 +172,30 @@ internal class VirtusizeImpl(
                     }
 
                     is VirtusizeEvent.UserUpdatedBodyMeasurements -> {
+                        VirtusizeSentryTracker.trackWebViewEvent(event.name, sentryStoreId)
                         invalidateCurrentProduct()
-                        // Updates the body recommendation size and switches the view to the body comparison,
-                        // then re-fetches the body profile and updates the recommendation again
+                        // Updates the body recommendation size and switches the view to the body comparison
                         val sizeRecName = event.data?.optString("sizeRecName")
                         scope.launch {
                             virtusizeRepository.updateUserBodyRecommendedSize(sizeRecName)
                             virtusizeRepository.updateInPageRecommendation(
                                 type = SizeRecommendationType.Body,
                             )
-                            virtusizeRepository.fetchDataForInPageRecommendation(
-                                shouldUpdateUserProducts = false,
-                                shouldUpdateBodyProfile = true,
-                            )
-                            virtusizeRepository.updateInPageRecommendation()
                         }
                     }
 
-                    is VirtusizeEvent.UserClosedWidget ->
+                    is VirtusizeEvent.UserClosedWidget -> {
+                        VirtusizeSentryTracker.trackWebViewEvent(
+                            eventName = event.name,
+                            storeId = sentryStoreId,
+                        )
                         scope.launch {
                             virtusizeRepository.updateUserSession()
                         }
+                    }
 
                     is VirtusizeEvent.UserClickedLanguageSelector -> {
+                        VirtusizeSentryTracker.trackWebViewEvent(event.name, sentryStoreId)
                         event.data?.optString("language")?.let { language ->
                             val virtusizeLanguage = VirtusizeLanguage.entries.firstOrNull { it.value == language }
                             if (virtusizeLanguage != null) {
@@ -188,13 +204,15 @@ internal class VirtusizeImpl(
                         }
                     }
 
+                    is VirtusizeEvent.UserSawProduct -> Unit
+
                     is VirtusizeEvent.UserCreatedSilhouette,
-                    is VirtusizeEvent.UserSawProduct,
                     is VirtusizeEvent.UserSawWidgetButton,
                     is VirtusizeEvent.UserClickedStart,
                     is VirtusizeEvent.WidgetReady,
-                    is VirtusizeEvent.Undefined,
-                    -> Unit
+                    -> VirtusizeSentryTracker.trackWebViewEvent(event.name, sentryStoreId)
+
+                    is VirtusizeEvent.Undefined -> Unit
                 }
             }
 
@@ -202,6 +220,10 @@ internal class VirtusizeImpl(
                 messageHandlers.forEach { messageHandler ->
                     messageHandler.onError(error)
                 }
+                VirtusizeSentryTracker.trackError(
+                    throwable = Exception(error.message),
+                    storeId = sentryStoreId,
+                )
             }
         }
 
@@ -343,13 +365,7 @@ internal class VirtusizeImpl(
         VirtusizeApi.setApiKey(apiKey)
         VirtusizeApi.setEnvironment(env)
         virtusizeViews.forEach { virtusizeView ->
-            virtusizeView.virtusizeParams.apiKey = apiKey
             virtusizeView.virtusizeParams.environment = env
-            virtusizeView.virtusizeParams.region = env.virtusizeRegion()
-        }
-        lastLoadedProduct?.let { product ->
-            invalidateCurrentProduct()
-            load(product)
         }
     }
 
@@ -371,14 +387,50 @@ internal class VirtusizeImpl(
      * @see Virtusize.load
      */
     override fun load(virtusizeProduct: VirtusizeProduct) {
-        if (lastLoadedProduct?.externalId != virtusizeProduct.externalId) {
-            invalidateCurrentProduct()
+        // Generate a new Sentry session ID when a different product is loaded
+        if (lastLoadedProductExternalId != virtusizeProduct.externalId) {
+            lastLoadedProductExternalId = virtusizeProduct.externalId
+            VirtusizeSentryTracker.generateSessionId()
         }
-        lastLoadedProduct = virtusizeProduct
         loadJob?.cancel()
-        loadJob = scope.launch {
-            productCheck(virtusizeProduct)
-        }
+        loadJob =
+            scope.launch {
+                if (!isActive) {
+                    VirtusizeSentryTracker.trackLoadCancelled(
+                        step = "start",
+                        externalProductId = virtusizeProduct.externalId,
+                        storeId = sentryStoreId,
+                    )
+                    return@launch
+                }
+                val success = productCheck(virtusizeProduct)
+                if (!isActive) {
+                    VirtusizeSentryTracker.trackLoadCancelled(
+                        step = "product-check",
+                        externalProductId = virtusizeProduct.externalId,
+                        storeId = sentryStoreId,
+                    )
+                    return@launch
+                }
+                // productCheckData is set only when the API call itself succeeded (valid or invalid product)
+                val apiSucceeded = virtusizeProduct.productCheckData != null
+                VirtusizeSentryTracker.trackProductCheck(
+                    externalProductId = virtusizeProduct.externalId,
+                    isValid = success,
+                    storeId = if (apiSucceeded) sentryStoreId else null,
+                )
+                if (apiSucceeded) {
+                    VirtusizeSentryTracker.trackUserSawProduct(
+                        externalProductId = virtusizeProduct.externalId,
+                        storeId = sentryStoreId,
+                    )
+                } else {
+                    VirtusizeSentryTracker.trackError(
+                        throwable = Exception("Product check failed"),
+                        storeId = null,
+                    )
+                }
+            }
     }
 
     /**
@@ -421,9 +473,14 @@ internal class VirtusizeImpl(
         onError: ((VirtusizeError) -> Unit)?,
     ) {
         scope.launch {
+            VirtusizeSentryTracker.trackSendOrder(order, sentryStoreId)
             virtusizeRepository.sendOrder(params, order, { _ ->
                 onSuccess?.invoke()
             }, { error ->
+                VirtusizeSentryTracker.trackError(
+                    throwable = Exception(error.message),
+                    storeId = sentryStoreId,
+                )
                 onError?.invoke(error)
             })
         }
@@ -438,9 +495,14 @@ internal class VirtusizeImpl(
         onError: ErrorResponseHandler?,
     ) {
         scope.launch {
+            VirtusizeSentryTracker.trackSendOrder(order, sentryStoreId)
             virtusizeRepository.sendOrder(params, order, { data ->
                 onSuccess?.onSuccess(data)
             }, { error ->
+                VirtusizeSentryTracker.trackError(
+                    throwable = Exception(error.message),
+                    storeId = sentryStoreId,
+                )
                 onError?.onError(error)
             })
         }

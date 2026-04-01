@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.sentry.android)
     `maven-publish`
     signing
 }
@@ -89,6 +90,8 @@ dependencies {
 
     implementation(libs.coil)
     implementation(libs.coil.gif)
+
+    implementation(libs.sentry.android)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
 
