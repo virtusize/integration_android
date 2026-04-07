@@ -49,7 +49,7 @@ internal fun VirtusizeSampleApp() {
                     if (apiKey == KeyJp) {
                         VirtusizeProduct(externalId = "ION05")
                     } else {
-                        VirtusizeProduct(externalId = "OPP90")
+                        VirtusizeProduct(externalId = "NL1110231")
                     }
                 }
             }
@@ -59,6 +59,7 @@ internal fun VirtusizeSampleApp() {
                     apiKey = apiKey,
                     env = if (apiKey == KeyJp) VirtusizeEnvironment.JAPAN else VirtusizeEnvironment.KOREA,
                 )
+                Virtusize.getInstance().load(product)
             }
 
             Text(if (apiKey == KeyKr) "Now Korea" else "Now Japan")

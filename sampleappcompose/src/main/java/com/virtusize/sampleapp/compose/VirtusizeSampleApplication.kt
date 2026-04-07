@@ -26,13 +26,13 @@ internal class VirtusizeSampleApplication : Application() {
             .setShowSGI(true)
             // By default, Virtusize allows all the possible languages
             .setAllowedLanguages(listOf(VirtusizeLanguage.EN, VirtusizeLanguage.JP, VirtusizeLanguage.KR))
-            // By default, Virtusize displays all the possible info categories in the Product Details tab
+            // By dXefault, Virtusize displays all the possible info categories in the Product Details tab
             .setDetailsPanelCards(setOf(VirtusizeInfoCategory.BRAND_SIZING, VirtusizeInfoCategory.GENERAL_FIT))
             // By default, Virtusize enables the SNS buttons
             .setShowSNSButtons(true)
             // By default, Virtusize shows Privacy Policy
             .setShowPrivacyPolicy(true)
-            .setBranch("nsdk-412-market-aware-body-measurements-idb-cache")
+            .setBranch("nsdk-412-market-aware-body-measurements-no-idb-cache")
             .build()
     }
 }

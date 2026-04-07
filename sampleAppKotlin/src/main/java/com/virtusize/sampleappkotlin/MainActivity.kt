@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
          */
         val product =
             VirtusizeProduct(
-                externalId = "vs_dress",
+                externalId = "ION05",
                 imageUrl = "http://www.image.com/goods/12345.jpg",
             )
         Virtusize.getInstance().load(product)
