@@ -11,9 +11,9 @@ import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.VirtusizeMessageHandler
 import com.virtusize.android.data.local.VirtusizeOrder
 import com.virtusize.android.data.local.VirtusizeParams
-import com.virtusize.android.data.local.virtusizeRegion
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.throwError
+import com.virtusize.android.data.local.virtusizeRegion
 import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.network.VirtusizeAPIService
 import com.virtusize.android.network.VirtusizeApi
@@ -326,7 +326,10 @@ internal class VirtusizeImpl(
     /**
      * @see Virtusize.changeStore
      */
-    override fun changeStore(apiKey: String, env: VirtusizeEnvironment) {
+    override fun changeStore(
+        apiKey: String,
+        env: VirtusizeEnvironment,
+    ) {
         VirtusizeApi.setApiKey(apiKey)
         VirtusizeApi.setEnvironment(env)
         virtusizeViews.forEach { virtusizeView ->
@@ -391,7 +394,7 @@ internal class VirtusizeImpl(
                         externalProductId = virtusizeProduct.externalId,
                         storeId = sentryStoreId,
                     )
-                    virtusizeRepository.updateUserSession( false, virtusizeProduct.externalId)
+                    virtusizeRepository.updateUserSession(false, virtusizeProduct.externalId)
                     if (virtusizeViewsContainInPage()) {
                         virtusizeRepository.fetchInitialData(params.language, virtusizeProduct)
                         virtusizeRepository.fetchDataForInPageRecommendation(virtusizeProduct.externalId)

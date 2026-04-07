@@ -2,7 +2,6 @@ package com.virtusize.android.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
@@ -12,6 +11,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MotionEvent

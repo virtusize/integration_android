@@ -2,9 +2,9 @@ package com.virtusize.android.network
 
 import android.content.Context
 import android.content.res.Configuration
-import android.util.Log
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import android.view.WindowManager
 import com.virtusize.android.BuildConfig
 import com.virtusize.android.R
