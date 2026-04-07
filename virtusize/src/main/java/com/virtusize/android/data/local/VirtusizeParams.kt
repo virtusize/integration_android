@@ -39,13 +39,15 @@ data class VirtusizeParams(
      * Returns the virtusize parameter string to be passed to the JavaScript function vsParamsFromSDK
      */
     internal fun vsParamsString(product: VirtusizeProduct): String {
-        val sessionData = SharedPreferencesHelper.getInstance(context).getSessionData()
-        val bid = SharedPreferencesHelper.getInstance(context).getBrowserId()
+        val prefs = SharedPreferencesHelper.getInstance(context)
+        val sessionData = prefs.getSessionData()
+        val bid = prefs.getBrowserId()
+        val authToken = prefs.getAuthToken()
         return "{$PARAM_API_KEY: '$apiKey', " +
             "$PARAM_BID: '$bid', " +
             (if (sessionData != null) "$PARAM_SESSION_DATA: $sessionData, " else "") +
             "$PARAM_STORE_PRODUCT_ID: '${product.productCheckData?.productId}', " +
-            (if (externalUserId != null) "$PARAM_EXTERNAL_USER_ID: '$externalUserId', " else "") +
+            (if (externalUserId != null && !authToken.isNullOrEmpty()) "$PARAM_EXTERNAL_USER_ID: '$externalUserId', " else "") +
             "$PARAM_LANGUAGE: '${language.value}', " +
             "$PARAM_SHOW_SGI: $showSGI, " +
             "$PARAM_ALLOW_LANGUAGES: " +

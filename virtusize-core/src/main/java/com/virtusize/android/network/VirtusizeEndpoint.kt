@@ -73,7 +73,7 @@ sealed interface VirtusizeEndpoint {
     }
 
     data object UserBodyMeasurements : VirtusizeEndpoint {
-        override val path: String = "/a/api/v3/user-body-measurements"
+        override val path: String = "/a/api/v3/user-body-measurements/"
     }
 
     data object I18N : VirtusizeEndpoint {

@@ -2,6 +2,7 @@ package com.virtusize.android
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import java.util.Calendar
 import kotlin.random.Random
 
@@ -41,6 +42,7 @@ class SharedPreferencesHelper {
         if (authToken == null) {
             return
         }
+        Log.d("[Aoyama-mobile]", "Auth Token: $authToken")
         preferences.edit().putString(PREFS_AUTH_TOKEN_KEY, authToken).apply()
     }
 
@@ -56,6 +58,7 @@ class SharedPreferencesHelper {
      * Stores the access token for the session API
      */
     fun storeAccessToken(authToken: String) {
+        Log.d("[Aoyama-mobile]", "Access Token: $authToken")
         preferences.edit().putString(PREFS_ACCESS_TOKEN_KEY, authToken).apply()
     }
 

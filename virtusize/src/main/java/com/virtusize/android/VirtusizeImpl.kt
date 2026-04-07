@@ -14,6 +14,7 @@ import com.virtusize.android.data.local.VirtusizeOrder
 import com.virtusize.android.data.local.VirtusizeParams
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.throwError
+import com.virtusize.android.data.local.virtusizeRegion
 import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.network.VirtusizeAPIService
 import com.virtusize.android.network.VirtusizeApi
@@ -27,8 +28,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
@@ -59,7 +58,7 @@ internal class VirtusizeImpl(
     // Tracks the last product ID loaded to detect product changes for session tracking
     private var lastLoadedProductExternalId: String? = null
 
-    // The Virtusize message handler passes received errors and events to registered message handlers
+// The Virtusize message handler passes received errors and events to registered message handlers
     val messageHandler =
         object : VirtusizeMessageHandler {
             override fun onEvent(
@@ -111,7 +110,7 @@ internal class VirtusizeImpl(
                         // and then re-fetches user products and body profile from the server
                         scope.launch {
                             virtusizeRepository.clearUserData()
-                            virtusizeRepository.updateUserSession()
+                            virtusizeRepository.updateUserSession(forceUpdate = true)
                             virtusizeRepository.fetchDataForInPageRecommendation()
                             virtusizeRepository.updateInPageRecommendation()
                         }
@@ -135,7 +134,7 @@ internal class VirtusizeImpl(
                         VirtusizeSentryTracker.trackWebViewEvent(event.name, sentryStoreId)
                         // Updates the user session and fetches updated user products and body profile from the server
                         scope.launch {
-                            virtusizeRepository.updateUserSession()
+                            virtusizeRepository.updateUserSession(forceUpdate = true)
                             virtusizeRepository.fetchDataForInPageRecommendation()
                             virtusizeRepository.updateInPageRecommendation()
                         }
@@ -173,7 +172,6 @@ internal class VirtusizeImpl(
 
                     is VirtusizeEvent.UserUpdatedBodyMeasurements -> {
                         VirtusizeSentryTracker.trackWebViewEvent(event.name, sentryStoreId)
-                        invalidateCurrentProduct()
                         // Updates the body recommendation size and switches the view to the body comparison
                         val sizeRecName = event.data?.optString("sizeRecName")
                         scope.launch {
@@ -228,15 +226,6 @@ internal class VirtusizeImpl(
         }
 
     /**
-     * The current product external ID
-     */
-    private var currentProductExternalId: AtomicReference<String?> = AtomicReference()
-
-    private fun invalidateCurrentProduct() {
-        currentProductExternalId.set(null)
-    }
-
-    /**
      * The VirtusizePresenter handles the data passed from the actions of VirtusizeRepository
      */
     private val virtusizePresenter =
@@ -246,32 +235,12 @@ internal class VirtusizeImpl(
                 virtusizeViews.forEach { virtusizeView ->
                     virtusizeView.setProductWithProductCheckData(productWithPCDData)
                 }
-
-                // Check if product ID has changed
-                val newExternalProductId = productWithPCDData.externalId
-                val shouldReloadProduct = currentProductExternalId.getAndSet(newExternalProductId) != newExternalProductId
-                if (virtusizeViewsContainInPage()) {
-                    scope.launch {
-                        if (shouldReloadProduct) {
-                            // Those two data fetches are independent and can be run in parallel
-                            awaitAll(
-                                async { virtusizeRepository.fetchInitialData(params.language, productWithPCDData) },
-                                async { virtusizeRepository.updateUserSession(newExternalProductId) },
-                            )
-
-                            virtusizeRepository.fetchDataForInPageRecommendation(newExternalProductId)
-                        }
-                        // update recommendations anyway
-                        virtusizeRepository.updateInPageRecommendation(newExternalProductId)
-                    }
-                }
             }
 
             override fun hasInPageError(
                 externalProductId: String?,
                 error: VirtusizeError?,
             ) {
-                invalidateCurrentProduct()
                 error?.let { messageHandler.onError(it) }
                 virtusizeViews
                     .filterIsInstance<VirtusizeInPageView>()
@@ -365,7 +334,9 @@ internal class VirtusizeImpl(
         VirtusizeApi.setApiKey(apiKey)
         VirtusizeApi.setEnvironment(env)
         virtusizeViews.forEach { virtusizeView ->
+            virtusizeView.virtusizeParams.apiKey = apiKey
             virtusizeView.virtusizeParams.environment = env
+            virtusizeView.virtusizeParams.region = env.virtusizeRegion()
         }
     }
 
@@ -424,6 +395,12 @@ internal class VirtusizeImpl(
                         externalProductId = virtusizeProduct.externalId,
                         storeId = sentryStoreId,
                     )
+                    virtusizeRepository.updateUserSession( false, virtusizeProduct.externalId)
+                    if (virtusizeViewsContainInPage()) {
+                        virtusizeRepository.fetchInitialData(params.language, virtusizeProduct)
+                        virtusizeRepository.fetchDataForInPageRecommendation(virtusizeProduct.externalId)
+                        virtusizeRepository.updateInPageRecommendation(virtusizeProduct.externalId)
+                    }
                 } else {
                     VirtusizeSentryTracker.trackError(
                         throwable = Exception("Product check failed"),
