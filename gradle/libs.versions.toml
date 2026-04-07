@@ -23,6 +23,8 @@ truth = "1.4.4"
 virtusize = "2.12.21"
 virtusizeAuth = "1.1.1"
 browser = "1.8.0"
+sentry = "8.34.1"
+sentry_plugin = "6.1.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
@@ -51,6 +53,7 @@ virtusize-auth = { module = "com.virtusize.android:virtusize-auth", version.ref 
 androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
 coil = { group = "io.coil-kt", name = "coil", version = "2.6.0" }
 coil-gif = { group = "io.coil-kt", name = "coil-gif", version = "2.6.0" }
+sentry-android = { module = "io.sentry:sentry-android", version.ref = "sentry" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -59,3 +62,4 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nextPublish" }
+sentry-android = { id = "io.sentry.android.gradle", version.ref = "sentry_plugin" }

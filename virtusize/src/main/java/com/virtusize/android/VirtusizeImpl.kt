@@ -1,7 +1,6 @@
 package com.virtusize.android
 
 import android.content.Context
-import androidx.lifecycle.AtomicReference
 import com.virtusize.android.data.local.SizeComparisonRecommendedSize
 import com.virtusize.android.data.local.SizeRecommendationType
 import com.virtusize.android.data.local.VirtusizeEnvironment
@@ -15,7 +14,6 @@ import com.virtusize.android.data.local.VirtusizeParams
 import com.virtusize.android.data.local.virtusizeRegion
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.throwError
-import com.virtusize.android.data.local.virtusizeRegion
 import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.network.VirtusizeAPIService
 import com.virtusize.android.network.VirtusizeApi
@@ -326,19 +324,10 @@ internal class VirtusizeImpl(
     }
 
     /**
-     * @see Virtusize.setApiKey
+     * @see Virtusize.changeStore
      */
-    override fun setApiKey(newApiKey: String) {
-        VirtusizeApi.setApiKey(newApiKey)
-        virtusizeViews.forEach { virtusizeView ->
-            virtusizeView.virtusizeParams.apiKey = newApiKey
-        }
-    }
-
-    /**
-     * @see Virtusize.setEnvironment
-     */
-    override fun setEnvironment(env: VirtusizeEnvironment) {
+    override fun changeStore(apiKey: String, env: VirtusizeEnvironment) {
+        VirtusizeApi.setApiKey(apiKey)
         VirtusizeApi.setEnvironment(env)
         virtusizeViews.forEach { virtusizeView ->
             virtusizeView.virtusizeParams.apiKey = apiKey
