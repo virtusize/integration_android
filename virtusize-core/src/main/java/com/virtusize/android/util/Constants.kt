@@ -6,8 +6,8 @@ package com.virtusize.android.util
 object Constants {
     const val FRAG_TAG = "FRAG_TAG"
     const val URL_KEY_FOR_FIT_ILLUSTRATOR = "URL_KEY_FOR_FIT_ILLUSTRATOR"
-    const val VIRTUSIZE_PARAMS_SCRIPT_KEY = "VIRTUSIZE_PARAMS_SCRIPT_KEY"
     const val VIRTUSIZE_PRODUCT_KEY = "VIRTUSIZE_PRODUCT_KEY"
+    const val VIRTUSIZE_PARAMS_SCRIPT_KEY = "VIRTUSIZE_PARAMS_SCRIPT_KEY"
     const val VIRTUSIZE_SHOW_SNS_BUTTONS = "VIRTUSIZE_SHOW_SNS_BUTTONS"
     const val JS_BRIDGE_NAME = "VirtusizeAndroid"
 }

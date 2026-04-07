@@ -46,6 +46,10 @@ class VirtusizeRepository internal constructor(
     private var sharedPreferencesHelper: SharedPreferencesHelper =
         SharedPreferencesHelper.getInstance(context)
 
+    // Session cache: stores the last fetched session and the time it was fetched
+    private var cachedUserSession: Pair<Long, com.virtusize.android.data.remote.UserSessionInfo>? = null
+    private val sessionCacheTtlMs = 30 * 60 * 1000L // 30 minutes
+
     private var userProducts: List<Product>? = null
     private var userProductRecommendedSize: SizeComparisonRecommendedSize? = null
     private var userBodyRecommendedSize: String? = null
@@ -254,15 +258,31 @@ class VirtusizeRepository internal constructor(
 
     /**
      * Updates the user session by calling the session API
+     * @param forceUpdate if true, bypasses the cache and always fetches a fresh session
      * @param externalProductId the external product ID set by a client
      */
-    internal suspend fun updateUserSession(externalProductId: ExternalProductId? = lastProductOnVirtusizeWebView?.externalId) {
+    internal suspend fun updateUserSession(
+        forceUpdate: Boolean = false,
+        externalProductId: ExternalProductId? = lastProductOnVirtusizeWebView?.externalId,
+    ) {
+        val cached = cachedUserSession
+        val now = System.currentTimeMillis()
+        if (!forceUpdate && cached != null && (now - cached.first) < sessionCacheTtlMs) {
+            cached.second.apply {
+                sharedPreferencesHelper.storeSessionData(userSessionResponse)
+                sharedPreferencesHelper.storeAccessToken(accessToken)
+                hasSessionBodyMeasurement = hasBodyMeasurement
+            }
+            return
+        }
+
         val userSessionInfoResponse = virtusizeAPIService.getUserSessionInfo()
         if (userSessionInfoResponse.isSuccessful) {
             userSessionInfoResponse.successData?.apply {
+                cachedUserSession = Pair(System.currentTimeMillis(), this)
                 sharedPreferencesHelper.storeSessionData(userSessionResponse)
                 sharedPreferencesHelper.storeAccessToken(accessToken)
-                if (accessToken.isNotBlank()) {
+                if (accessToken.isNotBlank() && authToken.isNotBlank()) {
                     sharedPreferencesHelper.storeAuthToken(authToken)
                 }
                 hasSessionBodyMeasurement = hasBodyMeasurement
@@ -407,6 +427,7 @@ class VirtusizeRepository internal constructor(
      * Clear user session and the data related to size recommendations
      */
     internal suspend fun clearUserData() {
+        cachedUserSession = null
         virtusizeAPIService.deleteUser()
         sharedPreferencesHelper.storeAuthToken("")
 
