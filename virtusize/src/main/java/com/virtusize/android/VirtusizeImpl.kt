@@ -187,7 +187,7 @@ internal class VirtusizeImpl(
                             storeId = sentryStoreId,
                         )
                         scope.launch {
-                            virtusizeRepository.updateUserSession()
+                            virtusizeRepository.updateUserSession(forceUpdate = true)
                         }
                     }
 

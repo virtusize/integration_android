@@ -169,7 +169,7 @@ internal class VirtusizeFlutterImpl(
 
                     is VirtusizeEvent.UserClosedWidget ->
                         scope.launch {
-                            virtusizeRepository.updateUserSession()
+                            virtusizeRepository.updateUserSession(forceUpdate = true)
                         }
 
                     is VirtusizeEvent.UserClickedLanguageSelector -> {
