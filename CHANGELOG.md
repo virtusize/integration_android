@@ -1,10 +1,7 @@
-### Changes:
-- Fix: Align iOS and Android willFit parameter for recommended text
+### 2.12.22
 - Feature: Added Sentry logger
-- Feature: Web view logs handler
-- Bugfix: Load product on switch store changed
-- Codefix: Re-implementation session key requests
-- Codefix: Authorize web view fixed
+- Fix: switch between store and environments WebView authorization issue
+- Fix: Align iOS and Android willFit parameter for recommended text
 
 ### 2.12.21
 - Fix: Compose VirtusizeInPageMini VirtusizeInPageStandard update fix
