@@ -30,6 +30,7 @@ class App : Application() {
             .setShowSNSButtons(true)
             // By default, branch is empty and `production` is used
             // .setBranch("branch-name")
+            .setBranch("nsdk-412-market-aware-body-measurements-idb-cache")
             // By default, Virtusize shows Privacy Policy
             .setShowPrivacyPolicy(true)
             .build()

@@ -41,6 +41,7 @@ class SharedPreferencesHelper {
         if (authToken == null) {
             return
         }
+
         preferences.edit().putString(PREFS_AUTH_TOKEN_KEY, authToken).apply()
     }
 

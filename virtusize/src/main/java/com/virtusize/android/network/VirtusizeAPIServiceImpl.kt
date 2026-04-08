@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import android.view.WindowManager
 import com.virtusize.android.BuildConfig
 import com.virtusize.android.R
@@ -281,7 +282,10 @@ internal class VirtusizeAPIServiceImpl(
                 messageHandler,
             )
                 .setJsonParser(UserBodyProfileJsonParser())
-                .execute(apiRequest)
+                .execute<UserBodyProfile>(apiRequest)
+                .also { response ->
+                    Log.d("[Aoyama-mobile]", "User body profile response: $response")
+                }
         }
 
     override suspend fun getBodyProfileRecommendedItemSize(
@@ -297,7 +301,10 @@ internal class VirtusizeAPIServiceImpl(
                 messageHandler,
             )
                 .setJsonParser(BodyProfileRecommendedSizeJsonParser(storeProduct))
-                .execute(apiRequest)
+                .execute<ArrayList<BodyProfileRecommendedSize>?>(apiRequest)
+                .also { response ->
+                    Log.d("[Aoyama-mobile]", "Recommended item size response: $response")
+                }
         }
 
     override suspend fun getBodyProfileRecommendedShoeSize(
@@ -313,7 +320,10 @@ internal class VirtusizeAPIServiceImpl(
                 messageHandler,
             )
                 .setJsonParser(BodyProfileRecommendedSizeJsonParser(storeProduct))
-                .execute(apiRequest)
+                .execute<BodyProfileRecommendedSize?>(apiRequest)
+                .also { response ->
+                    Log.d("[Aoyama-mobile]", "Recommended shoe size response: $response")
+                }
         }
 
     override suspend fun getI18n(language: VirtusizeLanguage?): VirtusizeApiResponse<JSONObject> =

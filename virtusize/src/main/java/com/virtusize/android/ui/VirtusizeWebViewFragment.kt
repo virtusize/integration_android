@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -126,6 +127,7 @@ class VirtusizeWebViewFragment : DialogFragment() {
                     url: String?,
                 ) {
                     if (url != null && url.contains(virtusizeWebAppUrl)) {
+                        Log.d("[Aoyama-mobile]", "Evaluating vsParamsFromSDKScript: $vsParamsFromSDKScript")
                         binding.webView.evaluateJavascript(vsParamsFromSDKScript, null)
                         binding.webView.evaluateJavascript(
                             "javascript:window.virtusizeSNSEnabled = $showSNSButtons;",

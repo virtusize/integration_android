@@ -169,7 +169,7 @@ internal class VirtusizeFlutterImpl(
 
                     is VirtusizeEvent.UserClosedWidget ->
                         scope.launch {
-                            virtusizeRepository.updateUserSession()
+                            virtusizeRepository.updateUserSession(forceUpdate = true)
                         }
 
                     is VirtusizeEvent.UserClickedLanguageSelector -> {
@@ -224,7 +224,7 @@ internal class VirtusizeFlutterImpl(
                         // Those two data fetches are independent and can be run in parallel
                         awaitAll(
                             async { virtusizeRepository.fetchInitialData(params.language, productWithPCDData) },
-                            async { virtusizeRepository.updateUserSession(newExternalProductId) },
+                            async { virtusizeRepository.updateUserSession(false, newExternalProductId) },
                         )
 
                         virtusizeRepository.fetchDataForInPageRecommendation(newExternalProductId)

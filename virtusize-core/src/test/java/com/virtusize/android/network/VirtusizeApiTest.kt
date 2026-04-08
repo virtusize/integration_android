@@ -280,7 +280,7 @@ internal class VirtusizeApiTest {
     fun `test getUserBodyProfile should return expected API request`() {
         val actualApiRequest = VirtusizeApi.getUserBodyProfile()
 
-        val expectedUrl = "https://staging.virtusize.com/a/api/v3/user-body-measurements"
+        val expectedUrl = "https://staging.virtusize.com/a/api/v3/user-body-measurements/"
 
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET, mutableMapOf(), true)
 
