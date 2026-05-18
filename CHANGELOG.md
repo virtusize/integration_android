@@ -1,4 +1,4 @@
-### Changes
+### 2.12.23
 - Fix: crash on externalProductId nil
 - Fix: Sentry logger for Flutter
 
