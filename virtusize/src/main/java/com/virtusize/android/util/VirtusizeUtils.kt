@@ -126,10 +126,12 @@ internal object VirtusizeUtils {
     ): Bundle =
         Bundle().apply {
             virtusizeParams?.let { params ->
-                putString(
-                    Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY,
-                    "javascript:vsParamsFromSDK(${params.vsParamsString(product)})",
-                )
+                params.vsParamsString(product)?.let { paramsString ->
+                    putString(
+                        Constants.VIRTUSIZE_PARAMS_SCRIPT_KEY,
+                        "javascript:vsParamsFromSDK($paramsString)",
+                    )
+                }
                 putBoolean(Constants.VIRTUSIZE_SHOW_SNS_BUTTONS, virtusizeParams.showSNSButtons)
             }
             putParcelable(Constants.VIRTUSIZE_PRODUCT_KEY, product)

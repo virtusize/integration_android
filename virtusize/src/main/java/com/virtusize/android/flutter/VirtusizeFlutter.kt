@@ -36,6 +36,7 @@ interface VirtusizeFlutter {
         ) = if (!Companion::instance.isInitialized) {
             synchronized(this) {
                 if (!Companion::instance.isInitialized) {
+                    VirtusizeSentryTracker.initSentry(context)
                     VirtusizeSentryTracker.setSDKPlatform("flutter-android")
                     VirtusizeFlutterImpl(
                         context = context,
