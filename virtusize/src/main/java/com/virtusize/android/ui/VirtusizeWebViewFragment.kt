@@ -128,7 +128,9 @@ class VirtusizeWebViewFragment : DialogFragment() {
                 ) {
                     if (url != null && url.contains(virtusizeWebAppUrl)) {
                         Log.d("[Aoyama-mobile]", "Evaluating vsParamsFromSDKScript: $vsParamsFromSDKScript")
-                        binding.webView.evaluateJavascript(vsParamsFromSDKScript, null)
+                        if (vsParamsFromSDKScript.isNotBlank()) {
+                            binding.webView.evaluateJavascript(vsParamsFromSDKScript, null)
+                        }
                         binding.webView.evaluateJavascript(
                             "javascript:window.virtusizeSNSEnabled = $showSNSButtons;",
                             null,

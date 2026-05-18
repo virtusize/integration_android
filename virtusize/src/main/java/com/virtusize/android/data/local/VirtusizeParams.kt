@@ -36,9 +36,12 @@ data class VirtusizeParams(
     internal val serviceEnvironment: Boolean,
 ) {
     /**
-     * Returns the virtusize parameter string to be passed to the JavaScript function vsParamsFromSDK
+     * Returns the virtusize parameter string to be passed to the JavaScript function vsParamsFromSDK,
+     * or null if required params (apiKey, product externalId) are missing.
      */
-    internal fun vsParamsString(product: VirtusizeProduct): String {
+    internal fun vsParamsString(product: VirtusizeProduct): String? {
+        val apiKey = apiKey ?: return null
+        if (product.externalId.isEmpty()) return null
         val prefs = SharedPreferencesHelper.getInstance(context)
         val sessionData = prefs.getSessionData()
         val bid = prefs.getBrowserId()

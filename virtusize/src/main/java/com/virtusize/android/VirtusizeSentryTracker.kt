@@ -1,14 +1,16 @@
 package com.virtusize.android
 
+import android.content.Context
 import com.virtusize.android.data.local.VirtusizeOrder
 import io.sentry.Sentry
+import io.sentry.android.core.SentryAndroid
 import java.util.UUID
 
 /**
  * Utility for Sentry metrics and structured logs tracking in the Virtusize SDK.
  *
  * Requires Sentry Android SDK >= 8.0.0.
- * Configured via AndroidManifest.xml meta-data (DSN, logs, traces sample rate, environment).
+ * Initialized programmatically via initSentry(context).
  */
 internal object VirtusizeSentryTracker {
     // MARK: - Session Management
@@ -16,7 +18,13 @@ internal object VirtusizeSentryTracker {
     /** The current active session ID, set by Virtusize.load. */
     var currentSessionId: String = ""
 
-    init {
+    fun initSentry(context: Context) {
+        SentryAndroid.init(context) { options ->
+            options.dsn = "https://fc419e92ef1a49b9cef57d1c6f207e75@o903.ingest.us.sentry.io/4510877744562176"
+            options.isDebug = false
+            options.isSendDefaultPii = true
+            options.logs.isEnabled = true
+        }
         Sentry.configureScope { scope ->
             scope.setTag("sdk_version", BuildConfig.VERSION_NANE)
             scope.setTag("sdk_platform", "android")

@@ -32,6 +32,7 @@ interface Virtusize {
         ) = if (!Companion::instance.isInitialized) {
             synchronized(this) {
                 if (!Companion::instance.isInitialized) {
+                    VirtusizeSentryTracker.initSentry(context)
                     VirtusizeImpl(context = context, params = params).also { instance = it }
                 } else {
                     instance

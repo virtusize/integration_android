@@ -1,4 +1,8 @@
-### Changes:
+### Changes
+- Fix: crash on externalProductId nil
+- Fix: Sentry logger for Flutter
+
+### 2.12.22
 - Fix: Align iOS and Android willFit parameter for recommended text
 - Feature: Added Sentry logger
 - Feature: Web view logs handler
