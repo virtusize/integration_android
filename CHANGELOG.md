@@ -1,3 +1,6 @@
+### 2.12.24
+- Fix: Google SNS login iOS browser issue
+
 ### 2.12.23
 - Fix: crash on externalProductId nil
 - Fix: Sentry logger for Flutter
