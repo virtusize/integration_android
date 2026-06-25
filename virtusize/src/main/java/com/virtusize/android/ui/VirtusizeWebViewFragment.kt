@@ -23,6 +23,7 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.FrameLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -163,60 +164,72 @@ class VirtusizeWebViewFragment : DialogFragment() {
                     userGesture: Boolean,
                     resultMsg: Message,
                 ): Boolean {
-                    if (resultMsg.obj != null && resultMsg.obj is WebView.WebViewTransport) {
-                        val popupWebView =
-                            WebView(view.context).apply {
-                                setBackgroundColor(Color.TRANSPARENT)
-                                layoutParams =
-                                    ViewGroup.LayoutParams(
-                                        ViewGroup.LayoutParams.MATCH_PARENT,
-                                        ViewGroup.LayoutParams.MATCH_PARENT,
-                                    )
-                                settings.javaScriptEnabled = true
-                                settings.javaScriptCanOpenWindowsAutomatically = true
-                                settings.setSupportMultipleWindows(true)
-                                settings.domStorageEnabled = true
-                                settings.userAgentString = System.getProperty("http.agent")
-                                webViewClient =
-                                    object : WebViewClient() {
-                                        override fun shouldOverrideUrlLoading(
-                                            view: WebView,
-                                            url: String,
-                                        ): Boolean {
-                                            if (VirtusizeURLCheck.isExternalLinkFromVirtusize(url)) {
-                                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                                                try {
-                                                    startActivity(intent)
-                                                } finally {
-                                                    return true
-                                                }
-                                            }
-                                            if (showSNSButtons) {
-                                                return VirtusizeAuth.isSNSAuthUrl(
-                                                    requireContext(),
-                                                    virtusizeSNSAuthLauncher,
-                                                    url,
-                                                ).also { isSNSAuthUrl ->
-                                                    if (isSNSAuthUrl) {
-                                                        binding.webView.removeAllViews()
-                                                    }
-                                                }
-                                            }
-                                            return false
-                                        }
-                                    }
-                                webChromeClient =
-                                    object : WebChromeClient() {
-                                        override fun onCloseWindow(window: WebView) {
-                                            binding.webView.removeAllViews()
-                                        }
-                                    }
+                    val transport = resultMsg.obj as? WebView.WebViewTransport ?: return false
+                    val popupWebView =
+                        WebView(view.context).apply {
+                            setBackgroundColor(Color.TRANSPARENT)
+                            layoutParams =
+                                FrameLayout.LayoutParams(
+                                    FrameLayout.LayoutParams.MATCH_PARENT,
+                                    FrameLayout.LayoutParams.MATCH_PARENT,
+                                )
+                            settings.javaScriptEnabled = true
+                            settings.javaScriptCanOpenWindowsAutomatically = true
+                            settings.setSupportMultipleWindows(true)
+                            settings.domStorageEnabled = true
+                            // Device default UA (not the SDK Safari UA) so providers such as Google
+                            // do not reject the embedded browser. See https://stackoverflow.com/a/73152331
+                            settings.userAgentString = System.getProperty("http.agent")
+                            isFocusableInTouchMode = true
+                            setOnKeyListener { _, keyCode, event ->
+                                if (keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP) {
+                                    if (canGoBack()) goBack() else removePopupWebView(this)
+                                    true
+                                } else {
+                                    false
+                                }
                             }
+                            webViewClient =
+                                object : WebViewClient() {
+                                    override fun shouldOverrideUrlLoading(
+                                        view: WebView,
+                                        url: String,
+                                    ): Boolean {
+                                        val scheme = Uri.parse(url).scheme?.lowercase()
+                                        // Hand non-http(s) deep links (e.g. SNS app schemes) to the OS.
+                                        if (scheme != null && scheme != "http" && scheme != "https") {
+                                            return runCatching {
+                                                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                                                true
+                                            }.getOrDefault(false)
+                                        }
+                                        if (VirtusizeURLCheck.isExternalLinkFromVirtusize(url)) {
+                                            return runCatching {
+                                                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                                                true
+                                            }.getOrDefault(false)
+                                        }
+                                        // Keep the SNS sign-in (Google/Apple/LINE) inside this popup so the
+                                        // window.opener relationship is preserved and the SNS proxy can post
+                                        // the auth result back to the aoyama widget. This mirrors the working
+                                        // iceberg-native SDK; diverting to a standalone VitrusizeAuthActivity
+                                        // breaks window.opener and leaves a blank page after Google login.
+                                        return false
+                                    }
+                                }
+                            webChromeClient =
+                                object : WebChromeClient() {
+                                    override fun onCloseWindow(window: WebView) {
+                                        removePopupWebView(window)
+                                    }
+                                }
+                        }
 
-                        val transport = resultMsg.obj as WebView.WebViewTransport
-                        transport.webView = popupWebView
-                        resultMsg.sendToTarget()
-                    }
+                    // Attach the popup as an overlay on the root container (not on the main WebView,
+                    // whose i18n handler calls removeAllViews) so it actually renders.
+                    (binding.root as ViewGroup).addView(popupWebView)
+                    transport.webView = popupWebView
+                    resultMsg.sendToTarget()
                     return true
                 }
             }
@@ -312,6 +325,14 @@ class VirtusizeWebViewFragment : DialogFragment() {
      */
     internal fun setupMessageHandler(messageHandler: VirtusizeMessageHandler) {
         virtusizeMessageHandler = messageHandler
+    }
+
+    /**
+     * Removes a transient SNS sign-in popup [WebView] from the root container and releases it.
+     */
+    private fun removePopupWebView(popup: WebView) {
+        (binding.root as? ViewGroup)?.removeView(popup)
+        popup.destroy()
     }
 
     /**

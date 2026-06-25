@@ -1,15 +1,15 @@
 package com.virtusize.android.auth.views
 
+import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
-import androidx.browser.customtabs.CustomTabsIntent
-import androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION
 import com.virtusize.android.auth.data.SnsType
 import com.virtusize.android.auth.data.VirtusizeUser
 import com.virtusize.android.auth.network.FacebookAPIService
@@ -31,13 +31,16 @@ import java.net.URLDecoder
 
 internal class VitrusizeAuthActivity : AppCompatActivity() {
     companion object {
+        private const val TAG = "VsAuth"
         private const val QUERY_REDIRECT_URI_KEY = "redirect_uri"
         private const val QUERY_CHANNEL_URL_KEY = "channel_url"
     }
 
     private lateinit var viewModel: VirtusizeAuthViewModel
-    private var customTabIsOpened = false
+    private var webView: WebView? = null
+    private var redirectHandled = false
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -114,13 +117,15 @@ internal class VitrusizeAuthActivity : AppCompatActivity() {
                         env.lowercase(),
                     )
 
-                if (deviceSupportsChromeCustomTabs(this)) {
-                    val customTabsIntent = CustomTabsIntent.Builder().build()
-                    customTabsIntent.launchUrl(this, uri)
-                } else {
-                    val launchUrlInBrowser = Intent(Intent.ACTION_VIEW, uri)
-                    startActivity(launchUrlInBrowser)
-                }
+                // Render the SNS sign-in flow in an embedded WebView instead of a Chrome Custom
+                // Tab. The Custom Tab showed a blank screen after the user picked a Google account
+                // (Chrome blocks the automatic redirect back to the app's custom scheme without a
+                // user gesture). A WebView using the device's default user agent is accepted by
+                // Google and lets us intercept the final redirect ourselves. See the working
+                // iceberg-native SDK which uses the same embedded-WebView approach.
+                Log.d(TAG, "onCreate loading auth url: $uri")
+                setContentView(createAuthWebView().also { webView = it })
+                webView?.loadUrl(uri.toString())
             }
             else -> finish()
         }
@@ -128,37 +133,49 @@ internal class VitrusizeAuthActivity : AppCompatActivity() {
         subscribeUI()
     }
 
-    /**
-     * Returns a list of packages that support Custom Tabs.
-     *
-     * Ref: https://developer.chrome.com/docs/android/custom-tabs/integration-guide/#how-can-i-check-whether-the-android-device-has-a-browser-that-supports-custom-tab
-     *
-     * @param context
-     * @return true if the device supports chrome custom tabs
-     */
-    private fun deviceSupportsChromeCustomTabs(context: Context): Boolean {
-        val pm: PackageManager = context.packageManager
-        // Get default VIEW intent handler.
-        val activityIntent =
-            Intent()
-                .setAction(Intent.ACTION_VIEW)
-                .addCategory(Intent.CATEGORY_BROWSABLE)
-                .setData(Uri.parse("https://"))
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun createAuthWebView(): WebView =
+        WebView(this).apply {
+            settings.javaScriptEnabled = true
+            settings.domStorageEnabled = true
+            settings.databaseEnabled = true
+            settings.javaScriptCanOpenWindowsAutomatically = true
+            // Use the device's default browser user agent (not the SDK Safari UA) so providers
+            // such as Google do not reject the embedded browser.
+            settings.userAgentString = System.getProperty("http.agent")
+            webViewClient =
+                object : WebViewClient() {
+                    override fun shouldOverrideUrlLoading(
+                        view: WebView,
+                        request: WebResourceRequest,
+                    ): Boolean {
+                        val url = request.url
+                        val scheme = url.scheme?.lowercase()
+                        Log.d(TAG, "shouldOverrideUrlLoading scheme=$scheme url=$url")
+                        // The SNS proxy redirects to the app's custom scheme
+                        // (e.g. com.company.app.virtusize://sns-auth?...) once the provider
+                        // sign-in completes. Consume that redirect and deliver the result.
+                        if (scheme != null && scheme != "http" && scheme != "https") {
+                            handleRedirect(url)
+                            return true
+                        }
+                        return false
+                    }
 
-        // Get all apps that can handle VIEW intents.
-        val resolvedActivityList = pm.queryIntentActivities(activityIntent, 0)
-        val packagesSupportingCustomTabs: ArrayList<ResolveInfo> = ArrayList()
-        for (info in resolvedActivityList) {
-            val serviceIntent = Intent()
-            serviceIntent.action = ACTION_CUSTOM_TABS_CONNECTION
-            serviceIntent.setPackage(info.activityInfo.packageName)
-            // Check if this package also resolves the Custom Tabs service.
-            if (pm.resolveService(serviceIntent, 0) != null) {
-                packagesSupportingCustomTabs.add(info)
-            }
+                    override fun onPageFinished(
+                        view: WebView?,
+                        url: String?,
+                    ) {
+                        super.onPageFinished(view, url)
+                        Log.d(TAG, "onPageFinished url=$url")
+                        // Defensive: some SNS proxy pages deliver the result to the opener via
+                        // postMessage and never navigate to the app's custom scheme. When loaded
+                        // directly (no opener) that leaves a blank page, so also try to consume the
+                        // token straight from the loaded URL.
+                        url?.let { handleRedirect(Uri.parse(it)) }
+                    }
+                }
         }
-        return packagesSupportingCustomTabs.isNotEmpty()
-    }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
@@ -167,14 +184,35 @@ internal class VitrusizeAuthActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val redirectURL = intent.data
+        // Fallback for the manifest deep-link path (e.g. when the flow falls back to an external
+        // browser): consume a redirect URI we were resumed with. No-op on the initial launch.
+        handleRedirect(intent.data)
+    }
+
+    override fun onDestroy() {
+        webView?.destroy()
+        webView = null
+        super.onDestroy()
+    }
+
+    /**
+     * Handles the SNS redirect URI carrying the access token (or code) and the `state` params.
+     *
+     * @return true if [redirectURL] was a valid SNS redirect that we consumed.
+     */
+    private fun handleRedirect(redirectURL: Uri?): Boolean {
         val accessToken =
             redirectURL?.getQueryParameter(SNS_ACCESS_TOKEN_KEY)
                 ?: redirectURL?.getQueryParameter(SNS_CODE_KEY)
         if (redirectURL == null || accessToken == null) {
-            handleCustomTabToggleAndFinish()
-            return
+            return false
         }
+        // Both shouldOverrideUrlLoading and onPageFinished may surface the same redirect; only
+        // process it once so we don't fire the user-info request (and finish) twice.
+        if (redirectHandled) {
+            return true
+        }
+        redirectHandled = true
 
         // Restore SNS params from `state` parameter as json
         val stateMap = VirtusizeUriHelper.getStateMap(redirectURL)
@@ -185,6 +223,7 @@ internal class VitrusizeAuthActivity : AppCompatActivity() {
         val region = stateMap[SNS_REGION_KEY] as? String
         val env = stateMap[SNS_ENV_KEY] as? String
         val redirectUrl = VirtusizeUriHelper.getRedirectUrl(region, env)
+        Log.d(TAG, "handleRedirect token=present snsType=$snsType region=$region env=$env")
 
         when (snsType) {
             SnsType.GOOGLE, SnsType.FACEBOOK -> {
@@ -201,19 +240,12 @@ internal class VitrusizeAuthActivity : AppCompatActivity() {
             }
             null -> finish() // cancel the flow if the SNS Provider can't be resolved
         }
-    }
-
-    private fun handleCustomTabToggleAndFinish() {
-        if (customTabIsOpened) {
-            customTabIsOpened = false
-            finish()
-        } else {
-            customTabIsOpened = true
-        }
+        return true
     }
 
     private fun subscribeUI() {
         viewModel.virtusizeUser.observe(this) { user ->
+            Log.d(TAG, "getUserInfo result user=${if (user != null) "ok(${user.email})" else "null"}; finishing")
             if (user != null) {
                 val data = Intent()
                 data.putExtra(
