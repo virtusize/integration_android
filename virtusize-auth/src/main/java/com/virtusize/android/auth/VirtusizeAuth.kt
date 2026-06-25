@@ -61,8 +61,14 @@ object VirtusizeAuth {
         resultCode: Int,
         data: Intent?,
     ) {
+        val script = data?.getStringExtra(EXTRA_NAME_SNS_SCRIPT)
+        android.util.Log.d(
+            "VsAuth",
+            "handleVirtusizeSNSAuthResult resultCode=$resultCode ok=${resultCode == Activity.RESULT_OK} " +
+                "scriptPresent=${script != null}",
+        )
         if (resultCode == Activity.RESULT_OK) {
-            data?.getStringExtra(EXTRA_NAME_SNS_SCRIPT)?.let { snsScript ->
+            script?.let { snsScript ->
                 view.evaluateJavascript(snsScript, null)
             }
         }
