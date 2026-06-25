@@ -1,3 +1,6 @@
+### 2.12.24
+- Fix: SNS Google login webview issue fixed
+
 ### 2.12.23
 - Fix: crash on externalProductId nil
 - Fix: Sentry logger for Flutter
