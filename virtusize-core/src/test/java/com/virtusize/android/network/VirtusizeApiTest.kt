@@ -14,8 +14,8 @@ import com.virtusize.android.data.local.VirtusizeOrderItem
 import com.virtusize.android.data.parsers.JsonUtils
 import com.virtusize.android.fixtures.ProductFixtures
 import com.virtusize.android.fixtures.TestFixtures
-import org.json.JSONObject
 import com.virtusize.android.network.VirtusizeApi.DEFAULT_AOYAMA_VERSION
+import org.json.JSONObject
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
