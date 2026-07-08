@@ -1,3 +1,6 @@
+### Changes:
+- Fix: getBodyProfileRecommendedSize API returns incorrect recommended size response
+
 ### 2.12.24
 - Fix: SNS Google login webview issue fixed
 
