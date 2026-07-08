@@ -15,6 +15,7 @@ import com.virtusize.android.data.parsers.JsonUtils
 import com.virtusize.android.fixtures.ProductFixtures
 import com.virtusize.android.fixtures.TestFixtures
 import com.virtusize.android.network.VirtusizeApi.DEFAULT_AOYAMA_VERSION
+import org.json.JSONObject
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -303,7 +304,7 @@ internal class VirtusizeApiTest {
         assertThat(actualApiRequest.authorization).isEqualTo(false)
         assertThat(actualApiRequest.params["user_gender"]).isEqualTo("female")
         assertThat(actualApiRequest.params["user_height"]).isEqualTo(1630)
-        assertThat(actualApiRequest.params["user_weight"]).isEqualTo(50)
+        assertThat(actualApiRequest.params["user_weight"]).isEqualTo("50.00")
         assertThat(actualApiRequest.params["body_data"]).isEqualTo(
             mutableMapOf(
                 "waist_width" to
@@ -467,6 +468,8 @@ internal class VirtusizeApiTest {
                             "height" to 165,
                         ),
                     "style" to "fashionable",
+                    "item_measurements" to true,
+                    "fit_adjust" to JSONObject.NULL,
                 ),
             )
         }

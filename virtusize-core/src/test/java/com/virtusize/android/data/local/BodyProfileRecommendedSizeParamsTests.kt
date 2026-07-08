@@ -30,7 +30,6 @@ internal class BodyProfileRecommendedSizeParamsTests {
             """
             {
                 "fit": "regular",
-                "style": "fashionable",
                 "sizes": {
                     "38": {
                         "bust": 660,
@@ -44,14 +43,17 @@ internal class BodyProfileRecommendedSizeParamsTests {
                     }
                 },
                 "gender": "female",
-                "brand": "Virtusize",
                 "model_info": {
                     "waist": 56,
                     "bust": 78,
                     "size": "38",
                     "hip": 85,
                     "height": 165
-                }
+                },
+                "style": "fashionable",
+                "fit_adjust": null,
+                "brand": "Virtusize",
+                "item_measurements": true
             }
             """.trimIndent().replace("\\s+|[\\n]+".toRegex(), ""),
         )
@@ -76,11 +78,13 @@ internal class BodyProfileRecommendedSizeParamsTests {
             """
             {
                 "fit": "regular",
-                "style": "fashionable",
                 "sizes": {},
                 "gender": "male",
+                "model_info": null,
+                "style": "fashionable",
+                "fit_adjust": null,
                 "brand": "",
-                "model_info": null
+                "item_measurements": false
             }
             """.trimIndent().replace("\\s+|[\\n]+".toRegex(), ""),
         )
@@ -228,7 +232,7 @@ internal class BodyProfileRecommendedSizeParamsTests {
             )
         val bodyProfileRecommendedSizeParamsMap = bodyProfileRecommendedSizeParams.paramsToMap()
         assertThat(bodyProfileRecommendedSizeParamsMap["user_gender"]).isEqualTo("female")
-        assertThat(bodyProfileRecommendedSizeParamsMap["user_weight"]).isEqualTo(50)
+        assertThat(bodyProfileRecommendedSizeParamsMap["user_weight"]).isEqualTo("50.00")
         assertThat(bodyProfileRecommendedSizeParamsMap["user_height"]).isEqualTo(1630)
         assertThat(bodyProfileRecommendedSizeParamsMap["body_data"]).isEqualTo(
             mutableMapOf(
@@ -393,6 +397,8 @@ internal class BodyProfileRecommendedSizeParamsTests {
                             "height" to 165,
                         ),
                     "style" to "fashionable",
+                    "item_measurements" to true,
+                    "fit_adjust" to JSONObject.NULL,
                 ),
             )
         }

@@ -39,7 +39,9 @@ internal data class BodyProfileRecommendedSizeParams(
                 mapOf(PARAM_USER_HEIGHT to userBodyProfile.height),
             )
             .plus(
-                userBodyProfile.weight.toFloatOrNull()?.let { mapOf(PARAM_USER_WEIGHT to it) }
+                // Send the raw API string (e.g. "56.00") to match the web widget's payload
+                userBodyProfile.weight.takeIf { it.toFloatOrNull() != null }
+                    ?.let { mapOf(PARAM_USER_WEIGHT to it) }
                     .orEmpty(),
             )
             .plus(
@@ -62,7 +64,9 @@ internal data class BodyProfileRecommendedSizeParams(
                 mapOf(PARAM_USER_HEIGHT to userBodyProfile.height),
             )
             .plus(
-                userBodyProfile.weight.toFloatOrNull()?.let { mapOf(PARAM_USER_WEIGHT to it) }
+                // Send the raw API string (e.g. "56.00") to match the web widget's payload
+                userBodyProfile.weight.takeIf { it.toFloatOrNull() != null }
+                    ?.let { mapOf(PARAM_USER_WEIGHT to it) }
                     .orEmpty(),
             )
             .plus(
@@ -89,8 +93,9 @@ internal data class BodyProfileRecommendedSizeParams(
             )
             .plus(
                 mapOf(
+                    // The API returns camelCase names (e.g. "tShirt") while the web widget sends "t_shirt"
                     PARAM_PRODUCT_TYPE to
-                        (productTypes.find { it.id == storeProduct.productType }?.name ?: ""),
+                        toSnakeCase(productTypes.find { it.id == storeProduct.productType }?.name ?: ""),
                 ),
             )
             .plus(
@@ -141,6 +146,13 @@ internal data class BodyProfileRecommendedSizeParams(
                 mapOf(
                     PARAM_STYLE to (storeProduct.storeProductMeta?.additionalInfo?.style ?: "regular"),
                 ),
+            )
+            // The web widget sends these two keys with every request
+            .plus(
+                mapOf(PARAM_ITEM_MEASUREMENTS to storeProduct.sizes.isNotEmpty()),
+            )
+            .plus(
+                mapOf(PARAM_FIT_ADJUST to JSONObject.NULL),
             )
     }
 
@@ -224,7 +236,10 @@ internal data class BodyProfileRecommendedSizeParams(
                 storeProduct.sizes.map { productSize ->
                     productSize.name to
                         productSize.measurements.associate { measurement ->
-                            measurement.name to measurement.millimeter
+                            // Measurement names arrive camelCase from the store-products API
+                            // (e.g. "bustRound"), but the get-size API expects the web widget's
+                            // snake_case names ("bust_round")
+                            toSnakeCase(measurement.name) to measurement.millimeter
                         }
                 },
             )
@@ -246,6 +261,8 @@ internal data class BodyProfileRecommendedSizeParams(
 
         const val PARAM_BRAND = "brand"
         const val PARAM_FIT = "fit"
+        const val PARAM_ITEM_MEASUREMENTS = "item_measurements"
+        const val PARAM_FIT_ADJUST = "fit_adjust"
         const val PARAM_SIZES = "sizes"
         const val PARAM_MODEL_INFO = "model_info"
         const val PARAM_GENDER = "gender"
