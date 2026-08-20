@@ -460,6 +460,14 @@ class VirtusizeRepository internal constructor(
                         userBodyProfileResponse.successData!!,
                     )
                 return bodyProfileRecommendedSizeResponse.successData
+            } else if (storeProduct.isKid()) {
+                val bodyProfileRecommendedSizeResponse =
+                    virtusizeAPIService.getBodyProfileRecommendedKidSize(
+                        productTypes,
+                        storeProduct,
+                        userBodyProfileResponse.successData!!,
+                    )
+                return bodyProfileRecommendedSizeResponse.successData
             } else {
                 val bodyProfileRecommendedSizeResponse =
                     virtusizeAPIService.getBodyProfileRecommendedItemSize(

@@ -299,4 +299,11 @@ class ProductTest {
             ),
         ).isEqualTo(bodyDataEmptyText)
     }
+
+    @Test
+    fun isKid_boyOrGirlGender_returnsTrue() {
+        assertThat(ProductFixtures.storeProduct(gender = "girl").isKid()).isTrue()
+        assertThat(ProductFixtures.storeProduct(gender = "boy").isKid()).isTrue()
+        assertThat(ProductFixtures.storeProduct(gender = "female").isKid()).isFalse()
+    }
 }

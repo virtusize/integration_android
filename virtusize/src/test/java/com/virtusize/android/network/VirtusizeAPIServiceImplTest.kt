@@ -639,6 +639,26 @@ class VirtusizeAPIServiceImplTest {
         }
 
     @Test
+    fun testKidRecommendedSize_whenSuccessful_shouldReturnExpectedBodyProfileRecommendedSize() =
+        runBlocking {
+            virtusizeAPIService.setHTTPURLConnection(
+                MockHttpsURLConnection(
+                    mockURL,
+                    MockedResponse(200, "{\"size\": \"110\", \"willFit\": true}".byteInputStream()),
+                ),
+            )
+
+            val actualBodyProfileRecommendedSize =
+                virtusizeAPIService.getBodyProfileRecommendedKidSize(
+                    ProductFixtures.productTypes(),
+                    ProductFixtures.storeProduct(gender = "girl"),
+                    TestFixtures.userBodyProfile,
+                ).successData
+
+            assertThat(actualBodyProfileRecommendedSize?.sizeName).isEqualTo("110")
+        }
+
+    @Test
     fun `test fetchLatestAoyamaVersion should return expected value`() =
         runTest {
             virtusizeAPIService.setHTTPURLConnection(

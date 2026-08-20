@@ -106,6 +106,14 @@ internal class MockVirtusizeApiService : VirtusizeAPIService {
         TODO("Not yet implemented")
     }
 
+    override suspend fun getBodyProfileRecommendedKidSize(
+        productTypes: List<ProductType>,
+        storeProduct: Product,
+        userBodyProfile: UserBodyProfile,
+    ): VirtusizeApiResponse<BodyProfileRecommendedSize?> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun loadImage(urlString: String): Bitmap? {
         TODO("Not yet implemented")
     }

@@ -326,6 +326,25 @@ internal class VirtusizeAPIServiceImpl(
                 }
         }
 
+    override suspend fun getBodyProfileRecommendedKidSize(
+        productTypes: List<ProductType>,
+        storeProduct: Product,
+        userBodyProfile: UserBodyProfile,
+    ): VirtusizeApiResponse<BodyProfileRecommendedSize?> =
+        withContext(Dispatchers.IO) {
+            val apiRequest = VirtusizeApi.getKidSizeRecommendationRequest(productTypes, storeProduct, userBodyProfile)
+            VirtusizeApiTask(
+                httpURLConnection,
+                sharedPreferencesHelper,
+                messageHandler,
+            )
+                .setJsonParser(BodyProfileRecommendedSizeJsonParser(storeProduct))
+                .execute<BodyProfileRecommendedSize?>(apiRequest)
+                .also { response ->
+                    Log.d("[Aoyama-mobile]", "Recommended kid size response: $response")
+                }
+        }
+
     override suspend fun getI18n(language: VirtusizeLanguage?): VirtusizeApiResponse<JSONObject> =
         withContext(Dispatchers.IO) {
             val apiRequest =
