@@ -403,4 +403,25 @@ internal class BodyProfileRecommendedSizeParamsTests {
             )
         }
     }
+
+    @Test
+    fun testBodyProfileRecommendedSizeParams_kidPayload_hasExpectedKeys() {
+        val bodyProfileRecommendedSizeParams =
+            BodyProfileRecommendedSizeParams(
+                productTypes,
+                ProductFixtures.storeProduct(gender = "girl"),
+                TestFixtures.userBodyProfile,
+            )
+        val params = bodyProfileRecommendedSizeParams.paramsToMapKid()
+        assertThat(params["ext_product_id"]).isEqualTo("694")
+        @Suppress("UNCHECKED_CAST")
+        val product = params["product"] as Map<String, Any>
+        assertThat(product["gender"]).isEqualTo("girl")
+        assertThat(product["productType"]).isEqualTo("jacket")
+        @Suppress("UNCHECKED_CAST")
+        val user = params["user"] as Map<String, Any>
+        assertThat(user["height"]).isEqualTo(1630)
+        assertThat(user["weight"]).isEqualTo(50)
+        assertThat(user["age"]).isEqualTo(32)
+    }
 }

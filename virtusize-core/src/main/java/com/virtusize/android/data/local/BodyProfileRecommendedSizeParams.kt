@@ -86,6 +86,47 @@ internal data class BodyProfileRecommendedSizeParams(
             )
     }
 
+    /**
+     * Returns the map that represents the kids size recommendation API request body.
+     * Matches the Aoyama widget payload for `/kid`.
+     */
+    fun paramsToMapKid(): Map<String, Any> {
+        val productTypeName = productTypes.find { it.id == storeProduct.productType }?.name ?: ""
+        val gender = storeProduct.storeProductMeta?.additionalInfo?.gender ?: ""
+        val brand =
+            storeProduct.storeProductMeta?.additionalInfo?.brand
+                ?: storeProduct.storeProductMeta?.brand
+                ?: ""
+        val sizeMeasurements = createItemSizesParams()
+        val sizeNames =
+            storeProduct.sizes.map { it.name }.ifEmpty { sizeMeasurements.keys.toList() }
+        val weight =
+            userBodyProfile.weight.toFloatOrNull()?.let { Math.round(it) }
+
+        val productParams =
+            mutableMapOf<String, Any>(
+                PARAM_KID_BRAND to brand,
+                PARAM_GENDER to gender,
+                PARAM_KID_PRODUCT_TYPE to productTypeName,
+                PARAM_KID_SIZE_NAMES to sizeNames,
+                PARAM_KID_SIZE_MEASUREMENTS to sizeMeasurements,
+            )
+
+        val userParams =
+            mutableMapOf<String, Any>(
+                PARAM_GENDER to userBodyProfile.gender,
+                PARAM_KID_USER_HEIGHT to userBodyProfile.height,
+                PARAM_KID_USER_AGE to userBodyProfile.age,
+                PARAM_KID_BODY_DATA to createBodyDataParams(),
+            )
+        weight?.let { userParams[PARAM_KID_USER_WEIGHT] = it }
+
+        return emptyMap<String, Any>()
+            .plus(mapOf(PARAM_KID_PRODUCT to productParams))
+            .plus(mapOf(PARAM_KID_USER to userParams))
+            .plus(mapOf(PARAM_EXTERNAL_PRODUCT_ID to (storeProduct.externalId ?: "")))
+    }
+
     private fun createItemsParams(): Map<String, Any> {
         return emptyMap<String, Any>()
             .plus(
@@ -258,6 +299,17 @@ internal data class BodyProfileRecommendedSizeParams(
         const val PARAM_EXTERNAL_PRODUCT_ID = "ext_product_id"
         const val PARAM_FOOTWEAR_DATA = "footwear_data"
         const val PARAM_PRODUCT_NAME = "product_name"
+
+        const val PARAM_KID_PRODUCT = "product"
+        const val PARAM_KID_USER = "user"
+        const val PARAM_KID_BRAND = "brand"
+        const val PARAM_KID_PRODUCT_TYPE = "productType"
+        const val PARAM_KID_SIZE_NAMES = "sizeNames"
+        const val PARAM_KID_SIZE_MEASUREMENTS = "size_measurements"
+        const val PARAM_KID_USER_HEIGHT = "height"
+        const val PARAM_KID_USER_WEIGHT = "weight"
+        const val PARAM_KID_USER_AGE = "age"
+        const val PARAM_KID_BODY_DATA = "bodyData"
 
         const val PARAM_BRAND = "brand"
         const val PARAM_FIT = "fit"

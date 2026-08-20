@@ -163,4 +163,12 @@ data class Product(
     fun isShoe(): Boolean {
         return productType == 17
     }
+
+    /**
+     * Checks if the product is a kids item
+     */
+    fun isKid(): Boolean {
+        val gender = (storeProductMeta?.additionalInfo?.gender ?: storeProductMeta?.gender)?.lowercase()
+        return gender == "boy" || gender == "girl"
+    }
 }

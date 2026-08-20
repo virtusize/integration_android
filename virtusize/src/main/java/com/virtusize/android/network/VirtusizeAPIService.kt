@@ -165,6 +165,19 @@ internal interface VirtusizeAPIService {
     ): VirtusizeApiResponse<BodyProfileRecommendedSize?>
 
     /**
+     * Gets the API response for retrieving the recommended kids size based on the user body profile
+     * @param productTypes a list of product types
+     * @param storeProduct the store product
+     * @param userBodyProfile the user body profile
+     * @return the [VirtusizeApiResponse] with [BodyProfileRecommendedSize]
+     */
+    suspend fun getBodyProfileRecommendedKidSize(
+        productTypes: List<ProductType>,
+        storeProduct: Product,
+        userBodyProfile: UserBodyProfile,
+    ): VirtusizeApiResponse<BodyProfileRecommendedSize?>
+
+    /**
      * Loads an image URL and returns the bitmap of the image
      * @param urlString the image URL string
      * @return the Bitmap of the image

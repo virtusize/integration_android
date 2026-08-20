@@ -524,4 +524,26 @@ object VirtusizeApi {
                 .toString()
         return ApiRequest(url, HttpMethod.POST, bodyProfileRecommendedSizeParams.paramsToMapShoe())
     }
+
+    /**
+     * Gets a API request for getting the recommended kids size based on the user's body profile
+     * @param productTypes the list of available [ProductType]
+     * @param storeProduct [Product]
+     * @param userBodyProfile [UserBodyProfile]
+     * @see ApiRequest
+     */
+    fun getKidSizeRecommendationRequest(
+        productTypes: List<ProductType>,
+        storeProduct: Product,
+        userBodyProfile: UserBodyProfile,
+    ): ApiRequest {
+        val bodyProfileRecommendedSizeParams =
+            BodyProfileRecommendedSizeParams(productTypes, storeProduct, userBodyProfile)
+        val url =
+            Uri.parse("${environment.sizeRecommendationApiBaseUrl()}${VirtusizeEndpoint.GetKidSize.path}")
+                .buildUpon()
+                .build()
+                .toString()
+        return ApiRequest(url, HttpMethod.POST, bodyProfileRecommendedSizeParams.paramsToMapKid())
+    }
 }
