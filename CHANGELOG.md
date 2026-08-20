@@ -1,3 +1,6 @@
+### 2.12.26
+- Feature: Kids implementation added
+
 ### 2.12.25
 - Fix: getBodyProfileRecommendedSize API returns incorrect recommended size response
 
