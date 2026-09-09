@@ -169,6 +169,6 @@ data class Product(
      */
     fun isKid(): Boolean {
         val gender = (storeProductMeta?.additionalInfo?.gender ?: storeProductMeta?.gender)?.lowercase()
-        return gender == "boy" || gender == "girl"
+        return gender == "boy" || gender == "girl" || gender == "kids"
     }
 }

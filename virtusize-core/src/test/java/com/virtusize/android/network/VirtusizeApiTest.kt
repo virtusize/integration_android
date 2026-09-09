@@ -6,6 +6,7 @@ import android.view.WindowManager
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.virtusize.android.core.BuildConfig
+import com.virtusize.android.data.local.KidBodyData
 import com.virtusize.android.data.local.VirtusizeEnvironment
 import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeLanguage
@@ -286,6 +287,45 @@ internal class VirtusizeApiTest {
         val expectedApiRequest = ApiRequest(expectedUrl, HttpMethod.GET, mutableMapOf(), true)
 
         assertThat(actualApiRequest).isEqualTo(expectedApiRequest)
+    }
+
+    @Test
+    fun `test predictUserBodyMeasurements should return expected API request`() {
+        val kidBodyData = KidBodyData(gender = "boy", height = 1070, weight = 17, age = 5)
+
+        val actualApiRequest = VirtusizeApi.predictUserBodyMeasurements(kidBodyData)
+
+        val expectedUrl = "https://staging.virtusize.com/a/api/v3/user-body-measurements-predict"
+        val expectedParams = mapOf("gender" to "boy", "height" to 1070, "weight" to 17, "age" to 5)
+        assertThat(actualApiRequest).isEqualTo(ApiRequest(expectedUrl, HttpMethod.POST, expectedParams, true))
+        assertThat(JSONObject(actualApiRequest.params).toString())
+            .isEqualTo("""{"gender":"boy","height":1070,"weight":17,"age":5}""")
+    }
+
+    @Test
+    fun `test getKidSizeRecommendationRequest should return expected API request`() {
+        val actualApiRequest =
+            VirtusizeApi.getKidSizeRecommendationRequest(
+                ProductFixtures.productTypes(),
+                ProductFixtures.storeProduct(gender = "kids"),
+                TestFixtures.userBodyProfile,
+            )
+
+        assertThat(actualApiRequest.url).isEqualTo("https://size-recommendation.staging.virtusize.jp/kid")
+        assertThat(actualApiRequest.method).isEqualTo(HttpMethod.POST)
+        // Same headers as the web widget: `Authorization: Token`
+        assertThat(actualApiRequest.authorization).isTrue()
+        assertThat(actualApiRequest.params["ext_product_id"]).isEqualTo("694")
+
+        // Android's JSONObject keeps the insertion order the /kid API depends on
+        // (this test runs on Robolectric, i.e. against the Android implementation)
+        val json = JSONObject(actualApiRequest.params).toString()
+        val expectedProductPrefix =
+            """{"product":{"brand":"Virtusize","gender":"kids","productType":"jacket",""" +
+                """"sizeNames":["36","38"],"size_measurements":{"36":"""
+        assertThat(json).startsWith(expectedProductPrefix)
+        assertThat(json.indexOf("\"36\":")).isLessThan(json.indexOf("\"38\":"))
+        assertThat(json).endsWith(""""ext_product_id":"694"}""")
     }
 
     @Test

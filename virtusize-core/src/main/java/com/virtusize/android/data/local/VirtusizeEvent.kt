@@ -15,6 +15,7 @@ enum class EventName(val value: String) {
     UserChangedRecommendationType("user-changed-recommendation-type"),
     UserCreatedSilhouette("user-created-silhouette"),
     UserUpdatedBodyMeasurements("user-updated-body-measurements"),
+    UserSelectedGender("user-selected-gender"),
     UserAuthData("user-auth-data"),
     UserLoggedIn("user-logged-in"),
     UserLoggedOut("user-logged-out"),
@@ -73,6 +74,10 @@ sealed interface VirtusizeEvent {
 
     data class UserUpdatedBodyMeasurements(override val data: JSONObject? = null) : VirtusizeEvent {
         override val name: String = EventName.UserUpdatedBodyMeasurements.value
+    }
+
+    data class UserSelectedGender(override val data: JSONObject? = null) : VirtusizeEvent {
+        override val name: String = EventName.UserSelectedGender.value
     }
 
     data class UserAuthData(override val data: JSONObject? = null) : VirtusizeEvent {

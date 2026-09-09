@@ -157,14 +157,29 @@ internal class VirtusizeFlutterImpl(
 
                     is VirtusizeEvent.UserUpdatedBodyMeasurements -> {
                         invalidateCurrentProduct()
+                        val isKidsEvent = event.data?.let { virtusizeRepository.updateKidBodyData(it) } ?: false
                         // Updates the body recommendation size and switches the view to the body comparison
                         val sizeRecName = event.data?.optString("sizeRecName")
                         scope.launch {
-                            virtusizeRepository.updateUserBodyRecommendedSize(sizeRecName)
+                            if (isKidsEvent) {
+                                // The kids flow has no server-side body profile: predict it from the
+                                // cached inputs and re-run the kids size recommendation
+                                virtusizeRepository.fetchDataForInPageRecommendation(
+                                    shouldUpdateUserProducts = false,
+                                    shouldUpdateBodyProfile = true,
+                                )
+                            } else {
+                                virtusizeRepository.updateUserBodyRecommendedSize(sizeRecName)
+                            }
                             virtusizeRepository.updateInPageRecommendation(
                                 type = SizeRecommendationType.Body,
                             )
                         }
+                    }
+
+                    is VirtusizeEvent.UserSelectedGender -> {
+                        // Caches the kid's gender for the kids size recommendation
+                        event.data?.let { virtusizeRepository.updateKidBodyData(it) }
                     }
 
                     is VirtusizeEvent.UserClosedWidget ->

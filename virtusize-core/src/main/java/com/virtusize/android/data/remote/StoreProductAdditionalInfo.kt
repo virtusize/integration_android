@@ -9,6 +9,7 @@ package com.virtusize.android.data.remote
  * @param fit the general fit key
  * @param style the store product style
  * @param brandSizing the brand sizing info
+ * @param itemMeasurements whether the `sizes` measurements should be used for the size recommendation (null means yes)
  * @see ProductSize
  * @see BrandSizing
  */
@@ -20,4 +21,5 @@ data class StoreProductAdditionalInfo(
     val fit: String?,
     val style: String?,
     val brandSizing: BrandSizing?,
+    val itemMeasurements: Boolean? = null,
 )

@@ -2,6 +2,7 @@ package com.virtusize.android.network
 
 import android.content.Context
 import android.graphics.Bitmap
+import com.virtusize.android.data.local.KidBodyData
 import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeLanguage
 import com.virtusize.android.data.local.VirtusizeMessageHandler
@@ -137,6 +138,14 @@ internal interface VirtusizeAPIService {
      * @return the [VirtusizeApiResponse] with the data class [UserBodyProfile]
      */
     suspend fun getUserBodyProfile(): VirtusizeApiResponse<UserBodyProfile>
+
+    /**
+     * Predicts a kid's body measurements from the inputs entered in the web widget.
+     * The kids flow has no server-side body profile, so this replaces [getUserBodyProfile] for kids items.
+     * @param kidBodyData the kid's body inputs cached from the web widget
+     * @return the [VirtusizeApiResponse] with the [UserBodyProfile] built from the predicted measurements
+     */
+    suspend fun predictUserBodyProfile(kidBodyData: KidBodyData): VirtusizeApiResponse<UserBodyProfile>
 
     /**
      * Gets the API response for retrieving the recommended item size based on the user body profile

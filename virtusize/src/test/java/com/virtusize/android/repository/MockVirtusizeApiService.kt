@@ -2,6 +2,7 @@ package com.virtusize.android.repository
 
 import android.content.Context
 import android.graphics.Bitmap
+import com.virtusize.android.data.local.KidBodyData
 import com.virtusize.android.data.local.VirtusizeError
 import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeLanguage
@@ -87,6 +88,10 @@ internal class MockVirtusizeApiService : VirtusizeAPIService {
     }
 
     override suspend fun getUserBodyProfile(): VirtusizeApiResponse<UserBodyProfile> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun predictUserBodyProfile(kidBodyData: KidBodyData): VirtusizeApiResponse<UserBodyProfile> {
         TODO("Not yet implemented")
     }
 

@@ -3,6 +3,7 @@ package com.virtusize.android.data.local
 import com.virtusize.android.data.remote.Product
 import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.data.remote.UserBodyProfile
+import com.virtusize.android.util.sortedLikeJavaScriptObjectKeys
 import org.json.JSONObject
 
 /**
@@ -89,43 +90,83 @@ internal data class BodyProfileRecommendedSizeParams(
     /**
      * Returns the map that represents the kids size recommendation API request body.
      * Matches the Aoyama widget payload for `/kid`.
+     *
+     * The `/kid` API result depends on the order of `sizeNames` and of the `size_measurements` keys,
+     * so both are emitted in the order the web widget sends (see [sortedLikeJavaScriptObjectKeys]).
+     * All maps are insertion-ordered, which [org.json.JSONObject] preserves on Android.
      */
     fun paramsToMapKid(): Map<String, Any> {
         val productTypeName = productTypes.find { it.id == storeProduct.productType }?.name ?: ""
-        val gender = storeProduct.storeProductMeta?.additionalInfo?.gender ?: ""
+        val gender =
+            storeProduct.storeProductMeta?.additionalInfo?.gender
+                ?: storeProduct.storeProductMeta?.gender
+                ?: ""
         val brand =
             storeProduct.storeProductMeta?.additionalInfo?.brand
                 ?: storeProduct.storeProductMeta?.brand
                 ?: ""
-        val sizeMeasurements = createItemSizesParams()
+
+        // The web widget sends `additionalInfo.sizes` as-is (e.g. only height/bust/sleeve),
+        // not the full product size list, and omits it when `itemMeasurements` is false
+        val additionalInfo = storeProduct.storeProductMeta?.additionalInfo
+        val additionalInfoSizes =
+            additionalInfo?.sizes
+                ?.takeIf { additionalInfo.itemMeasurements != false }
+                ?.associate { size -> size.name to size.measurements.associate { it.name to it.millimeter } }
+
+        val productSizeNames = storeProduct.sizes.map { it.name }.filter { it.isNotEmpty() }
         val sizeNames =
-            storeProduct.sizes.map { it.name }.ifEmpty { sizeMeasurements.keys.toList() }
-        val weight =
-            userBodyProfile.weight.toFloatOrNull()?.let { Math.round(it) }
+            productSizeNames
+                .ifEmpty { additionalInfoSizes?.keys?.sorted() ?: emptyList() }
+                .sortedLikeJavaScriptObjectKeys()
+        val sizeMeasurements =
+            additionalInfoSizes?.let { sizes ->
+                // Sizes known to the product first, in the web widget's order, then any extra keys
+                val extraNames = sizes.keys.filter { it !in sizeNames }.sorted()
+                (sizeNames + extraNames).mapNotNull { name -> sizes[name]?.let { name to it } }.toMap()
+            }
+        val weight = userBodyProfile.weight.toFloatOrNull()?.let { Math.round(it) }
 
         val productParams =
-            mutableMapOf<String, Any>(
+            linkedMapOf<String, Any>(
                 PARAM_KID_BRAND to brand,
                 PARAM_GENDER to gender,
                 PARAM_KID_PRODUCT_TYPE to productTypeName,
                 PARAM_KID_SIZE_NAMES to sizeNames,
-                PARAM_KID_SIZE_MEASUREMENTS to sizeMeasurements,
             )
+        sizeMeasurements?.let { productParams[PARAM_KID_SIZE_MEASUREMENTS] = it }
 
         val userParams =
-            mutableMapOf<String, Any>(
+            linkedMapOf<String, Any>(
                 PARAM_GENDER to userBodyProfile.gender,
                 PARAM_KID_USER_HEIGHT to userBodyProfile.height,
-                PARAM_KID_USER_AGE to userBodyProfile.age,
-                PARAM_KID_BODY_DATA to createBodyDataParams(),
             )
         weight?.let { userParams[PARAM_KID_USER_WEIGHT] = it }
+        userParams[PARAM_KID_USER_AGE] = userBodyProfile.age
+        userParams[PARAM_KID_BODY_DATA] = createKidBodyDataParams()
 
-        return emptyMap<String, Any>()
-            .plus(mapOf(PARAM_KID_PRODUCT to productParams))
-            .plus(mapOf(PARAM_KID_USER to userParams))
-            .plus(mapOf(PARAM_EXTERNAL_PRODUCT_ID to (storeProduct.externalId ?: "")))
+        return linkedMapOf(
+            PARAM_KID_PRODUCT to productParams,
+            PARAM_KID_USER to userParams,
+            PARAM_EXTERNAL_PRODUCT_ID to (storeProduct.externalId ?: ""),
+        )
     }
+
+    /**
+     * Creates the map that represents the kid's body data for the `/kid` payload.
+     * Unlike the `/item` payload, the web widget sends the measurement names as they come
+     * from the predict API (camelCase, e.g. "hipWidth") and does not add the "chest" alias.
+     */
+    private fun createKidBodyDataParams(): Map<String, Any> =
+        userBodyProfile.bodyData
+            .sortedBy { it.name }
+            .associate {
+                it.name to
+                    linkedMapOf(
+                        PARAM_BODY_MEASUREMENT_VALUE to it.millimeter,
+                        PARAM_BODY_MEASUREMENT_PREDICTED to true,
+                    )
+            }
 
     private fun createItemsParams(): Map<String, Any> {
         return emptyMap<String, Any>()

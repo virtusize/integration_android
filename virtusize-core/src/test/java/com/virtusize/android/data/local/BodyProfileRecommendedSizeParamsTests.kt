@@ -424,4 +424,62 @@ internal class BodyProfileRecommendedSizeParamsTests {
         assertThat(user["weight"]).isEqualTo(50)
         assertThat(user["age"]).isEqualTo(32)
     }
+
+    @Test
+    fun testBodyProfileRecommendedSizeParams_kidPayload_matchesWidgetPayload() {
+        val kidBodyData = KidBodyData(gender = "boy", height = 1070, weight = 17, age = 5)
+        val userBodyProfile =
+            kidBodyData.toUserBodyProfile(
+                mapOf("hipWidth" to 195, "ankleHeight" to 50, "bust" to 535, "sleeveLength" to 345.0, "unknown" to null),
+            )
+        val params =
+            BodyProfileRecommendedSizeParams(
+                productTypes,
+                ProductFixtures.storeProduct(gender = "kids"),
+                userBodyProfile,
+            ).paramsToMapKid()
+
+        // The web widget sends product, user and ext_product_id
+        assertThat(params.keys.toList()).isEqualTo(listOf("product", "user", "ext_product_id"))
+        @Suppress("UNCHECKED_CAST")
+        val product = params["product"] as Map<String, Any>
+        assertThat(product["brand"]).isEqualTo("Virtusize")
+        assertThat(product["gender"]).isEqualTo("kids")
+        assertThat(product["productType"]).isEqualTo("jacket")
+        // sizeNames and size_measurements are in JavaScript object key order (numeric ascending)
+        assertThat(product["sizeNames"]).isEqualTo(listOf("36", "38"))
+        @Suppress("UNCHECKED_CAST")
+        val sizeMeasurements = product["size_measurements"] as Map<String, Map<String, Int>>
+        assertThat(sizeMeasurements.keys.toList()).isEqualTo(listOf("36", "38"))
+        // size_measurements is additionalInfo.sizes as-is: camelCase names, no snake_case conversion
+        assertThat(sizeMeasurements["36"]).isEqualTo(mapOf("height" to 750, "bust" to 645, "sleeve" to 825))
+
+        @Suppress("UNCHECKED_CAST")
+        val user = params["user"] as Map<String, Any>
+        assertThat(user["gender"]).isEqualTo("boy")
+        assertThat(user["height"]).isEqualTo(1070)
+        assertThat(user["weight"]).isEqualTo(17)
+        assertThat(user["age"]).isEqualTo(5)
+        // bodyData keeps the camelCase names returned by the predict API and adds no "chest" alias
+        @Suppress("UNCHECKED_CAST")
+        val bodyData = user["bodyData"] as Map<String, Map<String, Any>>
+        assertThat(bodyData.keys.toList()).isEqualTo(listOf("ankleHeight", "bust", "hipWidth", "sleeveLength"))
+        assertThat(bodyData["hipWidth"]).isEqualTo(mapOf("value" to 195, "predicted" to true))
+        assertThat(bodyData["sleeveLength"]?.get("value")).isEqualTo(345)
+    }
+
+    @Test
+    fun testBodyProfileRecommendedSizeParams_kidPayload_omitsSizeMeasurementsWhenItemMeasurementsIsFalse() {
+        val storeProduct = ProductFixtures.storeProduct(gender = "girl")
+        val additionalInfo = storeProduct.storeProductMeta!!.additionalInfo!!.copy(itemMeasurements = false)
+        storeProduct.storeProductMeta = storeProduct.storeProductMeta!!.copy(additionalInfo = additionalInfo)
+
+        val params =
+            BodyProfileRecommendedSizeParams(productTypes, storeProduct, TestFixtures.userBodyProfile).paramsToMapKid()
+
+        @Suppress("UNCHECKED_CAST")
+        val product = params["product"] as Map<String, Any>
+        assertThat(product.containsKey("size_measurements")).isFalse()
+        assertThat(product["sizeNames"]).isEqualTo(listOf("36", "38"))
+    }
 }

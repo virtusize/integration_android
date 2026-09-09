@@ -128,6 +128,11 @@ class VirtusizeApiTask(
                                     setRequestProperty(HEADER_VS_AUTH, it)
                                     setRequestProperty(HEADER_COOKIE, "")
                                 }
+                            } else if (apiRequest.url.endsWith(VirtusizeEndpoint.GetKidSize.path)) {
+                                // The web widget sends `x-vs-auth` to the kids size recommendation API when logged in
+                                sharedPreferencesHelper.getAuthToken()?.takeIf { it.isNotEmpty() }?.let {
+                                    setRequestProperty(HEADER_VS_AUTH, it)
+                                }
                             }
 
                             // Write the byte array of the request body to the output stream
