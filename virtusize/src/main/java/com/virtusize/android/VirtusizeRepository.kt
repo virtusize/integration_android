@@ -2,6 +2,7 @@ package com.virtusize.android
 
 import android.content.Context
 import android.graphics.Bitmap
+import com.virtusize.android.data.local.KidBodyData
 import com.virtusize.android.data.local.SizeComparisonRecommendedSize
 import com.virtusize.android.data.local.SizeRecommendationType
 import com.virtusize.android.data.local.VirtusizeError
@@ -321,9 +322,15 @@ class VirtusizeRepository internal constructor(
                 null
             }
 
+        // Kids items have no server-side body profile: the measurements are predicted from the
+        // inputs cached from the web widget instead of being loaded from `/user-body-measurements/`
+        val isKidProduct = storeProduct?.isKid() == true
+        val kidBodyData = if (isKidProduct) KidBodyData.cached(sharedPreferencesHelper) else null
+        val hasBodyMeasurement = if (isKidProduct) kidBodyData != null else hasSessionBodyMeasurement
+
         val recommendedSizeDeferred =
-            if (shouldUpdateBodyProfile && hasSessionBodyMeasurement) {
-                async { getUserBodyRecommendedSize(storeProduct, productTypes) }
+            if (shouldUpdateBodyProfile && hasBodyMeasurement) {
+                async { getUserBodyRecommendedSize(storeProduct, productTypes, kidBodyData) }
             } else {
                 null
             }
@@ -430,6 +437,7 @@ class VirtusizeRepository internal constructor(
         cachedUserSession = null
         virtusizeAPIService.deleteUser()
         sharedPreferencesHelper.storeAuthToken("")
+        sharedPreferencesHelper.deleteKidBodyData()
 
         userProducts = null
         userProductRecommendedSize = null
@@ -441,16 +449,24 @@ class VirtusizeRepository internal constructor(
      * Gets size recommendation for a store product that would best fit a user's body.
      * @param storeProduct the store product
      * @param productTypes a list of product types
+     * @param kidBodyData the cached kid's body inputs for kids items; the body profile is predicted from them
+     * instead of being loaded from the user body measurements API
      * @return [BodyProfileRecommendedSize] containing the size name and willFit flag, or null if not available
      */
     private suspend fun getUserBodyRecommendedSize(
         storeProduct: Product?,
         productTypes: List<ProductType>?,
+        kidBodyData: KidBodyData? = null,
     ): BodyProfileRecommendedSize? {
         if (storeProduct == null || productTypes == null || storeProduct.isAccessory()) {
             return null
         }
-        val userBodyProfileResponse = virtusizeAPIService.getUserBodyProfile()
+        val userBodyProfileResponse =
+            if (kidBodyData != null) {
+                virtusizeAPIService.predictUserBodyProfile(kidBodyData)
+            } else {
+                virtusizeAPIService.getUserBodyProfile()
+            }
         if (userBodyProfileResponse.successData != null) {
             if (storeProduct.isShoe()) {
                 val bodyProfileRecommendedSizeResponse =
@@ -539,6 +555,21 @@ class VirtusizeRepository internal constructor(
                 ),
             )
         }
+    }
+
+    /**
+     * Caches the kid's body inputs from the data of the kids events
+     * `user-selected-gender` and `user-updated-body-measurements` (whose `source` is `kids`).
+     * Every value present overrides the cached one; absent values are kept.
+     * @param eventJsonObject the event data in JSONObject
+     * @return true if the event came from the kids flow and was cached
+     */
+    internal fun updateKidBodyData(eventJsonObject: JSONObject): Boolean {
+        if (!KidBodyData.isKidsEvent(eventJsonObject)) {
+            return false
+        }
+        KidBodyData.cache(sharedPreferencesHelper, eventJsonObject)
+        return true
     }
 
     internal suspend fun fetchLanguage(language: VirtusizeLanguage?): I18nLocalization? =

@@ -15,6 +15,10 @@ class SharedPreferencesHelper {
         private const val PREFS_AUTH_TOKEN_KEY = "AUTH_TOKEN_KEY_VIRTUSIZE"
         private const val PREFS_ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY_VIRTUSIZE"
         private const val PREFS_SESSION_DATA_KEY = "SESSION_DATA_KEY_VIRTUSIZE"
+        private const val PREFS_KID_GENDER_KEY = "KID_GENDER_KEY_VIRTUSIZE"
+        private const val PREFS_KID_AGE_KEY = "KID_AGE_KEY_VIRTUSIZE"
+        private const val PREFS_KID_HEIGHT_KEY = "KID_HEIGHT_KEY_VIRTUSIZE"
+        private const val PREFS_KID_WEIGHT_KEY = "KID_WEIGHT_KEY_VIRTUSIZE"
 
         private var sharedPreferenceHelper: SharedPreferencesHelper? = null
         private lateinit var preferences: SharedPreferences
@@ -82,6 +86,71 @@ class SharedPreferencesHelper {
     fun getSessionData(): String? {
         return preferences.getString(PREFS_SESSION_DATA_KEY, null)
     }
+
+    // The kids flow keeps its inputs on the client only (the web widget uses localStorage),
+    // so the SDK caches the values received from the widget events here.
+
+    /**
+     * Stores the kid's gender ("girl" or "boy") selected in the widget
+     */
+    fun storeKidGender(gender: String) {
+        preferences.edit().putString(PREFS_KID_GENDER_KEY, gender).apply()
+    }
+
+    /**
+     * Gets the kid's gender selected in the widget, or null if none was received
+     */
+    fun getKidGender(): String? = preferences.getString(PREFS_KID_GENDER_KEY, null)
+
+    /**
+     * Stores the kid's age in years entered in the widget
+     */
+    fun storeKidAge(age: Int) {
+        preferences.edit().putInt(PREFS_KID_AGE_KEY, age).apply()
+    }
+
+    /**
+     * Gets the kid's age in years, or null if none was received
+     */
+    fun getKidAge(): Int? = getIntOrNull(PREFS_KID_AGE_KEY)
+
+    /**
+     * Stores the kid's height in centimeters entered in the widget
+     */
+    fun storeKidHeight(heightInCm: Int) {
+        preferences.edit().putInt(PREFS_KID_HEIGHT_KEY, heightInCm).apply()
+    }
+
+    /**
+     * Gets the kid's height in centimeters, or null if none was received
+     */
+    fun getKidHeight(): Int? = getIntOrNull(PREFS_KID_HEIGHT_KEY)
+
+    /**
+     * Stores the kid's weight in kilograms entered in the widget
+     */
+    fun storeKidWeight(weightInKg: Int) {
+        preferences.edit().putInt(PREFS_KID_WEIGHT_KEY, weightInKg).apply()
+    }
+
+    /**
+     * Gets the kid's weight in kilograms, or null if none was received
+     */
+    fun getKidWeight(): Int? = getIntOrNull(PREFS_KID_WEIGHT_KEY)
+
+    /**
+     * Deletes the cached kid's body data
+     */
+    fun deleteKidBodyData() {
+        preferences.edit()
+            .remove(PREFS_KID_GENDER_KEY)
+            .remove(PREFS_KID_AGE_KEY)
+            .remove(PREFS_KID_HEIGHT_KEY)
+            .remove(PREFS_KID_WEIGHT_KEY)
+            .apply()
+    }
+
+    private fun getIntOrNull(key: String): Int? = if (preferences.contains(key)) preferences.getInt(key, 0) else null
 
     /**
      * Gets the browser identifier specific to this SDK

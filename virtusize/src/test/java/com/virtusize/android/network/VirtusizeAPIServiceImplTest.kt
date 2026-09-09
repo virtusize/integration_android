@@ -7,6 +7,7 @@ import com.google.common.truth.Truth.assertThat
 import com.virtusize.android.MainCoroutineRule
 import com.virtusize.android.TestUtils
 import com.virtusize.android.VirtusizeBuilder
+import com.virtusize.android.data.local.KidBodyData
 import com.virtusize.android.data.local.VirtusizeEnvironment
 import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeEvent
@@ -474,6 +475,38 @@ class VirtusizeAPIServiceImplTest {
             assertThat(actualError?.code).isEqualTo(HttpURLConnection.HTTP_NOT_FOUND)
             assertThat(actualError?.message).contains("{\"detail\":\"No wardrobe found\"}")
             assertThat(actualError?.type).isEqualTo(VirtusizeErrorType.APIError)
+        }
+
+    @Test
+    fun testPredictUserBodyProfile_whenSuccessful_shouldReturnBodyProfileFromPredictedMeasurements() =
+        runBlocking {
+            virtusizeAPIService.setHTTPURLConnection(
+                MockHttpsURLConnection(
+                    mockURL,
+                    MockedResponse(
+                        200,
+                        """{"ankleHeight":50,"armpitHeight":760,"bust":535,"hipWidth":195,"sleeveLength":345}"""
+                            .byteInputStream(),
+                    ),
+                ),
+            )
+            val kidBodyData = KidBodyData(gender = "boy", height = 1070, weight = 17, age = 5)
+
+            val actualUserBodyProfile = virtusizeAPIService.predictUserBodyProfile(kidBodyData).successData
+
+            assertThat(actualUserBodyProfile?.gender).isEqualTo("boy")
+            assertThat(actualUserBodyProfile?.age).isEqualTo(5)
+            assertThat(actualUserBodyProfile?.height).isEqualTo(1070)
+            assertThat(actualUserBodyProfile?.weight).isEqualTo("17")
+            assertThat(actualUserBodyProfile?.bodyData).isEqualTo(
+                setOf(
+                    Measurement("ankleHeight", 50),
+                    Measurement("armpitHeight", 760),
+                    Measurement("bust", 535),
+                    Measurement("hipWidth", 195),
+                    Measurement("sleeveLength", 345),
+                ),
+            )
         }
 
     @Test

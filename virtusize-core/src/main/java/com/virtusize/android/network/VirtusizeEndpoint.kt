@@ -80,6 +80,10 @@ sealed interface VirtusizeEndpoint {
         override val path: String = "/a/api/v3/user-body-measurements/"
     }
 
+    data object UserBodyMeasurementsPredict : VirtusizeEndpoint {
+        override val path: String = "/a/api/v3/user-body-measurements-predict"
+    }
+
     data object I18N : VirtusizeEndpoint {
         override val path: String = "/bundle-payloads/aoyama/"
     }

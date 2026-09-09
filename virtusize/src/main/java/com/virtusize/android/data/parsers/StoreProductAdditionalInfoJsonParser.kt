@@ -41,10 +41,12 @@ internal class StoreProductAdditionalInfoJsonParser :
         if (fit.isBlank() && brandSizing == null) {
             return null
         }
-        return StoreProductAdditionalInfo(brand, gender, sizes, modelInfo, fit, style, brandSizing)
+        val itemMeasurements = if (json.has(FIELD_ITEM_MEASUREMENTS)) json.optBoolean(FIELD_ITEM_MEASUREMENTS, true) else null
+        return StoreProductAdditionalInfo(brand, gender, sizes, modelInfo, fit, style, brandSizing, itemMeasurements)
     }
 
     private companion object {
+        const val FIELD_ITEM_MEASUREMENTS = "itemMeasurements"
         const val FIELD_BRAND = "brand"
         const val FIELD_GENDER = "gender"
         const val FIELD_SIZES = "sizes"

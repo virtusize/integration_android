@@ -9,6 +9,7 @@ import android.view.WindowManager
 import com.virtusize.android.BuildConfig
 import com.virtusize.android.R
 import com.virtusize.android.SharedPreferencesHelper
+import com.virtusize.android.data.local.KidBodyData
 import com.virtusize.android.data.local.StoreId
 import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeEvent
@@ -18,6 +19,7 @@ import com.virtusize.android.data.local.VirtusizeOrder
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.local.virtusizeError
 import com.virtusize.android.data.parsers.BodyProfileRecommendedSizeJsonParser
+import com.virtusize.android.data.parsers.JsonUtils
 import com.virtusize.android.data.parsers.ProductCheckDataJsonParser
 import com.virtusize.android.data.parsers.ProductMetaDataHintsJsonParser
 import com.virtusize.android.data.parsers.ProductTypeJsonParser
@@ -288,6 +290,26 @@ internal class VirtusizeAPIServiceImpl(
                 }
         }
 
+    override suspend fun predictUserBodyProfile(kidBodyData: KidBodyData): VirtusizeApiResponse<UserBodyProfile> =
+        withContext(Dispatchers.IO) {
+            val apiRequest = VirtusizeApi.predictUserBodyMeasurements(kidBodyData)
+            Log.d("[Aoyama-mobile]", "Predict body measurements request: ${apiRequest.url} ${JSONObject(apiRequest.params)}")
+            val response =
+                VirtusizeApiTask(
+                    httpURLConnection,
+                    sharedPreferencesHelper,
+                    messageHandler,
+                ).execute<JSONObject>(apiRequest)
+            Log.d("[Aoyama-mobile]", "Predict body measurements response: $response")
+            when (response) {
+                is VirtusizeApiResponse.Success ->
+                    VirtusizeApiResponse.Success(
+                        kidBodyData.toUserBodyProfile(JsonUtils.jsonObjectToMap(response.data)),
+                    )
+                is VirtusizeApiResponse.Error -> response
+            }
+        }
+
     override suspend fun getBodyProfileRecommendedItemSize(
         productTypes: List<ProductType>,
         storeProduct: Product,
@@ -333,6 +355,7 @@ internal class VirtusizeAPIServiceImpl(
     ): VirtusizeApiResponse<BodyProfileRecommendedSize?> =
         withContext(Dispatchers.IO) {
             val apiRequest = VirtusizeApi.getKidSizeRecommendationRequest(productTypes, storeProduct, userBodyProfile)
+            Log.d("[Aoyama-mobile]", "Recommended kid size request: ${apiRequest.url} ${JSONObject(apiRequest.params)}")
             VirtusizeApiTask(
                 httpURLConnection,
                 sharedPreferencesHelper,

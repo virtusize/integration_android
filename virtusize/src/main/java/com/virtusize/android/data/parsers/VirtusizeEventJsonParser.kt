@@ -32,6 +32,7 @@ private fun getVirtusizeEvent(
         EventName.UserChangedRecommendationType -> VirtusizeEvent.UserChangedRecommendationType(data = json)
         EventName.UserCreatedSilhouette -> VirtusizeEvent.UserCreatedSilhouette(data = json)
         EventName.UserUpdatedBodyMeasurements -> VirtusizeEvent.UserUpdatedBodyMeasurements(data = json)
+        EventName.UserSelectedGender -> VirtusizeEvent.UserSelectedGender(data = json)
         EventName.UserAuthData -> VirtusizeEvent.UserAuthData(data = json)
         EventName.UserLoggedIn -> VirtusizeEvent.UserLoggedIn(data = json)
         EventName.UserLoggedOut -> VirtusizeEvent.UserLoggedOut(data = json)

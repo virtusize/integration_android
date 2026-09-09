@@ -304,6 +304,7 @@ class ProductTest {
     fun isKid_boyOrGirlGender_returnsTrue() {
         assertThat(ProductFixtures.storeProduct(gender = "girl").isKid()).isTrue()
         assertThat(ProductFixtures.storeProduct(gender = "boy").isKid()).isTrue()
+        assertThat(ProductFixtures.storeProduct(gender = "kids").isKid()).isTrue()
         assertThat(ProductFixtures.storeProduct(gender = "female").isKid()).isFalse()
     }
 }
