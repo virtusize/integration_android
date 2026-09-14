@@ -1,4 +1,4 @@
-### Changes:
+### 2.12.28:
 - Fix: added eventHandlers to update InPage widget changes
 
 ### 2.12.27
