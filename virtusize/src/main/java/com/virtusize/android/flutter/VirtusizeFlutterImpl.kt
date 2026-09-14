@@ -182,6 +182,26 @@ internal class VirtusizeFlutterImpl(
                         event.data?.let { virtusizeRepository.updateKidBodyData(it) }
                     }
 
+                    is VirtusizeEvent.UserClickedReset -> {
+                        // Clears the kids data and resets the InPage views
+                        virtusizeRepository.clearKidBodyData()
+                        scope.launch {
+                            virtusizeRepository.updateInPageRecommendation()
+                        }
+                    }
+
+                    is VirtusizeEvent.UserCompletedOnboarding, is VirtusizeEvent.UserEditedBody -> {
+                        // Updates the recommendation: kids items predict the body profile from the cached
+                        // inputs, other items load the body measurements, then the size is recommended
+                        scope.launch {
+                            virtusizeRepository.fetchDataForInPageRecommendation(
+                                shouldUpdateUserProducts = false,
+                                shouldUpdateBodyProfile = true,
+                            )
+                            virtusizeRepository.updateInPageRecommendation()
+                        }
+                    }
+
                     is VirtusizeEvent.UserClosedWidget ->
                         scope.launch {
                             virtusizeRepository.updateUserSession(forceUpdate = true)

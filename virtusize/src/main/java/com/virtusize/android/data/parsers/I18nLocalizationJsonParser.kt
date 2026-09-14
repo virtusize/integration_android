@@ -16,6 +16,8 @@ internal class I18nLocalizationJsonParser(
     override fun parse(json: JSONObject): I18nLocalization {
         val aoyamaJSONObject = json.optJSONObject(FIELD_KEYS)?.optJSONObject(FIELD_APPS)?.optJSONObject(FIELD_AOYAMA)
         val inpageJSONObject = aoyamaJSONObject?.optJSONObject(FIELD_INPAGE)
+        val kidInpageJSONObject =
+            json.optJSONObject(FIELD_KEYS)?.optJSONObject(FIELD_APPS)?.optJSONObject(FIELD_KID)?.optJSONObject(FIELD_INPAGE)
         val oneSizeJSONObject = inpageJSONObject?.optJSONObject(FIELD_ONE_SIZE)
         val multiSizeJSONObject = inpageJSONObject?.optJSONObject(FIELD_MULTI_SIZE)
         val accessoryJSONObject = inpageJSONObject?.optJSONObject(FIELD_ACCESSORY)
@@ -136,6 +138,10 @@ internal class I18nLocalizationJsonParser(
                 ),
             )?.trim().orEmpty()
 
+        val kidBodyDataEmptyText =
+            kidInpageJSONObject?.optString(FIELD_KID_BODY_DATA_EMPTY)?.trim()?.takeIf { it.isNotEmpty() }
+                ?: bodyDataEmptyText
+
         return I18nLocalization(
             language = virtusizeLanguage,
             defaultAccessoryText = defaultAccessoryText,
@@ -153,6 +159,7 @@ internal class I18nLocalizationJsonParser(
             willNotFitResultText = willNotFitResultText,
             willNotFitResultDefaultText = willNotFitResultDefaultText,
             bodyDataEmptyText = bodyDataEmptyText,
+            kidBodyDataEmptyText = kidBodyDataEmptyText,
         )
     }
 
@@ -178,5 +185,7 @@ internal class I18nLocalizationJsonParser(
         private const val FIELD_SIZE_COMPARISON = "sizeComparison"
         private const val FIELD_DEFAULT_ACCESSORY_TEXT = "defaultAccessoryText"
         private const val FIELD_BODY_DATA_EMPTY = "bodydataEmpty"
+        private const val FIELD_KID = "kid"
+        private const val FIELD_KID_BODY_DATA_EMPTY = "checkYourChildSize"
     }
 }

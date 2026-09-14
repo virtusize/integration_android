@@ -114,6 +114,8 @@ data class KidBodyData(
                 is Int -> value
                 is Number -> value.toDouble().roundToInt()
                 is String -> value.trim().toDoubleOrNull()?.roundToInt()
+                // the widget sometimes sends a Vue ref instead of its value
+                is JSONObject -> intValue(value.opt("_value"))
                 else -> null
             }
     }

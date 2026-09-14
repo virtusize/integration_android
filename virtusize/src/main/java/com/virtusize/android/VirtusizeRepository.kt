@@ -431,13 +431,22 @@ class VirtusizeRepository internal constructor(
     }
 
     /**
+     * Clears the cached kid's body inputs and the body-profile recommendation
+     */
+    internal fun clearKidBodyData() {
+        sharedPreferencesHelper.deleteKidBodyData()
+        userBodyRecommendedSize = null
+        userBodyProfileRecommendedSize = null
+    }
+
+    /**
      * Clear user session and the data related to size recommendations
      */
     internal suspend fun clearUserData() {
         cachedUserSession = null
         virtusizeAPIService.deleteUser()
         sharedPreferencesHelper.storeAuthToken("")
-        sharedPreferencesHelper.deleteKidBodyData()
+        clearKidBodyData()
 
         userProducts = null
         userProductRecommendedSize = null

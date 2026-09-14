@@ -103,7 +103,7 @@ data class Product(
                 return i18nLocalization.oneSizeWillFitResultText
             }
             // If willFit is false or no recommended size, show "Your size not found"
-            return i18nLocalization.willNotFitResultDefaultText
+            return if (isKid()) bodyDataEmptyText(i18nLocalization) else i18nLocalization.willNotFitResultDefaultText
         }
 
         // No body data provided, check for product comparison
@@ -112,7 +112,7 @@ data class Product(
         }
 
         // No data at all, show body data empty message
-        return i18nLocalization.bodyDataEmptyText
+        return bodyDataEmptyText(i18nLocalization)
     }
 
     /**
@@ -136,7 +136,7 @@ data class Product(
                 )
             }
             // If willFit is false or no recommended size, show "Your size not found"
-            return i18nLocalization.willNotFitResultDefaultText
+            return if (isKid()) bodyDataEmptyText(i18nLocalization) else i18nLocalization.willNotFitResultDefaultText
         }
 
         // No body data provided, check for product comparison
@@ -145,8 +145,15 @@ data class Product(
         }
 
         // No data at all, show body data empty message
-        return i18nLocalization.bodyDataEmptyText
+        return bodyDataEmptyText(i18nLocalization)
     }
+
+    /**
+     * Gets the text where no recommendation is available: kids items use the widget's
+     * "Check your child's size" wording instead of the generic one
+     */
+    private fun bodyDataEmptyText(i18nLocalization: I18nLocalization): String =
+        if (isKid()) i18nLocalization.kidBodyDataEmptyText else i18nLocalization.bodyDataEmptyText
 
     /**
      * Checks if the product is an accessory
