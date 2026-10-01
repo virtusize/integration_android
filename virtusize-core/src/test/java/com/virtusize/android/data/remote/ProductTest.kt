@@ -253,6 +253,60 @@ class ProductTest {
     }
 
     @Test
+    fun getRecommendationText_multiSizeProduct_hasSizeM_returnMultiSizeBodyProfileTextForM() {
+        val recommendationText =
+            ProductFixtures.storeProduct(
+                sizeList =
+                    mutableListOf(
+                        ProductSize("S", mutableSetOf()),
+                        ProductSize("M", mutableSetOf()),
+                    ),
+            ).getRecommendationText(
+                context = context,
+                i18nLocalization = i18nLocalization,
+                sizeComparisonRecommendedSize = null,
+                bodyProfileRecommendedSizeName = "M",
+            )
+
+        assertThat(recommendationText)
+            .isEqualTo(i18nLocalization.getMultiSizeBodyProfileText("M"))
+    }
+
+    @Test
+    fun getRecommendationText_multiSizeProduct_emptyBodySize_returnBodyDataEmptyText() {
+        val recommendationText =
+            ProductFixtures.storeProduct(
+                sizeList =
+                    mutableListOf(
+                        ProductSize("S", mutableSetOf()),
+                        ProductSize("M", mutableSetOf()),
+                    ),
+            ).getRecommendationText(
+                context = context,
+                i18nLocalization = i18nLocalization,
+                sizeComparisonRecommendedSize = null,
+                bodyProfileRecommendedSizeName = "",
+            )
+
+        assertThat(recommendationText).isEqualTo(i18nLocalization.bodyDataEmptyText)
+    }
+
+    @Test
+    fun getRecommendationText_oneSizeProduct_emptyBodySize_returnBodyDataEmptyText() {
+        val recommendationText =
+            ProductFixtures.storeProduct(
+                sizeList = mutableListOf(ProductSize("FREE", mutableSetOf())),
+            ).getRecommendationText(
+                context = context,
+                i18nLocalization = i18nLocalization,
+                sizeComparisonRecommendedSize = null,
+                bodyProfileRecommendedSizeName = "",
+            )
+
+        assertThat(recommendationText).isEqualTo(i18nLocalization.bodyDataEmptyText)
+    }
+
+    @Test
     fun getRecommendationText_multiSizeProduct_noRecommendedSizes_returnBodyDataEmptyText() {
         val bodyDataEmptyText = context.getString(R.string.inpage_body_data_empty_text)
         assertThat(

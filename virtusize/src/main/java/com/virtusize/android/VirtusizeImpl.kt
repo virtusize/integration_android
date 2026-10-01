@@ -173,7 +173,7 @@ internal class VirtusizeImpl(
                         VirtusizeSentryTracker.trackWebViewEvent(event.name, sentryStoreId)
                         val isKidsEvent = event.data?.let { virtusizeRepository.updateKidBodyData(it) } ?: false
                         // Updates the body recommendation size and switches the view to the body comparison
-                        val sizeRecName = event.data?.optString("sizeRecName")
+                        val sizeRecName = event.recommendedSizeName()
                         scope.launch {
                             if (isKidsEvent) {
                                 // The kids flow has no server-side body profile: predict it from the

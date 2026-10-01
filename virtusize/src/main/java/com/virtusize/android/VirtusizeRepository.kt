@@ -372,11 +372,13 @@ class VirtusizeRepository internal constructor(
     }
 
     /**
-     * Updates the user body recommended size
+     * Updates the user body recommended size when a non-empty recommendation is provided
      * @param recommendedSize the recommended size got from the web view
      */
     internal fun updateUserBodyRecommendedSize(recommendedSize: String?) {
-        userBodyRecommendedSize = recommendedSize
+        recommendedSize?.takeIf { it.isNotEmpty() }?.let {
+            userBodyRecommendedSize = it
+        }
     }
 
     /**

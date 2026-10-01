@@ -20,6 +20,7 @@ import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.network.VirtusizeAPIService
 import com.virtusize.android.network.VirtusizeApi
+import com.virtusize.android.recommendedSizeName
 import com.virtusize.android.ui.VirtusizeView
 import com.virtusize.android.util.ConfigurationUtils
 import com.virtusize.android.util.VirtusizeUtils
@@ -159,7 +160,7 @@ internal class VirtusizeFlutterImpl(
                         invalidateCurrentProduct()
                         val isKidsEvent = event.data?.let { virtusizeRepository.updateKidBodyData(it) } ?: false
                         // Updates the body recommendation size and switches the view to the body comparison
-                        val sizeRecName = event.data?.optString("sizeRecName")
+                        val sizeRecName = event.recommendedSizeName()
                         scope.launch {
                             if (isKidsEvent) {
                                 // The kids flow has no server-side body profile: predict it from the
