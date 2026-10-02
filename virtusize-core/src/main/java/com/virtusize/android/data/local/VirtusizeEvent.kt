@@ -23,6 +23,9 @@ enum class EventName(val value: String) {
     UserClosedWidget("user-closed-widget"),
     UserClickedStart("user-clicked-start"),
     UserClickedLanguageSelector("user-clicked-language"),
+    UserClickedReset("user-clicked-reset"),
+    UserCompletedOnboarding("user-completed-onboarding"),
+    UserEditedBody("user-edited-body"),
     WidgetReady("widget-ready"),
     ;
 
@@ -106,6 +109,18 @@ sealed interface VirtusizeEvent {
 
     data class UserClickedLanguageSelector(override val data: JSONObject? = null) : VirtusizeEvent {
         override val name: String = EventName.UserClickedLanguageSelector.value
+    }
+
+    data class UserClickedReset(override val data: JSONObject? = null) : VirtusizeEvent {
+        override val name: String = EventName.UserClickedReset.value
+    }
+
+    data class UserCompletedOnboarding(override val data: JSONObject? = null) : VirtusizeEvent {
+        override val name: String = EventName.UserCompletedOnboarding.value
+    }
+
+    data class UserEditedBody(override val data: JSONObject? = null) : VirtusizeEvent {
+        override val name: String = EventName.UserEditedBody.value
     }
 
     data class WidgetReady(override val data: JSONObject? = null) : VirtusizeEvent {

@@ -1,3 +1,9 @@
+### Changes:
+- Fix: filter empty user-updated-body-measurements to prevent no size bug
+
+### 2.12.28:
+- Fix: added eventHandlers to update InPage widget changes
+
 ### 2.12.27
 - Feature: Kids body inputs (gender, age, height, weight) are cached from the widget events and the kids size recommendation predicts the body measurements via `user-body-measurements-predict` instead of loading `/user-body-measurements/`; the `/kid` payload and headers match the web widget
 

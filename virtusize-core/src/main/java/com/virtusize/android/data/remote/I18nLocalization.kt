@@ -24,6 +24,8 @@ data class I18nLocalization(
     val willNotFitResultText: String,
     val willNotFitResultDefaultText: String,
     val bodyDataEmptyText: String,
+    /** The kids InPage text where the recommendation is not available ("Check your child's size") */
+    val kidBodyDataEmptyText: String = bodyDataEmptyText,
 ) {
     enum class TrimType {
         ONELINE,

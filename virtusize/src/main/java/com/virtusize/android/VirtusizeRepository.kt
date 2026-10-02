@@ -372,11 +372,13 @@ class VirtusizeRepository internal constructor(
     }
 
     /**
-     * Updates the user body recommended size
+     * Updates the user body recommended size when a non-empty recommendation is provided
      * @param recommendedSize the recommended size got from the web view
      */
     internal fun updateUserBodyRecommendedSize(recommendedSize: String?) {
-        userBodyRecommendedSize = recommendedSize
+        recommendedSize?.takeIf { it.isNotEmpty() }?.let {
+            userBodyRecommendedSize = it
+        }
     }
 
     /**
@@ -431,13 +433,22 @@ class VirtusizeRepository internal constructor(
     }
 
     /**
+     * Clears the cached kid's body inputs and the body-profile recommendation
+     */
+    internal fun clearKidBodyData() {
+        sharedPreferencesHelper.deleteKidBodyData()
+        userBodyRecommendedSize = null
+        userBodyProfileRecommendedSize = null
+    }
+
+    /**
      * Clear user session and the data related to size recommendations
      */
     internal suspend fun clearUserData() {
         cachedUserSession = null
         virtusizeAPIService.deleteUser()
         sharedPreferencesHelper.storeAuthToken("")
-        sharedPreferencesHelper.deleteKidBodyData()
+        clearKidBodyData()
 
         userProducts = null
         userProductRecommendedSize = null
