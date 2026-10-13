@@ -9,7 +9,6 @@ import android.view.WindowManager
 import com.virtusize.android.BuildConfig
 import com.virtusize.android.R
 import com.virtusize.android.SharedPreferencesHelper
-import com.virtusize.android.data.local.KidBodyData
 import com.virtusize.android.data.local.StoreId
 import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeEvent
@@ -34,6 +33,7 @@ import com.virtusize.android.data.remote.ProductCheckData
 import com.virtusize.android.data.remote.ProductMetaDataHints
 import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.data.remote.Store
+import com.virtusize.android.data.remote.KidBodyProfile
 import com.virtusize.android.data.remote.UserBodyProfile
 import com.virtusize.android.data.remote.UserSessionInfo
 import kotlinx.coroutines.CoroutineDispatcher
@@ -290,9 +290,9 @@ internal class VirtusizeAPIServiceImpl(
                 }
         }
 
-    override suspend fun predictUserBodyProfile(kidBodyData: KidBodyData): VirtusizeApiResponse<UserBodyProfile> =
+    override suspend fun predictUserBodyProfile(kidBodyProfile: KidBodyProfile): VirtusizeApiResponse<UserBodyProfile> =
         withContext(Dispatchers.IO) {
-            val apiRequest = VirtusizeApi.predictUserBodyMeasurements(kidBodyData)
+            val apiRequest = VirtusizeApi.predictUserBodyMeasurements(kidBodyProfile)
             Log.d("[Aoyama-mobile]", "Predict body measurements request: ${apiRequest.url} ${JSONObject(apiRequest.params)}")
             val response =
                 VirtusizeApiTask(
@@ -304,7 +304,7 @@ internal class VirtusizeAPIServiceImpl(
             when (response) {
                 is VirtusizeApiResponse.Success ->
                     VirtusizeApiResponse.Success(
-                        kidBodyData.toUserBodyProfile(JsonUtils.jsonObjectToMap(response.data)),
+                        kidBodyProfile.applyingPredictedMeasurements(JsonUtils.jsonObjectToMap(response.data)),
                     )
                 is VirtusizeApiResponse.Error -> response
             }

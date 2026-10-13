@@ -6,7 +6,6 @@ import android.view.WindowManager
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.virtusize.android.core.BuildConfig
-import com.virtusize.android.data.local.KidBodyData
 import com.virtusize.android.data.local.VirtusizeEnvironment
 import com.virtusize.android.data.local.VirtusizeEvent
 import com.virtusize.android.data.local.VirtusizeLanguage
@@ -291,9 +290,7 @@ internal class VirtusizeApiTest {
 
     @Test
     fun `test predictUserBodyMeasurements should return expected API request`() {
-        val kidBodyData = KidBodyData(gender = "boy", height = 1070, weight = 17, age = 5)
-
-        val actualApiRequest = VirtusizeApi.predictUserBodyMeasurements(kidBodyData)
+        val actualApiRequest = VirtusizeApi.predictUserBodyMeasurements(TestFixtures.kidsPredictInputs)
 
         val expectedUrl = "https://staging.virtusize.com/a/api/v3/user-body-measurements-predict"
         val expectedParams = mapOf("gender" to "boy", "height" to 1070, "weight" to 17, "age" to 5)

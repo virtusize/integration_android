@@ -4,6 +4,7 @@ import com.virtusize.android.data.local.VirtusizeOrder
 import com.virtusize.android.data.local.VirtusizeOrderItem
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.parsers.ProductCheckDataJsonParser
+import com.virtusize.android.data.remote.KidBodyProfile
 import com.virtusize.android.data.remote.Measurement
 import com.virtusize.android.data.remote.UserBodyProfile
 import org.json.JSONObject
@@ -241,6 +242,14 @@ internal object TestFixtures {
                 "bodyData": null
             }
             """.trimIndent(),
+        )
+
+    val kidsPredictInputs =
+        KidBodyProfile(
+            gender = "boy",
+            age = 5,
+            height = 1070,
+            weight = "17",
         )
 
     val userBodyProfile =

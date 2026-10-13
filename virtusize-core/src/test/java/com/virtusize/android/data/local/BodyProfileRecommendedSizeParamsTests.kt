@@ -427,9 +427,8 @@ internal class BodyProfileRecommendedSizeParamsTests {
 
     @Test
     fun testBodyProfileRecommendedSizeParams_kidPayload_matchesWidgetPayload() {
-        val kidBodyData = KidBodyData(gender = "boy", height = 1070, weight = 17, age = 5)
         val userBodyProfile =
-            kidBodyData.toUserBodyProfile(
+            TestFixtures.kidsPredictInputs.applyingPredictedMeasurements(
                 mapOf("hipWidth" to 195, "ankleHeight" to 50, "bust" to 535, "sleeveLength" to 345.0, "unknown" to null),
             )
         val params =

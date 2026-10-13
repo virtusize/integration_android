@@ -133,6 +133,7 @@ internal class VirtusizeImpl(
                         VirtusizeSentryTracker.trackWebViewEvent(event.name, sentryStoreId)
                         // Updates the user session and fetches updated user products and body profile from the server
                         scope.launch {
+                            virtusizeRepository.invalidateApiBodyProfileCache()
                             virtusizeRepository.updateUserSession(forceUpdate = true)
                             virtusizeRepository.fetchDataForInPageRecommendation()
                             virtusizeRepository.updateInPageRecommendation()
@@ -175,6 +176,7 @@ internal class VirtusizeImpl(
                         // Updates the body recommendation size and switches the view to the body comparison
                         val sizeRecName = event.recommendedSizeName()
                         scope.launch {
+                            virtusizeRepository.invalidateApiBodyProfileCache()
                             if (isKidsEvent) {
                                 // The kids flow has no server-side body profile: predict it from the
                                 // cached inputs and re-run the kids size recommendation
@@ -193,7 +195,6 @@ internal class VirtusizeImpl(
 
                     is VirtusizeEvent.UserSelectedGender -> {
                         VirtusizeSentryTracker.trackWebViewEvent(event.name, sentryStoreId)
-                        // Caches the kid's gender for the kids size recommendation
                         event.data?.let { virtusizeRepository.updateKidBodyData(it) }
                     }
 
@@ -211,6 +212,7 @@ internal class VirtusizeImpl(
                         // Updates the recommendation: kids items predict the body profile from the cached
                         // inputs, other items load the body measurements, then the size is recommended
                         scope.launch {
+                            virtusizeRepository.invalidateApiBodyProfileCache()
                             virtusizeRepository.fetchDataForInPageRecommendation(
                                 shouldUpdateUserProducts = false,
                                 shouldUpdateBodyProfile = true,

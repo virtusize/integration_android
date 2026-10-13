@@ -23,7 +23,8 @@ class UserBodyProfileJsonParser : VirtusizeJsonParser<UserBodyProfile> {
             val braSizeMap = JsonUtils.jsonObjectToMap(braSizeJsonObject)
             braSize = if (braSizeMap.isEmpty()) null else braSizeMap
         }
-        return UserBodyProfile(gender, age, height, weight, bodyData, footwearData, braSize)
+        val origin = JsonUtils.optString(json, FIELD_ORIGIN).ifEmpty { null }
+        return UserBodyProfile(gender, age, height, weight, bodyData, footwearData, braSize, origin)
     }
 
     companion object {
@@ -34,5 +35,6 @@ class UserBodyProfileJsonParser : VirtusizeJsonParser<UserBodyProfile> {
         private const val FIELD_BODY_DATA = "bodyData"
         private const val FIELD_FOOTWEAR_DATA = "footwearData"
         private const val FIELD_BRA_SIZE = "braSize"
+        private const val FIELD_ORIGIN = "origin"
     }
 }
