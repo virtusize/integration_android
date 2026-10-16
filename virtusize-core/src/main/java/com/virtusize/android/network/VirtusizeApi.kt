@@ -3,7 +3,6 @@ package com.virtusize.android.network
 import android.net.Uri
 import com.virtusize.android.data.local.BodyProfileRecommendedSizeParams
 import com.virtusize.android.data.local.I18N_URL
-import com.virtusize.android.data.local.KidBodyData
 import com.virtusize.android.data.local.StoreId
 import com.virtusize.android.data.local.VirtusizeEnvironment
 import com.virtusize.android.data.local.VirtusizeEvent
@@ -17,6 +16,7 @@ import com.virtusize.android.data.local.servicesApiUrl
 import com.virtusize.android.data.local.sizeRecommendationApiBaseUrl
 import com.virtusize.android.data.local.virtusizeUrl
 import com.virtusize.android.data.parsers.JsonUtils
+import com.virtusize.android.data.remote.KidBodyProfile
 import com.virtusize.android.data.remote.Product
 import com.virtusize.android.data.remote.ProductCheckData
 import com.virtusize.android.data.remote.ProductType
@@ -437,10 +437,10 @@ object VirtusizeApi {
     /**
      * Gets a API request for predicting a kid's body measurements from the gender, height, weight and age.
      * The kids flow has no server-side body profile, so this replaces [getUserBodyProfile] for kids items.
-     * @param kidBodyData the kid's body inputs cached from the web widget
+     * @param kidBodyProfile the cached kids inputs (gender, age, height, weight)
      * @see ApiRequest
      */
-    fun predictUserBodyMeasurements(kidBodyData: KidBodyData): ApiRequest {
+    fun predictUserBodyMeasurements(kidBodyProfile: KidBodyProfile): ApiRequest {
         val url =
             Uri.parse(
                 environment.defaultApiUrl() + VirtusizeEndpoint.UserBodyMeasurementsPredict.path,
@@ -448,7 +448,7 @@ object VirtusizeApi {
                 .buildUpon()
                 .build()
                 .toString()
-        return ApiRequest(url, HttpMethod.POST, kidBodyData.paramsToMap(), authorization = true)
+        return ApiRequest(url, HttpMethod.POST, kidBodyProfile.predictParams() ?: emptyMap(), authorization = true)
     }
 
     /**

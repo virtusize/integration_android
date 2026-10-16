@@ -125,6 +125,7 @@ internal class VirtusizeFlutterImpl(
                     is VirtusizeEvent.UserLoggedIn -> {
                         // Updates the user session and fetches updated user products and body profile from the server
                         scope.launch {
+                            virtusizeRepository.invalidateApiBodyProfileCache()
                             virtusizeRepository.updateUserSession()
                             virtusizeRepository.fetchDataForInPageRecommendation()
                             virtusizeRepository.updateInPageRecommendation()
@@ -162,6 +163,7 @@ internal class VirtusizeFlutterImpl(
                         // Updates the body recommendation size and switches the view to the body comparison
                         val sizeRecName = event.recommendedSizeName()
                         scope.launch {
+                            virtusizeRepository.invalidateApiBodyProfileCache()
                             if (isKidsEvent) {
                                 // The kids flow has no server-side body profile: predict it from the
                                 // cached inputs and re-run the kids size recommendation
@@ -179,7 +181,6 @@ internal class VirtusizeFlutterImpl(
                     }
 
                     is VirtusizeEvent.UserSelectedGender -> {
-                        // Caches the kid's gender for the kids size recommendation
                         event.data?.let { virtusizeRepository.updateKidBodyData(it) }
                     }
 
@@ -195,6 +196,7 @@ internal class VirtusizeFlutterImpl(
                         // Updates the recommendation: kids items predict the body profile from the cached
                         // inputs, other items load the body measurements, then the size is recommended
                         scope.launch {
+                            virtusizeRepository.invalidateApiBodyProfileCache()
                             virtusizeRepository.fetchDataForInPageRecommendation(
                                 shouldUpdateUserProducts = false,
                                 shouldUpdateBodyProfile = true,

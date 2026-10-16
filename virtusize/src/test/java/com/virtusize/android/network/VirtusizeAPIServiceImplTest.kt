@@ -7,7 +7,6 @@ import com.google.common.truth.Truth.assertThat
 import com.virtusize.android.MainCoroutineRule
 import com.virtusize.android.TestUtils
 import com.virtusize.android.VirtusizeBuilder
-import com.virtusize.android.data.local.KidBodyData
 import com.virtusize.android.data.local.VirtusizeEnvironment
 import com.virtusize.android.data.local.VirtusizeErrorType
 import com.virtusize.android.data.local.VirtusizeEvent
@@ -490,9 +489,8 @@ class VirtusizeAPIServiceImplTest {
                     ),
                 ),
             )
-            val kidBodyData = KidBodyData(gender = "boy", height = 1070, weight = 17, age = 5)
-
-            val actualUserBodyProfile = virtusizeAPIService.predictUserBodyProfile(kidBodyData).successData
+            val actualUserBodyProfile =
+                virtusizeAPIService.predictUserBodyProfile(TestFixtures.kidsPredictInputs).successData
 
             assertThat(actualUserBodyProfile?.gender).isEqualTo("boy")
             assertThat(actualUserBodyProfile?.age).isEqualTo(5)

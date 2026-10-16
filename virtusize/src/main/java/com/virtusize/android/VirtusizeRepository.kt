@@ -2,7 +2,6 @@ package com.virtusize.android
 
 import android.content.Context
 import android.graphics.Bitmap
-import com.virtusize.android.data.local.KidBodyData
 import com.virtusize.android.data.local.SizeComparisonRecommendedSize
 import com.virtusize.android.data.local.SizeRecommendationType
 import com.virtusize.android.data.local.VirtusizeError
@@ -19,10 +18,12 @@ import com.virtusize.android.data.parsers.I18nLocalizationJsonParser
 import com.virtusize.android.data.parsers.UserAuthDataJsonParser
 import com.virtusize.android.data.remote.BodyProfileRecommendedSize
 import com.virtusize.android.data.remote.I18nLocalization
+import com.virtusize.android.data.remote.KidBodyProfile
 import com.virtusize.android.data.remote.Product
 import com.virtusize.android.data.remote.ProductCheckData
 import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.data.remote.Store
+import com.virtusize.android.data.remote.UserBodyProfile
 import com.virtusize.android.network.VirtusizeAPIService
 import com.virtusize.android.network.VirtusizeApiResponse
 import com.virtusize.android.util.VirtusizeUtils
@@ -322,15 +323,19 @@ class VirtusizeRepository internal constructor(
                 null
             }
 
-        // Kids items have no server-side body profile: the measurements are predicted from the
-        // inputs cached from the web widget instead of being loaded from `/user-body-measurements/`
+        // Kids predict from the kids cache. Adult and shoe reuse the cached
+        // `getUserBodyProfile` response when present.
         val isKidProduct = storeProduct?.isKid() == true
-        val kidBodyData = if (isKidProduct) KidBodyData.cached(sharedPreferencesHelper) else null
-        val hasBodyMeasurement = if (isKidProduct) kidBodyData != null else hasSessionBodyMeasurement
+        val hasBodyMeasurement =
+            if (isKidProduct) {
+                KidBodyProfile.cached(sharedPreferencesHelper)?.hasKidPredictInputs == true
+            } else {
+                hasSessionBodyMeasurement
+            }
 
         val recommendedSizeDeferred =
             if (shouldUpdateBodyProfile && hasBodyMeasurement) {
-                async { getUserBodyRecommendedSize(storeProduct, productTypes, kidBodyData) }
+                async { getUserBodyRecommendedSize(storeProduct, productTypes) }
             } else {
                 null
             }
@@ -433,12 +438,23 @@ class VirtusizeRepository internal constructor(
     }
 
     /**
-     * Clears the cached kid's body inputs and the body-profile recommendation
+     * Clears the kids inputs, the predicted kids measurements, and the body-profile recommendation.
+     * The adult/shoe profile cache is left in place.
      */
     internal fun clearKidBodyData() {
-        sharedPreferencesHelper.deleteKidBodyData()
+        KidBodyProfile.clearCache(sharedPreferencesHelper)
+        UserBodyProfile.clearKidPrediction(sharedPreferencesHelper)
         userBodyRecommendedSize = null
         userBodyProfileRecommendedSize = null
+    }
+
+    /**
+     * Drops the cached adult/shoe profile and the cached kids prediction.
+     * Kids age, weight, gender and height stay.
+     */
+    internal fun invalidateApiBodyProfileCache() {
+        UserBodyProfile.clearCache(sharedPreferencesHelper)
+        UserBodyProfile.clearKidPrediction(sharedPreferencesHelper)
     }
 
     /**
@@ -449,6 +465,7 @@ class VirtusizeRepository internal constructor(
         virtusizeAPIService.deleteUser()
         sharedPreferencesHelper.storeAuthToken("")
         clearKidBodyData()
+        UserBodyProfile.clearCache(sharedPreferencesHelper)
 
         userProducts = null
         userProductRecommendedSize = null
@@ -460,23 +477,20 @@ class VirtusizeRepository internal constructor(
      * Gets size recommendation for a store product that would best fit a user's body.
      * @param storeProduct the store product
      * @param productTypes a list of product types
-     * @param kidBodyData the cached kid's body inputs for kids items; the body profile is predicted from them
-     * instead of being loaded from the user body measurements API
      * @return [BodyProfileRecommendedSize] containing the size name and willFit flag, or null if not available
      */
     private suspend fun getUserBodyRecommendedSize(
         storeProduct: Product?,
         productTypes: List<ProductType>?,
-        kidBodyData: KidBodyData? = null,
     ): BodyProfileRecommendedSize? {
         if (storeProduct == null || productTypes == null || storeProduct.isAccessory()) {
             return null
         }
         val userBodyProfileResponse =
-            if (kidBodyData != null) {
-                virtusizeAPIService.predictUserBodyProfile(kidBodyData)
+            if (storeProduct.isKid()) {
+                fetchKidsBodyProfile()
             } else {
-                virtusizeAPIService.getUserBodyProfile()
+                fetchUserBodyProfile()
             }
         if (userBodyProfileResponse.successData != null) {
             if (storeProduct.isShoe()) {
@@ -510,6 +524,30 @@ class VirtusizeRepository internal constructor(
             }
         }
         return null
+    }
+
+    /**
+     * Adult and shoe: return the cached `getUserBodyProfile` response, or fetch and store it.
+     */
+    private suspend fun fetchUserBodyProfile(): VirtusizeApiResponse<UserBodyProfile> {
+        UserBodyProfile.cached(sharedPreferencesHelper)?.let { return VirtusizeApiResponse.Success(it) }
+        val result = virtusizeAPIService.getUserBodyProfile()
+        result.successData?.let { UserBodyProfile.cache(sharedPreferencesHelper, it) }
+        return result
+    }
+
+    /**
+     * Kids: return the cached predicted measurements, or predict from the widget inputs and store them.
+     */
+    private suspend fun fetchKidsBodyProfile(): VirtusizeApiResponse<UserBodyProfile> {
+        UserBodyProfile.cachedKidPrediction(sharedPreferencesHelper)?.let { return VirtusizeApiResponse.Success(it) }
+        val inputs = KidBodyProfile.cached(sharedPreferencesHelper)
+        if (inputs == null || !inputs.hasKidPredictInputs) {
+            return VirtusizeApiResponse.Error(VirtusizeErrorType.WardrobeNotFound.virtusizeError())
+        }
+        val result = virtusizeAPIService.predictUserBodyProfile(inputs)
+        result.successData?.let { UserBodyProfile.cacheKidPrediction(sharedPreferencesHelper, it) }
+        return result
     }
 
     /**
@@ -569,17 +607,17 @@ class VirtusizeRepository internal constructor(
     }
 
     /**
-     * Caches the kid's body inputs from the data of the kids events
-     * `user-selected-gender` and `user-updated-body-measurements` (whose `source` is `kids`).
+     * Caches kids widget inputs (`user-selected-gender` and `user-updated-body-measurements`
+     * whose `source` is `kids`) on [KidBodyProfile].
      * Every value present overrides the cached one; absent values are kept.
      * @param eventJsonObject the event data in JSONObject
-     * @return true if the event came from the kids flow and was cached
+     * @return true if the event came from the kids flow
      */
     internal fun updateKidBodyData(eventJsonObject: JSONObject): Boolean {
-        if (!KidBodyData.isKidsEvent(eventJsonObject)) {
+        if (!KidBodyProfile.isKidsEvent(eventJsonObject)) {
             return false
         }
-        KidBodyData.cache(sharedPreferencesHelper, eventJsonObject)
+        KidBodyProfile.cacheKidsEvent(sharedPreferencesHelper, eventJsonObject)
         return true
     }
 

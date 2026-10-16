@@ -2,6 +2,7 @@ package com.virtusize.android.fixtures
 
 import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.parsers.ProductCheckDataJsonParser
+import com.virtusize.android.data.remote.KidBodyProfile
 import com.virtusize.android.data.remote.Measurement
 import com.virtusize.android.data.remote.UserBodyProfile
 import org.json.JSONObject
@@ -127,6 +128,14 @@ internal object TestFixtures {
             emptySet(),
             emptyMap(),
             null,
+        )
+
+    val kidsPredictInputs =
+        KidBodyProfile(
+            gender = "boy",
+            age = 5,
+            height = 1070,
+            weight = "17",
         )
 
     val userBodyProfile =
