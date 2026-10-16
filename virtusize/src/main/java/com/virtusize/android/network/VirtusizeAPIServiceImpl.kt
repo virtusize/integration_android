@@ -28,12 +28,12 @@ import com.virtusize.android.data.parsers.UserBodyProfileJsonParser
 import com.virtusize.android.data.parsers.UserProductJsonParser
 import com.virtusize.android.data.parsers.UserSessionInfoJsonParser
 import com.virtusize.android.data.remote.BodyProfileRecommendedSize
+import com.virtusize.android.data.remote.KidBodyProfile
 import com.virtusize.android.data.remote.Product
 import com.virtusize.android.data.remote.ProductCheckData
 import com.virtusize.android.data.remote.ProductMetaDataHints
 import com.virtusize.android.data.remote.ProductType
 import com.virtusize.android.data.remote.Store
-import com.virtusize.android.data.remote.KidBodyProfile
 import com.virtusize.android.data.remote.UserBodyProfile
 import com.virtusize.android.data.remote.UserSessionInfo
 import kotlinx.coroutines.CoroutineDispatcher

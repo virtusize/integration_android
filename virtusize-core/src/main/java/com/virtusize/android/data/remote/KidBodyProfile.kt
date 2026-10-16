@@ -94,7 +94,10 @@ data class KidBodyProfile(
             )
         }
 
-        fun cache(sharedPreferencesHelper: SharedPreferencesHelper, profile: KidBodyProfile) {
+        fun cache(
+            sharedPreferencesHelper: SharedPreferencesHelper,
+            profile: KidBodyProfile,
+        ) {
             sharedPreferencesHelper.storeKidBodyProfileJson(profile.toJson().toString())
         }
 
@@ -102,7 +105,10 @@ data class KidBodyProfile(
          * Overrides gender/age/height/weight from a kids widget event. Height is in centimeters
          * in the event and stored in millimeters. Absent values keep their cached value.
          */
-        fun cacheKidsEvent(sharedPreferencesHelper: SharedPreferencesHelper, eventData: JSONObject) {
+        fun cacheKidsEvent(
+            sharedPreferencesHelper: SharedPreferencesHelper,
+            eventData: JSONObject,
+        ) {
             val current = cached(sharedPreferencesHelper)
             val gender =
                 eventData.optString("gender").takeIf { it.isNotEmpty() }

@@ -52,7 +52,10 @@ data class UserBodyProfile(
             return UserBodyProfileJsonParser().parse(JSONObject(json))
         }
 
-        fun cache(sharedPreferencesHelper: SharedPreferencesHelper, profile: UserBodyProfile) {
+        fun cache(
+            sharedPreferencesHelper: SharedPreferencesHelper,
+            profile: UserBodyProfile,
+        ) {
             sharedPreferencesHelper.storeUserBodyProfileJson(profile.toJson().toString())
         }
 
@@ -65,7 +68,10 @@ data class UserBodyProfile(
             return UserBodyProfileJsonParser().parse(JSONObject(json))
         }
 
-        fun cacheKidPrediction(sharedPreferencesHelper: SharedPreferencesHelper, profile: UserBodyProfile) {
+        fun cacheKidPrediction(
+            sharedPreferencesHelper: SharedPreferencesHelper,
+            profile: UserBodyProfile,
+        ) {
             sharedPreferencesHelper.storeKidPredictedBodyProfileJson(profile.toJson().toString())
         }
 
