@@ -100,112 +100,113 @@ internal class BodyProfileRecommendedSizeParamsTests {
             )
         val bodyDataParams = bodyProfileRecommendedSizeParams.createBodyDataParams()
         val actual = JSONObject(bodyDataParams)
-        val expected = JSONObject(
-            """
-            {
-              "armpit_height": {
-                "value": 1130,
-                "predicted": true
-              },
-              "shoulder_height": {
-                "value": 1240,
-                "predicted": true
-              },
-              "chest": {
-                "value": 760,
-                "predicted": true
-              },
-              "bust_width": {
-                "value": 245,
-                "predicted": true
-              },
-              "hip_height": {
-                "value": 750,
-                "predicted": true
-              },
-              "thigh": {
-                "value": 480,
-                "predicted": true
-              },
-              "knee_height": {
-                "value": 395,
-                "predicted": true
-              },
-              "head_height": {
-                "value": 215,
-                "predicted": true
-              },
-              "hip_width": {
-                "value": 300,
-                "predicted": true
-              },
-              "neck": {
-                "value": 300,
-                "predicted": true
-              },
-              "hip": {
-                "value": 830,
-                "predicted": true
-              },
-              "waist_width": {
-                "value": 225,
-                "predicted": true
-              },
-              "waist_height": {
-                "value": 920,
-                "predicted": true
-              },
-              "shoulder_width": {
-                "value": 340,
-                "predicted": true
-              },
-              "bicep": {
-                "value": 220,
-                "predicted": true
-              },
-              "inseam": {
-                "value": 700,
-                "predicted": true
-              },
-              "sleeve": {
-                "value": 720,
-                "predicted": true
-              },
-              "bust": {
-                "value": 755,
-                "predicted": true
-              },
-              "waist": {
-                "value": 630,
-                "predicted": true
-              },
-              "rise": {
-                "value": 215,
-                "predicted": true
-              },
-              "shoulder": {
-                "value": 370,
-                "predicted": true
-              },
-              "sleeve_length": {
-                "value": 520,
-                "predicted": true
-              },
-              "bra_country": {
-                "value": "",
-                "predicted": false
-              },
-              "bra_cup": {
-                "value": "",
-                "predicted": false
-              },
-              "bra_band": {
-                "value": 0,
-                "predicted": false
-              }
-            }
-            """.trimIndent(),
-        )
+        val expected =
+            JSONObject(
+                """
+                {
+                  "armpit_height": {
+                    "value": 1130,
+                    "predicted": true
+                  },
+                  "shoulder_height": {
+                    "value": 1240,
+                    "predicted": true
+                  },
+                  "chest": {
+                    "value": 760,
+                    "predicted": true
+                  },
+                  "bust_width": {
+                    "value": 245,
+                    "predicted": true
+                  },
+                  "hip_height": {
+                    "value": 750,
+                    "predicted": true
+                  },
+                  "thigh": {
+                    "value": 480,
+                    "predicted": true
+                  },
+                  "knee_height": {
+                    "value": 395,
+                    "predicted": true
+                  },
+                  "head_height": {
+                    "value": 215,
+                    "predicted": true
+                  },
+                  "hip_width": {
+                    "value": 300,
+                    "predicted": true
+                  },
+                  "neck": {
+                    "value": 300,
+                    "predicted": true
+                  },
+                  "hip": {
+                    "value": 830,
+                    "predicted": true
+                  },
+                  "waist_width": {
+                    "value": 225,
+                    "predicted": true
+                  },
+                  "waist_height": {
+                    "value": 920,
+                    "predicted": true
+                  },
+                  "shoulder_width": {
+                    "value": 340,
+                    "predicted": true
+                  },
+                  "bicep": {
+                    "value": 220,
+                    "predicted": true
+                  },
+                  "inseam": {
+                    "value": 700,
+                    "predicted": true
+                  },
+                  "sleeve": {
+                    "value": 720,
+                    "predicted": true
+                  },
+                  "bust": {
+                    "value": 755,
+                    "predicted": true
+                  },
+                  "waist": {
+                    "value": 630,
+                    "predicted": true
+                  },
+                  "rise": {
+                    "value": 215,
+                    "predicted": true
+                  },
+                  "shoulder": {
+                    "value": 370,
+                    "predicted": true
+                  },
+                  "sleeve_length": {
+                    "value": 520,
+                    "predicted": true
+                  },
+                  "bra_country": {
+                    "value": "",
+                    "predicted": false
+                  },
+                  "bra_cup": {
+                    "value": "",
+                    "predicted": false
+                  },
+                  "bra_band": {
+                    "value": 0,
+                    "predicted": false
+                  }
+                }
+                """.trimIndent(),
+            )
         assertThat(actual.length()).isEqualTo(expected.length())
         val keys = expected.keys()
         while (keys.hasNext()) {

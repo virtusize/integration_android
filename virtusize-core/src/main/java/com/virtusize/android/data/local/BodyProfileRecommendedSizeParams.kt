@@ -262,35 +262,35 @@ internal data class BodyProfileRecommendedSizeParams(
         var chestValue: Int? = null
         val bodyData =
             emptyMap<String, Any?>()
-            .plus(
-                userBodyProfile.bodyData.associate {
-                    if (it.name == PARAM_BODY_BUST) {
-                        chestValue = it.millimeter
-                    }
-                    it.name to
-                        mutableMapOf(
-                            PARAM_BODY_MEASUREMENT_VALUE to aoyamaMillimeters(it.name, it.millimeter),
-                            PARAM_BODY_MEASUREMENT_PREDICTED to true,
-                        )
-                },
-            )
-            .plus(
-                chestValue?.let {
-                    mapOf(
-                        PARAM_BODY_CHEST to
+                .plus(
+                    userBodyProfile.bodyData.associate {
+                        if (it.name == PARAM_BODY_BUST) {
+                            chestValue = it.millimeter
+                        }
+                        it.name to
                             mutableMapOf(
-                                PARAM_BODY_MEASUREMENT_VALUE to aoyamaMillimeters(PARAM_BODY_CHEST, it),
+                                PARAM_BODY_MEASUREMENT_VALUE to aoyamaMillimeters(it.name, it.millimeter),
                                 PARAM_BODY_MEASUREMENT_PREDICTED to true,
-                            ),
-                    )
-                }.orEmpty(),
-            )
-            .plus(
-                createBraSizeParams(),
-            )
-            // Convert all keys in the map to snake_case. Keys the profile adds later stay in the payload.
-            .mapKeys { (key, _) -> toSnakeCase(key) }
-            .toMutableMap()
+                            )
+                    },
+                )
+                .plus(
+                    chestValue?.let {
+                        mapOf(
+                            PARAM_BODY_CHEST to
+                                mutableMapOf(
+                                    PARAM_BODY_MEASUREMENT_VALUE to aoyamaMillimeters(PARAM_BODY_CHEST, it),
+                                    PARAM_BODY_MEASUREMENT_PREDICTED to true,
+                                ),
+                        )
+                    }.orEmpty(),
+                )
+                .plus(
+                    createBraSizeParams(),
+                )
+                // Convert all keys in the map to snake_case. Keys the profile adds later stay in the payload.
+                .mapKeys { (key, _) -> toSnakeCase(key) }
+                .toMutableMap()
         // Aoyama always sends these, including when the profile has no bra size
         putBraDefault(bodyData, "bra_country", "")
         putBraDefault(bodyData, "bra_cup", "")
@@ -302,7 +302,10 @@ internal data class BodyProfileRecommendedSizeParams(
      * Aoyama divides every measurement by 10 in `parseBodyMeasurements`. These names are also
      * `Math.round`ed, which is nearest 10 mm. Every other measurement is sent unchanged.
      */
-    private fun aoyamaMillimeters(name: String, millimeters: Int): Int {
+    private fun aoyamaMillimeters(
+        name: String,
+        millimeters: Int,
+    ): Int {
         return if (toSnakeCase(name) in AOYAMA_ROUNDED_BODY_MEASUREMENTS) {
             (millimeters + 5) / 10 * 10
         } else {
@@ -310,7 +313,11 @@ internal data class BodyProfileRecommendedSizeParams(
         }
     }
 
-    private fun putBraDefault(bodyData: MutableMap<String, Any?>, key: String, value: Any) {
+    private fun putBraDefault(
+        bodyData: MutableMap<String, Any?>,
+        key: String,
+        value: Any,
+    ) {
         if (key !in bodyData) {
             bodyData[key] =
                 mutableMapOf(
@@ -393,7 +400,10 @@ internal data class BodyProfileRecommendedSizeParams(
         return ordered.associateWith { getValue(it) }
     }
 
-    private fun bestSizeKey(keys: Set<String>, clientName: String): String? {
+    private fun bestSizeKey(
+        keys: Set<String>,
+        clientName: String,
+    ): String? {
         if (clientName in keys) return clientName
         return keys
             .filter { clientName.endsWith("/$it") || clientName.endsWith(it) }
