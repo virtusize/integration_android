@@ -341,7 +341,7 @@ internal class VirtusizeApiTest {
         assertThat(actualApiRequest.authorization).isEqualTo(false)
         assertThat(actualApiRequest.params["user_gender"]).isEqualTo("female")
         assertThat(actualApiRequest.params["user_height"]).isEqualTo(1630)
-        assertThat(actualApiRequest.params["user_weight"]).isEqualTo("50.00")
+        assertThat(actualApiRequest.params["user_weight"]).isEqualTo(50)
         assertThat(actualApiRequest.params["body_data"]).isEqualTo(
             mutableMapOf(
                 "waist_width" to
@@ -351,7 +351,7 @@ internal class VirtusizeApiTest {
                     ),
                 "chest" to
                     mutableMapOf(
-                        "value" to 755,
+                        "value" to 760,
                         "predicted" to true,
                     ),
                 "bust_width" to
@@ -454,6 +454,21 @@ internal class VirtusizeApiTest {
                         "value" to 1240,
                         "predicted" to true,
                     ),
+                "bra_country" to
+                    mutableMapOf(
+                        "value" to "",
+                        "predicted" to false,
+                    ),
+                "bra_cup" to
+                    mutableMapOf(
+                        "value" to "",
+                        "predicted" to false,
+                    ),
+                "bra_band" to
+                    mutableMapOf(
+                        "value" to 0,
+                        "predicted" to false,
+                    ),
             ),
         )
         val items = actualApiRequest.params["items"] as Array<Map<String, Any>>
@@ -506,9 +521,10 @@ internal class VirtusizeApiTest {
                         ),
                     "style" to "fashionable",
                     "item_measurements" to true,
-                    "fit_adjust" to JSONObject.NULL,
+                    "client_size_order" to listOf("36", "38"),
                 ),
             )
+            assertThat(item["fit_adjust"]).isEqualTo(JSONObject.NULL)
         }
     }
 }

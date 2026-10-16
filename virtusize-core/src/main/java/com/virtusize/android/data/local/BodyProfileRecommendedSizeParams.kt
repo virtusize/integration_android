@@ -40,10 +40,8 @@ internal data class BodyProfileRecommendedSizeParams(
                 mapOf(PARAM_USER_HEIGHT to userBodyProfile.height),
             )
             .plus(
-                // Send the raw API string (e.g. "56.00") to match the web widget's payload
-                userBodyProfile.weight.takeIf { it.toFloatOrNull() != null }
-                    ?.let { mapOf(PARAM_USER_WEIGHT to it) }
-                    .orEmpty(),
+                // The web widget sends a JSON number (`56`), not the raw API string (`"56.00"`)
+                numericWeight()?.let { mapOf(PARAM_USER_WEIGHT to it) }.orEmpty(),
             )
             .plus(
                 mapOf(PARAM_USER_AGE to userBodyProfile.age),
@@ -169,23 +167,39 @@ internal data class BodyProfileRecommendedSizeParams(
             }
 
     private fun createItemsParams(): Map<String, Any> {
-        return emptyMap<String, Any>()
-            .plus(
-                mapOf(PARAM_ITEM_SIZES to createItemSizesParams()),
-            )
-            .plus(
-                mapOf(
-                    // The API returns camelCase names (e.g. "tShirt") while the web widget sends "t_shirt"
-                    PARAM_PRODUCT_TYPE to
-                        toSnakeCase(productTypes.find { it.id == storeProduct.productType }?.name ?: ""),
-                ),
-            )
-            .plus(
-                mapOf(PARAM_ADDITIONAL_INFO to createAdditionalInfoParams()),
-            )
-            .plus(
-                mapOf(PARAM_EXTERNAL_PRODUCT_ID to (storeProduct.externalId ?: "")),
-            )
+        val clientSizeOrder =
+            storeProduct.sizes
+                .map { it.name }
+                .filter { it.isNotEmpty() }
+                .sortedLikeJavaScriptObjectKeys()
+        val additionalInfo = createAdditionalInfoParams().toMutableMap()
+        // The web widget puts fit_adjust on the item, and sends the size-chart order
+        // inside additional_info. A tied fit score follows that order, including names
+        // such as J/XS that JavaScript does not sort numerically.
+        additionalInfo.remove(PARAM_FIT_ADJUST)
+        additionalInfo[PARAM_CLIENT_SIZE_ORDER] = clientSizeOrder
+        (additionalInfo[PARAM_SIZES] as? Map<*, *>)?.let { sizes ->
+            val typed = linkedMapOf<String, Any?>()
+            sizes.forEach { (key, value) ->
+                if (key is String) typed[key] = value
+            }
+            additionalInfo[PARAM_SIZES] = typed.orderedByClientSize(clientSizeOrder)
+        }
+        return linkedMapOf(
+            PARAM_ITEM_SIZES to createItemSizesParams().orderedByClientSize(clientSizeOrder),
+            PARAM_PRODUCT_TYPE to
+                toSnakeCase(productTypes.find { it.id == storeProduct.productType }?.name ?: ""),
+            PARAM_ADDITIONAL_INFO to additionalInfo,
+            PARAM_EXTERNAL_PRODUCT_ID to (storeProduct.externalId ?: ""),
+            PARAM_FIT_ADJUST to JSONObject.NULL,
+        )
+    }
+
+    /** Whole numbers stay integers (`56`), fractional weights stay decimals (`56.5`). */
+    private fun numericWeight(): Number? {
+        val weight = userBodyProfile.weight.toDoubleOrNull() ?: return null
+        val whole = weight.toInt()
+        return if (weight == whole.toDouble()) whole else weight
     }
 
     /**
@@ -196,12 +210,15 @@ internal data class BodyProfileRecommendedSizeParams(
             storeProduct.storeProductMeta?.additionalInfo?.brand
                 ?: storeProduct.storeProductMeta?.brand
         val sizeHashMap =
-            storeProduct.storeProductMeta?.additionalInfo?.sizes?.associate {
-                it.name to
-                    it.measurements.associate { measurement ->
-                        measurement.name to measurement.millimeter
-                    }
-            }
+            storeProduct.storeProductMeta?.additionalInfo?.sizes
+                ?.associate {
+                    it.name to
+                        it.measurements.associate { measurement ->
+                            // Store meta uses camelCase (`frontRise`); the web widget sends `front_rise`
+                            toSnakeCase(measurement.name) to measurement.millimeter
+                        }
+                }
+                ?.withJavaScriptKeyOrder()
         val modelInfo =
             storeProduct.storeProductMeta?.additionalInfo?.modelInfo
                 ?.mapKeys { (key, _) -> toSnakeCase(key) } ?: JSONObject.NULL
@@ -243,35 +260,71 @@ internal data class BodyProfileRecommendedSizeParams(
      */
     fun createBodyDataParams(): Map<String, Any?> {
         var chestValue: Int? = null
-        return emptyMap<String, Any?>()
-            .plus(
-                userBodyProfile.bodyData.map {
-                    if (it.name == PARAM_BODY_BUST) {
-                        chestValue = it.millimeter
-                    }
-                    it.name to
-                        mutableMapOf(
-                            PARAM_BODY_MEASUREMENT_VALUE to it.millimeter,
-                            PARAM_BODY_MEASUREMENT_PREDICTED to true,
-                        )
-                },
-            )
-            .plus(
-                chestValue?.let {
-                    mapOf(
-                        PARAM_BODY_CHEST to
+        val bodyData =
+            emptyMap<String, Any?>()
+                .plus(
+                    userBodyProfile.bodyData.associate {
+                        if (it.name == PARAM_BODY_BUST) {
+                            chestValue = it.millimeter
+                        }
+                        it.name to
                             mutableMapOf(
-                                PARAM_BODY_MEASUREMENT_VALUE to it,
+                                PARAM_BODY_MEASUREMENT_VALUE to aoyamaMillimeters(it.name, it.millimeter),
                                 PARAM_BODY_MEASUREMENT_PREDICTED to true,
-                            ),
-                    )
-                }.orEmpty(),
-            )
-            .plus(
-                createBraSizeParams(),
-            )
-            // Convert all keys in the map to snake_case
-            .mapKeys { (key, _) -> toSnakeCase(key) }
+                            )
+                    },
+                )
+                .plus(
+                    chestValue?.let {
+                        mapOf(
+                            PARAM_BODY_CHEST to
+                                mutableMapOf(
+                                    PARAM_BODY_MEASUREMENT_VALUE to aoyamaMillimeters(PARAM_BODY_CHEST, it),
+                                    PARAM_BODY_MEASUREMENT_PREDICTED to true,
+                                ),
+                        )
+                    }.orEmpty(),
+                )
+                .plus(
+                    createBraSizeParams(),
+                )
+                // Convert all keys in the map to snake_case. Keys the profile adds later stay in the payload.
+                .mapKeys { (key, _) -> toSnakeCase(key) }
+                .toMutableMap()
+        // Aoyama always sends these, including when the profile has no bra size
+        putBraDefault(bodyData, "bra_country", "")
+        putBraDefault(bodyData, "bra_cup", "")
+        putBraDefault(bodyData, "bra_band", 0)
+        return bodyData
+    }
+
+    /**
+     * Aoyama divides every measurement by 10 in `parseBodyMeasurements`. These names are also
+     * `Math.round`ed, which is nearest 10 mm. Every other measurement is sent unchanged.
+     */
+    private fun aoyamaMillimeters(
+        name: String,
+        millimeters: Int,
+    ): Int {
+        return if (toSnakeCase(name) in AOYAMA_ROUNDED_BODY_MEASUREMENTS) {
+            (millimeters + 5) / 10 * 10
+        } else {
+            millimeters
+        }
+    }
+
+    private fun putBraDefault(
+        bodyData: MutableMap<String, Any?>,
+        key: String,
+        value: Any,
+    ) {
+        if (key !in bodyData) {
+            bodyData[key] =
+                mutableMapOf(
+                    PARAM_BODY_MEASUREMENT_VALUE to value,
+                    PARAM_BODY_MEASUREMENT_PREDICTED to false,
+                )
+        }
     }
 
     /**
@@ -295,13 +348,13 @@ internal data class BodyProfileRecommendedSizeParams(
                 braSizeParams["bra_$snakeKey"] =
                     mutableMapOf(
                         PARAM_BODY_MEASUREMENT_VALUE to bandValue,
-                        PARAM_BODY_MEASUREMENT_PREDICTED to true,
+                        PARAM_BODY_MEASUREMENT_PREDICTED to false,
                     )
             } else {
                 braSizeParams["bra_$snakeKey"] =
                     mutableMapOf(
                         PARAM_BODY_MEASUREMENT_VALUE to value,
-                        PARAM_BODY_MEASUREMENT_PREDICTED to true,
+                        PARAM_BODY_MEASUREMENT_PREDICTED to false,
                     )
             }
         }
@@ -313,18 +366,48 @@ internal data class BodyProfileRecommendedSizeParams(
      * Creates the map that represents the store product size info
      */
     fun createItemSizesParams(): Map<String, Any?> {
-        return emptyMap<String, Any?>()
-            .plus(
-                storeProduct.sizes.map { productSize ->
-                    productSize.name to
-                        productSize.measurements.associate { measurement ->
-                            // Measurement names arrive camelCase from the store-products API
-                            // (e.g. "bustRound"), but the get-size API expects the web widget's
-                            // snake_case names ("bust_round")
-                            toSnakeCase(measurement.name) to measurement.millimeter
-                        }
-                },
-            )
+        return storeProduct.sizes
+            .associate { productSize ->
+                productSize.name to
+                    productSize.measurements.associate { measurement ->
+                        // Measurement names arrive camelCase from the store-products API
+                        // (e.g. "bustRound"), but the get-size API expects the web widget's
+                        // snake_case names ("bust_round")
+                        toSnakeCase(measurement.name) to measurement.millimeter
+                    }
+            }
+            .withJavaScriptKeyOrder()
+    }
+
+    /** The size API walks these objects in key order when two sizes share a fit score. */
+    private fun <Value> Map<String, Value>.withJavaScriptKeyOrder(): Map<String, Value> {
+        return keys.toList().sortedLikeJavaScriptObjectKeys().associateWith { getValue(it) }
+    }
+
+    /**
+     * Emits size names in [clientOrder]. `J/XS` matches `J/XS` and also `XS`.
+     * Names that are not in the chart stay in JavaScript object-key order.
+     */
+    private fun <Value> Map<String, Value>.orderedByClientSize(clientOrder: List<String>): Map<String, Value> {
+        val remaining = keys.toMutableSet()
+        val ordered = mutableListOf<String>()
+        for (name in clientOrder) {
+            val match = bestSizeKey(remaining, name) ?: continue
+            ordered.add(match)
+            remaining.remove(match)
+        }
+        ordered.addAll(remaining.toList().sortedLikeJavaScriptObjectKeys())
+        return ordered.associateWith { getValue(it) }
+    }
+
+    private fun bestSizeKey(
+        keys: Set<String>,
+        clientName: String,
+    ): String? {
+        if (clientName in keys) return clientName
+        return keys
+            .filter { clientName.endsWith("/$it") || clientName.endsWith(it) }
+            .maxByOrNull { it.length }
     }
 
     private companion object {
@@ -356,6 +439,7 @@ internal data class BodyProfileRecommendedSizeParams(
         const val PARAM_FIT = "fit"
         const val PARAM_ITEM_MEASUREMENTS = "item_measurements"
         const val PARAM_FIT_ADJUST = "fit_adjust"
+        const val PARAM_CLIENT_SIZE_ORDER = "client_size_order"
         const val PARAM_SIZES = "sizes"
         const val PARAM_MODEL_INFO = "model_info"
         const val PARAM_GENDER = "gender"
@@ -365,6 +449,8 @@ internal data class BodyProfileRecommendedSizeParams(
         const val PARAM_BODY_MEASUREMENT_PREDICTED = "predicted"
         const val PARAM_BODY_BUST = "bust"
         const val PARAM_BODY_CHEST = "chest"
+        val AOYAMA_ROUNDED_BODY_MEASUREMENTS =
+            setOf("shoulder", "bicep", "chest", "waist", "hip", "thigh", "inseam")
 
         const val APP_ORIGIN_ANDROID = 2
     }

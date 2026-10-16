@@ -1,4 +1,5 @@
 ### Changes:
+- Fix: Align SDK to Web API /item request
 - Fix: filter empty user-updated-body-measurements to prevent no size bug
 
 ### 2.12.28:
