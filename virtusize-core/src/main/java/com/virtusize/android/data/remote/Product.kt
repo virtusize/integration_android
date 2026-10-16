@@ -93,8 +93,8 @@ data class Product(
         bodyProfileRecommendedSizeName: String?,
         bodyProfileWillFit: Boolean?,
     ): String {
-        // Check if body data is provided (bodyProfileRecommendedSizeName is not null means body data was provided)
-        val hasBodyData = bodyProfileRecommendedSizeName != null
+        // A missing or empty recommendation means body data has not been provided yet.
+        val hasBodyData = !bodyProfileRecommendedSizeName.isNullOrEmpty()
 
         // For one-size products with body data provided
         if (hasBodyData) {
@@ -103,7 +103,7 @@ data class Product(
                 return i18nLocalization.oneSizeWillFitResultText
             }
             // If willFit is false or no recommended size, show "Your size not found"
-            return i18nLocalization.willNotFitResultDefaultText
+            return if (isKid()) bodyDataEmptyText(i18nLocalization) else i18nLocalization.willNotFitResultDefaultText
         }
 
         // No body data provided, check for product comparison
@@ -112,7 +112,7 @@ data class Product(
         }
 
         // No data at all, show body data empty message
-        return i18nLocalization.bodyDataEmptyText
+        return bodyDataEmptyText(i18nLocalization)
     }
 
     /**
@@ -124,8 +124,8 @@ data class Product(
         bodyProfileRecommendedSizeName: String?,
         bodyProfileWillFit: Boolean?,
     ): String {
-        // Check if body data is provided
-        val hasBodyData = bodyProfileRecommendedSizeName != null
+        // A missing or empty recommendation means body data has not been provided yet.
+        val hasBodyData = !bodyProfileRecommendedSizeName.isNullOrEmpty()
 
         // For multi-size products with body data provided
         if (hasBodyData) {
@@ -136,7 +136,7 @@ data class Product(
                 )
             }
             // If willFit is false or no recommended size, show "Your size not found"
-            return i18nLocalization.willNotFitResultDefaultText
+            return if (isKid()) bodyDataEmptyText(i18nLocalization) else i18nLocalization.willNotFitResultDefaultText
         }
 
         // No body data provided, check for product comparison
@@ -145,8 +145,15 @@ data class Product(
         }
 
         // No data at all, show body data empty message
-        return i18nLocalization.bodyDataEmptyText
+        return bodyDataEmptyText(i18nLocalization)
     }
+
+    /**
+     * Gets the text where no recommendation is available: kids items use the widget's
+     * "Check your child's size" wording instead of the generic one
+     */
+    private fun bodyDataEmptyText(i18nLocalization: I18nLocalization): String =
+        if (isKid()) i18nLocalization.kidBodyDataEmptyText else i18nLocalization.bodyDataEmptyText
 
     /**
      * Checks if the product is an accessory
