@@ -20,6 +20,7 @@ import com.virtusize.android.data.local.VirtusizeProduct
 import com.virtusize.android.data.remote.I18nLocalization
 import com.virtusize.android.network.VirtusizeAPIService
 import com.virtusize.android.network.VirtusizeApi
+import com.virtusize.android.recommendedSizeName
 import com.virtusize.android.ui.VirtusizeView
 import com.virtusize.android.util.ConfigurationUtils
 import com.virtusize.android.util.VirtusizeUtils
@@ -124,6 +125,7 @@ internal class VirtusizeFlutterImpl(
                     is VirtusizeEvent.UserLoggedIn -> {
                         // Updates the user session and fetches updated user products and body profile from the server
                         scope.launch {
+                            virtusizeRepository.invalidateApiBodyProfileCache()
                             virtusizeRepository.updateUserSession()
                             virtusizeRepository.fetchDataForInPageRecommendation()
                             virtusizeRepository.updateInPageRecommendation()
@@ -159,8 +161,9 @@ internal class VirtusizeFlutterImpl(
                         invalidateCurrentProduct()
                         val isKidsEvent = event.data?.let { virtusizeRepository.updateKidBodyData(it) } ?: false
                         // Updates the body recommendation size and switches the view to the body comparison
-                        val sizeRecName = event.data?.optString("sizeRecName")
+                        val sizeRecName = event.recommendedSizeName()
                         scope.launch {
+                            virtusizeRepository.invalidateApiBodyProfileCache()
                             if (isKidsEvent) {
                                 // The kids flow has no server-side body profile: predict it from the
                                 // cached inputs and re-run the kids size recommendation
@@ -178,7 +181,6 @@ internal class VirtusizeFlutterImpl(
                     }
 
                     is VirtusizeEvent.UserSelectedGender -> {
-                        // Caches the kid's gender for the kids size recommendation
                         event.data?.let { virtusizeRepository.updateKidBodyData(it) }
                     }
 
@@ -194,6 +196,7 @@ internal class VirtusizeFlutterImpl(
                         // Updates the recommendation: kids items predict the body profile from the cached
                         // inputs, other items load the body measurements, then the size is recommended
                         scope.launch {
+                            virtusizeRepository.invalidateApiBodyProfileCache()
                             virtusizeRepository.fetchDataForInPageRecommendation(
                                 shouldUpdateUserProducts = false,
                                 shouldUpdateBodyProfile = true,

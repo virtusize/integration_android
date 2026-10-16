@@ -93,8 +93,8 @@ data class Product(
         bodyProfileRecommendedSizeName: String?,
         bodyProfileWillFit: Boolean?,
     ): String {
-        // Check if body data is provided (bodyProfileRecommendedSizeName is not null means body data was provided)
-        val hasBodyData = bodyProfileRecommendedSizeName != null
+        // A missing or empty recommendation means body data has not been provided yet.
+        val hasBodyData = !bodyProfileRecommendedSizeName.isNullOrEmpty()
 
         // For one-size products with body data provided
         if (hasBodyData) {
@@ -124,8 +124,8 @@ data class Product(
         bodyProfileRecommendedSizeName: String?,
         bodyProfileWillFit: Boolean?,
     ): String {
-        // Check if body data is provided
-        val hasBodyData = bodyProfileRecommendedSizeName != null
+        // A missing or empty recommendation means body data has not been provided yet.
+        val hasBodyData = !bodyProfileRecommendedSizeName.isNullOrEmpty()
 
         // For multi-size products with body data provided
         if (hasBodyData) {
