@@ -99,7 +99,8 @@ internal class BodyProfileRecommendedSizeParamsTests {
                 TestFixtures.userBodyProfile,
             )
         val bodyDataParams = bodyProfileRecommendedSizeParams.createBodyDataParams()
-        assertThat(JSONObject(bodyDataParams).toString()).isEqualTo(
+        val actual = JSONObject(bodyDataParams)
+        val expected = JSONObject(
             """
             {
               "armpit_height": {
@@ -111,7 +112,7 @@ internal class BodyProfileRecommendedSizeParamsTests {
                 "predicted": true
               },
               "chest": {
-                "value": 755,
+                "value": 760,
                 "predicted": true
               },
               "bust_width": {
@@ -189,10 +190,29 @@ internal class BodyProfileRecommendedSizeParamsTests {
               "sleeve_length": {
                 "value": 520,
                 "predicted": true
+              },
+              "bra_country": {
+                "value": "",
+                "predicted": false
+              },
+              "bra_cup": {
+                "value": "",
+                "predicted": false
+              },
+              "bra_band": {
+                "value": 0,
+                "predicted": false
               }
             }
-            """.trimIndent().replace("\\s+|[\\n]+".toRegex(), ""),
+            """.trimIndent(),
         )
+        assertThat(actual.length()).isEqualTo(expected.length())
+        val keys = expected.keys()
+        while (keys.hasNext()) {
+            val key = keys.next()
+            assertThat(actual.getJSONObject(key).get("value")).isEqualTo(expected.getJSONObject(key).get("value"))
+            assertThat(actual.getJSONObject(key).get("predicted")).isEqualTo(expected.getJSONObject(key).get("predicted"))
+        }
     }
 
     @Test
@@ -232,7 +252,7 @@ internal class BodyProfileRecommendedSizeParamsTests {
             )
         val bodyProfileRecommendedSizeParamsMap = bodyProfileRecommendedSizeParams.paramsToMap()
         assertThat(bodyProfileRecommendedSizeParamsMap["user_gender"]).isEqualTo("female")
-        assertThat(bodyProfileRecommendedSizeParamsMap["user_weight"]).isEqualTo("50.00")
+        assertThat(bodyProfileRecommendedSizeParamsMap["user_weight"]).isEqualTo(50)
         assertThat(bodyProfileRecommendedSizeParamsMap["user_height"]).isEqualTo(1630)
         assertThat(bodyProfileRecommendedSizeParamsMap["body_data"]).isEqualTo(
             mutableMapOf(
@@ -243,7 +263,7 @@ internal class BodyProfileRecommendedSizeParamsTests {
                     ),
                 "chest" to
                     mutableMapOf(
-                        "value" to 755,
+                        "value" to 760,
                         "predicted" to true,
                     ),
                 "bust_width" to
@@ -346,6 +366,21 @@ internal class BodyProfileRecommendedSizeParamsTests {
                         "value" to 1240,
                         "predicted" to true,
                     ),
+                "bra_country" to
+                    mutableMapOf(
+                        "value" to "",
+                        "predicted" to false,
+                    ),
+                "bra_cup" to
+                    mutableMapOf(
+                        "value" to "",
+                        "predicted" to false,
+                    ),
+                "bra_band" to
+                    mutableMapOf(
+                        "value" to 0,
+                        "predicted" to false,
+                    ),
             ),
         )
         val items = bodyProfileRecommendedSizeParamsMap["items"] as Array<Map<String, Any>>
@@ -398,9 +433,16 @@ internal class BodyProfileRecommendedSizeParamsTests {
                         ),
                     "style" to "fashionable",
                     "item_measurements" to true,
-                    "fit_adjust" to JSONObject.NULL,
+                    "client_size_order" to listOf("36", "38"),
                 ),
             )
+            assertThat(item["fit_adjust"]).isEqualTo(JSONObject.NULL)
+            assertThat((item["item_sizes_orig"] as Map<*, *>).keys.toList())
+                .containsExactly("36", "38")
+                .inOrder()
+            assertThat(((item["additional_info"] as Map<*, *>)["sizes"] as Map<*, *>).keys.toList())
+                .containsExactly("36", "38")
+                .inOrder()
         }
     }
 
