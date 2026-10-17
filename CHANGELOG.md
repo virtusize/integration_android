@@ -1,5 +1,6 @@
-### Changes:
+### 2.12.29:
 - Fix: Align SDK to Web API /item request
+- Fix: Extended caching for Adult and Shoe
 - Fix: filter empty user-updated-body-measurements to prevent no size bug
 
 ### 2.12.28:
